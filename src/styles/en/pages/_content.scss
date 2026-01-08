@@ -1,0 +1,139 @@
+@use '../base/mixins';
+
+// 1. Ant Alert 초기화 (간결화)
+.ant-alert-error {
+  background: none;
+  border: none;
+  padding: 0;
+}
+.ant-alert-message{color:var(--danger);}
+
+// KIDS-PP-US-LG-01
+.pageCont_login {
+  .login_form_section{padding:0 30px 0 0;}
+  .ant-input, 
+  .ant-input-affix-wrapper {
+    padding: 16px; // 상하좌우 동일하면 한 번만 기입
+    background-color: #fff;
+    border: 1px solid #58616A;
+    border-radius: 8px;
+
+    &::placeholder, 
+    input::placeholder {
+      color: #8A949E;
+    }
+  }
+
+  [class^="col_"] {
+    padding: 0 20px;
+  }
+
+  .login_info_section {
+    padding:0 30px;
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 100%;
+      background-color: var(--border-2);
+    }
+  }
+
+  .ant-form-item {
+    margin-bottom: 8px; // 0 0 8px 0 축약
+    &-label > label {
+      color: var(--color-text-1);
+      font-size: 15px;
+    }
+  }
+
+  .ant-checkbox-wrapper { font-size: 17px; }
+  .login_actions { margin: 24px 0; }
+  
+  .btn_login {
+    @include mixins.btn_type_01;
+    background: var(--btn-bg-1);
+  }
+
+  .login_link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .ant-space-item {
+      display: flex;
+      align-items: center;
+
+      &:not(:last-child)::after {
+        content: "";
+        width: 1px;
+        height: 12px;
+        margin: 0 12px;
+        background-color: var(--border-2);
+      }
+      
+      a {
+        color: var(--color-text-1);
+        font-size: 17px;
+      }
+    }
+  }
+
+  .login_guide {
+    li {
+      position: relative;
+      padding-left: 24px;
+      font-size: 17px;
+      margin-bottom: 8px;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 6px;
+        width: 6px;
+        height: 6px;
+        background-color: var(--color-text-1);
+        border-radius: 50%;
+      }
+
+      &:last-child { margin-bottom: 0; }
+    }
+  }
+}
+
+@media (max-width: 991px) { 
+  .pageCont_login {
+    .ant-col-12 {
+      display: block;
+      flex: 0 0 100%; 
+      max-width: 100%; 
+    }
+
+    // 2. 왼쪽 폼 섹션 간격 조정
+    .login_form_section {
+      padding: 0 0 40px 0;
+    }
+
+    .login_info_section {
+      padding: 40px 0 0 0;
+      &::before {
+        left: 0;
+        top: 0;
+        transform: none;
+        width: 100%; // 세로선을 가로선으로 변경
+        height: 1px;
+        background-color: var(--border-2);
+      }
+    }
+    
+    // 4. (선택사항) 컬럼 내부 패딩 초기화
+    [class^="col_"] {
+      padding: 0; 
+    }
+  }
+}

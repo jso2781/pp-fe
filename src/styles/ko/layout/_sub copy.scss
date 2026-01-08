@@ -1,0 +1,113 @@
+@use '../base/mixins';
+
+.content_wrap {
+    display: flex;
+    gap: 46px;    
+}
+.lnb_wrap {
+  flex: 0 0 246px;
+}
+.sub_content {
+  flex: 1; /* 남은 공간 모두 차지 (lnb가 없으면 자동으로 100%) */
+  min-width: 0; /* 컨텐츠 넘침 방지 */
+}
+
+.lnb_menu {
+    border-radius: 10px;
+
+    .lnb_tit {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 105px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #fff;
+        border-radius: 10px 10px 0 0;
+        background: #087C80 url(/img/bg_lnb_title.png) no-repeat center center;
+    }
+    .lnb_list {
+        margin: -10px 0 0 0;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid var(--border-1);
+        background: #FFF;
+
+        /* Antd Menu 컴포넌트 자체 클래스 */
+        .ant-menu {
+            padding: 0 !important;
+            border: none !important;
+            background: none !important;
+
+            /* li 태그 대신 .ant-menu-item 클래스 사용 */
+            .ant-menu-item {
+                padding: 16px 8px !important;
+                border-bottom: 1px solid var(--border-1);
+                border-radius: 0;
+                height: auto !important; 
+                line-height: 150% !important;
+                margin: 0 !important;
+
+                /* span 태그 대신 .ant-menu-title-content 클래스 사용 */
+                .ant-menu-title-content {
+                    color: var(--color-text-1);
+                    font-size: 17px;
+                    font-weight: 700;
+                    white-space: normal !important; 
+                    word-break: break-all !important;
+                    display: inline-block !important;
+                    max-width: 100% !important;
+                }
+
+                /* 선택된 메뉴 (li에 붙는 선택 클래스) */
+                &.ant-menu-item-selected {
+                    background-color: transparent !important;
+                    .ant-menu-title-content {
+                        color: var(--color-text-2) !important; 
+                    }
+                }
+
+                /* 마우스 호버 */
+                &:hover {
+                    .ant-menu-title-content {
+                        color: var(--color-text-2) !important;
+                    }
+                }
+
+                /* 마지막 아이템 밑줄 제거 */
+                &:last-child {
+                    border-bottom: none !important;
+                }
+
+                /* Antd 기본 파란색 선 제거 */
+                &::after {
+                    display: none !important;
+                }
+            }
+        }
+    }
+}
+
+.location {
+    margin:0 0 40px 0;
+    .local{
+        margin:0 0 36px 0;
+        .home {
+            padding:0 0 0 20px;
+            background: url('/img/ico_home.svg') no-repeat left center;
+        
+        }
+    }
+   .page_path {
+      margin-top: 10px; 
+      padding: 0 0 20px 0;
+      border-bottom: 1px solid var(--border-2);
+      .tit {
+        line-height: 1;
+        font-size: 40px;
+        font-weight: 700;
+        color: var(--color-text-1);
+        display: block;
+      }
+    }
+}

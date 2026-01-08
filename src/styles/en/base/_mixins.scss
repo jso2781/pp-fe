@@ -1,0 +1,37 @@
+$default-width: min(100%, 1200px);
+
+.container {
+  width: $default-width;
+  margin: 0 auto; // 가운데 정렬이 필요한 경우
+}
+
+// $default-width: var(--container, 1200px);
+@mixin container($max-width: $default-width) {
+  width: min($max-width, calc(100% - 32px));
+  margin: 0 auto;
+}
+// @mixin container {
+//   width: min(var(--container), calc(100% - 32px));
+//   margin: 0 auto;
+// }
+
+@mixin sr_only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin btn_type_01 {
+  display: inline-flex;
+  height: 64px;
+  font-size: 19px;
+  font-weight: 700;
+  color:#fff;
+  padding:0 24px;
+}

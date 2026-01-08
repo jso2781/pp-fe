@@ -1,0 +1,56 @@
+@use './en/base/reset';
+@use './en/base/variables';
+@use './en/base/mixins';
+
+@use './en/layout/common';
+@use './en/layout/header';
+@use './en/layout/footer';
+@use './en/layout/sub';
+
+@use './en/components/grid';
+@use './en/pages/board';
+@use './en/pages/home';
+@use './en/pages/dur';
+@use './en/pages/content';
+
+.app-main {
+  @include mixins.container;
+  padding: 18px 0 28px;
+}
+
+.container {
+  @include mixins.container;
+}
+
+.container-full {
+  @include mixins.container(var(--container-full));
+}
+
+.page-title h1 {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+.page-title p {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.alert {
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin: 10px 0;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+}
+.alert--error { color: var(--danger); }
+
+.ds-container {
+  @include mixins.container;
+}

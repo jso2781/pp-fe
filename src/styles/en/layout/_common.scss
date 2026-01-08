@@ -1,0 +1,34 @@
+@use '../base/mixins';
+
+/* 모든 Ant Design 관련 클래스 내부의 폰트를 강제함 */
+body, input, button, select, textarea {
+  font-family: var(--font-main) !important;
+}
+[class^="ant-"] {
+  font-family: var(--font-main) !important;
+}
+/* placeholder */
+input::placeholder {
+    color: #8A949E;
+    opacity: 1;/* 파이어폭스 대응 */
+}
+
+/* 스킵네비 */
+#skip-navigation{position:absolute;left:0;top:0;width:100%;text-align:center;z-index:9999}
+#skip-navigation a{overflow:hidden;white-space:nowrap;display:block;width:100%;height:0;color:#fff !important;}
+#skip-navigation a:focus,#skipnavigation a:active{display:block;width:100%;height:36px;color:#fff;background:#000;line-height:36px;text-decoration:underline!important;font-size:14px}
+
+/* 제목 링크에 포커스가 갔을 때의 스타일 */
+.board-link:focus {
+  outline: 2px solid #1890ff; /* Ant Design 기본 블루 색상 */
+  outline-offset: 2px;
+  border-radius: 2px;
+  background-color: rgba(24, 144, 255, 0.1);
+  text-decoration: underline; 
+}
+.board-link:hover,
+.board-link:focus {
+  color: #40a9ff;
+}
+
+

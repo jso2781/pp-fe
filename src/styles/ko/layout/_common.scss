@@ -1,0 +1,119 @@
+
+/* 스킵네비 */
+#skip-navigation{position:absolute;left:0;top:0;width:100%;text-align:center;z-index:9999}
+#skip-navigation a{overflow:hidden;white-space:nowrap;display:block;width:100%;height:0;color:#fff !important;}
+#skip-navigation a:focus,#skipnavigation a:active{display:block;width:100%;height:36px;color:#fff;background:#000;line-height:36px;text-decoration:underline!important;font-size:14px}
+
+/* 모달  */
+.modal-small {
+  .ant-modal {
+    width: 600px !important;
+  }
+}
+.modal-md {
+  .ant-modal {
+    width: 760 !important;
+  }
+}
+.modal-lg {
+  .ant-modal {
+    width: 900px !important;
+  }
+}
+.ant-modal-footer{
+  .ant-btn {
+    width: 91px !important;
+    height: 48px !important;
+    padding: 0 16px !important
+  }
+}
+
+/* 폰트 */
+.txt_1 { color: var(--color-text-1) !important; }
+.txt_2 { color: var(--color-text-2) !important; }
+.txt_3 { color: var(--color-text-3) !important; }
+
+.fs_13 { font-size: var(--fs-13); }
+.fs_14 { font-size: var(--fs-14); }
+.fs_15 { font-size: var(--fs-15); }
+.fs_16 { font-size: var(--fs-16); }
+.fs_17 { font-size: var(--fs-17); }
+.fs_18 { font-size: var(--fs-18); }
+.fs_20 { font-size: var(--fs-20); }
+.fs_22 { font-size: var(--fs-22); }
+.fs_24 { font-size: var(--fs-24); }
+.fs_26 { font-size: var(--fs-26); }
+.fs_28 { font-size: var(--fs-28); }
+.fs_30 { font-size: var(--fs_30); }
+.fs_32 { font-size: var(--fs-32); }
+
+.fw_400 { font-weight: var(--fw-400); }
+.fw_500 { font-weight: var(--fw-500); }
+.fw_600 { font-weight: var(--fw-600); }
+.fw_700 { font-weight: var(--fw-700); }
+
+.btn_group{display: flex;}
+
+/* 버튼 그룹 전체 컨테이너 */
+.btn_group {
+  display: flex;
+  width: 100%;
+  margin-top: 32px;
+  padding: 16px 0;
+}
+
+.btn_group {
+  display: flex;
+  width: 100%;
+  margin-top: 32px;
+  padding: 16px 0;
+
+  .ant-flex {
+    width: 100%;
+  }
+
+  &.between {
+    .ant-flex {
+      justify-content: space-between;
+    }
+  }
+
+  &.center {
+    .ant-flex {
+      justify-content: center;
+    }
+  }
+
+  &.right {
+    .ant-flex {
+      justify-content: flex-end;
+    }
+  }
+}
+
+.box_type_01 {
+  width: 100%;
+  padding: 40px 32px;
+  background: #FFF;
+  border: 1px solid #CDD1D5;
+  border-radius: 10px;
+  
+}
+// .box_type_01 {
+//   @extend .box_type_common;  
+// }
+
+
+@media (max-width: 991px) {
+  .btn_group .ant-btn {
+    flex: 1; 
+  }
+  .ant-btn-lg {
+    height: 56px;
+    font-size:19px ;
+  }
+
+  .box_type_01 {
+    padding: 24px 16px;
+  }
+}

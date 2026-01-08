@@ -1,0 +1,80 @@
+:root {
+
+  --font-main: 'Pretendard', sans-serif;
+  
+  --container: 1200px;
+
+  --border: #e5e7eb;
+  --muted: #6b7280;
+  --bg: #ffffff;
+  --primary: #2563eb;
+  --danger: #BD2C0F;
+
+  --btn-bg-1: #087C80; 
+  --btn-bg-1-hover: #0A6C70; 
+  --btn-bg-2: #414343; 
+  --btn-bg-2-hover: #363A3A; 
+  --btn-bg-3: #ffffff; 
+  --btn-bg-3-hover: #EDF8F8; 
+  --btn-bg-4: #1E2124; 
+  --btn-bg-4-hover: #CDD1D5; 
+
+  /* 인풋 */
+  --input-border: #D8D8D8;
+
+  /* 체크박스 */
+  --chk-active-bg: var(--btn-bg-1);
+  --chk-default-bg: #ffffff; 
+  --chk-default-border: var(--btn-bg-1);
+
+  /* 라디오 */
+  --radio-active-bg: var(--btn-bg-1);
+  --radio-default-bg: #ffffff;
+  --radio-default-border: var(--btn-bg-1);
+
+  /* 스위치 */
+  --switch-active-bg: var(--btn-bg-1);
+  --switch-default-bg: var(--btn-bg-1);
+  --switch-knob-bg: #ffffff;
+
+  --color-text-1: #1E2124; 
+  --color-text-2: #087C80; 
+  --color-text-3: #464C53; 
+
+  --border-1: #8A949E;
+  --border-2: #CDD1D5;
+  --border-3: #087C80; 
+  
+  --placeholder: #8A949E;
+
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-17: 17px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-24: 24px;
+  --fs-28: 28px;
+  --fs-32: 32px;
+
+  --fw-400: 400;
+  --fw-500: 500;
+  --fw-600: 600;
+  --fw-700: 700;
+
+}
+
+@media (max-width: 768px) {
+  :root {
+    --fs-14: 13px;
+    --fs-15: 14px;
+    --fs-16: 14px;
+    --fs-17: 15px;
+    --fs-18: 16px;
+    --fs-20: 17px;
+    --fs-24: 18px;
+    --fs-28: 20px;
+    --fs-32: 24px;
+  }
+}

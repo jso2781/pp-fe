@@ -1,0 +1,124 @@
+@use '../base/mixins';
+
+.header{
+  position: relative;
+}
+.gov_badge {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  background: #EEF2F7;
+  .txt {
+    padding: 0 0 0 30px;
+    background: url(/img/ico_flag_ko.png) no-repeat left center;
+  }
+}
+.header_topbar{
+  .container{
+    display: flex;
+    align-items: center;
+    height:45px;
+    .top_links{
+      margin-left: auto;
+    }
+  }
+}
+.header_menu {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height:82px;
+  border-top: 1px solid #D8D8D8;
+  border-bottom: 1px solid #D8D8D8;
+
+  .container {
+    display: flex;
+    align-items: center;
+
+    .logo{
+      margin-right:70px;
+    }
+
+    .util_menu {
+      width: 100%;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+
+      .link_list {
+        margin-left: auto;
+        .ant-space{
+          flex-wrap: wrap;
+        }
+        button span{
+          font-size: 18px;
+          font-weight: 700;
+          color:#464C53;
+        }
+        .btn_search{padding-left:28px;background: url(/img/ico_search.svg) no-repeat left center;}
+        .btn_signup{padding-left:28px;background: url(/img/ico_signup.svg) no-repeat left center;}
+        .btn_login{padding-left:28px;background: url(/img/ico_login.svg) no-repeat left center;}
+        .btn_user_role{padding-left:28px;background: url(/img/ico_user_role.svg) no-repeat left center;}
+      }
+    }
+
+    // .integrated_search {
+    //   width: 390px;
+    //   padding: 5px;
+    //   height: 45px;
+    //   border: 3px solid transparent;
+    //   border-radius: 30px;
+    //   background: linear-gradient(45deg, #D3E01C, #00ABBD, #004638);
+    //   background-clip: padding-box;
+
+    //   .ant-input-affix-wrapper {
+    //     border-radius: 30px;
+    //     border: none;
+    //   }
+    // }
+  }
+}
+
+.nav{
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.25);
+  .container{
+    display: flex;
+    align-items: center;
+  }
+  .gnb_list {
+    width:100%;
+    border:none;
+    line-height: 66px;
+    .ant-menu-title-content{
+      font-size: 17px;
+      font-weight: 700;
+      color: #464C53;
+    }
+  }
+  .btn_sitemap{
+    margin-left: auto;
+    width:30px;height:30px;
+    background: url(/img/ico_sitemap.svg) no-repeat center center;
+    span{
+      @include mixins.sr_only;
+    }
+    &:hover {
+      background: url(/img/ico_sitemap.svg) no-repeat center center !important;
+    }
+  }
+}
+
+/* span 태그 클릭 영역 확장 */
+.gnb-focus-target {
+  display: block;
+  width: 100%;
+}
+
+// sample
+@media (max-width: 980px) {
+  .ds-header__main-inner {
+    grid-template-columns: 1fr;
+  }
+  .ds-header__nav { overflow-x: auto; }
+  .ds-header__search { justify-self: stretch; }
+}

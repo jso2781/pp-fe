@@ -1,0 +1,11 @@
+.ag-wrapper {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.grid-loading-hint {
+  padding: 10px 12px;
+  color: var(--muted);
+  font-size: 14px;
+}

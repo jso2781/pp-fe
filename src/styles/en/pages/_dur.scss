@@ -1,0 +1,88 @@
+.ds-breadcrumb {
+  margin: 14px 0 10px;
+}
+
+.ds-card {
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+  margin-bottom: 14px;
+}
+
+.ds-page-grid {
+  display: grid;
+  grid-template-columns: 246px 1fr;
+  gap: 46px; 
+}
+
+.ds-page-grid--popup {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+/* container 여백 제거 */
+.ds-page-grid--popup .ds-container {
+  max-width: 100%;
+  padding: 0;
+}
+
+.ds-page-grid--popup .ds-main {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.ds-side .ant-menu {
+  border-inline-end: 0;
+}
+
+.ds-content {
+  min-width: 0;
+}
+
+.ds-section-title {
+  margin: 0 0 10px !important;
+}
+
+.ds-muted {
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.ds-consent-box {
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.ds-consent-box ol {
+  margin: 0;
+  padding-left: 18px;
+  color: #111827;
+}
+
+.ds-procedure {
+  margin-top: 6px;
+}
+
+.ds-form-alert {
+  margin-bottom: 12px;
+}
+
+.ds-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 860px) {
+  .ds-page-grid {
+    grid-template-columns: 1fr;
+  }
+  .ds-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ds-breadcrumb {
+    margin-top: 10px;
+  }
+}

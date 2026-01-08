@@ -1,0 +1,26 @@
+
+
+@use '../layout/sub';
+
+.layout-full{
+  width: 100%;
+
+  .app-main,
+  .container{
+    width:100%;
+    padding:0 20px;
+  }
+}
+
+.sub-full {
+    .content_wrap{
+    width:100%;
+    
+  }
+    .lnb_menu {
+        height: 100% !important; 
+    }   
+    .lnb_menu .lnb_tit{
+        background: #087C80 ;
+    }
+}
