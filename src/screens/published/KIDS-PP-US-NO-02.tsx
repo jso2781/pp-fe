@@ -1,10 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { 
-  Box, Stack, Typography, Divider, Button, 
-  Card, CardContent, CircularProgress 
-} from '@mui/material';
+import { Box, Stack, Typography, Link, Button,} from '@mui/material';
 import { fetchNoticeDetail } from '@/features/notice/noticeThunks';
 import ScreenShell from '../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
@@ -89,34 +86,71 @@ export default function KIDS_PP_US_NO_02() {
                       </Box>
                     </Box>
 
-                    <Divider className="detail-divider" />
-
-                    {/* 2. 본문 영역 */}
-                    <section className="board-content">
-                      {isHtml ? (
-                        <div 
-                          className="content-inner html-render" 
-                          dangerouslySetInnerHTML={{ __html: html }} 
-                        />
-                      ) : (
-                        <Typography className="content-inner text-render">
-                          {String(html || '')}
-                        </Typography>
-                      )}
-                    </section>
-
-                    <Divider className="detail-divider" />
-
-                    {/* 3. 하단 버튼 영역 */}
-                    <footer className="board-footer">
-                      <Button 
-                        variant="outlined" 
+                    <Box className="board-body-wrap">
+                      {/* 게시글 본문 영역 */}
+                      <Box className="board-content">
+                        {isHtml ? (
+                          <div 
+                            className="content-inner html-render" 
+                            dangerouslySetInnerHTML={{ __html: html }} 
+                          />
+                        ) : (
+                          <Typography className="content-inner text-render">
+                            {String(html || '')}
+                          </Typography>
+                        )}
+                      </Box>
+                      {/* 첨부파일 */}
+                      <Box className="board-attachment">
+                        <ul className="attachment-list">
+                          <li>
+                            <Link 
+                              href="#none" // 실제 파일 다운로드 URL
+                              className="attachment-item"
+                              underline="none"
+                              title="첨부파일 다운로드"
+                            >
+                              <Box className="file-info">
+                                <span className="file-label">첨부파일</span>
+                                <span className="file-name">공고문 등 입찰 관련 서류</span>
+                                <span className="file-meta">
+                                  <span className="file-ext">[zip]</span>
+                                  <span className="file-size">1,069KB</span>
+                                </span>
+                              </Box>
+                            </Link>
+                          </li>
+                        </ul>
+                      </Box>
+                    </Box>
+                    <Box className="kogl-license-wrap">
+                      <Box className="kogl-container">
+                        <Box className="kogl-image">
+                          <img 
+                            src="/img//icon_kogl.png" 
+                            alt="공공누리 제4유형: 출처표시, 상업적 이용금지, 변경금지" 
+                          />
+                        </Box>
+                        
+                        <Box className="kogl-text">
+                          <Typography variant="body2" component="p">
+                            본 저작물은 <strong>"공공누리" 제4유형 : 출처표시 + 상업적 이용금지 + 변경금지</strong> 조건에 따라 이용할 수 있습니다.
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                  {/* 하단 버튼 영역 */}
+                  <Box className="board-actions">
+                    <Button 
+                        variant="contained" 
+                        color="dark" 
+                        size="large"
                         className="btn-list-go"
                         onClick={() => navigate(`/ko/notice?page=${pageIndex}`)}
                       >
-                        목록으로
-                      </Button>
-                    </footer>
+                      목록
+                    </Button>
                   </Box>
                   {/* --- 본문 끝 --- */}
 

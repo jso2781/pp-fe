@@ -1,5 +1,6 @@
 @use '../base/mixins';
 
+// 일반 게시판 목록
 .board_list_area{
   .board_search{
     display: flex;
@@ -28,7 +29,7 @@
   }
 }
 
-// 게시판 상단 (카운트 등)
+// 일반 게시판 목록 상단
 .board_info {
   display: flex;
   justify-content: space-between;
@@ -71,31 +72,192 @@
   background-color: #f5f5f5;
 }
 
-
+// 게시판 상세
 .board-detail {
   border-top: 1px solid #464C53; 
-  border-bottom: 1px solid #D8D8D8;
-  padding-bottom: 40px;
+  .board-header {
+    padding: 30px 20px;
+    background-color: #EDF8F8;
+    .board-title{
+      font-size: var(--fs-20);
+      font-weight: var(--fw-700);
+      margin:0 0 30px 0;
+    }
+  }
+
+  /* 게시판 상세 상단 정보 영역 */
+  .board-info {
+    .info-list {
+      display: flex;
+      flex-wrap: wrap;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        position: relative;
+        padding-right: 20px; 
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+
+        // 이전 소스의 구분선 스타일 그대로 적용
+        &::before {
+          content: "";
+          position: absolute;
+          right: 0;
+          top: 50%;
+          width: 1px;
+          height: 14px; // 구분선 높이
+          transform: translateY(-50%);
+          background: #303336; 
+        }
+
+        &:last-child {
+          padding-right: 0;
+          margin-right: 0;
+          &::before { display: none; }
+        }
+      }
+    }
+
+    /* 라벨 (작성자, 등록일 등) */
+    .info-label {
+      display: inline-block;
+      margin-right: 10px;
+      font-size: 18px; 
+      font-weight: 700;
+      color: #1E2124;
+    }
+
+    /* 실제 데이터 값 */
+    .info-value {
+      font-size: 18px;
+      font-weight: 500;
+      color: #464C53;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .board-info {
+      .info-label, .info-value {
+        font-size: 15px;
+      }
+      .info-list li {
+        padding-right: 15px;
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .board-body-wrap{
+    border-bottom:1px solid #404040;
+    .board-content {
+      padding: 40px 20px;
+      min-height: 300px;
+    }
+    // 첨부파일
+    .board-attachment {
+      padding: 48px 20px;
+      border-top: 1px solid #D8D8D8;
+  
+      .attachment-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+  
+        .attachment-item {
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          color: #464C53;
+          transition: color 0.2s;
+  
+          .file-icon {
+            font-size: 20px;
+          }
+  
+          .file-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+          }
+  
+          .file-label {
+            font-size: var(--fs18);
+            font-weight: 700;
+            color: #1E2124;
+            margin-right: 4px;
+          }
+            
+          .file-name {
+            font-size: var(--fs16);
+            text-decoration: underline;
+            color: #1D52B2;
+          }
+  
+          .file-meta {
+            color: #666;
+            font-size: 14px;
+            
+            .file-ext {
+              margin-right: 4px;
+              text-transform: uppercase;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
-.board-header {
-  padding: 30px 20px;
-  background-color: #f9f9f9; /* 제목 영역 배경색 분리 */
+.kogl-license-wrap {
+  margin-top: 10px;
+
+  .kogl-container {
+    display: flex;
+    align-items: center;
+    gap: 20px; 
+  }
+
+  .kogl-image {
+    flex-shrink: 0;
+    img {
+      display: block;
+      width: 120px;
+      height: auto;
+    }
+  }
+
+  .kogl-text {
+    p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #464C53;
+      
+      strong {
+        color: #1E2124;
+        font-weight: 700;
+      }
+    }
+  }
+  /* 모바일 대응 */
+  @media (max-width: 600px) {
+    .kogl-container {
+      flex-direction: column; // 모바일에서는 세로로 배치
+      align-items: flex-start;
+      gap: 12px;
+    }
+    
+    .kogl-image img {
+      width: 100px;
+    }
+  }
 }
 
-.info-list {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 10px 0 0 0;
-  gap: 20px;
-  font-size: 14px;
-}
 
-.board-content {
-  padding: 40px 20px;
-  min-height: 300px;
-}
 
 
 
@@ -131,6 +293,21 @@
     border-radius: 8px;
   }
 
+}
+
+// 하단 액션 버튼
+.board-actions {
+  margin: 30px 0 0 0;
+  text-align: right;
+
+  .btn_list {
+    @include mixins.btn_type_01;
+    background: var(--btn-bg-2);
+  } 
+  .btn_preview {
+    @include mixins.btn_type_01;
+    background: var(--btn-bg-1); 
+  }
 }
 
 
