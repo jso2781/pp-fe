@@ -16,6 +16,7 @@ export default function Layout() {
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
+      {/* <Box className="layout-full"> */}
       <Header onOpenNav={() => setMobileOpen(true)} />
       
         {/* <AppNavDrawer mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} drawerWidth={DRAWER_WIDTH} /> */}
@@ -36,8 +37,8 @@ export default function Layout() {
           <Box className="app-main" sx={{ flex: 1 }}>
             <Outlet />
           </Box>
-        {/* </Box> */}
         <Footer />
+        {/* </Box> */}
     </ThemeProvider>
   )
 }

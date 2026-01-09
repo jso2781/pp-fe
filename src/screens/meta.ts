@@ -353,6 +353,12 @@ export const screens: ScreenMeta[] = [
 
   //내업무 템플릿 예시
   {
+    "id": "KIDS-PP-US-MT-01-LAYOUT",
+    "title": "내업무 레이아웃",
+    "uiType": "detail"
+  },
+
+  {
     "id": "KIDS-PP-US-MT-01_List",
     "title": "내업무 리스트",
     "uiType": "detail"

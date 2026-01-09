@@ -1,26 +1,31 @@
 
 
-@use '../layout/sub';
-
 .layout-full{
   width: 100%;
-
   .app-main,
   .container{
+    position: relative;
     width:100%;
-    padding:0 20px;
+  }
+
+  .sub-container{
+    width:100%;
+    padding-left:300px;
+    transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1); // MUI 표준 가속도 적용
+    .container{
+      min-width:100%;
+      width:100%;
+    }
+    .content-wrap{
+      width:100%;
+      padding:0 20px 0 0;
+    }
   }
 }
 
-.sub-full {
-    .content-wrap{
-    width:100%;
-    
-  }
-    .lnb-menu {
-        height: 100% !important; 
-    }   
-    .lnb-menu .lnb-tit{
-        background: #087C80 ;
+.layout-full .page-layout.is-collapsed{
+  .sub-container{
+      padding-left:90px;
+      
     }
 }

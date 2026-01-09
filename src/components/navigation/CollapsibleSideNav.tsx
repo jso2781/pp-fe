@@ -1,20 +1,12 @@
-import { useMemo } from 'react'
-import {
-  Box,
-  Divider,
-  Drawer,
-  IconButton,
-  List,
-  ListItemButton,
-  ListItemText,
-  Typography,
-} from '@mui/material'
-import { Menu as MenuIcon, MenuOpen as MenuOpenIcon } from '@mui/icons-material'
+import { useMemo, useState } from 'react'
+import { Box, Divider, Drawer, IconButton, List, ListItemButton, ListItemText, Typography, Collapse } from '@mui/material'
+import { Menu as MenuIcon, MenuOpen as MenuOpenIcon, ExpandLess, ExpandMore } from '@mui/icons-material'
 
 export type CollapsibleNavItem = {
   key: string
   label: string
   disabled?: boolean
+  children?: CollapsibleNavItem[] // 하위 메뉴 추가
 }
 
 type Props = {
@@ -28,10 +20,6 @@ type Props = {
   onSelect?: (key: string) => void
 }
 
-/**
- * Simple permanent left nav Drawer with "mini" collapsed mode.
- * Intended for admin-like screens under /screens/published.
- */
 export default function CollapsibleSideNav({
   title,
   collapsed,
@@ -44,6 +32,13 @@ export default function CollapsibleSideNav({
 }: Props) {
   const drawerWidth = collapsed ? collapsedWidth : width
   const selected = useMemo(() => selectedKey ?? '', [selectedKey])
+  
+  // 열려있는 1뎁스 메뉴들의 key를 관리하는 상태
+  const [openKeys, setOpenKeys] = useState<Record<string, boolean>>({})
+
+  const handleToggleOpen = (key: string) => {
+    setOpenKeys((prev) => ({ ...prev, [key]: !prev[key] }))
+  }
 
   return (
     <Drawer
@@ -53,7 +48,22 @@ export default function CollapsibleSideNav({
           width: drawerWidth,
           overflowX: 'hidden',
           borderRightColor: 'divider',
+          position: 'absolute',
+          height: '100%',
+          zIndex: 1200,
+          transition: (theme) =>
+            theme.transitions.create('width', {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.enteringScreen,
+            }),
         },
+      }}
+      sx={{
+        position: 'absolute',
+        height: '100%',
+        top: 0,
+        left: 0,
+        zIndex: 1200,
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', px: 1.5, py: 1 }}>
@@ -68,24 +78,63 @@ export default function CollapsibleSideNav({
       </Box>
       <Divider />
       <List dense disablePadding>
-        {items.map((it) => (
-          <ListItemButton
-            key={it.key}
-            selected={selected === it.key}
-            disabled={!!it.disabled}
-            onClick={() => onSelect?.(it.key)}
-            sx={{ px: collapsed ? 1 : 2 }}
-          >
-            <ListItemText
-              primary={it.label}
-              primaryTypographyProps={{
-                fontSize: 14,
-                noWrap: true,
-                sx: { opacity: collapsed ? 0 : 1 },
-              }}
-            />
-          </ListItemButton>
-        ))}
+        {items.map((it) => {
+          const hasChildren = !!(it.children && it.children.length > 0)
+          const isOpen = openKeys[it.key] || false
+
+          return (
+            <Box key={it.key}>
+              <ListItemButton
+                selected={selected === it.key}
+                disabled={!!it.disabled}
+                onClick={() => {
+                  if (hasChildren) {
+                    handleToggleOpen(it.key)
+                  } else {
+                    onSelect?.(it.key)
+                  }
+                }}
+                sx={{ px: collapsed ? 1.5 : 2 }}
+              >
+                <ListItemText
+                  primary={it.label}
+                  primaryTypographyProps={{
+                    fontSize: 14,
+                    noWrap: true,
+                    sx: { opacity: collapsed ? 0 : 1, fontWeight: hasChildren ? 700 : 400 },
+                  }}
+                />
+                {/* 하위 메뉴가 있고, 메뉴가 펼쳐진 상태일 때만 화살표 표시 */}
+                {!collapsed && hasChildren && (isOpen ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />)}
+              </ListItemButton>
+
+              {/* 하위 메뉴 리스트 (Collapse) */}
+              {hasChildren && (
+                <Collapse in={isOpen && !collapsed} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding dense>
+                    {it.children?.map((child) => (
+                      <ListItemButton
+                        key={child.key}
+                        selected={selected === child.key}
+                        onClick={() => onSelect?.(child.key)}
+                        sx={{ pl: collapsed ? 1.5 : 4 }} // 하위 메뉴 들여쓰기
+                      >
+                        <ListItemText
+                          primary={child.label}
+                          primaryTypographyProps={{
+                            fontSize: 13,
+                            noWrap: true,
+                            sx: { opacity: collapsed ? 0 : 1 },
+                          }}
+                        />
+                      </ListItemButton>
+                    ))}
+                  </List>
+                </Collapse>
+              )}
+            </Box>
+          )
+        })}
       </List>
     </Drawer>
   )

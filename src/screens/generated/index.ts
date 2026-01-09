@@ -64,12 +64,13 @@ export const screenComponentLoaders = {
   'KIDS-PP-US-NO-01': () => import('../published/KIDS-PP-US-NO-01'),
   'KIDS-PP-US-NO-02': () => import('../published/KIDS-PP-US-NO-02'),
   'KIDS-PP-US-NO-05': () => import('./KIDS-PP-US-NO-05'),
-  'KIDS-PP-US-NO-08': () => import('./KIDS-PP-US-NO-08'),
+  'KIDS-PP-US-NO-08': () => import('../published/KIDS-PP-US-NO-08'),
   'KIDS-PP-US-NO-09': () => import('./KIDS-PP-US-NO-09'),
   'KIDS-PP-US-NO-10': () => import('./KIDS-PP-US-NO-10'),
   'KIDS-PP-US-NO-11': () => import('./KIDS-PP-US-NO-11'),
   'KIDS-PP-US-PI-01': () => import('./KIDS-PP-US-PI-01'),
 
+  'KIDS-PP-US-MT-01-LAYOUT': () => import('../published/KIDS-PP-US-MT-01-LAYOUT'),
   'KIDS-PP-US-MT-01_List': () => import('../published/KIDS-PP-US-MT-01_List'),
   'KIDS-PP-US-MT-01_Write': () => import('../published/KIDS-PP-US-MT-01_Write'),
 }

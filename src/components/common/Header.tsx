@@ -1070,7 +1070,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   return (
     <>
       <SkipNavigation />
-      <AppBar position="relative" elevation={0} sx={{ borderBottom: '1px solid', borderColor: 'divider' }}>
+      <AppBar position="relative" elevation={0}>
         {/* 첫 번째 줄: Screens, English/한국어 선택 */}
         <Box
           sx={{
@@ -1080,7 +1080,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             py: 0.5,
           }}
         >
-          <Container maxWidth="xl">
+          <Container>
             <Stack
               direction="row"
               justifyContent="flex-end"
