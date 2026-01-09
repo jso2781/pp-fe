@@ -31,7 +31,7 @@ export default function Screens() {
   }, [q]);
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2 }} className="container">
       <Stack spacing={2}>
         <Typography variant="h5">Screens</Typography>
 

@@ -149,14 +149,14 @@ export default function NoticeList() {
   const totalPages = Math.max(1, Math.ceil((totalCount || rows.length || 1) / 10));
 
   return (
-    <Box className="page_layout">
+    <Box className="page-layout">
       <PageTitle title="기관 소식" subtitle="공지사항"/>
-      <Box className="sub_container">
-        <Box className="content_wrap">
-          <Box className="sub_content">
+      <Box className="sub-container">
+        <Box className="content-wrap">
+          <Box className="sub-content">
             <DepsLocation />
 
-            <Box className="content_view" id="content">
+            <Box className="content-view" id="content">
               <Box className="sub_lnb">
                 <Card variant="outlined" sx={{ p: 1 }}>
                   <SideNav items={sideItems} />

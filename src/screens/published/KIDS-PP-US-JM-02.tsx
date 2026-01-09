@@ -100,12 +100,12 @@ export default function KIDS_PP_US_JM_02() {
 
   return (
     <ScreenShell screenId="KIDS-PP-US-JM-02" title="약관동의" uiType="page">
-      <div className="page_layout">
-        <div className="sub_container">
-          <div className="content_wrap">
-            <div className="sub_content">
+      <div className="page-layout">
+        <div className="sub-container">
+          <div className="content-wrap">
+            <div className="sub-content">
               <DepsLocation />
-              <div className="content_view" id="content">
+              <div className="content-view" id="content">
                 <div className="pageCont_joinType member_page">
                   <div className="joinType_step">
                     <Steps current={current} items={stepItems} labelPlacement="vertical" />

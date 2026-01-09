@@ -18,14 +18,14 @@ export default function KIDS_PP_US_JM_04() {
 
   return (
     <ScreenShell screenId="KIDS-PP-US-JM-04" title="본인 인증(14세 이상인 경우 3단계)" uiType="page">
-    <div className="page_layout">
-      <div className="sub_container">
-        <div className="content_wrap">
+    <div className="page-layout">
+      <div className="sub-container">
+        <div className="content-wrap">
 
           {/* sub content :: s */}
-          <div className="sub_content">
+          <div className="sub-content">
             <DepsLocation></DepsLocation>
-            <div className="content_view" id="content">
+            <div className="content-view" id="content">
 
               <div className="pageCont_joinType member_page">
                 <div className="joinType_step">
@@ -53,7 +53,7 @@ export default function KIDS_PP_US_JM_04() {
               </div>    
               
             </div>
-            {/* content_view :: e */}
+            {/* content-view :: e */}
           </div>
           {/* sub content :: e */}
         </div>

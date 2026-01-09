@@ -1,33 +1,33 @@
 @use '../base/mixins';
 
-.content_wrap {
+.content-wrap {
     display: flex;
     gap: 46px;
     align-items: stretch; // lnb와 컨텐츠 높이를 맞춤
 }
 
-.lnb_wrap {
+.lnb-wrap {
     flex: 0 0 246px;
     transition: none !important;
 
-    // 접혔을 때 lnb_wrap의 너비 (아이콘만 보일 정도의 너비)
+    // 접혔을 때 lnb-wrap의 너비 (아이콘만 보일 정도의 너비)
     &:has(.ant-menu-inline-collapsed) {
         flex: 0 0 80px; 
     }
 }
 
-.sub_content {
+.sub-content {
     flex: 1;
     min-width: 0;
 }
 
-.lnb_menu {
+.lnb-menu {
     display: flex;
     flex-direction: column;
     height: 100%;
     border-radius: 10px;
 
-    .lnb_tit {
+    .lnb-tit {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -36,10 +36,10 @@
         font-weight: 700;
         color: #fff;
         border-radius: 10px 10px 0 0;
-        background: #087C80 url(/img/bg_lnb_title.png) no-repeat center center;
+        background: #087C80 url(/img/bg_lnb-title.png) no-repeat center center;
     }
 
-    .lnb_list {
+    .lnb-list {
         flex: 1;
         margin: -10px 0 0 0;
         padding: 15px;
@@ -48,7 +48,7 @@
         background: #FFF;
         transition: none !important;
 
-        // 접히면 lnb_list 영역을 즉시 숨김 (글자 꼬임 방지)
+        // 접히면 lnb-list 영역을 즉시 숨김 (글자 꼬임 방지)
         &:has(.ant-menu-inline-collapsed) {
             display: none !important;
         }

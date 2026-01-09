@@ -15,6 +15,7 @@ import DurNoticeListKo from '@/pages/ko/dur/DurNoticeList'
 import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail'
 import NotFoundKo from '@/pages/ko/NotFound'
 import LoginKo from '@/pages/ko/Login'
+import FaqListKo from '@/pages/ko/faq/FaqList';
 
 // 게시판 테스트용
 import CommonBoardListKo from '@/pages/ko/newboard/common/CommonList'
@@ -138,6 +139,8 @@ export default function Router() {
           <Route path="/:lang/dur/notice/:id" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailEn /> }} />} />
           <Route path="/:lang/dur/proposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalEn /> }} />} />
 
+          <Route path="/:lang/faq" element={<LangElement byLang={{ ko: <FaqListKo />, en: <FaqListKo /> }} />} />
+          
           {/* 게시판 테스트중 */}          
           <Route path="/:lang/newboard/common/:bbsId" element={<LangElement byLang={{ ko: <CommonBoardListKo />, en: <CommonBoardListKo /> }} />} />
           <Route path="/:lang/newboard/common/:bbsId/:sn" element={<LangElement byLang={{ ko: <CommonBoardDetailKo />, en: <CommonBoardDetailKo /> }} />} />

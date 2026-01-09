@@ -1,21 +1,21 @@
 @use '../base/mixins';
 
-.content_wrap {
+.content-wrap {
     display: flex;
     gap: 46px;    
 }
-.lnb_wrap {
+.lnb-wrap {
   flex: 0 0 246px;
 }
-.sub_content {
+.sub-content {
   flex: 1; /* 남은 공간 모두 차지 (lnb가 없으면 자동으로 100%) */
   min-width: 0; /* 컨텐츠 넘침 방지 */
 }
 
-.lnb_menu {
+.lnb-menu {
     border-radius: 10px;
 
-    .lnb_tit {
+    .lnb-tit {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -24,9 +24,9 @@
         font-weight: 700;
         color: #fff;
         border-radius: 10px 10px 0 0;
-        background: #087C80 url(/img/bg_lnb_title.png) no-repeat center center;
+        background: #087C80 url(/img/bg_lnb-title.png) no-repeat center center;
     }
-    .lnb_list {
+    .lnb-list {
         margin: -10px 0 0 0;
         padding: 15px;
         border-radius: 10px;

@@ -7,12 +7,12 @@ import ScreenShell from '../ScreenShell';
 export default function KIDS_PP_US_LG_02() {
   return (
     <ScreenShell screenId="KIDS-PP-US-LG-02" title="로그인 로그인 방식 선택" uiType="page">
-      <div className="page_layout">
-        <div className="sub_container">
-          <div className="content_wrap">
-            <div className="sub_content">
+      <div className="page-layout">
+        <div className="sub-container">
+          <div className="content-wrap">
+            <div className="sub-content">
               <DepsLocation />
-              <div className="content_view" id="content">
+              <div className="content-view" id="content">
                 <div className="pageCont_login">
                   <Grid container spacing={4}>
                     <Grid className="login_form_section" size={{ xs: 12, md: 6 }}>
