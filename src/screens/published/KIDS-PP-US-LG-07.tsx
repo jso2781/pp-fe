@@ -6,12 +6,12 @@ import ScreenShell from '../ScreenShell';
 export default function KIDS_PP_US_LG_07() {
   return (
     <ScreenShell screenId="KIDS-PP-US-LG-07" title="로그인 실패" uiType="page">
-      <div className="page_layout">
-        <div className="sub_container">
-          <div className="content_wrap">
-            <div className="sub_content">
+      <div className="page-layout">
+        <div className="sub-container">
+          <div className="content-wrap">
+            <div className="sub-content">
               <DepsLocation />
-              <div className="content_view" id="content">
+              <div className="content-view" id="content">
                 <Box sx={{ maxWidth: 640, mx: 'auto' }}>
                   <Stack spacing={2} alignItems="flex-start">
                     <Typography variant="h6">로그인에 실패했습니다</Typography>

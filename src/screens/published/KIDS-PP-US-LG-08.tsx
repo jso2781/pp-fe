@@ -12,13 +12,13 @@ export default function KIDS_PP_US_LG_08() {
   // return <FormTemplate screenId="KIDS-PP-US-LG-08" title="비밀번호 찾기" config={config} />
   return (
     <ScreenShell screenId="KIDS-PP-US-LG-08" title="비밀번호 찾기" uiType="page">
-      <div className="page_layout">
-        <div className="sub_container">
-          <div className="content_wrap">
+      <div className="page-layout">
+        <div className="sub-container">
+          <div className="content-wrap">
             {/* sub content :: s */}
-            <div className="sub_content">
+            <div className="sub-content">
               <DepsLocation></DepsLocation>
-              <div className="content_view" id="content">
+              <div className="content-view" id="content">
 
                 <div className="pageCont_idPwFind member_page">
                   <p className="guide_text">비밀번호 재설정을 위해 본인 확인을 진행합니다. </p>  
@@ -36,7 +36,7 @@ export default function KIDS_PP_US_LG_08() {
                 </div>
                 
               </div>
-              {/* content_view :: e */}
+              {/* content-view :: e */}
             </div>
             {/* sub content :: e */}
           </div>

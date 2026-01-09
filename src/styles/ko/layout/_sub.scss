@@ -1,5 +1,6 @@
 @use '../base/mixins';
 
+
 .container-full {
   width:100%;
 } 
@@ -7,11 +8,11 @@
   width: min(1200px, calc(100% - 40px));
   margin: 0 auto;
 }
-.sub_container {
+.sub-container {
     width: 100%;
     padding: 30px 0;
 
-    .content_wrap {
+    .content-wrap {
         @include mixins.container;
         display: flex;
         gap: 46px;
@@ -19,7 +20,7 @@
     }
 }
 
-.lnb_wrap {
+.lnb-wrap {
     flex: 0 0 246px;
     transition: flex 0.2s ease;
 
@@ -28,12 +29,12 @@
     }
 }
 
-.lnb_menu {
+.lnb-menu {
     display: flex;
     flex-direction: column;
     border-radius: 10px;
 
-    .lnb_tit {
+    .lnb-tit {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -42,7 +43,7 @@
         font-weight: 700;
         color: #fff;
         border-radius: 10px 10px 0 0;
-        background: #087C80 url(/img/bg_lnb_title.png) no-repeat center center;
+        background: #087C80 url(/img/bg_lnb-title.png) no-repeat center center;
         overflow: hidden;
 
         .btn_toggle {
@@ -52,7 +53,7 @@
             margin: 0 0 0 10px;
         }
 
-        .lnb_wrap:has(.ant-menu-inline-collapsed) & {
+        .lnb-wrap:has(.ant-menu-inline-collapsed) & {
             font-size: 0 !important;
             .btn_toggle {
                 margin: 0 !important;
@@ -60,7 +61,7 @@
         }
     }
 
-    .lnb_list {
+    .lnb-list {
         flex: 1;
         margin: -10px 0 0 0;
         padding: 15px;
@@ -166,10 +167,10 @@
 }
 
 
-.sub_content {
+.sub-content {
     flex: 1;
     min-width: 0;
-    .content_view {
+    .content-view {
         min-height: 500px;
     }
 }

@@ -4,6 +4,18 @@
 #skip-navigation a{overflow:hidden;white-space:nowrap;display:block;width:100%;height:0;color:#fff !important;}
 #skip-navigation a:focus,#skipnavigation a:active{display:block;width:100%;height:36px;color:#fff;background:#000;line-height:36px;text-decoration:underline!important;font-size:14px}
 
+.sr_only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* 모달  */
 .modal-small {
   .ant-modal {

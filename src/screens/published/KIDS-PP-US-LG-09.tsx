@@ -6,12 +6,12 @@ import ScreenShell from '../ScreenShell';
 export default function KIDS_PP_US_LG_09() {
   return (
     <ScreenShell screenId="KIDS-PP-US-LG-09" title="비밀번호 재설정" uiType="page">
-      <div className="page_layout">
-        <div className="sub_container">
-          <div className="content_wrap">
-            <div className="sub_content">
+      <div className="page-layout">
+        <div className="sub-container">
+          <div className="content-wrap">
+            <div className="sub-content">
               <DepsLocation />
-              <div className="content_view" id="content">
+              <div className="content-view" id="content">
                 <Box sx={{ maxWidth: 560, mx: 'auto' }}>
                   <Box component="form" noValidate onSubmit={(e) => e.preventDefault()}>
                     <Stack spacing={2}>

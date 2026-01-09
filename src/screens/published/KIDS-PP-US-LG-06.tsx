@@ -11,13 +11,13 @@ export default function KIDS_PP_US_LG_06() {
 
   return (
     <ScreenShell screenId="KIDS-PP-US-LG-06" title="아이디 찾기" uiType="page">
-      <div className="page_layout">
-        <div className="sub_container">
-          <div className="content_wrap">
+      <div className="page-layout">
+        <div className="sub-container">
+          <div className="content-wrap">
             {/* sub content :: s */}
-            <div className="sub_content">
+            <div className="sub-content">
               <DepsLocation></DepsLocation>
-              <div className="content_view" id="content">
+              <div className="content-view" id="content">
 
                 <div className="pageCont_idPwFind member_page">
                   <p className="guide_text">아이디를 찾을 방법을 선택해주세요.</p>  
@@ -35,7 +35,7 @@ export default function KIDS_PP_US_LG_06() {
                 </div>
                 
               </div>
-              {/* content_view :: e */}
+              {/* content-view :: e */}
             </div>
             {/* sub content :: e */}
           </div>
