@@ -13,7 +13,7 @@ export const selectPstList = createAsyncThunk<PstListRVO, PstListPVO | undefined
       const res = await https.post(getPstListPath(), params);
 
       // ✅ 여기서 “서버 응답”을 표준 형태로 맞춰서 return
-      const payload = res.data;
+      const payload = res.data?.data?.list;
 
       // 서버가 Pst[] 형식으로 주므로 PstListRVO 형식으로 데이터 구조 재조정 
       return {
