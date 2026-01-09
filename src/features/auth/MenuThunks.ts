@@ -16,6 +16,63 @@ type RootStateLike = {
 
 /**
  * 대국민포털_메뉴기본 정보 목록 조회 
+ * Rest Api Result JSON
+ * {
+ *  "code": "0",
+ *  "msg": "성공",
+ *  "data": {
+ *      "list": [
+ *          {
+ *              "menuSn": 1000,
+ *              "menuNm": "주요 업무",
+ *              "taskSeCd": null,
+ *              "langSeCd": "ko",
+ *              "menuUrlAddr": null,
+ *              "upMenuSn": null,
+ *              "depLevel": 1,
+ *              "rootSn": 1000,
+ *              "menuTypeCd": null,
+ *              "path": "1000",
+ *              "menuSeq": 1,
+ *              "menuExpln": null,
+ *              "picDeptNm": null,
+ *              "picFlnm": null,
+ *              "useYn": null,
+ *              "rgtrId": null,
+ *              "regDt": null,
+ *              "regPrgrmId": null,
+ *              "mdfrId": null,
+ *              "mdfcnDt": null,
+ *              "mdfcnPrgrmId": null
+ *          },
+ *          {
+ *              "menuSn": 1001,
+ *              "menuNm": "의약품 이상사례보고",
+ *              "taskSeCd": null,
+ *              "langSeCd": "ko",
+ *              "menuUrlAddr": null,
+ *              "upMenuSn": 1000,
+ *              "depLevel": 2,
+ *              "rootSn": 1000,
+ *              "menuTypeCd": null,
+ *              "path": "1000 > 1001",
+ *              "menuSeq": 1,
+ *              "menuExpln": null,
+ *              "picDeptNm": null,
+ *              "picFlnm": null,
+ *              "useYn": null,
+ *              "rgtrId": null,
+ *              "regDt": null,
+ *              "regPrgrmId": null,
+ *              "mdfrId": null,
+ *              "mdfcnDt": null,
+ *              "mdfcnPrgrmId": null
+ *          },
+ *           ~~
+ *           ~~
+ *      ]
+ *   }
+ * }
  */
 export const selectMenuList = createAsyncThunk<MenuListRVO, MenuListPVO | undefined, {state: RootStateLike}>(
   '/auth/selectMenuList',
@@ -24,7 +81,7 @@ export const selectMenuList = createAsyncThunk<MenuListRVO, MenuListPVO | undefi
       const res = await https.post(selectMenuListApiPath(), params);
 
       // 여기서 “서버 응답”을 표준 형태로 맞춰서 return
-      const payload = res.data;
+      const payload = res.data.data?.list;
 
       // 서버가 Menu[] 형식으로 주므로 MenuListRVO 형식으로 데이터 구조 재조정 
       return {
