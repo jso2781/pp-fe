@@ -31,6 +31,9 @@ import PageTitle from '@/components/common/PageTitle';
 import { fetchNoticeList } from '@/features/notice/noticeThunks';
 import { Notice } from '@/features/notice/noticeTypes';
 import DepsLocation from '@/components/common/DepsLocation';
+import Lnb from '@/components/common/Lnb';
+import { Link as RouterLink } from 'react-router-dom';
+import { Link } from '@mui/material';
 
 type SideItem = {
   key: string;
@@ -112,7 +115,7 @@ export default function NoticeList() {
         label: '센터',
         children: [
           { key: '/center/1', label: '센터 소개', disabled: true },
-          { key: '/center/2', label: '센터 소식', disabled: true },
+          { key: '/center/2', label: '센터 소식', disabled: false },
         ],
       },
     ],
@@ -150,104 +153,126 @@ export default function NoticeList() {
 
   return (
     <Box className="page-layout">
-      <PageTitle title="기관 소식" subtitle="공지사항"/>
       <Box className="sub-container">
-        <Box className="content-wrap">
-          <Box className="sub-content">
-            <DepsLocation />
+          <Box className="content-wrap">
 
-            <Box className="content-view" id="content">
-              <Box className="sub_lnb">
-                <Card variant="outlined" sx={{ p: 1 }}>
-                  <SideNav items={sideItems} />
-                </Card>
+            {/* Lnb 영역 */}
+            <Box className="lnb-wrap">
+              <Box className="lnb-menu">
+                <Typography component="h2" className="lnb-tit">
+                  <span>알림마당</span>
+                </Typography>
+                <Box className="lnb-list">
+                  <Lnb items={sideItems} />
+                </Box>
               </Box>
+            </Box>
 
-              <Box className="sub_cont">
-                <Box className="ds-board">
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-                    <Typography variant="h6">공지사항</Typography>
-
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      <FormControl size="small" sx={{ minWidth: 140 }}>
-                        <InputLabel id="searchCnd-label">검색조건</InputLabel>
-                        <Select
-                          labelId="searchCnd-label"
-                          label="검색조건"
-                          value={searchCnd}
+            {/* 컨텐츠 본문 영역 */}
+            <Box className="sub-content">
+              <DepsLocation />
+              <Box className="content-view" id="content">
+                <Box className="sub_cont">
+                  
+                 {/* --- 본문 시작 --- */}
+                  <Box className="board_list_area" component="section">
+                    <Stack 
+                        direction="row" 
+                        spacing={1} // 요소 간 간격을 Antd 느낌으로 좁힘 (8px)
+                        alignItems="stretch" // 높이를 동일하게 맞추기 위해 stretch 권장
+                        component="form" 
+                        className="board_search"
+                      >
+                      <FormControl size="large" sx={{ minWidth: 140 }}>
+                        <InputLabel id="search-condition-label" className="sr_only">검색조건</InputLabel>
+                        <Select 
+                          value={searchCnd} 
+                          labelId="search-condition-label" 
                           onChange={(e) => setSearchCnd(String(e.target.value))}
                         >
                           <MenuItem value="title">제목</MenuItem>
                           <MenuItem value="content">내용</MenuItem>
-                          <MenuItem value="writer">작성자</MenuItem>
                         </Select>
                       </FormControl>
-
-                      <TextField
-                        size="small"
-                        placeholder="검색어"
-                        value={searchWrd}
-                        onChange={(e) => setSearchWrd(e.target.value)}
+                      <TextField 
+                        size="large" 
+                        placeholder="검색어 입력" 
+                        value={searchWrd} 
+                        onChange={(e) => setSearchWrd(e.target.value)} 
+                        sx={{ flexGrow: 1 }} // 남은 공간을 꽉 채우도록 설정
                       />
-
-                      <Button variant="contained" onClick={onSearch} disabled={loading}>
-                        검색
-                      </Button>
+                      <Button variant="contained" size="large" sx={{ px: 4, minWidth: 100 }} onClick={() => dispatch(fetchNoticeList({ pageIndex: 1, searchCnd, searchWrd }))}>검색</Button>
                     </Stack>
-                  </Stack>
 
-                  <Divider sx={{ mb: 2 }} />
+                    <Box className="board_info" aria-label="게시판 검색결과">
+                      <Typography className="board_count">
+                        검색결과 
+                        <Typography component="span" className="count">1</Typography>
+                        건
+                      </Typography>
+                    </Box>
 
-                  <TableContainer component={Paper} variant="outlined">
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell width={80} align="center">No</TableCell>
-                          <TableCell>제목</TableCell>
-                          <TableCell width={120} align="center">작성자</TableCell>
-                          <TableCell width={140} align="center">등록일</TableCell>
-                          <TableCell width={90} align="center">조회수</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {rows.map((r, idx) => (
-                          <TableRow key={String(r.id)} hover>
-                            <TableCell align="center">{(pageIndex - 1) * 10 + idx + 1}</TableCell>
-                            <TableCell>
-                              <Button
-                                variant="text"
-                                sx={{ p: 0, textTransform: 'none', justifyContent: 'flex-start' }}
-                                onClick={() => navigate(`/ko/notice/${r.id}?page=${pageIndex}`)}
-                              >
-                                {r.title}
-                              </Button>
-                            </TableCell>
-                            <TableCell align="center">{r.writer}</TableCell>
-                            <TableCell align="center">{r.date}</TableCell>
-                            <TableCell align="center">{r.views}</TableCell>
+                    <TableContainer component={Paper} className="bbs_list">
+                      {/* 1. aria-label로 표의 목적을 설명합니다. */}
+                      <Table aria-label="공지사항 목록">
+                        <TableHead>
+                          <TableRow>
+                            {/* 2. component="th"와 scope="col"을 통해 제목 열임을 명시합니다. */}
+                            <TableCell component="th" scope="col" align="center">No</TableCell>
+                            <TableCell component="th" scope="col" align="center">제목</TableCell>
+                            <TableCell component="th" scope="col" align="center">작성자</TableCell>
+                            <TableCell component="th" scope="col" align="center">등록일</TableCell>
+                            <TableCell component="th" scope="col" align="center">조회수</TableCell>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                          {rows.map((r, idx) => (
+                            <TableRow key={String(r.id)}>
+                              {/* 3. 행의 식별자 데이터도 component="th", scope="row"를 권장합니다. */}
+                              <TableCell component="th" scope="row" align="center">
+                                {(pageIndex - 1) * 10 + idx + 1}
+                              </TableCell>
+                              <TableCell>
+                                {/* 4. 동작이 발생하는 요소에 명확한 aria-label을 제공합니다. */}
+                                <Link
+                                  component={RouterLink}
+                                  to={`/ko/notice/${r.id}`}
+                                  color="inherit"
+                                  underline="hover" // 평소엔 밑줄 없고 마우스 올릴 때만 생성 (접근성 권장)
+                                  aria-label={`${r.title} 상세보기`}
+                                  sx={{ 
+                                    display: 'inline-block',
+                                    width: '100%',
+                                    fontWeight: 500,
+                                    cursor: 'pointer'
+                                  }}
+                                >
+                                  {r.title}
+                                </Link>
+                              </TableCell>
+                              <TableCell align="center">{r.writer}</TableCell>
+                              <TableCell align="center">{r.date}</TableCell>
+                              <TableCell align="center">{r.views}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
 
-                  <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
-                    <Pagination
-                      count={totalPages}
-                      page={pageIndex}
-                      onChange={(_, p) => {
+                    <Stack direction="row" justifyContent="center" className="paging_wrap">
+                      <Pagination count={totalPages} page={pageIndex} onChange={(_, p) => {
                         const next = new URLSearchParams(searchParams);
                         next.set('page', String(p));
                         setSearchParams(next);
-                        dispatch(fetchNoticeList({ pageIndex: p, searchCnd, searchWrd }));
-                      }}
-                    />
-                  </Stack>
+                      }} />
+                    </Stack>
+                  </Box>
+                   {/* --- 본문 끝 --- */}
+
                 </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
       </Box>
     </Box>
   );
