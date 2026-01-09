@@ -17,10 +17,10 @@ export default function Layout() {
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
       <Header onOpenNav={() => setMobileOpen(true)} />
-      <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+      
         {/* <AppNavDrawer mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} drawerWidth={DRAWER_WIDTH} /> */}
 
-        <Box
+        {/* <Box
           component="main"
           sx={{
             flex: 1,
@@ -30,15 +30,14 @@ export default function Layout() {
             display: 'flex',
             flexDirection: 'column',
           }}
-        >
+        > */}
           {/* keep spacing consistent under sticky AppBar */}
-          <Toolbar sx={{ display: 'none' }} />
+          {/* <Toolbar sx={{ display: 'none' }} /> */}
           <Box className="app-main" sx={{ flex: 1 }}>
             <Outlet />
           </Box>
-          <Footer />
-        </Box>
-      </Box>
+        {/* </Box> */}
+        <Footer />
     </ThemeProvider>
   )
 }
