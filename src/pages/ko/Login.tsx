@@ -28,7 +28,7 @@ function ensureAnyIdAssets() {
   // Any-ID UI 자원(CSS/JS) 적용 가이드 (AuthResourceRelay 기준)
   //  - /anyid/css/app.css
   //  - /anyid/js/manifest.js, vendor.js, app.js
-  ensureLink('/anyid/css/app.css')
+  ensureLink(`${anyIdStaticUrl}/anyid/css/app.css`)
 
   // manifest -> vendor -> app 순서 권장
   return loadScript(`${anyIdStaticUrl}/anyid/js/manifest.js`)
