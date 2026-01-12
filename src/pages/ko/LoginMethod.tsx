@@ -183,9 +183,7 @@ export default function KIDS_PP_US_LG_01() {
     <div className="sub-container">
         <div className="content-wrap">
         <div className="sub-content">
-            <Box sx={{ mb: 0, '& .location': { marginBottom: '12px !important' } }}>
             <DepsLocation />
-            </Box>
             <div className="content-view" id="content">
             <Box sx={{ maxWidth: 980, margin: '0 auto', padding: '5px 16px' }}>
                 {/* Any-ID SDK가 렌더링될 영역 (정부24와 동일) */}

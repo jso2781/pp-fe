@@ -39,6 +39,7 @@ import Screens from '@/pages/screens/Screens'
 import ScreenViewer from '@/pages/screens/ScreenViewer'
 
 import { normalizeLang, FALLBACK_LANG, detectBrowserLang } from "./lang";
+import { AuthProvider } from '@/contexts/AuthContext';
 
 type LangElementProps = {
   byLang: Record<string, JSX.Element>;
@@ -130,46 +131,48 @@ const LangGuard = ({ children }: { children: JSX.Element }) => {
 
 export default function Router() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* 공통 레이아웃 */}
-        <Route element={<LangGuard><Layout /></LangGuard>}>
-          {/* ✅ 루트(/)로 들어오면 브라우저 언어 기반으로 /ko 또는 /en로 보내기 */}
-          <Route path="/" element={<Navigate to={`/${detectBrowserLang()}`} replace />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* 공통 레이아웃 */}
+          <Route element={<LangGuard><Layout /></LangGuard>}>
+            {/* ✅ 루트(/)로 들어오면 브라우저 언어 기반으로 /ko 또는 /en로 보내기 */}
+            <Route path="/" element={<Navigate to={`/${detectBrowserLang()}`} replace />} />
 
-          {/* 언어별로 화면 전환 */}
-          <Route path="/:lang" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
-          <Route path="/:lang/notice" element={<LangElement byLang={{ ko: <NoticeListKo />, en: <NoticeListEn /> }} />} />
-          <Route path="/:lang/notice/:id" element={<LangElement byLang={{ ko: <NoticeDetailKo />, en: <NoticeDetailEn /> }} />} />
-          <Route path="/:lang/board" element={<LangElement byLang={{ ko: <BoardListKo />, en: <BoardListEn /> }} />} />
-          <Route path="/:lang/board/write" element={<LangElement byLang={{ ko: <BoardWriteKo />, en: <BoardWriteEn /> }} />} />
-          <Route path="/:lang/dur/notice" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListEn /> }} />} />
-          <Route path="/:lang/dur/notice/:id" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailEn /> }} />} />
-          <Route path="/:lang/dur/proposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalEn /> }} />} />
+            {/* 언어별로 화면 전환 */}
+            <Route path="/:lang" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
+            <Route path="/:lang/notice" element={<LangElement byLang={{ ko: <NoticeListKo />, en: <NoticeListEn /> }} />} />
+            <Route path="/:lang/notice/:id" element={<LangElement byLang={{ ko: <NoticeDetailKo />, en: <NoticeDetailEn /> }} />} />
+            <Route path="/:lang/board" element={<LangElement byLang={{ ko: <BoardListKo />, en: <BoardListEn /> }} />} />
+            <Route path="/:lang/board/write" element={<LangElement byLang={{ ko: <BoardWriteKo />, en: <BoardWriteEn /> }} />} />
+            <Route path="/:lang/dur/notice" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListEn /> }} />} />
+            <Route path="/:lang/dur/notice/:id" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailEn /> }} />} />
+            <Route path="/:lang/dur/proposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalEn /> }} />} />
 
-          <Route path="/:lang/faq" element={<LangElement byLang={{ ko: <FaqListKo />, en: <FaqListKo /> }} />} />
-          
-          {/* 게시판 테스트중 */}          
-          <Route path="/:lang/newboard/common/:bbsId" element={<LangElement byLang={{ ko: <CommonBoardListKo />, en: <CommonBoardListKo /> }} />} />
-          <Route path="/:lang/newboard/common/:bbsId/:sn" element={<LangElement byLang={{ ko: <CommonBoardDetailKo />, en: <CommonBoardDetailKo /> }} />} />
+            <Route path="/:lang/faq" element={<LangElement byLang={{ ko: <FaqListKo />, en: <FaqListKo /> }} />} />
+            
+            {/* 게시판 테스트중 */}          
+            <Route path="/:lang/newboard/common/:bbsId" element={<LangElement byLang={{ ko: <CommonBoardListKo />, en: <CommonBoardListKo /> }} />} />
+            <Route path="/:lang/newboard/common/:bbsId/:sn" element={<LangElement byLang={{ ko: <CommonBoardDetailKo />, en: <CommonBoardDetailKo /> }} />} />
 
-          {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
-          <Route path="/screens" element={<Screens />} />
-          <Route path="/screens/:screenId" element={<ScreenViewer />} />
+            {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
+            <Route path="/screens" element={<Screens />} />
+            <Route path="/screens/:screenId" element={<ScreenViewer />} />
 
-          {/* 로그인 관련 라우트 - 와일드카드보다 먼저 배치 (더 구체적인 경로가 먼저 와야 함) */}
-          <Route path="/:lang/login/method" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />
-          <Route path="/:lang/login" element={<LangElement byLang={{ ko: <LoginKo />, en: <LoginEn /> }} />} />
+            {/* 로그인 관련 라우트 - 와일드카드보다 먼저 배치 (더 구체적인 경로가 먼저 와야 함) */}
+            <Route path="/:lang/login/method" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />
+            <Route path="/:lang/login" element={<LangElement byLang={{ ko: <LoginKo />, en: <LoginEn /> }} />} />
 
-          {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
-          <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />
-        </Route>
+            {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
+            <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />
+          </Route>
 
-        {/* BlankLayout */}
-        <Route element={<BlankLayout />}>
-          <Route path="/:lang/notice/:id/preview" element={<LangElement byLang={{ ko: <NoticeDetailKo />, en: <NoticeDetailEn /> }} />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          {/* BlankLayout */}
+          <Route element={<BlankLayout />}>
+            <Route path="/:lang/notice/:id/preview" element={<LangElement byLang={{ ko: <NoticeDetailKo />, en: <NoticeDetailEn /> }} />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
