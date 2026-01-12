@@ -61,7 +61,7 @@ export default function KIDS_PP_US_MT_01_LAYOUT() {
             </Box>
             <DepsLocation />
             <Box className="content-view" id="content">
-              <Box className="sub_cont">
+              <Box className="page-content">
                 {/* --- 본문 시작 --- */}
 
                 {/* --- 본문 끝 --- */}

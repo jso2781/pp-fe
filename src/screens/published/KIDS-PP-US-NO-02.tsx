@@ -58,7 +58,7 @@ export default function KIDS_PP_US_NO_02() {
             <Box className="sub-content">
               <DepsLocation />
               <Box className="content-view" id="content">
-                <Box className="sub_cont">
+                <Box className="page-content">
                   
                   {/* --- 본문 시작 --- */}
                   <Box component="article" className="board-detail">
