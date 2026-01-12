@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Stack, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+
 import DepsLocation from '@/components/common/DepsLocation'
 import CollapsibleSideNav from '@/components/navigation/CollapsibleSideNav'
 
@@ -35,17 +37,28 @@ export default function KIDS_PP_US_MT_01_LAYOUT() {
       <Box className="sub-container">
         <Box className="content-wrap">
 
-          <CollapsibleSideNav
-            title="알림마당"
-            collapsed={collapsed}
-            onToggle={() => setCollapsed((p) => !p)}
-            items={sideItems}
-            //selectedKey="/3"
-            onSelect={(key) => window.alert(`Maps: ${key}`)}
-          />
-          
+          <Box className="side_nav">
+            <CollapsibleSideNav
+              title="내업무"
+              collapsed={collapsed}
+              onToggle={() => setCollapsed((p) => !p)}
+              items={sideItems}
+              onSelect={(key) => window.alert(`Maps: ${key}`)}
+            />
+          </Box>
+
           {/* 컨텐츠 본문 영역 */}
           <Box className="sub-content">
+            <Box className="welcome-banner">
+              <Stack direction="row" alignItems="center" className="welcome-banner__inner">
+                <Typography className="welcome-banner__message">
+                  <span className="user-name">김안전</span>님 환영합니다. ‘OOO’ 메뉴에 새로운 확인 사항이 있습니다.
+                </Typography>
+                <IconButton size="small" className="btn-close" aria-label="close">
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </Stack>
+            </Box>
             <DepsLocation />
             <Box className="content-view" id="content">
               <Box className="sub_cont">

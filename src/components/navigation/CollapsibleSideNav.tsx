@@ -50,6 +50,9 @@ export default function CollapsibleSideNav({
           borderRightColor: 'divider',
           position: 'absolute',
           height: '100%',
+          borderRadius: '0 12px 12px 0',
+          border: '1px solid #D8D8D8',
+          background: '#EDF8F8',
           zIndex: 1200,
           transition: (theme) =>
             theme.transitions.create('width', {
@@ -60,20 +63,20 @@ export default function CollapsibleSideNav({
       }}
       sx={{
         position: 'absolute',
-        height: '100%',
-        top: 0,
+        height: 'calc(100% - 80px)', 
+        top: '30px',
         left: 0,
         zIndex: 1200,
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', px: 1.5, py: 1 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', padding: '20px 20px', }}>
         {!collapsed && (
-          <Typography variant="subtitle1" fontWeight={800} noWrap>
+          <Typography className="nav_title">
             {title}
           </Typography>
         )}
-        <IconButton aria-label="toggle menu" onClick={onToggle} size="small">
-          {collapsed ? <MenuIcon /> : <MenuOpenIcon />}
+        <IconButton aria-label="toggle menu" onClick={onToggle} size="small" sx={{ color: '#1E2124' }}>
+          {collapsed ? <MenuIcon sx={{ fontSize: 32 }}/> : <MenuOpenIcon sx={{ fontSize: 32 }}/>}
         </IconButton>
       </Box>
       <Divider />
@@ -81,9 +84,14 @@ export default function CollapsibleSideNav({
         {items.map((it) => {
           const hasChildren = !!(it.children && it.children.length > 0)
           const isOpen = openKeys[it.key] || false
-
+          
           return (
-            <Box key={it.key}>
+            <Box 
+              key={it.key}
+              sx={{
+                borderBottom: '1px solid #8A949E', 
+              }}
+            >
               <ListItemButton
                 selected={selected === it.key}
                 disabled={!!it.disabled}
@@ -94,36 +102,68 @@ export default function CollapsibleSideNav({
                     onSelect?.(it.key)
                   }
                 }}
-                sx={{ px: collapsed ? 1.5 : 2 }}
+                sx={{ 
+                  py: '15px',
+                  pl: '30px',
+                  pr: '25px',
+                }}
               >
                 <ListItemText
                   primary={it.label}
                   primaryTypographyProps={{
-                    fontSize: 14,
+                    fontSize: 18,
+                    fontWeight: 700,
                     noWrap: true,
-                    sx: { opacity: collapsed ? 0 : 1, fontWeight: hasChildren ? 700 : 400 },
+                    sx: { opacity: collapsed ? 0 : 1 },
+                    //pl: '8px',
                   }}
                 />
                 {/* 하위 메뉴가 있고, 메뉴가 펼쳐진 상태일 때만 화살표 표시 */}
-                {!collapsed && hasChildren && (isOpen ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />)}
+                {!collapsed && hasChildren && (
+                  isOpen 
+                    ? <ExpandLess sx={{ fontSize: 30 }} /> 
+                    : <ExpandMore sx={{ fontSize: 30 }} />
+                )}
               </ListItemButton>
 
               {/* 하위 메뉴 리스트 (Collapse) */}
               {hasChildren && (
                 <Collapse in={isOpen && !collapsed} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding dense>
+                  <List 
+                    component="div" 
+                    disablePadding 
+                    dense
+                    sx={{ 
+                      py: 1,           // 위아래 전체 패딩 (8px)
+                      backgroundColor: '#B1D2D2'
+                    }}
+                  >
                     {it.children?.map((child) => (
                       <ListItemButton
                         key={child.key}
                         selected={selected === child.key}
                         onClick={() => onSelect?.(child.key)}
-                        sx={{ pl: collapsed ? 1.5 : 4 }} // 하위 메뉴 들여쓰기
+                        sx={{ 
+                          pl: collapsed ? 1.5 : 3,
+                          backgroundColor: '#B1D2D2',
+                          '&:hover': {
+                            backgroundColor: '#9DBFBF',
+                            '& .MuiTypography-root': {
+                              fontWeight: 700,
+                            },
+                          },
+                          /* 선택되었을 때 */
+                          '&.Mui-selected .MuiTypography-root': {
+                            fontWeight: 700,
+                          }
+                         }}
                       >
                         <ListItemText
                           primary={child.label}
                           primaryTypographyProps={{
-                            fontSize: 13,
                             noWrap: true,
+                            fontSize: 17,
+                            fontWeight: 400,
                             sx: { opacity: collapsed ? 0 : 1 },
                           }}
                         />

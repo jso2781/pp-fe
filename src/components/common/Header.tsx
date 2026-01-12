@@ -1070,28 +1070,33 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   return (
     <>
       <SkipNavigation />
-      <AppBar position="relative" elevation={0}>
-        {/* 첫 번째 줄: Screens, English/한국어 선택 */}
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-            py: 0.5,
-          }}
-        >
-          <Container>
-            <Stack
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="center"
-              spacing={1}
-              sx={{ px: 2 }}
-            >
+      
+      <Box component="header" className="header">
+        {/* 정부 배지 영역 */}
+        <Box className="gov-badge">
+          <Box className="container">
+            <Typography className="txt">
+              {t("shutcutTitle")}
+            </Typography>
+          </Box>
+        </Box>
+        {/* 상단 바 */}
+        <Box className="header-topbar">
+          <Box className="container">
+            <Box className="top-link">
+              <Box className="timer_box">
+                <span className="time_text">12:00</span>
+                <Button 
+                  size="small" 
+                  className="btn_extend"
+                  //onClick={handleExtendSession} // 세션 연장 함수
+                >
+                  시간연장
+                </Button>
+              </Box>
               <Button
                 size="small"
                 onClick={() => navigate('/screens')}
-                sx={{ color: 'text.secondary', fontSize: '0.875rem' }}
               >
                 Screens
               </Button>
@@ -1099,26 +1104,16 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                 size="small"
                 onClick={onToggleLang}
                 startIcon={<Language />}
-                sx={{ color: 'text.secondary', fontSize: '0.875rem' }}
               >
                 {i18nInstance.language === 'ko' ? 'English' : '한국어'}
               </Button>
-            </Stack>
-          </Container>
+            </Box>
+          </Box>
         </Box>
-
-        {/* 두 번째 줄: 로고 + 통합검색, 회원가입, 전문가 회원 전환 신청, 로그인 */}
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-            py: 1.5,
-          }}
-        >
-          <Container maxWidth="xl">
-            <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between', px: 2 }}>
-              {/* 로고 */}
+        {/* 로고, 유틸메뉴 */}
+        <Box className="header_menu">
+          <Box className="container">
+            <h1>
               <Link
                 to={to('/')}
                 style={{
@@ -1137,256 +1132,182 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   }}
                 />
               </Link>
-
-              {/* 유틸리티 메뉴: 통합검색, 회원가입, 전문가 회원 전환 신청, 로그인 */}
+            </h1>
+            <Box className="util-menu">
               {i18nInstance.language === 'ko' && (
                 <Stack direction="row" spacing={1} alignItems="center">
                   <Button
                     size="small"
-                    startIcon={<Search />}
                     onClick={() => navigate(to('/search'))}
-                    sx={{ color: 'text.primary', fontSize: '0.875rem' }}
+                    className="btn-util search"
                   >
                     {t('integratedSearch')}
                   </Button>
                   <Button
                     size="small"
-                    startIcon={<Person />}
                     onClick={() => navigate(to('/signup'))}
-                    sx={{ color: 'text.primary', fontSize: '0.875rem' }}
+                    className="btn-util signup" 
                   >
                     {t('signup')}
                   </Button>
                   <Button
                     size="small"
-                    startIcon={<Person />}
+                    onClick={() => navigate(to('/signup'))}
+                    className="btn-util edit-profile" 
+                  >
+                    {t('editProfile')}
+                  </Button>
+                  <Button
+                    size="small"
                     onClick={() => navigate(to('/expert/convert/apply'))}
-                    sx={{ color: 'text.primary', fontSize: '0.875rem' }}
+                    className="btn-util user-reg"
                   >
                     {t('usrSwtReg')}
                   </Button>
                   <Button
                     size="small"
-                    startIcon={<Login />}
                     onClick={() => {
                       const path = to('/login/method')
                       console.log('Header login button clicked, current lang:', lang, 'navigating to:', path)
                       navigate(path, { replace: false })
                     }}
-                    sx={{ color: 'text.primary', fontSize: '0.875rem' }}
+                    className="btn-util login"
                   >
                     {t('login')}
                   </Button>
+                  <Button
+                    size="small"
+                    onClick={() => {
+                      const path = to('/login/method')
+                      navigate(path, { replace: false })
+                    }}
+                    className="btn-util logout"
+                  >
+                    {t('logout')}
+                  </Button>
                 </Stack>
               )}
-            </Toolbar>
-          </Container>
+            </Box>
+          </Box>
         </Box>
-
-        {/* 세 번째 줄: 주요 업무, 정보공개, 기관소식, 기관소개 메뉴 */}
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-          }}
-        >
-          <Container maxWidth="xl">
-            <Toolbar
-              disableGutters
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                px: 2,
-                minHeight: '48px !important',
-              }}
-            >
-              {/* 모바일 메뉴 아이콘 */}
-              <IconButton
-                aria-label="open navigation"
-                onClick={onOpenNav}
-                edge="start"
-                sx={{ display: { xs: 'flex', md: 'none' } }}
-              >
-                <MenuIcon />
-              </IconButton>
-
-              {/* 주요 업무, 정보공개, 기관소식, 기관소개 메뉴 */}
-              <Stack
-                direction="row"
-                spacing={1}
+        {/*  GNB */}
+        <Box className="gnb" aria-label="주요 메뉴">
+          <Box className="container">
+            <Box className="gnb-list">
+              <Toolbar
+                disableGutters
                 sx={{
-                  display: { xs: 'none', md: 'flex' },
+                  display: 'flex',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
-                  flex: 1,
+                  px: 2,
+                  minHeight: '48px !important',
                 }}
               >
-                {rootMenus.map((rootMenu) => {
-                  const menuKey = `menu-${rootMenu.menuSn}`
-                  const hasChildren = (byParent.get(rootMenu.menuSn ?? null) ?? []).length > 0
-                  const anchorEl = anchorEls[menuKey]
+                {/* 모바일 메뉴 아이콘 */}
+                <IconButton
+                  aria-label="open navigation"
+                  onClick={onOpenNav}
+                  edge="start"
+                  sx={{ display: { xs: 'flex', md: 'none' } }}
+                >
+                  <MenuIcon />
+                </IconButton>
 
-                  if (hasChildren) {
-                    return (
-                      <Box key={menuKey}>
-                        <Button
-                          color="inherit"
-                          data-root-menu={menuKey}
-                          onClick={(e) => {
-                            // 클릭 시 모든 메뉴를 즉시 닫고, 클릭한 메뉴만 열기
-                            // 모든 타임아웃 취소 (즉시 실행)
-                            Object.keys(closeTimeoutsRef.current).forEach((key) => {
-                              clearTimeout(closeTimeoutsRef.current[key])
-                              delete closeTimeoutsRef.current[key]
-                            })
-                            
-                            // 모든 메뉴를 즉시 닫고 클릭한 메뉴만 열기
-                            // flushSync를 사용하여 즉시 DOM에 반영
-                            flushSync(() => {
-                              setAnchorEls(() => {
-                                const newState: Record<string, HTMLElement | null> = {}
-                                // 클릭한 메뉴만 열기
-                                newState[menuKey] = e.currentTarget
-                                return newState
-                              })
-                            })
-                          }}
-                          onMouseEnter={(e) => {
-                            // 마우스 오버로도 메뉴 열기
-                            // 모든 루트 메뉴의 타임아웃 즉시 취소
-                            Object.keys(closeTimeoutsRef.current).forEach((key) => {
-                              if (key.startsWith('menu-')) {
+                {/* 주요 업무, 정보공개, 기관소식, 기관소개 메뉴 */}
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{
+                    display: { xs: 'none', md: 'flex' },
+                    alignItems: 'center',
+                    flex: 1,
+                  }}
+                >
+                  {rootMenus.map((rootMenu) => {
+                    const menuKey = `menu-${rootMenu.menuSn}`
+                    const hasChildren = (byParent.get(rootMenu.menuSn ?? null) ?? []).length > 0
+                    const anchorEl = anchorEls[menuKey]
+
+                    if (hasChildren) {
+                      return (
+                        <Box key={menuKey}>
+                          <Button
+                            color="inherit"
+                            data-root-menu={menuKey}
+                            onClick={(e) => {
+                              // 클릭 시 모든 메뉴를 즉시 닫고, 클릭한 메뉴만 열기
+                              // 모든 타임아웃 취소 (즉시 실행)
+                              Object.keys(closeTimeoutsRef.current).forEach((key) => {
                                 clearTimeout(closeTimeoutsRef.current[key])
                                 delete closeTimeoutsRef.current[key]
-                              }
-                              // 하위 메뉴의 타임아웃도 즉시 취소
-                              Object.keys(closeTimeoutsRef.current).forEach((childKey) => {
-                                if (childKey.startsWith(key + '-')) {
-                                  clearTimeout(closeTimeoutsRef.current[childKey])
-                                  delete closeTimeoutsRef.current[childKey]
+                              })
+                              
+                              // 모든 메뉴를 즉시 닫고 클릭한 메뉴만 열기
+                              // flushSync를 사용하여 즉시 DOM에 반영
+                              flushSync(() => {
+                                setAnchorEls(() => {
+                                  const newState: Record<string, HTMLElement | null> = {}
+                                  // 클릭한 메뉴만 열기
+                                  newState[menuKey] = e.currentTarget
+                                  return newState
+                                })
+                              })
+                            }}
+                            onMouseEnter={(e) => {
+                              // 마우스 오버로도 메뉴 열기
+                              // 모든 루트 메뉴의 타임아웃 즉시 취소
+                              Object.keys(closeTimeoutsRef.current).forEach((key) => {
+                                if (key.startsWith('menu-')) {
+                                  clearTimeout(closeTimeoutsRef.current[key])
+                                  delete closeTimeoutsRef.current[key]
                                 }
+                                // 하위 메뉴의 타임아웃도 즉시 취소
+                                Object.keys(closeTimeoutsRef.current).forEach((childKey) => {
+                                  if (childKey.startsWith(key + '-')) {
+                                    clearTimeout(closeTimeoutsRef.current[childKey])
+                                    delete closeTimeoutsRef.current[childKey]
+                                  }
+                                })
                               })
-                            })
-                            
-                            // 다른 루트 메뉴들을 즉시 닫기 (flushSync로 즉시 반영)
-                            flushSync(() => {
-                              setAnchorEls(() => {
-                                const newState: Record<string, HTMLElement | null> = {}
-                                // 클릭한 메뉴만 열기 (다른 모든 메뉴는 닫힘)
-                                newState[menuKey] = e.currentTarget
-                                return newState
+                              
+                              // 다른 루트 메뉴들을 즉시 닫기 (flushSync로 즉시 반영)
+                              flushSync(() => {
+                                setAnchorEls(() => {
+                                  const newState: Record<string, HTMLElement | null> = {}
+                                  // 클릭한 메뉴만 열기 (다른 모든 메뉴는 닫힘)
+                                  newState[menuKey] = e.currentTarget
+                                  return newState
+                                })
                               })
-                            })
-                          }}
-                          onMouseLeave={(e) => {
-                            // 마우스가 떠날 때 약간의 지연 후 닫기
-                            const relatedTarget = e.relatedTarget as HTMLElement | null
-                            const isMovingToMenu = relatedTarget?.closest(`[data-menu-key="${menuKey}"]`) !== null
-                            const isMovingToMenuItem = relatedTarget?.closest(`[data-menu-item-key]`) !== null
-                            const isMovingToOtherRoot = relatedTarget?.closest('button[data-root-menu]') !== null
-                            
-                            // 다른 루트 메뉴로 이동하는 경우 즉시 닫기
-                            if (isMovingToOtherRoot) {
-                              // 타임아웃 취소
-                              if (closeTimeoutsRef.current[menuKey]) {
-                                clearTimeout(closeTimeoutsRef.current[menuKey])
-                                delete closeTimeoutsRef.current[menuKey]
-                              }
-                              // 즉시 닫기
-                              handleMenuClose(menuKey)
-                              return
-                            }
-                            
-                            // 메뉴가 열려있지 않으면 타임아웃 설정 불필요
-                            if (!anchorEl) {
-                              return
-                            }
-                            
-                            // 메뉴 영역이나 MenuItem으로 이동하는 경우 타임아웃 설정하지 않음
-                            if (isMovingToMenu || isMovingToMenuItem) {
-                              // 타임아웃 취소
-                              if (closeTimeoutsRef.current[menuKey]) {
-                                clearTimeout(closeTimeoutsRef.current[menuKey])
-                                delete closeTimeoutsRef.current[menuKey]
-                              }
-                              return
-                            }
-                            
-                            // 기존 타임아웃 취소
-                            if (closeTimeoutsRef.current[menuKey]) {
-                              clearTimeout(closeTimeoutsRef.current[menuKey])
-                            }
-                            
-                            // e.currentTarget을 변수에 저장하여 setTimeout 콜백에서 안전하게 사용
-                            const buttonElement = e.currentTarget
-                            
-                            // 마우스가 완전히 벗어났을 때만 타임아웃 설정
-                            closeTimeoutsRef.current[menuKey] = setTimeout(() => {
-                              // 타임아웃이 여전히 유효한지 확인
-                              if (!closeTimeoutsRef.current[menuKey]) {
-                                return
-                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              // 마우스가 떠날 때 약간의 지연 후 닫기
+                              const relatedTarget = e.relatedTarget as HTMLElement | null
+                              const isMovingToMenu = relatedTarget?.closest(`[data-menu-key="${menuKey}"]`) !== null
+                              const isMovingToMenuItem = relatedTarget?.closest(`[data-menu-item-key]`) !== null
+                              const isMovingToOtherRoot = relatedTarget?.closest('button[data-root-menu]') !== null
                               
-                              // 메뉴가 여전히 열려있는지 확인
-                              const currentAnchorEl = anchorEls[menuKey]
-                              if (!currentAnchorEl) {
-                                delete closeTimeoutsRef.current[menuKey]
-                                return
-                              }
-                              
-                              // 현재 마우스 위치 확인 (이벤트 좌표가 아닌 실제 마우스 위치 사용)
-                              // 마우스 이벤트를 직접 사용할 수 없으므로, 메뉴와 버튼 요소가 활성 상태인지 확인
-                              const menuElement = document.querySelector(`[data-menu-key="${menuKey}"]`)
-                              const menuItemElement = document.querySelector(`[data-menu-item-key="${menuKey}"]`)
-                              
-                              // 메뉴가 열려있고, 메뉴 요소나 버튼 요소가 존재하는 경우
-                              // 실제로는 마우스가 메뉴 영역에 있으면 onMouseEnter가 호출되어 타임아웃이 취소되므로
-                              // 여기까지 도달했다는 것은 마우스가 메뉴 영역 밖에 있다는 의미
-                              // 하지만 안전을 위해 한 번 더 확인
-                              if (menuElement || menuItemElement) {
-                                // 메뉴 요소가 있으면 타임아웃만 취소하고 메뉴는 유지
-                                delete closeTimeoutsRef.current[menuKey]
-                                return
-                              }
-                              
-                              // 메뉴 영역에 마우스가 없으면 닫기
+                              // 다른 루트 메뉴로 이동하는 경우 즉시 닫기
+                              if (isMovingToOtherRoot) {
+                                // 타임아웃 취소
+                                if (closeTimeoutsRef.current[menuKey]) {
+                                  clearTimeout(closeTimeoutsRef.current[menuKey])
+                                  delete closeTimeoutsRef.current[menuKey]
+                                }
+                                // 즉시 닫기
                                 handleMenuClose(menuKey)
-                              delete closeTimeoutsRef.current[menuKey]
-                            }, 200) // 타임아웃을 200ms로 늘려서 메뉴 영역으로 이동할 시간 확보
-                          }}
-                          endIcon={<ArrowDropDown />}
-                          sx={{
-                            fontWeight: 600,
-                            color: 'text.primary',
-                            fontSize: '0.9375rem',
-                            textTransform: 'none',
-                          }}
-                        >
-                          {rootMenu.menuNm}
-                        </Button>
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={Boolean(anchorEl)}
-                          onClose={() => handleMenuClose(menuKey)}
-                          MenuListProps={{
-                            'aria-labelledby': menuKey,
-                            onMouseEnter: () => {
-                              // 메뉴 영역에 마우스가 들어오면 타임아웃 취소
-                              if (closeTimeoutsRef.current[menuKey]) {
-                                clearTimeout(closeTimeoutsRef.current[menuKey])
-                                delete closeTimeoutsRef.current[menuKey]
+                                return
                               }
-                            },
-                            onMouseLeave: (e: React.MouseEvent) => {
-                              // 메뉴 영역을 벗어날 때 타임아웃 설정
-                              const relatedTarget = e.relatedTarget as HTMLElement | null
-                              const isMovingToButton = relatedTarget === anchorEl || 
-                                (anchorEl && anchorEl.contains(relatedTarget as Node))
-                              const isMovingToChild = relatedTarget?.closest(`[data-menu-key]`)?.getAttribute('data-menu-key')?.startsWith(menuKey + '-') === true
                               
-                              // 버튼이나 하위 메뉴로 이동하는 경우 타임아웃 설정하지 않음
-                              if (isMovingToButton || isMovingToChild) {
+                              // 메뉴가 열려있지 않으면 타임아웃 설정 불필요
+                              if (!anchorEl) {
+                                return
+                              }
+                              
+                              // 메뉴 영역이나 MenuItem으로 이동하는 경우 타임아웃 설정하지 않음
+                              if (isMovingToMenu || isMovingToMenuItem) {
+                                // 타임아웃 취소
                                 if (closeTimeoutsRef.current[menuKey]) {
                                   clearTimeout(closeTimeoutsRef.current[menuKey])
                                   delete closeTimeoutsRef.current[menuKey]
@@ -1399,133 +1320,218 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                 clearTimeout(closeTimeoutsRef.current[menuKey])
                               }
                               
-                              // 타임아웃 설정
+                              // e.currentTarget을 변수에 저장하여 setTimeout 콜백에서 안전하게 사용
+                              const buttonElement = e.currentTarget
+                              
+                              // 마우스가 완전히 벗어났을 때만 타임아웃 설정
                               closeTimeoutsRef.current[menuKey] = setTimeout(() => {
+                                // 타임아웃이 여전히 유효한지 확인
                                 if (!closeTimeoutsRef.current[menuKey]) {
                                   return
                                 }
                                 
+                                // 메뉴가 여전히 열려있는지 확인
                                 const currentAnchorEl = anchorEls[menuKey]
                                 if (!currentAnchorEl) {
                                   delete closeTimeoutsRef.current[menuKey]
                                   return
                                 }
                                 
-                                // 메뉴 요소가 여전히 존재하는지 확인
-                                // 메뉴 영역에 마우스가 있으면 onMouseEnter가 호출되어 타임아웃이 취소되므로
-                                // 여기까지 도달했다는 것은 마우스가 메뉴 영역 밖에 있다는 의미
+                                // 현재 마우스 위치 확인 (이벤트 좌표가 아닌 실제 마우스 위치 사용)
+                                // 마우스 이벤트를 직접 사용할 수 없으므로, 메뉴와 버튼 요소가 활성 상태인지 확인
                                 const menuElement = document.querySelector(`[data-menu-key="${menuKey}"]`)
-                                  const hasOpenChild = Object.keys(anchorEls).some((key) => 
-                                    key.startsWith(menuKey + '-') && anchorEls[key] !== null
-                                  )
+                                const menuItemElement = document.querySelector(`[data-menu-item-key="${menuKey}"]`)
                                 
-                                // 하위 메뉴가 열려있지 않고, 메뉴 요소가 없으면 닫기
-                                if (!hasOpenChild && !menuElement) {
-                                    handleMenuClose(menuKey)
+                                // 메뉴가 열려있고, 메뉴 요소나 버튼 요소가 존재하는 경우
+                                // 실제로는 마우스가 메뉴 영역에 있으면 onMouseEnter가 호출되어 타임아웃이 취소되므로
+                                // 여기까지 도달했다는 것은 마우스가 메뉴 영역 밖에 있다는 의미
+                                // 하지만 안전을 위해 한 번 더 확인
+                                if (menuElement || menuItemElement) {
+                                  // 메뉴 요소가 있으면 타임아웃만 취소하고 메뉴는 유지
+                                  delete closeTimeoutsRef.current[menuKey]
+                                  return
                                 }
                                 
+                                // 메뉴 영역에 마우스가 없으면 닫기
+                                  handleMenuClose(menuKey)
                                 delete closeTimeoutsRef.current[menuKey]
                               }, 200) // 타임아웃을 200ms로 늘려서 메뉴 영역으로 이동할 시간 확보
-                            },
-                          }}
-                          PaperProps={{
-                            'data-menu-key': menuKey,
-                            onMouseEnter: () => {
-                              // Paper 영역에 마우스가 들어오면 타임아웃 취소
-                              if (closeTimeoutsRef.current[menuKey]) {
-                                clearTimeout(closeTimeoutsRef.current[menuKey])
-                                delete closeTimeoutsRef.current[menuKey]
-                              }
-                            },
-                            onMouseLeave: (e: React.MouseEvent) => {
-                              // Paper 영역을 벗어날 때 타임아웃 설정
-                              const relatedTarget = e.relatedTarget as HTMLElement | null
-                              const isMovingToButton = relatedTarget === anchorEl || 
-                                (anchorEl && anchorEl.contains(relatedTarget as Node))
-                              const isMovingToChild = relatedTarget?.closest(`[data-menu-key]`)?.getAttribute('data-menu-key')?.startsWith(menuKey + '-') === true
-                              
-                              // 버튼이나 하위 메뉴로 이동하는 경우 타임아웃 설정하지 않음
-                              if (isMovingToButton || isMovingToChild) {
+                            }}
+                            endIcon={<ArrowDropDown />}
+                            sx={{
+                              fontWeight: 600,
+                              color: 'text.primary',
+                              fontSize: '0.9375rem',
+                              textTransform: 'none',
+                            }}
+                          >
+                            {rootMenu.menuNm}
+                          </Button>
+                          <Menu
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={() => handleMenuClose(menuKey)}
+                            MenuListProps={{
+                              'aria-labelledby': menuKey,
+                              onMouseEnter: () => {
+                                // 메뉴 영역에 마우스가 들어오면 타임아웃 취소
                                 if (closeTimeoutsRef.current[menuKey]) {
                                   clearTimeout(closeTimeoutsRef.current[menuKey])
                                   delete closeTimeoutsRef.current[menuKey]
                                 }
-                                return
-                              }
-                              
-                              // 기존 타임아웃 취소
-                              if (closeTimeoutsRef.current[menuKey]) {
-                                clearTimeout(closeTimeoutsRef.current[menuKey])
-                              }
-                              
-                              // 타임아웃 설정
-                              closeTimeoutsRef.current[menuKey] = setTimeout(() => {
-                                if (!closeTimeoutsRef.current[menuKey]) {
+                              },
+                              onMouseLeave: (e: React.MouseEvent) => {
+                                // 메뉴 영역을 벗어날 때 타임아웃 설정
+                                const relatedTarget = e.relatedTarget as HTMLElement | null
+                                const isMovingToButton = relatedTarget === anchorEl || 
+                                  (anchorEl && anchorEl.contains(relatedTarget as Node))
+                                const isMovingToChild = relatedTarget?.closest(`[data-menu-key]`)?.getAttribute('data-menu-key')?.startsWith(menuKey + '-') === true
+                                
+                                // 버튼이나 하위 메뉴로 이동하는 경우 타임아웃 설정하지 않음
+                                if (isMovingToButton || isMovingToChild) {
+                                  if (closeTimeoutsRef.current[menuKey]) {
+                                    clearTimeout(closeTimeoutsRef.current[menuKey])
+                                    delete closeTimeoutsRef.current[menuKey]
+                                  }
                                   return
                                 }
                                 
-                                const currentAnchorEl = anchorEls[menuKey]
-                                if (!currentAnchorEl) {
+                                // 기존 타임아웃 취소
+                                if (closeTimeoutsRef.current[menuKey]) {
+                                  clearTimeout(closeTimeoutsRef.current[menuKey])
+                                }
+                                
+                                // 타임아웃 설정
+                                closeTimeoutsRef.current[menuKey] = setTimeout(() => {
+                                  if (!closeTimeoutsRef.current[menuKey]) {
+                                    return
+                                  }
+                                  
+                                  const currentAnchorEl = anchorEls[menuKey]
+                                  if (!currentAnchorEl) {
+                                    delete closeTimeoutsRef.current[menuKey]
+                                    return
+                                  }
+                                  
+                                  // 메뉴 요소가 여전히 존재하는지 확인
+                                  // 메뉴 영역에 마우스가 있으면 onMouseEnter가 호출되어 타임아웃이 취소되므로
+                                  // 여기까지 도달했다는 것은 마우스가 메뉴 영역 밖에 있다는 의미
+                                  const menuElement = document.querySelector(`[data-menu-key="${menuKey}"]`)
+                                    const hasOpenChild = Object.keys(anchorEls).some((key) => 
+                                      key.startsWith(menuKey + '-') && anchorEls[key] !== null
+                                    )
+                                  
+                                  // 하위 메뉴가 열려있지 않고, 메뉴 요소가 없으면 닫기
+                                  if (!hasOpenChild && !menuElement) {
+                                      handleMenuClose(menuKey)
+                                  }
+                                  
                                   delete closeTimeoutsRef.current[menuKey]
+                                }, 200) // 타임아웃을 200ms로 늘려서 메뉴 영역으로 이동할 시간 확보
+                              },
+                            }}
+                            PaperProps={{
+                              'data-menu-key': menuKey,
+                              onMouseEnter: () => {
+                                // Paper 영역에 마우스가 들어오면 타임아웃 취소
+                                if (closeTimeoutsRef.current[menuKey]) {
+                                  clearTimeout(closeTimeoutsRef.current[menuKey])
+                                  delete closeTimeoutsRef.current[menuKey]
+                                }
+                              },
+                              onMouseLeave: (e: React.MouseEvent) => {
+                                // Paper 영역을 벗어날 때 타임아웃 설정
+                                const relatedTarget = e.relatedTarget as HTMLElement | null
+                                const isMovingToButton = relatedTarget === anchorEl || 
+                                  (anchorEl && anchorEl.contains(relatedTarget as Node))
+                                const isMovingToChild = relatedTarget?.closest(`[data-menu-key]`)?.getAttribute('data-menu-key')?.startsWith(menuKey + '-') === true
+                                
+                                // 버튼이나 하위 메뉴로 이동하는 경우 타임아웃 설정하지 않음
+                                if (isMovingToButton || isMovingToChild) {
+                                  if (closeTimeoutsRef.current[menuKey]) {
+                                    clearTimeout(closeTimeoutsRef.current[menuKey])
+                                    delete closeTimeoutsRef.current[menuKey]
+                                  }
                                   return
                                 }
                                 
-                                // 메뉴 요소가 여전히 존재하는지 확인
-                                // 메뉴 영역에 마우스가 있으면 onMouseEnter가 호출되어 타임아웃이 취소되므로
-                                // 여기까지 도달했다는 것은 마우스가 메뉴 영역 밖에 있다는 의미
-                                const menuElement = document.querySelector(`[data-menu-key="${menuKey}"]`)
-                                  const hasOpenChild = Object.keys(anchorEls).some((key) => 
-                                    key.startsWith(menuKey + '-') && anchorEls[key] !== null
-                                  )
-                                
-                                // 하위 메뉴가 열려있지 않고, 메뉴 요소가 없으면 닫기
-                                if (!hasOpenChild && !menuElement) {
-                                    handleMenuClose(menuKey)
+                                // 기존 타임아웃 취소
+                                if (closeTimeoutsRef.current[menuKey]) {
+                                  clearTimeout(closeTimeoutsRef.current[menuKey])
                                 }
                                 
-                                delete closeTimeoutsRef.current[menuKey]
-                              }, 200) // 타임아웃을 200ms로 늘려서 메뉴 영역으로 이동할 시간 확보
-                            },
-                          }}
-                        >
-                          {rootMenu.menuSn != null && renderSubMenu(rootMenu.menuSn, menuKey)}
-                        </Menu>
-                      </Box>
+                                // 타임아웃 설정
+                                closeTimeoutsRef.current[menuKey] = setTimeout(() => {
+                                  if (!closeTimeoutsRef.current[menuKey]) {
+                                    return
+                                  }
+                                  
+                                  const currentAnchorEl = anchorEls[menuKey]
+                                  if (!currentAnchorEl) {
+                                    delete closeTimeoutsRef.current[menuKey]
+                                    return
+                                  }
+                                  
+                                  // 메뉴 요소가 여전히 존재하는지 확인
+                                  // 메뉴 영역에 마우스가 있으면 onMouseEnter가 호출되어 타임아웃이 취소되므로
+                                  // 여기까지 도달했다는 것은 마우스가 메뉴 영역 밖에 있다는 의미
+                                  const menuElement = document.querySelector(`[data-menu-key="${menuKey}"]`)
+                                    const hasOpenChild = Object.keys(anchorEls).some((key) => 
+                                      key.startsWith(menuKey + '-') && anchorEls[key] !== null
+                                    )
+                                  
+                                  // 하위 메뉴가 열려있지 않고, 메뉴 요소가 없으면 닫기
+                                  if (!hasOpenChild && !menuElement) {
+                                      handleMenuClose(menuKey)
+                                  }
+                                  
+                                  delete closeTimeoutsRef.current[menuKey]
+                                }, 200) // 타임아웃을 200ms로 늘려서 메뉴 영역으로 이동할 시간 확보
+                              },
+                            }}
+                          >
+                            {rootMenu.menuSn != null && renderSubMenu(rootMenu.menuSn, menuKey)}
+                          </Menu>
+                        </Box>
+                      )
+                    }
+
+                    // 자식이 없는 경우 직접 링크
+                    return (
+                      <Button
+                        key={menuKey}
+                        color="inherit"
+                        onClick={() => handleMenuItemClick(rootMenu.menuUrlAddr)}
+                        sx={{
+                          fontWeight: 600,
+                          color: 'text.primary',
+                          fontSize: '0.9375rem',
+                          textTransform: 'none',
+                        }}
+                      >
+                        {rootMenu.menuNm}
+                      </Button>
                     )
-                  }
+                  })}
+                </Stack>
 
-                  // 자식이 없는 경우 직접 링크
-                  return (
-                    <Button
-                      key={menuKey}
-                      color="inherit"
-                      onClick={() => handleMenuItemClick(rootMenu.menuUrlAddr)}
-                      sx={{
-                        fontWeight: 600,
-                        color: 'text.primary',
-                        fontSize: '0.9375rem',
-                        textTransform: 'none',
-                      }}
-                    >
-                      {rootMenu.menuNm}
-                    </Button>
-                  )
-                })}
-              </Stack>
-
-              {/* 햄버거 버튼 (사이트맵 열기) - 데스크톱에서도 표시 */}
-              <IconButton
-                aria-label="사이트맵 열기"
-                onClick={() => setSitemapOpen(true)}
-                edge="end"
-                sx={{ ml: 1 }}
-              >
-                <MenuIcon />
-              </IconButton>
-            </Toolbar>
-          </Container>
+                {/* 햄버거 버튼 (사이트맵 열기) - 데스크톱에서도 표시 */}
+                <IconButton
+                  aria-label="사이트맵 열기"
+                  onClick={() => setSitemapOpen(true)}
+                  edge="end"
+                  sx={{ ml: 1 }}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Toolbar>
+            </Box>
+          </Box>
         </Box>
-      </AppBar>
+      </Box>
+      {/* ///////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+
+        
 
       {/* 사이트맵 Drawer */}
       <Drawer
