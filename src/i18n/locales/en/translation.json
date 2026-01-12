@@ -1,6 +1,8 @@
 {
     "contactHpTitle": "Report And Consultation",
     "login": "Login",
+    "loginMethod": "Login Method",
+    "idLogin": "ID Login",
     "signup": "Sign Up",
     "usrSwtReg": "Switch To Expert Membership",
     "sitemap": "Sitemap",

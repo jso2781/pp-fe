@@ -1139,40 +1139,46 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
               </Link>
 
               {/* 유틸리티 메뉴: 통합검색, 회원가입, 전문가 회원 전환 신청, 로그인 */}
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Button
-                  size="small"
-                  startIcon={<Search />}
-                  onClick={() => navigate(to('/search'))}
-                  sx={{ color: 'text.primary', fontSize: '0.875rem' }}
-                >
-                  {t('integratedSearch')}
-                </Button>
-                <Button
-                  size="small"
-                  startIcon={<Person />}
-                  onClick={() => navigate(to('/signup'))}
-                  sx={{ color: 'text.primary', fontSize: '0.875rem' }}
-                >
-                  {t('signup')}
-                </Button>
-                <Button
-                  size="small"
-                  startIcon={<Person />}
-                  onClick={() => navigate(to('/expert/convert/apply'))}
-                  sx={{ color: 'text.primary', fontSize: '0.875rem' }}
-                >
-                  {t('usrSwtReg')}
-                </Button>
-                <Button
-                  size="small"
-                  startIcon={<Login />}
-                  onClick={() => navigate(to('/login'))}
-                  sx={{ color: 'text.primary', fontSize: '0.875rem' }}
-                >
-                  {t('login')}
-                </Button>
-              </Stack>
+              {i18nInstance.language === 'ko' && (
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Button
+                    size="small"
+                    startIcon={<Search />}
+                    onClick={() => navigate(to('/search'))}
+                    sx={{ color: 'text.primary', fontSize: '0.875rem' }}
+                  >
+                    {t('integratedSearch')}
+                  </Button>
+                  <Button
+                    size="small"
+                    startIcon={<Person />}
+                    onClick={() => navigate(to('/signup'))}
+                    sx={{ color: 'text.primary', fontSize: '0.875rem' }}
+                  >
+                    {t('signup')}
+                  </Button>
+                  <Button
+                    size="small"
+                    startIcon={<Person />}
+                    onClick={() => navigate(to('/expert/convert/apply'))}
+                    sx={{ color: 'text.primary', fontSize: '0.875rem' }}
+                  >
+                    {t('usrSwtReg')}
+                  </Button>
+                  <Button
+                    size="small"
+                    startIcon={<Login />}
+                    onClick={() => {
+                      const path = to('/login/method')
+                      console.log('Header login button clicked, current lang:', lang, 'navigating to:', path)
+                      navigate(path, { replace: false })
+                    }}
+                    sx={{ color: 'text.primary', fontSize: '0.875rem' }}
+                  >
+                    {t('login')}
+                  </Button>
+                </Stack>
+              )}
             </Toolbar>
           </Container>
         </Box>
@@ -1565,16 +1571,18 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           <Divider sx={{ mb: 2 }} />
 
           {/* 로그인/회원가입 버튼 */}
-          <Box sx={{ mb: 2 }}>
-            <Stack direction="row" spacing={1} flexWrap="wrap">
-              <Button variant="contained" component={NavLink} to={to('/login')}>
-                {t('login')}
-              </Button>
-              <Button variant="outlined" component={NavLink} to={to('/signup')}>
-                {t('signup')}
-              </Button>
-            </Stack>
-          </Box>
+          {i18nInstance.language === 'ko' && (
+            <Box sx={{ mb: 2 }}>
+              <Stack direction="row" spacing={1} flexWrap="wrap">
+                <Button variant="contained" component={NavLink} to={to('/login/method')}>
+                  {t('login')}
+                </Button>
+                <Button variant="outlined" component={NavLink} to={to('/signup')}>
+                  {t('signup')}
+                </Button>
+              </Stack>
+            </Box>
+          )}
 
           <Divider sx={{ mb: 2 }} />
 

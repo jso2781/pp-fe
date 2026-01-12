@@ -1,6 +1,8 @@
 {
     "contactHpTitle": "의약품 부작용신고 및 피해구제 상담",
     "login": "로그인",
+    "loginMethod": "로그인 방식 선택",
+    "idLogin": "아이디 로그인",
     "signup": "회원가입",
     "usrSwtReg": "전문가 회원 전환 신청",
     "sitemap": "사이트맵",

@@ -11,6 +11,8 @@ const pathLabels: Record<string, string[]> = {
   "/ko/dur/notice/5": ["DUR 정보", "알림 게시판"],
   "/ko/dur/proposal": ["DUR 정보", "의견 제안"],
   "/ko/safety/report/online": ["의약품 안전관리", "의약품 이상사례 보고", "이상사례 보고"],
+  "/ko/login/method": ["로그인", "로그인 방식 선택"],
+  "/ko/login": ["로그인", "아이디 로그인"],
 
   "/en/notice": ["알림마당11", "공지사항11"],
   "/en/board": ["커뮤니티11", "게시판11"],
@@ -18,6 +20,7 @@ const pathLabels: Record<string, string[]> = {
   "/en/dur/notice": ["DUR 정보11", "알림 게시판11"],
   "/en/dur/proposal": ["DUR 정보11", "의견 제안11"],
   "/en/safety/report/online": ["의약품 안전관리11", "의약품 이상사례 보고11", "이상사례 보고11"]
+
 };
 
 export default function DepsLocation() {
@@ -56,6 +59,15 @@ export default function DepsLocation() {
     {
       pattern: /^\/[A-Za-z]{2}\/safety\/report\/online$/,
       labels: ["drugSafetyMgmt", "drugSafetyReport", "drugSafetyReportOnline"]
+    }
+    ,
+    {
+      pattern: /^\/[A-Za-z]{2}\/login\/method$/,
+      labels: ["login", "loginMethod"]
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/login$/,
+      labels: ["login", "idLogin"]
     }
   ];
 

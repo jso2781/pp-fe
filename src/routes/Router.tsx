@@ -15,6 +15,7 @@ import DurNoticeListKo from '@/pages/ko/dur/DurNoticeList'
 import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail'
 import NotFoundKo from '@/pages/ko/NotFound'
 import LoginKo from '@/pages/ko/Login'
+import LoginMethodKo from '@/pages/ko/LoginMethod'
 import FaqListKo from '@/pages/ko/faq/FaqList';
 
 // 게시판 테스트용
@@ -45,7 +46,14 @@ type LangElementProps = {
 
 function LangElement({ byLang }: LangElementProps) {
   const { lang } = useParams<{ lang: string }>();
+  const location = useLocation();
   const normalized = normalizeLang(lang) ?? FALLBACK_LANG;
+  
+  // 디버깅: 어떤 컴포넌트가 렌더링되는지 확인
+  if (location.pathname.includes('/login')) {
+    console.log('LangElement - pathname:', location.pathname, 'lang:', normalized, 'byLang keys:', Object.keys(byLang));
+  }
+  
   return byLang[normalized] ?? byLang[FALLBACK_LANG];
 }
 
@@ -149,14 +157,17 @@ export default function Router() {
           <Route path="/screens" element={<Screens />} />
           <Route path="/screens/:screenId" element={<ScreenViewer />} />
 
-          {/* lang 포함 NotFound */}
+          {/* 로그인 관련 라우트 - 와일드카드보다 먼저 배치 (더 구체적인 경로가 먼저 와야 함) */}
+          <Route path="/:lang/login/method" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />
+          <Route path="/:lang/login" element={<LangElement byLang={{ ko: <LoginKo />, en: <LoginEn /> }} />} />
+
+          {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
           <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />
         </Route>
 
         {/* BlankLayout */}
         <Route element={<BlankLayout />}>
           <Route path="/:lang/notice/:id/preview" element={<LangElement byLang={{ ko: <NoticeDetailKo />, en: <NoticeDetailEn /> }} />} />
-          <Route path="/:lang/login" element={<LangElement byLang={{ ko: <LoginKo />, en: <LoginEn /> }} />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,154 +1,319 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import https from '@/api/axiosInstance'
+import { useState, useEffect } from 'react'
+import {
+  Alert,
+  Box,
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  FormControlLabel,
+  Link,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import DepsLocation from '@/components/common/DepsLocation'
 
-function ensureAnyIdAssets() {
-  const ensureLink = (href: string) => {
-    if (document.querySelector(`link[href="${href}"]`)) return
-    const l = document.createElement('link')
-    l.rel = 'stylesheet'
-    l.href = href
-    document.head.appendChild(l)
-  }
+const STORAGE_KEY_REMEMBER_ID = 'kids_login_remember_id'
 
-  const loadScript = (src: string) =>
-    new Promise<void>((resolve, reject) => {
-      if (document.querySelector(`script[src="${src}"]`)) return resolve()
-      const s = document.createElement('script')
-      s.src = src
-      s.async = true
-      s.onload = () => resolve()
-      s.onerror = () => reject(new Error(`Failed to load ${src}`))
-      document.body.appendChild(s)
-    })
-
-  // dev - http://localhost:8080/pp
-  const anyIdStaticUrl = import.meta.env.VITE_ANY_ID_STATIC_URL;
-
-  // Any-ID UI 자원(CSS/JS) 적용 가이드 (AuthResourceRelay 기준)
-  //  - /anyid/css/app.css
-  //  - /anyid/js/manifest.js, vendor.js, app.js
-  ensureLink(`${anyIdStaticUrl}/anyid/css/app.css`)
-
-  // manifest -> vendor -> app 순서 권장
-  return loadScript(`${anyIdStaticUrl}/anyid/js/manifest.js`)
-    .then(() => loadScript(`${anyIdStaticUrl}/anyid/js/vendor.js`))
-    .then(() => loadScript(`${anyIdStaticUrl}/anyid/js/app.js`))
+type LoginValues = {
+  loginId: string
+  password: string
+  rememberId: boolean
 }
 
+type LoginFailInfo = {
+  reason: string
+  failedCount: number
+  isIdError?: boolean
+}
+
+const KOREAN_REGEX = /[ㄱ-ㅎㅏ-ㅣ가-힣]/g
+const MAX_LENGTH = 20
+const MAX_FAIL_COUNT = 5
+
 export default function Login() {
-  const location = useLocation()
   const navigate = useNavigate()
-  const [error, setError] = useState<string | null>(null)
-  const [ready, setReady] = useState(false)
+  const [values, setValues] = useState<LoginValues>({ loginId: '', password: '', rememberId: false })
+  const [errors, setErrors] = useState<Partial<Record<keyof LoginValues, string>>>({})
+  const [loginFail, setLoginFail] = useState<LoginFailInfo | null>(null)
+  const [localFailCount, setLocalFailCount] = useState(0)
+  const [showPasswordErrorPopup, setShowPasswordErrorPopup] = useState(false)
 
-  const params = useMemo(() => new URLSearchParams(location.search), [location.search])
-
-  const tx = useMemo(() => {
-    // SSO를 쓰는 구조라면 SSO 모듈이 txId를 내려줌(가이드). 없으면 로컬에서 생성.
-    return params.get('tx') || crypto.randomUUID()
-  }, [params])
-
-  const acrValues = useMemo(() => {
-    const v = params.get('acrValues')
-    const n = v ? parseInt(v, 10) : NaN
-    return Number.isFinite(n) ? n : 3
-  }, [params])
-
-  const redirectUri = useMemo(() => params.get('redirect_uri') || '/', [params])
-
+  // 아이디 저장 기능: 페이지 로드 시 저장된 아이디 불러오기
   useEffect(() => {
-    let cancelled = false;
-
-    (async () => {
-      try {
-        setError(null);
-        await ensureAnyIdAssets()
-        if (cancelled) return
-
-        // Any-ID SDK의 success 콜백에서 호출될 어댑터 객체를 전역으로 노출
-        window.anyidAdaptor = {
-          success: async (data: any) => {
-            try {
-              // Any-ID 샘플(orgLogin.jsp)과 동일하게 ssob/tag(tx) 전송
-              await https.post('/auth/anyid/login', {
-                ssob: data?.ssob,
-                tag: tx,
-              })
-              navigate(redirectUri, { replace: true })
-            } catch (e) {
-              console.error(e)
-              setError('서버 로그인 처리에 실패했습니다.')
-            }
-          },
-        }
-
-        // dev - http://localhost:8080/pp + '/config/config.anyidc.json'
-        const configAnyidcJsonUrl = import.meta.env.VITE_ANY_ID_STATIC_URL + '/config/config.anyidc.json';
-        console.log("configAnyidcJsonUrl="+configAnyidcJsonUrl);
-        if(!window.AnyidC){
-            setError('Any-ID 모듈 window.AnyidC 이 로드되지 않았습니다.')
-            return;
-        }
-        // AnyidC 전역 객체는 Any-ID 스크립트 로드 후 생성
-        if (!window.AnyidC?.LOAD_MODULE) {
-          setError('Any-ID 모듈 로드에 실패했습니다.');
-          return;
-        }
-
-        // 가이드의 LOAD_MODULE 초기화 파라미터를 React 환경에 맞게 적용
-        window.AnyidC.LOAD_MODULE({
-          cfg: configAnyidcJsonUrl,
-          txId: tx,
-          tag: tx,
-          lvl: acrValues,
-          // SSO 연동이 없는 "이용기관 자체 로그인" 흐름: bypass=1
-          bypass: 1,
-          toggle: true,
-          theme: '4.1.0',
-          redirect_uri: redirectUri,
-          success: function (data) {
-            window.anyidAdaptor?.success?.(data)
-          },
-          fail: function (err) {
-            console.error(err)
-            setError('Any-ID 인증에 실패했습니다.')
-          },
-          log: function (data) {
-            console.log(data)
-          },
-        })
-
-        setReady(true)
-      } catch (e) {
-        console.error(e)
-        setError('Any-ID 인증 모듈 로딩 중 오류가 발생했습니다.')
-      }
-    })();
-
-    return () => {
-      cancelled = true
+    const savedId = localStorage.getItem(STORAGE_KEY_REMEMBER_ID)
+    if (savedId) {
+      setValues((p) => ({ ...p, loginId: savedId, rememberId: true }))
     }
-  }, [acrValues, navigate, redirectUri, tx])
+  }, [])
+
+  const validate = (v: LoginValues) => {
+    const next: Partial<Record<keyof LoginValues, string>> = {}
+    if (!v.loginId.trim()) {
+      next.loginId = '아이디를 입력하세요.'
+    } else if (v.loginId.trim().length < 2) {
+      next.loginId = '최소 두자리 수 이상 입력해주세요.'
+    } else if (KOREAN_REGEX.test(v.loginId)) {
+      next.loginId = '아이디에는 한글을 입력할 수 없습니다.'
+    }
+    if (!v.password.trim()) {
+      next.password = '비밀번호를 입력하세요.'
+    }
+    return next
+  }
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const next = validate(values)
+    setErrors(next)
+    if (Object.keys(next).length) return
+
+    // 아이디 저장 기능
+    if (values.rememberId) {
+      localStorage.setItem(STORAGE_KEY_REMEMBER_ID, values.loginId)
+    } else {
+      localStorage.removeItem(STORAGE_KEY_REMEMBER_ID)
+    }
+
+    try {
+      // TODO: 실제 로그인 API 호출
+      // const response = await https.post('/auth/login', {
+      //   loginId: values.loginId,
+      //   password: values.password,
+      // })
+
+      // 샘플: 실패횟수 시뮬레이션 (실제로는 서버에서 실패 횟수를 관리)
+      const nextCount = localFailCount + 1
+      setLocalFailCount(nextCount)
+
+      // 5회째 실패 시 팝업 표시
+      if (nextCount >= MAX_FAIL_COUNT) {
+        setShowPasswordErrorPopup(true)
+        setLoginFail(null)
+        return
+      }
+
+      // 4회째까지만 오류 횟수 노출
+      if (nextCount <= 4) {
+        setLoginFail({
+          reason: '아이디 또는 비밀번호가 일치하지 않습니다.',
+          failedCount: nextCount,
+          isIdError: false,
+        })
+        setErrors({ password: `아이디 또는 비밀번호가 일치하지 않습니다. (${nextCount}/${MAX_FAIL_COUNT})` })
+      } else {
+        setLoginFail(null)
+        setErrors({})
+      }
+
+      // 샘플: 실제 로그인 성공 시 아래 코드 실행
+      // const userType = response.data.userType // 'general' | 'expert'
+      // if (userType === 'expert') {
+      //   navigate('/screens/KIDS-PP-US-MT-01')
+      // } else {
+      //   navigate('/ko') // 일반 회원은 메인 페이지로
+      // }
+      window.alert('샘플 화면입니다. (로그인 API 미연동)')
+    } catch (error: any) {
+      // 서버 에러 처리
+      const nextCount = localFailCount + 1
+      setLocalFailCount(nextCount)
+
+      if (nextCount >= MAX_FAIL_COUNT) {
+        setShowPasswordErrorPopup(true)
+        setLoginFail(null)
+        return
+      }
+
+      if (nextCount <= 4) {
+        setLoginFail({
+          reason: '아이디 또는 비밀번호가 일치하지 않습니다.',
+          failedCount: nextCount,
+          isIdError: false,
+        })
+        setErrors({ password: `아이디 또는 비밀번호가 일치하지 않습니다. (${nextCount}/${MAX_FAIL_COUNT})` })
+      }
+    }
+  }
 
   return (
-    <div style={{ maxWidth: 980, margin: '0 auto', padding: '24px 16px' }}>
-      <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 12 }}>로그인</h1>
+    <div>
+      <Box sx={{ p: 2, maxWidth: 520, mx: 'auto' }}>
+        <DepsLocation />
 
-      {error ? (
-        <div style={{ padding: 12, border: '1px solid #f0c2c2', borderRadius: 8, marginBottom: 16 }}>
-          {error}
-        </div>
-      ) : null}
+        <Typography variant="h6" fontWeight={800} sx={{ mb: 2 }}>
+          로그인
+        </Typography>
 
-      {!ready && !error ? (
-        <div style={{ padding: 12, border: '1px solid #e5e7eb', borderRadius: 8, marginBottom: 16 }}>
-          Any-ID 인증 모듈을 불러오는 중입니다...
-        </div>
-      ) : null}
+        <Box component="form" onSubmit={onSubmit} noValidate>
+          <Stack spacing={2}>
+            <TextField
+              label="아이디"
+              placeholder="아이디 혹은 이메일을 입력하세요."
+              value={values.loginId}
+              onChange={(e) => {
+                let v = e.target.value.replace(KOREAN_REGEX, '')
+                // 최대 20자 제한
+                if (v.length > MAX_LENGTH) {
+                  v = v.slice(0, MAX_LENGTH)
+                }
+                setValues((p) => ({ ...p, loginId: v }))
+                // 입력 시 에러 초기화
+                if (errors.loginId) {
+                  setErrors((prev) => ({ ...prev, loginId: undefined }))
+                }
+              }}
+              error={!!errors.loginId}
+              helperText={errors.loginId}
+              fullWidth
+              inputProps={{ maxLength: MAX_LENGTH }}
+            />
 
-      {/* 가이드: anyidc 라는 id의 div 영역에 Any-ID 통합로그인 모듈이 그려짐 (id 변경 불가) */}
-      <div id="anyidc" />
-    </div>
+            <TextField
+              label="비밀번호"
+              placeholder="비밀번호를 입력하세요."
+              type="password"
+              value={values.password}
+              onChange={(e) => {
+                let v = e.target.value
+                // 최대 20자 제한
+                if (v.length > MAX_LENGTH) {
+                  v = v.slice(0, MAX_LENGTH)
+                }
+                setValues((p) => ({ ...p, password: v }))
+                // 입력 시 에러 초기화
+                if (errors.password) {
+                  setErrors((prev) => ({ ...prev, password: undefined }))
+                  setLoginFail(null)
+                }
+              }}
+              error={!!errors.password || !!loginFail}
+              helperText={errors.password || (loginFail && !errors.password ? `${loginFail.reason} (${loginFail.failedCount}/${MAX_FAIL_COUNT})` : '')}
+              fullWidth
+              inputProps={{ maxLength: MAX_LENGTH }}
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={values.rememberId}
+                  onChange={(e) => {
+                    const checked = e.target.checked
+                    setValues((p) => ({ ...p, rememberId: checked }))
+                    // 체크 해제 시 localStorage에서도 제거
+                    if (!checked) {
+                      localStorage.removeItem(STORAGE_KEY_REMEMBER_ID)
+                    }
+                  }}
+                />
+              }
+              label="아이디 저장"
+            />
+
+            <Button variant="contained" type="submit" size="large">
+              로그인
+            </Button>
+
+            {/* 회원가입, 아이디 찾기, 비밀번호 찾기 링크 */}
+            <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 1 }}>
+              <Link
+                component="button"
+                variant="body2"
+                onClick={() => navigate('/screens/KIDS-PP-US-JM-01')}
+                sx={{
+                  cursor: 'pointer',
+                  color: 'text.secondary',
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                    color: 'primary.main',
+                  },
+                }}
+              >
+                회원가입
+              </Link>
+              <Link
+                component="button"
+                variant="body2"
+                onClick={() => navigate('/screens/KIDS-PP-US-LG-06')}
+                sx={{
+                  cursor: 'pointer',
+                  color: 'text.secondary',
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                    color: 'primary.main',
+                  },
+                }}
+              >
+                아이디 찾기
+              </Link>
+              <Link
+                component="button"
+                variant="body2"
+                onClick={() => navigate('/screens/KIDS-PP-US-LG-08')}
+                sx={{
+                  cursor: 'pointer',
+                  color: 'text.secondary',
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                    color: 'primary.main',
+                  },
+                }}
+              >
+                비밀번호 찾기
+              </Link>
+            </Stack>
+
+            {/* 안내 문구 */}
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1, fontSize: '0.813rem' }}>
+                개인정보 보호를 위해 비밀번호 5회 이상 오류 시, 비밀번호 재설정이 필요합니다.
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1, fontSize: '0.813rem' }}>
+                비밀번호는 주기적(3개월)으로 변경하시고, 서비스 이용 후 반드시 로그아웃 하시기 바랍니다.
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.813rem' }}>
+                로그인 후 60분 동안 미동작 시 자동으로 로그아웃 됩니다.
+              </Typography>
+            </Box>
+          </Stack>
+        </Box>
+      </Box>
+
+      {/* 비밀번호 5회 오류 팝업 */}
+      <Dialog
+        open={showPasswordErrorPopup}
+        onClose={() => setShowPasswordErrorPopup(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>비밀번호 5회 오류</DialogTitle>
+        <Divider />
+        <DialogContent>
+          <Typography variant="body1">
+            비밀번호가 5회이상 잘못입력되어, 비밀번호를 재설정 후 이용할 수 있습니다. 비밀번호를 재설정하시겠습니까?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowPasswordErrorPopup(false)}>취소</Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setShowPasswordErrorPopup(false)
+              navigate('/screens/KIDS-PP-US-LG-08') // 비밀번호 찾기 페이지로 이동
+            }}
+          >
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
+      </div>
   )
 }
