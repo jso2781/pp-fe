@@ -37,7 +37,7 @@ export default function KIDS_PP_US_MT_01_LAYOUT() {
       <Box className="sub-container">
         <Box className="content-wrap">
 
-          <Box className="side_nav">
+          <Box className="side-nav">
             <CollapsibleSideNav
               title="내업무"
               collapsed={collapsed}
