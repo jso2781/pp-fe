@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Box, Button, Card, CardContent, Link, Stack, Switch, Typography, IconButton, Tooltip } from '@mui/material'
-import CheckIcon from '@mui/icons-material/Check';
+import { Box, Button, Card, CardContent, Link, Stack, Typography, IconButton, Tooltip } from '@mui/material'
+import { Switch as BaseSwitch } from '@base-ui/react';
 import Grid from '@mui/material/Grid'
 import {
   PhoneAndroid as PhoneIcon,
@@ -179,6 +179,8 @@ export default function KIDS_PP_US_LG_01() {
     }
   }
 
+  
+
   return (
     <ScreenShell screenId="KIDS-PP-US-LG-01" title="로그인 방식 선택" uiType="page">
       <div className="page-layout">
@@ -219,63 +221,19 @@ export default function KIDS_PP_US_LG_01() {
                             color="primary"
                           /> {useGovLogin ? '사용' : '미사용'} */}
 
-                          <Stack direction="row" alignItems="center">
-                            <Switch
-                              checked={useGovLogin}
-                              onChange={(e) => setUseGovLogin(e.target.checked)}
-                              sx={{
-                                width: 50, // 전체 가로 길이
-                                height: 28, // 전체 세로 길이 (막대기 높이와 맞춤)
-                                padding: 0, // 기본 여백 제거
-                                display: 'flex',
-                                alignItems: 'center',
-                                '& .MuiSwitch-switchBase': {
-                                  padding: '4px', // 동그라미와 테두리 사이 간격
-                                  '&.Mui-checked': {
-                                    transform: 'translateX(22px)', // 이동 거리 조정
-                                    color: '#fff',
-                                    '& + .MuiSwitch-track': {
-                                      backgroundColor: '#0A6C70', // 체크 시 막대기 색상
-                                      opacity: 1,
-                                      border: 0,
-                                    },
-                                  },
-                                },
-                                '& .MuiSwitch-thumb': {
-                                  width: 20,
-                                  height: 20,
-                                },
-                                '& .MuiSwitch-track': {
-                                  borderRadius: 28 / 2, // 높이의 절반으로 설정하면 둥글게 됨
-                                  backgroundColor: '#E9E9EA', // 비활성 시 막대기 색상
-                                  opacity: 1,
-                                  transition: 'background-color 0.2s',
-                                  height: '100%', // Root 높이를 꽉 채우도록 설정 (넓힘)
-                                },
-                              }}
-                              color="primary"
-                              // 체크되었을 때 동그라미 안에 보일 아이콘
-                              checkedIcon={
-                                <div style={{ 
-                                  width: 20, 
-                                  height: 20, 
-                                  borderRadius: '50%', 
-                                  backgroundColor: '#fff',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                }}>
-                                  <CheckIcon sx={{ fontSize: 16, color: '#0A6C70' }} /> {/* 체크표시만 청록색 */}
-                                </div>
-                              }
-                              // 체크되지 않았을 때
-                              icon={
-                                <div style={{ width: 20, height: 20, borderRadius: '50%', backgroundColor: '#fff' }} />
-                              }
-                            /> 
-                            <Box sx={{ ml: 1 }}>
-                              {useGovLogin ? '사용' : '미사용'}
-                            </Box>
+                          <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
+                            {/* Base UI 스위치 */}
+                            <BaseSwitch.Root 
+                              className="base_switch_root" 
+                              checked={useGovLogin} 
+                              onCheckedChange={setUseGovLogin}
+                            >
+                              <BaseSwitch.Thumb className="base_switch_thumb" />
+                            </BaseSwitch.Root>
+                            {/* 텍스트 라벨 */}
+                            <Typography component="p" className="switch_label">
+                              {useGovLogin ? '사용 중' : '미사용'}
+                            </Typography>
                           </Stack>
                         </Stack>
                         <Stack spacing={1}>
