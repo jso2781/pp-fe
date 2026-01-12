@@ -177,7 +177,10 @@ export interface PstRVO {
  */
 export interface PstListPVO {
   /** 현재 페이지 인덱스 */
-  pageIndex?: number
+  pageNum?: number
+
+  /** 한 페이지에 보여줄 아이템의 개수 */
+  pageSize?: number
 
   /** 게시판아이디 */
   bbsId?: string
@@ -195,6 +198,7 @@ export interface PstListPVO {
 export interface PstListRVO {
   list: PstRVO[]
   totalCount: number
+  totalPages: number
 }
 
 /**

@@ -8,6 +8,7 @@ import { mockPstList, PstPVO, PstRVO, PstListPVO, PstListRVO, PstDVO  } from './
 export interface PstState {
   list: PstRVO[]
   totalCount: number | null
+  totalPages: number | null
   current: PstRVO | null
   loading: boolean
   error: string | null
@@ -19,6 +20,7 @@ export interface PstState {
 const initialState: PstState = {
   list: [],
   totalCount: null,
+  totalPages: null,
   current: null,
   loading: false,
   error: null
@@ -42,6 +44,7 @@ const PstSlice = createSlice({
         state.loading = false;
         state.list = action.payload.list;
         state.totalCount = action.payload.totalCount;
+        state.totalPages = action.payload.totalPages;
       })
       .addCase(selectPstList.rejected, (state, action) => {
         state.loading = false;

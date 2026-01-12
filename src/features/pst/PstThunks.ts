@@ -13,12 +13,14 @@ export const selectPstList = createAsyncThunk<PstListRVO, PstListPVO | undefined
       const res = await https.post(getPstListPath(), params);
 
       // ✅ 여기서 “서버 응답”을 표준 형태로 맞춰서 return
-      const payload = res.data?.data?.list;
+      // const payload = res.data?.data?.list;
+      const payload = res.data?.data;
 
       // 서버가 Pst[] 형식으로 주므로 PstListRVO 형식으로 데이터 구조 재조정 
       return {
-        list: Array.isArray(payload) ? payload : [],
-        totalCount: Array.isArray(payload) ? payload.length : 0
+        list: payload && Array.isArray(payload.list) ? payload.list : [],
+        totalCount: payload.totalCount ?? 0,
+        totalPages: payload.totalPages ?? 0,
       } as PstListRVO;
     }
     // 서버가 없거나 에러 나면 강제로 mock 데이터 사용 
@@ -32,7 +34,7 @@ export const selectPstList = createAsyncThunk<PstListRVO, PstListPVO | undefined
         return true; // edit !! 
       });
 
-      const result: PstListRVO = { list: filtered as PstRVO[], totalCount: filtered.length }
+      const result: PstListRVO = { list: filtered as PstRVO[], totalCount: filtered.length, totalPages: filtered.length }
       return result;
     }
   }
