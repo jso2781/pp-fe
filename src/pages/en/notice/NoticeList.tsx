@@ -163,7 +163,7 @@ export default function NoticeList() {
                 </Card>
               </Box>
 
-              <Box className="sub_cont">
+              <Box className="page-content">
                 <Box className="ds-board">
                   <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
                     <Typography variant="h6">Notice</Typography>

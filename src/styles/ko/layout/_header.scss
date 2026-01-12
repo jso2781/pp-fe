@@ -1,124 +1,137 @@
 @use '../base/mixins';
 
-.header{
+// 공통 변수나 믹스인이 있다면 활용하는 것이 좋지만, 
+// 우선은 주신 코드를 바탕으로 구조를 최적화했습니다.
+
+.header {
   position: relative;
-}
-.gov_badge {
-  display: flex;
-  align-items: center;
-  height: 32px;
-  background: #EEF2F7;
-  .txt {
-    padding: 0 0 0 30px;
-    background: url(/img/ico_flag_ko.png) no-repeat left center;
-  }
-}
-.header_topbar{
-  .container{
+
+  // 정부 배지 영역
+  .gov-badge {
     display: flex;
     align-items: center;
-    height:45px;
-    .top_links{
-      margin-left: auto;
+    height: 32px;
+    background-color: #eef2f7;
+
+    .txt {
+      padding-left: 30px;
+      color: var(--color-text-1);
+      background: url(/img/ico_flag_ko.png) no-repeat left center;
     }
   }
-}
-.header_menu {
-  display: flex;
-  align-items: center;
-  position: relative;
-  height:82px;
-  border-top: 1px solid #D8D8D8;
-  border-bottom: 1px solid #D8D8D8;
 
-  .container {
+  // 상단 바
+  .header-topbar {
     display: flex;
     align-items: center;
+    height: 46px;
+    background-color: #ffffff;
 
-    .logo{
-      margin-right:70px;
+    .container {
+      display: flex;
+      align-items: center;
     }
 
-    .util_menu {
-      width: 100%;
+    .top-link {
       margin-left: auto;
       display: flex;
       align-items: center;
-
-      .link_list {
-        margin-left: auto;
-        .ant-space{
-          flex-wrap: wrap;
-        }
-        button span{
-          font-size: 18px;
-          font-weight: 700;
-          color:#464C53;
-        }
-        .btn_search{padding-left:28px;background: url(/img/ico_search.svg) no-repeat left center;}
-        .btn_signup{padding-left:28px;background: url(/img/ico_signup.svg) no-repeat left center;}
-        .btn_login{padding-left:28px;background: url(/img/ico_login.svg) no-repeat left center;}
-        .btn_user_role{padding-left:28px;background: url(/img/ico_user_role.svg) no-repeat left center;}
+      button{
+        color: var(--color-text-1);
       }
     }
 
-    // .integrated_search {
-    //   width: 390px;
-    //   padding: 5px;
-    //   height: 45px;
-    //   border: 3px solid transparent;
-    //   border-radius: 30px;
-    //   background: linear-gradient(45deg, #D3E01C, #00ABBD, #004638);
-    //   background-clip: padding-box;
-
-    //   .ant-input-affix-wrapper {
-    //     border-radius: 30px;
-    //     border: none;
-    //   }
-    // }
+    .timer_box{
+      display: flex;
+      align-items: center;
+      .time_text{
+        font-size: 16px;
+        color: var(--color-text-2);
+        margin:0 10px 0 0;
+        padding:0 0 0 20px;
+        background: url('/img/ico_time.svg') no-repeat left center;
+      }
+      .btn_extend{
+        color: var(--color-text-1);
+        font-size: 16px;
+      }
+    }
   }
-}
 
-.nav{
-  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.25);
-  .container{
+  // 로고, 유틸메뉴
+  .header_menu {
+    position: relative;
     display: flex;
     align-items: center;
-  }
-  .gnb_list {
-    width:100%;
-    border:none;
-    line-height: 66px;
-    .ant-menu-title-content{
-      font-size: 17px;
-      font-weight: 700;
-      color: #464C53;
-    }
-  }
-  .btn_sitemap{
-    margin-left: auto;
-    width:30px;height:30px;
-    background: url(/img/ico_sitemap.svg) no-repeat center center;
-    span{
-      @include mixins.sr_only;
-    }
-    &:hover {
-      background: url(/img/ico_sitemap.svg) no-repeat center center !important;
-    }
-  }
-}
+    height: 82px;
+    background-color: #fff;
+    border-top: 1px solid #d8d8d8;
+    border-bottom: 1px solid #d8d8d8;
 
-/* span 태그 클릭 영역 확장 */
-.gnb-focus-target {
-  display: block;
-  width: 100%;
-}
+    .container {
+      display: flex;
+      align-items: center;
 
-// sample
-@media (max-width: 980px) {
-  .ds-header__main-inner {
-    grid-template-columns: 1fr;
+      .util-menu {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+
+        .btn-util {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          position: relative;
+          color:#1E2124;
+          font-size: 18px;
+          font-weight: 700;
+        }
+
+        /* 아이콘을 위한 가상 요소 공통 설정 */
+        .btn-util::before {
+          content: '';
+          display: inline-block;
+          width: 20px; 
+          height: 20px;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+
+        .btn-util.search::before {
+          background-image: url('/img/ico_search.svg');
+        }
+
+        .btn-util.signup::before {
+          background-image: url('/img/ico_signup.svg');
+        }
+
+         .btn-util.edit-profile::before {
+          background-image: url('/img/ico_edit_profile.svg');
+        }
+
+        .btn-util.user-reg::before {
+          background-image: url('/img/ico_usrSwtReg.svg');
+        }
+
+        .btn-util.login::before {
+          background-image: url('/img/ico_login.svg');
+        }
+
+        .btn-util.logout::before {
+          background-image: url('/img/ico_login.svg');
+        }
+
+        /* (선택) 호버 시 아이콘 색상 변경이 필요하다면 별도 처리 */
+        .btn-util:hover {
+          background-color: transparent;
+        }
+      }
+    }
   }
-  .ds-header__nav { overflow-x: auto; }
-  .ds-header__search { justify-self: stretch; }
+  .gnb{
+    display: flex;
+    align-items: center;
+    height:66px;
+    border-bottom: 1px solid #d8d8d8;}
 }

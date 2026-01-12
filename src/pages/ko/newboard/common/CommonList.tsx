@@ -22,14 +22,11 @@ import {
   ListItemButton,
   ListItemText,
   Collapse,
-  Divider,
   TextField,
   Paper,
 } from '@mui/material';
 import { ExpandLess, ExpandMore, Menu as MenuIcon, MenuOpen as MenuOpenIcon } from '@mui/icons-material';
-import PageTitle from '@/components/common/PageTitle';
 import { selectPstList } from '@/features/pst/PstThunks';
-import { PstRVO } from '@/features/pst/PstTypes';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import { Link as RouterLink } from 'react-router-dom';
@@ -89,42 +86,35 @@ function SideNav({ items }: { items: SideItem[] }) {
 
 export default function NoticeList() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageIndex = Number(searchParams.get('page') || 1);
 
-  const { list, totalCount, loading } = useAppSelector((s) => s.pst);
+  const { list, totalCount, totalPages, loading } = useAppSelector((s) => s.pst);
 
   const { bbsId } = useParams<{ bbsId: string }>();
   const [searchCnd, setSearchCnd] = useState(searchParams.get('searchCnd') || 'title');
   const [searchWrd, setSearchWrd] = useState(searchParams.get('searchWrd') || '');
 
-  // sample fallback (페이지가 정적일 때도 동작하도록)
-  const sampleNotices =[
-    { no: 850, title: '[입찰공고]2026년 의약품통합정보시스템 등 유지보수 사업(긴급입찰)(정정공고)', writer: '박혜정', date: '2025-11-07', views: 757 },
-    { no: 849, title: '한국의약품안전관리원 정보시스템 네트워크 중단 작업 안내 (\'25.11.7.(금) 19시 ~ 11.8.(토) 12시)', writer: '이주아', date: '2025-11-06', views: 725 },
-    { no: 848, title: '2025년 한국의약품안전관리원 포스터·카툰 공모전 수상자 발표', writer: '장선주', date: '2025-10-31', views: 1147 },
-  ];
+  // 페이징 관련
+  const [pageNum, setPageNum] = useState(1)
+  const [pageSize, setPageSize] = useState(10) // 화면에 페이지 사이즈 설정이 필요시 setPageSize 활용
 
+  // FIXME 일반게시판 유형에 따른 메뉴구조 분석 후 수정 필요
   const sideItems: SideItem[] = useMemo(
     () => [
-      { key: '/notice', label: '공지사항' },
-      { key: '/jobs', label: '채용게시판', disabled: true },
-      {
-        key: 'centers_group',
-        label: '센터',
-        children: [
-          { key: '/center/1', label: '센터 소개', disabled: true },
-          { key: '/center/2', label: '센터 소식', disabled: true },
-        ],
-      },
-    ],
-    [],
+      { key: '/newboard/common/BBS_COM_001', label: '공지사항' },
+      { key: '/newboard/common/BBS_COM_002', label: '채용 게시판' },
+    ].map(item => {
+      const lastSegment = item.key.split('/').pop(); 
+      return {
+        ...item,
+        disabled: lastSegment === bbsId,
+      };
+    }),
+    [bbsId],
   );
 
   const rows = useMemo(() => {
-    const arr = Array.isArray(list) && list.length > 0 ? list : sampleNotices;
+    const arr = Array.isArray(list) && list.length > 0 ? list : [];
     return arr.map((n: any, idx: number) => {
       const id = n.no ?? String(idx);
       return {
@@ -138,20 +128,13 @@ export default function NoticeList() {
   }, [list]);
 
   useEffect(() => {
-    dispatch(selectPstList({ pageIndex, bbsId, searchCnd, searchWrd }));
-  }, [dispatch, pageIndex, bbsId, searchCnd, searchWrd]);
+    dispatch(selectPstList({ pageNum, pageSize, bbsId, searchCnd, searchWrd }));
+  }, [dispatch, pageNum, bbsId]);
 
   const onSearch = () => {
-    const next = new URLSearchParams();
-    next.set('page', '1');
-    if (bbsId) next.set('bbsId', bbsId);
-    if (searchCnd) next.set('searchCnd', searchCnd);
-    if (searchWrd) next.set('searchWrd', searchWrd);
-    setSearchParams(next);
-    dispatch(selectPstList({ pageIndex: 1, searchCnd, searchWrd }));
+    setPageNum(1);
+    dispatch(selectPstList({ pageNum, pageSize, bbsId, searchCnd, searchWrd }));
   };
-
-  const totalPages = Math.max(1, Math.ceil((totalCount || rows.length || 1) / 10));
 
   return (
     <Box className="page-layout">
@@ -174,7 +157,7 @@ export default function NoticeList() {
             <Box className="sub-content">
               <DepsLocation />
               <Box className="content-view" id="content">
-                <Box className="sub_cont">
+                <Box className="page-content">
                   
                  {/* --- 본문 시작 --- */}
                   <Box className="board_list_area" component="section">
@@ -201,6 +184,11 @@ export default function NoticeList() {
                         placeholder="검색어 입력" 
                         value={searchWrd} 
                         onChange={(e) => setSearchWrd(e.target.value)} 
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            onSearch();
+                          }
+                        }}
                         sx={{ flexGrow: 1 }} // 남은 공간을 꽉 채우도록 설정
                       />
                       <Button variant="contained" size="large" sx={{ px: 4, minWidth: 100 }} onClick={onSearch}>검색</Button>
@@ -209,7 +197,7 @@ export default function NoticeList() {
                     <Box className="board_info" aria-label="게시판 검색결과">
                       <Typography className="board_count">
                         검색결과 
-                        <Typography component="span" className="count">1</Typography>
+                        <Typography component="span" className="count">{totalCount}</Typography>
                         건
                       </Typography>
                     </Box>
@@ -232,7 +220,7 @@ export default function NoticeList() {
                             <TableRow key={String(r.id)}>
                               {/* 3. 행의 식별자 데이터도 component="th", scope="row"를 권장합니다. */}
                               <TableCell component="th" scope="row" align="center">
-                                {(pageIndex - 1) * 10 + idx + 1}
+                                {(pageNum - 1) * 10 + idx + 1}
                               </TableCell>
                               <TableCell>
                                 {/* 4. 동작이 발생하는 요소에 명확한 aria-label을 제공합니다. */}
@@ -262,11 +250,15 @@ export default function NoticeList() {
                     </TableContainer>
 
                     <Stack direction="row" justifyContent="center" className="paging_wrap">
-                      <Pagination count={totalPages} page={pageIndex} onChange={(_, p) => {
-                        const next = new URLSearchParams(searchParams);
-                        next.set('page', String(p));
-                        setSearchParams(next);
-                      }} />
+                      <Pagination
+                        page={pageNum}
+                        count={totalPages ?? 0}
+                        onChange={(_: React.ChangeEvent<unknown>, page: number) => {
+                          setPageNum(page)
+                        }}
+                        showFirstButton
+                        showLastButton
+                      />
                     </Stack>
                   </Box>
                    {/* --- 본문 끝 --- */}

@@ -12,10 +12,9 @@ export const insertOpnn = createAsyncThunk<number, OpnnPVO>(
     try {
       const res = await https.post(insertOpnnApiPath(), params);
 
-      const insertCnt = res.data;
-
-      // 입력된 건수 반환함. 
-      return insertCnt;
+      const code = res.data?.code;
+      //code값에 따라서 에러처리
+      return code;
     }
     catch (e) {
       console.log("OpnnThunks insertOpnn");

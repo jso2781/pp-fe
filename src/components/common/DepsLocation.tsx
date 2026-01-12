@@ -68,7 +68,15 @@ export default function DepsLocation() {
     {
       pattern: /^\/[A-Za-z]{2}\/login$/,
       labels: ["login", "idLogin"]
-    }
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/newboard\/common\/BBS_COM_001(\/\d+)?$/,
+      labels: ["announcement", "noticeList"] // 기관소식 > 공지사항
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/newboard\/common\/BBS_COM_002(\/\d+)?$/,
+      labels: ["announcement", "employmentBoard"] // 기관소식 > 채용게시판
+    },    
   ];
 
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기
