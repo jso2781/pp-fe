@@ -243,6 +243,8 @@ export default function KIDS_PP_US_LG_01() {
                                 textDecoration: 'underline',
                                 color: 'primary.main',
                                 fontWeight: 500,
+                                verticalAlign: 'baseline',
+                                display: 'inline',
                               }}
                             >
                               사용자 등록 &gt;
@@ -259,6 +261,8 @@ export default function KIDS_PP_US_LG_01() {
                                 textDecoration: 'underline',
                                 color: 'primary.main',
                                 fontWeight: 500,
+                                verticalAlign: 'baseline',
+                                display: 'inline',
                               }}
                             >
                               사용자 관리 &gt;
