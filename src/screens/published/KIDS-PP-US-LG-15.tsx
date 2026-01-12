@@ -1,7 +1,25 @@
-import { useState } from 'react'
-import { Alert, Box, Button, Checkbox, FormControlLabel, Stack, TextField, Typography } from '@mui/material'
+import { useState, useEffect } from 'react'
+import {
+  Alert,
+  Box,
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  FormControlLabel,
+  Link,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 import DepsLocation from '@/components/common/DepsLocation'
 import ScreenShell from '../ScreenShell'
+
+const STORAGE_KEY_REMEMBER_ID = 'kids_login_remember_id'
 
 type LoginValues = {
   loginId: string
@@ -12,21 +30,41 @@ type LoginValues = {
 type LoginFailInfo = {
   reason: string
   failedCount: number
+  isIdError?: boolean
 }
 
 const KOREAN_REGEX = /[ㄱ-ㅎㅏ-ㅣ가-힣]/g
+const MAX_LENGTH = 20
+const MAX_FAIL_COUNT = 5
 
 export default function KIDS_PP_US_LG_15() {
+  const navigate = useNavigate()
   const [values, setValues] = useState<LoginValues>({ loginId: '', password: '', rememberId: false })
   const [errors, setErrors] = useState<Partial<Record<keyof LoginValues, string>>>({})
   const [loginFail, setLoginFail] = useState<LoginFailInfo | null>(null)
   const [localFailCount, setLocalFailCount] = useState(0)
+  const [showPasswordErrorPopup, setShowPasswordErrorPopup] = useState(false)
+
+  // 아이디 저장 기능: 페이지 로드 시 저장된 아이디 불러오기
+  useEffect(() => {
+    const savedId = localStorage.getItem(STORAGE_KEY_REMEMBER_ID)
+    if (savedId) {
+      setValues((p) => ({ ...p, loginId: savedId, rememberId: true }))
+    }
+  }, [])
 
   const validate = (v: LoginValues) => {
     const next: Partial<Record<keyof LoginValues, string>> = {}
-    if (!v.loginId.trim()) next.loginId = '아이디를 입력하세요.'
-    if (KOREAN_REGEX.test(v.loginId)) next.loginId = '아이디에는 한글을 입력할 수 없습니다.'
-    if (!v.password.trim()) next.password = '비밀번호를 입력하세요.'
+    if (!v.loginId.trim()) {
+      next.loginId = '아이디를 입력하세요.'
+    } else if (v.loginId.trim().length < 2) {
+      next.loginId = '최소 두자리 수 이상 입력해주세요.'
+    } else if (KOREAN_REGEX.test(v.loginId)) {
+      next.loginId = '아이디에는 한글을 입력할 수 없습니다.'
+    }
+    if (!v.password.trim()) {
+      next.password = '비밀번호를 입력하세요.'
+    }
     return next
   }
 
@@ -36,11 +74,72 @@ export default function KIDS_PP_US_LG_15() {
     setErrors(next)
     if (Object.keys(next).length) return
 
-    // 샘플: 실패횟수 시뮬레이션
-    const nextCount = localFailCount + 1
-    setLocalFailCount(nextCount)
-    setLoginFail({ reason: '아이디 또는 비밀번호가 올바르지 않습니다.', failedCount: nextCount })
-    window.alert('샘플 화면입니다. (로그인 API 미연동)')
+    // 아이디 저장 기능
+    if (values.rememberId) {
+      localStorage.setItem(STORAGE_KEY_REMEMBER_ID, values.loginId)
+    } else {
+      localStorage.removeItem(STORAGE_KEY_REMEMBER_ID)
+    }
+
+    try {
+      // TODO: 실제 로그인 API 호출
+      // const response = await https.post('/auth/login', {
+      //   loginId: values.loginId,
+      //   password: values.password,
+      // })
+
+      // 샘플: 실패횟수 시뮬레이션 (실제로는 서버에서 실패 횟수를 관리)
+      const nextCount = localFailCount + 1
+      setLocalFailCount(nextCount)
+
+      // 5회째 실패 시 팝업 표시
+      if (nextCount >= MAX_FAIL_COUNT) {
+        setShowPasswordErrorPopup(true)
+        setLoginFail(null)
+        return
+      }
+
+      // 4회째까지만 오류 횟수 노출
+      if (nextCount <= 4) {
+        setLoginFail({
+          reason: '아이디 또는 비밀번호가 일치하지 않습니다.',
+          failedCount: nextCount,
+          isIdError: false,
+        })
+        setErrors({ password: `아이디 또는 비밀번호가 일치하지 않습니다. (${nextCount}/${MAX_FAIL_COUNT})` })
+      } else {
+        setLoginFail(null)
+        setErrors({})
+      }
+
+      // 샘플: 실제 로그인 성공 시 아래 코드 실행
+      // const userType = response.data.userType // 'general' | 'expert'
+      // if (userType === 'expert') {
+      //   navigate('/screens/KIDS-PP-US-MT-01')
+      // } else {
+      //   navigate('/ko') // 일반 회원은 메인 페이지로
+      // }
+      window.alert('샘플 화면입니다. (로그인 API 미연동)')
+    } catch (error: any) {
+      // 서버 에러 처리
+      const nextCount = localFailCount + 1
+      setLocalFailCount(nextCount)
+
+      if (nextCount >= MAX_FAIL_COUNT) {
+        setShowPasswordErrorPopup(true)
+        setLoginFail(null)
+        return
+      }
+
+      if (nextCount <= 4) {
+        setLoginFail({
+          reason: '아이디 또는 비밀번호가 일치하지 않습니다.',
+          failedCount: nextCount,
+          isIdError: false,
+        })
+        setErrors({ password: `아이디 또는 비밀번호가 일치하지 않습니다. (${nextCount}/${MAX_FAIL_COUNT})` })
+      }
+    }
   }
 
   return (
@@ -56,48 +155,166 @@ export default function KIDS_PP_US_LG_15() {
           <Stack spacing={2}>
             <TextField
               label="아이디"
+              placeholder="아이디 혹은 이메일을 입력하세요."
               value={values.loginId}
               onChange={(e) => {
-                const v = e.target.value.replace(KOREAN_REGEX, '')
+                let v = e.target.value.replace(KOREAN_REGEX, '')
+                // 최대 20자 제한
+                if (v.length > MAX_LENGTH) {
+                  v = v.slice(0, MAX_LENGTH)
+                }
                 setValues((p) => ({ ...p, loginId: v }))
+                // 입력 시 에러 초기화
+                if (errors.loginId) {
+                  setErrors((prev) => ({ ...prev, loginId: undefined }))
+                }
               }}
               error={!!errors.loginId}
               helperText={errors.loginId}
               fullWidth
+              inputProps={{ maxLength: MAX_LENGTH }}
             />
 
             <TextField
               label="비밀번호"
+              placeholder="비밀번호를 입력하세요."
               type="password"
               value={values.password}
-              onChange={(e) => setValues((p) => ({ ...p, password: e.target.value }))}
-              error={!!errors.password}
-              helperText={errors.password}
+              onChange={(e) => {
+                let v = e.target.value
+                // 최대 20자 제한
+                if (v.length > MAX_LENGTH) {
+                  v = v.slice(0, MAX_LENGTH)
+                }
+                setValues((p) => ({ ...p, password: v }))
+                // 입력 시 에러 초기화
+                if (errors.password) {
+                  setErrors((prev) => ({ ...prev, password: undefined }))
+                  setLoginFail(null)
+                }
+              }}
+              error={!!errors.password || !!loginFail}
+              helperText={errors.password || (loginFail && !errors.password ? `${loginFail.reason} (${loginFail.failedCount}/${MAX_FAIL_COUNT})` : '')}
               fullWidth
+              inputProps={{ maxLength: MAX_LENGTH }}
             />
 
             <FormControlLabel
               control={
                 <Checkbox
                   checked={values.rememberId}
-                  onChange={(e) => setValues((p) => ({ ...p, rememberId: e.target.checked }))}
+                  onChange={(e) => {
+                    const checked = e.target.checked
+                    setValues((p) => ({ ...p, rememberId: checked }))
+                    // 체크 해제 시 localStorage에서도 제거
+                    if (!checked) {
+                      localStorage.removeItem(STORAGE_KEY_REMEMBER_ID)
+                    }
+                  }}
                 />
               }
               label="아이디 저장"
             />
 
-            {loginFail ? (
-              <Alert severity="error">
-                {loginFail.reason} (실패 {loginFail.failedCount}회)
-              </Alert>
-            ) : null}
-
             <Button variant="contained" type="submit" size="large">
               로그인
             </Button>
+
+            {/* 회원가입, 아이디 찾기, 비밀번호 찾기 링크 */}
+            <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 1 }}>
+              <Link
+                component="button"
+                variant="body2"
+                onClick={() => navigate('/screens/KIDS-PP-US-JM-01')}
+                sx={{
+                  cursor: 'pointer',
+                  color: 'text.secondary',
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                    color: 'primary.main',
+                  },
+                }}
+              >
+                회원가입
+              </Link>
+              <Link
+                component="button"
+                variant="body2"
+                onClick={() => navigate('/screens/KIDS-PP-US-LG-06')}
+                sx={{
+                  cursor: 'pointer',
+                  color: 'text.secondary',
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                    color: 'primary.main',
+                  },
+                }}
+              >
+                아이디 찾기
+              </Link>
+              <Link
+                component="button"
+                variant="body2"
+                onClick={() => navigate('/screens/KIDS-PP-US-LG-08')}
+                sx={{
+                  cursor: 'pointer',
+                  color: 'text.secondary',
+                  textDecoration: 'none',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                    color: 'primary.main',
+                  },
+                }}
+              >
+                비밀번호 찾기
+              </Link>
+            </Stack>
+
+            {/* 안내 문구 */}
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1, fontSize: '0.813rem' }}>
+                개인정보 보호를 위해 비밀번호 5회 이상 오류 시, 비밀번호 재설정이 필요합니다.
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1, fontSize: '0.813rem' }}>
+                비밀번호는 주기적(3개월)으로 변경하시고, 서비스 이용 후 반드시 로그아웃 하시기 바랍니다.
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.813rem' }}>
+                로그인 후 60분 동안 미동작 시 자동으로 로그아웃 됩니다.
+              </Typography>
+            </Box>
           </Stack>
         </Box>
       </Box>
+
+      {/* 비밀번호 5회 오류 팝업 */}
+      <Dialog
+        open={showPasswordErrorPopup}
+        onClose={() => setShowPasswordErrorPopup(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>비밀번호 5회 오류</DialogTitle>
+        <Divider />
+        <DialogContent>
+          <Typography variant="body1">
+            비밀번호가 5회이상 잘못입력되어, 비밀번호를 재설정 후 이용할 수 있습니다. 비밀번호를 재설정하시겠습니까?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowPasswordErrorPopup(false)}>취소</Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setShowPasswordErrorPopup(false)
+              navigate('/screens/KIDS-PP-US-LG-08') // 비밀번호 찾기 페이지로 이동
+            }}
+          >
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
     </ScreenShell>
   )
 }
