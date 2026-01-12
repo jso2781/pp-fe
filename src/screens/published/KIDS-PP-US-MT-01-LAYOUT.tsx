@@ -23,7 +23,7 @@ export default function KIDS_PP_US_MT_01_LAYOUT() {
         label: '업무 시스템 메뉴 1',
         children: [
           { key: '/3', label: '업무 시스템 서브 메뉴 1' },
-          { key: '/4', label: '업무 시스템 서브 메뉴 2' },
+          { key: '/4', label: '업무 시스템 서브 메뉴 2', isExternal: true },
         ]
       },
       { key: '/6', label: '업무 시스템 메뉴 2',},

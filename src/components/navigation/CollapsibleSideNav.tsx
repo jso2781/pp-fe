@@ -1,11 +1,21 @@
 import { useMemo, useState } from 'react'
 import { Box, Divider, Drawer, IconButton, List, ListItemButton, ListItemText, Typography, Collapse } from '@mui/material'
 import { Menu as MenuIcon, MenuOpen as MenuOpenIcon, ExpandLess, ExpandMore } from '@mui/icons-material'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+
+interface MenuItem {
+  key: string;
+  label: string;
+  disabled?: boolean;
+  isExternal?: boolean; 
+  children?: MenuItem[];
+}
 
 export type CollapsibleNavItem = {
   key: string
   label: string
   disabled?: boolean
+  isExternal?: boolean
   children?: CollapsibleNavItem[] // 하위 메뉴 추가
 }
 
@@ -99,7 +109,12 @@ export default function CollapsibleSideNav({
                   if (hasChildren) {
                     handleToggleOpen(it.key)
                   } else {
-                    onSelect?.(it.key)
+                    // 만약 새창 속성이 있다면 window.open
+                    if (it.isExternal) {
+                      window.open(it.key, '_blank'); // key가 URL일 경우
+                    } else {
+                      onSelect?.(it.key);
+                    }
                   }
                 }}
                 sx={{ 
@@ -134,7 +149,7 @@ export default function CollapsibleSideNav({
                     disablePadding 
                     dense
                     sx={{ 
-                      py: 1,           // 위아래 전체 패딩 (8px)
+                      py: 1,
                       backgroundColor: '#B1D2D2'
                     }}
                   >
@@ -142,7 +157,14 @@ export default function CollapsibleSideNav({
                       <ListItemButton
                         key={child.key}
                         selected={selected === child.key}
-                        onClick={() => onSelect?.(child.key)}
+                        onClick={() => {
+                          /* 하위 메뉴 새창 */
+                          if (child.isExternal) {
+                            window.open(child.key, '_blank');
+                          } else {
+                            onSelect?.(child.key);
+                          }
+                        }}
                         sx={{ 
                           pl: collapsed ? 1.5 : 3,
                           backgroundColor: '#B1D2D2',
@@ -167,6 +189,19 @@ export default function CollapsibleSideNav({
                             sx: { opacity: collapsed ? 0 : 1 },
                           }}
                         />
+
+                        {/* 3. 새창 아이콘 추가 위치 */}
+                        {!collapsed && child.isExternal && (
+                          <OpenInNewIcon 
+                            className="external-icon"
+                            sx={{ 
+                              fontSize: 16,
+                              ml: 0.8,
+                              transition: 'opacity 0.2s',
+                              color: 'inherit' 
+                            }} 
+                          />
+                        )}
                       </ListItemButton>
                     ))}
                   </List>

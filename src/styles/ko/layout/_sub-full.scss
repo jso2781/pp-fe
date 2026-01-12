@@ -56,12 +56,11 @@
     }
   }
 
-  // 닫기 버튼을 오른쪽 끝으로 고정
   .btn-close {
     position: absolute;
-    right: 10px; // 오른쪽 끝에서 10px 띄움
+    right: 10px; 
     top: 50%;
-    transform: translateY(-50%); // 세로 중앙 정렬
+    transform: translateY(-50%); 
     color: #555;
 
     &:hover {
