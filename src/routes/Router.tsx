@@ -17,6 +17,7 @@ import NotFoundKo from '@/pages/ko/NotFound'
 import LoginKo from '@/pages/ko/Login'
 import LoginMethodKo from '@/pages/ko/LoginMethod'
 import FaqListKo from '@/pages/ko/faq/FaqList';
+import OpnnWriteKo from '@/pages/ko/opnn/OpnnWrite';
 
 // 게시판 테스트용
 import CommonBoardListKo from '@/pages/ko/newboard/common/CommonList'
@@ -148,6 +149,7 @@ export default function Router() {
           <Route path="/:lang/dur/proposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalEn /> }} />} />
 
           <Route path="/:lang/faq" element={<LangElement byLang={{ ko: <FaqListKo />, en: <FaqListKo /> }} />} />
+          <Route path="/:lang/opnnWrite" element={<LangElement byLang={{ ko: <OpnnWriteKo />, en: <OpnnWriteKo /> }} />} />
           
           {/* 게시판 테스트중 */}          
           <Route path="/:lang/newboard/common/:bbsId" element={<LangElement byLang={{ ko: <CommonBoardListKo />, en: <CommonBoardListKo /> }} />} />
