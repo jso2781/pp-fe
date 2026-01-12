@@ -33,17 +33,22 @@ const RelatedSites = () => {
   return (
     <div className="footer_related">
       <div className="container">
-        <Grid container spacing={1.5} alignItems="center" justifyContent="flex-end">
-          <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <div className="related_grid_container">
+          {/* 정부 유관기관 셀렉트 */}
+          <div className="related_grid_item">
             <FormControl fullWidth size="small">
-              <InputLabel id="gov-site-label">{t('goToRelGov')}</InputLabel>
               <Select
-                labelId="gov-site-label"
-                label={t('goToRelGov')}
                 value=""
+                displayEmpty
                 onChange={handleSelect}
+                renderValue={(selected) => {
+                  if (selected === "") {
+                    return <span className="placeholder_text">{t('goToRelGov')}</span>;
+                  }
+                  return selected;
+                }}
               >
-                <MenuItem value="">
+                <MenuItem value="" disabled>
                   <em>{t('goToRelGov')}</em>
                 </MenuItem>
                 {GOV_SITES.map((o) => (
@@ -53,18 +58,23 @@ const RelatedSites = () => {
                 ))}
               </Select>
             </FormControl>
-          </Grid>
+          </div>
 
-          <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          {/* 관련 단체 셀렉트 */}
+          <div className="related_grid_item">
             <FormControl fullWidth size="small">
-              <InputLabel id="org-site-label">{t('goToRelOrg')}</InputLabel>
               <Select
-                labelId="org-site-label"
-                label={t('goToRelOrg')}
                 value=""
+                displayEmpty
                 onChange={handleSelect}
+                renderValue={(selected) => {
+                  if (selected === "") {
+                    return <span className="placeholder_text">{t('goToRelOrg')}</span>;
+                  }
+                  return selected;
+                }}
               >
-                <MenuItem value="">
+                <MenuItem value="" disabled>
                   <em>{t('goToRelOrg')}</em>
                 </MenuItem>
                 {ORG_SITES.map((o) => (
@@ -74,8 +84,8 @@ const RelatedSites = () => {
                 ))}
               </Select>
             </FormControl>
-          </Grid>
-        </Grid>
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -39,86 +39,100 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="footer">
+
+    <Box component="footer" className="footer">
       <RelatedSites />
-      <div className="container">
-        <Grid container spacing={1.5} className="footer_logo" alignItems="center" justifyContent="space-between">
-          <Grid size={{ xs: 12 }}>
-            <Link to="/" aria-label={t('kidsHomeAria')}>
-              <img src="/img/footer_logo.png" alt={`KIDS ${t('kidsName')}`} style={{ cursor: 'pointer' }} />
-            </Link>
-          </Grid>
-        </Grid>
+      <Box className="container">
+        
+        {/* 로고 영역 */}
+        <Box className="footer_logo">
+          <Link to="/" aria-label={t("kidsHomeAria")}>
+            <Box
+              component="img"
+              src="/img/footer_logo.png"
+              alt={`KIDS ${t("kidsName")}`}
+            />
+          </Link>
+        </Box>
 
-        <Grid container spacing={1.5} className="footer_corporate_info">
-          <Grid className="info_txt" sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }} size={{ xs: 12, md: 6 }}>
-            <Typography variant="body2" className="address">{t('kidsAddress')}</Typography>
-            <Typography variant="body2">{`${t('bizRegNo')} 101-82-21134`}</Typography>
-            <Typography variant="body2">{`${t('mainTel')} 02-2172-6700`}</Typography>
-            <Typography variant="body2">{`${t('fax')} 02-2172-6701`}</Typography>
-          </Grid>
-
-          <Grid className="info_link" sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }} size={{ xs: 12, md: 6 }}>
-            <Stack spacing={1}>
+        {/* 주소, 정책 링크 영역 */}
+        <Box className="footer_corporate_info">
+          <Box className="info_txt">
+            <Typography className="address">{t("kidsAddress")}</Typography>
+            <Typography>{`${t("bizRegNo")} 101-82-21134`}</Typography>
+            <Typography>{`${t("mainTel")} 02-2172-6700`}</Typography>
+            <Typography>{`${t("fax")} 02-2172-6701`}</Typography>
+          </Box>
+          
+          <Box className="info_link">
+            <Stack className="link_group_1">
               {FOOTER_INFO_LINKS.map((item) => (
-                <MuiLink key={item.key} href={item.href} target="_blank" rel="noopener noreferrer" underline="hover">
-                  {t(item.labelKey)}
-                </MuiLink>
-              ))}
-            </Stack>
-            <Stack spacing={1}>
-              {FOOTER_LEGAL_LINKS.map((item) => (
-                <MuiLink key={item.key} href={item.href} target="_blank" rel="noopener noreferrer" underline="hover">
-                  {t(item.labelKey)}
-                </MuiLink>
-              ))}
-            </Stack>
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={1.5} className="footer_sns_link">
-          <Grid size={{ xs: 12 }}>
-            <Stack direction="row" spacing={2} flexWrap="wrap">
-              {FOOTER_SNS_LINKS.map((item) => (
                 <MuiLink
                   key={item.key}
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`sns_item ${item.key}`}
                   underline="hover"
                 >
-                  <span>{t(item.labelKey)}</span>
-                </MuiLink>
-              ))}
-            </Stack>
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={1.5} className="footer_meta_info" alignItems="center">
-          <Grid size={{ xs: 12 }}>
-            <Stack direction="row" spacing={2} flexWrap="wrap">
-              {FOOTER_LEGAL_LINKS.map((item) => (
-                <MuiLink key={item.key} href={item.href} target="_blank" rel="noopener noreferrer" underline="hover">
                   {t(item.labelKey)}
                 </MuiLink>
               ))}
             </Stack>
-          </Grid>
+            <Stack className="link_group_2">
+              {FOOTER_LEGAL_LINKS.map((item) => (
+                <MuiLink
+                  key={item.key}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  underline="hover"
+                >
+                  {t(item.labelKey)}
+                </MuiLink>
+              ))}
+            </Stack>
+          </Box>
+        </Box>
 
-          <Grid className="copyright" size={{ xs: 12 }}>
-            <Typography variant="body2">
-              Copyright © Korea Institute of Drug Safety &amp; Risk Management. All Rights Reserved.
-            </Typography>
-          </Grid>
+        {/* SNS 링크 */}
+        <Box className="footer_sns_link">
+          <Stack className="sns_group">
+            {FOOTER_SNS_LINKS.map((item) => (
+              <MuiLink
+                key={item.key}
+                href={item.href}
+                className={`sns_item ${item.key}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Typography component="span">{t(item.labelKey)}</Typography>
+              </MuiLink>
+            ))}
+          </Stack>
+        </Box>
 
-          <Grid size={{ xs: 12 }}>
-            <Typography variant="caption" color="text.secondary">
-              © {year}
+        {/* 정책 링크, Copyright */}
+        <Box className="footer_meta_info">
+          <Box className="meta_links">
+            {FOOTER_LEGAL_LINKS.map((item) => (
+              <MuiLink
+                key={item.key}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t(item.labelKey)}
+              </MuiLink>
+            ))}
+          </Box>
+          
+          <Box className="copyright">
+            <Typography>
+              © Korea Institute of Drug Safety &amp; Risk Management. All rights reserved.
             </Typography>
-          </Grid>
-        </Grid>
-      </div>
-    </footer>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   )
 }
