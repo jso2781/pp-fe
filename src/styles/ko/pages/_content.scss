@@ -258,6 +258,12 @@
         font-weight: var(--fw-700);
       }
     }
+    
+   @media (max-width: 1023px) {
+      .step-description {
+        margin-bottom: 20px;
+      }
+    }
   }
 
   // 회원가입 회원 유형 선택
@@ -353,10 +359,6 @@
 
       .member-type-card {
         max-width: 100%;
-
-        &__link {
-          height: auto;
-        }
       }
     }
   }
