@@ -19,6 +19,8 @@ import { useNavigate } from 'react-router-dom'
 import DepsLocation from '@/components/common/DepsLocation'
 
 const STORAGE_KEY_REMEMBER_ID = 'kids_login_remember_id'
+const STORAGE_KEY_PASSWORD_CHANGE_REMINDER = 'kids_password_change_reminder'
+const PASSWORD_CHANGE_REMINDER_DAYS = 80 // 80일 전부터 알림
 
 type LoginValues = {
   loginId: string
@@ -43,7 +45,7 @@ export default function Login() {
   const [loginFail, setLoginFail] = useState<LoginFailInfo | null>(null)
   const [localFailCount, setLocalFailCount] = useState(0)
   const [showPasswordErrorPopup, setShowPasswordErrorPopup] = useState(false)
-
+  const [showPasswordChangeReminder, setShowPasswordChangeReminder] = useState(false)
   // 아이디 저장 기능: 페이지 로드 시 저장된 아이디 불러오기
   useEffect(() => {
     const savedId = localStorage.getItem(STORAGE_KEY_REMEMBER_ID)
@@ -51,6 +53,34 @@ export default function Login() {
       setValues((p) => ({ ...p, loginId: savedId, rememberId: true }))
     }
   }, [])
+
+  // 비밀번호 변경 안내 팝업 표시 여부 확인
+  // Description: 회원가입 또는 비밀번호 변경 후 80일 전부터 메시지 노출
+  const checkPasswordChangeReminder = () => {
+    const reminderDate = localStorage.getItem(STORAGE_KEY_PASSWORD_CHANGE_REMINDER)
+    if (reminderDate) {
+      const reminder = new Date(reminderDate)
+      const now = new Date()
+      // 아직 알림 날짜가 지나지 않았으면 표시하지 않음
+      if (now < reminder) {
+        return false
+      }
+    }
+
+    // TODO: 실제 로그인 성공 후 서버에서 비밀번호 변경 필요 여부 확인
+    // 비밀번호 변경 정책: 비밀번호는 90일마다 변경 필요
+    // 80일 전부터 알림 시작 (즉, 변경 후 10일 후부터 알림)
+    // const passwordLastChanged = response.data.passwordLastChanged // 서버에서 받아온 마지막 변경일 (회원가입일 또는 마지막 변경일)
+    // const now = new Date()
+    // const daysSinceChange = Math.floor((now.getTime() - new Date(passwordLastChanged).getTime()) / (1000 * 60 * 60 * 24))
+    // const daysUntilExpiry = 90 - daysSinceChange
+    // if (daysUntilExpiry <= PASSWORD_CHANGE_REMINDER_DAYS && daysUntilExpiry > 0) {
+    //   return true // 80일 전부터 알림 시작
+    // }
+
+    // 샘플: 테스트를 위해 false 반환 (실제로는 위의 로직 사용)
+    return false // 실제 구현 시 위의 주석 처리된 로직 사용
+  }
 
   const validate = (v: LoginValues) => {
     const next: Partial<Record<keyof LoginValues, string>> = {}
@@ -113,12 +143,19 @@ export default function Login() {
 
       // 샘플: 실제 로그인 성공 시 아래 코드 실행
       // const userType = response.data.userType // 'general' | 'expert'
-      // if (userType === 'expert') {
-      //   navigate('/screens/KIDS-PP-US-MT-01')
-      // } else {
-      //   navigate('/ko') // 일반 회원은 메인 페이지로
-      // }
-      window.alert('샘플 화면입니다. (로그인 API 미연동)')
+      
+      // 비밀번호 변경 안내 팝업 표시 여부 확인
+      if (checkPasswordChangeReminder()) {
+        setShowPasswordChangeReminder(true)
+      } else {
+        // 비밀번호 변경 안내가 필요 없으면 정상 로그인 처리
+        // if (userType === 'expert') {
+        //   navigate('/screens/KIDS-PP-US-MT-01')
+        // } else {
+        //   navigate('/ko') // 일반 회원은 메인 페이지로
+        // }
+        window.alert('샘플 화면입니다. (로그인 API 미연동)')
+      }
     } catch (error: any) {
       // 서버 에러 처리
       const nextCount = localFailCount + 1
@@ -311,6 +348,58 @@ export default function Login() {
             }}
           >
             확인
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* 비밀번호 변경 안내 팝업 (KIDS-PP-US-LG-16) */}
+      <Dialog
+        open={showPasswordChangeReminder}
+        onClose={undefined} // 팝업은 버튼으로만 닫을 수 있음
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>비밀번호 변경 안내</DialogTitle>
+        <Divider />
+        <DialogContent>
+          <Typography variant="body1" sx={{ mb: 1 }}>
+            회원님께서 비밀번호를 변경하신지 90일이 이상 경과되어 안내해드립니다.
+          </Typography>
+          <Typography variant="body1">
+            비밀번호를 변경하시려면 지금 변경 버튼을 클릭해주세요.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              // 나중에 변경: 팝업 닫고 +80일 후 다시 알림
+              // 해당 회원의 비밀번호 유효기간을 버튼을 클릭한 일자를 기준으로 +80일 뒤에 다시 알림 메시지 노출
+              const nextReminderDate = new Date()
+              nextReminderDate.setDate(nextReminderDate.getDate() + PASSWORD_CHANGE_REMINDER_DAYS)
+              localStorage.setItem(STORAGE_KEY_PASSWORD_CHANGE_REMINDER, nextReminderDate.toISOString())
+              setShowPasswordChangeReminder(false)
+              
+              // 정상 로그인 처리 계속
+              // TODO: 실제 로그인 성공 처리
+              // const userType = response.data.userType
+              // if (userType === 'expert') {
+              //   navigate('/screens/KIDS-PP-US-MT-01')
+              // } else {
+              //   navigate('/ko')
+              // }
+            }}
+          >
+            나중에 변경
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              // 지금 변경: 팝업 닫고 비밀번호 재설정 페이지로 이동
+              setShowPasswordChangeReminder(false)
+              navigate('/screens/KIDS-PP-US-LG-09')
+            }}
+          >
+            지금 변경
           </Button>
         </DialogActions>
       </Dialog>
