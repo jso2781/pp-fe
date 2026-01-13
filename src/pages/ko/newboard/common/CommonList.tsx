@@ -116,7 +116,7 @@ export default function NoticeList() {
   const rows = useMemo(() => {
     const arr = Array.isArray(list) && list.length > 0 ? list : [];
     return arr.map((n: any, idx: number) => {
-      const id = n.no ?? String(idx);
+      const id = n.pstSn ?? String(idx);
       return {
         id,
         title: n.pstTtl ?? '',
@@ -204,15 +204,15 @@ export default function NoticeList() {
 
                     <TableContainer component={Paper} className="bbs_list">
                       {/* 1. aria-label로 표의 목적을 설명합니다. */}
-                      <Table aria-label="공지사항 목록">
+                      <Table aria-label="공지사항 목록" sx={{ tableLayout: 'fixed' }}>
                         <TableHead>
                           <TableRow>
                             {/* 2. component="th"와 scope="col"을 통해 제목 열임을 명시합니다. */}
-                            <TableCell component="th" scope="col" align="center">No</TableCell>
-                            <TableCell component="th" scope="col" align="center">제목</TableCell>
-                            <TableCell component="th" scope="col" align="center">작성자</TableCell>
-                            <TableCell component="th" scope="col" align="center">등록일</TableCell>
-                            <TableCell component="th" scope="col" align="center">조회수</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '10%' }}>No</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '40%' }}>제목</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '20%' }}>작성자</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '20%' }}>등록일</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '10%' }}>조회수</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -222,11 +222,11 @@ export default function NoticeList() {
                               <TableCell component="th" scope="row" align="center">
                                 {(pageNum - 1) * 10 + idx + 1}
                               </TableCell>
-                              <TableCell>
+                              <TableCell align="center">
                                 {/* 4. 동작이 발생하는 요소에 명확한 aria-label을 제공합니다. */}
                                 <Link
                                   component={RouterLink}
-                                  to={`/ko/notice/${r.id}`}
+                                  to={`/ko/newboard/common/${bbsId}/${r.id}`}
                                   color="inherit"
                                   underline="hover" // 평소엔 밑줄 없고 마우스 올릴 때만 생성 (접근성 권장)
                                   aria-label={`${r.title} 상세보기`}

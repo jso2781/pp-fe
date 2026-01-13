@@ -1,106 +1,184 @@
-import { useEffect, useMemo } from 'react'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { Box, Button, Card, CardContent, Divider, Stack, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid';import { BreadcrumbNav } from '@/components/mui'
-import PageTitle from '@/components/common/PageTitle'
-import SectionSideNav from '@/components/navigation/SectionSideNav'
-import { fetchNoticeDetail, fetchNoticeList } from '@/features/notice/noticeThunks'
+import DepsLocation from '@/components/common/DepsLocation';
+import Lnb from '@/components/common/Lnb';
+import { getPst } from '@/features/pst/PstThunks';
+import { downloadAtch } from '@/features/atch/AtchThunks';
+import { PstRVO } from '@/features/pst/PstTypes';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { Box, Button, Link, Typography } from '@mui/material';
+import { useEffect, useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function NoticeDetail() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { id } = useParams()
-  const [searchParams] = useSearchParams()
-  const pageIndex = Number(searchParams.get('page') || 1)
 
-  const { list, current, loading } = useAppSelector((s) => s.notice)
+  const { bbsId } = useParams<{ bbsId: string }>();
+  const { pstSn } = useParams<{ pstSn: string }>();
 
-  useEffect(() => {
-    if (id) dispatch(fetchNoticeDetail(id))
-  }, [dispatch, id])
+  const { current } = useAppSelector((s) => s.pst)
 
   useEffect(() => {
-    if (!list?.length) dispatch(fetchNoticeList({ pageIndex }))
-  }, [dispatch, list?.length, pageIndex])
+    if (bbsId && pstSn) dispatch(getPst({bbsId, pstSn}))
+  }, [dispatch, bbsId, pstSn])
 
-  const sideItems = useMemo(
+  // FIXME 일반게시판 유형에 따른 메뉴구조 분석 후 수정 필요
+  const sideItems: any[] = useMemo(
     () => [
-      { key: '/ko/notice', label: '공지사항' },
-      { key: '/ko/jobs', label: '채용게시판', disabled: true },
-      { key: '/ko/centers', label: '지역의약품안전센터', disabled: true },
-      { key: '/ko/faq', label: 'FAQ', disabled: true },
-      { key: '/ko/qna', label: '고객문의', disabled: true },
-    ],
-    [],
-  )
+      { key: '/newboard/common/BBS_COM_001', label: '공지사항' },
+      { key: '/newboard/common/BBS_COM_002', label: '채용 게시판' },
+    ].map(item => {
+      const lastSegment = item.key.split('/').pop(); 
+      return {
+        ...item,
+        disabled: lastSegment === bbsId,
+      };
+    }),
+    [bbsId],
+  );  
 
-  const data: any = current || list?.find((n: any) => String(n.id ?? n.nttId) === String(id))
-  const html = data?.contentHtml || data?.nttCn || data?.content || ''
+  const data: PstRVO = current || {};
+  const html = data?.pstCn || '';
   const isHtml = typeof html === 'string' && /<\/?[a-z][\s\S]*>/i.test(html)
-  const isPopup = searchParams.get('popup') === '1'
+  const atchFiles = data?.atchRVOs || [];
 
+  const handleDownload = (atchFileSn: string) => {
+    dispatch(
+      downloadAtch({atchFileSn})
+    );
+  };
+  
   return (
-    <div className="ds-page ds-notice">
-      <div className="ds-container">
-        {!isPopup && (
-          <>
-            <BreadcrumbNav className="ds-breadcrumb" items={[{ title: '홈' }, { title: '알림마당' }, { title: '공지사항' }]} />
-            <PageTitle title="공지사항" subtitle="알림마당" />
-          </>
-        )}
+      <Box className="page-layout">
+        <Box className="sub-container">
+          <Box className="content-wrap">
 
-        <Grid container spacing={2} sx={{ alignItems: 'flex-start' }}>
-          {!isPopup && (
-            <Grid size={{ xs: 12, md: 3 }}>
-              <SectionSideNav title="알림마당" items={sideItems} selectedKey="/ko/notice" />
-            </Grid>
-          )}
+            {/* Lnb 영역 */}
+            <Box className="lnb-wrap">
+              <Box className="lnb-menu">
+                <Typography component="h2" className="lnb-tit">
+                  <span>알림마당</span>
+                </Typography>
+                <Box className="lnb-list">
+                  <Lnb items={sideItems} />
+                </Box>
+              </Box>
+            </Box>
 
-          <Grid size={{ xs: 12, md: isPopup ? 12 : 9 }}>
-            <Card variant="outlined" sx={{ borderRadius: 2 }}>
-              <CardContent>
-                {loading && !data ? (
-                  <Typography variant="body2" color="text.secondary">
-                    로딩 중...
-                  </Typography>
-                ) : !data ? (
-                  <Typography variant="body2">게시글을 찾을 수 없습니다.</Typography>
-                ) : (
-                  <>
-                    <Typography variant="h6" fontWeight={900} sx={{ mb: 1 }}>
-                      {data.title || data.nttSj || '-'}
-                    </Typography>
+            {/* 컨텐츠 본문 영역 */}
+            <Box className="sub-content">
+              <DepsLocation />
+              <Box className="content-view" id="content">
+                <Box className="page-content">
+                  
+                  {/* --- 본문 시작 --- */}
+                  <Box component="article" className="board-detail">
+                    {/* (제목 + 정보) */}
+                    <Box className="board-header">
+                      <Typography component="h1" className="board-title">
+                        {data.pstTtl || '-'}
+                      </Typography>
+                      
+                      <Box className="board-info">
+                        <ul className="info-list">
+                          <li>
+                            <span className="info-label">작성자</span>
+                            <span className="info-value">{data.wrtrDeptNm ?? '-'}</span>
+                          </li>
+                          <li>
+                            <span className="info-label">등록일</span>
+                            <span className="info-value">{data.regDt ?? '-'}</span>
+                          </li>
+                          <li>
+                            <span className="info-label">조회수</span>
+                            <span className="info-value">{data.pstInqCnt ?? '-'}</span>
+                          </li>
+                        </ul>
+                      </Box>
+                    </Box>
 
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 1.5 }}>
-                      <Typography variant="body2">작성자 <b>{data.writer || data.frstRegisterNm || '-'}</b></Typography>
-                      <Typography variant="body2">등록일 <b>{data.date || data.frstRegisterPnttm || '-'}</b></Typography>
-                      <Typography variant="body2">조회수 <b>{data.views ?? data.inqireCo ?? '-'}</b></Typography>
-                    </Stack>
-
-                    <Divider sx={{ my: 1.5 }} />
-
-                    <Box sx={{ '& img': { maxWidth: '100%' } }}>
-                      {isHtml ? (
-                        <div dangerouslySetInnerHTML={{ __html: html }} />
-                      ) : (
-                        <div style={{ whiteSpace: 'pre-line', lineHeight: 1.7 }}>{String(html || '')}</div>
+                    <Box className="board-body-wrap">
+                      {/* 게시글 본문 영역 */}
+                      <Box className="board-content">
+                        {isHtml ? (
+                          <div 
+                            className="content-inner html-render" 
+                            dangerouslySetInnerHTML={{ __html: html }} 
+                          />
+                        ) : (
+                          <Typography className="content-inner text-render">
+                            {String(html || '')}
+                          </Typography>
+                        )}
+                      </Box>
+                      {/* 첨부파일 */}
+                      {atchFiles.length > 0 && (
+                      <Box className="board-attachment">
+                        <ul className="attachment-list">
+                          {atchFiles.map((file, index) => (
+                          <li key={index}>
+                            <Link 
+                              // href={file.atchFilePath ?? '#none'} // 첨부파일 다운로드 api 연동으로 변경 필요
+                              className="attachment-item"
+                              underline="none"
+                              title="첨부파일 다운로드"
+                              onClick={() => handleDownload(file.atchFileSn ?? '')}
+                            >
+                              <Box className="file-info">
+                                <span className="file-label">{atchFiles.length === 1 ? '첨부파일' : `첨부파일${index + 1}`}</span>
+                                <span className="file-name">{file.atchFileNm}</span>
+                                <span className="file-meta">
+                                  <span className="file-ext">[{file.atchFileExtnNm}]</span>
+                                  <span className="file-size">{file.atchFileSz}</span> {/** 파일 크기 단위 변환 로직 필요 */}
+                                </span>
+                              </Box>
+                            </Link>
+                          </li>
+                          ))}
+                        </ul>
+                      </Box>
                       )}
                     </Box>
-                  </>
-                )}
-
-                <Divider sx={{ my: 2 }} />
-                <Stack direction="row" justifyContent="flex-end">
-                  <Button variant="outlined" onClick={() => navigate(`/ko/notice?page=${pageIndex}`)}>
-                    목록
-                  </Button>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </div>
-    </div>
+                    <Box className="kogl-license-wrap">
+                      <Box className="kogl-container">
+                        <Link 
+                          href="http://www.kogl.or.kr/info/licenseType4.do"
+                          underline="none"
+                          target="_blank"
+                          title="저작권 로고"
+                        >
+                          <Box className="kogl-image">
+                            <img 
+                              src="/img//icon_kogl.png" 
+                              alt="공공누리 제4유형: 출처표시, 상업적 이용금지, 변경금지" 
+                            />
+                          </Box>
+                        </Link>
+                        <Box className="kogl-text">
+                          <Typography variant="body2" component="p">
+                            본 저작물은 <strong>"공공누리" 제4유형 : 출처표시 + 상업적 이용금지 + 변경금지</strong> 조건에 따라 이용할 수 있습니다.
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                  {/* 하단 버튼 영역 */}
+                  <Box className="board-actions">
+                    <Button 
+                        variant="contained" 
+                        color="dark" 
+                        size="large"
+                        className="btn-list-go"
+                        onClick={() => navigate(`/ko/newboard/common/${bbsId}`)}
+                      >
+                      목록
+                    </Button>
+                  </Box>
+                  {/* --- 본문 끝 --- */}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
   )
 }

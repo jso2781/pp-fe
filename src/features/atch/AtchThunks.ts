@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectAtchListApiPath, getAtchApiPath, insertAtchApiPath, updateAtchApiPath, saveAtchApiPath, deleteAtchApiPath, downloadAtchApiPath, downloadAtchApiPath2 } from '@/api/atch/AtchApiPaths'
+import { selectAtchListApiPath, getAtchApiPath, insertAtchApiPath, updateAtchApiPath, saveAtchApiPath, deleteAtchApiPath, downloadAtchApiPath } from '@/api/atch/AtchApiPaths'
 import { mockAtchList, AtchPVO, AtchRVO, AtchListPVO, AtchListRVO, AtchDVO, AtchDownVO  } from './AtchTypes'
 import { mockPstList } from '../notice/PstTypes'
 

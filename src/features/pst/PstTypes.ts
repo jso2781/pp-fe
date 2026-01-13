@@ -1,3 +1,6 @@
+import { AtchRVO } from '../atch/AtchTypes'
+
+
 /**
  * 대국민포털_게시물기본 조회 목업 정보 
  */
@@ -63,6 +66,9 @@ export const mockPstList = [
  * 대국민포털_게시물기본 조회/입력/수정/저장 파라메터 정보 
  */
 export interface PstPVO {
+  /** 게시글일련번호 */
+  pstSn?: string
+
   /** 게시판아이디 */
   bbsId?: string
 
@@ -117,6 +123,9 @@ export interface PstPVO {
  * 대국민포털_게시물기본 정보 
  */
 export interface PstRVO {
+  /** 게시글일련번호 */
+  pstSn?: string
+
   /** 순번 */
   no?: 1
 
@@ -170,6 +179,9 @@ export interface PstRVO {
 
   /** 조회수 */
   pstInqCnt?: number
+
+  /** 첨부파일 목록 */
+  atchRVOs?: AtchRVO[]
 }
 
 /**
@@ -184,6 +196,9 @@ export interface PstListPVO {
 
   /** 게시판아이디 */
   bbsId?: string
+
+  /** 게시글일련번호 */
+  pstSn?: string
 
   /** 검색조건 */
   searchCnd?: string

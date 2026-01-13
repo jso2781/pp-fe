@@ -70,11 +70,11 @@ export default function DepsLocation() {
       labels: ["login", "idLogin"]
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/newboard\/common\/BBS_COM_001(\/\d+)?$/,
+      pattern: /^\/[A-Za-z]{2}\/newboard\/common\/BBS_COM_001(\/)?(\d+)?$/,
       labels: ["announcement", "noticeList"] // 기관소식 > 공지사항
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/newboard\/common\/BBS_COM_002(\/\d+)?$/,
+      pattern: /^\/[A-Za-z]{2}\/newboard\/common\/BBS_COM_002(\/)?(\d+)?$/,
       labels: ["announcement", "employmentBoard"] // 기관소식 > 채용게시판
     },    
   ];

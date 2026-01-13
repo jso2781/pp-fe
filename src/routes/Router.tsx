@@ -155,7 +155,7 @@ export default function Router() {
           
             {/* 게시판 테스트중 */}          
             <Route path="/:lang/newboard/common/:bbsId" element={<LangElement byLang={{ ko: <CommonBoardListKo />, en: <CommonBoardListKo /> }} />} />
-            <Route path="/:lang/newboard/common/:bbsId/:sn" element={<LangElement byLang={{ ko: <CommonBoardDetailKo />, en: <CommonBoardDetailKo /> }} />} />
+            <Route path="/:lang/newboard/common/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <CommonBoardDetailKo />, en: <CommonBoardDetailKo /> }} />} />
 
             {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
             <Route path="/screens" element={<Screens />} />

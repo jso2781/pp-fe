@@ -49,7 +49,7 @@ export const getPst = createAsyncThunk<PstRVO, PstPVO | undefined>(
     try {
       const res = await https.post(getPstDetailPath(), params);
 
-      const payload = res.data;
+      const payload = res.data?.data?.detailData;
 
       // 서버가 PstRVO 형식으로 단 건 데이터를 반환함. 
       return payload;
