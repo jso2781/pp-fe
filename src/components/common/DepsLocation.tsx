@@ -96,7 +96,11 @@ export default function DepsLocation() {
 
   // 5. Breadcrumb 아이템 생성
   const breadcrumbItems = [
-    { label: t("home"), href: '/' },
+    // { label: t("home"), href: '/', className: 'home' },
+    { 
+      label: <span className="home">{t("home")}</span>, 
+      href: '/' 
+    },
     ...currentLabels.map((label, index) => ({
       label: label,
       className: index === currentLabels.length - 1 ? 'current' : 'route'
@@ -108,7 +112,7 @@ export default function DepsLocation() {
     <div className="location">
       <div className="local">
         <BreadcrumbNav
-          className="ds-breadcrumb"
+          className="breadcrumb"
           separator=">"
           items={breadcrumbItems}
         />
