@@ -10,13 +10,13 @@ import NoticeListKo from '@/pages/ko/notice/NoticeList'
 import NoticeDetailKo from '@/pages/ko/notice/NoticeDetail'
 import BoardListKo from '@/pages/ko/board/BoardList'
 import BoardWriteKo from '@/pages/ko/board/BoardWrite'
-import DurProposalKo from '@/pages/ko/dur/DurProposal'
+import MaintaskDurProposalKo from '@/pages/ko/maintask/dur/DurProposal'
 import DurNoticeListKo from '@/pages/ko/dur/DurNoticeList'
 import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail'
 import NotFoundKo from '@/pages/ko/NotFound'
 import LoginKo from '@/pages/ko/Login'
 import LoginMethodKo from '@/pages/ko/LoginMethod'
-import FaqListKo from '@/pages/ko/faq/FaqList';
+import NewsFaqNoticeKo from '@/pages/ko/news/faqNotice/FaqNotice';
 import OpnnWriteKo from '@/pages/ko/opnn/OpnnWrite';
 
 // 게시판 테스트중
@@ -152,10 +152,9 @@ export default function Router() {
             <Route path="/:lang/board/write" element={<LangElement byLang={{ ko: <BoardWriteKo />, en: <BoardWriteEn /> }} />} />
             <Route path="/:lang/dur/notice" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListEn /> }} />} />
             <Route path="/:lang/dur/notice/:id" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailEn /> }} />} />
-            <Route path="/:lang/dur/proposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalEn /> }} />} />
 
-            <Route path="/:lang/faq" element={<LangElement byLang={{ ko: <FaqListKo />, en: <FaqListKo /> }} />} />
-            <Route path="/:lang/opnnWrite" element={<LangElement byLang={{ ko: <OpnnWriteKo />, en: <OpnnWriteKo /> }} />} />
+            <Route path="/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <MaintaskDurProposalKo />, en: <DurProposalEn /> }} />} />
+            <Route path="/:lang/news/NewsFaqNotice" element={<LangElement byLang={{ ko: <NewsFaqNoticeKo />, en: <NewsFaqNoticeKo /> }} />} />
           
             {/* 게시판 테스트중 */}          
             <Route path="/:lang/news/NewsNoticeList" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
