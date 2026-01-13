@@ -76,49 +76,19 @@
     .login-section__form {
       padding:0 ;
     }
-
     .login-section__notice {
       margin:24px 0 0 0; 
       padding:24px 0 0 0 ;
       border:none;
       border-top:1px solid #D8D8D8;
-    }
-
-      
+    } 
   }
 }
+
+
 
 
 //아래 ant css
-//KIDS-PP-US-LG-04
-.popup_content {
-  .popup_status {
-      display: flex;
-      align-items: center;
-      gap: 5px;    
-      margin-bottom: 20px;
-      .label {
-        font-size: var(--fs-18);
-        font-weight: 700;
-        line-height: 150%;
-    }
-    .time {
-      font-size: var(--fs-18);
-      font-weight: 700;
-      color: var(--color-text-2);
-    }
-  }
-  .popup_desc {
-    margin:0 0 24px 0;
-    > p {
-      font-size: var(--fs-20);
-      line-height: 140%;
-    }
-  }
-}
-
-
-
 // 아이디,비밀번호 찾기
 .member_page{max-width: 842px;margin:0 auto}
 .pageCont_idPwFind {

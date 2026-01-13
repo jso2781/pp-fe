@@ -51,13 +51,7 @@
 .modal-lg {
   width: 900px !important;
 }
-.modal-footer{
-  Button {
-    min-width: 90px;
-    height: 48px;
-    font-size: 18px;
-  }
-}
+
 // 모달 컨텐츠
 .popup-title{
   h2{
@@ -85,11 +79,18 @@
     }
   }
   .popup-desc {
-    margin:0 0 24px 0;
     > p {
       font-size: var(--fs-20);
       line-height: 140%;
     }
+  }
+}
+.modal-footer{
+  padding:20px 24px !important;
+  Button {
+    min-width: 120px;
+    height: 48px;
+    font-size: 18px;
   }
 }
 
