@@ -7,8 +7,9 @@ import {
   DialogTitle,
   Stack,
   Typography,
-  Divider,
+  IconButton,
 } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close';
 import ScreenShell from '../ScreenShell'
 import type { TemplateBaseProps, PopupTemplateConfig } from './templateTypes'
 
@@ -61,13 +62,23 @@ export default function PopupTemplate({
           className: config?.wrapClassName, // 기존 wrapClassName 유지(필요 시)
         }}
       >
-        <DialogTitle sx={{ fontSize: dialogTitleFontSize, pb: 1 }}>
-          {title}
+        <DialogTitle component="div" className="popup-title">
+          <h2>{title}</h2>
+          <IconButton
+            aria-label="닫기"
+            onClick={() => setOpen(false)}
+            sx={{
+              position: 'absolute',
+              right: 12,
+              top: 16,
+              color: '#1E2124',
+            }}
+          >
+            <CloseIcon aria-hidden="true" />
+          </IconButton>
         </DialogTitle>
 
-        <Divider sx={{ borderColor: '#303336' }} />
-
-        <DialogContent sx={{ pt: 2 }}>
+        <DialogContent>
           {config?.content || (
             <Typography variant="body1">
               PDF 설계의 팝업 화면을 기반으로 생성된 템플릿입니다. 내부 콘텐츠 컴포넌트를 채워주세요.
@@ -75,8 +86,8 @@ export default function PopupTemplate({
           )}
         </DialogContent>
 
-        <DialogActions>
-          <Button onClick={() => setOpen(false)}>
+        <DialogActions className="modal-footer">
+          <Button variant="outlined" onClick={() => setOpen(false)}>
             {config?.cancelText || '취소'}
           </Button>
           <Button variant="contained" onClick={handleOk}>

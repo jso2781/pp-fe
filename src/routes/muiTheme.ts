@@ -86,7 +86,8 @@ export const muiTheme = createTheme({
         },
         sizeLarge: { height: 56, fontSize: 17, padding: '0 32px' },
         outlined: {
-          borderColor: '#D8D8D8',
+          borderColor: '#58616A',
+          color: '#464C53',
         }
       },
     },

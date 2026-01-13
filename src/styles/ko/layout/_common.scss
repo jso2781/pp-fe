@@ -41,6 +41,58 @@
   border: 0;
 }
 
+/* 모달 사이즈 */
+.modal-small {
+  width: 600px !important;
+}
+.modal-md {
+  width: 760 !important;
+}
+.modal-lg {
+  width: 900px !important;
+}
+.modal-footer{
+  Button {
+    min-width: 90px;
+    height: 48px;
+    font-size: 18px;
+  }
+}
+// 모달 컨텐츠
+.popup-title{
+  h2{
+    font-size: 24px;
+    font-weight: 700;
+    padding:0 0 10px 0;
+    border-bottom:1px solid #303336;
+  }
+}
+.popup-content {
+  .popup-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;    
+      margin-bottom: 20px;
+      .label {
+        font-size: var(--fs-18);
+        font-weight: 700;
+        line-height: 150%;
+    }
+    .time {
+      font-size: var(--fs-18);
+      font-weight: 700;
+      color: var(--color-text-2);
+    }
+  }
+  .popup-desc {
+    margin:0 0 24px 0;
+    > p {
+      font-size: var(--fs-20);
+      line-height: 140%;
+    }
+  }
+}
+
 /* ==========================================================================
    MUI Base UI - Custom Switch Styles
    ========================================================================== */
@@ -144,6 +196,7 @@
   }
 }
 
+// 리스트 스타일
 .bullet-list {
   @include bullet-list;
 }
@@ -185,16 +238,3 @@
     }
   }
 }
-
-.box_type_01 {
-  width: 100%;
-  padding: 40px 32px;
-  background: #FFF;
-  border: 1px solid #CDD1D5;
-  border-radius: 10px;
-  
-}
-// .box_type_01 {
-//   @extend .box_type_common;  
-// }
-
