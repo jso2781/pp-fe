@@ -2,21 +2,7 @@ import React, { useMemo, useState, useEffect, useRef } from 'react'
 import { flushSync } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import {
-  AppBar,
-  Box,
-  Button,
-  IconButton,
-  Stack,
-  Toolbar,
-  Typography,
-  Divider,
-  Menu,
-  MenuItem,
-  Container,
-  Drawer,
-  Link as MuiLink,
-} from '@mui/material'
+import { AppBar, Box, Button, IconButton, Stack, Toolbar, Typography, Divider, Menu, MenuItem, Container, Drawer, Link as MuiLink } from '@mui/material';
 import { Language, Menu as MenuIcon, ArrowDropDown, Search, Person, Login, Close, ChevronRight } from '@mui/icons-material'
 import SkipNavigation from './SkipNavigation'
 import { getLangFromPathname, langPath } from '@/routes/lang'
