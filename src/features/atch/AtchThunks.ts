@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectAtchListApiPath, getAtchApiPath, insertAtchApiPath, updateAtchApiPath, saveAtchApiPath, deleteAtchApiPath } from '@/api/atch/AtchApiPaths'
-import { mockAtchList, AtchPVO, AtchRVO, AtchListPVO, AtchListRVO, AtchDVO  } from './AtchTypes'
+import { selectAtchListApiPath, getAtchApiPath, insertAtchApiPath, updateAtchApiPath, saveAtchApiPath, deleteAtchApiPath, downloadAtchApiPath, downloadAtchApiPath2 } from '@/api/atch/AtchApiPaths'
+import { mockAtchList, AtchPVO, AtchRVO, AtchListPVO, AtchListRVO, AtchDVO, AtchDownVO  } from './AtchTypes'
+import { mockPstList } from '../notice/PstTypes'
 
 /**
  * 공통_첨부파일기본 정보 목록 조회 
@@ -56,8 +57,7 @@ export const getAtch = createAsyncThunk<AtchRVO, AtchPVO | undefined>(
     catch (e) {
       // 개발/데모 환경용 fallback (백엔드 연동 시 제거 가능)
       console.log("AtchThunks getAtch mockAtchList=",mockAtchList);
-      return (mockAtchList).find((n) => 
-      ) || null;
+      return (mockAtchList).find((n) => mockAtchList[0]) || null;
     }
   }
 )
@@ -146,3 +146,54 @@ export const deleteAtch = createAsyncThunk<number, AtchDVO>(
   }
 )
 
+/**
+ * 공통_첨부파일 다운로드
+ */
+export const downloadAtch = createAsyncThunk<void, AtchDownVO>(
+  '/atch/download',
+  async (params: AtchDownVO) => {
+    try {
+      const res = await https.post(
+        downloadAtchApiPath(),
+        params,
+        {
+          responseType: 'blob', 
+        }
+      );
+
+      const blob = new Blob([res.data]);
+
+      let fileName = 'download.file';
+      const disposition = res.headers['content-disposition'];
+
+      if (disposition) {
+        // filename*=UTF-8''xxx
+        const utf8Match = disposition.match(/filename\*\=UTF-8''(.+)/);
+
+        if (utf8Match) {
+          fileName = decodeURIComponent(utf8Match[1]);
+        } else {
+          // filename="xxx"
+          const asciiMatch = disposition.match(/filename="?([^"]+)"?/);
+
+          if (asciiMatch) {
+            fileName = asciiMatch[1];
+          }        
+        }
+      }
+
+      // 브라우저 다운로드 처리
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('AtchThunks downloadAtch error!!', e);      
+    }
+  }
+);

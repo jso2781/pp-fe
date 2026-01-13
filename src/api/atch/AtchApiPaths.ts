@@ -28,3 +28,8 @@ export const saveAtchApiPath = () => '/atch/saveAtch'
  * 공통_첨부파일기본 정보 삭제 
  */
 export const deleteAtchApiPath = () => '/atch/deleteAtch'
+
+/**
+ * 공통_첨부파일기본 다운로드
+ */
+export const downloadAtchApiPath = () => '/atch/download'

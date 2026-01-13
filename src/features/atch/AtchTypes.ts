@@ -91,12 +91,17 @@ export interface AtchPVO {
   /** 수정프로그램아이디 */
   mdfcnPrgrmId?: string
 
+  /** 첨부파일 크기 */
+  atchFileSz?: number  
 }
 
 /**
  * 공통_첨부파일기본 정보 
  */
 export interface AtchRVO {
+  /** 첨부파일일련번호 */
+  atchFileSn?: string
+
   /** 순번 */
   no?: 1
 
@@ -139,6 +144,8 @@ export interface AtchRVO {
   /** 수정프로그램아이디 */
   mdfcnPrgrmId?: string
 
+  /** 첨부파일 크기 */
+  atchFileSz?: number
 }
 
 /**
@@ -200,3 +207,10 @@ export interface AtchListRVO {
 export interface AtchDVO {
 }
 
+/**
+ * 공통_첨부파일기본 다운로드 파라메터 정보 
+ */
+export interface AtchDownVO {
+  /** 첨부파일일련번호 */
+  atchFileSn?: string  
+}
