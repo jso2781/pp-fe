@@ -85,25 +85,21 @@
   }
 }
 
-
-
-
-//아래 ant css
-// 아이디,비밀번호 찾기
-.member_page{max-width: 842px;margin:0 auto}
-.pageCont_idPwFind {
-  .guide_text {
+// KIDS-PP-US-LG-06
+.member-page{max-width: 842px;margin:0 auto}
+.pageCont-idPwFind {
+  .guide-text {
     margin:0 0 40px 0;
     text-align: center;
     font-size: var(--fs-32); 
     font-weight: 700;
   }
-  .AnyID_area{margin:0 0 40px 0;}
-  .caution_area{
+  .AnyID-area{margin:0 0 40px 0;}
+  .caution-area{
     padding:16px 24px;
     background:#EEF2F7;
     border-radius: 12px;
-    .caution_title{
+    .caution-title{
       position: relative;
       padding:0 0 0 25px;
       font-size: var(--fs-17);  
@@ -120,12 +116,12 @@
         background: url(/img/ico_exclamation_circle.svg) no-repeat center center;
       }
     }
-    .caution_list{
+    .caution-list{
       padding:0 0 0 25px; 
       @include mixins.bullet_list;
     }
   }
-  .id_find_result {
+  .id-find-result {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -139,11 +135,11 @@
     background: #EEF2F7;
     border-radius: 12px;
   }
-  .login_actions{
+  .login-actions{
     max-width: 500px;
     margin:0 auto;
   }
-  .find_recovery {
+  .find-recovery {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -164,7 +160,7 @@
     }
   }
   @media (max-width: 991px) { 
-    .find_recovery{
+    .find-recovery{
       flex-direction: column;
     }
   }
