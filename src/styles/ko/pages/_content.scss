@@ -182,231 +182,265 @@
 }
 
 
-
-
 // 회원가입
-.pageCont_joinType{
+.pageCont-joinType{
 
-  .joinType_step{
-    .ant-steps-item-title{
+  // 회원가입 단계
+  .step-progress{
+
+    /* .MuiStep-root {
+      .MuiStepLabel-root {
+        .MuiStepIcon-root {
+
+          // 숫자 숨기기
+          & .MuiStepIcon-text {
+            display: none;
+          }
+
+          // 동그라미 모양
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border:3px solid #087C80;
+
+          // 활성 단계
+          &.Mui-active {
+            background-color: #087C80;
+          }
+
+          // 완료 단계
+          &.Mui-completed {
+            background-color: #087C80;
+
+            // 체크 표시
+            &::after {
+              content: '✔';
+              color: #fff;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    } */
+
+    .step-label{
       font-size: var(--fs-13);
       color: var(--color-text-3);
     }
-    .ant-steps-item-description{
+    .step-description{
       font-size: var(--fs-15);
       font-weight: var(--fw-700);
       color: var(--color-text-5);
       margin-top: 4px;
     }
-    .ant-steps-item{
-      // padding: 0 8px;
-    }
-    .ant-steps-item-icon{
-      position: relative;
-      width: 40px;
-      height: 40px;
-      margin-inline-start: 34px;
-      .ant-steps-icon{
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        display: flex;
-        align-items: center;
-        width: 20px;
-        height: 20px;
-        border:2px solid #fff;
-        border-radius: 20px;
-
-        overflow: hidden;
-        text-indent: -9999px;
-      }
-    }
-    .ant-steps-item-tail {
-      top: 20px !important;
-      padding: 0 20px !important;
-
-      &::after {
-        top: 0 !important;
-        height: 1px !important;
-        background-color: #CDD1D5 !important;
-      }
-    }
   }
 
-  .step_title{
-    display: block;
-    margin:0 0 40px 0;
-    font-size: var(--fs-15);
-    font-weight: var(--fw-700);
-    color: var(--color-text-1);
-
-    .step_count{
+  // 단계 제목
+  .step-header{
+    .step-title{
+      display: block;
       margin:0 0 24px 0;
       font-size: var(--fs-18);
       font-weight: var(--fw-700);
       margin: 40px 0 24px 0;
-      span{
-         color: var(--color-text-2);
+
+      .step-current{
+        color: var(--color-text-2);
       }
     }
-    .step_desc{
-      font-size: var(--fs-32);
+    .step-description {
+      margin:0 0 40px 0;
+      .step-description-text{
+        font-size: var(--fs-32);
+        font-weight: var(--fw-700);
+      }
     }
   }
 
-  // 회원가입 - 회원 유형 선택
-  .joinType_list{
+  // 회원가입 회원 유형 선택
+  .member-type-list {
     display: flex;
+    flex-direction: row;
+    width: 100%;
     gap: 20px;
-    .item{
-      flex:1;
-      &.item_general .joinType_link { 
-        background: url(/img/img_user_general.png) no-repeat center bottom 40px; 
+    
+    .member-type-card {
+      flex: 0 0 calc(50% - 10px); /* gap 절감 */
+      max-width: calc(50% - 10px); 
+      cursor: pointer;
+      border:none;
+
+      /* 카드 변형 (배경 이미지) */
+      &--general .member-type-card__link {
+        background: url(/img/img_user_general.png) no-repeat center bottom 40px;
       }
-      &.item_junior .joinType_link { 
-        background: url(/img/img_user_junior.png) no-repeat center bottom 40px; 
+
+      &--junior .member-type-card__link {
+        background: url(/img/img_user_junior.png) no-repeat center bottom 40px;
       }
-      .joinType_link{
+
+      /* 카드 내부 컨테이너 */
+      &__link {
         display: block;
-        position:relative;
-        max-width: 408px;
+        position: relative;
+        width: 100%;  
+        max-width: none;
         height: 268px;
         padding: 28px;
         border: 1px solid var(--border-2);
         border-radius: 10px;
-        transition: all 0.3s ease;
+        background-color: #fff;
 
-        &:hover{
+        &:hover {
           border-width: 3px;
           border-color: var(--border-3);
         }
-
-        .joinType_name{
-          display: block;
-          font-size: var(--fs-24);
-          font-weight: var(--fw-700);
-          margin-bottom: 16px;
-        }
-        .joinType_info{
-          font-size: var(--fs-16);
-          color: var(--color-text-1);
-        }
-        .joinType_btn{
-          position: absolute;
-          right: 28px;
-          bottom: 28px ;
-          display: inline-block;
-          font-size: var(--fs-15);
-          font-weight: var(--fw-600);
-        }
       }
-    }
-  }
 
-  @media (max-width: 768px) { 
-    .joinType_list {
-      flex-direction: column;
-      .item{
-        .joinType_link{
-          max-width: 100%;
-        }
+      /* 텍스트 + 버튼 묶음 */
+      &__inner {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
       }
-    }
-  }
 
-  @media (max-width: 576px) { 
-    .joinType_step { 
-      display: none; 
-    }
-    .step_title {
-      margin: 0 0 20px;
-      .step_count {
-        margin: 10px 0;
+      /* 타이틀 + 설명 영역 */
+      &__text {
+        margin-bottom: auto;
       }
-    }
-  }
 
-  // 회원가입 - 약관동의
-  .agree_terms {
-    padding: 45px 39px;
-    border-radius: 10px;
-    border: 1px solid var(--border-2);
-    background: #FFF;
-
-    .all_agree {
-      padding: 0 0 10px 0;
-      margin: 0 0 15px 0;
-      border-bottom: 1px solid var(--border-2);
-      .label {
+      &__title {
         display: block;
-        font-size: var(--fs-20);
+        font-size: var(--fs-24);
         font-weight: var(--fw-700);
+        margin-bottom: 16px;
+        color: var(--color-text-1);
+      }
+
+      &__description {
+        font-size: var(--fs-16);
+        color: var(--color-text-1);
+        line-height: 1.4;
+      }
+
+      /* 가입 버튼 */
+      &__action {
+        display: inline-flex !important;
+        position: absolute;
+        right: 28px;
+        bottom: 28px;
+        display: inline-block;
+        font-size: var(--fs-15);
+        font-weight: var(--fw-600);
+        color: var(--color-primary);
+        padding:0;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
-    
+  }
+
+  @media (max-width: 768px) {
+    .member-type-list {
+      flex-direction: column;
+      gap: 16px;
+
+      .member-type-card {
+        max-width: 100%;
+
+        &__link {
+          height: auto;
+        }
+      }
+    }
+  }
+}
+
+// 회원가입 - 약관동의
+.agree_terms {
+  padding: 45px 39px;
+  border-radius: 10px;
+  border: 1px solid var(--border-2);
+  background: #FFF;
+
+  .all_agree {
+    padding: 0 0 10px 0;
+    margin: 0 0 15px 0;
+    border-bottom: 1px solid var(--border-2);
+    .label {
+      display: block;
+      font-size: var(--fs-20);
+      font-weight: var(--fw-700);
+    }
+  }
+  
+  .terms_list {
+    .terms_item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px; // 체크박스와 버튼 사이 간격 확보
+
+      .terms_checkbox {
+        flex: 1; // 텍스트 영역 유연하게 확장
+      }
+
+      .terms_link {
+        font-size: var(--fs-20);
+        margin-right: 8px;
+      }
+      .optional {
+        font-size: var(--fs-20);
+      }
+      .required {
+        font-size: var(--fs-20);
+        color: var(--danger);
+      }
+
+      .btn_terms_view {
+        flex-shrink: 0; // 버튼 크기 고정
+        background: none;
+        border: none;
+        color: var(--color-text-1);
+        font-size: var(--fs-15);
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+    .terms_item + .terms_item {
+      margin-top: 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 30px 24px;
+
+    .terms_list {
+      .terms_item + .terms_item {
+        margin-top: 14px;
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    padding: 20px 16px;
+
     .terms_list {
       .terms_item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px; // 체크박스와 버튼 사이 간격 확보
-
-        .terms_checkbox {
-          flex: 1; // 텍스트 영역 유연하게 확장
-        }
-
-        .terms_link {
-          font-size: var(--fs-20);
-          margin-right: 8px;
-        }
-        .optional {
-          font-size: var(--fs-20);
-        }
-        .required {
-          font-size: var(--fs-20);
-          color: var(--danger);
-        }
-
+        align-items: flex-start;
+        
         .btn_terms_view {
-          flex-shrink: 0; // 버튼 크기 고정
-          background: none;
-          border: none;
-          color: var(--color-text-1);
-          font-size: var(--fs-15);
-          text-decoration: underline;
-          cursor: pointer;
+          margin-top: 4px;
         }
       }
       .terms_item + .terms_item {
-        margin-top: 16px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      padding: 30px 24px;
-
-      .terms_list {
-        .terms_item + .terms_item {
-          margin-top: 14px;
-        }
-      }
-    }
-
-    @media (max-width: 576px) {
-      padding: 20px 16px;
-
-      .terms_list {
-        .terms_item {
-          align-items: flex-start;
-          
-          .btn_terms_view {
-            margin-top: 4px;
-          }
-        }
-        .terms_item + .terms_item {
-          margin-top: 12px;
-        }
+        margin-top: 12px;
       }
     }
   }

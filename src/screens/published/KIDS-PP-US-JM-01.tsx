@@ -1,17 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Container,
-  Stack,
-  Stepper,
-  Step,
-  StepLabel,
-  Typography,
-} from '@mui/material'
+import { Box, Button, Card, CardContent, Stack, Stepper, Step, StepLabel, Typography } from '@mui/material';
 import { ArrowForward } from '@mui/icons-material'
 import DepsLocation from '@/components/common/DepsLocation'
 import ScreenShell from '../ScreenShell'
@@ -45,120 +34,99 @@ export default function KIDS_PP_US_JM_01() {
 
   return (
     <ScreenShell screenId="KIDS-PP-US-JM-01" title="회원가입 회원 유형 선택" uiType="page">
-      <Container maxWidth="xl" sx={{ py: 4 }}>
-        <Box sx={{ mb: 4 }}>
-          <DepsLocation />
-        </Box>
 
-        <Box className="pageCont_joinType member_page">
-          {/* 단계 표시 */}
-          <Box sx={{ mb: 6 }}>
-            <Stepper activeStep={currentStep} alternativeLabel>
-              {steps.map((step, index) => (
-                <Step key={index}>
-                  <StepLabel>
-                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.813rem' }}>
-                      {step.label}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontWeight: 700,
-                        fontSize: '0.938rem',
-                        color: index === currentStep ? 'primary.main' : 'text.primary',
-                        mt: 0.5,
-                      }}
-                    >
-                      {step.description}
-                    </Typography>
-                  </StepLabel>
-                </Step>
-              ))}
-            </Stepper>
-          </Box>
+      <Box className="page-layout">
+        <Box className="sub-container">
+          <Box className="content-wrap">
+            {/* 서브 콘텐츠 영역 */}
+            <Box className="sub-content">
+              {/* 상단 현재 위치 정보 */}
+              <DepsLocation />
+              <Box className="content-view" id="content">
+                <Box className="page-content">
+                  {/* --- 본문 시작 --- */}
+                  
+                  <Box className="pageCont-joinType member-page">
+                    {/* 단계 표시 */}
+                    <Box className="step-progress">
+                      <Stepper activeStep={currentStep} alternativeLabel>
+                        {steps.map((step, index) => (
+                          <Step key={index}>
+                            <StepLabel>
+                              <Typography variant="caption" className="step-label">
+                                {step.label}
+                              </Typography>
+                              <Typography className={`step-description ${index === currentStep ? 'current-step' : ''}`}>
+                                {step.description}
+                              </Typography>
+                            </StepLabel>
+                          </Step>
+                        ))}
+                      </Stepper>
+                    </Box>
 
-          {/* 단계 제목 */}
-          <Box sx={{ mb: 5 }}>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
-              <Typography component="span" sx={{ fontWeight: 700, color: 'primary.main' }}>
-                {steps[currentStep].label}
-              </Typography>
-              {' / '}
-              {steps[steps.length - 1].label}
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '0.938rem' }}>
-              {steps[currentStep].description}
-            </Typography>
-          </Box>
-
-          {/* 회원 유형 선택 카드 */}
-          <Stack spacing={3} sx={{ maxWidth: 800, mx: 'auto' }}>
-            {memberTypes.map((type) => (
-              <Card
-                key={type.id}
-                variant="outlined"
-                sx={{
-                  borderRadius: 2,
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  transition: 'all 0.2s',
-                  cursor: 'pointer',
-                  '&:hover': {
-                    borderColor: 'primary.main',
-                    boxShadow: 2,
-                  },
-                }}
-                onClick={() => navigate(type.route)}
-              >
-                <CardContent sx={{ p: 3 }}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Box sx={{ flex: 1 }}>
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontWeight: 700,
-                          fontSize: '1.063rem',
-                          mb: 1,
-                          color: 'text.primary',
-                        }}
-                      >
-                        {type.title}
+                    {/* 단계 제목 */}
+                    <Box className="step-header">
+                      <Typography className="step-title">
+                        <Box component="span" className="step-current">
+                          {steps[currentStep].label}
+                        </Box>
+                        {` / ${steps[steps.length - 1].label}`}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ fontSize: '0.938rem' }}
-                      >
-                        {type.description}
+                      <Typography className="step-description">
+                        <span className="step-description-text">
+                          {steps[currentStep].description}
+                        </span>
                       </Typography>
                     </Box>
-                    <Button
-                      variant="contained"
-                      endIcon={<ArrowForward />}
-                      sx={{
-                        minWidth: 120,
-                        height: 40,
-                        fontWeight: 600,
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        navigate(type.route)
-                      }}
-                    >
-                      가입하기
-                    </Button>
-                  </Stack>
-                </CardContent>
-              </Card>
-            ))}
-          </Stack>
+                    
+                    {/* 회원 유형 선택 카드 */}
+                    <Stack className="member-type-list">
+                      {memberTypes.map((type) => (
+                        <Card
+                          key={type.id}
+                          variant="outlined"
+                          className={`member-type-card member-type-card--${type.id}`}
+                          onClick={() => navigate(type.route)}
+                        >
+                          <CardContent className="member-type-card__link">
+                            <Stack className="member-type-card__inner">
+                              <Box className="member-type-card__text">
+                                <Typography className="member-type-card__title">
+                                  {type.title}
+                                </Typography>
+                                <Typography className="member-type-card__description">
+                                  {type.description}
+                                </Typography>
+                              </Box>
+                              <Button
+                                variant="text"
+                                className="member-type-card__action"
+                                endIcon={<ArrowForward />}
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Card 클릭 이벤트 방지
+                                  navigate(type.route);
+                                }}
+                              >
+                                가입하기
+                              </Button>
+                            </Stack>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </Stack>
+                  </Box>
+
+
+
+                  {/* --- 본문 끝 --- */}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         </Box>
-      </Container>
+      </Box>
+
     </ScreenShell>
   )
 }
