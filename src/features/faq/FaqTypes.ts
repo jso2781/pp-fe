@@ -226,7 +226,7 @@ export interface FaqListPVO {
  * 대국민포털_FAQ기본 정보 목록 
  */
 export interface FaqListRVO {
-  list: FaqRVO[]
+  list: FaqResult[]
   totalCount: number
 }
 
@@ -234,5 +234,21 @@ export interface FaqListRVO {
  * 대국민포털_FAQ기본 삭제 파라메터 정보 
  */
 export interface FaqDVO {
+}
+
+export interface FaqResultList {
+  list: FaqResult[]
+}
+
+export interface FaqResult {
+  category: string;
+  item: FaqItem[];
+}
+
+export interface FaqItem {
+  title?: string;
+  content?: string;
+  seq?: number;
+  langSeCd?: string;
 }
 

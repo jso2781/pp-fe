@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
 import { selectFaqListApiPath, getFaqApiPath, insertFaqApiPath, updateFaqApiPath, saveFaqApiPath, deleteFaqApiPath } from '@/api/faq/FaqApiPaths'
-import { mockFaqList, FaqPVO, FaqRVO, FaqListPVO, FaqListRVO, FaqDVO  } from './FaqTypes'
+import { mockFaqList, FaqPVO, FaqRVO, FaqListPVO, FaqListRVO, FaqDVO, FaqResult  } from './FaqTypes'
 
 export const sideEffectThunk = createAsyncThunk(
   '/faq/test',
@@ -31,18 +31,28 @@ export const selectFaqList = createAsyncThunk<FaqListRVO, FaqListPVO | undefined
     try {
       const res = await https.post(selectFaqListApiPath(), params);
 
-      // ✅ 여기서 “서버 응답”을 표준 형태로 맞춰서 return
-      const payload = res.data;
+      // 관리자에서 몇개의 카테고리가 넘어올지 알수 없으므로 동적으로 카테고리별로 분리
+      const payload = res.data?.data?.list?.reduce((acc: FaqResult[], cur: FaqRVO) => {
+        if(!cur.faqClsf) return acc;
+        const idx = acc.findIndex(v => v.category === cur.faqClsf);
+        if(idx !== -1) {
+            acc[idx].item.push({title: cur.faqTtl, content: cur.faqAns, seq: cur.faqSeq, langSeCd: cur.langSeCd})
+            return acc;
+        } else {
+            acc.push({
+                category: cur.faqClsf,
+                item: [{title: cur.faqTtl}]
+            })
+            return acc;
+        }
+      }, []);
 
-      // 서버가 Faq[] 형식으로 주므로 FaqListRVO 형식으로 데이터 구조 재조정 
       return {
         list: Array.isArray(payload) ? payload : [],
         totalCount: Array.isArray(payload) ? payload.length : 0
       } as FaqListRVO;
     }
-    // 서버가 없거나 에러 나면 강제로 mock 데이터 사용 
     catch (e) {
-      // 개발/데모 환경용 fallback (백엔드 연동 시 제거 가능)
       console.log("FaqThunks selectFaqList mockFaqList=",mockFaqList);
       const filtered = mockFaqList.filter((n) => {
         //if (!params.searchWrd) return true;
@@ -56,3 +66,5 @@ export const selectFaqList = createAsyncThunk<FaqListRVO, FaqListPVO | undefined
     }
   }
 )
+
+

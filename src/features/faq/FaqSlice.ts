@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { selectFaqList, sideEffectThunk } from './FaqThunks'
-import { FaqRVO } from './FaqTypes'
+import { FaqResult, FaqRVO } from './FaqTypes'
 
 /**
  * 대국민포털_FAQ기본 정보 목록 조회(Redux 저장 구조) 
  */
 export interface FaqState {
-  list: FaqRVO[]
+  list: FaqResult[]
   totalCount: number | null
   current: FaqRVO | null
   loading: boolean
@@ -47,6 +47,8 @@ const FaqSlice = createSlice({
         state.loading = false;
         state.error = action.error?.message || 'Failed to load notice list';
       })
+
+      //테스트용
       .addCase(sideEffectThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
