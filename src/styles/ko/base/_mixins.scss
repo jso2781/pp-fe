@@ -15,7 +15,7 @@ $default-width: 1200px;
   white-space: nowrap;
   border: 0;
 }
-@mixin btn_type_01 {
+@mixin btn-type-01 {
   display: inline-flex;
   height: 64px;
   font-size: 19px;
@@ -23,7 +23,7 @@ $default-width: 1200px;
   padding:0 24px;
 }
 
-@mixin bullet_list {
+@mixin bullet-list {
   li {
     position: relative;
     padding-left: 24px;

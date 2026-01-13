@@ -1,3 +1,28 @@
+@use '../base/mixins'as *;
+
+/* 폰트 */
+.txt_1 { color: var(--color-text-1) !important; }
+.txt_2 { color: var(--color-text-2) !important; }
+.txt_3 { color: var(--color-text-3) !important; }
+
+.fs_13 { font-size: var(--fs-13); }
+.fs_14 { font-size: var(--fs-14); }
+.fs_15 { font-size: var(--fs-15); }
+.fs_16 { font-size: var(--fs-16); }
+.fs_17 { font-size: var(--fs-17); }
+.fs_18 { font-size: var(--fs-18); }
+.fs_20 { font-size: var(--fs-20); }
+.fs_22 { font-size: var(--fs-22); }
+.fs_24 { font-size: var(--fs-24); }
+.fs_26 { font-size: var(--fs-26); }
+.fs_28 { font-size: var(--fs-28); }
+.fs_30 { font-size: var(--fs_30); }
+.fs_32 { font-size: var(--fs-32); }
+
+.fw_400 { font-weight: var(--fw-400); }
+.fw_500 { font-weight: var(--fw-500); }
+.fw_600 { font-weight: var(--fw-600); }
+.fw_700 { font-weight: var(--fw-700); }
 
 /* 스킵네비 */
 #skip-navigation{position:absolute;left:0;top:0;width:100%;text-align:center;z-index:9999}
@@ -94,66 +119,45 @@
   box-shadow: 0 0 0 2px rgba(10, 108, 112, 0.4);
 }
 
-
-/* 모달  */
-.modal-small {
-  .ant-modal {
-    width: 600px !important;
+/* ==========================================================================
+   error-alert
+   ========================================================================== */
+.error-alert {
+  position: relative;
+  padding:0;
+  background: #fff !important;
+  .MuiAlert-icon {
+    svg { display: none; } 
+    content: ""; 
+    position: absolute;
+    top:6px;
+    left:0;
+    width: 16px;
+    height: 16px;
+    background: url('/img/icon_error_circle.svg') no-repeat center center;
+  }
+  .MuiAlert-message {
+    font-size:13px;
+    font-weight: 400;
+    color: var(--danger); 
+    padding:0 0 0 5px;
   }
 }
-.modal-md {
-  .ant-modal {
-    width: 760 !important;
-  }
-}
-.modal-lg {
-  .ant-modal {
-    width: 900px !important;
-  }
-}
-.ant-modal-footer{
-  .ant-btn {
-    width: 91px !important;
-    height: 48px !important;
-    padding: 0 16px !important
-  }
+
+.bullet-list {
+  @include bullet-list;
 }
 
-/* 폰트 */
-.txt_1 { color: var(--color-text-1) !important; }
-.txt_2 { color: var(--color-text-2) !important; }
-.txt_3 { color: var(--color-text-3) !important; }
-
-.fs_13 { font-size: var(--fs-13); }
-.fs_14 { font-size: var(--fs-14); }
-.fs_15 { font-size: var(--fs-15); }
-.fs_16 { font-size: var(--fs-16); }
-.fs_17 { font-size: var(--fs-17); }
-.fs_18 { font-size: var(--fs-18); }
-.fs_20 { font-size: var(--fs-20); }
-.fs_22 { font-size: var(--fs-22); }
-.fs_24 { font-size: var(--fs-24); }
-.fs_26 { font-size: var(--fs-26); }
-.fs_28 { font-size: var(--fs-28); }
-.fs_30 { font-size: var(--fs_30); }
-.fs_32 { font-size: var(--fs-32); }
-
-.fw_400 { font-weight: var(--fw-400); }
-.fw_500 { font-weight: var(--fw-500); }
-.fw_600 { font-weight: var(--fw-600); }
-.fw_700 { font-weight: var(--fw-700); }
-
-.btn_group{display: flex;}
 
 /* 버튼 그룹 전체 컨테이너 */
-.btn_group {
+.btn-group {
   display: flex;
   width: 100%;
   margin-top: 32px;
   padding: 16px 0;
 }
 
-.btn_group {
+.btn-group {
   display: flex;
   width: 100%;
   margin-top: 32px;
@@ -194,17 +198,3 @@
 //   @extend .box_type_common;  
 // }
 
-
-@media (max-width: 991px) {
-  .btn_group .ant-btn {
-    flex: 1; 
-  }
-  .ant-btn-lg {
-    height: 56px;
-    font-size:19px ;
-  }
-
-  .box_type_01 {
-    padding: 24px 16px;
-  }
-}
