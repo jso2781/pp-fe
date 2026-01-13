@@ -47,7 +47,7 @@ export default function KIDS_PP_US_MT_01_LAYOUT() {
             />
           </Box>
 
-          {/* 컨텐츠 본문 영역 */}
+          {/* 서브 콘텐츠 영역 */}
           <Box className="sub-content">
             <Box className="welcome-banner">
               <Stack direction="row" alignItems="center" className="welcome-banner__inner">
@@ -59,6 +59,7 @@ export default function KIDS_PP_US_MT_01_LAYOUT() {
                 </IconButton>
               </Stack>
             </Box>
+            {/* 상단 현재 위치 정보 */}
             <DepsLocation />
             <Box className="content-view" id="content">
               <Box className="page-content">
@@ -69,7 +70,7 @@ export default function KIDS_PP_US_MT_01_LAYOUT() {
             </Box>
           </Box>
         </Box>
-      </Box>
+      </Box> 
     </Box>
   )
 }
