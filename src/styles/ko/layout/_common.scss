@@ -88,7 +88,7 @@
 .modal-footer{
   padding:20px 24px !important;
   Button {
-    min-width: 120px;
+    min-width: 100px;
     height: 48px;
     font-size: 18px;
   }
@@ -183,7 +183,7 @@
     svg { display: none; } 
     content: ""; 
     position: absolute;
-    top:6px;
+    top:7px;
     left:0;
     width: 16px;
     height: 16px;
@@ -207,6 +207,9 @@
   border-radius: 10px;
   border: 1px solid #CDD1D5;
   background: #FFF;
+  @media (max-width: 1023px) {
+    padding: 24px 20px; // 여백 축소
+  }
 }
 
 /* 버튼 그룹 전체 컨테이너 */
@@ -215,18 +218,18 @@
   width: 100%;
   margin-top: 32px;
   padding: 16px 0;
-  gap: 8px; 
+  gap: 8px;
 
-  &.between {
-    justify-content: space-between;
-    gap: 0;
-  }
+  &.between { justify-content: space-between; gap: 8px; } // 사이 간격 유지 권장
+  &.center  { justify-content: center; }
+  &.right   { justify-content: flex-end; }
 
-  &.center {
-    justify-content: center;
-  }
+  @media (max-width: 599px) {
+    gap: 12px; // 모바일에서는 버튼 사이 간격을 조금 더 넓게
 
-  &.right {
-    justify-content: flex-end;
+    .MuiButton-root {
+      width: 100%;
+      margin: 0;
+    }
   }
 }

@@ -75,7 +75,10 @@ export const muiTheme = createTheme({
     },
     // 버튼 설정
     MuiButton: {
-      defaultProps: { disableElevation: true },
+      defaultProps: { 
+        disableElevation: true,
+        size: 'medium'
+      },
       styleOverrides: {
         root: { 
           textTransform: 'none', 
@@ -84,11 +87,31 @@ export const muiTheme = createTheme({
           boxShadow: 'none',
           '&:hover': { boxShadow: 'none' }
         },
-        sizeLarge: { height: 56, fontSize: 17, padding: '0 32px' },
+        // Medium
+        sizeMedium: { 
+          height: 48, 
+          fontSize: 15, 
+          padding: '0 20px',
+          '@media (max-width: 599px)': {
+            height: 44,
+            padding: '0 16px'
+          }
+        },
+        // Small
+        sizeSmall: { 
+          height: 36, 
+          fontSize: 13, 
+          padding: '0 12px' 
+        },
+        sizeLarge: { 
+          height: 56, 
+          fontSize: 17, 
+          padding: '0 24px' 
+        },
         outlined: {
           borderColor: '#58616A',
           color: '#464C53',
-        }
+        },
       },
     },
     // 인풋 설정

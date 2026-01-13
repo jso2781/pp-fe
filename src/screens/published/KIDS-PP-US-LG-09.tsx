@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, TextField, Button, Stack, Grid } from '@mui/material';
+import { Box, Typography, TextField, Button, Stack, Alert } from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation';
 import ScreenShell from '../ScreenShell';
 
@@ -69,6 +69,9 @@ export default function KIDS_PP_US_LG_09() {
                             }}
                           />
                         </Box>
+                        <Alert severity="error" className="error-alert">
+                          입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요. 
+                        </Alert>
                       </Box>
                     </Box>
                     {/* 하단 버튼 그룹 */}
@@ -108,7 +111,7 @@ export default function KIDS_PP_US_LG_09() {
             </Alert>
           </Stack>
         </Box>
-      </Box> */}
+      </Box> */} 
               
     </ScreenShell>
   );
