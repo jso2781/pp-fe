@@ -79,7 +79,7 @@ export default function CollapsibleSideNav({
         zIndex: 1200,
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', padding: '20px 20px', }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', padding: '20px 20px', borderBottom: '1px solid #8A949E'}}>
         {!collapsed && (
           <Typography className="nav_title">
             {title}
@@ -89,7 +89,6 @@ export default function CollapsibleSideNav({
           {collapsed ? <MenuIcon sx={{ fontSize: 32 }}/> : <MenuOpenIcon sx={{ fontSize: 32 }}/>}
         </IconButton>
       </Box>
-      <Divider />
       <List dense disablePadding>
         {items.map((it) => {
           const hasChildren = !!(it.children && it.children.length > 0)
