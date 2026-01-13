@@ -1,34 +1,72 @@
 import React from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Typography, Button, Stack } from '@mui/material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
 import ScreenShell from '../ScreenShell';
 
 export default function KIDS_PP_US_LG_07() {
   return (
-    <ScreenShell screenId="KIDS-PP-US-LG-07" title="로그인 실패" uiType="page">
-      <div className="page-layout">
-        <div className="sub-container">
-          <div className="content-wrap">
-            <div className="sub-content">
+    <ScreenShell screenId="KIDS-PP-US-LG-07" title="아이디 찾기 결과" uiType="page">
+
+      <Box className="page-layout">
+        <Box className="sub-container">
+          <Box className="content-wrap">
+            {/* 서브 콘텐츠 영역 */}
+            <Box className="sub-content">
+              {/* 상단 현재 위치 정보 */}
               <DepsLocation />
-              <div className="content-view" id="content">
-                <Box sx={{ maxWidth: 640, mx: 'auto' }}>
-                  <Stack spacing={2} alignItems="flex-start">
-                    <Typography variant="h6">로그인에 실패했습니다</Typography>
-                    <Typography variant="body2">
-                      아이디/비밀번호를 확인하거나 비밀번호 재설정을 진행해 주세요.
+              <Box className="content-view" id="content">
+                <Box className="page-content">
+                  {/* --- 본문 시작 --- */}
+
+                 <Box className="pageCont-idPwFind member-page">
+                    <Typography className="guide-text">
+                      아이디를 찾았어요.
                     </Typography>
-                    <Stack direction="row" spacing={1}>
-                      <Button variant="contained">다시 시도</Button>
-                      <Button variant="outlined">비밀번호 재설정</Button>
+                    
+                    {/* 아이디 결과 영역 */}
+                    <Box className="id-find-result">
+                      <p><span>$김철수$</span>님의 아이디는</p>
+                      <p><span className="txt-2">$chskim7788</span>$ 입니다.</p>
+                    </Box>
+
+                    {/* 로그인 버튼 영역 */}
+                    <Box className="login-actions">
+                      <Button 
+                        variant="contained" 
+                        fullWidth 
+                        size="large" 
+                        className="btn-login fw-700"
+                      >
+                        로그인
+                      </Button>
+                    </Box>
+
+                    {/* 비밀번호 찾기 링크 영역 */}
+                    <Stack 
+                      direction="row" 
+                      className="find-recovery"
+                    >
+                      <Typography className="txt">
+                        비밀번호를 잊으셨다면?
+                      </Typography>
+                      <Button 
+                        variant="text" 
+                        className="btn-link" 
+                        endIcon={<ChevronRightIcon />}
+                      >
+                        비밀번호 찾기
+                      </Button>
                     </Stack>
-                  </Stack>
+                  </Box>
+                  {/* --- 본문 끝 --- */}
                 </Box>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+
     </ScreenShell>
   );
 }

@@ -85,7 +85,7 @@
   }
 }
 
-// KIDS-PP-US-LG-06
+// 아이디비번찾기
 .member-page{max-width: 842px;margin:0 auto}
 .pageCont-idPwFind {
   .guide-text {
@@ -134,6 +134,8 @@
     line-height: 150%;
     background: #EEF2F7;
     border-radius: 12px;
+    font-size: 20px;
+    font-weight: 700;
   }
   .login-actions{
     max-width: 500px;
@@ -150,14 +152,27 @@
       font-size: var(--fs-18);
       font-weight: var(--fw-700);
     }
-  }
-  .label{
-    font-size: var(--fs-16);
-    font-weight: var(--fw-700);
-    .necessary{
-      color: var(--danger);
-      font-weight: var(--fw-400);
+    .btn-link{
+      color: var(--color-text-1);
     }
+  }
+  
+  .form-item {
+      margin:0 0 5px 0;
+
+      &:not(:first-of-type) {
+        margin-top: 20px;
+      }
+    }
+    .label{
+      display: block;
+      font-size: var(--fs-16);
+      font-weight: var(--fw-700);
+      margin:0 0 5px 0;
+      .necessary{
+        color: var(--danger);
+        font-weight: var(--fw-400);
+      }
   }
   @media (max-width: 991px) { 
     .find-recovery{
@@ -165,6 +180,9 @@
     }
   }
 }
+
+
+
 
 // 회원가입
 .pageCont_joinType{
