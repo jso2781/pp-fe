@@ -320,15 +320,9 @@ export default function KIDS_PP_US_LG_15() {
         </Box>
       </Box>
 
-      <Box sx={{ p: 2, maxWidth: 520, mx: 'auto' }}>
-        <DepsLocation />
-
-        <Typography variant="h6" fontWeight={800} sx={{ mb: 2 }}>
-          로그인
-        </Typography>
-
-        <Box component="form" onSubmit={onSubmit} noValidate>
-          <Stack spacing={2}>
+      {/* <Box sx={{ p: 2, maxWidth: 520, mx: 'auto' }}>
+        <Box component="form" onSubmit={onSubmit} noValidate> */}
+          {/* <Stack spacing={2}>
             <TextField
               label="아이디"
               placeholder="아이디 혹은 이메일을 입력하세요."
@@ -394,10 +388,10 @@ export default function KIDS_PP_US_LG_15() {
 
             <Button variant="contained" type="submit" size="large">
               로그인
-            </Button>
+            </Button> */}
 
             {/* 회원가입, 아이디 찾기, 비밀번호 찾기 링크 */}
-            <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 1 }}>
+            {/* <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 1 }}>
               <Link
                 component="button"
                 variant="body2"
@@ -446,23 +440,10 @@ export default function KIDS_PP_US_LG_15() {
               >
                 비밀번호 찾기
               </Link>
-            </Stack>
-
-            {/* 안내 문구 */}
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1, fontSize: '0.813rem' }}>
-                개인정보 보호를 위해 비밀번호 5회 이상 오류 시, 비밀번호 재설정이 필요합니다.
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1, fontSize: '0.813rem' }}>
-                비밀번호는 주기적(3개월)으로 변경하시고, 서비스 이용 후 반드시 로그아웃 하시기 바랍니다.
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.813rem' }}>
-                로그인 후 60분 동안 미동작 시 자동으로 로그아웃 됩니다.
-              </Typography>
-            </Box>
-          </Stack>
+            </Stack> */}
+          {/* </Stack>
         </Box>
-      </Box>
+      </Box> */}
 
       {/* 비밀번호 5회 오류 팝업 */}
       <Dialog
