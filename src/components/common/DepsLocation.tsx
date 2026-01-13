@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { BreadcrumbNav } from '@/components/mui';
 import { useLocation } from 'react-router-dom';
+import { disabled } from 'node_modules/@base-ui/react/esm/utils/reason-parts';
 
 // 1. 경로별 한글 명칭 매핑 (데이터가 많아지면 별도 파일로 분리 추천)
 const pathLabels: Record<string, string[]> = {
@@ -13,6 +14,10 @@ const pathLabels: Record<string, string[]> = {
   "/ko/safety/report/online": ["의약품 안전관리", "의약품 이상사례 보고", "이상사례 보고"],
   "/ko/login/method": ["로그인", "로그인 방식 선택"],
   "/ko/login": ["로그인", "아이디 로그인"],
+
+  "/ko/news/NewsNoticeList": ["기관소식", "공지사항"],
+  "/ko/news/NewsJobNoticeList": ["기관소식", "채용 게시판"],
+  "/ko/news/NewsDataRoomList": ["기관소식", "자료실"],
 
   "/en/notice": ["알림마당11", "공지사항11"],
   "/en/board": ["커뮤니티11", "게시판11"],
@@ -70,13 +75,17 @@ export default function DepsLocation() {
       labels: ["login", "idLogin"]
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/newboard\/common\/BBS_COM_001(\/)?(\d+)?$/,
-      labels: ["announcement", "noticeList"] // 기관소식 > 공지사항
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsNoticeList(\/)?(\d+)?$/,
+      labels: ["news", "noticeList"] // 기관소식 > 공지사항
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/newboard\/common\/BBS_COM_002(\/)?(\d+)?$/,
-      labels: ["announcement", "employmentBoard"] // 기관소식 > 채용게시판
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsJobNoticeList(\/)?(\d+)?$/,
+      labels: ["news", "employmentBoard"] // 기관소식 > 채용게시판
     },    
+    {
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsDataRoomList(\/)?(\d+)?$/,
+      labels: ["news", "menuEduArchive"] // 기관소식 > 자료실
+    },      
   ];
 
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기

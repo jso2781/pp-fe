@@ -19,9 +19,13 @@ import LoginMethodKo from '@/pages/ko/LoginMethod'
 import FaqListKo from '@/pages/ko/faq/FaqList';
 import OpnnWriteKo from '@/pages/ko/opnn/OpnnWrite';
 
-// 게시판 테스트용
-import CommonBoardListKo from '@/pages/ko/newboard/common/CommonList'
-import CommonBoardDetailKo from '@/pages/ko/newboard/common/CommonDetail'
+// 게시판 테스트중
+import NewsNoticeListKo from '@/pages/ko/news/NewsNoticeList'
+import NewsNoticeDetailKo from '@/pages/ko/news/NewsNoticeDetail'
+import NewsJobNoticeListKo from '@/pages/ko/news/NewsJobNoticeList'
+import NewsJobNoticeDetailKo from '@/pages/ko/news/NewsJobNoticeDetail'
+import NewsDataRoomListKo from '@/pages/ko/news/NewsDataRoomList'
+import NewsDataRoomDetailKo from '@/pages/ko/news/NewsDataRoomDetail'
 
 // en 페이지들 (프로젝트에 실제 존재한다고 가정)
 import HomeEn from "@/pages/en/Home";
@@ -154,8 +158,12 @@ export default function Router() {
             <Route path="/:lang/opnnWrite" element={<LangElement byLang={{ ko: <OpnnWriteKo />, en: <OpnnWriteKo /> }} />} />
           
             {/* 게시판 테스트중 */}          
-            <Route path="/:lang/newboard/common/:bbsId" element={<LangElement byLang={{ ko: <CommonBoardListKo />, en: <CommonBoardListKo /> }} />} />
-            <Route path="/:lang/newboard/common/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <CommonBoardDetailKo />, en: <CommonBoardDetailKo /> }} />} />
+            <Route path="/:lang/news/NewsNoticeList" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
+            <Route path="/:lang/news/NewsNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsNoticeDetailKo />, en: <NewsNoticeDetailKo /> }} />} />            
+            <Route path="/:lang/news/NewsJobNoticeList" element={<LangElement byLang={{ ko: <NewsJobNoticeListKo />, en: <NewsJobNoticeListKo /> }} />} />
+            <Route path="/:lang/news/NewsJobNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsJobNoticeDetailKo />, en: <NewsJobNoticeDetailKo /> }} />} />            
+            <Route path="/:lang/news/NewsDataRoomList" element={<LangElement byLang={{ ko: <NewsDataRoomListKo />, en: <NewsDataRoomListKo /> }} />} />
+            <Route path="/:lang/news/NewsDataRoomList/:pstSn" element={<LangElement byLang={{ ko: <NewsDataRoomDetailKo />, en: <NewsDataRoomDetailKo /> }} />} />
 
             {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
             <Route path="/screens" element={<Screens />} />
