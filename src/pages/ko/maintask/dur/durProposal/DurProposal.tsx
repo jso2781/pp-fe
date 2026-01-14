@@ -12,6 +12,8 @@ import RHFCheckbox from '@/components/rhf/RHFCheckbox'
 import RHFRadioGroup from '@/components/rhf/RHFRadioGroup'
 import RHFFileUploadField from '@/components/rhf/RHFFileUploadField'
 import { validateFiles } from '@/lib/validation/files'
+import { useAppDispatch } from '@/store/hooks';
+import { insertOpnn } from '@/features/opnn/OpnnThunks';
 
 const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'zip']
 const accept = allowedExtensions.map((e) => `.${e}`).join(',')
@@ -51,6 +53,9 @@ const defaultValues: FormValues = {
 }
 
 export default function DurProposal() {
+
+  const dispatch = useAppDispatch();
+
   const sideItems = useMemo(
     () => [
       { key: '/ko/dur/understand', label: 'DUR 이해', disabled: true },
@@ -79,8 +84,26 @@ export default function DurProposal() {
 
   const onSubmit = (values: FormValues) => {
     console.log('DUR proposal submit:', values)
+    dispatch(insertOpnn(transfromDataType(values)));
     window.alert('의견 제안이 등록되었습니다. 담당자가 확인 후 연락드리겠습니다.')
     form.reset(defaultValues)
+  }
+
+  //임시
+  const transfromDataType = (values: FormValues): FormData => {
+    const formData = new FormData();
+    formData.append('wrtrEncptFlnm', values.name);
+    formData.append('wrtrEncptTelno', values.contact);
+    formData.append('wrtSeCd', values.role);
+    formData.append('pbptCn', values.problem);
+    formData.append('dmndMttr', values.detail);
+    formData.append('dmndMttrDtlCn', values.etc);
+    formData.append('refMttr', '');
+    formData.append('atchFileSn', '');
+    values.files?.forEach((file) => {
+      formData.append('attachFiles', file)
+    })
+    return formData;
   }
 
   return (

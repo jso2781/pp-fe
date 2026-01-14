@@ -3,7 +3,7 @@ import { selectFaqList } from "@/features/faq/FaqThunks";
 import { useEffect, useState } from "react";
 import FaqRow from "./components/FaqRow";
 
-export default function FaqNotice () {
+export default function NewsFaqNotice () {
 
   const dispatch = useAppDispatch();
   const { loading, list, error } = useAppSelector(s => s.faq); 
