@@ -73,7 +73,7 @@ export default function PopupTemplate({
           </IconButton>
         </DialogTitle>
 
-        <DialogContent>
+        <DialogContent className="modal-content">
           {config?.content || (
             <Typography variant="body1">
               PDF 설계의 팝업 화면을 기반으로 생성된 템플릿입니다. 내부 콘텐츠 컴포넌트를 채워주세요.

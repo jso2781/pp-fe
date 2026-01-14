@@ -1,15 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { 
-  Box, Button, Stepper, Step, StepLabel, Typography, Checkbox, 
-  FormControlLabel, List, ListItem, Dialog, DialogTitle, 
-  DialogContent, DialogActions, Divider, IconButton 
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close'; // 닫기 아이콘 추가
-
+import { Box, Button, Stepper, Step, StepLabel, Typography, Checkbox, FormControlLabel, List, ListItem, Dialog, DialogTitle, DialogContent, DialogActions, Divider, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import DepsLocation from '@/components/common/DepsLocation'
 import ScreenShell from '../ScreenShell'
-// import PopupTemplate from '../templates/PopupTemplate' // 사용 안 함
 
 // --- 약관 상세 컨텐츠 (모달 내부에 들어갈 내용) ---
 const TermsDetail01 = () => <Box>sdfsdf이용약관 상세 내용입니다.<br/>내용이 길어지면 자동으로 스크롤이 생성됩니다.</Box>;
@@ -46,8 +40,11 @@ export default function KIDS_PP_US_JM_02() {
   const [checked3, setChecked3] = useState(false);
   const [checked4, setChecked4] = useState(false);
 
-  // 추가: 필수 약관 미동의 알림 팝업 상태
+  // 필수 약관 미동의 알림 팝업 상태 (비활성화 방식을 쓰더라도 만약을 위해 유지)
   const [showErrorPopup, setShowErrorPopup] = useState(false);
+
+  // 필수 약관(1, 2, 4번) 동의 여부 체크 변수 추가
+  const isRequiredAgreed = checked1 && checked2 && checked4;
 
   const allChecked = checked1 && checked2 && checked3 && checked4;
 
@@ -59,13 +56,14 @@ export default function KIDS_PP_US_JM_02() {
     setChecked4(isChecked);
   };
 
-  // 추가: 다음 버튼 클릭 핸들러
+  // 다음 버튼 클릭 핸들러
   const handleNextStep = () => {
     // 필수 약관(1, 2, 4번) 동의 여부 체크
-    if (checked1 && checked2 && checked4) {
+    if (isRequiredAgreed) {
       navigate('/screens/KIDS-PP-US-JM-03'); // 다음 단계(본인 인증)로 이동
     } else {
-      setShowErrorPopup(true); // 미동의 시 알림 팝업 노출
+      // 버튼 disabled 처리를 했으므로 실제로는 이 로직을 타지 않지만 안전상 유지
+      setShowErrorPopup(true); 
     }
   };
 
@@ -209,6 +207,8 @@ export default function KIDS_PP_US_JM_02() {
                         variant="contained" 
                         size="large" 
                         onClick={handleNextStep}
+                        // 필수 체크가 안 되어 있으면 버튼 비활성화
+                        disabled={!isRequiredAgreed}
                       >
                         동의하기
                       </Button>
@@ -240,7 +240,7 @@ export default function KIDS_PP_US_JM_02() {
             <CloseIcon aria-hidden="true" />
           </IconButton>
         </DialogTitle>
-        <DialogContent sx={{ minHeight: '200px' }}>
+        <DialogContent className="modal-content" sx={{ minHeight: '200px' }}>
           {modalData.content}
         </DialogContent>
         <DialogActions className="modal-footer">
