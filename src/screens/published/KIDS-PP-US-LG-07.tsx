@@ -43,10 +43,7 @@ export default function KIDS_PP_US_LG_07() {
                     </Box>
 
                     {/* 비밀번호 찾기 링크 영역 */}
-                    <Stack 
-                      direction="row" 
-                      className="find-recovery"
-                    >
+                    <Stack direction="row" className="form-helper-group">
                       <Typography className="txt">
                         비밀번호를 잊으셨다면?
                       </Typography>
