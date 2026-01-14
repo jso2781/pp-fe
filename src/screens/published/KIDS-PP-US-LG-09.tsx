@@ -46,7 +46,7 @@ export default function KIDS_PP_US_LG_09() {
                               },
                             }}
                           />
-                          <Alert severity="error" className="error-alert" id="password-alert">
+                          <Alert severity="error" className="error-alert" id="password-alert" role="alert">
                             사용할수없는 비밀번호입니다.
                           </Alert>
                         </Box>
@@ -74,7 +74,7 @@ export default function KIDS_PP_US_LG_09() {
                               },
                             }}
                           />
-                          <Alert severity="error" className="error-alert" id="confirm-password-alert">
+                          <Alert severity="error" className="error-alert" id="confirm-password-alert" role="alert">
                             입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요. 
                           </Alert>
                         </Box>

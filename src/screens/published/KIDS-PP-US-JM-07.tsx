@@ -131,7 +131,7 @@ export default function KIDS_PP_US_JM_07() {
                               }}
                               fullWidth
                             />
-                            <Alert severity="error" className="error-alert" id="birthDate-alert">
+                            <Alert severity="error" className="error-alert" id="birthDate-alert" role="alert">
                               숫자 8자리로 입력해주세요.
                             </Alert>
                           </Box>
@@ -217,7 +217,7 @@ export default function KIDS_PP_US_JM_07() {
                             />
                             <Button variant="outlined" size="large" aria-label="휴대전화번호 본인인증" className="btn-outline-02 btn-overlap">본인인증</Button>
                           </Stack>
-                          <Alert severity="error" className="error-alert" id="parentPhone-alert" role="alert">
+                          <Alert severity="error" className="error-alert" id="parentPhone-alert" role="alert" role="alert">
                             사용할 수 없는 휴대전화번호입니다. 다른 번호를 입력해 주세요.
                           </Alert>
                         </Box>

@@ -36,7 +36,7 @@ export default function KIDS_PP_US_LG_02() {
                             },
                           }}
                         />
-                        <Alert severity="error" className="error-alert" id="loginId-alert">
+                        <Alert severity="error" className="error-alert" id="loginId-alert" role="alert">
                           최소 두자리 수 이상 입력해주세요.
                         </Alert>
                       </Box>
@@ -58,7 +58,7 @@ export default function KIDS_PP_US_LG_02() {
                             },
                           }}
                         />
-                        <Alert severity="error" className="error-alert" id="password-input-alert">
+                        <Alert severity="error" className="error-alert" id="password-input-alert" role="alert">
                           아이디 / 이메일 또는 비밀번호가 일치하지 않습니다. (1/5)
                         </Alert>
                       </Box>
