@@ -79,7 +79,7 @@ export default function KIDS_PP_US_JM_05() {
                       </Typography>
                     </Box>
                     
-                    <Box className="inner-box">
+                    <Box className="bordered-box">
                       <Box className="form-group-wrap">
                         <Box className="flex-container flex-half">
                           {/* 이름 (필수) */}

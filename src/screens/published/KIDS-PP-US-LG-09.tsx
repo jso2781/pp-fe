@@ -23,7 +23,7 @@ export default function KIDS_PP_US_LG_09() {
                     <Typography className="guide-text">
                       비밀번호 변경을 위해 새로운 비밀번호를 입력해주세요.
                     </Typography>
-                    <Box className="inner-box">
+                    <Box className="bordered-box">
                       <Box component="form" noValidate className="pw-reset">
                         {/* 1. 새 비밀번호 */}
                         <Box className="form-item">
