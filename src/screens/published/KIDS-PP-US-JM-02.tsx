@@ -92,7 +92,11 @@ export default function KIDS_PP_US_JM_02() {
                   
                   <Box className="pageCont-joinType member-page">
                     {/* 단계 표시 */}
-                    <Box className="step-progress">
+                    <Box 
+                      className="step-progress" 
+                      role="img" 
+                      aria-label={`총 5단계 중 현재 ${currentStep + 1}단계 ${steps[currentStep].description} 진행 중`}
+                    >
                       <Stepper activeStep={currentStep} alternativeLabel>
                         {steps.map((step, index) => (
                           <Step key={index}>
