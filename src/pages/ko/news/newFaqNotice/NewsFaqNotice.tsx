@@ -2,14 +2,32 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectFaqList } from "@/features/faq/FaqThunks";
 import { useEffect, useState } from "react";
 import FaqRow from "./components/FaqRow";
+import { selectViewFaqList, selectFaqCategoryList } from "@/features/faq/FaqSelector";
+import { FaqSearchParam } from '@/features/faq/FaqTypes';
+
+interface categoryNaming {
+  all: string
+  tempClsf1: string
+  tempClsf2: string
+}
+const categoryNaming = {
+  all: "전체",
+  tempClsf1: "의약품부작용 정의",
+  tempClsf2: "부작용 신고방법"
+}
 
 export default function NewsFaqNotice () {
+  
 
+  const [search, setSearch] = useState<FaqSearchParam>(() => ({category: '', search: ''}));
   const dispatch = useAppDispatch();
-  const { loading, list, error } = useAppSelector(s => s.faq); 
-
+  const { loading, error } = useAppSelector(s => s.faq);
+  const categoryList = useAppSelector(selectFaqCategoryList);
+  const faqList = useAppSelector(s => selectViewFaqList(s, search));
+  
+  console.log(faqList)
   useEffect(() =>{
-    dispatch(selectFaqList());
+    dispatch(selectFaqList({langSeCd: 'ko'}));
   }, [dispatch]);
 
   if(error) return <>500에러 페이지 처리?</>
@@ -21,25 +39,13 @@ export default function NewsFaqNotice () {
       {
         loading ? <>로딩중</> : 
         <>
-        { list.map(data => <div>{data.category}</div>)}
+        {categoryList.map(category => (<>{categoryNaming[category]}&nbsp;&nbsp;&nbsp;&nbsp;</>))}
+        {/* { list.map(data => <div>{data.category}</div>)}
         <div>검색 결과 {list.length} 건</div>
-        { list.map(data => <FaqRow {...data} />) }
+        { list.map(data => <FaqRow {...data} />) } */}
+        {/* { faqList.map(data =>  <>{JSON.stringify(data)}</>) }  */}
         </>
       }
     </>
   );
 }
-
-// const filteredList = useMemo(() => {
-//   if (category === 'ALL') return allList;
-//   return allList.filter(item => item.category === category);
-// }, [allList, category]);
-
-
-/**
- * faqClsf FAQ분류
- * faqTtl FAQ제목
- * faqSeq FAQ순서
- * langSeCd 언어구분코드
- * faqAns FAQ답변
- */
