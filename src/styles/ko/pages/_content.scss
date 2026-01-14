@@ -18,6 +18,13 @@
       font-weight: var(--fw-400);
     }
   }
+
+  .input-with-btn{
+    .btn-form-util{
+      min-width: 105px !important; 
+  width: 105px;
+    }
+  }
 }
 
 /* 가로 배치를 위한 공통 플렉스 컨테이너 */

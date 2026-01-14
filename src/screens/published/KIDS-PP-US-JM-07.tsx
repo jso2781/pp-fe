@@ -82,126 +82,70 @@ export default function KIDS_PP_US_JM_07() {
                     
                     {/* 신청인 (만14세 미만) 정보 */}
                     <Box className="bordered-box">
-                      <Box className="form-group-wrap">
-                        <Box component="h3" className="sub-title">
-                          신청인 (만14세 미만) 정보
-                        </Box>
-                        <Box className="flex-container flex-half">
-                          {/* 이름 (필수) */}
+                      <Box component="form" noValidate>
+                        <Box className="form-group-wrap">
+                          <Box component="h3" className="sub-title">
+                            신청인 (만14세 미만) 정보
+                          </Box>
+                          <Box className="flex-container flex-half">
+                            {/* 이름 (필수) */}
+                            <Box className="form-item">
+                              <Typography component="label" htmlFor="userName" className="label">
+                                이름
+                                <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              </Typography>
+                              <TextField
+                                id="userName"
+                                placeholder="이름을 입력하세요."
+                                size="large"
+                                error={true} // 에러가 발생했을 때 true로 변경됨
+                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                slotProps={{
+                                  htmlInput: {
+                                    'aria-required': 'true',
+                                    'aria-describedby': 'userName-alert',
+                                  },
+                                }}
+                                fullWidth
+                              />
+                              <Alert severity="error" className="error-alert" id="userName-alert" role="alert">
+                                이름을 입력해주세요.
+                              </Alert>
+                            </Box>
+                            {/* 생년월일 (필수) */}
+                            <Box className="form-item">
+                              <Typography component="label" htmlFor="birthDate" className="label">
+                                생년월일
+                                <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              </Typography>
+                              <TextField
+                                id="birthDate"
+                                placeholder="8자리 입력 ex)20121231"
+                                size="large"
+                                error={true} // 에러가 발생했을 때 true로 변경됨
+                                slotProps={{
+                                  htmlInput: {
+                                    'aria-required': 'true',
+                                    'aria-describedby': 'birthDate-alert',
+                                    'maxLength': 8, // 8자리로 제한 (선택 사항)
+                                  },
+                                }}
+                                fullWidth
+                              />
+                              <Alert severity="error" className="error-alert" id="birthDate-alert" role="alert">
+                                숫자 8자리로 입력해주세요.
+                              </Alert>
+                            </Box>
+                          </Box>
+
+                          {/* 휴대전화번호 */}
                           <Box className="form-item">
-                            <Typography component="label" htmlFor="userName" className="label">
-                              이름
+                            <Typography component="label" htmlFor="phone" className="label">
+                              휴대전화번호
                               <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
                             </Typography>
                             <TextField
-                              id="userName"
-                              placeholder="이름을 입력하세요."
-                              size="large"
-                              error={true} // 에러가 발생했을 때 true로 변경됨
-                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                  'aria-describedby': 'userName-alert',
-                                },
-                              }}
-                              fullWidth
-                            />
-                            <Alert severity="error" className="error-alert" id="userName-alert" role="alert">
-                              이름을 입력해주세요.
-                            </Alert>
-                          </Box>
-                          {/* 생년월일 (필수) */}
-                          <Box className="form-item">
-                            <Typography component="label" htmlFor="birthDate" className="label">
-                              생년월일
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
-                            </Typography>
-                            <TextField
-                              id="birthDate"
-                              placeholder="8자리 입력 ex)20121231"
-                              size="large"
-                              error={true} // 에러가 발생했을 때 true로 변경됨
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                  'aria-describedby': 'birthDate-alert',
-                                  'maxLength': 8, // 8자리로 제한 (선택 사항)
-                                },
-                              }}
-                              fullWidth
-                            />
-                            <Alert severity="error" className="error-alert" id="birthDate-alert" role="alert">
-                              숫자 8자리로 입력해주세요.
-                            </Alert>
-                          </Box>
-                        </Box>
-
-                        {/* 휴대전화번호 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="phone" className="label">
-                            휴대전화번호
-                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
-                          </Typography>
-                          <TextField
-                            id="phone"
-                            placeholder="휴대전화번호를 입력하세요."
-                            size="large"
-                            fullWidth
-                            error={true} // 에러가 발생했을 때 true로 변경됨
-                            // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
-                            slotProps={{
-                              htmlInput: {
-                                'aria-required': 'true',
-                                'aria-describedby': 'phone-alert',
-                                'type': 'tel', // 전화번호 입력 모드 활성화
-                              },
-                            }}
-                          />
-                          <Alert severity="error" className="error-alert" id="phone-alert" role="alert">
-                            사용할 수 없는 휴대전화번호입니다. 다른 번호를 입력해 주세요.
-                          </Alert>
-                        </Box>
-
-                        {/* 법정 대리인 정보 */}
-                        <Box component="h3" className="sub-title">
-                          법정 대리인 정보
-                        </Box>
-                        <Box className="flex-container flex-half">
-                          {/* 법정대리인 이름 */}
-                          <Box className="form-item">
-                            <Typography component="label" htmlFor="parentName" className="label">
-                              이름
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
-                            </Typography>
-                            <TextField
-                              id="parentName"
-                              placeholder="이름을 입력하세요."
-                              size="large"
-                              fullWidth
-                              error={true} // 에러 상태 예시
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                  'aria-describedby': 'parentName-alert',
-                                },
-                              }}
-                            />
-                            <Alert severity="error" className="error-alert" id="parentName-alert" role="alert">
-                              이름을 입력해 주세요.
-                            </Alert>
-                          </Box>
-                        </Box>
-
-                        {/* 법정대리인 휴대전화번호 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="parentPhone" className="label">
-                            휴대전화번호
-                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
-                          </Typography>
-                          <Stack direction="row" spacing={1} className="input-with-btn">
-                            <TextField
-                              id="parentPhone"
+                              id="phone"
                               placeholder="휴대전화번호를 입력하세요."
                               size="large"
                               fullWidth
@@ -210,16 +154,74 @@ export default function KIDS_PP_US_JM_07() {
                               slotProps={{
                                 htmlInput: {
                                   'aria-required': 'true',
-                                  'aria-describedby': 'parentPhone-alert',
+                                  'aria-describedby': 'phone-alert',
                                   'type': 'tel', // 전화번호 입력 모드 활성화
                                 },
                               }}
                             />
-                            <Button variant="outlined" size="large" aria-label="휴대전화번호 본인인증" className="btn-outline-02 btn-overlap">본인인증</Button>
-                          </Stack>
-                          <Alert severity="error" className="error-alert" id="parentPhone-alert" role="alert">
-                            사용할 수 없는 휴대전화번호입니다. 다른 번호를 입력해 주세요.
-                          </Alert>
+                            <Alert severity="error" className="error-alert" id="phone-alert" role="alert">
+                              사용할 수 없는 휴대전화번호입니다. 다른 번호를 입력해 주세요.
+                            </Alert>
+                          </Box>
+
+                          {/* 법정 대리인 정보 */}
+                          <Box component="h3" className="sub-title">
+                            법정 대리인 정보
+                          </Box>
+                          <Box className="flex-container flex-half">
+                            {/* 법정대리인 이름 */}
+                            <Box className="form-item">
+                              <Typography component="label" htmlFor="parentName" className="label">
+                                이름
+                                <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              </Typography>
+                              <TextField
+                                id="parentName"
+                                placeholder="이름을 입력하세요."
+                                size="large"
+                                fullWidth
+                                error={true} // 에러 상태 예시
+                                slotProps={{
+                                  htmlInput: {
+                                    'aria-required': 'true',
+                                    'aria-describedby': 'parentName-alert',
+                                  },
+                                }}
+                              />
+                              <Alert severity="error" className="error-alert" id="parentName-alert" role="alert">
+                                이름을 입력해 주세요.
+                              </Alert>
+                            </Box>
+                          </Box>
+
+                          {/* 법정대리인 휴대전화번호 */}
+                          <Box className="form-item">
+                            <Typography component="label" htmlFor="parentPhone" className="label">
+                              휴대전화번호
+                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                            </Typography>
+                            <Stack direction="row" spacing={1} className="input-with-btn">
+                              <TextField
+                                id="parentPhone"
+                                placeholder="휴대전화번호를 입력하세요."
+                                size="large"
+                                fullWidth
+                                error={true} // 에러가 발생했을 때 true로 변경됨
+                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                slotProps={{
+                                  htmlInput: {
+                                    'aria-required': 'true',
+                                    'aria-describedby': 'parentPhone-alert',
+                                    'type': 'tel', // 전화번호 입력 모드 활성화
+                                  },
+                                }}
+                              />
+                              <Button variant="outlined" size="large" aria-label="휴대전화번호 본인인증" className="btn-outline-02 btn-form-util">본인인증</Button>
+                            </Stack>
+                            <Alert severity="error" className="error-alert" id="parentPhone-alert" role="alert">
+                              사용할 수 없는 휴대전화번호입니다. 다른 번호를 입력해 주세요.
+                            </Alert>
+                          </Box>
                         </Box>
                       </Box>
                     </Box>

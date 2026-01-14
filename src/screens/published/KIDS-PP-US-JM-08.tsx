@@ -26,31 +26,33 @@ export default function KIDS_PP_US_JM_08() {
                     </Typography>
                     <Box className="bordered-box">
                       <Box component="form" noValidate>
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="password" className="label">
-                            비밀번호
-                            <Box component="span" className="necessary" aria-label="필수입력">
-                              (필수)
-                            </Box>
-                          </Typography>
-                          <TextField
-                            id="password" 
-                            type="password"
-                            placeholder="비밀번호를 입력하세요."
-                            size="large"
-                            fullWidth
-                            error={true} // 에러가 발생했을 때 true로 변경됨
-                            // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
-                            slotProps={{
-                              htmlInput: {
-                                'aria-required': 'true',
-                                'aria-describedby': 'password-alert',
-                              },
-                            }}
-                          />
-                          <Alert severity="error" className="error-alert" id="password-alert" role="alert">
-                            비밀번호가 일치하지 않습니다. (1/5)
-                          </Alert>
+                        <Box className="form-group-wrap">
+                          <Box className="form-item">
+                            <Typography component="label" htmlFor="password" className="label">
+                              비밀번호
+                              <Box component="span" className="necessary" aria-label="필수입력">
+                                (필수)
+                              </Box>
+                            </Typography>
+                            <TextField
+                              id="password" 
+                              type="password"
+                              placeholder="비밀번호를 입력하세요."
+                              size="large"
+                              fullWidth
+                              error={true} // 에러가 발생했을 때 true로 변경됨
+                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                              slotProps={{
+                                htmlInput: {
+                                  'aria-required': 'true',
+                                  'aria-describedby': 'password-alert',
+                                },
+                              }}
+                            />
+                            <Alert severity="error" className="error-alert" id="password-alert" role="alert">
+                              비밀번호가 일치하지 않습니다. (1/5)
+                            </Alert>
+                          </Box>
                         </Box>
                       </Box>
                     </Box>
