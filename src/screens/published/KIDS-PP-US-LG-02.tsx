@@ -28,11 +28,18 @@ export default function KIDS_PP_US_LG_02() {
                           placeholder="아이디 혹은 이메일을 입력하세요."
                           size="large"
                           fullWidth
+                          error={true} // 에러가 발생했을 때 true로 변경됨
+                          // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                          slotProps={{
+                            htmlInput: {
+                              'aria-describedby': 'loginId-alert',
+                            },
+                          }}
                         />
+                        <Alert severity="error" className="error-alert" id="loginId-alert">
+                          최소 두자리 수 이상 입력해주세요.
+                        </Alert>
                       </Box>
-                      <Alert severity="error" className="error-alert">
-                        최소 두자리 수 이상 입력해주세요.
-                      </Alert>
                       <Box className="form-item">
                         <Typography component="label" htmlFor="password-input">
                           비밀번호
@@ -43,11 +50,18 @@ export default function KIDS_PP_US_LG_02() {
                           size="large"
                           type="password"
                           fullWidth
+                          error={true} // 에러가 발생했을 때 true로 변경됨
+                          // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                          slotProps={{
+                            htmlInput: {
+                              'aria-describedby': 'password-input-alert',
+                            },
+                          }}
                         />
+                        <Alert severity="error" className="error-alert" id="password-input-alert">
+                          아이디 / 이메일 또는 비밀번호가 일치하지 않습니다. (1/5)
+                        </Alert>
                       </Box>
-                      <Alert severity="error" className="error-alert">
-                        아이디 / 이메일 또는 비밀번호가 일치하지 않습니다. (1/5)
-                      </Alert>
 
                       <FormControlLabel
                         control={

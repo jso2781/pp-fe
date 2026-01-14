@@ -168,7 +168,7 @@ export default function KIDS_PP_US_JM_05() {
                               // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
                               slotProps={{
                                 htmlInput: {
-                                  'aria-required': 'true',
+                                  'aria-required': 'false',
                                   'aria-describedby': 'email-alert',
                                 },
                               }}
@@ -176,7 +176,7 @@ export default function KIDS_PP_US_JM_05() {
                             <Button variant="outlined" size="large" aria-label="이메일 주소 중복확인" className="btn-outline-02 btn-overlap">중복확인</Button>
                           </Stack>
                           <Alert severity="error" className="error-alert" id="email-alert">
-                            사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요.
+                            사용할 수 없는 이메일입니다. 다른 이메일을 입력해 주세요.
                           </Alert>
                         </Box>
 
@@ -227,7 +227,7 @@ export default function KIDS_PP_US_JM_05() {
                                 },
                               }}
                             />
-                            <Alert severity="error" className="error-alert" id="password-alert">
+                            <Alert severity="error" className="error-alert" id="confirm-password-alert">
                               하단에 입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요.
                             </Alert>
                           </Box>

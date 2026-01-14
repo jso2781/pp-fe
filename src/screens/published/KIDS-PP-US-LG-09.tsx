@@ -27,26 +27,28 @@ export default function KIDS_PP_US_LG_09() {
                       <Box component="form" noValidate className="pw-reset">
                         {/* 1. 새 비밀번호 */}
                         <Box className="form-item">
-                          <Typography component="label" htmlFor="new-password" className="label">
+                          <Typography component="label" htmlFor="password" className="label">
                             새 비밀번호 
-                            <Box component="span" className="necessary" aria-label="필수입력">
-                              (필수)
-                            </Box>
+                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
                           </Typography>
-                          
                           <TextField
-                            id="new-password" // id 부여
-                            fullWidth
+                            id="password"
                             type="password"
                             placeholder="숫자+영문+특수문자 조합 10자리 이상"
                             size="large"
-                            variant="outlined"
-                            className="input-password"
+                            fullWidth
+                            error={true} // 에러가 발생했을 때 true로 변경됨
                             // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
-                            inputProps={{
-                              'aria-required': 'true',
+                            slotProps={{
+                              htmlInput: {
+                                'aria-required': 'true',
+                                'aria-describedby': 'password-alert',
+                              },
                             }}
                           />
+                          <Alert severity="error" className="error-alert" id="password-alert">
+                            사용할수없는 비밀번호입니다.
+                          </Alert>
                         </Box>
 
                         {/* 2. 비밀번호 확인 */}
@@ -57,23 +59,25 @@ export default function KIDS_PP_US_LG_09() {
                               (필수)
                             </Box>
                           </Typography>
-                          
                           <TextField
                             id="confirm-password" // id 부여
-                            fullWidth
                             type="password"
                             placeholder="비밀번호를 동일하게 입력하세요."
                             size="large"
-                            variant="outlined"
-                            className="input-confirm"
-                            inputProps={{
-                              'aria-required': 'true',
+                            fullWidth
+                            error={true} // 에러가 발생했을 때 true로 변경됨
+                            // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                            slotProps={{
+                              htmlInput: {
+                                'aria-required': 'true',
+                                'aria-describedby': 'confirm-password-alert',
+                              },
                             }}
                           />
+                          <Alert severity="error" className="error-alert" id="confirm-password-alert">
+                            입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요. 
+                          </Alert>
                         </Box>
-                        <Alert severity="error" className="error-alert">
-                          입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요. 
-                        </Alert>
                       </Box>
                     </Box>
                     {/* 하단 버튼 그룹 */}
