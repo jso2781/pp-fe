@@ -101,6 +101,7 @@ export default function KIDS_PP_US_JM_02() {
                         {steps.map((step, index) => (
                           <Step key={index}>
                             <StepLabel 
+                              aria-hidden="true"
                               slotProps={{
                                 stepIcon: {
                                   classes: {

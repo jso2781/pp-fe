@@ -48,6 +48,9 @@ declare module '@mui/material/InputBase' {
 declare module '@mui/material/FormControl' {
   interface FormControlPropsSizeOverrides { large: true; }
 }
+declare module '@mui/material/Select' {
+  interface SelectPropsSizeOverrides {large: true;}
+}
 
 // 2. 테마 생성
 export const muiTheme = createTheme({
@@ -135,8 +138,77 @@ export const muiTheme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
+          padding: 0, 
+          boxSizing: 'border-box', // 테두리 두께를 높이에 포함시킴
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': { boxShadow: 'none' },
+
+          // [핵심] 아무 사이즈도 주지 않았을 때 적용되는 기본 높이 (Medium과 동일)
+          height: 48, 
+          fontSize: '15px',
+
+          // 1. Large 사이즈 (56px)
+          '&.MuiInputBase-sizeLarge': {
+            height: 56,
+            fontSize: '17px',
+          },
+          // 2. Medium 사이즈 (명시적으로 size="medium"을 줬을 때)
+          '&.MuiInputBase-sizeMedium': {
+            height: 48,
+            fontSize: '15px',
+          },
+          // 3. Small 사이즈 (36px)
+          '&.MuiInputBase-sizeSmall': {
+            height: 36,
+            fontSize: '13px',
+          },
+
+          // 비활성화 상태 스타일
+          '&.Mui-disabled': {
+            backgroundColor: '#CDD1D5', // 아주 연한 회색 배경으로 변경
+            color: '#8A949E',           // 글자색을 흐리게
+            cursor: 'not-allowed',      // 마우스 커서를 '금지' 모양으로
+            
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#CDD1D5 !important', // 보더 색상을 더 연하게 고정
+            },
+          },
+        },
+        input: {
+          padding: '0 14px',
+          height: '100% !important', // 부모(root) 높이를 그대로 따라감
+          boxSizing: 'border-box',
+          display: 'flex',
+          alignItems: 'center',
+        },
+      },
+    },
+    /* MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': { boxShadow: 'none' },
           '&.MuiInputBase-sizeLarge': { height: 56 },
+        },
+      },
+    }, */
+
+    //셀렉트박스
+    MuiSelect: {
+      defaultProps: {
+        size: 'medium', // 기본값 설정
+      },
+      styleOverrides: {
+        select: {
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          paddingTop: '0 !important',
+          paddingBottom: '0 !important',
+          // Select는 내부에 padding-right가 기본으로 잡혀있으므로 유지 혹은 미세조정
+        },
+        icon: {
+          // 높이가 변해도 화살표 아이콘이 항상 중앙에 오도록 설정
+          top: 'calc(50% - 12px)', 
         },
       },
     },
