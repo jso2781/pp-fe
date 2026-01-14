@@ -1,13 +1,12 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Button, Card, CardContent, Stack, Stepper, Step, StepLabel, Typography } from '@mui/material';
-import { ArrowForward } from '@mui/icons-material'
+import { Box, Button, Stepper, Step, StepLabel, Typography} from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation'
 import ScreenShell from '../ScreenShell'
 
-export default function KIDS_PP_US_JM_01() {
+export default function KIDS_PP_US_JM_06() {
   const navigate = useNavigate()
-  const currentStep = 0
+  const currentStep = 4
 
   const steps = [
     { label: '1단계', description: '회원 유형 선택' },
@@ -17,23 +16,8 @@ export default function KIDS_PP_US_JM_01() {
     { label: '5단계', description: '가입 신청 완료' },
   ]
 
-  const memberTypes = [
-    {
-      id: 'general',
-      title: '일반 회원(만 14세 이상 회원)',
-      description: '만14세 이상의 회원을 가입합니다.',
-      route: '/ko/signup/general', // 실제 라우트 경로로 변경 필요
-    },
-    {
-      id: 'junior',
-      title: '일반 회원(만 14세 미만 회원)',
-      description: '만 14세 미만 가입 시 법정대리인의 동의가 필요합니다.',
-      route: '/ko/signup/junior', // 실제 라우트 경로로 변경 필요
-    },
-  ]
-
   return (
-    <ScreenShell screenId="KIDS-PP-US-JM-01" title="회원가입 회원 유형 선택" uiType="page">
+    <ScreenShell screenId="KIDS-PP-US-JM-06" title="일반회원가입 가입신청완료" uiType="page">
 
       <Box className="page-layout">
         <Box className="sub-container">
@@ -53,7 +37,7 @@ export default function KIDS_PP_US_JM_01() {
                       role="img" 
                       aria-label={`총 5단계 중 현재 ${currentStep + 1}단계 ${steps[currentStep].description} 진행 중`}
                     >
-                      <Stepper activeStep={currentStep} alternativeLabel>
+                      <Stepper activeStep={currentStep} alternativeLabel aria-hidden="true">
                         {steps.map((step, index) => (
                           <Step key={index}>
                             <StepLabel 
@@ -94,43 +78,18 @@ export default function KIDS_PP_US_JM_01() {
                       </Typography>
                     </Box>
                     
-                    {/* 회원 유형 선택 카드 */}
-                    <Stack className="member-type-list">
-                      {memberTypes.map((type) => (
-                        <Card
-                          key={type.id}
-                          variant="outlined"
-                          className={`member-type-card member-type-card--${type.id}`}
-                          onClick={() => navigate(type.route)}
-                        >
-                          <CardContent className="member-type-card__link">
-                            <Stack className="member-type-card__inner">
-                              <Box className="member-type-card__text">
-                                <Typography className="member-type-card__title">
-                                  {type.title}
-                                </Typography>
-                                <Typography className="member-type-card__description">
-                                  {type.description}
-                                </Typography>
-                              </Box>
-                              <Button
-                                variant="text"
-                                className="member-type-card__action"
-                                endIcon={<ArrowForward />}
-                                onClick={(e) => {
-                                  e.stopPropagation(); // Card 클릭 이벤트 방지
-                                  navigate(type.route);
-                                }}
-                              >
-                                가입하기
-                              </Button>
-                            </Stack>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </Stack>
-                  </Box>
+                    <Box className="bordered-box">
+                      <Box className="join-complete-section">
+                        <Typography component="p" className="complete-title">일반회원 가입 신청이 완료되었습니다.</Typography>
+                        <Typography component="p" className="complete-info">전문가회원으로 활동하셔야 하실 경우 전문가회원 전환신청 페이지에서 신청해주세요.</Typography>
+                      </Box>
+                    </Box>
 
+                    {/* 하단 버튼 영역 */}
+                    <Box className="btn-group right">
+                      <Button variant="contained" size="large">홈으로</Button>
+                    </Box>
+                  </Box>
                   {/* --- 본문 끝 --- */}
                 </Box>
               </Box>

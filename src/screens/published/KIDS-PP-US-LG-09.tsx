@@ -23,55 +23,63 @@ export default function KIDS_PP_US_LG_09() {
                     <Typography className="guide-text">
                       비밀번호 변경을 위해 새로운 비밀번호를 입력해주세요.
                     </Typography>
-                    <Box className="inner-box">
-                      <Box component="form" noValidate className="pw-reset">
-                        {/* 1. 새 비밀번호 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="new-password" className="label">
-                            새 비밀번호 
-                            <Box component="span" className="necessary" aria-label="필수입력">
-                              (필수)
-                            </Box>
-                          </Typography>
-                          
-                          <TextField
-                            id="new-password" // id 부여
-                            fullWidth
-                            type="password"
-                            placeholder="숫자+영문+특수문자 조합 10자리 이상"
-                            variant="outlined"
-                            className="input-password"
-                            // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
-                            inputProps={{
-                              'aria-required': 'true',
-                            }}
-                          />
-                        </Box>
+                    <Box className="bordered-box">
+                      <Box component="form" noValidate>
+                        <Box className="form-group-wrap">
+                          {/* 1. 새 비밀번호 */}
+                          <Box className="form-item">
+                            <Typography component="label" htmlFor="password" className="label">
+                              새 비밀번호 
+                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                            </Typography>
+                            <TextField
+                              id="password"
+                              type="password"
+                              placeholder="숫자+영문+특수문자 조합 10자리 이상"
+                              size="large"
+                              fullWidth
+                              error={true} // 에러가 발생했을 때 true로 변경됨
+                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                              slotProps={{
+                                htmlInput: {
+                                  'aria-required': 'true',
+                                  'aria-describedby': 'password-alert',
+                                },
+                              }}
+                            />
+                            <Alert severity="error" className="error-alert" id="password-alert" role="alert">
+                              사용할수없는 비밀번호입니다.
+                            </Alert>
+                          </Box>
 
-                        {/* 2. 비밀번호 확인 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="confirm-password" className="label">
-                            비밀번호 확인 
-                            <Box component="span" className="necessary" aria-label="필수입력">
-                              (필수)
-                            </Box>
-                          </Typography>
-                          
-                          <TextField
-                            id="confirm-password" // id 부여
-                            fullWidth
-                            type="password"
-                            placeholder="비밀번호를 동일하게 입력하세요."
-                            variant="outlined"
-                            className="input-confirm"
-                            inputProps={{
-                              'aria-required': 'true',
-                            }}
-                          />
+                          {/* 2. 비밀번호 확인 */}
+                          <Box className="form-item">
+                            <Typography component="label" htmlFor="confirm-password" className="label">
+                              비밀번호 확인 
+                              <Box component="span" className="necessary" aria-label="필수입력">
+                                (필수)
+                              </Box>
+                            </Typography>
+                            <TextField
+                              id="confirm-password" // id 부여
+                              type="password"
+                              placeholder="비밀번호를 동일하게 입력하세요."
+                              size="large"
+                              fullWidth
+                              error={true} // 에러가 발생했을 때 true로 변경됨
+                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                              slotProps={{
+                                htmlInput: {
+                                  'aria-required': 'true',
+                                  'aria-describedby': 'confirm-password-alert',
+                                },
+                              }}
+                            />
+                            <Alert severity="error" className="error-alert" id="confirm-password-alert" role="alert">
+                              입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요. 
+                            </Alert>
+                          </Box>
                         </Box>
-                        <Alert severity="error" className="error-alert">
-                          입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요. 
-                        </Alert>
                       </Box>
                     </Box>
                     {/* 하단 버튼 그룹 */}

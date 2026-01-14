@@ -1,196 +1,260 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Stack } from '@mui/material';
-import DepsLocation from "@/components/common/DepsLocation";
-import ScreenShell from '../ScreenShell';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Box, Button, Stepper, Step, StepLabel, Typography, Checkbox, FormControlLabel, List, ListItem, Dialog, DialogTitle, DialogContent, DialogActions, Divider, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import DepsLocation from '@/components/common/DepsLocation'
+import ScreenShell from '../ScreenShell'
 
-// 별도로 만든 약관 컴포넌트 임포트
-// import { TermsDetail01, TermsDetail02, TermsDetail03, TermsDetail04 } from './TermsContent';
-/* --- 약관 상세 컴포넌트들 --- */
-const TermsDetail01 = () => (
-  <div className="terms_inner_content">
-    <h3>제1조 (목적)</h3>
-    <p>이 약관은 사이트 이용자가 제공하는 모든 서비스의 이용조건 및 절차에 관한 사항을 규정함을 목적으로 합니다.</p>
-    <h3>제2조 (용어의 정의)</h3>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-    <p>1. "서비스"란 회사가 운영하는 웹사이트를 통해 제공되는 기능을 의미합니다.</p>
-  </div>
-);
+// --- 약관 상세 컨텐츠 (모달 내부에 들어갈 내용) ---
+const TermsDetail01 = () => <Box>sdfsdf이용약관 상세 내용입니다.<br/>내용이 길어지면 자동으로 스크롤이 생성됩니다.</Box>;
+const TermsDetail02 = () => <Box>개인정보 수집 및 이용동의 상세 내용입니다.</Box>;
+const TermsDetail03 = () => <Box>개인정보 수집 및 이용동의(선택) 상세 내용입니다.</Box>;
+const TermsDetail04 = () => <Box>저작권보호정책 및 정보공유 동의 상세 내용입니다.</Box>;
 
-const TermsDetail02 = () => (
-  <div className="terms_inner_content">
-    <p>회사는 다음과 같은 목적으로 개인정보를 수집 및 이용합니다.</p>
-    <ul>
-      <li>수집항목: 성명, 휴대전화번호, 이메일</li>
-      <li>보유기간: 회원 탈퇴 시까지</li>
-    </ul>
-  </div>
-);
-
-const TermsDetail03 = () => (
-  <div className="terms_inner_content">
-    <p>회사는 이용자의 동의 없이 개인정보를 외부에 제공하지 않습니다.</p>
-  </div>
-);
-
-const TermsDetail04 = () => (
-  <div className="terms_inner_content">
-    <p>본 사이트에서 제공하는 모든 콘텐츠는 저작권법의 보호를 받습니다.</p>
-  </div>
-);
 export default function KIDS_PP_US_JM_02() {
-  const current = 1;
-  const stepItems = [
-    { title: '1단계', description: '회원 유형 선택' },
-    { title: '2단계', description: '약관 동의' },
-    { title: '3단계', description: '본인 인증' },
-    { title: '4단계', description: '회원 정보 입력' },
-    { title: '5단계', description: '가입 신청 완료' },
-  ];
+  const navigate = useNavigate()
+  const screenId = "KIDS-PP-US-JM-02"
+  const currentStep = 1
 
-  // 모달 상태 (React.ReactNode 타입을 사용하여 컴포넌트를 직접 담음)
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalData, setModalData] = useState({ title: '', content: null as React.ReactNode });
+  const steps = [
+    { label: '1단계', description: '회원 유형 선택' },
+    { label: '2단계', description: '약관 동의' },
+    { label: '3단계', description: '본인 인증' },
+    { label: '4단계', description: '회원 정보 입력' },
+    { label: '5단계', description: '가입 신청 완료' },
+  ]
 
-  // 체크박스 상태 개별 관리 (하드코딩)
+  // --- 모달 제어 로직 시작 ---
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState({ id: '', title: '', content: null });
+
+  const handleShowModal = (id, title, content) => {
+    setModalData({ id, title, content });
+    setModalOpen(true); // 버튼 클릭 시 true로 변경하여 팝업을 렌더링함
+  };
+  // --- 모달 제어 로직 끝 ---
+
+  // --- 상태 관리(State) 시작 ---
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
   const [checked3, setChecked3] = useState(false);
   const [checked4, setChecked4] = useState(false);
 
-  // 전체 동의 로직
+  // 필수 약관 미동의 알림 팝업 상태 (비활성화 방식을 쓰더라도 만약을 위해 유지)
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
+
+  // 필수 약관(1, 2, 4번) 동의 여부 체크 변수 추가
+  const isRequiredAgreed = checked1 && checked2 && checked4;
+
   const allChecked = checked1 && checked2 && checked3 && checked4;
-  const handleAllAgree = (e: any) => {
-    const status = e.target.checked;
-    setChecked1(status); setChecked2(status); setChecked3(status); setChecked4(status);
+
+  const handleAllAgree = (event) => {
+    const isChecked = event.target.checked;
+    setChecked1(isChecked);
+    setChecked2(isChecked);
+    setChecked3(isChecked);
+    setChecked4(isChecked);
   };
 
-  // 모달 열기 함수
-  const showModal = (title: string, content: React.ReactNode) => {
-    setModalData({ title, content });
-    setIsModalOpen(true);
+  // 다음 버튼 클릭 핸들러
+  const handleNextStep = () => {
+    // 필수 약관(1, 2, 4번) 동의 여부 체크
+    if (isRequiredAgreed) {
+      navigate('/screens/KIDS-PP-US-JM-03'); // 다음 단계(본인 인증)로 이동
+    } else {
+      // 버튼 disabled 처리를 했으므로 실제로는 이 로직을 타지 않지만 안전상 유지
+      setShowErrorPopup(true); 
+    }
   };
+
+  // 개별 약관 리스트 데이터 구성
+  const termsData = [
+    { id: 1, popupId: `${screenId}-P01`, label: '이용약관', required: true, checked: checked1, setter: setChecked1, component: <TermsDetail01 /> },
+    { id: 2, popupId: `${screenId}-P02`, label: '개인정보 수집 및 이용동의', required: true, checked: checked2, setter: setChecked2, component: <TermsDetail02 /> },
+    { id: 3, popupId: `${screenId}-P03`, label: '개인정보 수집 및 이용동의', required: false, checked: checked3, setter: setChecked3, component: <TermsDetail03 /> },
+    { id: 4, popupId: `${screenId}-P04`, label: '저작권보호정책 및 정보공유 동의', required: true, checked: checked4, setter: setChecked4, component: <TermsDetail04 /> },
+  ];
+  // --- 상태 관리 끝 ---
 
   return (
-    <ScreenShell screenId="KIDS-PP-US-JM-02" title="약관동의" uiType="page">
-      <div className="page-layout">
-        <div className="sub-container">
-          <div className="content-wrap">
-            <div className="sub-content">
+    <ScreenShell screenId={screenId} title="약관동의" uiType="page">
+
+      <Box className="page-layout">
+        <Box className="sub-container">
+          <Box className="content-wrap">
+            {/* 서브 콘텐츠 영역 */}
+            <Box className="sub-content">
+              {/* 상단 현재 위치 정보 */}
               <DepsLocation />
-              <div className="content-view" id="content">
-                <div className="pageCont_joinType member_page">
-                  <div className="joinType_step">
-                    <Steps current={current} items={stepItems} labelPlacement="vertical" />
-                  </div>
-                  <div className="step_content">
-                    <h3 className="step_title">
-                      <p className="step_count"><span>2단계</span> / 5단계 </p>
-                      <p className="step_desc">{stepItems[current].description}</p>
-                    </h3>
+              <Box className="content-view" id="content">
+                <Box className="page-content">
+                  {/* --- 본문 시작 --- */}
+                  
+                  <Box className="pageCont-joinType member-page">
+                    {/* 단계 표시 */}
+                    <Box 
+                      className="step-progress" 
+                      role="img" 
+                      aria-label={`총 5단계 중 현재 ${currentStep + 1}단계 ${steps[currentStep].description} 진행 중`}
+                    >
+                      <Stepper activeStep={currentStep} alternativeLabel>
+                        {steps.map((step, index) => (
+                          <Step key={index}>
+                            <StepLabel 
+                              aria-hidden="true"
+                              slotProps={{
+                                stepIcon: {
+                                  classes: {
+                                    root: 'step-icon',
+                                    text: 'step-text'
+                                  }
+                                }
+                              }}
+                            >
+                              <Typography variant="caption" className="step-label">
+                                {step.label}
+                              </Typography>
+                              <Typography className={`step-description ${index === currentStep ? 'current-step' : ''}`}>
+                                {step.description}
+                              </Typography>
+                            </StepLabel>
+                          </Step>
+                        ))}
+                      </Stepper>
+                    </Box>
 
-                    <div className="agree_terms">
-                      <div className="all_agree">
-                        <Checkbox onChange={handleAllAgree} checked={allChecked}>
-                          <strong className="label">전체 동의합니다.</strong>
-                        </Checkbox>
-                      </div>
+                    {/* 단계 제목 */}
+                    <Box className="step-header">
+                      <Typography className="step-title">
+                        <Box component="span" className="step-current">
+                          {steps[currentStep].label}
+                        </Box>
+                        {` / ${steps[steps.length - 1].label}`}
+                      </Typography>
+                      <Typography className="step-description">
+                        <span className="step-description-text">
+                          {steps[currentStep].description}
+                        </span>
+                      </Typography>
+                    </Box>
 
-                      <ul className="terms_list">
-                        <li className="terms_item">
-                          <Checkbox className="terms_checkbox" checked={checked1} onChange={(e) => setChecked1(e.target.checked)}>
-                            <span className="terms_link">이용약관</span> <span className="required">(필수)</span>
-                          </Checkbox>
-                          <button type="button" className="btn_terms_view" onClick={() => showModal('이용약관', <TermsDetail01 />)}>약관보기</button>
-                        </li>
-                        <li className="terms_item">
-                          <Checkbox className="terms_checkbox" checked={checked2} onChange={(e) => setChecked2(e.target.checked)}>
-                            <span className="terms_link">개인정보 수집 및 이용동의</span> <span className="required">(필수)</span>
-                          </Checkbox>
-                          <button type="button" className="btn_terms_view" onClick={() => showModal('개인정보 수집 및 이용동의', <TermsDetail02 />)}>약관보기</button>
-                        </li>
-                        <li className="terms_item">
-                          <Checkbox className="terms_checkbox" checked={checked3} onChange={(e) => setChecked3(e.target.checked)}>
-                            <span className="terms_link">개인정보 수집 및 이용동의</span> <span className="optional">(선택)</span>
-                          </Checkbox>
-                          <button type="button" className="btn_terms_view" onClick={() => showModal('개인정보 수집 및 이용동의(선택)', <TermsDetail03 />)}>약관보기</button>
-                        </li>
-                        <li className="terms_item">
-                          <Checkbox className="terms_checkbox" checked={checked4} onChange={(e) => setChecked4(e.target.checked)}>
-                            <span className="terms_link">저작권보호정책 및 정보공유 동의</span> <span className="required">(필수)</span>
-                          </Checkbox>
-                          <button type="button" className="btn_terms_view" onClick={() => showModal('저작권보호정책 및 정보공유 동의', <TermsDetail04 />)}>약관보기</button>
-                        </li>
-                      </ul>
-                    </div>
+                    <Box className="agree-terms">
+                      {/* 전체 동의 섹션 */}
+                      <Box className="all-agree">
+                        <FormControlLabel
+                          control={
+                            <Checkbox 
+                              onChange={handleAllAgree} 
+                              checked={allChecked} 
+                            />
+                          }
+                          label={<strong className="label">모두 동의합니다.</strong>}
+                        />
+                      </Box>
 
-                    <div className="btn_group between">
-                      <Stack gap={8} >
-                        <Button size="large">취소하기</Button>
-                        <Button type="primary" size="large" disabled={!(checked1 && checked2 && checked4)}>동의하기</Button>
-                      </Stack>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+                      {/* 개별 약관 리스트 */}
+                      <List className="terms-list">
+                        {termsData.map((item) => (
+                          <ListItem 
+                            key={item.id}
+                            disablePadding
+                            className="terms-item"
+                            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                          >
+                            <FormControlLabel
+                              control={
+                                <Checkbox 
+                                  className="terms-checkbox"
+                                  checked={item.checked} 
+                                  onChange={(e) => item.setter(e.target.checked)} 
+                                  size="small"
+                                />
+                              }
+                              label={
+                                <Typography component="div">
+                                  <span className="terms-link">{item.label}</span>
+                                  <Typography 
+                                    component="span" 
+                                    variant="caption" 
+                                    className={item.required ? 'required' : 'optional'}
+                                    sx={{ ml: 0.5, color: item.required ? 'error.main' : 'text.secondary' }}
+                                  >
+                                    ({item.required ? '필수' : '선택'})
+                                  </Typography>
+                                </Typography>
+                              }
+                            />
+                            {/* 약관보기 버튼 클릭 시 handleShowModal 호출 */}
+                            <Button 
+                              type="button"
+                              variant="text" 
+                              size="small" 
+                              className="btn_terms_view"
+                              onClick={() => handleShowModal(item.popupId, item.label, item.component)}
+                            >
+                              약관보기
+                            </Button>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Box>
 
-      <Modal
-        title={modalData.title}
-        open={isModalOpen}
-        onOk={() => setIsModalOpen(false)}
-        onCancel={() => setIsModalOpen(false)}
-        width={640}
-        okText="확인"
-        // cancelText="취소"
-        cancelButtonProps={{ style: { display: 'none' } }}
-        centered
-        styles={{
-          header: {
-              borderBottom: '1px solid #303336',
-              paddingBottom: '15px',
-              marginBottom: '15px',
-            },
-            body: {
-              maxHeight: '450px',
-              overflowY: 'auto',
-            }
-          }}
+                    {/* 하단 버튼 영역 */}
+                    <Box className="btn-group between">
+                      <Button 
+                        variant="outlined" 
+                        size="large" 
+                        onClick={() => navigate(-1)}
+                      >
+                        취소하기
+                      </Button>
+                      <Button 
+                        variant="contained" 
+                        size="large" 
+                        onClick={handleNextStep}
+                        // 필수 체크가 안 되어 있으면 버튼 비활성화
+                        disabled={!isRequiredAgreed}
+                      >
+                        동의하기
+                      </Button>
+                    </Box>
+                  </Box>
+
+                  {/* --- 본문 끝 --- */}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* 약관 상세 팝업 */}
+      <Dialog
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        maxWidth="md"
+        fullWidth
       >
-        <div className="terms_modal_wrapper">
+        <DialogTitle component="div" className="modal-title">
+          <h2>{modalData.title}</h2>
+          <IconButton
+            aria-label="닫기"
+            onClick={() => setModalOpen(false)}
+            className="btn-modal-close"
+          >
+            <CloseIcon aria-hidden="true" />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent className="modal-content" sx={{ minHeight: '200px' }}>
           {modalData.content}
-        </div>
-      </Modal>
+        </DialogContent>
+        <DialogActions className="modal-footer">
+          <Button variant="contained" onClick={() => setModalOpen(false)}>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </ScreenShell>
-  );
+  )
 }

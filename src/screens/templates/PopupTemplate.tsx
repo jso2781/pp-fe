@@ -62,23 +62,18 @@ export default function PopupTemplate({
           className: config?.wrapClassName, // 기존 wrapClassName 유지(필요 시)
         }}
       >
-        <DialogTitle component="div" className="popup-title">
+        <DialogTitle component="div" className="modal-title">
           <h2>{title}</h2>
           <IconButton
             aria-label="닫기"
             onClick={() => setOpen(false)}
-            sx={{
-              position: 'absolute',
-              right: 12,
-              top: 16,
-              color: '#1E2124',
-            }}
+            className="btn-modal-close"
           >
             <CloseIcon aria-hidden="true" />
           </IconButton>
         </DialogTitle>
 
-        <DialogContent>
+        <DialogContent className="modal-content">
           {config?.content || (
             <Typography variant="body1">
               PDF 설계의 팝업 화면을 기반으로 생성된 템플릿입니다. 내부 콘텐츠 컴포넌트를 채워주세요.

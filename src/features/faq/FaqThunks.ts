@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
 import { selectFaqListApiPath, getFaqApiPath, insertFaqApiPath, updateFaqApiPath, saveFaqApiPath, deleteFaqApiPath } from '@/api/faq/FaqApiPaths'
-import { mockFaqList, FaqPVO, FaqRVO, FaqListPVO, FaqListRVO, FaqDVO, FaqResult  } from './FaqTypes'
+import { mockFaqList, FaqPVO, FaqRVO, FaqListPVO, FaqListRVO, FaqDVO  } from './FaqTypes'
 
 export const sideEffectThunk = createAsyncThunk(
   '/faq/test',
@@ -31,21 +31,7 @@ export const selectFaqList = createAsyncThunk<FaqListRVO, FaqListPVO | undefined
     try {
       const res = await https.post(selectFaqListApiPath(), params);
 
-      // 관리자에서 몇개의 카테고리가 넘어올지 알수 없으므로 동적으로 카테고리별로 분리
-      const payload = res.data?.data?.list?.reduce((acc: FaqResult[], cur: FaqRVO) => {
-        if(!cur.faqClsf) return acc;
-        const idx = acc.findIndex(v => v.category === cur.faqClsf);
-        if(idx !== -1) {
-            acc[idx].item.push({title: cur.faqTtl, content: cur.faqAns, seq: cur.faqSeq, langSeCd: cur.langSeCd})
-            return acc;
-        } else {
-            acc.push({
-                category: cur.faqClsf,
-                item: [{title: cur.faqTtl}]
-            })
-            return acc;
-        }
-      }, []);
+      const payload = res.data?.data?.list
 
       return {
         list: Array.isArray(payload) ? payload : [],

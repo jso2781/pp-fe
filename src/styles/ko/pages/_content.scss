@@ -1,6 +1,113 @@
 @use '../base/mixins';
 
-// KIDS-PP-US-LG-15
+.form-item {
+  margin:0 0 5px 0;
+  &:not(:first-of-type) {
+    margin-top: 20px;
+  }
+  .label{
+    display: block;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-700);
+    margin:0 0 5px 0;
+    .optional{
+      font-weight: var(--fw-400);
+    }
+    .necessary{
+      color: var(--danger);
+      font-weight: var(--fw-400);
+    }
+  }
+
+  .input-with-btn{
+    .btn-form-util{
+      min-width: 105px !important; 
+  width: 105px;
+    }
+  }
+}
+
+/* 가로 배치를 위한 공통 플렉스 컨테이너 */
+.flex-container {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 20px; 
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  .form-item {
+    flex: 1;
+    min-width: 0;
+    margin-top: 0 !important;
+  }
+
+  /* 2등분, 3등분, 4등분 공통*/
+  &.flex-half, &.col-3, &.col-4 {
+    .form-item {
+      flex: 1;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    gap: 12px;
+    
+    &.flex-half, &.col-3, &.col-4 {
+      .form-item {
+        width: 100%; /* 너비를 꽉 채움 */
+        flex: none;  /* flex-grow 방해 방지 (선택사항) */
+      }
+    }
+
+    .form-item {
+      width: 100%; /* 일반 form-item도 꽉 차게 */
+      margin-top: 0 !important;
+    }
+    
+    &:not(:first-of-type) {
+      margin-top: 20px;
+    }
+  }
+}
+
+
+.member-page{
+  max-width: 842px;margin:0 auto;
+  .guide-text {
+    margin:0 0 40px 0;
+    text-align: center;
+    font-size: var(--fs-32); 
+    font-weight: 700;
+  }
+  .form-helper-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 40px 0 0 0;
+    padding: 25px 0 0 0;
+    border-top: 1px solid #D8D8D8;
+  
+    .txt {
+      font-size: var(--fs-18);
+      font-weight: var(--fw-700);
+    }
+  
+    .btn-link {
+      color: var(--color-text-1);
+    }
+  
+    /* ✅ 미디어 쿼리 위치와 중첩 확인 */
+    @media (max-width: 1023px) { 
+      flex-direction: column !important;
+      text-align: center; 
+    }
+  }
+}
+
+// 로그인 아이디 로그인
 .page-content__login {
   display: flex;
   align-items: stretch; 
@@ -16,20 +123,6 @@
     width: 100%;
     padding:0 0 0 30px;
     border-left:1px solid #D8D8D8;
-  }
-
-  .form-item {
-    margin:0 0 5px 0;
-
-    &:not(:first-of-type) {
-      margin-top: 10px;
-    }
-    
-    label{
-      display: block;
-      font-size: 15px;
-      margin:0 0 5px 0;
-    }
   }
 
   .login-actions{
@@ -86,14 +179,7 @@
 }
 
 // 아이디비번찾기
-.member-page{max-width: 842px;margin:0 auto}
 .pageCont-idPwFind {
-  .guide-text {
-    margin:0 0 40px 0;
-    text-align: center;
-    font-size: var(--fs-32); 
-    font-weight: 700;
-  }
   .AnyID-area{margin:0 0 40px 0;}
   .caution-area{
     padding:16px 24px;
@@ -141,94 +227,16 @@
     max-width: 500px;
     margin:0 auto;
   }
-  .find-recovery {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin:40px 0 0 0;
-    padding:25px 0 0 0;
-    border-top:1px solid #D8D8D8;
-    .txt{
-      font-size: var(--fs-18);
-      font-weight: var(--fw-700);
-    }
-    .btn-link{
-      color: var(--color-text-1);
-    }
-  }
   
-  .form-item {
-      margin:0 0 5px 0;
-
-      &:not(:first-of-type) {
-        margin-top: 20px;
-      }
-    }
-    .label{
-      display: block;
-      font-size: var(--fs-16);
-      font-weight: var(--fw-700);
-      margin:0 0 5px 0;
-      .necessary{
-        color: var(--danger);
-        font-weight: var(--fw-400);
-      }
-  }
-  @media (max-width: 991px) { 
-    .find-recovery{
-      flex-direction: column;
-    }
-  }
 }
-
 
 // 회원가입
 .pageCont-joinType{
-
   // 회원가입 단계
   .step-progress{
-
-    /* .MuiStep-root {
-      .MuiStepLabel-root {
-        .MuiStepIcon-root {
-
-          // 숫자 숨기기
-          & .MuiStepIcon-text {
-            display: none;
-          }
-
-          // 동그라미 모양
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border:3px solid #087C80;
-
-          // 활성 단계
-          &.Mui-active {
-            background-color: #087C80;
-          }
-
-          // 완료 단계
-          &.Mui-completed {
-            background-color: #087C80;
-
-            // 체크 표시
-            &::after {
-              content: '✔';
-              color: #fff;
-              font-size: 14px;
-            }
-          }
-        }
-      }
-    } */
-
     .step-label{
       font-size: var(--fs-13);
-      color: var(--color-text-3);
+      color: var(--color-text-1);
     }
     .step-description{
       font-size: var(--fs-15);
@@ -237,7 +245,6 @@
       margin-top: 4px;
     }
   }
-
   // 단계 제목
   .step-header{
     .step-title{
@@ -245,27 +252,26 @@
       margin:0 0 24px 0;
       font-size: var(--fs-18);
       font-weight: var(--fw-700);
-      margin: 40px 0 24px 0;
+      margin: 30px 0 10px 0;
 
       .step-current{
         color: var(--color-text-2);
       }
     }
     .step-description {
-      margin:0 0 40px 0;
+      margin:0 0 30px 0;
       .step-description-text{
         font-size: var(--fs-32);
         font-weight: var(--fw-700);
       }
     }
-    
+
    @media (max-width: 1023px) {
       .step-description {
         margin-bottom: 20px;
       }
     }
   }
-
   // 회원가입 회원 유형 선택
   .member-type-list {
     display: flex;
@@ -365,13 +371,13 @@
 }
 
 // 회원가입 - 약관동의
-.agree_terms {
-  padding: 45px 39px;
+.agree-terms {
+  padding: 30px 30px;
   border-radius: 10px;
   border: 1px solid var(--border-2);
   background: #FFF;
 
-  .all_agree {
+  .all-agree {
     padding: 0 0 10px 0;
     margin: 0 0 15px 0;
     border-bottom: 1px solid var(--border-2);
@@ -382,18 +388,18 @@
     }
   }
   
-  .terms_list {
-    .terms_item {
+  .terms-list {
+    .terms-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px; // 체크박스와 버튼 사이 간격 확보
 
-      .terms_checkbox {
+      .terms-checkbox {
         flex: 1; // 텍스트 영역 유연하게 확장
       }
 
-      .terms_link {
+      .terms-link {
         font-size: var(--fs-20);
         margin-right: 8px;
       }
@@ -448,3 +454,46 @@
   }
 }
 
+/* 회원가입완료 */
+.join-complete-section{
+  &::before {
+    content:"";
+    display:block;
+    width:50px;
+    height: 50px;
+    margin:0 auto 30px auto;
+    background: url(/img/img_complete.png) no-repeat center center;
+  }
+  .complete-title{
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .complete-info{
+    position: relative;
+    margin:40px 0 0 0;
+    padding: 15px 15px 15px 40px;
+    font-size: 17px;
+    border-radius: 8px;
+    border: 1px solid #CDD1D5;
+    background: #F4F5F6;
+    &::before {
+      content:"";
+      display:block;
+      position: absolute;
+      left: 15px;
+      top: 17px;
+      width:20px;
+      height: 20px;
+      background: url(/img/ico_exclamation_circle.svg) no-repeat center center;
+    }
+  }
+  @media (max-width: 768px) {
+    &::before {
+      margin: 0 auto 15px auto;
+    }
+    .complete-info{
+      margin:20px 0 0 0;
+    }
+  }
+}

@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { selectFaqList, sideEffectThunk } from './FaqThunks'
-import { FaqResult, FaqRVO } from './FaqTypes'
+import { FaqRVO } from './FaqTypes'
 
 /**
  * 대국민포털_FAQ기본 정보 목록 조회(Redux 저장 구조) 
  */
 export interface FaqState {
-  list: FaqResult[]
+  list: FaqRVO[]
   totalCount: number | null
   current: FaqRVO | null
   loading: boolean
