@@ -182,15 +182,13 @@ export default function KIDS_PP_US_LG_15() {
                   <Box className="page-content__login">
                     <Box className="login-section__form">
                       <Box className="form-item">
-                        <Typography 
-                          component="label"
-                          htmlFor="loginId" // 인풋의 id와 연결
-                        >
+                        <Typography component="label" htmlFor="loginId" className="label">
                           아이디
                         </Typography>
                         <TextField
                           id="loginId" // 라벨의 htmlFor와 일치
                           placeholder="아이디 혹은 이메일을 입력하세요."
+                          size="large"
                           value={values.loginId}
                           onChange={(e) => {
                             let v = e.target.value.replace(KOREAN_REGEX, '')
@@ -215,15 +213,13 @@ export default function KIDS_PP_US_LG_15() {
                       </Alert>
 
                       <Box className="form-item">
-                        <Typography 
-                        component="label"
-                          htmlFor="password-input"
-                        >
+                        <Typography  component="label" htmlFor="password-input" className="label">
                           비밀번호
                         </Typography>
                         <TextField
                           id="password-input"
                           placeholder="비밀번호를 입력하세요."
+                          size="large"
                           type="password"
                           value={values.password}
                           onChange={(e) => {

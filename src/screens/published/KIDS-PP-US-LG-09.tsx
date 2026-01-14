@@ -39,6 +39,7 @@ export default function KIDS_PP_US_LG_09() {
                             fullWidth
                             type="password"
                             placeholder="숫자+영문+특수문자 조합 10자리 이상"
+                            size="large"
                             variant="outlined"
                             className="input-password"
                             // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
@@ -62,6 +63,7 @@ export default function KIDS_PP_US_LG_09() {
                             fullWidth
                             type="password"
                             placeholder="비밀번호를 동일하게 입력하세요."
+                            size="large"
                             variant="outlined"
                             className="input-confirm"
                             inputProps={{
