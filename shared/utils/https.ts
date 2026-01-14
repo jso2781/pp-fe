@@ -64,7 +64,21 @@ https.interceptors.response.use(
     if (error.response?.status === 401 && !original._retry) {
       original._retry = true;
 
-      const refreshToken = localStorage.getItem("refreshToken");
+      // 통일된 키에서 refreshToken 가져오기 (하위 호환성을 위해 별도 키도 확인)
+      const authData = localStorage.getItem("auth");
+      let refreshToken: string | null = null;
+      if (authData) {
+        try {
+          const parsed = JSON.parse(authData);
+          refreshToken = parsed.refreshToken || null;
+        } catch (e) {
+          // 파싱 실패 시 별도 키에서 가져오기
+          refreshToken = localStorage.getItem("refreshToken");
+        }
+      } else {
+        refreshToken = localStorage.getItem("refreshToken");
+      }
+      
       if (!refreshToken) {
         store.dispatch(logout());
         return Promise.reject(error);
@@ -112,8 +126,27 @@ https.interceptors.response.use(
           refreshToken: newRefreshToken
         }));
 
-        // localStorage에 refreshToken 저장
+        // localStorage에 통일된 키로 저장 (AuthContext와 동기화)
         if (newRefreshToken) {
+          // 기존 auth 데이터 가져오기
+          const existingAuth = localStorage.getItem("auth");
+          let authData: any = {};
+          if (existingAuth) {
+            try {
+              authData = JSON.parse(existingAuth);
+            } catch (e) {
+              // 파싱 실패 시 빈 객체 사용
+            }
+          }
+          
+          // 토큰 정보 업데이트
+          authData.tokenId = tokenId;
+          authData.accessToken = newAccessToken;
+          authData.refreshToken = newRefreshToken;
+          
+          // 통일된 키로 저장
+          localStorage.setItem("auth", JSON.stringify(authData));
+          // 하위 호환성을 위해 refreshToken도 별도로 저장
           localStorage.setItem("refreshToken", newRefreshToken);
         }
 

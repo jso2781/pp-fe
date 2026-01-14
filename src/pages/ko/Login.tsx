@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useAuth } from '@/contexts/AuthContext'
 import { login as loginThunk } from '@/features/auth/AuthThunks';
@@ -45,7 +45,7 @@ export default function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { login, isAuthenticated } = useAuth();
-  const auth = useAppSelector((s) => s.auth); // FIX: Provide 'any' type for s to avoid type error.
+  const auth = useAppSelector((s) => s.auth);
   const { userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm, loading } = auth || {};
   console.log("Login auth userInfo=", userInfo);
   console.log("Login auth tokenId=", tokenId);
@@ -60,6 +60,7 @@ export default function Login() {
   const [localFailCount, setLocalFailCount] = useState(0)
   const [showPasswordErrorPopup, setShowPasswordErrorPopup] = useState(false)
   const [showPasswordChangeReminder, setShowPasswordChangeReminder] = useState(false)
+  const hasCheckedAuth = useRef(false)
 
   // 아이디 저장 기능: 페이지 로드 시 저장된 아이디 불러오기
   useEffect(() => {
@@ -71,12 +72,18 @@ export default function Login() {
 
   console.log("Login isAuthenticated=",isAuthenticated);
 
+  // 컴포넌트 마운트 시에만 체크 (이미 로그인된 상태에서 Login 페이지 접근 방지)
   useEffect(() => {
-    // 이미 로그인된 경우 홈으로 리다이렉트
-    if (isAuthenticated) {
-      navigate('/ko')
+    // 마운트 시에만 체크 (한 번만 실행)
+    if (!hasCheckedAuth.current) {
+      hasCheckedAuth.current = true;
+      // Redux 상태와 AuthContext 상태 모두 확인
+      const isLoggedIn = (userInfo && accessToken) || isAuthenticated;
+      if (isLoggedIn) {
+        navigate('/ko', { replace: true });
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [userInfo, accessToken, isAuthenticated, navigate]);
   
 
   // 비밀번호 변경 안내 팝업 표시 여부 확인
@@ -135,19 +142,21 @@ export default function Login() {
       localStorage.removeItem(STORAGE_KEY_REMEMBER_ID)
     }
 
-    try {
-      // TODO: 실제 로그인 API 호출
-      // const res = await https.post('/auth/login', {
-      //   loginId: values.loginId,
-      //   password: values.password,
-      // })
+    try{
       const res = await dispatch(loginThunk({ mbrId: values.loginId, mbrEnpswd: values.password, appId: import.meta.env.VITE_APP_ID ?? 'kids-pp-dev' })).unwrap();
 
       const userInfo = res.userInfo;
-      const pswdErrNmtm = res.pswdErrNmtm ?? 0;
+
+      /**
+       * 로그인 결과에 비밀번호오류횟수(pswdErrNmtm) 값이 없으면 로컬 카운트를 증가시킴(이 경우 입력한 사용자ID로 사용자 정보를 못 찾은 경우임)
+       * 로그인 결과에 비밀번호오류횟수(pswdErrNmtm) 값이 있으면 서버 값을 우선 사용하여 로컬 카운트를 업데이트
+       * 여기서 로그인 결과에 회원정보(userInfo)가 없으면서 비밀번호오류횟수(pswdErrNmtm) 값만 있으면 사용자 정보는 존재하는데 패스워드가 불일치 하는 경우임.
+       */
+      const pswdErrNmtm = res.pswdErrNmtm !== null ? res.pswdErrNmtm : (localFailCount + 1);
 
       console.log("login await dispatch(loginThunk~~ res=",res);
 
+      // 로그인 결과에 회원정보(userInfo)가 없으면 로그인 실패 처리 진행
       if(!userInfo && pswdErrNmtm > 0) {
 
         setLocalFailCount(pswdErrNmtm);
@@ -176,6 +185,19 @@ export default function Login() {
       // 샘플: 실제 로그인 성공 시 아래 코드 실행
       // const userType = response.data.userType // 'general' | 'expert'
       
+      // 로그인 성공 처리
+      // Redux에 이미 저장되어 있고, AuthContext는 Redux 상태와 자동 동기화됨
+      // 추가로 AuthContext.login()을 호출하여 명시적으로 동기화
+      if (userInfo && res.accessToken) {
+        login({
+          userInfo: userInfo,
+          tokenId: res.tokenId,
+          accessToken: res.accessToken,
+          refreshToken: res.refreshToken,
+          pswdErrNmtm: res.pswdErrNmtm,
+        });
+      }
+
       // 비밀번호 변경 안내 팝업 표시 여부 확인
       if (checkPasswordChangeReminder()) {
         setShowPasswordChangeReminder(true)
@@ -184,29 +206,26 @@ export default function Login() {
         // if (userType === 'expert') {
         //   navigate('/screens/KIDS-PP-US-MT-01')
         // } else {
-        //   navigate('/ko') // 일반 회원은 메인 페이지로
+          navigate('/ko') // 일반 회원은 메인 페이지로
         // }
-        window.alert('샘플 화면입니다. (로그인 API 미연동)')
       }
     }catch(error: any){
       // 서버 에러 처리
       // 에러 메시지에서 pswdErrNmtm 추출 시도 (서버 응답에 포함된 경우)
       let serverPswdErrNmtm: number | null = null;
-      try {
+      try{
         const errorInfo = typeof error === 'string' ? JSON.parse(error) : error;
-        if (errorInfo?.pswdErrNmtm !== undefined) {
+        if(errorInfo?.pswdErrNmtm !== undefined){
           serverPswdErrNmtm = errorInfo.pswdErrNmtm;
         }
-      } catch (e) {
+      }catch (e){
         // JSON 파싱 실패 시 무시 (일반 에러 메시지인 경우)
       }
 
       // 서버에서 pswdErrNmtm을 제공한 경우 서버 값을 우선 사용
       // 서버 값이 없으면 로컬 카운트를 증가시킴
-      const nextCount = serverPswdErrNmtm !== null 
-        ? serverPswdErrNmtm 
-        : localFailCount + 1;
-      
+      const nextCount = serverPswdErrNmtm !== null ? serverPswdErrNmtm : (localFailCount + 1);
+
       setLocalFailCount(nextCount);
 
       // 5회째 실패 시 팝업 표시

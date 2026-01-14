@@ -38,6 +38,22 @@ const AuthSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
       state.pswdErrNmtm = null;
+      
+      // localStorage에 통일된 키로 저장 (AuthContext와 동기화)
+      if (state.userInfo && action.payload.accessToken) {
+        const authData = {
+          userInfo: state.userInfo,
+          tokenId: action.payload.tokenId,
+          accessToken: action.payload.accessToken,
+          refreshToken: action.payload.refreshToken,
+          pswdErrNmtm: null,
+        };
+        localStorage.setItem("auth", JSON.stringify(authData));
+        // 하위 호환성을 위해 refreshToken도 별도로 저장
+        if (action.payload.refreshToken) {
+          localStorage.setItem("refreshToken", action.payload.refreshToken);
+        }
+      }
     },
     logout(state) {
       state.userInfo = null;
@@ -45,7 +61,9 @@ const AuthSlice = createSlice({
       state.accessToken = null;
       state.refreshToken = null;
       state.pswdErrNmtm = null;
-      localStorage.removeItem("refreshToken");
+      // localStorage에서 통일된 키 제거
+      localStorage.removeItem("auth");
+      localStorage.removeItem("refreshToken"); // 하위 호환성을 위해 유지
     },
     clearUserInfo: (state) => {
       state.userInfo = null;
@@ -53,7 +71,9 @@ const AuthSlice = createSlice({
       state.accessToken = null;
       state.refreshToken = null;
       state.pswdErrNmtm = null;
-      localStorage.removeItem("refreshToken");
+      // localStorage에서 통일된 키 제거
+      localStorage.removeItem("auth");
+      localStorage.removeItem("refreshToken"); // 하위 호환성을 위해 유지
     }
   },
   extraReducers: (builder) => {
@@ -70,6 +90,22 @@ const AuthSlice = createSlice({
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
         state.pswdErrNmtm = action.payload.pswdErrNmtm;
+        
+        // localStorage에 통일된 키로 저장 (AuthContext와 동기화)
+        if (action.payload.userInfo && action.payload.accessToken) {
+          const authData = {
+            userInfo: action.payload.userInfo,
+            tokenId: action.payload.tokenId,
+            accessToken: action.payload.accessToken,
+            refreshToken: action.payload.refreshToken,
+            pswdErrNmtm: action.payload.pswdErrNmtm,
+          };
+          localStorage.setItem("auth", JSON.stringify(authData));
+          // 하위 호환성을 위해 refreshToken도 별도로 저장
+          if (action.payload.refreshToken) {
+            localStorage.setItem("refreshToken", action.payload.refreshToken);
+          }
+        }
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
