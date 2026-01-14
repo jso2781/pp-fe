@@ -62,17 +62,12 @@ export default function PopupTemplate({
           className: config?.wrapClassName, // 기존 wrapClassName 유지(필요 시)
         }}
       >
-        <DialogTitle component="div" className="popup-title">
+        <DialogTitle component="div" className="modal-title">
           <h2>{title}</h2>
           <IconButton
             aria-label="닫기"
             onClick={() => setOpen(false)}
-            sx={{
-              position: 'absolute',
-              right: 12,
-              top: 16,
-              color: '#1E2124',
-            }}
+            className="btn-modal-close"
           >
             <CloseIcon aria-hidden="true" />
           </IconButton>
