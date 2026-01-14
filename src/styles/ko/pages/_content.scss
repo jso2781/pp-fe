@@ -187,45 +187,6 @@
 
   // 회원가입 단계
   .step-progress{
-
-    /* .MuiStep-root {
-      .MuiStepLabel-root {
-        .MuiStepIcon-root {
-
-          // 숫자 숨기기
-          & .MuiStepIcon-text {
-            display: none;
-          }
-
-          // 동그라미 모양
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border:3px solid #087C80;
-
-          // 활성 단계
-          &.Mui-active {
-            background-color: #087C80;
-          }
-
-          // 완료 단계
-          &.Mui-completed {
-            background-color: #087C80;
-
-            // 체크 표시
-            &::after {
-              content: '✔';
-              color: #fff;
-              font-size: 14px;
-            }
-          }
-        }
-      }
-    } */
-
     .step-label{
       font-size: var(--fs-13);
       color: var(--color-text-3);
@@ -245,20 +206,20 @@
       margin:0 0 24px 0;
       font-size: var(--fs-18);
       font-weight: var(--fw-700);
-      margin: 40px 0 24px 0;
+      margin: 30px 0 10px 0;
 
       .step-current{
         color: var(--color-text-2);
       }
     }
     .step-description {
-      margin:0 0 40px 0;
+      margin:0 0 30px 0;
       .step-description-text{
         font-size: var(--fs-32);
         font-weight: var(--fw-700);
       }
     }
-    
+
    @media (max-width: 1023px) {
       .step-description {
         margin-bottom: 20px;
@@ -365,13 +326,13 @@
 }
 
 // 회원가입 - 약관동의
-.agree_terms {
+.agree-terms {
   padding: 45px 39px;
   border-radius: 10px;
   border: 1px solid var(--border-2);
   background: #FFF;
 
-  .all_agree {
+  .all-agree {
     padding: 0 0 10px 0;
     margin: 0 0 15px 0;
     border-bottom: 1px solid var(--border-2);
@@ -382,18 +343,18 @@
     }
   }
   
-  .terms_list {
-    .terms_item {
+  .terms-list {
+    .terms-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px; // 체크박스와 버튼 사이 간격 확보
 
-      .terms_checkbox {
+      .terms-checkbox {
         flex: 1; // 텍스트 영역 유연하게 확장
       }
 
-      .terms_link {
+      .terms-link {
         font-size: var(--fs-20);
         margin-right: 8px;
       }

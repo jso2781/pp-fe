@@ -52,7 +52,16 @@ export default function KIDS_PP_US_JM_01() {
                       <Stepper activeStep={currentStep} alternativeLabel>
                         {steps.map((step, index) => (
                           <Step key={index}>
-                            <StepLabel>
+                            <StepLabel 
+                              slotProps={{
+                                stepIcon: {
+                                  classes: {
+                                    root: 'step-icon',
+                                    text: 'step-text'
+                                  }
+                                }
+                              }}
+                            >
                               <Typography variant="caption" className="step-label">
                                 {step.label}
                               </Typography>
@@ -116,8 +125,6 @@ export default function KIDS_PP_US_JM_01() {
                       ))}
                     </Stack>
                   </Box>
-
-
 
                   {/* --- 본문 끝 --- */}
                 </Box>

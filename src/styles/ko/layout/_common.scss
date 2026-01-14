@@ -41,6 +41,9 @@
   border: 0;
 }
 
+/* ==========================================================================
+   모달
+   ========================================================================== */
 /* 모달 사이즈 */
 .modal-small {
   width: 600px !important;
@@ -53,7 +56,7 @@
 }
 
 // 모달 컨텐츠
-.popup-title{
+.modal-title{
   h2{
     font-size: 24px;
     font-weight: 700;
@@ -61,8 +64,25 @@
     border-bottom:1px solid #303336;
   }
 }
-.popup-content {
-  .popup-status {
+
+/* 모달닫기 버튼 */
+.btn-modal-close {
+  position: absolute !important;
+  right: 12px;
+  top: 12px;
+  // transform: translateY(-50%); /* 세로 중앙 정렬 원할 경우 */
+  color: #1E2124;
+  padding: 8px;
+  transition: background-color 0.2s;
+}
+/* 아이콘 크기 제어 */
+.btn-modal-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+.modal-content {
+  .modal-status {
       display: flex;
       align-items: center;
       gap: 5px;    
@@ -78,7 +98,7 @@
       color: var(--color-text-2);
     }
   }
-  .popup-desc {
+  .modal-desc {
     > p {
       font-size: var(--fs-20);
       line-height: 140%;
