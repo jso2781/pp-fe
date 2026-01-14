@@ -15,7 +15,7 @@ const persistConfig = {
   version: 1,
   storage: storageSession,
   // If you want to persist only specific slices, uncomment whitelist:
-  // whitelist: ['board', 'notice', 'ui']
+  whitelist: ['menu', 'ui', 'auth']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

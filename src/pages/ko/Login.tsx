@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useAuth } from '@/contexts/AuthContext'
+import { login as loginThunk } from '@/features/auth/AuthThunks';
 import {
   Alert,
   Box,
@@ -39,20 +42,42 @@ const MAX_LENGTH = 20
 const MAX_FAIL_COUNT = 5
 
 export default function Login() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { login, isAuthenticated } = useAuth();
+  const auth = useAppSelector((s) => s.auth); // FIX: Provide 'any' type for s to avoid type error.
+  const { userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm, loading } = auth || {};
+  console.log("Login auth userInfo=", userInfo);
+  console.log("Login auth tokenId=", tokenId);
+  console.log("Login auth accessToken=", accessToken);
+  console.log("Login auth refreshToken=", refreshToken);
+  console.log("Login auth pswdErrNmtm=", pswdErrNmtm);
+  console.log("Login auth loading=",loading);
+  
   const [values, setValues] = useState<LoginValues>({ loginId: '', password: '', rememberId: false })
   const [errors, setErrors] = useState<Partial<Record<keyof LoginValues, string>>>({})
   const [loginFail, setLoginFail] = useState<LoginFailInfo | null>(null)
   const [localFailCount, setLocalFailCount] = useState(0)
   const [showPasswordErrorPopup, setShowPasswordErrorPopup] = useState(false)
   const [showPasswordChangeReminder, setShowPasswordChangeReminder] = useState(false)
+
   // 아이디 저장 기능: 페이지 로드 시 저장된 아이디 불러오기
   useEffect(() => {
     const savedId = localStorage.getItem(STORAGE_KEY_REMEMBER_ID)
     if (savedId) {
       setValues((p) => ({ ...p, loginId: savedId, rememberId: true }))
     }
-  }, [])
+  }, []);
+
+  console.log("Login isAuthenticated=",isAuthenticated);
+
+  useEffect(() => {
+    // 이미 로그인된 경우 홈으로 리다이렉트
+    if (isAuthenticated) {
+      navigate('/ko')
+    }
+  }, [isAuthenticated, navigate]);
+  
 
   // 비밀번호 변경 안내 팝업 표시 여부 확인
   // Description: 회원가입 또는 비밀번호 변경 후 80일 전부터 메시지 노출
@@ -112,33 +137,40 @@ export default function Login() {
 
     try {
       // TODO: 실제 로그인 API 호출
-      // const response = await https.post('/auth/login', {
+      // const res = await https.post('/auth/login', {
       //   loginId: values.loginId,
       //   password: values.password,
       // })
+      const res = await dispatch(loginThunk({ mbrId: values.loginId, mbrEnpswd: values.password, appId: import.meta.env.VITE_APP_ID ?? 'kids-pp-dev' })).unwrap();
 
-      // 샘플: 실패횟수 시뮬레이션 (실제로는 서버에서 실패 횟수를 관리)
-      const nextCount = localFailCount + 1
-      setLocalFailCount(nextCount)
+      const userInfo = res.userInfo;
+      const pswdErrNmtm = res.pswdErrNmtm;
 
-      // 5회째 실패 시 팝업 표시
-      if (nextCount >= MAX_FAIL_COUNT) {
-        setShowPasswordErrorPopup(true)
-        setLoginFail(null)
-        return
-      }
+      console.log("login await dispatch(loginThunk~~ res=",res);
 
-      // 4회째까지만 오류 횟수 노출
-      if (nextCount <= 4) {
-        setLoginFail({
-          reason: '아이디 또는 비밀번호가 일치하지 않습니다.',
-          failedCount: nextCount,
-          isIdError: false,
-        })
-        setErrors({ password: `아이디 또는 비밀번호가 일치하지 않습니다. (${nextCount}/${MAX_FAIL_COUNT})` })
-      } else {
-        setLoginFail(null)
-        setErrors({})
+      if(!userInfo && pswdErrNmtm && pswdErrNmtm > 0) {
+
+        setLocalFailCount(pswdErrNmtm)
+
+        // 5회째 실패 시 팝업 표시
+        if (pswdErrNmtm >= MAX_FAIL_COUNT) {
+          setShowPasswordErrorPopup(true);
+          setLoginFail(null);
+          return;
+        }
+
+        // 4회째까지만 오류 횟수 노출
+        if(pswdErrNmtm <= 4){
+          setLoginFail({
+            reason: '아이디 또는 비밀번호가 일치하지 않습니다.',
+            failedCount: pswdErrNmtm,
+            isIdError: false,
+          })
+          setErrors({ password: `아이디 또는 비밀번호가 일치하지 않습니다. (${pswdErrNmtm}/${MAX_FAIL_COUNT})` })
+        }else{
+          setLoginFail(null)
+          setErrors({})
+        }
       }
 
       // 샘플: 실제 로그인 성공 시 아래 코드 실행
@@ -156,15 +188,15 @@ export default function Login() {
         // }
         window.alert('샘플 화면입니다. (로그인 API 미연동)')
       }
-    } catch (error: any) {
+    }catch(error: any){
       // 서버 에러 처리
       const nextCount = localFailCount + 1
       setLocalFailCount(nextCount)
 
       if (nextCount >= MAX_FAIL_COUNT) {
-        setShowPasswordErrorPopup(true)
-        setLoginFail(null)
-        return
+        setShowPasswordErrorPopup(true);
+        setLoginFail(null);
+        return;
       }
 
       if (nextCount <= 4) {

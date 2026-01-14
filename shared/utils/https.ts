@@ -1,6 +1,9 @@
 import axios, { AxiosInstance } from 'axios'
 import i18n from '@/i18n/i18n'
-
+import { store } from '@/store/store'
+import type { AppDispatch } from '@/store/store'
+import { logout, setAccessToken } from '@/features/auth/AuthSlice'
+import { refreshTokenApiPath } from '@/api/auth/AuthApiPaths'
 
 /**
  * 공통 axios 인스턴스
@@ -34,9 +37,107 @@ https.interceptors.request.use((config) => {
   config.headers['Accept-Language'] = lang
   // config.headers['X-Locale'] = lang // 필요하면 둘 다
 
+  const token = store.getState().auth.accessToken;
+  if(token) config.headers['Authorization'] = `Bearer ${token}`;
+
+  config.headers["X-App-Id"] = import.meta.env.VITE_APP_ID ?? 'kids-pp-dev';
+
   return config
 })
 
-https.interceptors.response.use((res) => res, (err) => Promise.reject(err))
+// refresh 동시 호출 방지용
+let isRefreshing = false;
+let queue: Array<(token: string | null) => void> = [];
+
+function runQueue(token: string | null) {
+  queue.forEach((cb) => cb(token));
+  queue = [];
+}
+
+// https.interceptors.response.use((res) => res, (err) => Promise.reject(err))
+// 401이면 refresh 후 재시도
+https.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    const original = error.config;
+
+    if (error.response?.status === 401 && !original._retry) {
+      original._retry = true;
+
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) {
+        store.dispatch(logout());
+        return Promise.reject(error);
+      }
+
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          queue.push((token) => {
+            if (!token) return reject(error);
+            original.headers.Authorization = `Bearer ${token}`;
+            resolve(https(original));
+          });
+        });
+      }
+
+      isRefreshing = true;
+      const dispatch: AppDispatch = store.dispatch;
+
+      try {
+        
+
+        // refresh API 호출 (baseURL 포함)
+        const resp = await axios.post(
+          `${apiBaseURL}${refreshTokenApiPath()}`,
+          null,
+          {
+            headers: {
+              "X-Refresh-Token": refreshToken,
+              "X-App-Id": import.meta.env.VITE_APP_ID ?? 'kids-pp-dev',
+            },
+          }
+        );
+
+        console.log("/auth/refresh rest api response resp.data=", resp.data);
+
+        // 서버 응답에서 토큰 정보 추출
+        const tokenId = resp.data?.data?.tokenId ?? null;
+        const newAccessToken = resp.data?.data?.accessToken ?? null;
+        const newRefreshToken = resp.data?.data?.refreshToken ?? null;
+
+        // Redux store에 새 토큰 저장 (setAccessToken 액션 사용)
+        dispatch(setAccessToken({
+          tokenId,
+          accessToken: newAccessToken,
+          refreshToken: newRefreshToken
+        }));
+
+        // localStorage에 refreshToken 저장
+        if (newRefreshToken) {
+          localStorage.setItem("refreshToken", newRefreshToken);
+        }
+
+        // 대기 중인 요청들에 새 토큰 전달
+        runQueue(newAccessToken);
+        
+        // 원래 요청에 새 accessToken 설정 후 재시도
+        if (newAccessToken) {
+          original.headers.Authorization = `Bearer ${newAccessToken}`;
+        }
+        return https(original);
+      } catch (e) {
+        // refresh 실패 시 대기 중인 요청들 모두 실패 처리
+        runQueue(null);
+        // 로그아웃 처리
+        dispatch(logout());
+        return Promise.reject(e);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 export {https}
