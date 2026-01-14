@@ -32,6 +32,13 @@
 /* 스크린 리더용 */
 .sr_only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
+.sub-title{
+  font-size: 18px;font-weight: 700;margin:24px 0 20px 0;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
 /* ==========================================================================
    모달
    ========================================================================== */
