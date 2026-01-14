@@ -1,13 +1,18 @@
-import React, { useState,} from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Button, Stepper, Step, StepLabel, Typography, Checkbox, FormControlLabel, List, ListItem } from '@mui/material';
+import { 
+  Box, Button, Stepper, Step, StepLabel, Typography, Checkbox, 
+  FormControlLabel, List, ListItem, Dialog, DialogTitle, 
+  DialogContent, DialogActions, Divider, IconButton 
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close'; // 닫기 아이콘 추가
 
 import DepsLocation from '@/components/common/DepsLocation'
 import ScreenShell from '../ScreenShell'
-import PopupTemplate from '../templates/PopupTemplate' 
+// import PopupTemplate from '../templates/PopupTemplate' // 사용 안 함
 
 // --- 약관 상세 컨텐츠 (모달 내부에 들어갈 내용) ---
-const TermsDetail01 = () => <Box>이용약관 상세 내용입니다.<br/>내용이 길어지면 자동으로 스크롤이 생성됩니다.</Box>;
+const TermsDetail01 = () => <Box>sdfsdf이용약관 상세 내용입니다.<br/>내용이 길어지면 자동으로 스크롤이 생성됩니다.</Box>;
 const TermsDetail02 = () => <Box>개인정보 수집 및 이용동의 상세 내용입니다.</Box>;
 const TermsDetail03 = () => <Box>개인정보 수집 및 이용동의(선택) 상세 내용입니다.</Box>;
 const TermsDetail04 = () => <Box>저작권보호정책 및 정보공유 동의 상세 내용입니다.</Box>;
@@ -31,7 +36,7 @@ export default function KIDS_PP_US_JM_02() {
 
   const handleShowModal = (id, title, content) => {
     setModalData({ id, title, content });
-    setModalOpen(true); // 버튼 클릭 시 true로 변경하여 PopupTemplate을 렌더링함
+    setModalOpen(true); // 버튼 클릭 시 true로 변경하여 팝업을 렌더링함
   };
   // --- 모달 제어 로직 끝 ---
 
@@ -41,6 +46,9 @@ export default function KIDS_PP_US_JM_02() {
   const [checked3, setChecked3] = useState(false);
   const [checked4, setChecked4] = useState(false);
 
+  // 추가: 필수 약관 미동의 알림 팝업 상태
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
+
   const allChecked = checked1 && checked2 && checked3 && checked4;
 
   const handleAllAgree = (event) => {
@@ -49,6 +57,16 @@ export default function KIDS_PP_US_JM_02() {
     setChecked2(isChecked);
     setChecked3(isChecked);
     setChecked4(isChecked);
+  };
+
+  // 추가: 다음 버튼 클릭 핸들러
+  const handleNextStep = () => {
+    // 필수 약관(1, 2, 4번) 동의 여부 체크
+    if (checked1 && checked2 && checked4) {
+      navigate('/screens/KIDS-PP-US-JM-03'); // 다음 단계(본인 인증)로 이동
+    } else {
+      setShowErrorPopup(true); // 미동의 시 알림 팝업 노출
+    }
   };
 
   // 개별 약관 리스트 데이터 구성
@@ -177,22 +195,25 @@ export default function KIDS_PP_US_JM_02() {
                         ))}
                       </List>
                     </Box>
-                  </Box>
 
-                  {/* 약관 상세 모달 */}
-                  {modalOpen && (
-                    <PopupTemplate
-                      screenId={modalData.id}
-                      title={modalData.title}
-                      open={modalOpen}
-                      onClose={() => setModalOpen(false)}
-                      config={{
-                        content: modalData.content,
-                        cancelText: '닫기',
-                        width: 600,
-                      }}
-                    />
-                  )}
+                    {/* 하단 버튼 영역 */}
+                    <Box className="btn-group between">
+                      <Button 
+                        variant="outlined" 
+                        size="large" 
+                        onClick={() => navigate(-1)}
+                      >
+                        취소하기
+                      </Button>
+                      <Button 
+                        variant="contained" 
+                        size="large" 
+                        onClick={handleNextStep}
+                      >
+                        동의하기
+                      </Button>
+                    </Box>
+                  </Box>
 
                   {/* --- 본문 끝 --- */}
                 </Box>
@@ -201,6 +222,33 @@ export default function KIDS_PP_US_JM_02() {
           </Box>
         </Box>
       </Box>
+
+      {/* 약관 상세 팝업 */}
+      <Dialog
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle component="div" className="modal-title">
+          <h2>{modalData.title}</h2>
+          <IconButton
+            aria-label="닫기"
+            onClick={() => setModalOpen(false)}
+            className="btn-modal-close"
+          >
+            <CloseIcon aria-hidden="true" />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent sx={{ minHeight: '200px' }}>
+          {modalData.content}
+        </DialogContent>
+        <DialogActions className="modal-footer">
+          <Button variant="contained" onClick={() => setModalOpen(false)}>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
 
     </ScreenShell>
   )

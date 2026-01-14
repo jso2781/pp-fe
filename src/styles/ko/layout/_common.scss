@@ -63,18 +63,18 @@
     padding:0 0 10px 0;
     border-bottom:1px solid #303336;
   }
+  /* 모달닫기 버튼 */
+  .btn-modal-close {
+    position: absolute !important;
+    right: 12px;
+    top: 12px;
+    // transform: translateY(-50%); /* 세로 중앙 정렬 원할 경우 */
+    color: #1E2124;
+    padding: 8px;
+    transition: background-color 0.2s;
+  }
 }
 
-/* 모달닫기 버튼 */
-.btn-modal-close {
-  position: absolute !important;
-  right: 12px;
-  top: 12px;
-  // transform: translateY(-50%); /* 세로 중앙 정렬 원할 경우 */
-  color: #1E2124;
-  padding: 8px;
-  transition: background-color 0.2s;
-}
 /* 아이콘 크기 제어 */
 .btn-modal-close svg {
   width: 24px;
