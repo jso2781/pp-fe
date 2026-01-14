@@ -144,13 +144,13 @@ export default function Login() {
       const res = await dispatch(loginThunk({ mbrId: values.loginId, mbrEnpswd: values.password, appId: import.meta.env.VITE_APP_ID ?? 'kids-pp-dev' })).unwrap();
 
       const userInfo = res.userInfo;
-      const pswdErrNmtm = res.pswdErrNmtm;
+      const pswdErrNmtm = res.pswdErrNmtm ?? 0;
 
       console.log("login await dispatch(loginThunk~~ res=",res);
 
-      if(!userInfo && pswdErrNmtm && pswdErrNmtm > 0) {
+      if(!userInfo && pswdErrNmtm > 0) {
 
-        setLocalFailCount(pswdErrNmtm)
+        setLocalFailCount(pswdErrNmtm);
 
         // 5회째 실패 시 팝업 표시
         if (pswdErrNmtm >= MAX_FAIL_COUNT) {
@@ -190,22 +190,43 @@ export default function Login() {
       }
     }catch(error: any){
       // 서버 에러 처리
-      const nextCount = localFailCount + 1
-      setLocalFailCount(nextCount)
+      // 에러 메시지에서 pswdErrNmtm 추출 시도 (서버 응답에 포함된 경우)
+      let serverPswdErrNmtm: number | null = null;
+      try {
+        const errorInfo = typeof error === 'string' ? JSON.parse(error) : error;
+        if (errorInfo?.pswdErrNmtm !== undefined) {
+          serverPswdErrNmtm = errorInfo.pswdErrNmtm;
+        }
+      } catch (e) {
+        // JSON 파싱 실패 시 무시 (일반 에러 메시지인 경우)
+      }
 
+      // 서버에서 pswdErrNmtm을 제공한 경우 서버 값을 우선 사용
+      // 서버 값이 없으면 로컬 카운트를 증가시킴
+      const nextCount = serverPswdErrNmtm !== null 
+        ? serverPswdErrNmtm 
+        : localFailCount + 1;
+      
+      setLocalFailCount(nextCount);
+
+      // 5회째 실패 시 팝업 표시
       if (nextCount >= MAX_FAIL_COUNT) {
         setShowPasswordErrorPopup(true);
         setLoginFail(null);
         return;
       }
 
-      if (nextCount <= 4) {
+      // 4회째까지만 오류 횟수 노출
+      if(nextCount <= 4){
         setLoginFail({
           reason: '아이디 또는 비밀번호가 일치하지 않습니다.',
           failedCount: nextCount,
           isIdError: false,
         })
         setErrors({ password: `아이디 또는 비밀번호가 일치하지 않습니다. (${nextCount}/${MAX_FAIL_COUNT})` })
+      }else{
+        setLoginFail(null)
+        setErrors({})
       }
     }
   }

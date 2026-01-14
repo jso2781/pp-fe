@@ -37,15 +37,31 @@ export const login = createAsyncThunk<
       // - error.message: 에러 메시지
       // - error.config: 요청 설정 정보
       
-      const axiosError = error as AxiosError<{ message?: string; error?: string }>;
+      const axiosError = error as AxiosError<{ 
+        message?: string; 
+        error?: string;
+        data?: {
+          pswdErrNmtm?: number;
+        };
+      }>;
       
       // 서버 응답이 있는 경우 (4xx, 5xx 에러)
       if (axiosError.response) {
+        // 서버 응답에 pswdErrNmtm이 포함되어 있을 수 있음 (예: 401 Unauthorized)
+        const errorData = axiosError.response.data as any;
+        const pswdErrNmtm = errorData?.data?.pswdErrNmtm ?? errorData?.pswdErrNmtm;
+        
+        // pswdErrNmtm이 있으면 에러 객체에 포함하여 반환
         const errorMessage = 
-          axiosError.response.data?.message || 
-          axiosError.response.data?.error || 
+          errorData?.message || 
+          errorData?.error || 
           `서버 오류 (${axiosError.response.status})`;
-        return rejectWithValue(errorMessage);
+        
+        // pswdErrNmtm을 포함한 에러 정보를 반환 (문자열로 직렬화)
+        return rejectWithValue(JSON.stringify({ 
+          message: errorMessage, 
+          pswdErrNmtm: pswdErrNmtm 
+        }));
       }
       
       // 요청은 보냈지만 응답을 받지 못한 경우 (네트워크 에러)
