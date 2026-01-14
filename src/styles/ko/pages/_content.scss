@@ -138,14 +138,38 @@
 }
 
 // 아이디비번찾기
-.member-page{max-width: 842px;margin:0 auto}
-.pageCont-idPwFind {
+.member-page{
+  max-width: 842px;margin:0 auto;
   .guide-text {
     margin:0 0 40px 0;
     text-align: center;
     font-size: var(--fs-32); 
     font-weight: 700;
   }
+  .find-recovery {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin:40px 0 0 0;
+    padding:25px 0 0 0;
+    border-top:1px solid #D8D8D8;
+    .txt{
+      font-size: var(--fs-18);
+      font-weight: var(--fw-700);
+    }
+    .btn-link{
+      color: var(--color-text-1);
+    }
+  }
+  
+  @media (max-width: 991px) { 
+    .find-recovery{
+      flex-direction: column;
+    }
+  }
+}
+.pageCont-idPwFind {
+  
   .AnyID-area{margin:0 0 40px 0;}
   .caution-area{
     padding:16px 24px;
@@ -193,27 +217,7 @@
     max-width: 500px;
     margin:0 auto;
   }
-  .find-recovery {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin:40px 0 0 0;
-    padding:25px 0 0 0;
-    border-top:1px solid #D8D8D8;
-    .txt{
-      font-size: var(--fs-18);
-      font-weight: var(--fw-700);
-    }
-    .btn-link{
-      color: var(--color-text-1);
-    }
-  }
   
-  @media (max-width: 991px) { 
-    .find-recovery{
-      flex-direction: column;
-    }
-  }
 }
 
 // 회원가입
