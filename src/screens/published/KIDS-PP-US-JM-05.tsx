@@ -80,156 +80,158 @@ export default function KIDS_PP_US_JM_05() {
                     </Box>
                     
                     <Box className="bordered-box">
-                      <Box className="form-group-wrap">
-                        <Box className="flex-container flex-half">
-                          {/* 이름 (필수) */}
-                          <Box className="form-item">
-                            <Typography component="label" htmlFor="userName" className="label">
-                              이름
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
-                            </Typography>
-                            <TextField
-                              id="userName"
-                              placeholder="이름을 입력하세요."
-                              size="large"
-                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                },
-                              }}
-                              fullWidth
-                              disabled
-                            />
+                      <Box component="form" noValidate>
+                        <Box className="form-group-wrap">
+                          <Box className="flex-container flex-half">
+                            {/* 이름 (필수) */}
+                            <Box className="form-item">
+                              <Typography component="label" htmlFor="userName" className="label">
+                                이름
+                                <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              </Typography>
+                              <TextField
+                                id="userName"
+                                placeholder="이름을 입력하세요."
+                                size="large"
+                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                slotProps={{
+                                  htmlInput: {
+                                    'aria-required': 'true',
+                                  },
+                                }}
+                                fullWidth
+                                disabled
+                              />
+                            </Box>
+                            {/* 휴대폰번호 (필수) */}
+                            <Box className="form-item">
+                              <Typography component="label" htmlFor="phone" className="label">
+                                휴대폰번호
+                                <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              </Typography>
+                              <TextField
+                                id="phone"
+                                placeholder="숫자만 입력하세요."
+                                size="large"
+                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                slotProps={{
+                                  htmlInput: {
+                                    'aria-required': 'true',
+                                  },
+                                }}
+                                fullWidth
+                                disabled
+                              />
+                            </Box>
                           </Box>
-                          {/* 휴대폰번호 (필수) */}
+
+                          {/* 아이디 (필수) + 중복확인버튼 */}
                           <Box className="form-item">
-                            <Typography component="label" htmlFor="phone" className="label">
-                              휴대폰번호
+                            <Typography component="label" htmlFor="loginId" className="label">
+                              아이디
                               <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
                             </Typography>
-                            <TextField
-                              id="phone"
-                              placeholder="숫자만 입력하세요."
-                              size="large"
-                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                },
-                              }}
-                              fullWidth
-                              disabled
-                            />
-                          </Box>
-                        </Box>
-
-                        {/* 아이디 (필수) + 중복확인버튼 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="loginId" className="label">
-                            아이디
-                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
-                          </Typography>
-                          <Stack direction="row" spacing={1} className="input-with-btn">
-                            <TextField
-                              id="loginId"
-                              placeholder="아이디를 입력하세요."
-                              size="large"
-                              fullWidth
-                              error={true} // 에러가 발생했을 때 true로 변경됨
-                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                  'aria-describedby': 'loginId-alert',
-                                },
-                              }}
-                            />
-                            <Button variant="outlined" size="large" aria-label="아이디 중복확인" className="btn-outline-02 btn-overlap">중복확인</Button>
-                          </Stack>
-                          <Alert severity="error" className="error-alert" id="loginId-alert" role="alert">
-                            사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요.
-                          </Alert>
-                        </Box>
-
-                        {/* 이메일 (선택) + 중복확인버튼 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="email" className="label">
-                            이메일
-                            <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
-                          </Typography>
-                          <Stack direction="row" spacing={1} className="input-with-btn">
-                            <TextField
-                              id="email"
-                              placeholder="이메일 주소를 입력하세요."
-                              size="large"
-                              fullWidth
-                              error={true} // 에러가 발생했을 때 true로 변경됨
-                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'false',
-                                  'aria-describedby': 'email-alert',
-                                },
-                              }}
-                            />
-                            <Button variant="outlined" size="large" aria-label="이메일 주소 중복확인" className="btn-outline-02 btn-overlap">중복확인</Button>
-                          </Stack>
-                          <Alert severity="error" className="error-alert" id="email-alert" role="alert">
-                            사용할 수 없는 이메일입니다. 다른 이메일을 입력해 주세요.
-                          </Alert>
-                        </Box>
-
-                        <Box className="flex-container flex-half">
-                          {/* 비밀번호 */}
-                          <Box className="form-item">
-                            <Typography component="label" htmlFor="password" className="label">
-                              새 비밀번호 
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
-                            </Typography>
-                            <TextField
-                              id="password"
-                              type="password"
-                              placeholder="숫자+영문+특수문자 조합 10자리 이상"
-                              size="large"
-                              fullWidth
-                              error={true} // 에러가 발생했을 때 true로 변경됨
-                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                  'aria-describedby': 'password-alert',
-                                },
-                              }}
-                            />
-                            <Alert severity="error" className="error-alert" id="password-alert" role="alert">
-                              사용할수없는 비밀번호입니다.
+                            <Stack direction="row" spacing={1} className="input-with-btn">
+                              <TextField
+                                id="loginId"
+                                placeholder="아이디를 입력하세요."
+                                size="large"
+                                fullWidth
+                                error={true} // 에러가 발생했을 때 true로 변경됨
+                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                slotProps={{
+                                  htmlInput: {
+                                    'aria-required': 'true',
+                                    'aria-describedby': 'loginId-alert',
+                                  },
+                                }}
+                              />
+                              <Button variant="outlined" size="large" aria-label="아이디 중복확인" className="btn-outline-02 btn-form-util">중복확인</Button>
+                            </Stack>
+                            <Alert severity="error" className="error-alert" id="loginId-alert" role="alert">
+                              사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요.
                             </Alert>
                           </Box>
-                          
+
+                          {/* 이메일 (선택) + 중복확인버튼 */}
                           <Box className="form-item">
-                            <Typography component="label" htmlFor="confirm-password" className="label">
-                              비밀번호
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                            <Typography component="label" htmlFor="email" className="label">
+                              이메일
+                              <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
                             </Typography>
-                            <TextField
-                              id="confirm-password"
-                              type="password"
-                              placeholder="비밀번호를 동일하게 입력하세요."
-                              size="large"
-                              fullWidth
-                              error={true} // 에러가 발생했을 때 true로 변경됨
-                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                  'aria-describedby': 'confirm-password-alert',
-                                },
-                              }}
-                            />
-                            <Alert severity="error" className="error-alert" id="confirm-password-alert" role="alert">
-                              입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요.
+                            <Stack direction="row" spacing={1} className="input-with-btn">
+                              <TextField
+                                id="email"
+                                placeholder="이메일 주소를 입력하세요."
+                                size="large"
+                                fullWidth
+                                error={true} // 에러가 발생했을 때 true로 변경됨
+                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                slotProps={{
+                                  htmlInput: {
+                                    'aria-required': 'false',
+                                    'aria-describedby': 'email-alert',
+                                  },
+                                }}
+                              />
+                              <Button variant="outlined" size="large" aria-label="이메일 주소 중복확인" className="btn-outline-02 btn-form-util">중복확인</Button>
+                            </Stack>
+                            <Alert severity="error" className="error-alert" id="email-alert" role="alert">
+                              사용할 수 없는 이메일입니다. 다른 이메일을 입력해 주세요.
                             </Alert>
+                          </Box>
+
+                          <Box className="flex-container flex-half">
+                            {/* 비밀번호 */}
+                            <Box className="form-item">
+                              <Typography component="label" htmlFor="password" className="label">
+                                새 비밀번호 
+                                <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              </Typography>
+                              <TextField
+                                id="password"
+                                type="password"
+                                placeholder="숫자+영문+특수문자 조합 10자리 이상"
+                                size="large"
+                                fullWidth
+                                error={true} // 에러가 발생했을 때 true로 변경됨
+                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                slotProps={{
+                                  htmlInput: {
+                                    'aria-required': 'true',
+                                    'aria-describedby': 'password-alert',
+                                  },
+                                }}
+                              />
+                              <Alert severity="error" className="error-alert" id="password-alert" role="alert">
+                                사용할수없는 비밀번호입니다.
+                              </Alert>
+                            </Box>
+                            
+                            <Box className="form-item">
+                              <Typography component="label" htmlFor="confirm-password" className="label">
+                                비밀번호
+                                <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              </Typography>
+                              <TextField
+                                id="confirm-password"
+                                type="password"
+                                placeholder="비밀번호를 동일하게 입력하세요."
+                                size="large"
+                                fullWidth
+                                error={true} // 에러가 발생했을 때 true로 변경됨
+                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                slotProps={{
+                                  htmlInput: {
+                                    'aria-required': 'true',
+                                    'aria-describedby': 'confirm-password-alert',
+                                  },
+                                }}
+                              />
+                              <Alert severity="error" className="error-alert" id="confirm-password-alert" role="alert">
+                                입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요.
+                              </Alert>
+                            </Box>
                           </Box>
                         </Box>
                       </Box>
