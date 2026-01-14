@@ -166,7 +166,7 @@ export default function KIDS_PP_US_JM_09() {
                               // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
                               slotProps={{
                                 htmlInput: {
-                                  'aria-required': 'true',
+                                  'aria-re quired': 'true',
                                   'aria-describedby': 'confirm-password-alert',
                                 },
                               }}
@@ -195,7 +195,7 @@ export default function KIDS_PP_US_JM_09() {
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group between">
                       <Button variant="outlined" size="large" onClick={() => navigate(-1)}>취소하기</Button>
-                      <Button variant="contained" size="large">입력완료</Button>
+                      <Button variant="contained" size="large">수정완료</Button>
                     </Box>
                   </Box>
                   {/* --- 본문 끝 --- */}
