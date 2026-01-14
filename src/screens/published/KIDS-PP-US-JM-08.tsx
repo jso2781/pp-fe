@@ -56,13 +56,9 @@ export default function KIDS_PP_US_JM_08() {
                         </Box>
                       </Box>
                     </Box>
-                    {/* 하단 버튼 그룹 */}
-                    <Box className="btn-group right">
-                      <Button variant="contained" size="large">확인</Button>
-                    </Box>
-
+                    
                     {/* 비밀번호 찾기 링크 영역 */}
-                    <Stack  direction="row" className="find-recovery">
+                    <Stack  direction="row" className="form-helper-group">
                       <Typography className="txt">
                         비밀번호를 잊으셨다면?
                       </Typography>
@@ -74,6 +70,11 @@ export default function KIDS_PP_US_JM_08() {
                         비밀번호 찾기
                       </Button>
                     </Stack>
+
+                    {/* 하단 버튼 그룹 */}
+                    <Box className="btn-group right">
+                      <Button variant="contained" size="large">확인</Button>
+                    </Box>
                   </Box>
                   
                   

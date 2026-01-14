@@ -1,19 +1,7 @@
-/* import React from 'react'
-import FormTemplate from '../templates/FormTemplate'
-
-export default function KIDS_PP_US_JM_09() {
-  // TODO: fields/initialValues/onSubmit 등을 채우세요.
-  const config = {
-  // fields: [{ key:'', label:'', type:'input', required:true }]
-  submitLabel: '저장'
-}
-
-  return <FormTemplate screenId="KIDS-PP-US-JM-09" title="회원정보 수정" config={config} />
-}
- */
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Stepper, Step, StepLabel, Typography, TextField, Stack, Alert} from '@mui/material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation'
 import ScreenShell from '../ScreenShell'
 
@@ -190,6 +178,19 @@ export default function KIDS_PP_US_JM_09() {
                         </Box>
                       </Box>
                     </Box>
+
+                    <Stack  direction="row" className="form-helper-group">
+                      <Typography className="txt">
+                        회원 탈퇴를 원하신다면?
+                      </Typography>
+                      <Button 
+                        variant="text" 
+                        className="btn-link" 
+                        endIcon={<ChevronRightIcon />}
+                      >
+                        회원탈퇴
+                      </Button>
+                    </Stack>
 
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group between">

@@ -73,6 +73,23 @@
   }
 }
 
+.form-helper-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin:40px 0 0 0;
+    padding:25px 0 0 0;
+    border-top:1px solid #D8D8D8;
+    .txt{
+      font-size: var(--fs-18);
+      font-weight: var(--fw-700);
+    }
+    .btn-link{
+      color: var(--color-text-1);
+    }
+  }
+  
+
 // 로그인 아이디 로그인
 .page-content__login {
   display: flex;
@@ -153,21 +170,6 @@
     font-size: var(--fs-32); 
     font-weight: 700;
   }
-  .find-recovery {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin:40px 0 0 0;
-    padding:25px 0 0 0;
-    border-top:1px solid #D8D8D8;
-    .txt{
-      font-size: var(--fs-18);
-      font-weight: var(--fw-700);
-    }
-    .btn-link{
-      color: var(--color-text-1);
-    }
-  }
   
   @media (max-width: 991px) { 
     .find-recovery{
@@ -176,7 +178,6 @@
   }
 }
 .pageCont-idPwFind {
-  
   .AnyID-area{margin:0 0 40px 0;}
   .caution-area{
     padding:16px 24px;
