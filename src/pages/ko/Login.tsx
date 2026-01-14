@@ -61,6 +61,7 @@ export default function Login() {
   const [showPasswordErrorPopup, setShowPasswordErrorPopup] = useState(false)
   const [showPasswordChangeReminder, setShowPasswordChangeReminder] = useState(false)
   const hasCheckedAuth = useRef(false)
+  const isSubmittingRef = useRef(false) // 로그인 제출 중(Submitting)인지 추적
 
   // 아이디 저장 기능: 페이지 로드 시 저장된 아이디 불러오기
   useEffect(() => {
@@ -73,9 +74,11 @@ export default function Login() {
   console.log("Login isAuthenticated=",isAuthenticated);
 
   // 컴포넌트 마운트 시에만 체크 (이미 로그인된 상태에서 Login 페이지 접근 방지)
+  // 로그인 시도 중에는 이 체크를 하지 않도록 isSubmittingRef로 제어
   useEffect(() => {
     // 마운트 시에만 체크 (한 번만 실행)
-    if (!hasCheckedAuth.current) {
+    // 로그인 제출 중이면 리다이렉트하지 않음
+    if (!hasCheckedAuth.current && !isSubmittingRef.current) {
       hasCheckedAuth.current = true;
       // Redux 상태와 AuthContext 상태 모두 확인
       const isLoggedIn = (userInfo && accessToken) || isAuthenticated;
@@ -83,7 +86,8 @@ export default function Login() {
         navigate('/ko', { replace: true });
       }
     }
-  }, [userInfo, accessToken, isAuthenticated, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 빈 배열: 정말 마운트 시에만 실행 (로그인 성공 후 상태 변경과 무관하게)
   
 
   // 비밀번호 변경 안내 팝업 표시 여부 확인
@@ -135,6 +139,9 @@ export default function Login() {
     setErrors(next)
     if (Object.keys(next).length) return
 
+    // 로그인 제출 시작
+    isSubmittingRef.current = true
+
     // 아이디 저장 기능
     if (values.rememberId) {
       localStorage.setItem(STORAGE_KEY_REMEMBER_ID, values.loginId)
@@ -163,6 +170,7 @@ export default function Login() {
 
         // 5회째 실패 시 팝업 표시
         if (pswdErrNmtm >= MAX_FAIL_COUNT) {
+          isSubmittingRef.current = false; // 로그인 제출 상태 초기화
           setShowPasswordErrorPopup(true);
           setLoginFail(null);
           return;
@@ -203,6 +211,8 @@ export default function Login() {
         setShowPasswordChangeReminder(true)
       } else {
         // 비밀번호 변경 안내가 필요 없으면 정상 로그인 처리
+        // 로그인 제출 완료 후 리다이렉트
+        isSubmittingRef.current = false
         // if (userType === 'expert') {
         //   navigate('/screens/KIDS-PP-US-MT-01')
         // } else {
@@ -210,6 +220,8 @@ export default function Login() {
         // }
       }
     }catch(error: any){
+      // 로그인 실패 시 제출 상태 초기화
+      isSubmittingRef.current = false
       // 서버 에러 처리
       // 에러 메시지에서 pswdErrNmtm 추출 시도 (서버 응답에 포함된 경우)
       let serverPswdErrNmtm: number | null = null;
