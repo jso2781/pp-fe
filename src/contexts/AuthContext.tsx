@@ -28,21 +28,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   
   // Redux 상태 구독
   const auth = useAppSelector((s) => s.auth)
-  const { userInfo, tokenId, accessToken, refreshToken } = auth || {}
+  const { userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm } = auth || {}
 
   // 초기 로드 시 localStorage에서 인증 정보 복원
+  // 단, Redux 상태가 없으면 인증 정보를 복원하지 않음 (Redux가 실제 소스)
   useEffect(() => {
+    // Redux에 인증 정보가 있으면 localStorage에서 복원하지 않음 (Redux가 우선)
+    if (userInfo && accessToken) {
+      return; // Redux에 이미 있으면 localStorage 복원 불필요
+    }
+    
     const storedAuth = localStorage.getItem(AUTH_STORAGE_KEY)
     if (storedAuth) {
       try {
         const authData = JSON.parse(storedAuth)
-        setIsAuthenticated(!!authData.userInfo)
-        setUser(authData)
+        // localStorage에만 있고 Redux에 없으면 인증 정보가 유효하지 않음
+        // 따라서 인증 상태를 false로 설정
+        setIsAuthenticated(false)
+        setUser(null)
+        // localStorage도 정리 (유효하지 않은 인증 정보)
+        localStorage.removeItem(AUTH_STORAGE_KEY)
       } catch (e) {
         localStorage.removeItem(AUTH_STORAGE_KEY)
       }
     }
-  }, [])
+  }, [userInfo, accessToken])
 
   // Redux 상태와 동기화
   useEffect(() => {
@@ -53,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         tokenId,
         accessToken,
         refreshToken,
-        pswdErrNmtm: auth.pswdErrNmtm,
+        pswdErrNmtm: pswdErrNmtm,
       }
       setIsAuthenticated(true)
       setUser(authData)
@@ -65,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null)
       localStorage.removeItem(AUTH_STORAGE_KEY)
     }
-  }, [userInfo, tokenId, accessToken, refreshToken, auth.pswdErrNmtm])
+  }, [userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm])
 
   const login = (data: AuthData) => {
     setIsAuthenticated(true)

@@ -62,6 +62,7 @@ export default function Login() {
   const [showPasswordChangeReminder, setShowPasswordChangeReminder] = useState(false)
   const hasCheckedAuth = useRef(false)
   const isSubmittingRef = useRef(false) // 로그인 제출 중(Submitting)인지 추적
+  const [isRehydrated, setIsRehydrated] = useState(false) // Redux Persist rehydrate 완료 여부
 
   // 아이디 저장 기능: 페이지 로드 시 저장된 아이디 불러오기
   useEffect(() => {
@@ -72,22 +73,43 @@ export default function Login() {
   }, []);
 
   console.log("Login isAuthenticated=",isAuthenticated);
+  console.log("Login userInfo=", userInfo);
+  console.log("Login accessToken=", accessToken);
+  console.log("Login loading=", loading);
+
+  // Redux Persist rehydrate 완료 확인
+  useEffect(() => {
+    // loading이 false가 되면 Redux Persist rehydrate가 완료된 것으로 간주
+    if (!loading) {
+      setIsRehydrated(true);
+    }
+  }, [loading]);
 
   // 컴포넌트 마운트 시에만 체크 (이미 로그인된 상태에서 Login 페이지 접근 방지)
+  // Redux Persist rehydrate 완료 후에만 체크
   // 로그인 시도 중에는 이 체크를 하지 않도록 isSubmittingRef로 제어
   useEffect(() => {
-    // 마운트 시에만 체크 (한 번만 실행)
-    // 로그인 제출 중이면 리다이렉트하지 않음
-    if (!hasCheckedAuth.current && !isSubmittingRef.current) {
+    // Redux Persist rehydrate가 완료되고, 한 번만 체크하며, 로그인 제출 중이 아니면 체크
+    if (isRehydrated && !hasCheckedAuth.current && !isSubmittingRef.current) {
       hasCheckedAuth.current = true;
-      // Redux 상태와 AuthContext 상태 모두 확인
-      const isLoggedIn = (userInfo && accessToken) || isAuthenticated;
+      
+      // Redux 상태를 우선 확인 (Redux가 실제 인증 상태의 소스)
+      // userInfo가 객체이고 실제 데이터가 있는지 확인
+      const hasValidUserInfo = userInfo && typeof userInfo === 'object' && Object.keys(userInfo).length > 0;
+      const hasValidToken = accessToken && typeof accessToken === 'string' && accessToken.length > 0;
+      const isLoggedIn = hasValidUserInfo && hasValidToken;
+      
+      console.log("Login rehydrate check - hasValidUserInfo:", hasValidUserInfo, "hasValidToken:", hasValidToken, "isLoggedIn:", isLoggedIn);
+      
       if (isLoggedIn) {
+        console.log("Login: Already logged in, redirecting to /ko");
         navigate('/ko', { replace: true });
+      } else {
+        console.log("Login: Not logged in, staying on login page");
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // 빈 배열: 정말 마운트 시에만 실행 (로그인 성공 후 상태 변경과 무관하게)
+  }, [isRehydrated]); // isRehydrated가 변경될 때만 실행
   
 
   // 비밀번호 변경 안내 팝업 표시 여부 확인

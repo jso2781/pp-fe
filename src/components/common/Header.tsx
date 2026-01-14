@@ -9,6 +9,8 @@ import { getLangFromPathname, langPath } from '@/routes/lang'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectMenuList } from '@/features/auth/MenuThunks'
 import { clearMenuCache } from '@/features/auth/MenuSlice'
+import { logout as logoutAction } from '@/features/auth/AuthSlice'
+import { useAuth } from '@/contexts/AuthContext'
 import { LOCALE_KEY } from '@/i18n/i18n'
 import type { MenuRVO } from '@/features/auth/MenuTypes'
 import { NavLink } from 'react-router-dom'
@@ -335,6 +337,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const location = useLocation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const { isAuthenticated, logout: logoutContext } = useAuth()
   // Rest API 호출로 메뉴 가져오기
   const { list } = useAppSelector((s) => s.menu)
 
@@ -1150,27 +1153,33 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   >
                     {t('usrSwtReg')}
                   </Button>
-                  <Button
-                    size="small"
-                    onClick={() => {
-                      const path = to('/login/method')
-                      console.log('Header login button clicked, current lang:', lang, 'navigating to:', path)
-                      navigate(path, { replace: false })
-                    }}
-                    className="btn-util login"
-                  >
-                    {t('login')}
-                  </Button>
-                  <Button
-                    size="small"
-                    onClick={() => {
-                      const path = to('/login/method')
-                      navigate(path, { replace: false })
-                    }}
-                    className="btn-util logout"
-                  >
-                    {t('logout')}
-                  </Button>
+                  {!isAuthenticated ? (
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        const path = to('/login/method')
+                        console.log('Header login button clicked, current lang:', lang, 'navigating to:', path)
+                        navigate(path, { replace: false })
+                      }}
+                      className="btn-util login"
+                    >
+                      {t('login')}
+                    </Button>
+                  ) : (
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        // AuthContext와 Redux 모두 로그아웃 처리
+                        logoutContext()
+                        dispatch(logoutAction())
+                        // 로그아웃 후 홈으로 이동
+                        navigate(to('/'), { replace: true })
+                      }}
+                      className="btn-util logout"
+                    >
+                      {t('logout')}
+                    </Button>
+                  )}
                 </Stack>
               )}
             </Box>
@@ -1566,12 +1575,29 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           {i18nInstance.language === 'ko' && (
             <Box sx={{ mb: 2 }}>
               <Stack direction="row" spacing={1} flexWrap="wrap">
-                <Button variant="contained" component={NavLink} to={to('/login/method')}>
-                  {t('login')}
-                </Button>
-                <Button variant="outlined" component={NavLink} to={to('/signup')}>
-                  {t('signup')}
-                </Button>
+                {!isAuthenticated ? (
+                  <>
+                    <Button variant="contained" component={NavLink} to={to('/login/method')}>
+                      {t('login')}
+                    </Button>
+                    <Button variant="outlined" component={NavLink} to={to('/signup')}>
+                      {t('signup')}
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      // AuthContext와 Redux 모두 로그아웃 처리
+                      logoutContext()
+                      dispatch(logoutAction())
+                      // 로그아웃 후 홈으로 이동
+                      navigate(to('/'), { replace: true })
+                    }}
+                  >
+                    {t('logout')}
+                  </Button>
+                )}
               </Stack>
             </Box>
           )}
