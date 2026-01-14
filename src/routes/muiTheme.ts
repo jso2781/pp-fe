@@ -109,6 +109,14 @@ export const muiTheme = createTheme({
           boxShadow: 'none',
           // 모든 버튼 공통 호버 스타일
           '&:hover': { boxShadow: 'none' },
+
+          // 탭 키로 이동했을 때(Focus) 스타일 제어
+          '&.Mui-focusVisible': {
+            outline: '2px solid #087C80',
+            //backgroundColor: 'rgba(0, 0, 0, 0.04)', 
+            outlineOffset: '2px',
+            color: '#087C80'
+          },
         },
         text: {
           padding: 0,
