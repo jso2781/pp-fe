@@ -17,6 +17,10 @@ import NotFoundKo from '@/pages/ko/NotFound'
 import LoginKo from '@/pages/ko/Login'
 import LoginMethodKo from '@/pages/ko/LoginMethod'
 import NewsFaqNoticeKo from '@/pages/ko/news/newFaqNotice/NewsFaqNotice';
+import TermsKo from '@/pages/ko/etc/Terms';
+import PrivacyPolicyKo from '@/pages/ko/etc/PrivacyPolicy';
+import CctvPolicyKo from '@/pages/ko/etc/CctvPolicy';
+import EmailDenyKo from '@/pages/ko/etc/EmailDeny';
 
 // 게시판 테스트중
 import NewsNoticeListKo from '@/pages/ko/news/NewsNoticeList'
@@ -154,6 +158,10 @@ export default function Router() {
 
             <Route path="/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalEn /> }} />} />
             <Route path="/:lang/news/NewsFaqNotice" element={<LangElement byLang={{ ko: <NewsFaqNoticeKo />, en: <NewsFaqNoticeKo /> }} />} />
+            <Route path="/:lang/etc/Terms" element={<LangElement byLang={{ ko: <TermsKo />, en: <TermsKo /> }} />} />
+            <Route path="/:lang/etc/PrivacyPolicy" element={<LangElement byLang={{ ko: <PrivacyPolicyKo />, en: <PrivacyPolicyKo /> }} />} />
+            <Route path="/:lang/etc/CctvPolicy" element={<LangElement byLang={{ ko: <CctvPolicyKo />, en: <CctvPolicyKo /> }} />} />
+            <Route path="/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
           
             {/* 게시판 테스트중 */}          
             <Route path="/:lang/news/NewsNoticeList" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
