@@ -254,36 +254,6 @@ export default function LoginMethod() {
                     </CardContent>
                   </Card>
 
-<<<<<<< HEAD:src/pages/ko/auth/LoginMethod.tsx
-                {/* KIDS 로그인 */}
-                <Card sx={{ border: 'none', boxShadow: 'none' }}>
-                <CardContent sx={{ pb: 0 }}>
-                    <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-                    KIDS 로그인
-                    </Typography>
-                    <Grid container spacing={2}>
-                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                        <Box
-                        component={Button}
-                        variant="outlined"
-                        onClick={() => navigate('/ko/auth/Login')}
-                        sx={{
-                            width: '100%',
-                            aspectRatio: '2/1',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderColor: 'divider',
-                            borderWidth: 2,
-                            p: 1,
-                            '&:hover': {
-                            borderColor: 'primary.main',
-                            borderWidth: 2,
-                            backgroundColor: 'action.hover',
-                            },
-                        }}
-=======
 
                   {/* 로그인 방식 선택 */}
                   <Card className="login-method-card">
@@ -331,7 +301,6 @@ export default function LoginMethod() {
                           variant="outlined"
                           onClick={() => navigate('/ko/login')}
                           className="login-button"
->>>>>>> d408a120cccd8e370dec1dc2766951af89b6269b:src/pages/ko/LoginMethod.tsx
                         >
                           <Stack spacing={1} alignItems="center" className="login-button-stack">
                             <AccountIcon className="login-icon" />
