@@ -40,18 +40,22 @@ export default function KIDS_PP_US_JM_08() {
                               placeholder="비밀번호를 입력하세요."
                               size="large"
                               fullWidth
-                              error={true} // 에러가 발생했을 때 true로 변경됨
-                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                              error={true}
+                              helperText="비밀번호가 일치하지 않습니다. (1/5)"
                               slotProps={{
                                 htmlInput: {
                                   'aria-required': 'true',
-                                  'aria-describedby': 'password-alert',
+                                  //'aria-describedby': errors.password ? 'password-alert' : undefined,
+                                  
+                                },
+                                formHelperText: {
+                                  id: 'password-alert',
+                                  className: 'error-alert',
+                                  //role: errors.password ? 'alert' : undefined,
+                                  //'aria-live': errors.password ? 'polite' : undefined,
                                 },
                               }}
                             />
-                            <Alert severity="error" className="error-alert" id="password-alert" role="alert">
-                              비밀번호가 일치하지 않습니다. (1/5)
-                            </Alert>
                           </Box>
                         </Box>
                       </Box>

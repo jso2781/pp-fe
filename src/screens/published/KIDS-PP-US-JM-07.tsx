@@ -98,19 +98,22 @@ export default function KIDS_PP_US_JM_07() {
                                 id="userName"
                                 placeholder="이름을 입력하세요."
                                 size="large"
-                                error={true} // 에러가 발생했을 때 true로 변경됨
-                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                fullWidth
+                                error={true}
+                                helperText="이름을 입력해주세요."
                                 slotProps={{
                                   htmlInput: {
                                     'aria-required': 'true',
-                                    'aria-describedby': 'userName-alert',
+                                    //'aria-describedby': errors.userName ? 'userName-alert' : undefined,
+                                  },
+                                  formHelperText: {
+                                    id: 'userName-alert',
+                                    className: 'error-alert',
+                                    //role: errors.userName ? 'alert' : undefined,
+                                    //'aria-live': errors.userName ? 'polite' : undefined,
                                   },
                                 }}
-                                fullWidth
                               />
-                              <Alert severity="error" className="error-alert" id="userName-alert" role="alert">
-                                이름을 입력해주세요.
-                              </Alert>
                             </Box>
                             {/* 생년월일 (필수) */}
                             <Box className="form-item">
@@ -122,19 +125,23 @@ export default function KIDS_PP_US_JM_07() {
                                 id="birthDate"
                                 placeholder="8자리 입력 ex)20121231"
                                 size="large"
-                                error={true} // 에러가 발생했을 때 true로 변경됨
+                                fullWidth
+                                error={true}
+                                helperText="숫자 8자리로 입력해주세요."
                                 slotProps={{
                                   htmlInput: {
                                     'aria-required': 'true',
-                                    'aria-describedby': 'birthDate-alert',
-                                    'maxLength': 8, // 8자리로 제한 (선택 사항)
+                                    //'aria-describedby': errors.birthDate ? 'birthDate-alert' : undefined,
+                                    
+                                  },
+                                  formHelperText: {
+                                    id: 'birthDate-alert',
+                                    className: 'error-alert',
+                                    //role: errors.birthDate ? 'alert' : undefined,
+                                    //'aria-live': errors.birthDate ? 'polite' : undefined,
                                   },
                                 }}
-                                fullWidth
                               />
-                              <Alert severity="error" className="error-alert" id="birthDate-alert" role="alert">
-                                숫자 8자리로 입력해주세요.
-                              </Alert>
                             </Box>
                           </Box>
 
@@ -149,19 +156,23 @@ export default function KIDS_PP_US_JM_07() {
                               placeholder="휴대전화번호를 입력하세요."
                               size="large"
                               fullWidth
-                              error={true} // 에러가 발생했을 때 true로 변경됨
-                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                              error={true}
+                              helperText="사용할 수 없는 휴대전화번호입니다. 다른 번호를 입력해 주세요."
                               slotProps={{
                                 htmlInput: {
                                   'aria-required': 'true',
-                                  'aria-describedby': 'phone-alert',
+                                  //'aria-describedby': errors.phone ? 'phone-alert' : undefined,
+                                  
+                                },
+                                formHelperText: {
+                                  id: 'phone-alert',
+                                  className: 'error-alert',
                                   'type': 'tel', // 전화번호 입력 모드 활성화
+                                  //role: errors.phone ? 'alert' : undefined,
+                                  //'aria-live': errors.phone ? 'polite' : undefined,
                                 },
                               }}
                             />
-                            <Alert severity="error" className="error-alert" id="phone-alert" role="alert">
-                              사용할 수 없는 휴대전화번호입니다. 다른 번호를 입력해 주세요.
-                            </Alert>
                           </Box>
 
                           {/* 법정 대리인 정보 */}
@@ -180,17 +191,22 @@ export default function KIDS_PP_US_JM_07() {
                                 placeholder="이름을 입력하세요."
                                 size="large"
                                 fullWidth
-                                error={true} // 에러 상태 예시
+                                error={true}
+                                helperText="이름을 입력해 주세요."
                                 slotProps={{
                                   htmlInput: {
                                     'aria-required': 'true',
-                                    'aria-describedby': 'parentName-alert',
+                                    //'aria-describedby': errors.parentName ? 'parentName-alert' : undefined,
+                                    
+                                  },
+                                  formHelperText: {
+                                    id: 'parentName-alert',
+                                    className: 'error-alert',
+                                    //role: errors.parentName ? 'alert' : undefined,
+                                    //'aria-live': errors.parentName ? 'polite' : undefined,
                                   },
                                 }}
                               />
-                              <Alert severity="error" className="error-alert" id="parentName-alert" role="alert">
-                                이름을 입력해 주세요.
-                              </Alert>
                             </Box>
                           </Box>
 
@@ -206,21 +222,24 @@ export default function KIDS_PP_US_JM_07() {
                                 placeholder="휴대전화번호를 입력하세요."
                                 size="large"
                                 fullWidth
-                                error={true} // 에러가 발생했을 때 true로 변경됨
-                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                error={true}
+                                helperText="사용할 수 없는 휴대전화번호입니다. 다른 번호를 입력해 주세요."
                                 slotProps={{
                                   htmlInput: {
                                     'aria-required': 'true',
-                                    'aria-describedby': 'parentPhone-alert',
-                                    'type': 'tel', // 전화번호 입력 모드 활성화
+                                    //'aria-describedby': errors.parentPhone ? 'parentPhone-alert' : undefined,
+                                    
+                                  },
+                                  formHelperText: {
+                                    id: 'parentPhone-alert',
+                                    className: 'error-alert',
+                                    //role: errors.parentPhone ? 'alert' : undefined,
+                                    //'aria-live': errors.parentPhone ? 'polite' : undefined,
                                   },
                                 }}
                               />
                               <Button variant="outlined" size="large" aria-label="휴대전화번호 본인인증" className="btn-outline-02 btn-form-util">본인인증</Button>
                             </Stack>
-                            <Alert severity="error" className="error-alert" id="parentPhone-alert" role="alert">
-                              사용할 수 없는 휴대전화번호입니다. 다른 번호를 입력해 주세요.
-                            </Alert>
                           </Box>
                         </Box>
                       </Box>

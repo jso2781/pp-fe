@@ -195,24 +195,12 @@
    ========================================================================== */
 .error-alert {
   position: relative;
-  padding:0;
-  background: #fff !important;
-  .MuiAlert-icon {
-    svg { display: none; } 
-    content: ""; 
-    position: absolute;
-    top:7px;
-    left:0;
-    width: 16px;
-    height: 16px;
-    background: url('/img/icon_error_circle.svg') no-repeat center center;
-  }
-  .MuiAlert-message {
-    font-size:13px;
-    font-weight: 400;
-    color: var(--danger); 
-    padding:0 0 0 5px;
-  }
+  margin:5px 0 0 0 !important;
+  padding:0 0 0 20px;
+  font-size:13px;
+  font-weight: 400;
+  color: var(--danger); 
+  background: url('/img/icon_error_circle.svg') no-repeat left center;
 }
 
 // 리스트 스타일
