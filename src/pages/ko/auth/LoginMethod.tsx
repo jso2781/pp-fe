@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-LG-01
+ * 화면명: 로그인 방식 선택
+ * 화면경로: /ko/auth/LoginMethod
+ * 화면설명: 로그인 방식 선택 화면
+ */
 import React, { useState, useEffect, useMemo } from 'react'
 import { Box, Button, Card, CardContent, Link, Stack, Switch, Typography, IconButton, Tooltip } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check';
@@ -451,7 +457,7 @@ export default function LoginMethod() {
                         <Box
                         component={Button}
                         variant="outlined"
-                        onClick={() => navigate('/ko/login')}
+                        onClick={() => navigate('/ko/auth/Login')}
                         sx={{
                             width: '100%',
                             aspectRatio: '2/1',

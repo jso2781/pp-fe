@@ -1124,7 +1124,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   {/* <Button
                     size="small"
                     onClick={() => {
-                      const path = to('/login/method')
+                      const path = to('/auth/LoginMethod')
                       console.log('Header login button clicked, current lang:', lang, 'navigating to:', path)
                       navigate(path, { replace: false })
                     }}
@@ -1135,7 +1135,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   <Button
                     size="small"
                     onClick={() => {
-                      const path = to('/login/method')
+                      const path = to('/auth/LoginMethod')
                       navigate(path, { replace: false })
                     }}
                     className="btn-util logout"

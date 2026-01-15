@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-LG-15
+ * 화면명: KIDS 아이디 로그인
+ * 화면경로: /ko/auth/Login
+ * 화면설명: KIDS 아이디 로그인 화면
+ */
 import React from 'react';
 import { useState, useEffect, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -345,7 +351,7 @@ export default function Login() {
                             <ListItem disablePadding className="account-utils__item">
                               <Link
                                 component="button"
-                                onClick={() => navigate('/screens/KIDS-PP-US-JM-01')}
+                                onClick={() => navigate('/ko/auth/SignUpSel')}
                                 className="account-utils__link"
                               >
                                 {t('signup')}

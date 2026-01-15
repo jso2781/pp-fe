@@ -100,7 +100,7 @@ export default function KIDS_PP_US_LG_15() {
 
     try {
       // TODO: 실제 로그인 API 호출
-      // const response = await https.post('/auth/login', {
+      // const response = await https.post('/auth/Login', {
       //   loginId: values.loginId,
       //   password: values.password,
       // })

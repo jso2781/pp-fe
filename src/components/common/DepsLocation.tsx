@@ -13,8 +13,8 @@ const pathLabels: Record<string, string[]> = {
   "/ko/dur/notice/5": ["DUR 정보", "알림 게시판"],
   "/ko/dur/proposal": ["DUR 정보", "의견 제안"],
   "/ko/safety/report/online": ["의약품 안전관리", "의약품 이상사례 보고", "이상사례 보고"],
-  "/ko/login/method": ["로그인", "로그인 방식 선택"],
-  "/ko/login": ["로그인", "아이디 로그인"],
+  "/ko/auth/LoginMethod": ["로그인", "로그인 방식 선택"],
+  "/ko/auth/Login": ["로그인", "아이디 로그인"],
 
   "/ko/news/NewsNoticeList": ["기관소식", "공지사항"],
   "/ko/news/NewsJobNoticeList": ["기관소식", "채용 게시판"],
@@ -68,12 +68,16 @@ export default function DepsLocation() {
     }
     ,
     {
-      pattern: /^\/[A-Za-z]{2}\/login\/method$/,
+      pattern: /^\/[A-Za-z]{2}\/auth\/LoginMethod$/,
       labels: ["login", "loginMethod"]
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/login$/,
+      pattern: /^\/[A-Za-z]{2}\/auth\/Login$/,
       labels: ["login", "idLogin"]
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/auth\/SignUpSel$/,
+      labels: ["signUp"]
     },
     {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsNoticeList(\/)?(\d+)?$/,

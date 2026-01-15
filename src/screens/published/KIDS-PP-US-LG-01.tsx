@@ -413,7 +413,7 @@ export default function KIDS_PP_US_LG_01() {
                           <Box
                             component={Button}
                             variant="outlined"
-                            onClick={() => navigate('/ko/login/kids')}
+                            onClick={() => navigate('/ko/auth/Login')}
                             sx={{
                               width: '100%',
                               aspectRatio: '2/1',

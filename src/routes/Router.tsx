@@ -14,9 +14,10 @@ import DurProposalKo from '@/pages/ko/maintask/dur/durProposal/DurProposal'
 import DurNoticeListKo from '@/pages/ko/dur/DurNoticeList'
 import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail'
 import NotFoundKo from '@/pages/ko/NotFound'
-import LoginKo from '@/pages/ko/Login'
-import LoginMethodKo from '@/pages/ko/LoginMethod'
-import NewsFaqNoticeKo from '@/pages/ko/news/newFaqNotice/NewsFaqNotice';
+import LoginKo from '@/pages/ko/auth/Login'
+import LoginMethodKo from '@/pages/ko/auth/LoginMethod'
+import SignUpSelKo from '@/pages/ko/auth/SignUpSel'
+import NewsFaqNoticeKo from '@/pages/ko/news/newFaqNotice/NewsFaqNotice'
 
 // 게시판 테스트중
 import NewsNoticeListKo from '@/pages/ko/news/NewsNoticeList'
@@ -36,7 +37,7 @@ import DurNoticeListEn from "@/pages/en/dur/DurNoticeList";
 import DurNoticeDetailEn from "@/pages/en/dur/DurNoticeDetail";
 import DurProposalEn from "@/pages/en/dur/DurProposal";
 import NotFoundEn from "@/pages/en/NotFound";
-import LoginEn from "@/pages/en/Login";
+import LoginEn from "@/pages/en/auth/Login";
 
 // 언어 무관 화면
 import Screens from '@/pages/screens/Screens'
@@ -55,7 +56,7 @@ function LangElement({ byLang }: LangElementProps) {
   const normalized = normalizeLang(lang) ?? FALLBACK_LANG;
   
   // 디버깅: 어떤 컴포넌트가 렌더링되는지 확인
-  if (location.pathname.includes('/login')) {
+  if (location.pathname.includes('/auth/Login')) {
     console.log('LangElement - pathname:', location.pathname, 'lang:', normalized, 'byLang keys:', Object.keys(byLang));
   }
   
@@ -168,8 +169,9 @@ export default function Router() {
             <Route path="/screens/:screenId" element={<ScreenViewer />} />
 
             {/* 로그인 관련 라우트 - 와일드카드보다 먼저 배치 (더 구체적인 경로가 먼저 와야 함) */}
-            <Route path="/:lang/login/method" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />
-            <Route path="/:lang/login" element={<LangElement byLang={{ ko: <LoginKo />, en: <LoginEn /> }} />} />
+            <Route path="/:lang/auth/LoginMethod" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />
+            <Route path="/:lang/auth/Login" element={<LangElement byLang={{ ko: <LoginKo />, en: <LoginEn /> }} />} />
+            <Route path="/:lang/auth/SignUpSel" element={<LangElement byLang={{ ko: <SignUpSelKo />, en: <SignUpSelKo /> }} />} />
 
             {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
             <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />

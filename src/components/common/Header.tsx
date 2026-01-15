@@ -1312,7 +1312,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     <Button
                       size="small"
                       onClick={() => {
-                        const path = to('/login/method')
+                        const path = to('/auth/LoginMethod')
                         console.log('Header login button clicked, current lang:', lang, 'navigating to:', path)
                         navigate(path, { replace: false })
                       }}
@@ -1732,7 +1732,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
               <Stack direction="row" spacing={1} flexWrap="wrap">
                 {!isAuthenticated ? (
                   <>
-                    <Button variant="contained" component={NavLink} to={to('/login/method')}>
+                    <Button variant="contained" component={NavLink} to={to('/auth/LoginMethod')}>
                       {t('login')}
                     </Button>
                     <Button variant="outlined" component={NavLink} to={to('/signup')}>
