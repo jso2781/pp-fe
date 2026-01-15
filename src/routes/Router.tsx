@@ -6,10 +6,6 @@ import BlankLayout from './BlankLayout'
 
 // ko 페이지들
 import HomeKo from '@/pages/ko/Home'
-import NoticeListKo from '@/pages/ko/notice/NoticeList'
-import NoticeDetailKo from '@/pages/ko/notice/NoticeDetail'
-import BoardListKo from '@/pages/ko/board/BoardList'
-import BoardWriteKo from '@/pages/ko/board/BoardWrite'
 import DurProposalKo from '@/pages/ko/maintask/dur/DurProposal'
 import DurNoticeListKo from '@/pages/ko/dur/DurNoticeList'
 import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail'
@@ -34,10 +30,6 @@ import NewsCardNewsDetailKo from '@/pages/ko/news/NewsCardNewsDetail'
 
 // en 페이지들 (프로젝트에 실제 존재한다고 가정)
 import HomeEn from "@/pages/en/Home";
-import NoticeListEn from "@/pages/en/notice/NoticeList";
-import NoticeDetailEn from "@/pages/en/notice/NoticeDetail";
-import BoardListEn from "@/pages/en/board/BoardList";
-import BoardWriteEn from "@/pages/en/board/BoardWrite";
 import DurNoticeListEn from "@/pages/en/dur/DurNoticeList";
 import DurNoticeDetailEn from "@/pages/en/dur/DurNoticeDetail";
 import DurProposalEn from "@/pages/en/dur/DurProposal";
@@ -151,10 +143,6 @@ export default function Router() {
 
             {/* 언어별로 화면 전환 */}
             <Route path="/:lang" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
-            <Route path="/:lang/notice" element={<LangElement byLang={{ ko: <NoticeListKo />, en: <NoticeListEn /> }} />} />
-            <Route path="/:lang/notice/:id" element={<LangElement byLang={{ ko: <NoticeDetailKo />, en: <NoticeDetailEn /> }} />} />
-            <Route path="/:lang/board" element={<LangElement byLang={{ ko: <BoardListKo />, en: <BoardListEn /> }} />} />
-            <Route path="/:lang/board/write" element={<LangElement byLang={{ ko: <BoardWriteKo />, en: <BoardWriteEn /> }} />} />
             <Route path="/:lang/dur/notice" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListEn /> }} />} />
             <Route path="/:lang/dur/notice/:id" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailEn /> }} />} />
 
@@ -185,11 +173,6 @@ export default function Router() {
 
             {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
             <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />
-          </Route>
-
-          {/* BlankLayout */}
-          <Route element={<BlankLayout />}>
-            <Route path="/:lang/notice/:id/preview" element={<LangElement byLang={{ ko: <NoticeDetailKo />, en: <NoticeDetailEn /> }} />} />
           </Route>
         </Routes>
       </BrowserRouter>

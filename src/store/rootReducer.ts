@@ -1,7 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import menuReducer from '@/features/auth/MenuSlice'
-import boardReducer from '@/features/board/boardSlice'
-import noticeReducer from '@/features/notice/noticeSlice'
 import authReducer from '@/features/auth/AuthSlice'
 import pstReducer from '@/features/pst/PstSlice'
 import uiReducer from '@/features/ui/uiSlice'
@@ -11,8 +9,6 @@ import mainReducer from '@/features/main/MainSlice'
 
 
 const rootReducer = combineReducers({
-  board: boardReducer,    // FIXME 테스트 이후 삭제예정
-  notice: noticeReducer,  // FIXME 테스트 이후 삭제예정
   ui: uiReducer,
   menu: menuReducer,
   auth: authReducer,
