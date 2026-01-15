@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import FaqRow from "./components/FaqRow";
 import { selectViewFaqList, selectFaqCategoryList } from "@/features/faq/FaqSelector";
 import { CategoryCode, FaqParam } from '@/features/faq/FaqTypes';
+import { Pagination, Stack } from "@mui/material";
 
 const categoryNaming: Record<CategoryCode, string> = {
   all: "전체",
@@ -13,16 +14,22 @@ const categoryNaming: Record<CategoryCode, string> = {
 
 export default function NewsFaqNotice () {
   
-  const [param, setParam] = useState<FaqParam>(() => ({activeCategory: 'all', searchWord: ''}));
   const dispatch = useAppDispatch();
+  const [param, setParam] = useState<FaqParam>(() => ({activeCategory: 'all', searchWord: '', page: 1}));
+  const inputValue = useRef<HTMLInputElement>(null);
   const { loading, error } = useAppSelector(s => s.faq);
   const categoryList = useAppSelector(selectFaqCategoryList);
-  const faqList = useAppSelector(s => selectViewFaqList(s, param));
-  const inputValue = useRef<HTMLInputElement>(null);
+  const { faqList, totalCount } = useAppSelector(s => selectViewFaqList(s, param));
   
   useEffect(() =>{
     dispatch(selectFaqList({langSeCd: 'ko'}));
   }, [dispatch]);
+
+  const handleUI = ({ activeCategory, searchWord, page }: FaqParam) => {
+    setParam({ activeCategory, searchWord, page });
+  }
+
+  const totalPages = Math.max(1, Math.ceil((totalCount || 1) / 10));
 
   if(error) return <>500에러 페이지 처리?</>
 
@@ -32,13 +39,18 @@ export default function NewsFaqNotice () {
         loading ? <>로딩중</> : 
         <>
           FAQ <br/>
-          <input type="" ref={inputValue}/><button onClick={() => {setParam({...param, searchWord: inputValue.current?.value ? inputValue.current?.value : ''})}}>검색</button>
+          <input type="" ref={inputValue}/><button onClick={e => handleUI({...param, page: 1, searchWord: inputValue.current?.value ? inputValue.current?.value : ''})}>검색</button>
           <br/>
-          { categoryList.map(category => (<span onClick={()=>{setParam({...param, activeCategory: category})}}>{categoryNaming[category]}&nbsp;&nbsp;&nbsp;&nbsp;</span>)) }
+          { categoryList.map(category => (<span onClick={e => handleUI({...param, page: 1, activeCategory: category})}>{categoryNaming[category]}&nbsp;&nbsp;&nbsp;&nbsp;</span>)) }
           <br/>
-          검색 결과 {faqList.length}건
+          검색 결과 {totalCount}건
           <br/>
           { faqList.map(data => <FaqRow {...data} />) } 
+          <Stack className="paging-wrap">
+            <Pagination count={totalPages} page={param.page} onChange={(_, p) => {
+              handleUI({...param, page: p})
+            }} />
+          </Stack>
         </>
       }
     </>
