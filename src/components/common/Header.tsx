@@ -361,7 +361,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const closeTimeoutsRef = useRef<{ [key: string]: NodeJS.Timeout }>({})
   
   // 세션 타이머 관리 (초 단위, 30분 = 1800초)
-  const [sessionTime, setSessionTime] = useState<number>(310);         // 타이머 초기값 30:00
+  const [sessionTime, setSessionTime] = useState<number>(1800);         // 타이머 초기값 30:00
   const [showSessionWarning, setShowSessionWarning] = useState(false);  // 세션 경고 팝업 상태 관리
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);         // 세션 타이머 인터벌 관리
   const lastActivityRef = useRef<number>(Date.now());                   // 마지막 사용자 활동 시간(milliseconds)
@@ -375,7 +375,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   
   // 타이머 리셋 함수
   const resetTimer = () => {
-    setSessionTime(310) // 30:00으로 리셋
+    setSessionTime(1800) // 30:00으로 리셋
     setShowSessionWarning(false)
     lastActivityRef.current = Date.now() // 마지막 활동 시간 업데이트
   }
@@ -405,7 +405,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
       }
 
       // 타이머의 시간 30분으로 초기화
-      setSessionTime(310);
+      setSessionTime(1800);
 
       // 5분 잔여 타이머 알림 창을 닫기
       setShowSessionWarning(false);
@@ -459,7 +459,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
       
       setSessionTime((prev) => {
         // idle 시간이 30분(1800초) 이상이면 자동 로그아웃
-        if (idleTime >= 310) {
+        if (idleTime >= 1800) {
           if (timerIntervalRef.current) {
             clearInterval(timerIntervalRef.current);
             timerIntervalRef.current = null;
@@ -472,7 +472,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         }
         
         // idle 시간을 타이머에 반영 (마지막 활동 후 경과 시간)
-        const newTime = 310 - idleTime;
+        const newTime = 1800 - idleTime;
         
         // 0초 이하가 되면 자동 로그아웃
         if (newTime <= 0) {
