@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Box, Stack, Typography, Link, Button,} from '@mui/material';
+import { Box, Stack, Typography, Link, Button } from '@mui/material';
 import { fetchNoticeDetail } from '@/features/notice/noticeThunks';
 import ScreenShell from '../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
@@ -32,7 +32,7 @@ export default function KIDS_PP_US_NO_02() {
   ], []);
 
   // 2. 데이터 매핑 로직 (기존 NoticeDetail 로직 통합)
-  const data: any = current || list?.find((n: any) => String(n.id ?? n.nttId) === String(id));
+  const data: any = current || list?.find((n: any) => String(n.id ?? n.nttId) === String(id)) || {};
   const html = data?.contentHtml || data?.nttCn || data?.content || '';
   const isHtml = typeof html === 'string' && /<\/?[a-z][\s\S]*>/i.test(html);
 
@@ -65,22 +65,23 @@ export default function KIDS_PP_US_NO_02() {
                     {/* (제목 + 정보) */}
                     <Box className="board-header">
                       <Typography component="h1" className="board-title">
-                        {data.title || data.nttSj || '-'}
+                        {/* 데이터가 없을 때 퍼블용 텍스트 노출 */}
+                        {data?.title || data?.nttSj || '공지사항 상세페이지 제목 영역입니다.'}
                       </Typography>
                       
                       <Box className="board-info">
                         <ul className="info-list">
                           <li>
                             <span className="info-label">작성자</span>
-                            <span className="info-value">{data.writer || data.frstRegisterNm || '-'}</span>
+                            <span className="info-value">{data.writer || data.frstRegisterNm || '관리자'}</span>
                           </li>
                           <li>
                             <span className="info-label">등록일</span>
-                            <span className="info-value">{data.date || data.frstRegisterPnttm || '-'}</span>
+                            <span className="info-value">{data.date || data.frstRegisterPnttm || '2024-05-20'}</span>
                           </li>
                           <li>
                             <span className="info-label">조회수</span>
-                            <span className="info-value">{data.views ?? data.inqireCo ?? '-'}</span>
+                            <span className="info-value">{data.views ?? data.inqireCo ?? '1,234'}</span>
                           </li>
                         </ul>
                       </Box>
@@ -92,27 +93,45 @@ export default function KIDS_PP_US_NO_02() {
                         {isHtml ? (
                           <div 
                             className="content-inner html-render" 
-                            dangerouslySetInnerHTML={{ __html: html }} 
+                            dangerouslySetInnerHTML={{ __html: html || '<p>HTML 본문 렌더링 영역입니다.</p>' }} 
                           />
                         ) : (
                           <Typography className="content-inner text-render">
-                            {String(html || '')}
+                            {String(html || '공지사항의 상세 본문 내용이 출력되는 영역입니다. 현재 등록된 내용이 없습니다.')}
                           </Typography>
                         )}
+
+                        <Box
+                          component="img"
+                          src="https://www.drugsafe.or.kr/cmm/fms/FileDown.do?atchFileId=FILE_000000000079447&fileSn=0"
+                          alt="공지사항 본문 테스트용 이미지"
+                        />
+
+                        <Box className="iframe-wrap">
+                          <Box
+                            component="iframe"
+                            src="https://www.youtube.com/embed/D0l1HdemykU?si=fTvqzwHgZhhLxsVJ"
+                            title="공지사항 안내 영상" // 타이틀 제공
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                            allowFullScreen
+                            className="iframe"
+                          />
+                        </Box>
                       </Box>
                       {/* 첨부파일 */}
                       <Box className="board-attachment">
                         <ul className="attachment-list">
                           <li>
                             <Link 
-                              href="#none" // 실제 파일 다운로드 URL
+                              href="#none" 
                               className="attachment-item"
                               underline="none"
                               title="첨부파일 다운로드"
                             >
                               <Box className="file-info">
                                 <span className="file-label">첨부파일</span>
-                                <span className="file-name">공고문 등 입찰 관련 서류</span>
+                                <span className="file-name">공고문_및_관련_제출서류_양식.zip</span>
                                 <span className="file-meta">
                                   <span className="file-ext">[zip]</span>
                                   <span className="file-size">1,069KB</span>
@@ -123,13 +142,11 @@ export default function KIDS_PP_US_NO_02() {
                         </ul>
                       </Box>
                     </Box>
+
                     <Box className="kogl-license-wrap">
                       <Box className="kogl-container">
                         <Box className="kogl-image">
-                          <img 
-                            src="/img//icon_kogl.png" 
-                            alt="공공누리 제4유형: 출처표시, 상업적 이용금지, 변경금지" 
-                          />
+                          <img  src="/img/icon_kogl.png" alt="공공누리 제4유형: 출처표시, 상업적 이용금지, 변경금지" />
                         </Box>
                         
                         <Box className="kogl-text">
@@ -140,11 +157,11 @@ export default function KIDS_PP_US_NO_02() {
                       </Box>
                     </Box>
                   </Box>
+
                   {/* 하단 버튼 영역 */}
                   <Box className="board-actions">
                     <Button 
                         variant="contained" 
-                        color="dark" 
                         size="large"
                         className="btn-list-go"
                         onClick={() => navigate(`/ko/notice?page=${pageIndex}`)}

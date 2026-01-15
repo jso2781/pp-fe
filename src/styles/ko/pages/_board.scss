@@ -203,6 +203,12 @@
     .board-content {
       padding: 40px 20px;
       min-height: 300px;
+
+      img {
+        max-width: 100%;
+        height: auto; 
+        display: block;
+      }
     }
     // 첨부파일
     .board-attachment {
@@ -257,6 +263,31 @@
           }
         }
       }
+    }
+  }
+
+  // 게시판 상세 아이프레임 
+  .iframe-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 24px 0;
+    padding-top: 56.25%; // 16:9
+  }
+
+  .iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* 모바일 대응 */
+  @media (max-width: 768px) {
+    .iframe-wrap {
+      padding-top: 62.5%;
     }
   }
 }
@@ -422,6 +453,17 @@
       }
     }
   }
+}
+
+// 하단 액션 버튼
+.board-actions {
+  margin: 30px 0 0 0;
+  text-align: right;
+
+  .btn-list-go {
+    @include mixins.btn_type_01;
+    background: var(--btn-bg-2);
+  } 
 }
 
 
