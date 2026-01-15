@@ -3,25 +3,6 @@
 // 일반 게시판 목록
 .board-list-area{
 
-  /* .board-search{
-    display: flex;
-    flex-direction: row;
-    align-items: center; 
-    justify-content: center;
-    gap: 8px;
-    margin: 0 0 45px 0;
-    padding: 13px 105px;
-    border-radius: 10px;
-    border: 1px solid var(--border-2);
-    .btn-search {
-      flex-shrink: 0;
-      min-width: 100px !important;
-    }
-    .search-condition{
-      min-width: 140px !important;
-    }
-  } */
-
   .board-search {
     display: flex;
     flex-direction: row;
@@ -44,7 +25,7 @@
       }
     }
 
-    /* 입력창 + 버튼 (묶음) */
+    /* 입력창 + 버튼 */
     .search-input-group {
       display: flex; 
       flex-direction: row;
@@ -311,10 +292,10 @@
       }
     }
   }
-  /* 모바일 대응 */
+  
   @media (max-width: 600px) {
     .kogl-container {
-      flex-direction: column; // 모바일에서는 세로로 배치
+      flex-direction: column;
       align-items: flex-start;
       gap: 12px;
     }
@@ -324,7 +305,6 @@
     }
   }
 }
-
 
 // 카드뉴스
 .board-card-list {
@@ -354,7 +334,6 @@
     transition: transform 0.2s;
 
     &:hover, &:focus {
-      transform: translateY(-4px);
       border-color: var(--color-text-2);
       
       .title-text {
