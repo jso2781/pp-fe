@@ -91,6 +91,10 @@ export default function DepsLocation() {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsDataRoomList(\/)?(\d+)?$/,
       labels: ["news", "menuEduArchive"] // 기관소식 > 자료실
     },      
+    {
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsCardNewsList(\/)?(\d+)?$/,
+      labels: ["news", "menuEduCard"] // 기관소식 > 카드뉴스
+    },      
   ];
 
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기

@@ -8,28 +8,43 @@ import { Box, Button, Link, Typography } from '@mui/material';
 import { useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SideItem } from '@/features/common/CommonTypes';
+import { BOARD_CONFIG_GROUP, BoardKey } from '@/features/pst/PstConfig';
 
 export default function NoticeDetail() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const bbsId = 'BBS_COM_005'; // 자료실 게시판 ID
-  const { pstSn } = useParams<{ pstSn: string }>();
+  // URL 게시판 Key값을 통해 게시판 정보 및 LNB 설정
+  const match = location.pathname.match(/\/news\/([^/]+)/);
+  const boardKey = match?.[1] as BoardKey;
+  const currentBoard = BOARD_CONFIG_GROUP[boardKey];
+  const currentGroup = currentBoard.group;
+  const bbsId = currentBoard.bbsId;
 
+  const sideItems = useMemo(
+    () =>
+      Object.values(BOARD_CONFIG_GROUP)
+        .filter((board) => board.group === currentGroup)
+        .map((board) => ({
+          key: `/news/${board.key}`,
+          label: board.label,
+          disabled: board.key === boardKey,
+        })),
+    [boardKey, currentGroup],
+  );  
+
+  // 스크롤 상단 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);    
+
+  const { pstSn } = useParams<{ pstSn: string }>();
   const { current } = useAppSelector((s) => s.pst)
 
   useEffect(() => {
     if (bbsId && pstSn) dispatch(getPst({bbsId, pstSn}))
   }, [dispatch, bbsId, pstSn])
 
-  const sideItems: SideItem[] = useMemo(
-    () => [
-      { key: '/news/NewsNoticeList', label: '공지사항', disabled: false },
-      { key: '/news/NewsJobNoticeList', label: '채용 게시판', disabled: false },
-      { key: '/news/NewsDataRoomList', label: '자료실', disabled: true },
-    ],
-    [],
-  );
 
   const data: PstRVO = current || {};
   const html = data?.pstCn || '';
@@ -163,7 +178,7 @@ export default function NoticeDetail() {
                         color="dark" 
                         size="large"
                         className="btn-list-go"
-                        onClick={() => navigate(`/ko/news/NewsDataRoomList`)}
+                        onClick={() => navigate(`/ko/news/${boardKey}`)}
                       >
                       목록
                     </Button>

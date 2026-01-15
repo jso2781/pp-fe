@@ -237,7 +237,7 @@ export interface FaqDVO {
 }
 
 //API에서 받아오는 값 한정적으로 고정
-export type CategoryCode = 'all' | 'tempClsf1' | 'tempClsf2';
+export type CategoryCode = 'all' | 'ADEF_DEFN' | 'ADEF_DCLR';
 
 export interface FaqItem {
   title: string;
@@ -248,4 +248,5 @@ export interface FaqItem {
 export interface FaqParam {
   activeCategory: CategoryCode;
   searchWord: string;
+  page: number;
 }

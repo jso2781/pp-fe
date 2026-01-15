@@ -7,7 +7,7 @@ import { mockPstList, PstPVO, PstRVO, PstListPVO, PstListRVO, PstDVO  } from './
  * 대국민포털_게시물기본 정보 목록 조회 
  */
 export const selectPstList = createAsyncThunk<PstListRVO, PstListPVO | undefined>(
-  '/notice/selectPstList',
+  '/pst/selectPstList',
   async (params: PstListPVO = {}) => {
     try {
       const res = await https.post(getPstListPath(), params);
@@ -44,7 +44,7 @@ export const selectPstList = createAsyncThunk<PstListRVO, PstListPVO | undefined
  * 대국민포털_게시물기본 정보 조회 
  */
 export const getPst = createAsyncThunk<PstRVO, PstPVO | undefined>(
-  '/notice/getPst',
+  '/pst/getPst',
   async (params: PstPVO = {}) => {
     try {
       const res = await https.post(getPstDetailPath(), params);

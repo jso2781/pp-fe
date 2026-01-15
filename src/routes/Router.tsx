@@ -6,33 +6,31 @@ import BlankLayout from './BlankLayout'
 
 // ko 페이지들
 import HomeKo from '@/pages/ko/Home'
-import NoticeListKo from '@/pages/ko/notice/NoticeList'
-import NoticeDetailKo from '@/pages/ko/notice/NoticeDetail'
-import BoardListKo from '@/pages/ko/board/BoardList'
-import BoardWriteKo from '@/pages/ko/board/BoardWrite'
-import DurProposalKo from '@/pages/ko/maintask/dur/durProposal/DurProposal'
+import DurProposalKo from '@/pages/ko/maintask/dur/DurProposal'
 import DurNoticeListKo from '@/pages/ko/dur/DurNoticeList'
 import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail'
 import NotFoundKo from '@/pages/ko/NotFound'
+import SignUpSelKo from '@/pages/ko/auth/SignUpSel'
 import LoginKo from '@/pages/ko/auth/Login'
 import LoginMethodKo from '@/pages/ko/auth/LoginMethod'
-import SignUpSelKo from '@/pages/ko/auth/SignUpSel'
-import NewsFaqNoticeKo from '@/pages/ko/news/newFaqNotice/NewsFaqNotice'
+import NewsFaqNoticeKo from '@/pages/ko/news/NewsFaqNotice';
+import TermsKo from '@/pages/ko/etc/Terms';
+import PrivacyPolicyKo from '@/pages/ko/etc/PrivacyPolicy';
+import CctvPolicyKo from '@/pages/ko/etc/CctvPolicy';
+import EmailDenyKo from '@/pages/ko/etc/EmailDeny';
 
-// 게시판 테스트중
+// 게시판 페이지 작업중
 import NewsNoticeListKo from '@/pages/ko/news/NewsNoticeList'
 import NewsNoticeDetailKo from '@/pages/ko/news/NewsNoticeDetail'
 import NewsJobNoticeListKo from '@/pages/ko/news/NewsJobNoticeList'
 import NewsJobNoticeDetailKo from '@/pages/ko/news/NewsJobNoticeDetail'
 import NewsDataRoomListKo from '@/pages/ko/news/NewsDataRoomList'
 import NewsDataRoomDetailKo from '@/pages/ko/news/NewsDataRoomDetail'
+import NewsCardNewsListKo from '@/pages/ko/news/NewsCardNewsList'
+import NewsCardNewsDetailKo from '@/pages/ko/news/NewsCardNewsDetail'
 
 // en 페이지들 (프로젝트에 실제 존재한다고 가정)
 import HomeEn from "@/pages/en/Home";
-import NoticeListEn from "@/pages/en/notice/NoticeList";
-import NoticeDetailEn from "@/pages/en/notice/NoticeDetail";
-import BoardListEn from "@/pages/en/board/BoardList";
-import BoardWriteEn from "@/pages/en/board/BoardWrite";
 import DurNoticeListEn from "@/pages/en/dur/DurNoticeList";
 import DurNoticeDetailEn from "@/pages/en/dur/DurNoticeDetail";
 import DurProposalEn from "@/pages/en/dur/DurProposal";
@@ -146,23 +144,25 @@ export default function Router() {
 
             {/* 언어별로 화면 전환 */}
             <Route path="/:lang" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
-            <Route path="/:lang/notice" element={<LangElement byLang={{ ko: <NoticeListKo />, en: <NoticeListEn /> }} />} />
-            <Route path="/:lang/notice/:id" element={<LangElement byLang={{ ko: <NoticeDetailKo />, en: <NoticeDetailEn /> }} />} />
-            <Route path="/:lang/board" element={<LangElement byLang={{ ko: <BoardListKo />, en: <BoardListEn /> }} />} />
-            <Route path="/:lang/board/write" element={<LangElement byLang={{ ko: <BoardWriteKo />, en: <BoardWriteEn /> }} />} />
             <Route path="/:lang/dur/notice" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListEn /> }} />} />
             <Route path="/:lang/dur/notice/:id" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailEn /> }} />} />
 
             <Route path="/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalEn /> }} />} />
             <Route path="/:lang/news/NewsFaqNotice" element={<LangElement byLang={{ ko: <NewsFaqNoticeKo />, en: <NewsFaqNoticeKo /> }} />} />
+            <Route path="/:lang/etc/Terms" element={<LangElement byLang={{ ko: <TermsKo />, en: <TermsKo /> }} />} />
+            <Route path="/:lang/etc/PrivacyPolicy" element={<LangElement byLang={{ ko: <PrivacyPolicyKo />, en: <PrivacyPolicyKo /> }} />} />
+            <Route path="/:lang/etc/CctvPolicy" element={<LangElement byLang={{ ko: <CctvPolicyKo />, en: <CctvPolicyKo /> }} />} />
+            <Route path="/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
           
-            {/* 게시판 테스트중 */}          
+            {/* 게시판 페이지 작업중 */}          
             <Route path="/:lang/news/NewsNoticeList" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
             <Route path="/:lang/news/NewsNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsNoticeDetailKo />, en: <NewsNoticeDetailKo /> }} />} />            
             <Route path="/:lang/news/NewsJobNoticeList" element={<LangElement byLang={{ ko: <NewsJobNoticeListKo />, en: <NewsJobNoticeListKo /> }} />} />
             <Route path="/:lang/news/NewsJobNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsJobNoticeDetailKo />, en: <NewsJobNoticeDetailKo /> }} />} />            
             <Route path="/:lang/news/NewsDataRoomList" element={<LangElement byLang={{ ko: <NewsDataRoomListKo />, en: <NewsDataRoomListKo /> }} />} />
             <Route path="/:lang/news/NewsDataRoomList/:pstSn" element={<LangElement byLang={{ ko: <NewsDataRoomDetailKo />, en: <NewsDataRoomDetailKo /> }} />} />
+            <Route path="/:lang/news/NewsCardNewsList" element={<LangElement byLang={{ ko: <NewsCardNewsListKo />, en: <NewsCardNewsListKo /> }} />} />
+            <Route path="/:lang/news/NewsCardNewsList/:pstSn" element={<LangElement byLang={{ ko: <NewsCardNewsDetailKo />, en: <NewsCardNewsDetailKo /> }} />} />            
 
             {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
             <Route path="/screens" element={<Screens />} />
@@ -175,11 +175,6 @@ export default function Router() {
 
             {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
             <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />
-          </Route>
-
-          {/* BlankLayout */}
-          <Route element={<BlankLayout />}>
-            <Route path="/:lang/notice/:id/preview" element={<LangElement byLang={{ ko: <NoticeDetailKo />, en: <NoticeDetailEn /> }} />} />
           </Route>
         </Routes>
       </BrowserRouter>

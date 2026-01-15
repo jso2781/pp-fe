@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Box, Stack, Typography, Link, Button } from '@mui/material';
-import { fetchNoticeDetail } from '@/features/notice/noticeThunks';
 import ScreenShell from '../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
@@ -17,12 +16,7 @@ export default function KIDS_PP_US_NO_02() {
   const pageIndex = Number(searchParams.get('page') || 1);
   
   // Redux 스토어 데이터
-  const { list, current, loading } = useAppSelector((s) => s.notice);
-
-  // 1. 상세 데이터 가져오기
-  useEffect(() => {
-    if (id) dispatch(fetchNoticeDetail(id));
-  }, [dispatch, id]);
+  const { list, current, loading } = useAppSelector((s) => s.pst);
 
   // LNB 아이템 설정
   const sideItems = useMemo(() => [

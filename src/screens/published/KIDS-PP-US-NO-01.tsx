@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, Stack, FormControl, InputLabel, Select, MenuItem, TextField, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Pagination, Typography } from '@mui/material';
-import { fetchNoticeList } from '@/features/notice/noticeThunks';
 import ScreenShell from '../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
@@ -17,7 +16,7 @@ export default function KIDS_PP_US_NO_01() {
   
   // --- 기존 로직 유지 ---
   const pageIndex = Number(searchParams.get('page') || 1);
-  const { list, totalCount, loading } = useAppSelector((s) => s.notice);
+  const { list, totalCount, loading } = useAppSelector((s) => s.pst);
   const [searchCnd, setSearchCnd] = useState(searchParams.get('searchCnd') || 'title');
   const [searchWrd, setSearchWrd] = useState(searchParams.get('searchWrd') || '');
 
@@ -38,10 +37,6 @@ export default function KIDS_PP_US_NO_01() {
       views: n.views ?? n.inqireCo ?? 0,
     }));
   }, [list]);
-
-  useEffect(() => {
-    dispatch(fetchNoticeList({ pageIndex, searchCnd, searchWrd }));
-  }, [dispatch, pageIndex, searchCnd, searchWrd]);
 
   const totalPages = Math.max(1, Math.ceil((totalCount || rows.length || 1) / 10));
 
@@ -93,7 +88,7 @@ export default function KIDS_PP_US_NO_01() {
                           onChange={(e) => setSearchWrd(e.target.value)} 
                           sx={{ flexGrow: 1 }} // 남은 공간을 꽉 채우도록 설정
                         />
-                        <Button variant="contained" size="large" className="btn-search" onClick={() => dispatch(fetchNoticeList({ pageIndex: 1, searchCnd, searchWrd }))}>검색</Button>
+                        <Button variant="contained" size="large" className="btn-search">검색</Button>
                       </Box>
                     </Stack>
 
