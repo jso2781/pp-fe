@@ -38,18 +38,22 @@ export default function KIDS_PP_US_LG_09() {
                               placeholder="숫자+영문+특수문자 조합 10자리 이상"
                               size="large"
                               fullWidth
-                              error={true} // 에러가 발생했을 때 true로 변경됨
-                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                              error={true}
+                              helperText="사용할수없는 비밀번호입니다."
                               slotProps={{
                                 htmlInput: {
                                   'aria-required': 'true',
-                                  'aria-describedby': 'password-alert',
+                                  //'aria-describedby': errors.password ? 'password-alert' : undefined,
+                                  
+                                },
+                                formHelperText: {
+                                  id: 'password-alert',
+                                  className: 'error-alert',
+                                  //role: errors.password ? 'alert' : undefined,
+                                  //'aria-live': errors.password ? 'polite' : undefined,
                                 },
                               }}
                             />
-                            <Alert severity="error" className="error-alert" id="password-alert" role="alert">
-                              사용할수없는 비밀번호입니다.
-                            </Alert>
                           </Box>
 
                           {/* 2. 비밀번호 확인 */}
@@ -61,23 +65,26 @@ export default function KIDS_PP_US_LG_09() {
                               </Box>
                             </Typography>
                             <TextField
-                              id="confirm-password" // id 부여
+                              id="confirm-password" 
                               type="password"
                               placeholder="비밀번호를 동일하게 입력하세요."
                               size="large"
                               fullWidth
-                              error={true} // 에러가 발생했을 때 true로 변경됨
-                              // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                              error={true}
+                              helperText="입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요. "
                               slotProps={{
                                 htmlInput: {
                                   'aria-required': 'true',
-                                  'aria-describedby': 'confirm-password-alert',
+                                  //'aria-describedby': errors.confirm-password ? 'confirm-password' : undefined,
+                                },
+                                formHelperText: {
+                                  id: 'confirm-password-alert',
+                                  className: 'error-alert',
+                                  //role: errors.confirm-password ? 'alert' : undefined,
+                                  //'aria-live': errors.confirm-password ? 'polite' : undefined,
                                 },
                               }}
                             />
-                            <Alert severity="error" className="error-alert" id="confirm-password-alert" role="alert">
-                              입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요. 
-                            </Alert>
                           </Box>
                         </Box>
                       </Box>

@@ -137,20 +137,24 @@ export default function KIDS_PP_US_JM_05() {
                                 placeholder="아이디를 입력하세요."
                                 size="large"
                                 fullWidth
-                                error={true} // 에러가 발생했을 때 true로 변경됨
-                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                error={true}
+                                helperText="사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요."
                                 slotProps={{
                                   htmlInput: {
                                     'aria-required': 'true',
-                                    'aria-describedby': 'loginId-alert',
+                                    //'aria-describedby': errors.loginId ? 'loginId-alert' : undefined,
+                                    
+                                  },
+                                  formHelperText: {
+                                    id: 'loginId-alert',
+                                    className: 'error-alert',
+                                    //role: errors.loginId ? 'alert' : undefined,
+                                    //'aria-live': errors.loginId ? 'polite' : undefined,
                                   },
                                 }}
                               />
                               <Button variant="outlined" size="large" aria-label="아이디 중복확인" className="btn-outline-02 btn-form-util">중복확인</Button>
                             </Stack>
-                            <Alert severity="error" className="error-alert" id="loginId-alert" role="alert">
-                              사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요.
-                            </Alert>
                           </Box>
 
                           {/* 이메일 (선택) + 중복확인버튼 */}
@@ -165,20 +169,23 @@ export default function KIDS_PP_US_JM_05() {
                                 placeholder="이메일 주소를 입력하세요."
                                 size="large"
                                 fullWidth
-                                error={true} // 에러가 발생했을 때 true로 변경됨
-                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                error={true}
+                                helperText="사용할 수 없는 이메일입니다. 다른 이메일을 입력해 주세요."
                                 slotProps={{
                                   htmlInput: {
-                                    'aria-required': 'false',
-                                    'aria-describedby': 'email-alert',
+                                    //'aria-describedby': errors.email ? 'email-alert' : undefined,
+                                    
+                                  },
+                                  formHelperText: {
+                                    id: 'email-alert',
+                                    className: 'error-alert',
+                                    //role: errors.email ? 'alert' : undefined,
+                                    //'aria-live': errors.email ? 'polite' : undefined,
                                   },
                                 }}
                               />
                               <Button variant="outlined" size="large" aria-label="이메일 주소 중복확인" className="btn-outline-02 btn-form-util">중복확인</Button>
                             </Stack>
-                            <Alert severity="error" className="error-alert" id="email-alert" role="alert">
-                              사용할 수 없는 이메일입니다. 다른 이메일을 입력해 주세요.
-                            </Alert>
                           </Box>
 
                           <Box className="flex-container flex-half">
@@ -194,18 +201,22 @@ export default function KIDS_PP_US_JM_05() {
                                 placeholder="숫자+영문+특수문자 조합 10자리 이상"
                                 size="large"
                                 fullWidth
-                                error={true} // 에러가 발생했을 때 true로 변경됨
-                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                error={true}
+                                helperText="사용할수없는 비밀번호입니다."
                                 slotProps={{
                                   htmlInput: {
                                     'aria-required': 'true',
-                                    'aria-describedby': 'password-alert',
+                                    //'aria-describedby': errors.password ? 'password-alert' : undefined,
+                                    
+                                  },
+                                  formHelperText: {
+                                    id: 'password-alert',
+                                    className: 'error-alert',
+                                    //role: errors.password ? 'alert' : undefined,
+                                    //'aria-live': errors.password ? 'polite' : undefined,
                                   },
                                 }}
                               />
-                              <Alert severity="error" className="error-alert" id="password-alert" role="alert">
-                                사용할수없는 비밀번호입니다.
-                              </Alert>
                             </Box>
                             
                             <Box className="form-item">
@@ -219,18 +230,22 @@ export default function KIDS_PP_US_JM_05() {
                                 placeholder="비밀번호를 동일하게 입력하세요."
                                 size="large"
                                 fullWidth
-                                error={true} // 에러가 발생했을 때 true로 변경됨
-                                // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                                error={true}
+                                helperText="입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요."
                                 slotProps={{
                                   htmlInput: {
                                     'aria-required': 'true',
-                                    'aria-describedby': 'confirm-password-alert',
+                                    //'aria-describedby': errors.confirm-password ? 'confirm-password-alert' : undefined,
+                                    
+                                  },
+                                  formHelperText: {
+                                    id: 'confirm-password-alert',
+                                    className: 'error-alert',
+                                    //role: errors.confirm-password ? 'alert' : undefined,
+                                    //'aria-live': errors.confirm-password ? 'polite' : undefined,
                                   },
                                 }}
                               />
-                              <Alert severity="error" className="error-alert" id="confirm-password-alert" role="alert">
-                                입력하신 비밀번호가 일치하지 않습니다. 다시 입력해주세요.
-                              </Alert>
                             </Box>
                           </Box>
                         </Box>
