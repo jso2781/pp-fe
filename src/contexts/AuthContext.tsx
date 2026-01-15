@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { useAppSelector } from '@/store/hooks'
+import { createContext, useContext, useMemo, useCallback, ReactNode } from 'react'
+import { useAppSelector, useAppDispatch } from '@/store/hooks'
+import { logout as logoutAction } from '@/features/auth/AuthSlice'
 
 interface AuthData {
   userInfo?: any
@@ -13,86 +14,62 @@ interface AuthData {
 interface AuthContextType {
   isAuthenticated: boolean
   user: AuthData | null
-  login: (data: AuthData) => void
   logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// localStorage 키 통일
-const AUTH_STORAGE_KEY = 'auth'
-
+/**
+ * AuthContext는 Redux의 단순 래퍼입니다.
+ * Redux 상태를 직접 구독하고, 로그아웃 액션만 dispatch합니다.
+ * 로그인은 Redux thunk (loginThunk)를 직접 사용하세요.
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState<AuthData | null>(null)
+  const dispatch = useAppDispatch()
   
   // Redux 상태 구독
   const auth = useAppSelector((s) => s.auth)
   const { userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm } = auth || {}
 
-  // 초기 로드 시 localStorage에서 인증 정보 복원
-  // 단, Redux 상태가 없으면 인증 정보를 복원하지 않음 (Redux가 실제 소스)
-  useEffect(() => {
-    // Redux에 인증 정보가 있으면 localStorage에서 복원하지 않음 (Redux가 우선)
-    if (userInfo && accessToken) {
-      return; // Redux에 이미 있으면 localStorage 복원 불필요
-    }
-    
-    const storedAuth = localStorage.getItem(AUTH_STORAGE_KEY)
-    if (storedAuth) {
-      try {
-        const authData = JSON.parse(storedAuth)
-        // localStorage에만 있고 Redux에 없으면 인증 정보가 유효하지 않음
-        // 따라서 인증 상태를 false로 설정
-        setIsAuthenticated(false)
-        setUser(null)
-        // localStorage도 정리 (유효하지 않은 인증 정보)
-        localStorage.removeItem(AUTH_STORAGE_KEY)
-      } catch (e) {
-        localStorage.removeItem(AUTH_STORAGE_KEY)
-      }
-    }
+  // Redux 상태에서 직접 계산
+  // userInfo가 실제 데이터를 가진 객체인지 확인 (빈 객체가 아닌지)
+  const isAuthenticated = useMemo(() => {
+    const hasValidUserInfo = userInfo && 
+      typeof userInfo === 'object' && 
+      Object.keys(userInfo).length > 0 &&
+      userInfo !== null
+    const hasValidToken = accessToken && 
+      typeof accessToken === 'string' && 
+      accessToken.length > 0
+    return !!(hasValidUserInfo && hasValidToken)
   }, [userInfo, accessToken])
 
-  // Redux 상태와 동기화
-  useEffect(() => {
-    if (userInfo && accessToken) {
-      // Redux에 인증 정보가 있으면 AuthContext도 업데이트
-      const authData: AuthData = {
-        userInfo,
-        tokenId,
-        accessToken,
-        refreshToken,
-        pswdErrNmtm: pswdErrNmtm,
-      }
-      setIsAuthenticated(true)
-      setUser(authData)
-      // localStorage에도 저장 (통일된 키 사용)
-      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authData))
-    } else if (!userInfo && !accessToken) {
-      // Redux에 인증 정보가 없으면 AuthContext도 초기화
-      setIsAuthenticated(false)
-      setUser(null)
-      localStorage.removeItem(AUTH_STORAGE_KEY)
+  const user = useMemo<AuthData | null>(() => {
+    if (!userInfo || !accessToken) {
+      return null
+    }
+    return {
+      userInfo,
+      tokenId,
+      accessToken,
+      refreshToken,
+      pswdErrNmtm,
     }
   }, [userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm])
 
-  const login = (data: AuthData) => {
-    setIsAuthenticated(true)
-    setUser(data)
-    // localStorage에 통일된 키로 저장
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(data))
-  }
+  const logout = useCallback(() => {
+    // Redux logout 액션을 dispatch
+    dispatch(logoutAction())
+  }, [dispatch])
 
-  const logout = () => {
-    setIsAuthenticated(false)
-    setUser(null)
-    // localStorage에서 통일된 키 제거
-    localStorage.removeItem(AUTH_STORAGE_KEY)
-  }
+  const value = useMemo(() => ({
+    isAuthenticated,
+    user,
+    logout,
+  }), [isAuthenticated, user, logout])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   )

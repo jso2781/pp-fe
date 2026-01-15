@@ -2,14 +2,14 @@ import React, { useMemo, useState, useEffect, useRef } from 'react'
 import { flushSync } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { AppBar, Box, Button, IconButton, Stack, Toolbar, Typography, Divider, Menu, MenuItem, Container, Drawer, Link as MuiLink } from '@mui/material';
+import { AppBar, Box, Button, IconButton, Stack, Toolbar, Typography, Divider, Menu, MenuItem, Container, Drawer, Link as MuiLink, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { Language, Menu as MenuIcon, ArrowDropDown, Search, Person, Login, Close, ChevronRight } from '@mui/icons-material'
+import CloseIcon from '@mui/icons-material/Close';
 import SkipNavigation from './SkipNavigation'
 import { getLangFromPathname, langPath } from '@/routes/lang'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectMenuList } from '@/features/auth/MenuThunks'
 import { clearMenuCache } from '@/features/auth/MenuSlice'
-import { logout as logoutAction } from '@/features/auth/AuthSlice'
 import { useAuth } from '@/contexts/AuthContext'
 import { LOCALE_KEY } from '@/i18n/i18n'
 import type { MenuRVO } from '@/features/auth/MenuTypes'
@@ -337,7 +337,12 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const location = useLocation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { isAuthenticated, logout: logoutContext } = useAuth()
+  const { isAuthenticated, logout: logoutContext } = useAuth();
+
+  useEffect(() => {
+    console.log('========================= Header isAuthenticated', isAuthenticated);
+  }, [isAuthenticated]);
+
   // Rest API 호출로 메뉴 가져오기
   const { list } = useAppSelector((s) => s.menu)
 
@@ -354,6 +359,153 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const [sitemapOpen, setSitemapOpen] = useState(false)
   // 서브메뉴 닫기 타임아웃 관리
   const closeTimeoutsRef = useRef<{ [key: string]: NodeJS.Timeout }>({})
+  
+  // 세션 타이머 관리 (초 단위, 30분 = 1800초)
+  const [sessionTime, setSessionTime] = useState<number>(310);         // 타이머 초기값 30:00
+  const [showSessionWarning, setShowSessionWarning] = useState(false);  // 세션 경고 팝업 상태 관리
+  const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);         // 세션 타이머 인터벌 관리
+  const lastActivityRef = useRef<number>(Date.now());                   // 마지막 사용자 활동 시간(milliseconds)
+  
+  // 시간 포맷팅 함수 (초를 MM:SS로 변환)
+  const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+  }
+  
+  // 타이머 리셋 함수
+  const resetTimer = () => {
+    setSessionTime(310) // 30:00으로 리셋
+    setShowSessionWarning(false)
+    lastActivityRef.current = Date.now() // 마지막 활동 시간 업데이트
+  }
+  
+  // 사용자 활동 감지 함수
+  const handleUserActivity = () => {
+    // 로그인 상태에서 활동 감지(event listener)되면, 활동 감지 시간을 지정함.(마지막 활동 시간 업데이트)
+    if(isAuthenticated) {
+      lastActivityRef.current = Date.now();
+
+      // 5분 잔여 타이머 알림 창이 열려있으면 닫기
+      if(showSessionWarning){
+        setShowSessionWarning(false)
+      }
+    }
+  }
+  
+  // 로그인 상태가 변경될 때 타이머 초기화
+  useEffect(() => {
+    if (isAuthenticated) {
+      resetTimer()
+    } else {
+      // 로그아웃 시 타이머 정리
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current)
+        timerIntervalRef.current = null
+      }
+
+      // 타이머의 시간 30분으로 초기화
+      setSessionTime(310);
+
+      // 5분 잔여 타이머 알림 창을 닫기
+      setShowSessionWarning(false);
+
+      // 활동시간을 로그아웃된 시점으로 리켓시킴
+      lastActivityRef.current = Date.now()
+    }
+  }, [isAuthenticated])
+  
+  // 사용자 활동 이벤트 리스너 등록 (idle 상태 감지)
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return
+    }
+    
+    // 사용자 활동 이벤트 리스너(mousemove, scroll event는 제외외)
+    const events = ['mousedown', 'keypress', 'touchstart', 'click']
+    
+    const activityHandler = () => {
+      handleUserActivity()
+    }
+    
+    // 이벤트 리스너 등록
+    events.forEach((event) => {
+      document.addEventListener(event, activityHandler, true)
+    })
+    
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      events.forEach((event) => {
+        document.removeEventListener(event, activityHandler, true)
+      })
+    }
+  }, [isAuthenticated])
+  
+  // 타이머 실행 (로그인 상태일 때만, idle 상태 감지)
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return
+    }
+    
+    // 기존 타이머 정리
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current)
+    }
+    
+    // 1초마다 타이머 감소 및 idle 상태 체크
+    timerIntervalRef.current = setInterval(() => {
+      const now = Date.now();
+      const idleTime = Math.floor((now - lastActivityRef.current) / 1000); // 초 단위 idle 시간
+      
+      setSessionTime((prev) => {
+        // idle 시간이 30분(1800초) 이상이면 자동 로그아웃
+        if (idleTime >= 310) {
+          if (timerIntervalRef.current) {
+            clearInterval(timerIntervalRef.current);
+            timerIntervalRef.current = null;
+          }
+          // 자동 로그아웃 처리
+          logoutContext();
+          const currentLang = getLangFromPathname(location.pathname) || 'ko';
+          navigate(`/${currentLang}`, { replace: true });
+          return 0;
+        }
+        
+        // idle 시간을 타이머에 반영 (마지막 활동 후 경과 시간)
+        const newTime = 310 - idleTime;
+        
+        // 0초 이하가 되면 자동 로그아웃
+        if (newTime <= 0) {
+          if (timerIntervalRef.current) {
+            clearInterval(timerIntervalRef.current);
+            timerIntervalRef.current = null;
+          }
+          // 자동 로그아웃 처리, 한글 홈(/ko)으로 이동
+          logoutContext();
+          const currentLang = getLangFromPathname(location.pathname) || 'ko';
+          navigate(`/${currentLang}`, { replace: true });
+          return 0;
+        }
+        
+        return newTime;
+      })
+    }, 1000)
+    
+    // 컴포넌트 언마운트 시 타이머 정리
+    return () => {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+        timerIntervalRef.current = null;
+      }
+    }
+  }, [isAuthenticated, navigate, logoutContext, location.pathname])
+  
+  // 5분(300초) 남았을 때 경고 팝업 표시 (한 번만)
+  useEffect(() => {
+    if (isAuthenticated && sessionTime === 300 && !showSessionWarning) {
+      setShowSessionWarning(true)
+    }
+  }, [isAuthenticated, sessionTime, showSessionWarning])
 
   /**
    * 목업 데이터 - 주석처리 (Rest API 사용 시)
@@ -1073,16 +1225,18 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         <Box className="header-topbar">
           <Box className="container">
             <Box className="top-link">
-              <Box className="timer_box">
-                <span className="time_text">12:00</span>
-                <Button 
-                  size="small" 
-                  className="btn_extend"
-                  //onClick={handleExtendSession} // 세션 연장 함수
-                >
-                  시간연장
-                </Button>
-              </Box>
+              {isAuthenticated && (
+                  <Box className="timer_box">
+                    <span className="time_text">{formatTime(sessionTime)}</span>
+                    <Button 
+                      size="small" 
+                      className="btn_extend"
+                      onClick={resetTimer}
+                    >
+                      시간연장
+                    </Button>
+                  </Box>
+              )}
               <Button
                 size="small"
                 onClick={() => navigate('/screens')}
@@ -1153,6 +1307,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   >
                     {t('usrSwtReg')}
                   </Button>
+
                   {!isAuthenticated ? (
                     <Button
                       size="small"
@@ -1169,9 +1324,8 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     <Button
                       size="small"
                       onClick={() => {
-                        // AuthContext와 Redux 모두 로그아웃 처리
+                        // AuthContext의 logout이 Redux 액션을 dispatch하므로 중복 호출 불필요
                         logoutContext()
-                        dispatch(logoutAction())
                         // 로그아웃 후 홈으로 이동
                         navigate(to('/'), { replace: true })
                       }}
@@ -1180,6 +1334,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                       {t('logout')}
                     </Button>
                   )}
+
                 </Stack>
               )}
             </Box>
@@ -1265,7 +1420,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                   }
                                 })
                               })
-                              
+
                               // 다른 루트 메뉴들을 즉시 닫기 (flushSync로 즉시 반영)
                               flushSync(() => {
                                 setAnchorEls(() => {
@@ -1588,9 +1743,8 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   <Button
                     variant="contained"
                     onClick={() => {
-                      // AuthContext와 Redux 모두 로그아웃 처리
+                      // AuthContext의 logout이 Redux 액션을 dispatch하므로 중복 호출 불필요
                       logoutContext()
-                      dispatch(logoutAction())
                       // 로그아웃 후 홈으로 이동
                       navigate(to('/'), { replace: true })
                     }}
@@ -1653,6 +1807,68 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           </Stack>
         </Box>
       </Drawer>
+
+      {/* 세션 경고 팝업 (5분 남았을 때) */}
+      <Dialog
+        open={showSessionWarning}
+        onClose={() => setShowSessionWarning(false)}
+        fullWidth
+        maxWidth="md"
+        PaperProps={{
+          sx: {
+            width: undefined,
+          },
+          className: 'modal-small',
+        }}
+      >
+        <DialogTitle component="div" className="modal-title">
+          <h2>{t('sessionWarningTitle')}</h2>
+          <IconButton
+            aria-label="닫기"
+            onClick={() => setShowSessionWarning(false)}
+            className="btn-modal-close"
+          >
+            <CloseIcon aria-hidden="true" />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent className="modal-content">
+          <Box className="modal-status">
+            <Box className="status-row">
+              <Typography component="span" variant="body2" className="label">{t('sessionWarningTime')} : </Typography>
+              <Typography component="span" variant="body2" className="time">
+                {Math.floor(sessionTime / 60)}{t('minutes')} {sessionTime % 60}{t('seconds')}
+              </Typography>
+            </Box>
+          </Box>
+          <Box className="modal-desc">
+            <p>{t('sessionWarningDescription')}</p>
+            <p>{t('sessionWarningExtend')}</p>
+          </Box>
+        </DialogContent>
+
+        <DialogActions className="modal-footer">
+          <Button 
+            variant="outlined" 
+            onClick={() => {
+              logoutContext()
+              setShowSessionWarning(false)
+              navigate(to('/'), { replace: true })
+            }}
+          >
+            {t('logout')}
+          </Button>
+          <Button 
+            variant="contained" 
+            onClick={() => {
+              resetTimer()
+              setShowSessionWarning(false)
+            }}
+          >
+            {t('loginExtend')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }

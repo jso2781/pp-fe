@@ -46,7 +46,7 @@ function ensureAnyIdAssets() {
     .then(() => loadScript(`${anyIdStaticUrl}/anyid/js/app.js`))
 }
 
-export default function KIDS_PP_US_LG_01() {
+export default function LoginMethod() {
   const navigate = useNavigate()
   const location = useLocation()
   const [useGovLogin, setUseGovLogin] = useState(false)

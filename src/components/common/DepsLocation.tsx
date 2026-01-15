@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BreadcrumbNav } from '@/components/mui';
 import { useLocation } from 'react-router-dom';
@@ -91,7 +92,10 @@ export default function DepsLocation() {
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기
   const { pathname } = useLocation();
 
-  console.log("DepsLocation.tsx pathname="+pathname);
+  // pathname 변경 시에만 로그 출력 (StrictMode로 인한 중복 호출 방지)
+  useEffect(() => {
+    console.log("DepsLocation.tsx pathname="+pathname);
+  }, [pathname]);
   // 2. 현재 경로에 일치하는 설정 찾기
   const matched = pathConfig.find(item => item.pattern.test(pathname));
   

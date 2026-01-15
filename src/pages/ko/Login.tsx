@@ -1,25 +1,12 @@
+import React from 'react';
 import { useState, useEffect, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useAuth } from '@/contexts/AuthContext'
 import { login as loginThunk } from '@/features/auth/AuthThunks';
-import {
-  Alert,
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  FormControlLabel,
-  Link,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, Link, Stack, TextField, Typography, List, ListItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom'
 import DepsLocation from '@/components/common/DepsLocation'
+import { useTranslation } from 'react-i18next';
 
 const STORAGE_KEY_REMEMBER_ID = 'kids_login_remember_id'
 const STORAGE_KEY_PASSWORD_CHANGE_REMINDER = 'kids_password_change_reminder'
@@ -42,17 +29,18 @@ const MAX_LENGTH = 20
 const MAX_FAIL_COUNT = 5
 
 export default function Login() {
+  const { t, i18n: i18nInstance } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { login, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth(); // login 함수는 사용하지 않음 (Redux가 소스)
   const auth = useAppSelector((s) => s.auth);
   const { userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm, loading } = auth || {};
-  console.log("Login auth userInfo=", userInfo);
-  console.log("Login auth tokenId=", tokenId);
-  console.log("Login auth accessToken=", accessToken);
-  console.log("Login auth refreshToken=", refreshToken);
-  console.log("Login auth pswdErrNmtm=", pswdErrNmtm);
-  console.log("Login auth loading=",loading);
+  // console.log("Login auth userInfo=", userInfo);
+  // console.log("Login auth tokenId=", tokenId);
+  // console.log("Login auth accessToken=", accessToken);
+  // console.log("Login auth refreshToken=", refreshToken);
+  // console.log("Login auth pswdErrNmtm=", pswdErrNmtm);
+  // console.log("Login auth loading=",loading);
   
   const [values, setValues] = useState<LoginValues>({ loginId: '', password: '', rememberId: false })
   const [errors, setErrors] = useState<Partial<Record<keyof LoginValues, string>>>({})
@@ -60,8 +48,7 @@ export default function Login() {
   const [localFailCount, setLocalFailCount] = useState(0)
   const [showPasswordErrorPopup, setShowPasswordErrorPopup] = useState(false)
   const [showPasswordChangeReminder, setShowPasswordChangeReminder] = useState(false)
-  const hasCheckedAuth = useRef(false)
-  const isSubmittingRef = useRef(false) // 로그인 제출 중(Submitting)인지 추적
+  const hasCheckedAuth = useRef(false);
   const [isRehydrated, setIsRehydrated] = useState(false) // Redux Persist rehydrate 완료 여부
 
   // 아이디 저장 기능: 페이지 로드 시 저장된 아이디 불러오기
@@ -72,45 +59,10 @@ export default function Login() {
     }
   }, []);
 
-  console.log("Login isAuthenticated=",isAuthenticated);
-  console.log("Login userInfo=", userInfo);
-  console.log("Login accessToken=", accessToken);
-  console.log("Login loading=", loading);
-
-  // Redux Persist rehydrate 완료 확인
+  // isAuthenticated 변경 시에만 로그 출력 (StrictMode로 인한 중복 호출 방지)
   useEffect(() => {
-    // loading이 false가 되면 Redux Persist rehydrate가 완료된 것으로 간주
-    if (!loading) {
-      setIsRehydrated(true);
-    }
-  }, [loading]);
-
-  // 컴포넌트 마운트 시에만 체크 (이미 로그인된 상태에서 Login 페이지 접근 방지)
-  // Redux Persist rehydrate 완료 후에만 체크
-  // 로그인 시도 중에는 이 체크를 하지 않도록 isSubmittingRef로 제어
-  useEffect(() => {
-    // Redux Persist rehydrate가 완료되고, 한 번만 체크하며, 로그인 제출 중이 아니면 체크
-    if (isRehydrated && !hasCheckedAuth.current && !isSubmittingRef.current) {
-      hasCheckedAuth.current = true;
-      
-      // Redux 상태를 우선 확인 (Redux가 실제 인증 상태의 소스)
-      // userInfo가 객체이고 실제 데이터가 있는지 확인
-      const hasValidUserInfo = userInfo && typeof userInfo === 'object' && Object.keys(userInfo).length > 0;
-      const hasValidToken = accessToken && typeof accessToken === 'string' && accessToken.length > 0;
-      const isLoggedIn = hasValidUserInfo && hasValidToken;
-      
-      console.log("Login rehydrate check - hasValidUserInfo:", hasValidUserInfo, "hasValidToken:", hasValidToken, "isLoggedIn:", isLoggedIn);
-      
-      if (isLoggedIn) {
-        console.log("Login: Already logged in, redirecting to /ko");
-        navigate('/ko', { replace: true });
-      } else {
-        console.log("Login: Not logged in, staying on login page");
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isRehydrated]); // isRehydrated가 변경될 때만 실행
-  
+    console.log('========================= Login isAuthenticated', isAuthenticated);
+  }, [isAuthenticated]);
 
   // 비밀번호 변경 안내 팝업 표시 여부 확인
   // Description: 회원가입 또는 비밀번호 변경 후 80일 전부터 메시지 노출
@@ -143,14 +95,14 @@ export default function Login() {
   const validate = (v: LoginValues) => {
     const next: Partial<Record<keyof LoginValues, string>> = {}
     if (!v.loginId.trim()) {
-      next.loginId = '아이디를 입력하세요.'
+      next.loginId = t('idPlaceholder')
     } else if (v.loginId.trim().length < 2) {
-      next.loginId = '최소 두자리 수 이상 입력해주세요.'
+      next.loginId = t('minimumTwoCharacters')
     } else if (KOREAN_REGEX.test(v.loginId)) {
-      next.loginId = '아이디에는 한글을 입력할 수 없습니다.'
+      next.loginId = t('idCannotContainKorean')
     }
     if (!v.password.trim()) {
-      next.password = '비밀번호를 입력하세요.'
+      next.password = t('passwordPlaceholder')
     }
     return next
   }
@@ -160,9 +112,6 @@ export default function Login() {
     const next = validate(values)
     setErrors(next)
     if (Object.keys(next).length) return
-
-    // 로그인 제출 시작
-    isSubmittingRef.current = true
 
     // 아이디 저장 기능
     if (values.rememberId) {
@@ -187,63 +136,41 @@ export default function Login() {
 
       // 로그인 결과에 회원정보(userInfo)가 없으면 로그인 실패 처리 진행
       if(!userInfo && pswdErrNmtm > 0) {
-
         setLocalFailCount(pswdErrNmtm);
 
         // 5회째 실패 시 팝업 표시
         if (pswdErrNmtm >= MAX_FAIL_COUNT) {
-          isSubmittingRef.current = false; // 로그인 제출 상태 초기화
           setShowPasswordErrorPopup(true);
           setLoginFail(null);
-          return;
+          return; // 로그인 실패 - 리다이렉트하지 않음
         }
 
         // 4회째까지만 오류 횟수 노출
         if(pswdErrNmtm <= 4){
           setLoginFail({
-            reason: '아이디 또는 비밀번호가 일치하지 않습니다.',
+            reason: t('passwordMismatch'),
             failedCount: pswdErrNmtm,
             isIdError: false,
           })
-          setErrors({ password: `아이디 또는 비밀번호가 일치하지 않습니다. (${pswdErrNmtm}/${MAX_FAIL_COUNT})` })
+          setErrors({ password: `${t('passwordMismatch')} (${pswdErrNmtm}/${MAX_FAIL_COUNT})` })
         }else{
           setLoginFail(null)
           setErrors({})
         }
+        return; // 로그인 실패 - 리다이렉트하지 않음
       }
-
-      // 샘플: 실제 로그인 성공 시 아래 코드 실행
-      // const userType = response.data.userType // 'general' | 'expert'
       
-      // 로그인 성공 처리
-      // Redux에 이미 저장되어 있고, AuthContext는 Redux 상태와 자동 동기화됨
-      // 추가로 AuthContext.login()을 호출하여 명시적으로 동기화
-      if (userInfo && res.accessToken) {
-        login({
-          userInfo: userInfo,
-          tokenId: res.tokenId,
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
-          pswdErrNmtm: res.pswdErrNmtm,
-        });
-      }
-
       // 비밀번호 변경 안내 팝업 표시 여부 확인
       if (checkPasswordChangeReminder()) {
         setShowPasswordChangeReminder(true)
       } else {
         // 비밀번호 변경 안내가 필요 없으면 정상 로그인 처리
-        // 로그인 제출 완료 후 리다이렉트
-        isSubmittingRef.current = false
-        // if (userType === 'expert') {
-        //   navigate('/screens/KIDS-PP-US-MT-01')
-        // } else {
-          navigate('/ko') // 일반 회원은 메인 페이지로
-        // }
+        // Redux 상태 업데이트 후 리다이렉트 (약간의 지연으로 동기화 완료 대기)
+        setTimeout(() => {
+          navigate('/ko', { replace: true }) // 일반 회원은 메인 페이지로
+        }, 100)
       }
     }catch(error: any){
-      // 로그인 실패 시 제출 상태 초기화
-      isSubmittingRef.current = false
       // 서버 에러 처리
       // 에러 메시지에서 pswdErrNmtm 추출 시도 (서버 응답에 포함된 경우)
       let serverPswdErrNmtm: number | null = null;
@@ -272,11 +199,11 @@ export default function Login() {
       // 4회째까지만 오류 횟수 노출
       if(nextCount <= 4){
         setLoginFail({
-          reason: '아이디 또는 비밀번호가 일치하지 않습니다.',
+          reason: t('passwordMismatch'),
           failedCount: nextCount,
           isIdError: false,
         })
-        setErrors({ password: `아이디 또는 비밀번호가 일치하지 않습니다. (${nextCount}/${MAX_FAIL_COUNT})` })
+        setErrors({ password: `${t('passwordMismatch')} (${nextCount}/${MAX_FAIL_COUNT})` })
       }else{
         setLoginFail(null)
         setErrors({})
@@ -285,148 +212,186 @@ export default function Login() {
   }
 
   return (
-    <div>
-      <Box sx={{ p: 2, maxWidth: 520, mx: 'auto' }}>
-        <DepsLocation />
+    <>
+      <Box className="page-layout">
+        <Box className="sub-container">
+          <Box className="content-wrap">
+            {/* 서브 콘텐츠 영역 */}
+            <Box className="sub-content">
+              {/* 상단 현재 위치 정보 */}
+              <DepsLocation />
+              <Box className="content-view" id="content">
+                <Box className="page-content">
+                  {/* --- 본문 시작 --- */}
+                  <Box className="page-content__login">
+                    <Box className="login-section__form">
+                      <Box component="form" onSubmit={onSubmit} noValidate>
+                        <Box className="form-item">
+                          <Typography component="label" htmlFor="loginId" className="label">
+                            {t('login')}
+                          </Typography>
+                          <TextField
+                            id="loginId" // 라벨의 htmlFor와 일치
+                            placeholder={t('idPlaceholder')}
+                            size="large"
+                            value={values.loginId}
+                            onChange={(e) => {
+                              let v = e.target.value.replace(KOREAN_REGEX, '')
+                              // 최대 20자 제한
+                              if (v.length > MAX_LENGTH) {
+                                v = v.slice(0, MAX_LENGTH)
+                              }
+                              setValues((p) => ({ ...p, loginId: v }))
+                              // 입력 시 에러 초기화
+                              if (errors.loginId) {
+                                setErrors((prev) => ({ ...prev, loginId: undefined }))
+                              }
+                            }}
+                            error={!!errors.loginId}
+                            helperText={errors.loginId}
+                            FormHelperTextProps={{
+                              id: 'loginId-alert',
+                              className: 'error-alert',
+                              role: errors.loginId ? 'alert' : undefined,
+                              'aria-live': errors.loginId ? 'polite' : undefined,
+                            }}
+                            fullWidth
+                            inputProps={{ maxLength: MAX_LENGTH }}
+                            // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                            slotProps={{
+                              htmlInput: {
+                                'aria-describedby': errors.loginId ? 'loginId-alert' : undefined,
+                              },
+                            }}
+                          />
+                        </Box>
 
-        <Typography variant="h6" fontWeight={800} sx={{ mb: 2 }}>
-          로그인
-        </Typography>
+                        <Box className="form-item">
+                          <Typography  component="label" htmlFor="password-input" className="label">
+                            {t('password')}
+                          </Typography>
+                          <TextField
+                            id="password-input"
+                            placeholder={t('passwordPlaceholder')}
+                            size="large"
+                            type="password"
+                            value={values.password}
+                            onChange={(e) => {
+                              let v = e.target.value
+                              // 최대 20자 제한
+                              if (v.length > MAX_LENGTH) {
+                                v = v.slice(0, MAX_LENGTH)
+                              }
+                              setValues((p) => ({ ...p, password: v }))
+                              // 입력 시 에러 초기화
+                              if (errors.password) {
+                                setErrors((prev) => ({ ...prev, password: undefined }))
+                                setLoginFail(null)
+                              }
+                            }}
+                            error={!!errors.password || !!loginFail}
+                            helperText={errors.password || (loginFail ? `${loginFail.reason} (${loginFail.failedCount}/${MAX_FAIL_COUNT})` : '')}
+                            FormHelperTextProps={{
+                              id: 'password-input-alert',
+                              className: 'error-alert',
+                              role: (errors.password || loginFail) ? 'alert' : undefined,
+                              'aria-live': (errors.password || loginFail) ? 'polite' : undefined,
+                            }}
+                            fullWidth
+                            inputProps={{ maxLength: MAX_LENGTH }}
+                            // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                            slotProps={{
+                              htmlInput: {
+                                'aria-describedby': (errors.password || loginFail) ? 'password-input-alert' : undefined,
+                              },
+                            }}
+                          />
+                        </Box>
 
-        <Box component="form" onSubmit={onSubmit} noValidate>
-          <Stack spacing={2}>
-            <TextField
-              label="아이디"
-              placeholder="아이디 혹은 이메일을 입력하세요."
-              value={values.loginId}
-              onChange={(e) => {
-                let v = e.target.value.replace(KOREAN_REGEX, '')
-                // 최대 20자 제한
-                if (v.length > MAX_LENGTH) {
-                  v = v.slice(0, MAX_LENGTH)
-                }
-                setValues((p) => ({ ...p, loginId: v }))
-                // 입력 시 에러 초기화
-                if (errors.loginId) {
-                  setErrors((prev) => ({ ...prev, loginId: undefined }))
-                }
-              }}
-              error={!!errors.loginId}
-              helperText={errors.loginId}
-              fullWidth
-              inputProps={{ maxLength: MAX_LENGTH }}
-            />
-
-            <TextField
-              label="비밀번호"
-              placeholder="비밀번호를 입력하세요."
-              type="password"
-              value={values.password}
-              onChange={(e) => {
-                let v = e.target.value
-                // 최대 20자 제한
-                if (v.length > MAX_LENGTH) {
-                  v = v.slice(0, MAX_LENGTH)
-                }
-                setValues((p) => ({ ...p, password: v }))
-                // 입력 시 에러 초기화
-                if (errors.password) {
-                  setErrors((prev) => ({ ...prev, password: undefined }))
-                  setLoginFail(null)
-                }
-              }}
-              error={!!errors.password || !!loginFail}
-              helperText={errors.password || (loginFail && !errors.password ? `${loginFail.reason} (${loginFail.failedCount}/${MAX_FAIL_COUNT})` : '')}
-              fullWidth
-              inputProps={{ maxLength: MAX_LENGTH }}
-            />
-
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={values.rememberId}
-                  onChange={(e) => {
-                    const checked = e.target.checked
-                    setValues((p) => ({ ...p, rememberId: checked }))
-                    // 체크 해제 시 localStorage에서도 제거
-                    if (!checked) {
-                      localStorage.removeItem(STORAGE_KEY_REMEMBER_ID)
-                    }
-                  }}
-                />
-              }
-              label="아이디 저장"
-            />
-
-            <Button variant="contained" type="submit" size="large">
-              로그인
-            </Button>
-
-            {/* 회원가입, 아이디 찾기, 비밀번호 찾기 링크 */}
-            <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 1 }}>
-              <Link
-                component="button"
-                variant="body2"
-                onClick={() => navigate('/screens/KIDS-PP-US-JM-01')}
-                sx={{
-                  cursor: 'pointer',
-                  color: 'text.secondary',
-                  textDecoration: 'none',
-                  '&:hover': {
-                    textDecoration: 'underline',
-                    color: 'primary.main',
-                  },
-                }}
-              >
-                회원가입
-              </Link>
-              <Link
-                component="button"
-                variant="body2"
-                onClick={() => navigate('/screens/KIDS-PP-US-LG-06')}
-                sx={{
-                  cursor: 'pointer',
-                  color: 'text.secondary',
-                  textDecoration: 'none',
-                  '&:hover': {
-                    textDecoration: 'underline',
-                    color: 'primary.main',
-                  },
-                }}
-              >
-                아이디 찾기
-              </Link>
-              <Link
-                component="button"
-                variant="body2"
-                onClick={() => navigate('/screens/KIDS-PP-US-LG-08')}
-                sx={{
-                  cursor: 'pointer',
-                  color: 'text.secondary',
-                  textDecoration: 'none',
-                  '&:hover': {
-                    textDecoration: 'underline',
-                    color: 'primary.main',
-                  },
-                }}
-              >
-                비밀번호 찾기
-              </Link>
-            </Stack>
-
-            {/* 안내 문구 */}
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1, fontSize: '0.813rem' }}>
-                개인정보 보호를 위해 비밀번호 5회 이상 오류 시, 비밀번호 재설정이 필요합니다.
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1, fontSize: '0.813rem' }}>
-                비밀번호는 주기적(3개월)으로 변경하시고, 서비스 이용 후 반드시 로그아웃 하시기 바랍니다.
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.813rem' }}>
-                로그인 후 60분 동안 미동작 시 자동으로 로그아웃 됩니다.
-              </Typography>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              // 1. 보조 기기에서 체크박스의 상태 변화를 더 잘 인지하도록 속성 추가
+                              inputProps={{ 
+                                'aria-label': '아이디 저장 여부 선택',
+                                'role': 'checkbox'
+                              }}
+                              checked={values.rememberId}
+                              onChange={(e) => {
+                                const checked = e.target.checked
+                                setValues((p) => ({ ...p, rememberId: checked }))
+                                // 체크 해제 시 localStorage에서도 제거
+                                if (!checked) {
+                                  localStorage.removeItem(STORAGE_KEY_REMEMBER_ID)
+                                }
+                              }}
+                              // 2. 키보드 탭(Tab) 이동 시 시각적 포커스를 명확히 함 (MUI 기본 지원되지만 확인)
+                              disableRipple={false} 
+                            />
+                          }
+                          label={
+                            <Typography>
+                              {t('rememberId')}
+                            </Typography>
+                          }
+                        />
+                        <Box className="login-actions">
+                          <Button variant="contained" type="submit" size="large" fullWidth>
+                            {t('login')}
+                          </Button>
+                        </Box>
+                        <List className="account-utils" component="nav" aria-label="계정 관리 메뉴">
+                          <React.Fragment key="signup">
+                            <ListItem disablePadding className="account-utils__item">
+                              <Link
+                                component="button"
+                                onClick={() => navigate('/screens/KIDS-PP-US-JM-01')}
+                                className="account-utils__link"
+                              >
+                                {t('signup')}
+                              </Link>
+                            </ListItem>
+                            <Divider orientation="vertical" flexItem className="account-utils__divider" />
+                          </React.Fragment>
+                          <React.Fragment key="findId">
+                            <ListItem disablePadding className="account-utils__item">
+                              <Link
+                                component="button"
+                                onClick={() => navigate('/screens/KIDS-PP-US-LG-06')}
+                                className="account-utils__link"
+                              >
+                                {t('findId')}
+                              </Link>
+                            </ListItem>
+                            <Divider orientation="vertical" flexItem className="account-utils__divider" />
+                          </React.Fragment>
+                          <React.Fragment key="findPassword">
+                            <ListItem disablePadding className="account-utils__item">
+                              <Link
+                                component="button"
+                                onClick={() => navigate('/screens/KIDS-PP-US-LG-08')}
+                                className="account-utils__link"
+                              >
+                                {t('findPassword')}
+                              </Link>
+                            </ListItem>
+                          </React.Fragment>
+                        </List>
+                      </Box>
+                    </Box>
+                    <Box className="login-section__notice">
+                      <Box component="ul" className="bullet-list">
+                        <li>{t('passwordErrorReminder')}</li>
+                        <li>{t('passwordChangeReminder')}</li>
+                        <li>{t('logoutAfter60Minutes')}</li>
+                      </Box>
+                    </Box>
+                  </Box>
+                  {/* --- 본문 끝 --- */}
+                </Box>
+              </Box>
             </Box>
-          </Stack>
+          </Box>
         </Box>
       </Box>
 
@@ -509,6 +474,6 @@ export default function Login() {
           </Button>
         </DialogActions>
       </Dialog>
-      </div>
+    </>
   )
 }
