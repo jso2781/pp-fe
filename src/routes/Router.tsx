@@ -10,13 +10,13 @@ import NoticeListKo from '@/pages/ko/notice/NoticeList'
 import NoticeDetailKo from '@/pages/ko/notice/NoticeDetail'
 import BoardListKo from '@/pages/ko/board/BoardList'
 import BoardWriteKo from '@/pages/ko/board/BoardWrite'
-import DurProposalKo from '@/pages/ko/maintask/dur/durProposal/DurProposal'
+import DurProposalKo from '@/pages/ko/maintask/dur/DurProposal'
 import DurNoticeListKo from '@/pages/ko/dur/DurNoticeList'
 import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail'
 import NotFoundKo from '@/pages/ko/NotFound'
 import LoginKo from '@/pages/ko/Login'
 import LoginMethodKo from '@/pages/ko/LoginMethod'
-import NewsFaqNoticeKo from '@/pages/ko/news/newFaqNotice/NewsFaqNotice';
+import NewsFaqNoticeKo from '@/pages/ko/news/NewsFaqNotice';
 import TermsKo from '@/pages/ko/etc/Terms';
 import PrivacyPolicyKo from '@/pages/ko/etc/PrivacyPolicy';
 import CctvPolicyKo from '@/pages/ko/etc/CctvPolicy';
