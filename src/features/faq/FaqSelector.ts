@@ -1,6 +1,6 @@
 import type { RootState } from '@/store/store';
 import { createSelector } from '@reduxjs/toolkit';
-import { FaqSearchParam, FaqItem, FaqRVO } from './FaqTypes';
+import { FaqParam, FaqItem, FaqRVO, CategoryCode } from './FaqTypes';
 
 const faqList = (state: RootState) => state.faq.list;
 
@@ -9,7 +9,7 @@ const typeGuard = (vo: FaqRVO) => typeof vo.faqSeq === 'number' && typeof vo.faq
 const selectNormalizedFaqList = createSelector(
   [faqList],
   (list): FaqItem[] => [...list]
-  .filter((vo): vo is FaqRVO & { faqSeq: number; faqTtl: string; faqAns: string; faqClsf: string } => (typeGuard(vo)))
+  .filter((vo): vo is FaqRVO & { faqSeq: number; faqTtl: string; faqAns: string; faqClsf: CategoryCode } => (typeGuard(vo)))
   .sort((a, b) => a.faqSeq - b.faqSeq)
   .map(vo => ({title: vo.faqTtl, content: vo.faqAns, category: vo.faqClsf}))
 );
@@ -17,17 +17,18 @@ const selectNormalizedFaqList = createSelector(
 export const selectFaqCategoryList = createSelector(
   [selectNormalizedFaqList],
   (list) => {
-    const category: string[] = list.map(faqItem => faqItem.category);
+    const category = list.map(faqItem => faqItem.category);
     const set = new Set(category);
-    const categoryList = ['all', ...set];
+    const categoryList: CategoryCode[] = ['all', ...set];
     return categoryList;
   }
 )
 
 export const selectViewFaqList = createSelector(
-  [selectNormalizedFaqList, (state: RootState, param: FaqSearchParam) => param],
-  (selectNormalizedFaqList, { category = '', search= '' }) => {
-    return selectNormalizedFaqList
+  [selectNormalizedFaqList, (_: RootState, param: FaqParam) => param],
+  (selectNormalizedFaqList, { activeCategory = 'all', searchWord= '' }) => {
+    const filteredCategoryFaqList = selectNormalizedFaqList.filter(faqItem => activeCategory === 'all' || faqItem.category === activeCategory);
+    return filteredCategoryFaqList.filter(faqItem => faqItem.title.indexOf(searchWord) !== -1 || faqItem.content.indexOf(searchWord) !== -1);
   }
 )
 

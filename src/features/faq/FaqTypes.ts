@@ -236,13 +236,16 @@ export interface FaqListRVO {
 export interface FaqDVO {
 }
 
+//API에서 받아오는 값 한정적으로 고정
+export type CategoryCode = 'all' | 'tempClsf1' | 'tempClsf2';
+
 export interface FaqItem {
   title: string;
   content: string;
-  category: string;
+  category: CategoryCode;
 }
 
-export interface FaqSearchParam {
-  category: string;
-  search: string;
+export interface FaqParam {
+  activeCategory: CategoryCode;
+  searchWord: string;
 }

@@ -7,6 +7,9 @@
 .sr_only {
   @include mixins.sr_only;
 }
+.sr-only {
+  @include mixins.sr_only;
+}
 
 .footer{
   position: relative;

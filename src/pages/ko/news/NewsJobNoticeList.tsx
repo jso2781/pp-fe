@@ -148,17 +148,12 @@ export default function NoticeList() {
                 <Box className="page-content">
                   
                  {/* --- 본문 시작 --- */}
-                  <Box className="board_list_area" component="section">
-                    <Stack 
-                        direction="row" 
-                        spacing={1} // 요소 간 간격을 Antd 느낌으로 좁힘 (8px)
-                        alignItems="stretch" // 높이를 동일하게 맞추기 위해 stretch 권장
-                        component="form" 
-                        className="board_search"
-                      >
-                      <FormControl size="large" sx={{ minWidth: 140 }}>
-                        <InputLabel id="search-condition-label" className="sr_only">검색조건</InputLabel>
+                  <Box className="board-list-area" component="section">
+                    <Stack component="form" className="board-search">
+                      <FormControl size="large" className="search-condition">
+                        <InputLabel id="search-condition-label" className="sr-only">검색조건</InputLabel>
                         <Select 
+                          size="large" 
                           value={searchCnd} 
                           labelId="search-condition-label" 
                           onChange={(e) => setSearchCnd(String(e.target.value))}
@@ -167,23 +162,25 @@ export default function NoticeList() {
                           <MenuItem value="content">내용</MenuItem>
                         </Select>
                       </FormControl>
-                      <TextField 
-                        size="large" 
-                        placeholder="검색어 입력" 
-                        value={searchWrd} 
-                        onChange={(e) => setSearchWrd(e.target.value)} 
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            onSearch();
-                          }
-                        }}
-                        sx={{ flexGrow: 1 }} // 남은 공간을 꽉 채우도록 설정
-                      />
-                      <Button variant="contained" size="large" sx={{ px: 4, minWidth: 100 }} onClick={onSearch}>검색</Button>
+                      <Box className="search-input-group">
+                        <TextField 
+                          size="large" 
+                          placeholder="검색어 입력" 
+                          value={searchWrd} 
+                          onChange={(e) => setSearchWrd(e.target.value)} 
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              onSearch();
+                            }
+                          }}
+                          sx={{ flexGrow: 1 }} // 남은 공간을 꽉 채우도록 설정
+                        />
+                        <Button variant="contained" size="large" className="btn-search" onClick={onSearch}>검색</Button>
+                      </Box>
                     </Stack>
 
-                    <Box className="board_info" aria-label="게시판 검색결과">
-                      <Typography className="board_count">
+                    <Box className="board-info" aria-label="게시판 검색결과">
+                      <Typography className="board-count">
                         검색결과 
                         <Typography component="span" className="count">{totalCount}</Typography>
                         건
@@ -237,7 +234,7 @@ export default function NoticeList() {
                       </Table>
                     </TableContainer>
 
-                    <Stack direction="row" justifyContent="center" className="paging_wrap">
+                    <Stack className="paging-wrap">
                       <Pagination
                         page={pageNum}
                         count={totalPages ?? 0}
