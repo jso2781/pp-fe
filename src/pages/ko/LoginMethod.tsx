@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Box, Button, Card, CardContent, Link, Stack, Switch, Typography, IconButton, Tooltip } from '@mui/material'
+import { Switch as BaseSwitch } from '@base-ui/react';
 import CheckIcon from '@mui/icons-material/Check';
 import Grid from '@mui/material/Grid'
 import {
@@ -179,319 +180,141 @@ export default function LoginMethod() {
   }
 
   return (
-    <div className="page-layout">
-    <div className="sub-container">
-        <div className="content-wrap">
-        <div className="sub-content">
+    <Box className="page-layout">
+      <Box className="sub-container">
+        <Box className="content-wrap">
+          {/* 서브 콘텐츠 영역 */}
+          <Box className="sub-content">
+            {/* 상단 현재 위치 정보 */}
             <DepsLocation />
-            <div className="content-view" id="content">
-            <Box sx={{ maxWidth: 980, margin: '0 auto', padding: '5px 16px' }}>
-                {/* Any-ID SDK가 렌더링될 영역 (정부24와 동일) */}
-                <div id="anyidc" style={{ display: 'none' }} />
-                <Typography variant="h4" sx={{ mb: 1, fontWeight: 700 }}>
-                로그인 방식을 선택해주세요.
-                </Typography>
-                {/* 정부 통합로그인 사용 여부 */}
-                <Card sx={{ border: 'none', borderColor: 'divider' }}>
-                <CardContent sx={{ pb: 0 }}>
-                    <Stack spacing={2}>
-                    <Stack direction="row" spacing={0} alignItems="center">
+            <Box className="content-view" id="content">
+              <Box className="page-content">
+                {/* --- 본문 시작 --- */}
+
+                <Box className="page-content__anyid">
+                  {/* Any-ID SDK가 렌더링될 영역 (정부24와 동일) */}
+                  <div id="anyidc" className="anyidc" />
+
+                  <Typography variant="h3" className="login-title">
+                    로그인 방식을 선택해주세요.
+                  </Typography>
+                  <Card className="gov-login-card">
+                    <CardContent className="gov-login-card-content">
+                      <Stack spacing={2}>
                         <Stack direction="row" spacing={0} alignItems="center">
-                        <Typography variant="body1" fontWeight={600}>
-                            정부 통합로그인 사용
-                        </Typography>
-                        <Tooltip
-                            title="도글 ON 시 정부 통합 인증을 적용, 도글 OFF 시 정보 통합 인증을 미적용하고 1회성으로 본인인증 처리"
-                            arrow
-                        >
-                            <IconButton size="small" sx={{ p: 0.5 }}>
-                            <HelpIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
-                            </IconButton>
-                        </Tooltip>
-                        </Stack>
-                        {/* <Switch
-                        checked={useGovLogin}
-                        onChange={(e) => setUseGovLogin(e.target.checked)}
-                        color="primary"
-                        /> {useGovLogin ? '사용' : '미사용'} */}
-
-                        <Stack direction="row" alignItems="center">
-                        <Switch
-                            checked={useGovLogin}
-                            onChange={(e) => setUseGovLogin(e.target.checked)}
-                            sx={{
-                            width: 50, // 전체 가로 길이
-                            height: 28, // 전체 세로 길이 (막대기 높이와 맞춤)
-                            padding: 0, // 기본 여백 제거
-                            display: 'flex',
-                            alignItems: 'center',
-                            '& .MuiSwitch-switchBase': {
-                                padding: '4px', // 동그라미와 테두리 사이 간격
-                                '&.Mui-checked': {
-                                transform: 'translateX(22px)', // 이동 거리 조정
-                                color: '#fff',
-                                '& + .MuiSwitch-track': {
-                                    backgroundColor: '#0A6C70', // 체크 시 막대기 색상
-                                    opacity: 1,
-                                    border: 0,
-                                },
-                                },
-                            },
-                            '& .MuiSwitch-thumb': {
-                                width: 20,
-                                height: 20,
-                            },
-                            '& .MuiSwitch-track': {
-                                borderRadius: 28 / 2, // 높이의 절반으로 설정하면 둥글게 됨
-                                backgroundColor: '#E9E9EA', // 비활성 시 막대기 색상
-                                opacity: 1,
-                                transition: 'background-color 0.2s',
-                                height: '100%', // Root 높이를 꽉 채우도록 설정 (넓힘)
-                            },
-                            }}
-                            color="primary"
-                            // 체크되었을 때 동그라미 안에 보일 아이콘
-                            checkedIcon={
-                            <div style={{ 
-                                width: 20, 
-                                height: 20, 
-                                borderRadius: '50%', 
-                                backgroundColor: '#fff',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}>
-                                <CheckIcon sx={{ fontSize: 16, color: '#0A6C70' }} /> {/* 체크표시만 청록색 */}
-                            </div>
-                            }
-                            // 체크되지 않았을 때
-                            icon={
-                            <div style={{ width: 20, height: 20, borderRadius: '50%', backgroundColor: '#fff' }} />
-                            }
-                        /> 
-                        <Box sx={{ ml: 1 }}>
-                            {useGovLogin ? '사용' : '미사용'}
-                        </Box>
-                        </Stack>
-                    </Stack>
-                    <Stack spacing={1}>
-                        <Typography variant="body2" color="text.secondary">
-                        아직 정부 통합인증(Any-ID) 사용자가 아니신가요?{' '}
-                        <Link
-                            component="button"
-                            variant="body2"
-                            onClick={handleUserReg}
-                            sx={{
-                            cursor: 'pointer',
-                            textDecoration: 'underline',
-                            color: 'primary.main',
-                            fontWeight: 500,
-                            verticalAlign: 'baseline',
-                            display: 'inline',
-                            }}
-                        >
-                            사용자 등록 &gt;
-                        </Link>
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                        정부 통합인증(Any-ID){' '}
-                        <Link
-                            component="button"
-                            variant="body2"
-                            onClick={handleUserMgmt}
-                            sx={{
-                            cursor: 'pointer',
-                            textDecoration: 'underline',
-                            color: 'primary.main',
-                            fontWeight: 500,
-                            verticalAlign: 'baseline',
-                            display: 'inline',
-                            }}
-                        >
-                            사용자 관리 &gt;
-                        </Link>
-                        </Typography>
-                    </Stack>
-                    </Stack>
-                </CardContent>
-                </Card>
-
-                {/* 로그인 방식 선택 */}
-                <Card sx={{ border: 'none', boxShadow: 'none' }}>
-                <CardContent sx={{ pb: 0 }}>
-                    <Grid container spacing={2}>
-                    {/* 간편 인증 */}
-                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                        <Box
-                        component={Button}
-                        variant="outlined"
-                        onClick={() => handleLoginMethod('simple')}
-                        sx={{
-                            width: '100%',
-                            aspectRatio: '2/1',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderColor: 'divider',
-                            borderWidth: 2,
-                            p: 1,
-                            '&:hover': {
-                            borderColor: 'primary.main',
-                            borderWidth: 2,
-                            backgroundColor: 'action.hover',
-                            },
-                        }}
-                        >
-                        <Stack spacing={1} alignItems="center" sx={{ width: '100%' }}>
-                            <AccountIcon sx={{ fontSize: 32, color: 'primary.main' }} />
-                            <Typography variant="body1" fontWeight={600}>
-                            간편 인증
-                            </Typography>
-                            <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            sx={{ textAlign: 'center', lineHeight: 1.4 }}
+                          <Stack direction="row" spacing={0} alignItems="center">
+                            <Typography className="gov-login-label"> 정부 통합로그인 사용</Typography>
+                            <Tooltip
+                              title="도글 ON 시 정부 통합 인증을 적용, 도글 OFF 시 정보 통합 인증을 미적용하고 1회성으로 본인인증 처리"
+                              arrow
                             >
-                            네이버, 카카오, 금융기관 등의 전자서명으로 로그인
-                            </Typography>
-                        </Stack>
-                        </Box>
-                    </Grid>
+                              <IconButton size="small" className="help-icon-button">
+                                <HelpIcon className="help-icon" />
+                              </IconButton>
+                            </Tooltip>
+                          </Stack>
 
-                    {/* 휴대폰 SMS 인증 */}
-                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                        <Box
-                        component={Button}
-                        variant="outlined"
-                        onClick={() => handleLoginMethod('sms')}
-                        sx={{
-                            width: '100%',
-                            aspectRatio: '2/1',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderColor: 'divider',
-                            borderWidth: 2,
-                            p: 1,
-                            '&:hover': {
-                            borderColor: 'primary.main',
-                            borderWidth: 2,
-                            backgroundColor: 'action.hover',
-                            },
-                        }}
-                        >
-                        <Stack spacing={1} alignItems="center" sx={{ width: '100%' }}>
-                            <PhoneIcon sx={{ fontSize: 32, color: 'primary.main' }} />
-                            <Typography variant="body1" fontWeight={600}>
-                            휴대폰 SMS 인증
-                            </Typography>
-                            <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            sx={{ textAlign: 'center', lineHeight: 1.4 }}
+                          <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
+                            {/* Base UI 스위치 */}
+                            <BaseSwitch.Root
+                              className="base_switch_root"
+                              checked={useGovLogin}
+                              onCheckedChange={(checked) => setUseGovLogin(checked)}
                             >
-                            본인 명의로 가입된 휴대폰 인증으로 로그인
+                              <BaseSwitch.Thumb className="base_switch_thumb" />
+                            </BaseSwitch.Root>
+                            {/* 텍스트 라벨 */}
+                            <Typography component="p" className="switch_label">
+                              {useGovLogin ? '사용 중' : '미사용'}
                             </Typography>
+                          </Stack>
                         </Stack>
-                        </Box>
-                    </Grid>
 
-                    {/* 모바일 신분증 인증 */}
-                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                        <Box
-                        component={Button}
-                        variant="outlined"
-                        onClick={() => handleLoginMethod('mobileId')}
-                        sx={{
-                            width: '100%',
-                            aspectRatio: '2/1',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderColor: 'divider',
-                            borderWidth: 2,
-                            p: 1,
-                            '&:hover': {
-                            borderColor: 'primary.main',
-                            borderWidth: 2,
-                            backgroundColor: 'action.hover',
-                            },
-                        }}
-                        >
-                        <Stack spacing={1} alignItems="center" sx={{ width: '100%' }}>
-                            <FingerprintIcon sx={{ fontSize: 32, color: 'primary.main' }} />
-                            <Typography variant="body1" fontWeight={600}>
-                            모바일 신분증 인증
-                            </Typography>
-                            <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            sx={{ textAlign: 'center', lineHeight: 1.4 }}
-                            >
-                            스마트폰의 모바일 신분증 인증으로 로그인
-                            </Typography>
+                        <Stack spacing={1}>
+                          <Typography variant="body2" className="user-reg-text">
+                            아직 정부 통합인증(Any-ID) 사용자가 아니신가요?{' '}
+                            <Link component="button" variant="body2" onClick={handleUserReg} className="link">
+                              사용자 등록 &gt;
+                            </Link>
+                          </Typography>
+                          <Typography variant="body2" className="user-mgmt-text">
+                            정부 통합인증(Any-ID){' '}
+                            <Link component="button" variant="body2" onClick={handleUserMgmt} className="link">
+                              사용자 관리 &gt;
+                            </Link>
+                          </Typography>
                         </Stack>
-                        </Box>
-                    </Grid>
-                    </Grid>
-                </CardContent>
-                </Card>
+                      </Stack>
+                    </CardContent>
+                  </Card>
 
-                {/* KIDS 로그인 */}
-                <Card sx={{ border: 'none', boxShadow: 'none' }}>
-                <CardContent sx={{ pb: 0 }}>
-                    <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-                    KIDS 로그인
-                    </Typography>
-                    <Grid container spacing={2}>
-                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                        <Box
-                        component={Button}
-                        variant="outlined"
-                        onClick={() => navigate('/ko/login')}
-                        sx={{
-                            width: '100%',
-                            aspectRatio: '2/1',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderColor: 'divider',
-                            borderWidth: 2,
-                            p: 1,
-                            '&:hover': {
-                            borderColor: 'primary.main',
-                            borderWidth: 2,
-                            backgroundColor: 'action.hover',
-                            },
-                        }}
+
+                  {/* 로그인 방식 선택 */}
+                  <Card className="login-method-card">
+                    <CardContent className="login-method-card-content">
+                      <Box className="login-button-group">
+                        <Button variant="outlined" onClick={() => handleLoginMethod('simple')} className="login-button">
+                          <Stack spacing={1} alignItems="center" className="login-button-stack">
+                            <AccountIcon className="login-icon" />
+                            <Typography variant="body1" className="login-label">간편 인증</Typography>
+                            <Typography variant="caption" className="login-desc">
+                              네이버, 카카오, 금융기관 등의 전자서명으로 로그인
+                            </Typography>
+                          </Stack>
+                        </Button>
+                        
+                        <Button variant="outlined" onClick={() => handleLoginMethod('sms')} className="login-button">
+                          <Stack spacing={1} alignItems="center" className="login-button-stack">
+                            <PhoneIcon className="login-icon" />
+                            <Typography variant="body1" className="login-label">휴대폰 SMS 인증</Typography>
+                            <Typography variant="caption" className="login-desc">
+                              본인 명의로 가입된 휴대폰 인증으로 로그인
+                            </Typography>
+                          </Stack>
+                        </Button>
+
+                        <Button variant="outlined" onClick={() => handleLoginMethod('mobileId')} className="login-button">
+                          <Stack spacing={1} alignItems="center" className="login-button-stack">
+                            <FingerprintIcon className="login-icon" />
+                            <Typography variant="body1" className="login-label">모바일 신분증 인증</Typography>
+                            <Typography variant="caption" className="login-desc">
+                              스마트폰의 모바일 신분증 인증으로 로그인
+                            </Typography>
+                          </Stack>
+                        </Button>
+                      </Box>
+                    </CardContent>
+                  </Card>
+
+                  {/* KIDS 로그인 */}
+                  <Card className="kids-login-card">
+                    <Typography className="kids-login-title">KIDS 로그인</Typography>
+                    <CardContent className="kids-login-card-content">
+                      <Box className="login-button-group">
+                        <Button
+                          variant="outlined"
+                          onClick={() => navigate('/ko/login')}
+                          className="login-button"
                         >
-                        <Stack spacing={1} alignItems="center" sx={{ width: '100%' }}>
-                            <AccountIcon sx={{ fontSize: 32, color: 'primary.main' }} />
-                            <Typography variant="body1" fontWeight={600}>
-                            아이디 로그인
+                          <Stack spacing={1} alignItems="center" className="login-button-stack">
+                            <AccountIcon className="login-icon" />
+                            <Typography variant="body1" className="login-label">아이디 로그인</Typography>
+                            <Typography variant="caption" className="login-desc">
+                              한국의약품안전관리원 가입 시 등록한 아이디를 이용하여 로그인
                             </Typography>
-                            <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            sx={{ textAlign: 'center', lineHeight: 1.4 }}
-                            >
-                            한국의약품안전관리원 가입 시 등록한 아이디를 이용하여 로그인
-                            </Typography>
-                        </Stack>
-                        </Box>
-                    </Grid>
-                    </Grid>
-                </CardContent>
-                </Card>
+                          </Stack>
+                        </Button>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Box>
+      
+              {/* --- 본문 끝 --- */}
+              </Box>
             </Box>
-            </div>
-        </div>
-        </div>
-    </div>
-    </div>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   )
 }
