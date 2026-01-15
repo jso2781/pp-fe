@@ -180,6 +180,18 @@ export interface PstRVO {
   /** 조회수 */
   pstInqCnt?: number
 
+  /** 이미지 첨부파일명 */    
+  imgFileNm?: string;
+
+  /** 이미지 첨부파일경로 */
+  imgFilePath?: string;
+
+  /** 썸네일 첨부파일명 */
+  thmbFileNm?: string;
+
+  /** 썸네일 첨부파일경로 */
+  thmbFilePath?: string;
+
   /** 첨부파일 목록 */
   atchRVOs?: AtchRVO[]
 }

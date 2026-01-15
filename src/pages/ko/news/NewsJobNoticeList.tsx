@@ -32,6 +32,7 @@ import Lnb from '@/components/common/Lnb';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
 import { SideItem } from '@/features/common/CommonTypes';
+import { BoardKey, BOARD_CONFIG_GROUP } from '@/features/pst/PstConfig';
 
 function SideNav({ items }: { items: SideItem[] }) {
   const location = useLocation();
@@ -84,7 +85,6 @@ export default function NoticeList() {
 
   const { list, totalCount, totalPages, loading } = useAppSelector((s) => s.pst);
 
-  const bbsId = 'BBS_COM_002'; // 채용 게시판 ID
   const [searchCnd, setSearchCnd] = useState(searchParams.get('searchCnd') || 'title');
   const [searchWrd, setSearchWrd] = useState(searchParams.get('searchWrd') || '');
 
@@ -92,14 +92,30 @@ export default function NoticeList() {
   const [pageNum, setPageNum] = useState(1)
   const [pageSize, setPageSize] = useState(10) // 화면에 페이지 사이즈 설정이 필요시 setPageSize 활용
 
-  const sideItems: SideItem[] = useMemo(
-    () => [
-      { key: '/news/NewsNoticeList', label: '공지사항', disabled: false },
-      { key: '/news/NewsJobNoticeList', label: '채용 게시판', disabled: true },
-      { key: '/news/NewsDataRoomList', label: '자료실', disabled: false },
-    ],
-    [],
-  );
+  // URL 게시판 Key값을 통해 게시판 정보 및 LNB 설정
+  const match = location.pathname.match(/\/news\/([^/]+)/);
+  const boardKey = match?.[1] as BoardKey;
+  const currentBoard = BOARD_CONFIG_GROUP[boardKey];
+  const currentGroup = currentBoard.group;
+  const bbsId = currentBoard.bbsId;
+
+  const sideItems = useMemo(
+    () =>
+      Object.values(BOARD_CONFIG_GROUP)
+        .filter((board) => board.group === currentGroup)
+        .map((board) => ({
+          key: `/news/${board.key}`,
+          label: board.label,
+          disabled: board.key === boardKey,
+        })),
+    [boardKey, currentGroup],
+  );  
+
+  // 스크롤 상단 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pageNum]);  
+
 
   const rows = useMemo(() => {
     const arr = Array.isArray(list) && list.length > 0 ? list : [];
@@ -187,7 +203,7 @@ export default function NoticeList() {
                       </Typography>
                     </Box>
 
-                    <TableContainer component={Paper} className="bbs_list">
+                    <TableContainer component={Paper} className="bbs-list">
                       {/* 1. aria-label로 표의 목적을 설명합니다. */}
                       <Table aria-label="공지사항 목록" sx={{ tableLayout: 'fixed' }}>
                         <TableHead>
@@ -211,7 +227,7 @@ export default function NoticeList() {
                                 {/* 4. 동작이 발생하는 요소에 명확한 aria-label을 제공합니다. */}
                                 <Link
                                   component={RouterLink}
-                                  to={`/ko/news/NewsJobNoticeList/${r.id}`}
+                                  to={`/ko/news/${boardKey}/${r.id}`}
                                   color="inherit"
                                   underline="hover" // 평소엔 밑줄 없고 마우스 올릴 때만 생성 (접근성 권장)
                                   aria-label={`${r.title} 상세보기`}

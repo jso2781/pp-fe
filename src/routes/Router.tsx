@@ -22,13 +22,15 @@ import PrivacyPolicyKo from '@/pages/ko/etc/PrivacyPolicy';
 import CctvPolicyKo from '@/pages/ko/etc/CctvPolicy';
 import EmailDenyKo from '@/pages/ko/etc/EmailDeny';
 
-// 게시판 테스트중
+// 게시판 페이지 작업중
 import NewsNoticeListKo from '@/pages/ko/news/NewsNoticeList'
 import NewsNoticeDetailKo from '@/pages/ko/news/NewsNoticeDetail'
 import NewsJobNoticeListKo from '@/pages/ko/news/NewsJobNoticeList'
 import NewsJobNoticeDetailKo from '@/pages/ko/news/NewsJobNoticeDetail'
 import NewsDataRoomListKo from '@/pages/ko/news/NewsDataRoomList'
 import NewsDataRoomDetailKo from '@/pages/ko/news/NewsDataRoomDetail'
+import NewsCardNewsListKo from '@/pages/ko/news/NewsCardNewsList'
+import NewsCardNewsDetailKo from '@/pages/ko/news/NewsCardNewsDetail'
 
 // en 페이지들 (프로젝트에 실제 존재한다고 가정)
 import HomeEn from "@/pages/en/Home";
@@ -163,13 +165,15 @@ export default function Router() {
             <Route path="/:lang/etc/CctvPolicy" element={<LangElement byLang={{ ko: <CctvPolicyKo />, en: <CctvPolicyKo /> }} />} />
             <Route path="/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
           
-            {/* 게시판 테스트중 */}          
+            {/* 게시판 페이지 작업중 */}          
             <Route path="/:lang/news/NewsNoticeList" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
             <Route path="/:lang/news/NewsNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsNoticeDetailKo />, en: <NewsNoticeDetailKo /> }} />} />            
             <Route path="/:lang/news/NewsJobNoticeList" element={<LangElement byLang={{ ko: <NewsJobNoticeListKo />, en: <NewsJobNoticeListKo /> }} />} />
             <Route path="/:lang/news/NewsJobNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsJobNoticeDetailKo />, en: <NewsJobNoticeDetailKo /> }} />} />            
             <Route path="/:lang/news/NewsDataRoomList" element={<LangElement byLang={{ ko: <NewsDataRoomListKo />, en: <NewsDataRoomListKo /> }} />} />
             <Route path="/:lang/news/NewsDataRoomList/:pstSn" element={<LangElement byLang={{ ko: <NewsDataRoomDetailKo />, en: <NewsDataRoomDetailKo /> }} />} />
+            <Route path="/:lang/news/NewsCardNewsList" element={<LangElement byLang={{ ko: <NewsCardNewsListKo />, en: <NewsCardNewsListKo /> }} />} />
+            <Route path="/:lang/news/NewsCardNewsList/:pstSn" element={<LangElement byLang={{ ko: <NewsCardNewsDetailKo />, en: <NewsCardNewsDetailKo /> }} />} />            
 
             {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
             <Route path="/screens" element={<Screens />} />
