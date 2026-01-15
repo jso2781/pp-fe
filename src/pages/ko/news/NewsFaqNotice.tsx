@@ -2,13 +2,13 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectFaqList } from "@/features/faq/FaqThunks";
 import { useEffect, useRef, useState } from "react";
 import { selectViewFaqList, selectFaqCategoryList } from "@/features/faq/FaqSelector";
-import { CategoryCode, FaqParam } from '@/features/faq/FaqTypes';
+import { CategoryCode, FaqItem, FaqParam } from '@/features/faq/FaqTypes';
 import { Pagination, Stack } from "@mui/material";
 
 const categoryNaming: Record<CategoryCode, string> = {
   all: "전체",
-  tempClsf1: "의약품부작용 정의",
-  tempClsf2: "부작용 신고방법"
+  ADEF_DEFN: "의약품부작용 정의",
+  ADEF_DCLR: "부작용 신고방법"
 }
 
 export default function NewsFaqNotice () {
@@ -44,7 +44,7 @@ export default function NewsFaqNotice () {
           <br/>
           검색 결과 {totalCount}건
           <br/>
-          {/* { faqList.map(data => <FaqRow {...data} />) }  */}
+          { faqList.map(data => <FaqRow {...data} />) } 
           <Stack className="paging-wrap">
             <Pagination count={totalPages} page={param.page} onChange={(_, p) => {
               handleUI({...param, page: p})
@@ -55,3 +55,15 @@ export default function NewsFaqNotice () {
     </>
   );
 }
+
+
+const FaqRow = (props: FaqItem) => {
+  return (
+    <>
+      {props.title}
+      <br/>
+      {props.content}
+      <br/><br/>
+    </>
+  )
+} 
