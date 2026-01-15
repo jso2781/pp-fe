@@ -5,7 +5,6 @@
  * 화면설명: 회원 유형 선택 화면
  */
 import { useTranslation } from 'react-i18next'
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Card, CardContent, Stack, Stepper, Step, StepLabel, Typography } from '@mui/material';
 import { ArrowForward } from '@mui/icons-material'
