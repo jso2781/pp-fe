@@ -249,18 +249,18 @@ export default function Login() {
                             }}
                             error={!!errors.loginId}
                             helperText={errors.loginId}
-                            FormHelperTextProps={{
-                              id: 'loginId-alert',
-                              className: 'error-alert',
-                              role: errors.loginId ? 'alert' : undefined,
-                              'aria-live': errors.loginId ? 'polite' : undefined,
-                            }}
                             fullWidth
                             inputProps={{ maxLength: MAX_LENGTH }}
                             // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
                             slotProps={{
                               htmlInput: {
                                 'aria-describedby': errors.loginId ? 'loginId-alert' : undefined,
+                              },
+                              formHelperText: {
+                                id: 'loginId-alert',
+                                className: 'error-alert',
+                                role: errors.loginId ? 'alert' : undefined,
+                                'aria-live': errors.loginId ? 'polite' : undefined,
                               },
                             }}
                           />
@@ -291,18 +291,18 @@ export default function Login() {
                             }}
                             error={!!errors.password || !!loginFail}
                             helperText={errors.password || (loginFail ? `${loginFail.reason} (${loginFail.failedCount}/${MAX_FAIL_COUNT})` : '')}
-                            FormHelperTextProps={{
-                              id: 'password-input-alert',
-                              className: 'error-alert',
-                              role: (errors.password || loginFail) ? 'alert' : undefined,
-                              'aria-live': (errors.password || loginFail) ? 'polite' : undefined,
-                            }}
                             fullWidth
                             inputProps={{ maxLength: MAX_LENGTH }}
                             // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
                             slotProps={{
                               htmlInput: {
                                 'aria-describedby': (errors.password || loginFail) ? 'password-input-alert' : undefined,
+                              },
+                              formHelperText: {
+                                id: 'password-input-alert',
+                                className: 'error-alert',
+                                role: (errors.password || loginFail) ? 'alert' : undefined,
+                                'aria-live': (errors.password || loginFail) ? 'polite' : undefined,
                               },
                             }}
                           />
