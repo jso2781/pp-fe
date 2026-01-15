@@ -1,11 +1,11 @@
-import type { FaqRVO } from '@/features/faq/FaqTypes';
+import type { FaqItem } from '@/features/faq/FaqTypes';
 
-export default function FaqRow (props: FaqRVO) {
+export default function FaqRow (props: FaqItem) {
   return (
     <>
-      { props.faqTtl }
+      { props.title }
       <br/>
-      { props.faqAns }
+      { props.content }
       <br/>
       <br/>
     </>
