@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Box, List, ListItemButton, ListItemText, Collapse } from '@mui/material';
+import { Box, List, ListItem, ListItemButton, ListItemText, Collapse } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { lnbStyles } from './Lnb.styles';
 import { useAppSelector } from '@/store/hooks';
@@ -104,14 +104,29 @@ function Lnb({ currentUrl, items }: LnbProps) {
   }, [menuStructor, currentUrl, items]);
 
   const renderItems = (arr: SideItem[], depth = 0) => (
-    <List disablePadding>
+    <List 
+      component="ul" 
+      disablePadding 
+      sx={depth === 0 ? lnbStyles.container : { width: '100%' }}
+    >
       {arr.map((it) => {
         const active = location.pathname === it.key || location.pathname.startsWith(it.key + '/');
         const hasChildren = !!it.children?.length;
         const disabled = !!it.disabled;
 
+        // 현재 메뉴의 열림 상태를 변수
+        const isOpen = !!openKeys[it.key];
+
         return (
-          <Box key={it.key}>
+          <ListItem 
+            key={it.key} 
+            component="li" 
+            disablePadding 
+            sx={{ 
+              display: 'block',
+              ...lnbStyles.listItem(depth) 
+            }}
+          >
             <ListItemButton
               selected={active}
               disabled={disabled}
@@ -125,11 +140,11 @@ function Lnb({ currentUrl, items }: LnbProps) {
                 const dest = it.key.startsWith('/ko/') ? it.key : '/ko' + it.key;
                 window.location.href = dest;
               }}
-              sx={lnbStyles.itemButton(depth)} // 스타일 적용
+              sx={lnbStyles.itemButton(depth, isOpen)}
             >
               <ListItemText 
                 primary={it.label} 
-                sx={lnbStyles.itemText(depth)} // 스타일 적용
+                sx={lnbStyles.itemText(depth, isOpen)} 
               />
               {hasChildren ? (
                 openKeys[it.key] ? 
@@ -139,13 +154,13 @@ function Lnb({ currentUrl, items }: LnbProps) {
             </ListItemButton>
 
             {hasChildren && (
-              <Collapse in={!!openKeys[it.key]} timeout={0} unmountOnExit>
-                <Box sx={lnbStyles.collapseBox}>
+              <Collapse in={isOpen} timeout={0} unmountOnExit>
+                <Box component="div" sx={lnbStyles.collapseBox}>
                   {renderItems(it.children!, depth + 1)}
                 </Box>
               </Collapse>
             )}
-          </Box>
+          </ListItem>
         );
       })}
     </List>
