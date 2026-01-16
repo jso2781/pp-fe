@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Button, Stepper, Step, StepLabel, Typography, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
+import { Box, Button, Stepper, Step, StepLabel, Typography, Card, CardContent, Stack} from '@mui/material';
+import {
+  PhoneAndroid as PhoneIcon,
+  AccountCircle as AccountIcon,
+  Fingerprint as FingerprintIcon,
+  HelpOutline as HelpIcon,
+} from '@mui/icons-material'
 import DepsLocation from '@/components/common/DepsLocation'
 import ScreenShell from '../ScreenShell'
 
@@ -16,6 +22,50 @@ export default function KIDS_PP_US_JM_04() {
     { label: '4단계', description: '회원 정보 입력' },
     { label: '5단계', description: '가입 신청 완료' },
   ]
+
+  const handleLoginMethod = async (method: string) => {
+    if (method === 'simple') {
+      // 간편인증: 정부24와 동일하게 Any-ID SDK 다이얼로그 띄우기
+      if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
+        console.error('Any-ID 모듈이 준비되지 않았습니다.')
+        return
+      }
+
+      const configAnyidcJsonUrl =
+        import.meta.env.VITE_ANY_ID_STATIC_URL + '/config/config.anyidc.json'
+
+      // 정부24와 동일한 방식으로 간편인증 다이얼로그 표시
+      window.AnyidC.LOAD_MODULE({
+        cfg: configAnyidcJsonUrl,
+        txId: tx,
+        tag: tx,
+        lvl: acrValues,
+        // SSO 연동이 없는 "이용기관 자체 로그인" 흐름: bypass=1
+        bypass: 1,
+        toggle: true,
+        theme: '4.1.0',
+        redirect_uri: redirectUri,
+        success: function (data) {
+          window.anyidAdaptor?.success?.(data)
+        },
+        fail: function (err) {
+          console.error(err)
+        },
+        log: function (data) {
+          console.log(data)
+        },
+      })
+    } else if (method === 'sms') {
+      // 휴대폰 SMS 인증 처리
+      console.log('휴대폰 SMS 인증:', method)
+      // TODO: 실제 SMS 인증 처리 로직 구현
+    } else if (method === 'mobileId') {
+      // 모바일 신분증 인증 처리
+      console.log('모바일 신분증 인증:', method)
+      // TODO: 실제 모바일 신분증 인증 처리 로직 구현
+    }
+  }
+
 
 
   return (
@@ -80,9 +130,41 @@ export default function KIDS_PP_US_JM_04() {
                       </Typography>
                     </Box>
                     
-                    <Box>
-                      Any-ID 
-                    </Box>
+                    <Card className="login-method-card">
+                      <CardContent className="login-method-card-content">
+                        <Box className="login-button-group">
+                          <Button variant="outlined" onClick={() => handleLoginMethod('simple')} className="login-button">
+                            <Stack spacing={1} alignItems="center" className="login-button-stack">
+                              <AccountIcon className="login-icon" />
+                              <Typography variant="body1" className="login-label">간편 인증</Typography>
+                              <Typography variant="caption" className="login-desc">
+                                네이버, 카카오, 금융기관 등의 전자서명으로 로그인
+                              </Typography>
+                            </Stack>
+                          </Button>
+                          
+                          <Button variant="outlined" onClick={() => handleLoginMethod('sms')} className="login-button">
+                            <Stack spacing={1} alignItems="center" className="login-button-stack">
+                              <PhoneIcon className="login-icon" />
+                              <Typography variant="body1" className="login-label">휴대폰 SMS 인증</Typography>
+                              <Typography variant="caption" className="login-desc">
+                                본인 명의로 가입된 휴대폰 인증으로 로그인
+                              </Typography>
+                            </Stack>
+                          </Button>
+
+                          <Button variant="outlined" onClick={() => handleLoginMethod('mobileId')} className="login-button">
+                            <Stack spacing={1} alignItems="center" className="login-button-stack">
+                              <FingerprintIcon className="login-icon" />
+                              <Typography variant="body1" className="login-label">모바일 신분증 인증</Typography>
+                              <Typography variant="caption" className="login-desc">
+                                스마트폰의 모바일 신분증 인증으로 로그인
+                              </Typography>
+                            </Stack>
+                          </Button>
+                        </Box>
+                      </CardContent>
+                    </Card>
 
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group between">

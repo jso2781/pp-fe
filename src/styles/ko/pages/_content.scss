@@ -509,133 +509,133 @@
   margin: 0 auto;
   padding: 5px 16px;
 
-  .anyidc {
-    display: none;
-  }
-
   .login-title {
     margin: 0 0 40px 0;
     text-align: center;
     font-size: var(--fs-32);
     font-weight: 700;
   }
+}
 
-  /* 정부 통합 로그인 카드 */
-  .gov-login-card {
-    border: none;
+.anyidc {
+  display: none;
+}
 
-    .gov-login-card-content {
-      padding: 0;
+/* 정부 통합 로그인 카드 */
+.gov-login-card {
+  border: none;
 
-      .gov-login-label {
-        font-weight: 600;
-        font-size: var(--fs-18);
+  .gov-login-card-content {
+    padding: 0;
+
+    .gov-login-label {
+      font-weight: 600;
+      font-size: var(--fs-18);
+    }
+
+    .help-icon-button {
+      padding: 0.5rem;
+
+      .help-icon {
+        font-size: 18px;
+        color: #6b7280;
       }
+    }
 
-      .help-icon-button {
-        padding: 0.5rem;
+    .switch_group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
 
-        .help-icon {
-          font-size: 18px;
-          color: #6b7280;
-        }
+      .switch_label {
+        font-size: 0.875rem;
       }
+    }
 
-      .switch_group {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-
-        .switch_label {
-          font-size: 0.875rem;
-        }
-      }
-
-      .link {
-        cursor: pointer;
-        text-decoration: underline;
-        color: var(--color-text-2);
-        font-weight: 500;
-      }
+    .link {
+      cursor: pointer;
+      text-decoration: underline;
+      color: var(--color-text-2);
+      font-weight: 500;
     }
   }
+}
 
-  /* 로그인 방식 카드 / KIDS 카드 */
-  .login-method-card,
-  .kids-login-card {
-    border: none;
-    box-shadow: none;
+/* 로그인 방식 카드 / KIDS 카드 */
+.login-method-card,
+.kids-login-card {
+  border: none;
+  box-shadow: none;
 
-    .kids-login-title {
-      font-size: var(--fs-18);
-      font-weight: 600;
-      margin: 16px 0;
-      color: var(--color-text-1);
-    }
+  .kids-login-title {
+    font-size: var(--fs-18);
+    font-weight: 600;
+    margin: 16px 0;
+    color: var(--color-text-1);
+  }
 
-    .login-method-card-content,
-    .kids-login-card-content,
-    .login-button-group {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-      gap: 16px;
+  .login-method-card-content,
+  .kids-login-card-content,
+  .login-button-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 16px;
 
-      .login-button {
-        height: 180px;
-        border-radius: 12px;
-        background-color: #f8f8f8;
-        border: 1px solid #e4e4e4;
+    .login-button {
+      height: 180px;
+      border-radius: 12px;
+      background-color: #f8f8f8;
+      border: 1px solid #e4e4e4;
 
-        cursor: pointer;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start; 
+      padding: 16px;
+      text-align: center;
+      font-family: 'Noto Sans', sans-serif;
+      transition: all 0.2s ease-in-out;
+      outline: none;
+      position: relative;
+
+      &:hover {     
+        border-color: var(--color-text-2);  ;  
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 3px var(--color-text-2);
+      }
+
+      .login-button-stack {
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start; 
-        padding: 16px;
-        text-align: center;
-        font-family: 'Noto Sans', sans-serif;
-        transition: all 0.2s ease-in-out;
-        outline: none;
+        justify-content: flex-start; // 상단 고정
+        gap: 8px;
+        height: 100%;
         position: relative;
+      }
 
-        &:hover {     
-          border-color: var(--color-text-2);  ;  
-        }
+      .login-icon {
+        color: var(--color-text-2);
+        font-size: 36px;
+        margin-bottom: 8px;
+        flex-shrink: 0; // 아이콘 크기 고정
+        transition: all 0.2s ease-in-out;
+      }
 
-        &:focus {
-          box-shadow: 0 0 0 3px var(--color-text-2);
-        }
+      .login-label {
+        font-weight: 700;
+        font-size: 16px;
+      }
 
-        .login-button-stack {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start; // 상단 고정
-          gap: 8px;
-          height: 100%;
-          position: relative;
-        }
-
-        .login-icon {
-          color: var(--color-text-2);
-          font-size: 36px;
-          margin-bottom: 8px;
-          flex-shrink: 0; // 아이콘 크기 고정
-          transition: all 0.2s ease-in-out;
-        }
-
-        .login-label {
-          font-weight: 700;
-          font-size: 16px;
-        }
-
-        .login-desc {
-          font-size: 14px;
-          line-height: 1.4;
-          text-align: center;
-          flex-grow: 1; // 설명이 늘어나도 아이콘은 고정
-        }
+      .login-desc {
+        font-size: 14px;
+        line-height: 1.4;
+        text-align: center;
+        flex-grow: 1; // 설명이 늘어나도 아이콘은 고정
       }
     }
   }
