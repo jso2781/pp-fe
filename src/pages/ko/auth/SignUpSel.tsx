@@ -23,18 +23,27 @@ export default function SignUpSel() {
     { label: t('step5'), description: t('signUpComplete') },
   ]
 
+  /**
+   * 회원 유형 선택 카드 목록
+   * id: 회원 유형 아이디
+   * title: 회원 유형 제목
+   * description: 회원 유형 설명
+   * route: 회원 유형 선택 화면 라우트
+   * old 경로 - /ko/signup/general, /ko/signup/junior
+   * new 경로 - /ko/auth/GeneralSignUpAgrTrms, /ko/auth/JuniorSignUpAgrTrms
+  */
   const memberTypes = [
     {
       id: 'general',
       title: t('signUpGeneral'),
       description: t('signUpGeneralDescription'),
-      route: '/ko/signup/general', // 실제 라우트 경로로 변경 필요
+      route: '/ko/auth/GeneralSignUpAgrTrms',
     },
     {
       id: 'junior',
       title: t('signUpJunior'),
       description: t('signUpJuniorDescription'),
-      route: '/ko/signup/junior', // 실제 라우트 경로로 변경 필요
+      route: '/ko/auth/JuniorSignUpAgrTrms',
     },
   ]
 

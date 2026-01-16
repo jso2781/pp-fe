@@ -1,7 +1,43 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectTrmsSttListApiPath, getTrmsSttApiPath, insertTrmsSttApiPath, updateTrmsSttApiPath, saveTrmsSttApiPath, deleteTrmsSttApiPath } from '@/api/stt/TrmsSttApiPaths'
-import { mockTrmsSttList, TrmsSttPVO, TrmsSttRVO, TrmsSttListPVO, TrmsSttListRVO, TrmsSttDVO  } from './TrmsSttTypes'
+import { selectTrmsListForSignUpApiPath, selectTrmsSttListApiPath, getTrmsSttApiPath, insertTrmsSttApiPath, updateTrmsSttApiPath, saveTrmsSttApiPath, deleteTrmsSttApiPath } from '@/api/stt/TrmsSttApiPaths'
+import { mockTrmsSttList, TrmsSttPVO, TrmsSttRVO, TrmsSttListPVO, TrmsSttListRVO, TrmsSttDVO, mockTrmsListForSignUp  } from './TrmsSttTypes'
+
+/**
+ * 대국민포털 회원가입용 약관법령 목록 조회 
+ */
+export const selectTrmsListForSignUp = createAsyncThunk<TrmsSttListRVO>(
+  '/stt/selectTrmsListForSignUp',
+  async () => {
+    try {
+      const res = await https.post(selectTrmsListForSignUpApiPath());
+
+      console.log("TrmsSttThunks selectTrmsListForSignUp res=", res);
+      console.log("TrmsSttThunks selectTrmsListForSignUp res.data=", res.data);
+
+      // ✅ 여기서 "서버 응답"을 표준 형태로 맞춰서 return
+      // 서버 응답 구조: {code: '0', msg: '성공', data: {list: [...]}}
+      let payload = res.data?.data?.list || [];
+
+      console.log("TrmsSttThunks selectTrmsListForSignUp payload", payload);
+
+      // 서버가 TrmsStt[] 형식으로 주므로 TrmsSttListRVO 형식으로 데이터 구조 재조정 
+      return {
+        list: payload,
+        totalCount: payload.length
+      } as TrmsSttListRVO;
+    }
+    // 서버가 없거나 에러 나면 강제로 mock 데이터 사용 
+    catch (e) {
+      // 개발/데모 환경용 fallback (백엔드 연동 시 제거 가능)
+      console.log("TrmsSttThunks selectTrmsListForSignUp error=", e);
+      console.log("TrmsSttThunks selectTrmsListForSignUp mockTrmsListForSignUp=",mockTrmsListForSignUp);
+
+      const result: TrmsSttListRVO = { list: mockTrmsListForSignUp as TrmsSttRVO[], totalCount: mockTrmsListForSignUp.length }
+      return result;
+    }
+  }
+)
 
 /**
  * 대국민포털_약관법령기본 정보 목록 조회 
@@ -57,6 +93,7 @@ export const getTrmsStt = createAsyncThunk<TrmsSttRVO, TrmsSttPVO | undefined>(
       // 개발/데모 환경용 fallback (백엔드 연동 시 제거 가능)
       console.log("TrmsSttThunks getTrmsStt mockTrmsSttList=",mockTrmsSttList);
       return (mockTrmsSttList).find((n) => 
+        String(n.trmsSttCd) === String(params.trmsSttCd)
       ) || null;
     }
   }

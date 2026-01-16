@@ -5,24 +5,79 @@
  * 화면설명: 약관 동의 화면
  */
 import { useTranslation } from 'react-i18next'
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Button, Stepper, Step, StepLabel, Typography, Checkbox, FormControlLabel, List, ListItem, Dialog, DialogTitle, DialogContent, DialogActions, Divider, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DepsLocation from '@/components/common/DepsLocation'
-import { JSX } from 'react/jsx-runtime';
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { selectTrmsListForSignUp } from '@/features/stt/TrmsSttThunks'
+import type { TrmsSttRVO } from '@/features/stt/TrmsSttTypes'
 
 // --- 약관 상세 컨텐츠 (모달 내부에 들어갈 내용) ---
-const TermsDetail01 = () => <Box>sdfsdf이용약관 상세 내용입니다.<br/>내용이 길어지면 자동으로 스크롤이 생성됩니다.</Box>;
-const TermsDetail02 = () => <Box>개인정보 수집 및 이용동의 상세 내용입니다.</Box>;
-const TermsDetail03 = () => <Box>개인정보 수집 및 이용동의(선택) 상세 내용입니다.</Box>;
-const TermsDetail04 = () => <Box>저작권보호정책 및 정보공유 동의 상세 내용입니다.</Box>;
+interface TermsDetailProps {
+  list: TrmsSttRVO[];
+  popupId: string;
+  defaultContent: string;
+}
+
+const TermsDetail: React.FC<TermsDetailProps> = ({ list, popupId, defaultContent }) => {
+  const termData = useMemo(() => {
+    // console.log("TermsDetail useMemo list=", list);
+    // console.log("TermsDetail useMemo popupId=", popupId);
+    const found = list.find(item => {
+      // trmsSttCd에 공백이 포함될 수 있으므로 trim()으로 비교
+      const itemCode = item.trmsSttCd?.trim() || '';
+      const searchCode = popupId.trim();
+      // console.log("TermsDetail comparing item.trmsSttCd=", item.trmsSttCd, "(trimmed:", itemCode, ") with popupId=", popupId, "(trimmed:", searchCode, ")");
+      return itemCode === searchCode;
+    });
+    // console.log("TermsDetail useMemo found=", found);
+    return found;
+  }, [list, popupId]);
+
+  const content = termData?.trmsSttCn || defaultContent;
+
+  // console.log("TermsDetail termData=", termData);
+  // console.log("TermsDetail termData?.trmsSttCn=", termData?.trmsSttCn);
+  // console.log("TermsDetail defaultContent=", defaultContent);
+  // console.log("TermsDetail final content=", content);
+  
+  // HTML 태그가 포함된 경우 dangerouslySetInnerHTML 사용, 아니면 일반 텍스트로 표시
+  const hasHtmlTags = /<[^>]+>/.test(content);
+
+  if (hasHtmlTags) {
+    return <Box dangerouslySetInnerHTML={{ __html: content }} />;
+  }else{
+    return <Box><pre>{content}</pre></Box>;
+  }
+
+  // return <Box>{content}</Box>;
+};
 
 export default function SignUpAgrTrms() {
+  const location = useLocation();
   const navigate = useNavigate();
   const { t, i18n: i18nInstance } = useTranslation();
   const screenId = "SignUpAgrTrms"
   const currentStep = 1
+
+  const dispatch = useAppDispatch();
+  const { list, totalCount, loading, error } = useAppSelector((state) => state.stt);
+  const hasFetchedRef = useRef(false); // 한 번만 호출되도록 보장하는 ref
+
+  useEffect(() => {
+    // 화면 진입 시 한 번만 조회
+    if (!hasFetchedRef.current) {
+      hasFetchedRef.current = true;
+      dispatch(selectTrmsListForSignUp());
+    }
+  }, [dispatch]);
+
+  // console.log("list=",list);
+  // console.log("totalCount=",totalCount);
+  // console.log("loading=",loading);
+  // console.log("error=",error);
 
   const steps = [
     { label: t('step1'), description: t('signUpSelect') },
@@ -34,12 +89,43 @@ export default function SignUpAgrTrms() {
 
   // --- 모달 제어 로직 시작 ---
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalData, setModalData] = useState({ id: '', title: '', content: null });
+  const [modalData, setModalData] = useState<{ popupId: string, title: string, content: React.ReactNode | null, setter: ((checked: boolean) => void) | null }>({ popupId: '', title: '', content: null, setter: null });
 
-  const handleShowModal = (id: string, title: string, content: React.ReactNode) => {
-    setModalData({ id, title, content });
-    setModalOpen(true); // 버튼 클릭 시 true로 변경하여 팝업을 렌더링함
+  // 약관별 기본 내용 매핑
+  const getDefaultContent = (popupId: string): string => {
+    const defaultContents: Record<string, string> = {
+      'UTZTN': '이용약관 상세 내용입니다.<br/>내용이 길어지면 자동으로 스크롤이 생성됩니다.',
+      'CLCT': '개인정보 수집 및 이용동의 상세 내용입니다.',
+      'STTY_AGT': '만 14세 미만 아동에 관한 개인정보 수집〮이용 동의_법정대리인 상세 내용입니다.',
+      'STT_PRVC': '개인정보취급방침 상세 내용입니다.',
+    };
+    return defaultContents[popupId] || '약관 내용이 없습니다.';
   };
+
+  const handleShowModal = useCallback((popupId: string, title: string, setter: (checked: boolean) => void) => {
+    // console.log("handleShowModal popupId=", popupId);
+    // console.log("handleShowModal list=", list);
+    // console.log("handleShowModal list.length=", list.length);
+    
+    // list에서 해당 약관 찾기
+    const foundTerm = list.find(item => item.trmsSttCd === popupId);
+    // console.log("handleShowModal foundTerm=", foundTerm);
+    // console.log("handleShowModal foundTerm?.trmsSttCn=", foundTerm?.trmsSttCn);
+    
+    const content = <TermsDetail list={list} popupId={popupId} defaultContent={getDefaultContent(popupId)} />;
+    setModalData({ popupId, title, content, setter });
+    setModalOpen(true); // 버튼 클릭 시 true로 변경하여 팝업을 렌더링함
+  }, [list]);
+
+  // 모달 확인 버튼 클릭 시 해당 약관 체크하고 모달 닫기 (체크박스가 있는 약관만 체크)
+  const handleModalConfirm = () => {
+    // 체크박스가 있는 약관만 체크 (개인정보처리방침은 체크박스가 없으므로 체크하지 않음)
+    const currentTerm = termsData.find(term => term.popupId === modalData.popupId);
+    if (modalData.setter && currentTerm?.showCheckbox) {
+      modalData.setter(true); // 해당 약관을 체크
+    }
+    setModalOpen(false); // 모달 닫기
+  };  
   // --- 모달 제어 로직 끝 ---
 
   // --- 상태 관리(State) 시작 ---
@@ -48,15 +134,21 @@ export default function SignUpAgrTrms() {
   const [checked3, setChecked3] = useState(false);
   const [checked4, setChecked4] = useState(false);
 
+  // 이전 페이지에서 만 14세 미만 회원 가입 화면으로부터 이동했을 때만 "만 14세 미만 아동의 회원가입에 따른 개인정보 수집이용에 관한 법정대리인 동의" 약관 표기
+  const isJunior = location.pathname.includes('/ko/auth/JuniorSignUpAgrTrms');
+
   // 필수 약관 미동의 알림 팝업 상태 (비활성화 방식을 쓰더라도 만약을 위해 유지)
   const [showErrorPopup, setShowErrorPopup] = useState(false);
 
-  // 필수 약관(1, 2, 4번) 동의 여부 체크 변수 추가
-  const isRequiredAgreed = checked1 && checked2 && checked4;
+  /*
+   * 만 14세미만 아동의 회원가입인 경우 필수 약관(1, 2, 3번) 동의 여부 체크 변수 추가
+   * 만 14세 이상 회원가입인 경우 필수 약관(1, 2번) 동의 여부 체크 변수 추가
+   */
+  const isRequiredAgreed = isJunior ? checked1 && checked2 && checked3 : checked1 && checked2;
 
-  const allChecked = checked1 && checked2 && checked3 && checked4;
+  const allChecked = isJunior ? checked1 && checked2 && checked3 : checked1 && checked2;
 
-  const handleAllAgree = (event) => {
+  const handleAllAgree = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
     setChecked1(isChecked);
     setChecked2(isChecked);
@@ -76,12 +168,52 @@ export default function SignUpAgrTrms() {
   };
 
   // 개별 약관 리스트 데이터 구성
-  const termsData = [
-    { id: 1, popupId: `${screenId}-P01`, label: t('termsOfUse'), required: true, checked: checked1, setter: setChecked1, component: <TermsDetail01 /> },
-    { id: 2, popupId: `${screenId}-P02`, label: t('privacyPolicy'), required: true, checked: checked2, setter: setChecked2, component: <TermsDetail02 /> },
-    { id: 3, popupId: `${screenId}-P03`, label: t('privacyPolicy'), required: false, checked: checked3, setter: setChecked3, component: <TermsDetail03 /> },
-    { id: 4, popupId: `${screenId}-P04`, label: t('copyrightPolicy'), required: true, checked: checked4, setter: setChecked4, component: <TermsDetail04 /> },
-  ];
+  const termsData = useMemo(() => [
+    { 
+      id: 1, 
+      popupId: 'UTZTN', 
+      label: t('termsOfUse'), 
+      required: true, 
+      checked: checked1, 
+      isdisplay: true, 
+      showCheckbox: true, 
+      showOptionalLabel: true, 
+      setter: setChecked1
+    },
+    { 
+      id: 2, 
+      popupId: 'CLCT', 
+      label: t('privacyCollectionAgree'), 
+      required: true, 
+      checked: checked2, 
+      isdisplay: true, 
+      showCheckbox: true, 
+      showOptionalLabel: true, 
+      setter: setChecked2
+    },
+    { 
+      id: 3, 
+      popupId: 'STTY_AGT', 
+      label: t('signUpJuniorPrivacyCollectionAgree'), 
+      required: true, 
+      checked: checked3, 
+      isdisplay: (isJunior ? true : false), 
+      showCheckbox: true, 
+      showOptionalLabel: true, 
+      setter: setChecked3
+    },
+    { 
+      id: 4, 
+      popupId: 'STT_PRVC', 
+      label: t('privacyPolicy'), 
+      required: false, 
+      checked: checked4, 
+      isdisplay: true, 
+      showCheckbox: false, 
+      showOptionalLabel: false, 
+      setter: setChecked4
+    },
+  ], [checked1, checked2, checked3, checked4, isJunior, t]);
   // --- 상태 관리 끝 ---
 
   return (
@@ -161,48 +293,56 @@ export default function SignUpAgrTrms() {
 
                       {/* 개별 약관 리스트 */}
                       <List className="terms-list">
-                        {termsData.map((item) => (
-                          <ListItem 
-                            key={item.id}
-                            disablePadding
-                            className="terms-item"
-                            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                          >
-                            <FormControlLabel
-                              control={
-                                <Checkbox 
-                                  className="terms-checkbox"
-                                  checked={item.checked} 
-                                  onChange={(e) => item.setter(e.target.checked)} 
-                                  size="small"
-                                />
-                              }
-                              label={
-                                <Typography component="div">
-                                  <span className="terms-link">{item.label}</span>
-                                  <Typography 
-                                    component="span" 
-                                    variant="caption" 
-                                    className={item.required ? 'required' : 'optional'}
-                                    sx={{ ml: 0.5, color: item.required ? 'error.main' : 'text.secondary' }}
-                                  >
-                                    ({item.required ? t('required') : t('optional')})
-                                  </Typography>
-                                </Typography>
-                              }
-                            />
-                            {/* 약관보기 버튼 클릭 시 handleShowModal 호출 */}
-                            <Button 
-                              type="button"
-                              variant="text" 
-                              size="small" 
-                              className="btn_terms_view"
-                              onClick={() => handleShowModal(item.popupId, item.label, item.component)}
+                        {termsData
+                          .filter((item) => item.isdisplay)
+                          .map((item) => (
+                            <ListItem 
+                              key={item.id}
+                              disablePadding
+                              className="terms-item"
+                              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                             >
-                              {t('termsView')}
-                            </Button>
-                          </ListItem>
-                        ))}
+                              <FormControlLabel
+                                control={
+                                  item.showCheckbox ? (
+                                    <Checkbox 
+                                      className="terms-checkbox"
+                                      checked={item.checked} 
+                                      onChange={(e) => item.setter(e.target.checked)} 
+                                      size="small"
+                                    />
+                                  ) : (
+                                    <Box sx={{ width: 36, height: 36, padding: '8px', boxSizing: 'border-box' }} /> // 체크박스와 동일한 크기 및 padding
+                                  )
+                                }
+                                label={
+                                  <Typography component="div">
+                                    <span className="terms-link">{item.label}</span>
+                                    {item.showOptionalLabel && (
+                                      <Typography 
+                                        component="span" 
+                                        variant="caption" 
+                                        className={item.required ? 'required' : 'optional'}
+                                        sx={{ ml: 0.5, color: item.required ? 'error.main' : 'text.secondary' }}
+                                      >
+                                        ({item.required ? t('required') : t('optional')})
+                                      </Typography>
+                                    )}
+                                  </Typography>
+                                }
+                              />
+                              {/* 약관보기 버튼 클릭 시 handleShowModal 호출 */}
+                              <Button 
+                                type="button"
+                                variant="text" 
+                                size="small" 
+                                className="btn_terms_view"
+                                onClick={() => handleShowModal(item.popupId, item.label, item.setter)}
+                              >
+                                {t('termsView')}
+                              </Button>
+                            </ListItem>
+                          ))}
                       </List>
                     </Box>
 
@@ -256,7 +396,7 @@ export default function SignUpAgrTrms() {
           {modalData.content}
         </DialogContent>
         <DialogActions className="modal-footer">
-          <Button variant="contained" onClick={() => setModalOpen(false)}>
+          <Button variant="contained" onClick={handleModalConfirm}>
             {t('confirm')}
           </Button>
         </DialogActions>

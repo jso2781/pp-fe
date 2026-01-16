@@ -1,0 +1,187 @@
+
+// @charset "utf-8";
+/* CSS Document */
+
+/********************************************************
+파일명 : EgovLayout.css
+설 명 : 레이아웃.css
+수정일 수정자 Version Function 명
+------- -------- ---------- --------------
+2012.05.14 안병철 1.0 최초 생성
+2012.05.23 안병철 2.0 
+*********************************************************/
+
+.sign-step {height:51px; margin-left:15px}
+.sign-step li {position:relative; float:left; width:27%; max-width:216px; height:51px; margin-left:-15px; background-image:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_step_off.png); background-repeat:no-repeat; font-size:1.333em; font-weight:900; font-family:ngttf, sans-serif; line-height:51px; text-align:center}
+.sign-step li span {display:block; height:51px; margin:0 0 0 10px}
+.sign-step li.st1 {z-index:4; border-left:1px solid #d8d8d8}
+.sign-step li.st2 {z-index:3}
+.sign-step li.st3 {z-index:2}
+.sign-step li.st4 {z-index:1}
+.sign-step li.active {background-image:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_step_on.png); color:#fff}
+.sign-step li.active span {padding-left:30px}
+.sign-step li.st1.active span {background:url(../../../../../../images/egovframework/iwt/ds/ko/member/ico_step_01.png) 44px 10px no-repeat}
+.sign-step li.st2.active span {background:url(../../../../../../images/egovframework/iwt/ds/ko/member/ico_step_02.png) 44px 10px no-repeat}
+
+p.step {margin:12px 0 20px 0}
+
+.real-name {padding:20px 16px 20px 26px; border:1px solid #d8d8d8}
+.real-name fieldset legend {position:relative; top:0; padding:0 0 20px 0; color:#005453; font-size:1.333em; font-weight:900; font-family:ngttf, sans-serif}
+.real-name div {float:left; width:200px; color:#000000; margin:0 10px 0 0}
+.real-name div input {margin-bottom:5px}
+.real-name div input.name {width:200px}
+.real-name label {display:inline-block;color:#000000}
+.real-name p {margin:18px 0 0 0; clear:both; line-height:1.5em; color:#000000}
+.real-name.login_area{position: relative;}
+.real-name.login_area:before{content: "";position: absolute;top:40px;left:50px;display: block;width:135px;height:135px;background: url('/images/front/common/icon_login.png') no-repeat center center;z-index: 99;}
+.real-name.login_area:after{content: "";position: absolute;top:40px;left:50px;display: block;width:135px;height:135px;background:#f4f4f4;border-radius: 50%;}
+.real-name.login_area .login_area_in{padding-left:210px;}
+.real-name.login_area .login_area_in .login_con{position:relative;width:350px;float:none;padding-bottom: 20px;margin-bottom:20px;border-bottom: 1px #ddd solid;}
+.real-name.login_area .login_area_in .login_con label{width: 100px;}
+.real-name.login_area .login_area_in .login_con input{width: 170px;}
+.real-name.login_area .login_area_in .login_con button.big-green{position:absolute;top:0;right:0;width:70px!important;height:70px!important;border-radius:5px;}
+.real-name.login_area .login_area_in .login_btn{width: 350px;margin-bottom: 10px;}
+.real-name.login_area .login_area_in .login_btn .btn-gray{min-width:100px;height:32px!important;font-size:13px!important;background:#333!important;}
+.real-name.login_area .login_area_in .login_tit{width: 350px;}
+
+.gpin {float:left; width:42%; height:138px; padding:20px 16px 20px 26px; border:1px solid #d8d8d8}
+.gpin h1 {padding:0 0 20px 0; color:#005453; font-size:1.333em; font-weight:900; font-family:ngttf, sans-serif}
+.gpin a {float:right; padding:5px 11px; margin:-45px -6px 0 0; border:1px solid #d6d6d6; box-shadow:0 2px 0 0 #ccc; color:#333; font-weight:900;
+	background:#d7d7d7 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f1f1f1), to(#d7d7d7));
+	background:#d7d7d7 -moz-linear-gradient(top, #f1f1f1, #d7d7d7);
+	background:#d7d7d7 -o-linear-gradient(top, #f1f1f1, #d7d7d7);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#d7d7d7');
+}
+.gpin p.txt {line-height:1.5em}
+.gpin p.btn {margin:15px 0 0 0; text-align:center}
+
+div.term h3 {margin: 15px 0;color:#333; font-size:18px; font-weight:600}
+div.term h4 {position: relative; padding-bottom:12px; padding-left:11px; color:#355ab2; /* background:url(../../../../../../images/egovframework/iwt/ds/ko/cmm/ico/bu_h4.png) no-repeat 0 5px; */}
+div.term h4:before {content: ''; position: absolute; top: 0px; left: 0px; width: 5px; margin-top: 5px; height: 5px; background: #355ab2;}
+div.term ul, div.term p, div.term ol {padding-bottom:20px;line-height:1.5em}
+div.term ul ul {padding-top:5px;padding-left:15px;}
+
+/* 시작 2013.11.05 김선경 사이트맵 width조정 
+.sitemap {float:left; width:28.5%; height:320px; margin:0 0 30px 40px; border:1px solid #dfdfdf; border-bottom:1px solid #b2b2b2 !important}*/
+.sitemap {float:left; width:29%; height:320px; margin:0 0 30px 40px; border:1px solid #dfdfdf; border-bottom:1px solid #b2b2b2 !important}
+.sitemap.st1,
+.sitemap.st4,
+.sitemap.st7 {margin:0 0 26px 0}
+
+.sitemap h1 {height:42px; color:#ffffff; font-size:1em; line-height:42px; text-align:center; font-weight: 600;
+	background:#355ab2;
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#3faaaf', endColorstr='#2d8d93');
+}
+/* 시작 2013.11.05 김선경 사이트맵 height 조정
+.sitemap.st1 {height:300px; background:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_sitemap_05.png) right bottom no-repeat}
+.sitemap.st2 {height:300px; background:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_sitemap_05.png) right bottom no-repeat}
+.sitemap.st3 {height:300px; background:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_sitemap_05.png) right bottom no-repeat}
+.sitemap.st4 {background:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_sitemap_05.png) right bottom no-repeat}
+.sitemap.st5 {background:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_sitemap_05.png) right bottom no-repeat}
+.sitemap.st6 {background:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_sitemap_05.png) right bottom no-repeat} */
+/* .sitemap.st1 {height:530px;}
+.sitemap.st2 {height:530px;}
+.sitemap.st3 {height:530px;}
+.sitemap.st4 {height:400px;}
+.sitemap.st5 {height:400px;}
+.sitemap.st6 {height:400px;}
+.sitemap.st7 {height:400px;} */
+.sitemap {height: 500px;}
+.sitemap ul {padding:20px; line-height:1.4em}
+.sitemap ul li {padding-bottom:2px}
+.sitemap ul li a {color:#000000; font-weight:600;}
+.sitemap ul li ul {padding:3px 0 0 0}
+.sitemap ul li ul li {padding-bottom:2px !important}
+.sitemap ul li ul li a {font-weight:200}
+.sitemap ul li ul li a:before {content:"-"; padding-right:3px}
+
+
+/********************************************************
+회원가입 추가
+*********************************************************/
+
+.head-mem {margin:0 0 0 5%; padding:0 2%; }
+/* .head-mem img {max-width:100%} */
+.head-mem .key {float:left;width: 20%;padding:3px 0 0 0px}
+.head-mem table{width: 80%;}
+.head-mem img {max-width:100%}
+
+
+.report-guide .join_area {margin-bottom: 50px;}
+.report-guide .join_area li {line-height: 130%;}
+.report-guide .join_area textarea {font-size: 100%;}
+
+.report-guide h2 {margin:20px 0; color:#333; font-size:20px; font-weight:600; letter-spacing: -0.5px;}
+.report-guide p {margin:0 0 20px 0; color:#878a8a; line-height:1.5em}
+
+@media only screen and (max-width:760px) and (min-width:500px) {
+	.sitemap {width:45%; height: 450px;}
+	.sitemap.st1,
+	.sitemap.st3,
+	.sitemap.st5 {margin:0 0 26px 0}
+	.sitemap.st4 {margin:0 0 26px 40px}
+}
+@media screen and (max-width:640px) {
+	div.term h3 {font-size: 16px;}
+	.report-guide h2{font-size: 16px;}
+	.real-name.login_area{width: 100%;margin-top: 50px;}
+	.real-name.login_area:before, .real-name.login_area:after{left: 50%;margin-left: -67.5px;}
+	.real-name.login_area .login_area_in{width: 100%;padding-left:0;padding-top: 180px;}
+	.real-name.login_area .login_area_in .login_con{width: 100%}
+	.real-name.login_area .login_area_in .login_btn{width: 100%}
+	.real-name.login_area .login_area_in .login_tit{width: 100%}
+	.real-name.login_area .login_area_in .login_con input{width: 210px;}
+	.real-name.login_area .login_area_in .login_con button.big-green{position:static;display: block;width:90%!important;height: 40px!important;margin: 0 auto;}
+	
+	.head-mem{margin:0;padding:0;}
+	.head-mem .key{float: none;width: 100%;}
+	.head-mem table{width: 100%;}
+	.head-mem table colgroup col:first-child{width: 80px;}
+	.head-mem table th{text-align: left;}
+	.head-mem table td .intext{width: 150px;}
+}
+@media only screen and (max-width:499px) {
+	.sitemap {width:100%; height:auto; margin:0 0 26px 0}
+}
+/********************************************************
+회원가입 추가 
+*********************************************************/
+
+.head-mem {max-width:631px;  margin:0 0 0 5%; padding:0 2%; }
+.head-mem img {max-width:100%}
+.head-mem .key {float:left;  padding:3px 0 0 0px}
+
+.report-guide li {border-bottom:1px solid #d0d0d0} 
+.report-guide h2 {margin:20px 0 20px 0; color:#005453; font-size:16px; font-family:ngttf, sans-serif; font-weight:200}
+.report-guide p {margin:0 0 20px 0; color:#878a8a; line-height:1.5em}
+
+/* 주요 개인정보 처리 표시 labelingTb */
+#labelingTb {
+	width: 100%;
+	margin: 0px 0px 20px 0px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+#labelingTb th, #labelingTb td {
+	padding: 12px;
+	text-align: center;
+	border: 1px solid #dadada;
+}
+
+#labelingTb th {
+	background-color: #f2f3f7;
+}
+
+#labelingTb p {
+	padding: 0px;
+}
+
+.privacyIcon {
+	height: 25px;
+	width: auto;
+	margin-right: 5px;
+	vertical-align: middle;
+}
+	
+	

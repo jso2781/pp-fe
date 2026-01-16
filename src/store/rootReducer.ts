@@ -6,12 +6,13 @@ import uiReducer from '@/features/ui/uiSlice'
 import faqReducer from '@/features/faq/FaqSlice'
 import opnnReducer from '@/features/opnn/OpnnSlice'
 import mainReducer from '@/features/main/MainSlice'
-
+import sttReducer from '@/features/stt/TrmsSttSlice'
 
 const rootReducer = combineReducers({
   ui: uiReducer,
   menu: menuReducer,
   auth: authReducer,
+  stt: sttReducer, // 약관법령
   pst: pstReducer, // 게시판
   faq: faqReducer, // FAQ
   opnn: opnnReducer, // 의견제안

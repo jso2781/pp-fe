@@ -68,15 +68,15 @@ export default function DepsLocation() {
     }
     ,
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/LoginMethod$/,
+      pattern: /^\/[A-Za-z]{2}\/auth\/LoginMethod(\/)?$/,
       labels: ["login", "loginMethod"]
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/Login$/,
+      pattern: /^\/[A-Za-z]{2}\/auth\/Login(\/)?$/,
       labels: ["login", "idLogin"]
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/SignUpSel$/,
+      pattern: /^\/[A-Za-z]{2}\/auth\/SignUpSel(\/)?$/,
       labels: ["signUp"]
     },
     {
@@ -86,15 +86,23 @@ export default function DepsLocation() {
     {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsJobNoticeList(\/)?(\d+)?$/,
       labels: ["news", "employmentBoard"] // 기관소식 > 채용게시판
-    },    
+    },
     {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsDataRoomList(\/)?(\d+)?$/,
       labels: ["news", "menuEduArchive"] // 기관소식 > 자료실
-    },      
+    },
     {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsCardNewsList(\/)?(\d+)?$/,
       labels: ["news", "menuEduCard"] // 기관소식 > 카드뉴스
-    },      
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/auth\/GeneralSignUpAgrTrms(\/)?$/,
+      labels: ["signUp"] // 회원가입
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/auth\/JuniorSignUpAgrTrms(\/)?$/,
+      labels: ["signUp"] // 회원가입
+    }
   ];
 
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기

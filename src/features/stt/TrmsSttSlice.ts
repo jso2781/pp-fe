@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectTrmsSttList, getTrmsStt, insertTrmsStt, updateTrmsStt, saveTrmsStt, deleteTrmsStt } from './TrmsSttThunks'
+import { selectTrmsListForSignUp, selectTrmsSttList, getTrmsStt, insertTrmsStt, updateTrmsStt, saveTrmsStt, deleteTrmsStt } from './TrmsSttThunks'
 import { mockTrmsSttList, TrmsSttPVO, TrmsSttRVO, TrmsSttListPVO, TrmsSttListRVO, TrmsSttDVO  } from './TrmsSttTypes'
 
 /**
@@ -32,8 +32,22 @@ const TrmsSttSlice = createSlice({
       state.current = null;
     }
   },
+
   extraReducers: (builder) => {
     builder
+      .addCase(selectTrmsListForSignUp.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(selectTrmsListForSignUp.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list = action.payload.list;
+        state.totalCount = action.payload.totalCount;
+      })
+      .addCase(selectTrmsListForSignUp.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message || 'Failed to load notice list';
+      })
       .addCase(selectTrmsSttList.pending, (state) => {
         state.loading = true;
         state.error = null;
