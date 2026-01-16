@@ -1,8 +1,8 @@
 /**
  * 화면ID: KIDS-PP-US-JM-02
  * 화면명: 약관 동의
- * 화면경로: /ko/auth/SignUpAgrTrms
- * 화면설명: 약관 동의 화면
+ * 화면경로: /ko/auth/GeneralSignUpAgrTrms, /ko/auth/JuniorSignUpAgrTrms
+ * 화면설명: 일반 회원 가입 약관 동의 화면, 만 14세 미만 회원 가입 약관 동의 화면 동시 처리
  */
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
@@ -13,6 +13,7 @@ import DepsLocation from '@/components/common/DepsLocation'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectTrmsListForSignUp } from '@/features/stt/TrmsSttThunks'
 import type { TrmsSttRVO } from '@/features/stt/TrmsSttTypes'
+import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
 
 // --- 약관 상세 컨텐츠 (모달 내부에 들어갈 내용) ---
 interface TermsDetailProps {
@@ -79,14 +80,6 @@ export default function SignUpAgrTrms() {
   // console.log("loading=",loading);
   // console.log("error=",error);
 
-  const steps = [
-    { label: t('step1'), description: t('signUpSelect') },
-    { label: t('step2'), description: t('signUpAgree') },
-    { label: t('step3'), description: t('certifySelf') },
-    { label: t('step4'), description: t('inputMbrInfo') },
-    { label: t('step5'), description: t('signUpComplete') },
-  ]
-
   // --- 모달 제어 로직 시작 ---
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState<{ popupId: string, title: string, content: React.ReactNode | null, setter: ((checked: boolean) => void) | null }>({ popupId: '', title: '', content: null, setter: null });
@@ -137,6 +130,9 @@ export default function SignUpAgrTrms() {
   // 이전 페이지에서 만 14세 미만 회원 가입 화면으로부터 이동했을 때만 "만 14세 미만 아동의 회원가입에 따른 개인정보 수집이용에 관한 법정대리인 동의" 약관 표기
   const isJunior = location.pathname.includes('/ko/auth/JuniorSignUpAgrTrms');
 
+  // 회원 유형에 따라 steps 배열 구성 (공통 유틸리티 함수 사용)
+  const steps = useMemo(() => getSignUpSteps(t, isJunior), [isJunior, t]);
+
   // 필수 약관 미동의 알림 팝업 상태 (비활성화 방식을 쓰더라도 만약을 위해 유지)
   const [showErrorPopup, setShowErrorPopup] = useState(false);
 
@@ -158,11 +154,16 @@ export default function SignUpAgrTrms() {
 
   // 다음 버튼 클릭 핸들러
   const handleNextStep = () => {
-    // 필수 약관(1, 2, 4번) 동의 여부 체크
+    // 필수 약관이 전부 동의되었으면 다음 단계로 이동 
     if (isRequiredAgreed) {
-      navigate('/screens/KIDS-PP-US-JM-03'); // 다음 단계(본인 인증)로 이동
+      if (isJunior) {
+        // 만 14세 미만 가입: 법정 대리인 동의 단계로 이동 (steps 객체 전달)
+        navigate('/ko/auth/LegalGuardAgr', { state: { steps } });
+      } else {
+        navigate('/ko/auth/CertifySelf');   // 일반 가입: 본인 인증 단계로 이동
+      }
     } else {
-      // 버튼 disabled 처리를 했으므로 실제로는 이 로직을 타지 않지만 안전상 유지
+      // 필수 약관이 동의되지 않았으면 에러 팝업 표시
       setShowErrorPopup(true); 
     }
   };

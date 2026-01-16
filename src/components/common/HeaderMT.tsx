@@ -1105,7 +1105,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     onClick={() => navigate(to('/signup'))}
                     className="btn-util signup" 
                   >
-                    {t('signup')}
+                    {t('signUp')}
                   </Button> */}
                   <Button
                     size="small"

@@ -354,7 +354,7 @@ export default function Login() {
                                 onClick={() => navigate('/ko/auth/SignUpSel')}
                                 className="account-utils__link"
                               >
-                                {t('signup')}
+                                {t('signUp')}
                               </Link>
                             </ListItem>
                             <Divider orientation="vertical" flexItem className="account-utils__divider" />
