@@ -99,17 +99,21 @@ export default function NoticeList() {
   const currentGroup = currentBoard.group;
   const bbsId = currentBoard.bbsId;
 
-  const sideItems = useMemo(
-    () =>
-      Object.values(BOARD_CONFIG_GROUP)
-        .filter((board) => board.group === currentGroup)
-        .map((board) => ({
-          key: `/news/${board.key}`,
-          label: board.label,
-          disabled: board.key === boardKey,
-        })),
-    [boardKey, currentGroup],
-  );  
+  // Lnb 랜더링용
+  const currentUrl = location.pathname;
+
+  // 기존 Lnb Props : sideItems
+  // const sideItems = useMemo(
+  //   () =>
+  //     Object.values(BOARD_CONFIG_GROUP)
+  //       .filter((board) => board.group === currentGroup)
+  //       .map((board) => ({
+  //         key: `/news/${board.key}`,
+  //         label: board.label,
+  //         disabled: board.key === boardKey,
+  //       })),
+  //   [boardKey, currentGroup],
+  // );  
 
   // 스크롤 상단 이동
   useEffect(() => {
@@ -152,7 +156,7 @@ export default function NoticeList() {
                   <span>알림마당</span>
                 </Typography>
                 <Box className="lnb-list">
-                  <Lnb items={sideItems} />
+                  <Lnb currentUrl={currentUrl} />
                 </Box>
               </Box>
             </Box>
