@@ -10,17 +10,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { SideItem } from '@/features/common/CommonTypes';
 import { BOARD_CONFIG_GROUP, BoardKey } from '@/features/pst/PstConfig';
 
-export default function NoticeDetail() {
+export default function NewsVidioDetail() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  // URL 게시판 Key값을 통해 게시판 정보 및 LNB 설정
+  // URL 게시판 Key값을 통해 게시판 정보 설정
   const match = location.pathname.match(/\/news\/([^/]+)/);
   const boardKey = match?.[1] as BoardKey;
   const currentBoard = BOARD_CONFIG_GROUP[boardKey];
   const currentGroup = currentBoard.group;
   const bbsId = currentBoard.bbsId;
-  
+
   // Lnb 랜더링용
   const currentUrl = location.pathname;
 
