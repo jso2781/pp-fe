@@ -1,199 +1,119 @@
 @use '../base/mixins';
 
-
+// 1. 레이아웃 컨테이너
 .container-full {
-  width:100%;
-} 
+  width: 100%;
+}
+
 .container {
   width: min(1200px, calc(100% - 40px));
   margin: 0 auto;
 }
-.sub-container {
-    width: 100%;
-    padding: 30px 0;
 
-    .content-wrap {
-        @include mixins.container;
-        display: flex;
-        gap: 46px;
-        align-items: stretch;
-    }
+.sub-container {
+  width: 100%;
+  padding: 30px 0;
+
+  .content-wrap {
+    @include mixins.container;
+    display: flex;
+    gap: 46px;
+    align-items: stretch;
+  }
 }
 
+// 2. LNB (Left Navigation Bar) 영역
 .lnb-wrap {
-    flex: 0 0 246px;
-    transition: flex 0.2s ease;
+  flex: 0 0 246px;
+  transition: flex 0.2s ease;
 
-    &:has(.ant-menu-inline-collapsed) {
-        flex: 0 0 80px; 
-    }
+  @media (max-width: 1024px) {
+    display: none;
+  }
+
+  // LNB 축소 상태
+  &:has(.ant-menu-inline-collapsed) {
+    flex: 0 0 80px;
+  }
 }
 
 .lnb-menu {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+
+  // LNB 타이틀 영역
+  .lnb-tit {
     display: flex;
-    flex-direction: column;
-    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 105px;
+    background: #087C80 url(/img/bg_lnb-title.png) no-repeat center center;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    overflow: hidden;
 
-    .lnb-tit {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex: 0 0 105px;
-        font-size: 24px;
-        font-weight: 700;
-        color: #fff;
-        border-radius: 10px 10px 0 0;
-        background: #087C80 url(/img/bg_lnb-title.png) no-repeat center center;
-        overflow: hidden;
-
-        .btn_toggle {
-            color: #fff !important;
-            font-size: 32px !important;
-            cursor: pointer;
-            margin: 0 0 0 10px;
-        }
-
-        .lnb-wrap:has(.ant-menu-inline-collapsed) & {
-            font-size: 0 !important;
-            .btn_toggle {
-                margin: 0 !important;
-            }
-        }
+    .btn_toggle {
+      margin-left: 10px;
+      color: #fff !important;
+      font-size: 32px !important;
+      cursor: pointer;
     }
 
-    .lnb-list {
-        flex: 1;
-        margin: -10px 0 0 0;
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid var(--border-1);
-        background: #FFF;
-        transition: all 0.2s;
-
-        &:has(.ant-menu-inline-collapsed) {
-            .ant-menu {
-                display: none !important;
-            }
-        }
-
-        .ant-menu {
-            padding: 0 !important;
-            border: none !important;
-            background: none !important;
-            
-            &, *, *::before, *::after {
-                transition: none !important;
-                animation: none !important;
-            }
-
-            // [공통] 1단 메뉴 스타일 (기존 유지)
-            .ant-menu-item,
-            .ant-menu-submenu-title {
-                display: flex;
-                align-items: center;
-                width: 100%;
-                height: auto !important;
-                margin: 0 !important;
-                padding: 16px 8px !important;
-                line-height: 150% !important;
-                border-bottom: 1px solid var(--border-1);
-                border-radius: 0;
-
-                .ant-menu-title-content {
-                    flex: 1;
-                    color: var(--color-text-1);
-                    font-size: 17px;
-                    font-weight: 700; // 상위 메뉴는 기본 700
-                    white-space: nowrap !important;
-                }
-
-                .ant-menu-item-icon {
-                    font-size: 18px;
-                    color: var(--color-text-1);
-                }
-
-                &:hover {
-                    background-color: transparent !important;
-                    .ant-menu-title-content {
-                        &, span {
-                            color: #087C80 !important;
-                        }
-                    }
-                }
-            }
-
-            .ant-menu-submenu {
-                border-bottom: 1px solid var(--border-1);
-                border-radius: 0 !important;
-
-                .ant-menu-submenu-title {
-                    border-bottom: none !important;
-                }
-            }
-
-            // 하위 메뉴(Sub Menu)
-            .ant-menu-sub {
-                width: 100% !important;
-                background: #fff !important;
-                border-radius: 0 !important;
-
-                .ant-menu-item {
-                    padding: 10px 20px !important;
-                    border-bottom: none !important;
-                    border-radius: 0 !important;
-
-                    .ant-menu-title-content {
-                        font-weight: 400 !important;
-                        span { color: inherit; }
-                    }
-                    &:hover {
-                        background-color: #DCF3F4 !important;
-                        .ant-menu-title-content {
-                            font-weight: 700 !important;
-                            &, span {
-                                color: var(--color-text-1) !important; 
-                            }
-                        }
-                    }
-                }
-            }
-
-            > .ant-menu-item:last-child,
-            > .ant-menu-submenu:last-child {
-                border-bottom: none !important;
-            }
-        }
+    // LNB 축소 시 타이틀 처리
+    .lnb-wrap:has(.ant-menu-inline-collapsed) & {
+      font-size: 0 !important;
+      .btn_toggle { margin: 0 !important; }
     }
-}
+  }
 
-
-.sub-content {
+  // LNB 리스트/메뉴 영역
+  .lnb-list {
     flex: 1;
-    min-width: 0;
-    .content-view {
-        min-height: 500px;
-    }
+    margin-top: -10px;
+    padding: 15px;
+    background: #FFF;
+    border: 1px solid var(--border-1);
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
 }
 
+// 3. 메인 콘텐츠 영역
+.sub-content {
+  flex: 1;
+  min-width: 0;
+
+  .content-view {
+    min-height: 500px;
+  }
+}
+
+// 4. 로케이션 & 페이지 경로
 .location {
-    margin: 0 0 40px 0;
-    .local {
-        margin: 0 0 36px 0;
-        .home {
-            padding: 0 0 0 20px;
-            background: url('/img/ico_home.svg') no-repeat left center;
-        }
+  margin-bottom: 40px;
+
+  .local {
+    margin-bottom: 36px;
+    .home {
+      padding-left: 20px;
+      background: url('/img/ico_home.svg') no-repeat left center;
     }
-    .page_path {
-        margin-top: 10px;
-        padding: 0 0 20px 0;
-        border-bottom: 1px solid var(--border-2);
-        .tit {
-            line-height: 1;
-            font-size: 40px;
-            font-weight: 700;
-            color: var(--color-text-1);
-            display: block;
-        }
+  }
+
+  .page_path {
+    margin-top: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-2);
+
+    .tit {
+      display: block;
+      color: var(--color-text-1);
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1;
     }
+  }
 }

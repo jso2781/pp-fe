@@ -10,28 +10,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { SideItem } from '@/features/common/CommonTypes';
 import { BOARD_CONFIG_GROUP, BoardKey } from '@/features/pst/PstConfig';
 
-export default function NoticeDetail() {
+export default function NewsJobNoticeDetail() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  // URL 게시판 Key값을 통해 게시판 정보 및 LNB 설정
+  // URL 게시판 Key값을 통해 게시판 정보 설정
   const match = location.pathname.match(/\/news\/([^/]+)/);
   const boardKey = match?.[1] as BoardKey;
   const currentBoard = BOARD_CONFIG_GROUP[boardKey];
   const currentGroup = currentBoard.group;
   const bbsId = currentBoard.bbsId;
 
-  const sideItems = useMemo(
-    () =>
-      Object.values(BOARD_CONFIG_GROUP)
-        .filter((board) => board.group === currentGroup)
-        .map((board) => ({
-          key: `/news/${board.key}`,
-          label: board.label,
-          disabled: board.key === boardKey,
-        })),
-    [boardKey, currentGroup],
-  );  
+  // Lnb 랜더링용
+  const currentUrl = location.pathname;
 
   // 스크롤 상단 이동
   useEffect(() => {
@@ -65,10 +56,10 @@ export default function NoticeDetail() {
             <Box className="lnb-wrap">
               <Box className="lnb-menu">
                 <Typography component="h2" className="lnb-tit">
-                  <span>알림마당</span>
+                  <span>기관소식</span>
                 </Typography>
                 <Box className="lnb-list">
-                  <Lnb items={sideItems} />
+                  <Lnb currentUrl={currentUrl} />
                 </Box>
               </Box>
             </Box>
@@ -126,7 +117,6 @@ export default function NoticeDetail() {
                           {atchFiles.map((file, index) => (
                           <li key={index}>
                             <Link 
-                              // href={file.atchFilePath ?? '#none'} // 첨부파일 다운로드 api 연동으로 변경 필요
                               className="attachment-item"
                               underline="none"
                               title="첨부파일 다운로드"

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectMenuList, getMenu, insertMenu, updateMenu, saveMenu, deleteMenu } from './MenuThunks'
+import { selectMenuList, getMenu, insertMenu, updateMenu, saveMenu, deleteMenu, SideItem } from './MenuThunks'
 import { mockMenuList, MenuPVO, MenuRVO, MenuListPVO, MenuListRVO, MenuDVO  } from './MenuTypes'
 
 /**
@@ -14,6 +14,7 @@ export interface MenuState {
 
   langSeCd: string | null
   loaded: boolean
+  menuStructor: SideItem[]
 }
 
 /**
@@ -27,7 +28,8 @@ const initialState: MenuState = {
   error: null,
 
   langSeCd: null,
-  loaded: false
+  loaded: false,
+  menuStructor: []
 }
 
 const MenuSlice = createSlice({
@@ -45,6 +47,7 @@ const MenuSlice = createSlice({
       state.langSeCd = null;
       state.loaded = false;
       state.error = null;
+      state.menuStructor = [];
     }
   },
   extraReducers: (builder) => {
@@ -57,6 +60,9 @@ const MenuSlice = createSlice({
         state.loading = false;
         state.list = action.payload.list;
         state.totalCount = action.payload.totalCount;
+        
+        // menuStructor 저장
+        state.menuStructor = action.payload.menuStructor || [];
 
         // 어떤 언어로 로딩됐는지 기록 + loaded
         state.langSeCd = action.meta.arg?.langSeCd ?? state.langSeCd ?? null;

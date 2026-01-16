@@ -79,7 +79,7 @@ function SideNav({ items }: { items: SideItem[] }) {
   return <Box>{renderItems(items)}</Box>;
 }
 
-export default function NoticeList() {
+export default function NewsNoticeList() {
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -92,24 +92,28 @@ export default function NoticeList() {
   const [pageNum, setPageNum] = useState(1)
   const [pageSize, setPageSize] = useState(10) // 화면에 페이지 사이즈 설정이 필요시 setPageSize 활용
 
-  // URL 게시판 Key값을 통해 게시판 정보 및 LNB 설정
+  // URL 게시판 Key값을 통해 게시판 정보 설정
   const match = location.pathname.match(/\/news\/([^/]+)/);
   const boardKey = match?.[1] as BoardKey;
   const currentBoard = BOARD_CONFIG_GROUP[boardKey];
   const currentGroup = currentBoard.group;
   const bbsId = currentBoard.bbsId;
 
-  const sideItems = useMemo(
-    () =>
-      Object.values(BOARD_CONFIG_GROUP)
-        .filter((board) => board.group === currentGroup)
-        .map((board) => ({
-          key: `/news/${board.key}`,
-          label: board.label,
-          disabled: board.key === boardKey,
-        })),
-    [boardKey, currentGroup],
-  );  
+  // Lnb 랜더링용
+  const currentUrl = location.pathname;
+
+  // 기존 Lnb Props : sideItems
+  // const sideItems = useMemo(
+  //   () =>
+  //     Object.values(BOARD_CONFIG_GROUP)
+  //       .filter((board) => board.group === currentGroup)
+  //       .map((board) => ({
+  //         key: `/news/${board.key}`,
+  //         label: board.label,
+  //         disabled: board.key === boardKey,
+  //       })),
+  //   [boardKey, currentGroup],
+  // );  
 
   // 스크롤 상단 이동
   useEffect(() => {
@@ -149,10 +153,10 @@ export default function NoticeList() {
             <Box className="lnb-wrap">
               <Box className="lnb-menu">
                 <Typography component="h2" className="lnb-tit">
-                  <span>알림마당</span>
+                  <span>기관소식</span>
                 </Typography>
                 <Box className="lnb-list">
-                  <Lnb items={sideItems} />
+                  <Lnb currentUrl={currentUrl} />
                 </Box>
               </Box>
             </Box>
