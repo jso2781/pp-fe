@@ -28,6 +28,8 @@ import NewsDataRoomListKo from '@/pages/ko/news/NewsDataRoomList'
 import NewsDataRoomDetailKo from '@/pages/ko/news/NewsDataRoomDetail'
 import NewsCardNewsListKo from '@/pages/ko/news/NewsCardNewsList'
 import NewsCardNewsDetailKo from '@/pages/ko/news/NewsCardNewsDetail'
+import NewsVidioListKo from '@/pages/ko/news/NewsVidioList'
+import NewsVidioDetailKo from '@/pages/ko/news/NewsVidioDetail'
 
 // en 페이지들 (프로젝트에 실제 존재한다고 가정)
 import HomeEn from "@/pages/en/Home";
@@ -162,7 +164,9 @@ export default function Router() {
             <Route path="/:lang/news/NewsDataRoomList" element={<LangElement byLang={{ ko: <NewsDataRoomListKo />, en: <NewsDataRoomListKo /> }} />} />
             <Route path="/:lang/news/NewsDataRoomList/:pstSn" element={<LangElement byLang={{ ko: <NewsDataRoomDetailKo />, en: <NewsDataRoomDetailKo /> }} />} />
             <Route path="/:lang/news/NewsCardNewsList" element={<LangElement byLang={{ ko: <NewsCardNewsListKo />, en: <NewsCardNewsListKo /> }} />} />
-            <Route path="/:lang/news/NewsCardNewsList/:pstSn" element={<LangElement byLang={{ ko: <NewsCardNewsDetailKo />, en: <NewsCardNewsDetailKo /> }} />} />            
+            <Route path="/:lang/news/NewsCardNewsList/:pstSn" element={<LangElement byLang={{ ko: <NewsCardNewsDetailKo />, en: <NewsCardNewsDetailKo /> }} />} />         
+            <Route path="/:lang/news/NewsVidioList" element={<LangElement byLang={{ ko: <NewsVidioListKo />, en: <NewsVidioListKo /> }} />} />
+            <Route path="/:lang/news/NewsVidioList/:pstSn" element={<LangElement byLang={{ ko: <NewsVidioDetailKo />, en: <NewsVidioDetailKo /> }} />} />                        
 
             {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
             <Route path="/screens" element={<Screens />} />

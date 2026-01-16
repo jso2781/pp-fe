@@ -192,6 +192,9 @@ export interface PstRVO {
   /** 썸네일 첨부파일경로 */
   thmbFilePath?: string;
 
+  /** 동영상 ID */
+  videoId?: string;
+
   /** 첨부파일 목록 */
   atchRVOs?: AtchRVO[]
 }

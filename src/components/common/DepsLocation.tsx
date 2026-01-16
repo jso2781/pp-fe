@@ -19,6 +19,8 @@ const pathLabels: Record<string, string[]> = {
   "/ko/news/NewsNoticeList": ["기관소식", "공지사항"],
   "/ko/news/NewsJobNoticeList": ["기관소식", "채용 게시판"],
   "/ko/news/NewsDataRoomList": ["기관소식", "자료실"],
+  "/ko/news/NewsCardNewsList": ["기관소식", "카드뉴스"],
+  "/ko/news/NewsVidioList": ["기관소식", "동영상"],
 
   "/en/notice": ["알림마당11", "공지사항11"],
   "/en/board": ["커뮤니티11", "게시판11"],
@@ -95,6 +97,10 @@ export default function DepsLocation() {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsCardNewsList(\/)?(\d+)?$/,
       labels: ["news", "menuEduCard"] // 기관소식 > 카드뉴스
     },      
+    {
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsVidioList(\/)?(\d+)?$/,
+      labels: ["news", "menuEduVideo"] // 기관소식 > 동영상
+    },          
   ];
 
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기

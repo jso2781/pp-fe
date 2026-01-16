@@ -7,6 +7,7 @@ export type BoardKey =
   | 'NewsJobNoticeList'
   | 'NewsDataRoomList'
   | 'NewsCardNewsList'
+  | 'NewsVidioList'
   ;
 
 export interface BoardConfig {
@@ -41,5 +42,11 @@ export const BOARD_CONFIG_GROUP: Record<BoardKey, BoardConfig> = {
     label: '카드뉴스',
     bbsId: 'BBS_GAL_001',
     group: 'NEWS',
-  }
+  },
+  NewsVidioList: {
+    key: 'NewsVidioList',
+    label: '동영상',
+    bbsId: 'BBS_VDO_001',
+    group: 'NEWS',
+  }  
 };
