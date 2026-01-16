@@ -19,6 +19,7 @@ import TermsKo from '@/pages/ko/etc/Terms';
 import PrivacyPolicyKo from '@/pages/ko/etc/PrivacyPolicy';
 import CctvPolicyKo from '@/pages/ko/etc/CctvPolicy';
 import EmailDenyKo from '@/pages/ko/etc/EmailDeny';
+import ExpertMemberApplyKo from '@/pages/ko/expert/ExpertMemberApply'
 
 // 게시판 페이지 작업중
 import NewsNoticeListKo from '@/pages/ko/news/NewsNoticeList'
@@ -156,7 +157,8 @@ export default function Router() {
             <Route path="/:lang/etc/PrivacyPolicy" element={<LangElement byLang={{ ko: <PrivacyPolicyKo />, en: <PrivacyPolicyKo /> }} />} />
             <Route path="/:lang/etc/CctvPolicy" element={<LangElement byLang={{ ko: <CctvPolicyKo />, en: <CctvPolicyKo /> }} />} />
             <Route path="/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
-          
+            <Route path="/:lang/expert/ExpertMemberApply" element={<LangElement byLang={{ ko: <ExpertMemberApplyKo />, en: <ExpertMemberApplyKo /> }} />} />                                  
+
             {/* 게시판 페이지 작업중 */}          
             <Route path="/:lang/news/NewsNoticeList" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
             <Route path="/:lang/news/NewsNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsNoticeDetailKo />, en: <NewsNoticeDetailKo /> }} />} />            

@@ -98,6 +98,10 @@ export default function DepsLocation() {
       labels: ["news", "menuEduCard"] // 기관소식 > 카드뉴스
     },
     {
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsVidioList(\/)?(\d+)?$/,
+      labels: ["news", "menuEduVideo"] // 기관소식 > 동영상
+    },    
+    {
       pattern: /^\/[A-Za-z]{2}\/auth\/GeneralSignUpAgrTrms(\/)?$/,
       labels: ["signUp"] // 회원가입
     },
@@ -106,8 +110,8 @@ export default function DepsLocation() {
       labels: ["signUp"] // 회원가입
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsVidioList(\/)?(\d+)?$/,
-      labels: ["news", "menuEduVideo"] // 기관소식 > 동영상
+      pattern: /^\/[A-Za-z]{2}\/expert\/ExpertMemberApply(\/)?(\d+)?$/,
+      labels: ["usrSwtReg"] // 전문가 회원 전환 신청
     },
   ];
 
