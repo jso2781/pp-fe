@@ -1302,7 +1302,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   </Button>
                   <Button
                     size="small"
-                    onClick={() => navigate(to('/expert/convert/apply'))}
+                    onClick={() => navigate(to('/expert/ExpertMemberApply'))}
                     className="btn-util user-reg"
                   >
                     {t('usrSwtReg')}
