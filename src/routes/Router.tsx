@@ -12,6 +12,7 @@ import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail'
 import NotFoundKo from '@/pages/ko/NotFound'
 import SignUpSelKo from '@/pages/ko/auth/SignUpSel'
 import SignUpAgrTrmsKo from '@/pages/ko/auth/SignUpAgrTrms'
+import LegalGuardAgrKo from '@/pages/ko/auth/LegalGuardAgr'
 import LoginKo from '@/pages/ko/auth/Login'
 import LoginMethodKo from '@/pages/ko/auth/LoginMethod'
 import NewsFaqNoticeKo from '@/pages/ko/news/NewsFaqNotice';
@@ -181,6 +182,7 @@ export default function Router() {
             <Route path="/:lang/auth/SignUpSel" element={<LangElement byLang={{ ko: <SignUpSelKo />, en: <SignUpSelKo /> }} />} />
             <Route path="/:lang/auth/GeneralSignUpAgrTrms" element={<LangElement byLang={{ ko: <SignUpAgrTrmsKo />, en: <SignUpAgrTrmsKo /> }} />} />
             <Route path="/:lang/auth/JuniorSignUpAgrTrms" element={<LangElement byLang={{ ko: <SignUpAgrTrmsKo />, en: <SignUpAgrTrmsKo /> }} />} />
+            <Route path="/:lang/auth/LegalGuardAgr" element={<LangElement byLang={{ ko: <LegalGuardAgrKo />, en: <LegalGuardAgrKo /> }} />} />
 
             {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
             <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />

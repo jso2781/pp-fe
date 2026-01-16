@@ -79,7 +79,19 @@ export default function DepsLocation() {
     },
     {
       pattern: /^\/[A-Za-z]{2}\/auth\/SignUpSel(\/)?$/,
-      labels: ["signUp"]
+      labels: ["signUp"]  // 회원가입 선택
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/auth\/GeneralSignUpAgrTrms(\/)?$/,
+      labels: ["signUp"] // 회원가입 - 일반 회원 가입 약관 동의
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/auth\/JuniorSignUpAgrTrms(\/)?$/,
+      labels: ["signUp"] // 회원가입 - 만 14세 미만 회원 가입 약관 동의
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/auth\/LegalGuardAgr(\/)?$/,
+      labels: ["signUp"] // 회원가입 - 법정대리인 동의
     },
     {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsNoticeList(\/)?(\d+)?$/,
@@ -100,14 +112,6 @@ export default function DepsLocation() {
     {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsVidioList(\/)?(\d+)?$/,
       labels: ["news", "menuEduVideo"] // 기관소식 > 동영상
-    },    
-    {
-      pattern: /^\/[A-Za-z]{2}\/auth\/GeneralSignUpAgrTrms(\/)?$/,
-      labels: ["signUp"] // 회원가입
-    },
-    {
-      pattern: /^\/[A-Za-z]{2}\/auth\/JuniorSignUpAgrTrms(\/)?$/,
-      labels: ["signUp"] // 회원가입
     },
     {
       pattern: /^\/[A-Za-z]{2}\/expert\/ExpertMemberApply(\/)?(\d+)?$/,
