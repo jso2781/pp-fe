@@ -1,7 +1,16 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef} from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Button, Card, CardActions, CardContent, Link, List, ListItem, ListItemText, Stack, Tab, Tabs, TextField, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid';import { ChevronRight, Search } from '@mui/icons-material'
+import { Box, Button, Card, CardActions, CardContent, Link, List, ListItem, ListItemText, Stack, Tab, Tabs, TextField, Typography, IconButton } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { ChevronRight, OpenInNew, PlayArrow, Pause } from '@mui/icons-material'
+
+// Swiper
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay, A11y } from 'swiper/modules';
+import type { Swiper as SwiperCore } from 'swiper'; // 타입 지원
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 type TabKey = 'youtube' | 'insta' | 'blog';
 type SnsItem = { title: string; url: string };
@@ -12,6 +21,34 @@ export default function Home() {
   const navigate = useNavigate()
   const [tab, setTab] = useState<TabKey>('youtube')
   const [q, setQ] = useState('')
+
+  // service-swiper 버튼 엘리먼트를 담을 상태 선언
+  const [prevEl, setPrevEl] = useState<HTMLButtonElement | null>(null);
+  const [nextEl, setNextEl] = useState<HTMLButtonElement | null>(null);
+
+  // 섹션 1 상단 배너
+  const [isPlaying1, setIsPlaying1] = useState(true);
+  const swiperRef1 = useRef<SwiperCore | null>(null);
+
+  const toggleAutoplay1 = () => {
+    if (swiperRef1.current?.autoplay) {
+      if (isPlaying1) swiperRef1.current.autoplay.stop();
+      else swiperRef1.current.autoplay.start();
+      setIsPlaying1(!isPlaying1);
+    }
+  };
+
+  // 섹션 2 서비스 슬라이더
+  const [isPlaying2, setIsPlaying2] = useState(true);
+  const swiperRef2 = useRef<SwiperCore | null>(null);
+
+  const toggleAutoplay2 = () => {
+    if (swiperRef2.current?.autoplay) {
+      if (isPlaying2) swiperRef2.current.autoplay.stop();
+      else swiperRef2.current.autoplay.start();
+      setIsPlaying2(!isPlaying2);
+    }
+  };
 
   const systemCards = useMemo(
     () => [
@@ -39,16 +76,18 @@ export default function Home() {
 
   const serviceShortcuts = useMemo(
     () => [
-      { title: '국내이상사례보고', url: 'https://kaers.drugsafe.or.kr' },
-      { title: '국외이상사례보고', url: 'https://www.drugsafe.or.kr' },
-      { title: '의약품 부작용 피해구제', url: 'https://nedrug.mfds.go.kr' },
-      { title: '안전정보공개', url: 'https://open.drugsafe.or.kr' },
-      { title: '병원자료 분석네트워크 (MOA)', url: 'https://moa.drugsafe.or.kr' },
-      { title: 'APEC 약물감시 전문교육훈련', url: 'https://kidscoe.drugsafe.or.kr' },
-      { title: '의약품 안전관리책임자 교육', url: 'https://pvtraining.drugsafe.or.kr' },
+      { title: '국내 이상사례 온라인 보고', url: 'https://kaers.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
+      { title: '의약품부작용피해구제 민원신청', url: 'https://nedrug.mfds.go.kr/cntnts/230', iconUrl: '/img/shortcut_ico01.png' },
+      { title: '마약류 통합관리 시스템', url: 'https://www.nims.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
+      { title: '의약품 통합정보 시스템', url: 'https://nedrug.mfds.go.kr/index', iconUrl: '/img/shortcut_ico01.png' },
+      { title: '첨단바이오의약품 장기추적조사 시스템', url: 'https://ltfu.mfds.go.kr/main.do', iconUrl: '/img/shortcut_ico01.png' },
+      { title: '병원자료 분석네트워크', url: 'https://moa.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
+      { title: '의약품 안전관리책임자 교육', url: 'https://pvtraining.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
+      { title: '안전정보공개', url: 'https://open.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
+      { title: 'APEC 약물감시 전문교육훈련', url: 'https://kidscoe.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
     ],
     []
-  )
+  );
 
   const snsTabs = useMemo<SnsTabs>(
     () => ({
@@ -97,48 +136,114 @@ export default function Home() {
     navigate(`/ko/search?q=${encodeURIComponent(keyword)}`)
   }
 
-  return (
-    <Box className="ds-home">
-      <Box component="section" className="ds-hero ds-fullbleed">
-        <Box className="ds-container ds-hero__inner">
-          <Box className="ds-hero__copy">
-            <Typography variant="h4" sx={{ m: 0 }}>
-              의약품 안전관리로 국민을 건강하게
-            </Typography>
-            <Typography variant="body1" className="ds-hero__subtitle">
-              국민의 건강과 안전을 확보하고 국제적 수준의 안전관리체계를 마련하는 공공기관의 사명과 책임을 다하겠습니다.
-            </Typography>
 
-            <Stack direction="column" spacing={1} sx={{ width: '100%', mt: 1 }}>
-              <TextField
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="검색"
-                size="small"
-                InputProps={{
-                  startAdornment: <Search fontSize="small" />,
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') doSearch()
-                }}
-              />
-              <Stack direction="row" spacing={1} flexWrap="wrap">
-                <Button variant="contained" onClick={() => navigate('/ko/notice')}>
-                  공지사항
-                </Button>
-                <Button variant="outlined" onClick={() => navigate('/ko/board')}>
-                  게시판
-                </Button>
-                <Button variant="text" onClick={doSearch}>
-                  검색
-                </Button>
-              </Stack>
-            </Stack>
+  return (
+    <Box className="main-container">
+      {/* 메인비쥬얼 */}
+      <Box component="section" className="section-01">
+        <Box className="inner">
+          <Box className="slogan-group">
+            <Typography className="slogan-title">
+              의약품 안전관리로 <span>국민을 건강하게</span>
+            </Typography>
+            <Typography className="slogan-desc">
+              의약품 안전관리로 국민의 건강과 안전을 확보하고 <br />
+              국제적 수준 안전관리체계를 마련하여 그 혜택을 여러분께 <br />
+              돌려드리는 공공 기관의 사명과 책임을 다할 것입니다.
+          </Typography>
+          </Box>
+          <Box className="promotion-banner" component="section" aria-label="홍보존 슬라이드 배너" sx={{ position: 'relative' }}>
+            <Swiper
+              // [변경] swiperRef1 연결
+              onSwiper={(swiper) => (swiperRef1.current = swiper)} 
+              modules={[Navigation, Pagination, Autoplay, A11y]}
+              spaceBetween={0}
+              slidesPerView={1}
+              navigation
+              pagination={{ clickable: true, type: 'fraction' }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              loop={true}
+              a11y={{ enabled: true, prevSlideMessage: '이전 슬라이드', nextSlideMessage: '다음 슬라이드' }}
+            >
+              <SwiperSlide><Box sx={{ height: '494px', backgroundImage: 'url("/img/img_test_banner01.jpg")', backgroundSize: 'cover' }} /></SwiperSlide>
+              <SwiperSlide><Box sx={{ height: '494px', backgroundImage: 'url("/img/img_test_banner02.jpg")', backgroundSize: 'cover' }} /></SwiperSlide>
+            </Swiper>
+
+            <Box className="banner-control-box">
+              <IconButton 
+                className="banner-control-btn"
+                // [변경] toggleAutoplay1 및 isPlaying1 사용
+                onClick={toggleAutoplay1} 
+                aria-label={isPlaying1 ? "슬라이드 일시정지" : "슬라이드 재생"}
+              >
+                {isPlaying1 ? <Pause fontSize="small" /> : <PlayArrow fontSize="small" />}
+              </IconButton>
+            </Box>
           </Box>
         </Box>
       </Box>
 
-      <Box component="section" className="ds-section ds-fullbleed">
+      {/* 기본서비스 */}
+      <Box component="section" className="section-02">
+        <Box className="inner">
+          <h3 className="section-title">기본<span>서비스</span></h3>
+          <Box className="service-banner">
+            <Swiper
+              onSwiper={(swiper) => (swiperRef2.current = swiper)}
+              key={prevEl && nextEl ? 'ready' : 'not-ready'} 
+              modules={[Navigation, Pagination, A11y, Autoplay]}
+              spaceBetween={24}
+              slidesPerView={2}
+              navigation={{ prevEl, nextEl }}
+              pagination={{ clickable: true, type: 'fraction' }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              loop={true}
+              a11y={{ enabled: true, prevSlideMessage: '이전 슬라이드', nextSlideMessage: '다음 슬라이드' }}
+              role="region"
+              aria-roledescription="서비스 목록 슬라이더"
+              breakpoints={{
+                600: { slidesPerView: 3, slidesPerGroup: 3 }, 
+                900: { slidesPerView: 4, slidesPerGroup: 4 },
+                1200: { slidesPerView: 5, slidesPerGroup: 5 },
+              }}
+              className="service-swiper"
+            >
+              {serviceShortcuts.map((s, index) => (
+                <SwiperSlide key={s.title} role="group" aria-roledescription="서비스 항목" aria-label={`${serviceShortcuts.length}개 중 ${index + 1}번째 서비스`}>
+                  <a className="shortcut-item" href={s.url} target="_blank" rel="noreferrer">
+                    <Box className="icon-bg" style={{ backgroundImage: `url(${s.iconUrl})` } as React.CSSProperties} aria-hidden="true" />
+                    <span className="shortcut-text">{s.title}</span>
+                    <Box component="span" className="shortcut-link-box">
+                      <span className="shortcut-link-text">바로가기</span>
+                      <OpenInNew className="shortcut-icon" aria-hidden="true" />
+                    </Box>
+                  </a>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            
+            <Box className="service-control-group"> 
+              <button ref={setPrevEl} className="swiper-button-prev service-prev" aria-label="이전 슬라이드"></button>
+              <button ref={setNextEl} className="swiper-button-next service-next" aria-label="다음 슬라이드"></button>
+
+              <Box className="banner-control-box">
+                <IconButton 
+                  className={`banner-control-btn ${isPlaying2 ? 'is-playing' : 'is-paused'}`}
+                  onClick={toggleAutoplay2} 
+                  aria-label={isPlaying2 ? "슬라이드 일시정지" : "슬라이드 재생"}
+                  size="small"
+                >
+                  {isPlaying2 ? <Pause fontSize="small" /> : <PlayArrow fontSize="small" />}
+                </IconButton>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+
+      </Box>
+
+
+      <Box component="section" className="">
         <Box className="ds-container">
           <Grid container spacing={2}>
             {systemCards.map((c) => (
