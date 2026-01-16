@@ -32,11 +32,6 @@ export default function NewsCardNewsDetail() {
   const { pstSn } = useParams<{ pstSn: string }>();
   const { current } = useAppSelector((s) => s.pst)
 
-  // 스크롤 상단 이동
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);    
-
   useEffect(() => {
     if (bbsId && pstSn) dispatch(getPst({bbsId, pstSn}))
   }, [dispatch, bbsId, pstSn])
