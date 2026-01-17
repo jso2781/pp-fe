@@ -39,18 +39,14 @@ function ensureAnyIdAssets() {
       document.body.appendChild(s)
     })
 
-  // dev - http://localhost:8080/pp
-  const anyIdStaticUrl = import.meta.env.VITE_ANY_ID_STATIC_URL
-
-  // Any-ID UI 자원(CSS/JS) 적용 가이드 (AuthResourceRelay 기준)
-  //  - /anyid/css/app.css
-  //  - /anyid/js/manifest.js, vendor.js, app.js
-  ensureLink(`${anyIdStaticUrl}/anyid/css/app.css`)
+  // public 폴더 기준 상대 경로 사용
+  // public/anyid/css/app.css -> /anyid/css/app.css
+  ensureLink('/anyid/css/app.css')
 
   // manifest -> vendor -> app 순서 권장
-  return loadScript(`${anyIdStaticUrl}/anyid/js/manifest.js`)
-    .then(() => loadScript(`${anyIdStaticUrl}/anyid/js/vendor.js`))
-    .then(() => loadScript(`${anyIdStaticUrl}/anyid/js/app.js`))
+  return loadScript('/anyid/js/manifest.js')
+    .then(() => loadScript('/anyid/js/vendor.js'))
+    .then(() => loadScript('/anyid/js/app.js'))
 }
 
 export default function LoginMethod() {
@@ -150,8 +146,9 @@ export default function LoginMethod() {
         return
       }
 
-      const configAnyidcJsonUrl =
-        import.meta.env.VITE_ANY_ID_STATIC_URL + '/config/config.anyidc.json'
+      // public 폴더 기준 상대 경로 사용
+      // public/anyid/config/config.anyidc.json -> /anyid/config/config.anyidc.json
+      const configAnyidcJsonUrl = '/anyid/config/config.anyidc.json'
 
       // 정부24와 동일한 방식으로 간편인증 다이얼로그 표시
       window.AnyidC.LOAD_MODULE({

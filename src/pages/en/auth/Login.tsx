@@ -22,18 +22,14 @@ function ensureAnyIdAssets() {
       document.body.appendChild(s)
     })
 
-  // dev - http://localhost:8080/pp
-  const anyIdStaticUrl = import.meta.env.VITE_ANY_ID_STATIC_URL;
-
-  // Any-ID UI 자원(CSS/JS) 적용 가이드 (AuthResourceRelay 기준)
-  //  - /anyid/css/app.css
-  //  - /anyid/js/manifest.js, vendor.js, app.js
+  // public 폴더 기준 상대 경로 사용
+  // public/anyid/css/app.css -> /anyid/css/app.css
   ensureLink('/anyid/css/app.css')
 
   // manifest -> vendor -> app 순서 권장
-  return loadScript(`${anyIdStaticUrl}/anyid/js/manifest.js`)
-    .then(() => loadScript(`${anyIdStaticUrl}/anyid/js/vendor.js`))
-    .then(() => loadScript(`${anyIdStaticUrl}/anyid/js/app.js`))
+  return loadScript('/anyid/js/manifest.js')
+    .then(() => loadScript('/anyid/js/vendor.js'))
+    .then(() => loadScript('/anyid/js/app.js'))
 }
 
 export default function Login() {
@@ -83,8 +79,9 @@ export default function Login() {
           },
         }
 
-        // dev - http://localhost:8080/pp + '/config/config.anyidc.json'
-        const configAnyidcJsonUrl = import.meta.env.VITE_ANY_ID_STATIC_URL + '/config/config.anyidc.json';
+        // public 폴더 기준 상대 경로 사용
+        // public/anyid/config/config.anyidc.json -> /anyid/config/config.anyidc.json
+        const configAnyidcJsonUrl = '/anyid/config/config.anyidc.json';
         console.log("configAnyidcJsonUrl="+configAnyidcJsonUrl);
         if(!window.AnyidC){
             setError('Any-ID module window.AnyidC is not loaded.')
@@ -107,14 +104,14 @@ export default function Login() {
           toggle: true,
           theme: '4.1.0',
           redirect_uri: redirectUri,
-          success: function (data) {
+          success: function (data: any) {
             window.anyidAdaptor?.success?.(data)
           },
-          fail: function (err) {
+          fail: function (err: any) {
             console.error(err)
             setError('Any-ID authentication failed.')
           },
-          log: function (data) {
+          log: function (data: any) {
             console.log(data)
           },
         })
