@@ -54,21 +54,69 @@ function ensureAnyIdAssets() {
     .then(() => loadScript('/anyid/js/app.js'))
 }
 
+// sessionStorage 키
+const SIGNUP_FORM_DATA_KEY = 'signUpFormData';
+
+// formData 타입 정의
+type LegalGuardFormData = {
+  userName: string;
+  birthDate: string;
+  phone: string;
+  parentName: string;
+  relationship: string;
+  parentPhone: string;
+};
+
 export default function LegalGuardAgr() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
   const currentStep = 2;
 
+  // sessionStorage에서 저장된 formData 불러오기
+  const getStoredFormData = (): LegalGuardFormData | null => {
+    try {
+      const stored = sessionStorage.getItem(SIGNUP_FORM_DATA_KEY);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (error) {
+      console.error('Failed to parse stored form data:', error);
+    }
+    return null;
+  };
+
+  // location.state에서 전달받은 formData 또는 sessionStorage에서 불러온 formData 사용
+  const getInitialFormData = (): LegalGuardFormData => {
+    const state = location.state as { formData?: LegalGuardFormData } | null;
+    // location.state에서 전달받은 formData가 있으면 우선 사용
+    if (state?.formData) {
+      return state.formData;
+    }
+    // 없으면 sessionStorage에서 불러오기
+    const stored = getStoredFormData();
+    if (stored) {
+      return {
+        userName: stored.userName || '',
+        birthDate: stored.birthDate || '',
+        phone: stored.phone || '',
+        parentName: stored.parentName || '',
+        relationship: stored.relationship || '',
+        parentPhone: stored.parentPhone || '',
+      };
+    }
+    return {
+      userName: '',
+      birthDate: '',
+      phone: '',
+      parentName: '',
+      relationship: '',
+      parentPhone: '',
+    };
+  };
+
   // 폼 상태 관리
-  const [formData, setFormData] = useState({
-    userName: '',           // 신청인 이름
-    birthDate: '',          // 신청인 생년월일
-    phone: '',              // 신청인 휴대전화번호
-    parentName: '',         // 법정대리인 이름
-    relationship: '',       // 신청인과의 관계
-    parentPhone: '',        // 법정대리인 휴대전화번호
-  });
+  const [formData, setFormData] = useState<LegalGuardFormData>(getInitialFormData());
 
   // 에러 상태 관리
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -88,6 +136,20 @@ export default function LegalGuardAgr() {
     }
     return getSignUpSteps(t, true);
   }, [location.state, t]);
+
+  // location.state에서 새로운 formData가 전달되면 업데이트
+  useEffect(() => {
+    const state = location.state as { formData?: LegalGuardFormData } | null;
+    if (state?.formData) {
+      setFormData(state.formData);
+      // sessionStorage에도 저장
+      try {
+        sessionStorage.setItem(SIGNUP_FORM_DATA_KEY, JSON.stringify(state.formData));
+      } catch (error) {
+        console.error('Failed to save form data to storage:', error);
+      }
+    }
+  }, [location.state]);
 
   // Any-ID 자원 로드
   useEffect(() => {
@@ -277,7 +339,9 @@ export default function LegalGuardAgr() {
         alert(t('certifySelfFailedReminder'));
       },
       log: function (data: unknown) {
-        console.log(t('anyIdLog'), data);
+        console.log('============================ '+ t('anyIdLog') + ' ============================', data);
+        // 본인인증 성공
+        setIsCertified(true);
       },
     })
   }
@@ -293,6 +357,13 @@ export default function LegalGuardAgr() {
       return;
     }
 
+    // formData를 sessionStorage에 저장 (뒤로가기 시 유지)
+    try {
+      sessionStorage.setItem('signUpFormData', JSON.stringify(formData));
+    } catch (error) {
+      console.error('Failed to save form data to storage:', error);
+    }
+
     // 다음 단계로 이동 (본인인증 페이지)
     navigate('/ko/auth/CertifySelf', { state: { steps, formData } });
   }
@@ -304,6 +375,9 @@ export default function LegalGuardAgr() {
 
   // 다음단계 버튼 활성화 조건
   const isNextStepEnabled = useMemo(() => {
+    // 실제 에러 메시지가 있는지 확인 (빈 문자열은 에러가 아님)
+    const hasErrors = Object.values(errors).some(error => error && error.trim() !== '');
+    
     const isFormValid = 
       formData.userName.trim().length >= 2 &&
       formData.birthDate.trim().length === 8 &&
@@ -313,8 +387,23 @@ export default function LegalGuardAgr() {
       formData.relationship !== '' &&
       formData.parentPhone.trim().length >= 11 &&
       formData.parentPhone.trim().length <= 12 &&
-      Object.keys(errors).length === 0 &&
+      !hasErrors &&
       isCertified
+
+    // 디버깅용 로그 (개발 환경에서만)
+    // if (import.meta.env.DEV) {
+    //   console.log('isNextStepEnabled 체크:', {
+    //     userName: formData.userName.trim().length >= 2,
+    //     birthDate: formData.birthDate.trim().length === 8,
+    //     phone: formData.phone.trim().length >= 11 && formData.phone.trim().length <= 12,
+    //     parentName: formData.parentName.trim().length >= 2,
+    //     relationship: formData.relationship !== '',
+    //     parentPhone: formData.parentPhone.trim().length >= 11 && formData.parentPhone.trim().length <= 12,
+    //     hasErrors,
+    //     isCertified,
+    //     errors
+    //   });
+    // }
 
     return isFormValid;
   }, [formData, errors, isCertified]);

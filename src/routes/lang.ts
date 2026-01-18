@@ -17,7 +17,7 @@ export function normalizeLang(input?: string | null): SupportedLang | null {
 }
 
 export function detectBrowserLang(): SupportedLang {
-  const saved = localStorage.getItem(LOCALE_KEY);
+  const saved = sessionStorage.getItem(LOCALE_KEY);
   const savedNorm = normalizeLang(saved);
   console.log("lang.ts detectBrowserLang saved="+saved+", savedNorm="+savedNorm);
 

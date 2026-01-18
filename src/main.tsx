@@ -17,7 +17,7 @@ if (!rootEl) {
 }
 
 function resolveInitialLang() {
-  const saved = localStorage.getItem(LOCALE_KEY)
+  const saved = sessionStorage.getItem(LOCALE_KEY)
   return (
     normalizeLang(saved) ??
     normalizeLang(navigator.language) ??

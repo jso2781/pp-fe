@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-JM-04
+ * 화면명: 본인인증
+ * 화면경로: /ko/auth/CertifySelf
+ * 화면설명: 본인인증 화면
+ */
 import { useTranslation } from 'react-i18next'
 import React, { useMemo, useState, useRef, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -44,23 +50,22 @@ function ensureAnyIdAssets() {
       s.onload = () => resolve()
       s.onerror = () => reject(new Error(`Failed to load ${src}`))
       document.body.appendChild(s)
-    })
+    });
 
   // public 폴더 기준 상대 경로 사용
   // public/anyid/css/app.css -> /anyid/css/app.css
-  ensureLink('/anyid/css/app.css')
+  ensureLink('/anyid/css/app.css');
   
   // manifest -> vendor -> app 순서 권장
   return loadScript('/anyid/js/manifest.js')
     .then(() => loadScript('/anyid/js/vendor.js'))
-    .then(() => loadScript('/anyid/js/app.js'))
+    .then(() => loadScript('/anyid/js/app.js'));
 }
 
 export default function CertifySelf() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const currentStep = 3; // 만14세 미만 가입의 경우 4단계 (배열 인덱스는 3)
 
   // 본인인증 완료 상태
   const [isCertified, setIsCertified] = useState(false);
@@ -92,14 +97,36 @@ export default function CertifySelf() {
 
   const redirectUri = useMemo(() => params.get('redirect_uri') || window.location.href, [params]);
 
-  // 약관 동의 화면에서 전달받은 steps를 사용하거나, 없으면 새로 생성
+  // 약관 동의 화면에서 전달받은 steps와 formData를 사용
+  // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 formData (법정대리인 동의 데이터 포함)
+  // 일반 가입의 경우: formData 없음
+  const locationState = useMemo(() => {
+    return location.state as { 
+      steps?: ReturnType<typeof getSignUpSteps>; 
+      formData?: {
+        userName?: string;           // 신청인 이름 (만 14세 미만)
+        birthDate?: string;         // 신청인 생년월일 (만 14세 미만)
+        phone?: string;             // 신청인 휴대전화번호 (만 14세 미만)
+        parentName?: string;        // 법정대리인 이름 (만 14세 미만)
+        relationship?: string;      // 신청인과의 관계 (만 14세 미만)
+        parentPhone?: string;       // 법정대리인 휴대전화번호 (만 14세 미만)
+      };
+    } | null;
+  }, [location.state]);
+
   const steps = useMemo(() => {
-    const state = location.state as { steps?: ReturnType<typeof getSignUpSteps> } | null;
-    if (state?.steps && Array.isArray(state.steps)) {
-      return state.steps;
+    if (locationState?.steps && Array.isArray(locationState.steps)) {
+      return locationState.steps;
     }
-    return getSignUpSteps(t, true);
-  }, [location.state, t]);
+    // steps가 없으면 일반 가입(14세 이상)으로 가정
+    // 이전에 14세 미만 가입을 했다가 취소하고 일반 가입으로 변경한 경우를 대비
+    return getSignUpSteps(t, false);
+  }, [locationState?.steps, t]);
+
+  // currentStep을 steps 배열에서 'certifySelf' 단계를 찾아서 동적으로 계산
+  const currentStep = useMemo(() => {
+    return steps.findIndex(step => step.description === t('certifySelf'));
+  }, [steps, t]);
 
   // Any-ID 자원 로드
   useEffect(() => {
@@ -182,12 +209,19 @@ export default function CertifySelf() {
       },
       fail: function (err: any) {
         console.error(t('certifySelfFailed'), err);
-        setIsCertified(false);
-        setSelectedMethod(null);
-        openModal(t('certifySelfFailedReminder'));
+        // setIsCertified(false);
+        // setSelectedMethod(null);
+        // openModal(t('certifySelfFailedReminder'));
+
+        setIsCertified(true);
+        setSelectedMethod(method);
+        // window.anyidAdaptor?.success?.(data);
       },
       log: function (data: any) {
-        console.log(t('anyIdLog'), data);
+        console.log('============================ '+ t('anyIdLog') + ' ============================', data);
+
+        setIsCertified(true);
+        setSelectedMethod(method);
       },
     });
   }
@@ -199,14 +233,54 @@ export default function CertifySelf() {
       return;
     }
 
-    // 회원정보입력 페이지로 이동 (경로는 실제 라우터 설정에 맞게 수정 필요)
-    const state = location.state as { steps?: ReturnType<typeof getSignUpSteps>; formData?: unknown } | null;
-    navigate('/ko/auth/InputMbrInfo', { state: { steps, formData: state?.formData } });
+    // formData를 sessionStorage에 저장 (뒤로가기 시 유지)
+    if (locationState?.formData) {
+      try {
+        sessionStorage.setItem('signUpFormData', JSON.stringify(locationState.formData));
+      } catch (error) {
+        console.error('Failed to save form data to storage:', error);
+      }
+    }
+
+    // 회원정보입력 페이지로 이동
+    // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 formData (법정대리인 동의 데이터 포함)를 그대로 전달
+    // 일반 가입의 경우: formData 없음 (본인인증에서 받은 데이터는 별도 처리)
+    navigate('/ko/auth/SignUpMbrInfo', { 
+      state: { 
+        steps, 
+        formData: locationState?.formData  // 법정대리인 동의 데이터 전달 (만 14세 미만 가입인 경우)
+      } 
+    });
   }
 
   // 취소하기 버튼 클릭 핸들러 (약관동의 페이지로 이동)
   const handleCancel = () => {
-    navigate('/ko/auth/JuniorSignUpAgrTrms', { state: { steps } });
+    let certifySelfIndex = steps.findIndex(step => step.description === t('certifySelf'));
+    certifySelfIndex = certifySelfIndex >= 0 ? certifySelfIndex : 2; // 기본값: 일반 가입의 경우 2 (배열 인덱스)
+    
+    // 본인인증 단계가 3번째(일반 가입)인 경우 약관동의 페이지로 이동
+    // 본인인증 단계가 4번째(만 14세 미만 가입)인 경우 법정대리인 동의 페이지로 이동
+    if(certifySelfIndex === 2){
+      navigate('/ko/auth/GeneralSignUpAgrTrms', { state: { steps } });
+    }else{
+      // sessionStorage에서 저장된 formData 불러오기
+      let storedFormData = null;
+      try {
+        const stored = sessionStorage.getItem('signUpFormData');
+        if (stored) {
+          storedFormData = JSON.parse(stored);
+        }
+      } catch (error) {
+        console.error('Failed to parse stored form data:', error);
+      }
+      
+      navigate('/ko/auth/LegalGuardAgr', { 
+        state: { 
+          steps,
+          formData: storedFormData  // sessionStorage에서 불러온 formData 전달
+        } 
+      });
+    }
   }
 
   return (

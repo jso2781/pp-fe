@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { login } from './AuthThunks';
+import { login, refresh, logout, loginExtend} from './AuthThunks';
 import { AuthPVO, AuthRVO } from './AuthTypes';
+import { MbrInfoRVO } from '../mbr/MbrInfoTypes';
 
 /**
  * 대국민포털_로그인 정보(Redux 저장 구조) 
@@ -33,37 +34,28 @@ const AuthSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAccessToken(state, action: PayloadAction<{ tokenId: number | null, accessToken: string | null, refreshToken: string | null, pswdErrNmtm: number | null }>) {
+    setAccessToken(state, action: PayloadAction<{ tokenId: number | null, accessToken: string | null, refreshToken: string | null, pswdErrNmtm: number | null, userInfo: MbrInfoRVO | null }>) {
       state.tokenId = action.payload.tokenId;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
-      state.pswdErrNmtm = null;
-      
+      state.pswdErrNmtm = action.payload.pswdErrNmtm;
+      state.userInfo = action.payload.userInfo;
+
       // localStorage에 통일된 키로 저장 (AuthContext와 동기화)
-      if (state.userInfo && action.payload.accessToken) {
+      if(state.userInfo && action.payload.accessToken) {
         const authData = {
-          userInfo: state.userInfo,
           tokenId: action.payload.tokenId,
           accessToken: action.payload.accessToken,
           refreshToken: action.payload.refreshToken,
-          pswdErrNmtm: null,
+          pswdErrNmtm: action.payload.pswdErrNmtm,
+          userInfo: action.payload.userInfo
         };
-        localStorage.setItem("auth", JSON.stringify(authData));
+        sessionStorage.setItem("auth", JSON.stringify(authData));
         // 하위 호환성을 위해 refreshToken도 별도로 저장
-        if (action.payload.refreshToken) {
-          localStorage.setItem("refreshToken", action.payload.refreshToken);
+        if(action.payload.refreshToken){
+          sessionStorage.setItem("refreshToken", action.payload.refreshToken);
         }
       }
-    },
-    logout(state) {
-      state.userInfo = null;
-      state.tokenId = null;
-      state.accessToken = null;
-      state.refreshToken = null;
-      state.pswdErrNmtm = null;
-      // localStorage에서 통일된 키 제거
-      localStorage.removeItem("auth");
-      localStorage.removeItem("refreshToken"); // 하위 호환성을 위해 유지
     },
     clearUserInfo: (state) => {
       state.userInfo = null;
@@ -71,9 +63,9 @@ const AuthSlice = createSlice({
       state.accessToken = null;
       state.refreshToken = null;
       state.pswdErrNmtm = null;
-      // localStorage에서 통일된 키 제거
-      localStorage.removeItem("auth");
-      localStorage.removeItem("refreshToken"); // 하위 호환성을 위해 유지
+      // sessionStorage에서 통일된 키 제거
+      sessionStorage.removeItem("auth");
+      sessionStorage.removeItem("refreshToken"); // 하위 호환성을 위해 유지
     }
   },
   extraReducers: (builder) => {
@@ -91,7 +83,7 @@ const AuthSlice = createSlice({
         state.refreshToken = action.payload.refreshToken;
         state.pswdErrNmtm = action.payload.pswdErrNmtm;
         
-        // localStorage에 통일된 키로 저장 (AuthContext와 동기화)
+        // sessionStorage에 통일된 키로 저장 (AuthContext와 동기화)
         if (action.payload.userInfo && action.payload.accessToken) {
           const authData = {
             userInfo: action.payload.userInfo,
@@ -100,10 +92,10 @@ const AuthSlice = createSlice({
             refreshToken: action.payload.refreshToken,
             pswdErrNmtm: action.payload.pswdErrNmtm,
           };
-          localStorage.setItem("auth", JSON.stringify(authData));
+          sessionStorage.setItem("auth", JSON.stringify(authData));
           // 하위 호환성을 위해 refreshToken도 별도로 저장
           if (action.payload.refreshToken) {
-            localStorage.setItem("refreshToken", action.payload.refreshToken);
+            sessionStorage.setItem("refreshToken", action.payload.refreshToken);
           }
         }
       })
@@ -120,8 +112,65 @@ const AuthSlice = createSlice({
         state.refreshToken = null;
         state.pswdErrNmtm = null;
       })
+      .addCase(refresh.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.pswdErrNmtm = null;
+      })
+      .addCase(refresh.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userInfo = action.payload.userInfo;
+        state.tokenId = action.payload.tokenId;
+        state.accessToken = action.payload.accessToken;
+        state.refreshToken = action.payload.refreshToken;
+        state.pswdErrNmtm = action.payload.pswdErrNmtm;
+      })
+      .addCase(refresh.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? 'JWT Token 갱신에 실패했습니다.';
+        state.userInfo = null;
+        state.tokenId = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.pswdErrNmtm = null;
+      })
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userInfo = null;
+        state.tokenId = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.pswdErrNmtm = null;
+        // sessionStorage에서 통일된 키 제거
+        sessionStorage.removeItem("auth");
+        sessionStorage.removeItem("refreshToken");
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? '로그아웃에 실패했습니다.';
+        state.userInfo = null;
+        state.tokenId = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.pswdErrNmtm = null;
+      })
+      .addCase(loginExtend.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginExtend.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(loginExtend.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? '로그인 연장에 실패했습니다.';
+      })
     }
   })
 
-export const { setAccessToken, logout, clearUserInfo } = AuthSlice.actions;
+export const { setAccessToken, clearUserInfo } = AuthSlice.actions;
 export default AuthSlice.reducer;

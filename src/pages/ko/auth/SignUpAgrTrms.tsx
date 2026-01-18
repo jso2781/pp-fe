@@ -160,7 +160,8 @@ export default function SignUpAgrTrms() {
         // 만 14세 미만 가입: 법정 대리인 동의 단계로 이동 (steps 객체 전달)
         navigate('/ko/auth/LegalGuardAgr', { state: { steps } });
       } else {
-        navigate('/ko/auth/CertifySelf');   // 일반 가입: 본인 인증 단계로 이동
+        // 일반 가입: 본인 인증 단계로 이동 (steps 객체 전달)
+        navigate('/ko/auth/CertifySelf', { state: { steps } });
       }
     } else {
       // 필수 약관이 동의되지 않았으면 에러 팝업 표시
@@ -352,7 +353,7 @@ export default function SignUpAgrTrms() {
                       <Button 
                         variant="outlined" 
                         size="large" 
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate('/ko/auth/SignUpSel')}
                       >
                         {t('cancel')}
                       </Button>

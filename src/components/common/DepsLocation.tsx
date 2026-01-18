@@ -94,6 +94,10 @@ export default function DepsLocation() {
       labels: ["signUp"] // 회원가입 - 법정대리인 동의
     },
     {
+      pattern: /^\/[A-Za-z]{2}\/auth\/CertifySelf(\/)?$/,
+      labels: ["signUp"] // 회원가입 - 본인인증
+    },
+    {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsNoticeList(\/)?(\d+)?$/,
       labels: ["news", "noticeList"] // 기관소식 > 공지사항
     },

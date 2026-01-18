@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import https from '@/api/axiosInstance';
-import { loginApiPath, logoutApiPath, refreshTokenApiPath } from '@/api/auth/AuthApiPaths';
-import { AuthPVO, AuthRVO, LoginRVO } from './AuthTypes';
+import { loginApiPath, logoutApiPath, refreshApiPath, loginExtendApiPath } from '@/api/auth/AuthApiPaths';
+import { AuthPVO, AuthRVO, LoginExtendRVO, LoginRVO, LogoutPVO, LogoutRVO, RefreshPVO, RefreshRVO } from './AuthTypes';
+import { MbrInfoRVO } from '../mbr/MbrInfoTypes';
 
 /**
  * 대국민포털_로그인 요청
@@ -71,6 +72,99 @@ export const login = createAsyncThunk<
       
       // 기타 에러
       return rejectWithValue(axiosError.message || '로그인에 실패했습니다.');
+    }
+  }
+)
+
+/**
+ * 대국민포털_로그인 JWT Token 갱신 요청
+ */
+export const refresh = createAsyncThunk<RefreshRVO, RefreshPVO | undefined>(
+  '/auth/refresh',
+  async (params: RefreshPVO | undefined) => {
+    try {
+      const res = await https.post(refreshApiPath(), params);
+
+      const payload = res.data?.data;
+
+      return {
+        tokenId: payload.tokenId ?? null,
+        accessToken: payload.accessToken ?? null,
+        refreshToken: payload.refreshToken ?? null,
+        pswdErrNmtm: payload.pswdErrNmtm ?? null,
+        userInfo: payload.userInfo as MbrInfoRVO ?? null
+      };
+    }catch (e) {
+      console.log("AuthThunks refresh catch e=",e);
+      return null;
+    }
+  }
+)
+
+/**
+ * 대국민포털_로그아웃 요청
+ */
+export const logout = createAsyncThunk<LogoutRVO, LogoutPVO | undefined, { rejectValue: string }>(
+  '/auth/logout',
+  async (params: LogoutPVO | undefined, { rejectWithValue }) => {
+    try {
+      const res = await https.post(logoutApiPath(), params);
+
+      const payload = res.data?.data;
+
+      return {
+        code: payload.code ?? '',
+        msg: payload.msg ?? ''
+      };
+    }
+    // 서버가 없거나 에러 나면 강제로 mock 데이터 사용 
+    catch (error) {
+      console.log("AuthThunks logout catch error=",error);
+
+      const axiosError = error as AxiosError<{ 
+        code?: string; 
+        msg?: string;
+      }>;
+
+      // 서버 응답이 있는 경우 (4xx, 5xx 에러)
+      if (axiosError.response) {
+        const errorData = axiosError.response.data as any;
+        const code = errorData?.code ?? errorData?.data?.code;
+        const msg = errorData?.msg ?? errorData?.data?.msg;
+        return rejectWithValue(msg);
+      }
+
+      // 요청은 보냈지만 응답을 받지 못한 경우 (네트워크 에러)
+      if (axiosError.request) {
+        return rejectWithValue('네트워크 오류가 발생했습니다. 연결을 확인해주세요.');
+      }
+      
+      // 기타 에러
+      return rejectWithValue(axiosError.msg || '로그인에 실패했습니다.');
+    }
+  }
+)
+
+/**
+ * 대국민포털_로그인 연장 요청
+ */
+export const loginExtend = createAsyncThunk<LoginExtendRVO, undefined>(
+  '/auth/extend',
+  async () => {
+    try {
+      const res = await https.post(loginExtendApiPath());
+      const payload = res.data?.data;
+
+      return {
+        code: payload.code ?? '',
+        msg: payload.msg ?? ''
+      };
+    }
+    // 서버가 없거나 에러 나면 강제로 mock 데이터 사용 
+    catch (e) {
+      console.log("AuthThunks loginExtend catch e=",e);
+
+      return null;
     }
   }
 )

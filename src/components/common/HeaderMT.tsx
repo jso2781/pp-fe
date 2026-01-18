@@ -502,7 +502,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
     console.log('Header toggleLang curLang=' + i18nInstance.language + ', next=' + nextLang)
 
-    localStorage.setItem(LOCALE_KEY, nextLang) // ✅ APP_LOCALE 저장
+    sessionStorage.setItem(LOCALE_KEY, nextLang) // ✅ APP_LOCALE 저장
     i18nInstance.changeLanguage(nextLang) // ✅ UI 즉시 반영
     navigate(nextPath) // ✅ 경로 이동
   }

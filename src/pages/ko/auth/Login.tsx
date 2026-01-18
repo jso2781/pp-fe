@@ -59,7 +59,7 @@ export default function Login() {
 
   // 아이디 저장 기능: 페이지 로드 시 저장된 아이디 불러오기
   useEffect(() => {
-    const savedId = localStorage.getItem(STORAGE_KEY_REMEMBER_ID)
+    const savedId = sessionStorage.getItem(STORAGE_KEY_REMEMBER_ID)
     if (savedId) {
       setValues((p) => ({ ...p, loginId: savedId, rememberId: true }))
     }
@@ -73,7 +73,7 @@ export default function Login() {
   // 비밀번호 변경 안내 팝업 표시 여부 확인
   // Description: 회원가입 또는 비밀번호 변경 후 80일 전부터 메시지 노출
   const checkPasswordChangeReminder = () => {
-    const reminderDate = localStorage.getItem(STORAGE_KEY_PASSWORD_CHANGE_REMINDER)
+    const reminderDate = sessionStorage.getItem(STORAGE_KEY_PASSWORD_CHANGE_REMINDER)
     if (reminderDate) {
       const reminder = new Date(reminderDate)
       const now = new Date()
@@ -121,9 +121,9 @@ export default function Login() {
 
     // 아이디 저장 기능
     if (values.rememberId) {
-      localStorage.setItem(STORAGE_KEY_REMEMBER_ID, values.loginId)
+      sessionStorage.setItem(STORAGE_KEY_REMEMBER_ID, values.loginId)
     } else {
-      localStorage.removeItem(STORAGE_KEY_REMEMBER_ID)
+      sessionStorage.removeItem(STORAGE_KEY_REMEMBER_ID)
     }
 
     try{
@@ -328,7 +328,7 @@ export default function Login() {
                                 setValues((p) => ({ ...p, rememberId: checked }))
                                 // 체크 해제 시 localStorage에서도 제거
                                 if (!checked) {
-                                  localStorage.removeItem(STORAGE_KEY_REMEMBER_ID)
+                                  sessionStorage.removeItem(STORAGE_KEY_REMEMBER_ID)
                                 }
                               }}
                               // 2. 키보드 탭(Tab) 이동 시 시각적 포커스를 명확히 함 (MUI 기본 지원되지만 확인)
@@ -453,7 +453,7 @@ export default function Login() {
               // 해당 회원의 비밀번호 유효기간을 버튼을 클릭한 일자를 기준으로 +80일 뒤에 다시 알림 메시지 노출
               const nextReminderDate = new Date()
               nextReminderDate.setDate(nextReminderDate.getDate() + PASSWORD_CHANGE_REMINDER_DAYS)
-              localStorage.setItem(STORAGE_KEY_PASSWORD_CHANGE_REMINDER, nextReminderDate.toISOString())
+              sessionStorage.setItem(STORAGE_KEY_PASSWORD_CHANGE_REMINDER, nextReminderDate.toISOString())
               setShowPasswordChangeReminder(false)
               
               // 정상 로그인 처리 계속

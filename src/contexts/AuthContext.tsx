@@ -1,6 +1,8 @@
 import { createContext, useContext, useMemo, useCallback, ReactNode } from 'react'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
-import { logout as logoutAction } from '@/features/auth/AuthSlice'
+import { logout } from '@/features/auth/AuthThunks'
+import { RootState } from '@/store/store'
+import { AuthState } from '@/features/auth/AuthSlice'
 
 interface AuthData {
   userInfo?: any
@@ -14,7 +16,7 @@ interface AuthData {
 interface AuthContextType {
   isAuthenticated: boolean
   user: AuthData | null
-  logout: () => void
+  logoutContext: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -28,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const dispatch = useAppDispatch()
   
   // Redux 상태 구독
-  const auth = useAppSelector((s) => s.auth)
+  const auth = useAppSelector((s: RootState) => s.auth) as AuthState
   const { userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm } = auth || {}
 
   // Redux 상태에서 직접 계산
@@ -57,16 +59,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm])
 
-  const logout = useCallback(() => {
+  const logoutContext = useCallback(() => {
     // Redux logout 액션을 dispatch
-    dispatch(logoutAction())
-  }, [dispatch])
+    // tokenId가 null이면 0을 사용 (LogoutPVO는 tokenId가 필수 필드)
+    dispatch(logout({ tokenId: tokenId ?? 0 }))
+  }, [dispatch, tokenId])
 
   const value = useMemo(() => ({
     isAuthenticated,
     user,
-    logout,
-  }), [isAuthenticated, user, logout])
+    logoutContext,
+  }), [isAuthenticated, user, logoutContext])
 
   return (
     <AuthContext.Provider value={value}>

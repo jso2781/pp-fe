@@ -75,6 +75,7 @@ export const mockMbrInfoList = [
   }
 ]
 
+
 /**
  * 대국민포털_회원정보기본 조회/입력/수정/저장 파라메터 정보 
  */
@@ -311,3 +312,9 @@ export interface MbrInfoDVO {
 
 }
 
+/**
+ * 대국민포털_회원정보기본 기존 아이디, 이메일 존재여부 조회
+ */
+export interface checkMbrInfoRVO {
+  checkCnt: number
+}

@@ -14,6 +14,8 @@ import { useAuth } from '@/contexts/AuthContext'
 import { LOCALE_KEY } from '@/i18n/i18n'
 import type { MenuRVO } from '@/features/auth/MenuTypes'
 import { NavLink } from 'react-router-dom'
+import { loginExtend } from '@/features/auth/AuthThunks';
+import { LoginExtendRVO } from '@/features/auth/AuthTypes';
 
 /**
  * 사이트맵 아이템 타입 정의
@@ -337,7 +339,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const location = useLocation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { isAuthenticated, logout: logoutContext } = useAuth();
+  const { isAuthenticated, logoutContext } = useAuth();
 
   useEffect(() => {
     console.log('========================= Header isAuthenticated', isAuthenticated);
@@ -365,6 +367,8 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const [showSessionWarning, setShowSessionWarning] = useState(false);  // 세션 경고 팝업 상태 관리
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);         // 세션 타이머 인터벌 관리
   const lastActivityRef = useRef<number>(Date.now());                   // 마지막 사용자 활동 시간(milliseconds)
+  const isLoginExtendingRef = useRef<boolean>(false);                   // loginExtend 요청 진행 중 플래그
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);        // 디바운스 타이머
   
   // 시간 포맷팅 함수 (초를 MM:SS로 변환)
   const formatTime = (seconds: number): string => {
@@ -375,21 +379,79 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   
   // 타이머 리셋 함수
   const resetTimer = () => {
+    // 로그인 연장 요청
     setSessionTime(1800) // 30:00으로 리셋
-    setShowSessionWarning(false)
+
+    // 5분 잔여 타이머 알림 창이 열려있으면 닫기
+    if(showSessionWarning){
+      setShowSessionWarning(false)
+    }
+
     lastActivityRef.current = Date.now() // 마지막 활동 시간 업데이트
+
+    // 이미 loginExtend 요청이 진행 중이면 중복 호출 방지
+    if (isLoginExtendingRef.current) {
+      return;
+    }
+
+    // loginExtend 요청 시작 플래그 설정
+    isLoginExtendingRef.current = true;
+
+    try{
+      dispatch(loginExtend()).unwrap()
+      .then((response: LoginExtendRVO | null) => {
+        // response가 있고 code가 '0'인 경우에만 처리
+        if (response?.code === '0') {
+          console.log("loginExtend response.code=0 Redis Idle key 리셋 성공!!");
+        }
+      })
+      .catch((error: unknown) => {
+        console.log("loginExtend error=", error);
+      })
+      .finally(() => {
+        // 요청 완료 후 플래그 리셋
+        isLoginExtendingRef.current = false;
+      });
+    }catch(error){
+      console.log("loginExtend error=", error);
+      // 에러 발생 시에도 플래그 리셋
+      isLoginExtendingRef.current = false;
+    }
+  }
+
+  // 버튼 클릭 시 호출되는 핸들러 (디바운스 타이머 취소 후 즉시 실행)
+  const handleResetTimerClick = (e?: React.MouseEvent) => {
+    // 이벤트 전파 중지 (handleUserActivity 트리거 방지)
+    if (e) {
+      e.stopPropagation();
+    }
+    
+    // 디바운스 타이머가 있으면 취소 (handleUserActivity에서 설정된 타이머 취소, dispatch(loginExtend()) 요청 2번 실행 방지 )
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+    
+    // 즉시 resetTimer 실행
+    resetTimer();
   }
   
-  // 사용자 활동 감지 함수
+  // 사용자 활동 감지 함수 (디바운싱 적용)
   const handleUserActivity = () => {
     // 로그인 상태에서 활동 감지(event listener)되면, 활동 감지 시간을 지정함.(마지막 활동 시간 업데이트)
     if(isAuthenticated) {
-      lastActivityRef.current = Date.now();
-
-      // 5분 잔여 타이머 알림 창이 열려있으면 닫기
-      if(showSessionWarning){
-        setShowSessionWarning(false)
+      // 기존 디바운스 타이머가 있으면 취소
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
       }
+      
+      // 500ms 후에 resetTimer 호출 (디바운싱)
+      // 짧은 시간 내 여러 이벤트가 발생해도 마지막 이벤트만 처리
+      debounceTimerRef.current = setTimeout(() => {
+        // 시간연장 타이머를 리셋함.(마지막 활동 시간 업데이트 포함)
+        resetTimer();
+        debounceTimerRef.current = null;
+      }, 500);
     }
   }
   
@@ -433,11 +495,16 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
       document.addEventListener(event, activityHandler, true)
     })
     
-    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거 및 디바운스 타이머 정리
     return () => {
       events.forEach((event) => {
         document.removeEventListener(event, activityHandler, true)
       })
+      // 디바운스 타이머 정리
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+        debounceTimerRef.current = null;
+      }
     }
   }, [isAuthenticated])
   
@@ -657,7 +724,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
     console.log('Header toggleLang curLang=' + i18nInstance.language + ', next=' + nextLang)
 
-    localStorage.setItem(LOCALE_KEY, nextLang) // ✅ APP_LOCALE 저장
+    sessionStorage.setItem(LOCALE_KEY, nextLang) // ✅ APP_LOCALE 저장
     i18nInstance.changeLanguage(nextLang) // ✅ UI 즉시 반영
     navigate(nextPath) // ✅ 경로 이동
   }
@@ -1231,7 +1298,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     <Button 
                       size="small" 
                       className="btn_extend"
-                      onClick={resetTimer}
+                      onClick={handleResetTimerClick}
                     >
                       시간연장
                     </Button>
@@ -1533,8 +1600,9 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                               onMouseLeave: (e: React.MouseEvent) => {
                                 // 메뉴 영역을 벗어날 때 타임아웃 설정
                                 const relatedTarget = e.relatedTarget as HTMLElement | null
+                                // anchorEl과 relatedTarget이 모두 유효한 Node인지 확인
                                 const isMovingToButton = relatedTarget === anchorEl || 
-                                  (anchorEl && anchorEl.contains(relatedTarget as Node))
+                                  (anchorEl && relatedTarget && relatedTarget instanceof Node && anchorEl.contains(relatedTarget))
                                 const isMovingToChild = relatedTarget?.closest(`[data-menu-key]`)?.getAttribute('data-menu-key')?.startsWith(menuKey + '-') === true
                                 
                                 // 버튼이나 하위 메뉴로 이동하는 경우 타임아웃 설정하지 않음
@@ -1592,8 +1660,9 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                               onMouseLeave: (e: React.MouseEvent) => {
                                 // Paper 영역을 벗어날 때 타임아웃 설정
                                 const relatedTarget = e.relatedTarget as HTMLElement | null
+                                // anchorEl과 relatedTarget이 모두 유효한 Node인지 확인
                                 const isMovingToButton = relatedTarget === anchorEl || 
-                                  (anchorEl && anchorEl.contains(relatedTarget as Node))
+                                  (anchorEl && relatedTarget && relatedTarget instanceof Node && anchorEl.contains(relatedTarget))
                                 const isMovingToChild = relatedTarget?.closest(`[data-menu-key]`)?.getAttribute('data-menu-key')?.startsWith(menuKey + '-') === true
                                 
                                 // 버튼이나 하위 메뉴로 이동하는 경우 타임아웃 설정하지 않음
@@ -1860,8 +1929,8 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           </Button>
           <Button 
             variant="contained" 
-            onClick={() => {
-              resetTimer()
+            onClick={(e) => {
+              handleResetTimerClick(e)
               setShowSessionWarning(false)
             }}
           >

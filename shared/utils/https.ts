@@ -2,8 +2,10 @@ import axios, { AxiosInstance } from 'axios'
 import i18n from '@/i18n/i18n'
 import { store } from '@/store/store'
 import type { AppDispatch } from '@/store/store'
-import { logout, setAccessToken } from '@/features/auth/AuthSlice'
-import { refreshTokenApiPath } from '@/api/auth/AuthApiPaths'
+import { setAccessToken } from '@/features/auth/AuthSlice'
+import { refresh, logout } from '@/features/auth/AuthThunks'
+import { RefreshPVO, LogoutPVO } from '@/features/auth/AuthTypes'
+import { refreshApiPath } from '@/api/auth/AuthApiPaths'
 
 /**
  * 공통 axios 인스턴스
@@ -60,27 +62,35 @@ https.interceptors.response.use(
   (res) => res,
   async (error) => {
     const original = error.config;
+    const dispatch: AppDispatch = store.dispatch;
 
     if (error.response?.status === 401 && !original._retry) {
       original._retry = true;
 
-      // 통일된 키에서 refreshToken 가져오기 (하위 호환성을 위해 별도 키도 확인)
-      const authData = localStorage.getItem("auth");
-      let refreshToken: string | null = null;
+      // 세션 스토리지에서 인증정보(auth) 가져오기
+      const authData = sessionStorage.getItem("auth");
+
+      let tokenId1: number | null = null;
+      let refreshToken1: string | null = null;
+
       if (authData) {
         try {
           const parsed = JSON.parse(authData);
-          refreshToken = parsed.refreshToken || null;
+          tokenId1 = parsed.tokenId || null;
+          refreshToken1 = parsed.refreshToken || null;
         } catch (e) {
           // 파싱 실패 시 별도 키에서 가져오기
-          refreshToken = localStorage.getItem("refreshToken");
+          refreshToken1 = sessionStorage.getItem("refreshToken");
         }
       } else {
-        refreshToken = localStorage.getItem("refreshToken");
+        refreshToken1 = sessionStorage.getItem("refreshToken");
       }
       
-      if (!refreshToken) {
-        store.dispatch(logout());
+      if (!refreshToken1) {
+        // tokenId가 있으면 로그아웃 처리, 없으면 그냥 에러 반환
+        if (tokenId1) {
+          dispatch(logout({ tokenId: tokenId1 }));
+        }
         return Promise.reject(error);
       }
 
@@ -95,22 +105,10 @@ https.interceptors.response.use(
       }
 
       isRefreshing = true;
-      const dispatch: AppDispatch = store.dispatch;
 
       try {
-        
-
         // refresh API 호출 (baseURL 포함)
-        const resp = await axios.post(
-          `${apiBaseURL}${refreshTokenApiPath()}`,
-          null,
-          {
-            headers: {
-              "X-Refresh-Token": refreshToken,
-              "X-App-Id": import.meta.env.VITE_APP_ID ?? 'kids-pp-dev',
-            },
-          }
-        );
+        const resp = await axios.post(`${apiBaseURL}${refreshApiPath()}`,{ "tokenId": tokenId1 , "refreshToken": refreshToken1 });
 
         console.log("/auth/refresh rest api response resp.data=", resp.data);
 
@@ -118,22 +116,26 @@ https.interceptors.response.use(
         const tokenId = resp.data?.data?.tokenId ?? null;
         const newAccessToken = resp.data?.data?.accessToken ?? null;
         const newRefreshToken = resp.data?.data?.refreshToken ?? null;
+        const pswdErrNmtm = resp.data?.data?.pswdErrNmtm ?? null;
+        const userInfo = resp.data?.data?.userInfo ?? null;
 
         // Redux store에 새 토큰 저장 (setAccessToken 액션 사용)
         dispatch(setAccessToken({
           tokenId,
           accessToken: newAccessToken,
-          refreshToken: newRefreshToken
+          refreshToken: newRefreshToken,
+          pswdErrNmtm: pswdErrNmtm,
+          userInfo
         }));
 
-        // localStorage에 통일된 키로 저장 (AuthContext와 동기화)
+        // sessionStorage에 통일된 키로 저장 (AuthContext와 동기화)
         if (newRefreshToken) {
           // 기존 auth 데이터 가져오기
-          const existingAuth = localStorage.getItem("auth");
-          let authData: any = {};
+          const existingAuth = sessionStorage.getItem("auth");
+          let authData: Record<string, unknown> = {};
           if (existingAuth) {
             try {
-              authData = JSON.parse(existingAuth);
+              authData = JSON.parse(existingAuth) as Record<string, unknown>;
             } catch (e) {
               // 파싱 실패 시 빈 객체 사용
             }
@@ -145,9 +147,9 @@ https.interceptors.response.use(
           authData.refreshToken = newRefreshToken;
           
           // 통일된 키로 저장
-          localStorage.setItem("auth", JSON.stringify(authData));
+          sessionStorage.setItem("auth", JSON.stringify(authData));
           // 하위 호환성을 위해 refreshToken도 별도로 저장
-          localStorage.setItem("refreshToken", newRefreshToken);
+          sessionStorage.setItem("refreshToken", newRefreshToken);
         }
 
         // 대기 중인 요청들에 새 토큰 전달
@@ -158,15 +160,39 @@ https.interceptors.response.use(
           original.headers.Authorization = `Bearer ${newAccessToken}`;
         }
         return https(original);
-      } catch (e) {
+      }catch (e){
         // refresh 실패 시 대기 중인 요청들 모두 실패 처리
         runQueue(null);
-        // 로그아웃 처리
-        dispatch(logout());
+        // 로그아웃 처리 (tokenId가 null이면 0 사용, AuthContext와 동일한 로직)
+        if (tokenId1) {
+          dispatch(logout({ tokenId: tokenId1 }));
+        }
         return Promise.reject(e);
       } finally {
         isRefreshing = false;
       }
+    }
+    // 408 Request Timeout 시 로그아웃 처리(서버 Idle Timeout 처리)
+    else if(error.response?.status === 408){
+
+      // 세션 스토리지에서 인증정보(auth) 가져오기
+      const authData = sessionStorage.getItem("auth");
+
+      if(authData){
+        try{
+          const parsed = JSON.parse(authData);
+          let tokenId = parsed.tokenId || null;
+
+          if(tokenId){
+            console.log("408 Request Timeout 시 로그아웃 처리(서버 Idle Timeout 처리) tokenId=", tokenId);
+            dispatch(logout({ tokenId }));
+            return Promise.reject(error);
+          }else{
+            console.log("408 Request Timeout 시 로그아웃 처리(서버 Idle Timeout 처리) tokenId 없음");
+          }
+        }catch(e){}
+      }
+
     }
 
     return Promise.reject(error);
