@@ -11,11 +11,14 @@ import { Box, Button, Stepper, Step, StepLabel, Typography, TextField, Stack } f
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
+import { existMbrInfo, insertMbrInfo } from '@/features/mbr/MbrInfoThunks'
+import { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes'
 
 export default function SignUpMbrInfo() {
   const { t } = useTranslation();
   const navigate = useNavigate()
   const location = useLocation();
+  const dispatch = useAppDispatch();
 
   // Rest API 호출로 메뉴 가져오기
   const { list } = useAppSelector((s) => s.menu);
@@ -69,7 +72,7 @@ export default function SignUpMbrInfo() {
     }
   };
 
-  // 약관 동의 화면에서 전달받은 steps를 사용하거나, 없으면 새로 생성
+  // 이전 화면에서 전달받은 steps를 사용하거나, 없으면 새로 생성 (본인인증 화면에서 전달받은 steps)
   const steps = useMemo(() => {
     if (state?.steps && Array.isArray(state.steps)) {
       return state.steps;
@@ -108,9 +111,9 @@ export default function SignUpMbrInfo() {
 
   // 폼 상태 관리
   const [formData, setFormData] = useState({
-    userName: initialFormData.userName,  // 본인인증에서 받은 이름
-    phone: initialFormData.phone,        // 본인인증에서 받은 휴대전화번호
-    loginId: '',                          // 아이디
+    userName: initialFormData.userName,   // 본인인증에서 받은 이름
+    phone: initialFormData.phone,         // 본인인증에서 받은 휴대전화번호
+    mbrId: '',                            // 아이디
     email: '',                            // 이메일
     password: '',                         // 비밀번호
     confirmPassword: '',                  // 비밀번호 확인
@@ -132,27 +135,62 @@ export default function SignUpMbrInfo() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // 중복확인 상태 관리
-  const [isLoginIdChecked, setIsLoginIdChecked] = useState(false);
+  const [isMbrIdChecked, setIsMbrIdChecked] = useState(false);
   const [isEmailChecked, setIsEmailChecked] = useState(false);
-  const [loginIdAvailable, setLoginIdAvailable] = useState(false);
+  const [mbrIdAvailable, setMbrIdAvailable] = useState(false);
   const [emailAvailable, setEmailAvailable] = useState(false);
 
   // 성공 메시지 상태
   const [successMessages, setSuccessMessages] = useState<Record<string, string>>({});
 
-  // 아이디 유효성 검사 (숫자, 영문 조합 4-16자리)
-  const validateLoginId = (loginId: string): string => {
-    if (!loginId || loginId.trim().length === 0) {
-      return t('loginIdPlaceholder');
+  // 이름 유효성 검사 (한글과 영문만, 2-30자)
+  const validateName = (name: string): string => {
+    if (!name || name.trim().length === 0) {
+      return t('namePlaceholder');
     }
-    const trimmed = loginId.trim();
+    const trimmed = name.trim()
+    if (trimmed.length < 2 || trimmed.length > 30) {
+      return t('nameTwoCharacters');
+    }
+    // 한글과 영문만 허용
+    const namePattern = /^[가-힣a-zA-Z\s]+$/;
+    if (!namePattern.test(trimmed)) {
+      return t('nameOnlyKoreanAndEnglish');
+    }
+    return '';
+  }
+
+  // 휴대전화번호 유효성 검사 (숫자만, 11자리 또는 12자리)
+  const validatePhone = (phone: string): string => {
+    if (!phone || phone.trim().length === 0) {
+      return t('phoneError');
+    }
+    const trimmed = phone.trim()
+    // 숫자만 허용
+    const numberPattern = /^\d+$/;
+    if (!numberPattern.test(trimmed)) {
+      return t('phoneError');
+    }
+    // 10자리 이하 또는 13자리 이상이면 오류
+    if (trimmed.length <= 10 || trimmed.length >= 13) {
+      return t('phoneError');
+    }
+    return '';
+  }
+
+  // 아이디 유효성 검사 (숫자, 영문 조합 4-16자리)
+  const validateMbrId = (mbrId: string): string => {
+    if (!mbrId || mbrId.trim().length === 0) {
+      return t('mbrIdPlaceholder');
+    }
+    const trimmed = mbrId.trim();
     if (trimmed.length < 4 || trimmed.length > 16) {
-      return t('loginIdLengthError');
+      return t('mbrIdLengthError');
     }
     // 숫자와 영문만 허용
     const idPattern = /^[a-zA-Z0-9]+$/;
     if (!idPattern.test(trimmed)) {
-      return t('loginIdAlphabetError');
+      return t('mbrIdAlphabetError');
     }
     return '';
   }
@@ -206,10 +244,10 @@ export default function SignUpMbrInfo() {
     setFormData(prev => ({ ...prev, [field]: value }));
     
     // 중복확인 상태 초기화 (값이 변경되면 중복확인 무효화)
-    if (field === 'loginId') {
-      setIsLoginIdChecked(false);
-      setLoginIdAvailable(false);
-      setSuccessMessages(prev => ({ ...prev, loginId: '' }));
+    if (field === 'mbrId') {
+      setIsMbrIdChecked(false);
+      setMbrIdAvailable(false);
+      setSuccessMessages(prev => ({ ...prev, mbrId: '' }));
     } else if (field === 'email') {
       setIsEmailChecked(false);
       setEmailAvailable(false);
@@ -218,11 +256,15 @@ export default function SignUpMbrInfo() {
 
     // 실시간 유효성 검사
     let error = '';
-    if (field === 'loginId') {
-      error = validateLoginId(value);
-    } else if (field === 'email') {
+    if(field === 'userName'){
+      error = validateName(value);
+    }else if(field === 'phone'){
+      error = validatePhone(value);
+    }if(field === 'mbrId'){
+      error = validateMbrId(value);
+    }else if(field === 'email'){
       error = validateEmail(value);
-    } else if (field === 'password') {
+    }else if(field === 'password'){
       error = validatePassword(value);
       // 비밀번호 변경 시 비밀번호 확인도 재검증
       if (formData.confirmPassword) {
@@ -237,36 +279,34 @@ export default function SignUpMbrInfo() {
   }
 
   // 아이디 중복확인
-  const handleCheckLoginIdDuplicate = async () => {
-    const loginIdError = validateLoginId(formData.loginId);
-    if (loginIdError) {
-      setErrors(prev => ({ ...prev, loginId: loginIdError }));
-      setIsLoginIdChecked(false);
-      setLoginIdAvailable(false);
+  const handleCheckMbrIdDuplicate = async () => {
+    const mbrIdError = validateMbrId(formData.mbrId);
+    if (mbrIdError) {
+      setErrors(prev => ({ ...prev, mbrId: mbrIdError }));
+      setIsMbrIdChecked(false);
+      setMbrIdAvailable(false);
       return;
     }
 
     try {
-      // TODO: 실제 API 호출로 대체
-      // const response = await https.post('/auth/check-login-id', { loginId: formData.loginId });
-      // if (response.data.available) {
-      //   setLoginIdAvailable(true);
-      //   setSuccessMessages(prev => ({ ...prev, loginId: '사용가능합니다.' }));
-      // } else {
-      //   setLoginIdAvailable(false);
-      //   setErrors(prev => ({ ...prev, loginId: t('loginIdError') }));
-      // }
 
-      // 임시: 항상 사용 가능으로 처리 (실제로는 API 호출 필요)
-      setLoginIdAvailable(true);
-      setIsLoginIdChecked(true);
-      setSuccessMessages(prev => ({ ...prev, loginId: t('available') }));
-      setErrors(prev => ({ ...prev, loginId: '' }));
+      const result = await dispatch(existMbrInfo({ mbrId: formData.mbrId })).unwrap();
+      if (result.existYn === 'Y') {
+        setMbrIdAvailable(false);
+        setIsMbrIdChecked(true);
+        setErrors(prev => ({ ...prev, mbrId: t('mbrIdError') }));
+        return;
+      }else{
+        setMbrIdAvailable(true);
+        setIsMbrIdChecked(true);
+        setSuccessMessages(prev => ({ ...prev, mbrId: t('available') }));
+        setErrors(prev => ({ ...prev, mbrId: '' }));
+      }
     } catch (error) {
-      console.error(t('loginIdDuplicateCheckFailed'), error);
-      setLoginIdAvailable(false);
-      setIsLoginIdChecked(true);
-      setErrors(prev => ({ ...prev, loginId: t('loginIdError') }));
+      console.error(t('mbrIdDuplicateCheckFailed'), error);
+      setMbrIdAvailable(false);
+      setIsMbrIdChecked(true);
+      setErrors(prev => ({ ...prev, mbrId: t('mbrIdError') }));
     }
   }
 
@@ -286,21 +326,18 @@ export default function SignUpMbrInfo() {
     }
 
     try {
-      // TODO: 실제 API 호출로 대체
-      // const response = await https.post('/auth/check-email', { email: formData.email });
-      // if (response.data.available) {
-      //   setEmailAvailable(true);
-      //   setSuccessMessages(prev => ({ ...prev, email: '사용가능합니다.' }));
-      // } else {
-      //   setEmailAvailable(false);
-      //   setErrors(prev => ({ ...prev, email: t('emailError') }));
-      // }
-
-      // 임시: 항상 사용 가능으로 처리 (실제로는 API 호출 필요)
-      setEmailAvailable(true);
-      setIsEmailChecked(true);
-      setSuccessMessages(prev => ({ ...prev, email: t('available') }));
-      setErrors(prev => ({ ...prev, email: '' }));
+      const result = await dispatch(existMbrInfo({ mbrEncptEml: formData.email })).unwrap();
+      if(result.existYn === 'Y'){
+        setEmailAvailable(false);
+        setIsEmailChecked(true);
+        setErrors(prev => ({ ...prev, email: t('emailError') }));
+        return;
+      }else{
+        setEmailAvailable(true);
+        setIsEmailChecked(true);
+        setSuccessMessages(prev => ({ ...prev, email: t('available') }));
+        setErrors(prev => ({ ...prev, email: '' }));
+      }
     } catch (error) {
       console.error(t('emailDuplicateCheckFailed'), error);
       setEmailAvailable(false);
@@ -313,8 +350,8 @@ export default function SignUpMbrInfo() {
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
     
-    const loginIdError = validateLoginId(formData.loginId);
-    if (loginIdError) newErrors.loginId = loginIdError;
+    const mbrIdError = validateMbrId(formData.mbrId);
+    if (mbrIdError) newErrors.mbrId = mbrIdError;
 
     const emailError = validateEmail(formData.email);
     if (emailError) newErrors.email = emailError;
@@ -330,13 +367,13 @@ export default function SignUpMbrInfo() {
   }
 
   // 입력완료 버튼 클릭 핸들러
-  const handleInputComplete = () => {
+  const handleInputComplete = async () => {
     if (!validateForm()) {
       return;
     }
 
-    if (!isLoginIdChecked || !loginIdAvailable) {
-      alert(t('loginIdDuplicateCheckCompleteReminder'));
+    if (!isMbrIdChecked || !mbrIdAvailable) {
+      alert(t('mbrIdDuplicateCheckCompleteReminder'));
       return;
     }
 
@@ -348,15 +385,55 @@ export default function SignUpMbrInfo() {
       }
     }
 
-    // 회원가입 완료 시 만 14세 미만 가입의 경우 법정대리인 동의 폼 데이터를 sessionStorage에서 제거
     try {
-      sessionStorage.removeItem('legalGuardFormData');
-    } catch (error) {
-      console.error('Failed to clear form data from storage:', error);
-    }
+      // formData를 MbrInfoPVO 형식으로 변환
+      // TODO: 실제로는 암호화 처리가 필요하지만, 현재는 평문으로 전송 (백엔드에서 암호화 처리 예상)
+      /*
+      const mbrInfoPVO: MbrInfoPVO = {
+        mbrId: formData.mbrId,
+        mbrEncptFlnm: formData.userName,
+        mbrEncptEml: formData.email || undefined,
+        mbrEnpswd: formData.password,
+        mbrEncptTelno: formData.phone,
+        mbrTypeCd: '1',
+        mbrJoinStts: '1',
+        mbrJoinDt: new Date().toISOString(),
+        rgtrId: 'system',
+        regDt: new Date().toISOString(),
+        regPrgrmId: 'system',
+        mdfrId: 'system',
+        mdfcnDt: new Date().toISOString(),
+        mdfcnPrgrmId: 'system',
+        linkInfoIdntfId: 'system',
+        certToken: 'system',
+        pswdChgDt: new Date().toISOString(),
+        pswdErrNmtm: 0,
+        bfrEnpswd: '',
+        mbrWhdwlRsn: 'system',
+        mbrWhdwlDt: new Date().toISOString(),
+      };
 
-    // 다음 단계로 이동 (가입 신청 완료 페이지)
-    navigate('/ko/auth/SignUpComplete', { state: { steps, formData } });
+      const result = await dispatch(insertMbrInfo(mbrInfoPVO)).unwrap();
+      */
+      const result = 1;
+      // 회원정보 1건이 입력되었는지 확인
+      if (result > 0) {
+        // 다음 단계로 이동 (가입 신청 완료 페이지)
+        navigate('/ko/auth/SignUpComplete', { state: { steps } });
+      } else {
+        alert(t('insertMbrInfoFailed'));
+      }
+    }catch(error){
+      console.error(t('insertMbrInfoFailed'), error);
+      alert(t('insertMbrInfoFailed'));
+    }finally{
+      // 회원가입 완료 시 만 14세 미만 가입의 경우 법정대리인 동의 폼 데이터를 sessionStorage에서 제거
+      try {
+        sessionStorage.removeItem('legalGuardFormData');
+      } catch (error) {
+        console.error('Failed to clear form data from storage:', error);
+      }
+    }
   }
 
   // 취소하기 버튼 클릭 핸들러
@@ -392,19 +469,19 @@ export default function SignUpMbrInfo() {
     const isFormValid = 
       formData.userName.trim().length > 0 &&
       formData.phone.trim().length > 0 &&
-      formData.loginId.trim().length >= 4 &&
-      formData.loginId.trim().length <= 16 &&
+      formData.mbrId.trim().length >= 4 &&
+      formData.mbrId.trim().length <= 16 &&
       formData.password.trim().length >= 10 &&
       formData.password.trim().length <= 20 &&
       formData.confirmPassword === formData.password &&
       !hasErrors &&
-      isLoginIdChecked &&
-      loginIdAvailable &&
+      isMbrIdChecked &&
+      mbrIdAvailable &&
       // 이메일이 입력된 경우에만 중복확인 체크
       (formData.email.trim().length === 0 || (isEmailChecked && emailAvailable));
 
     return isFormValid;
-  }, [formData, errors, isLoginIdChecked, loginIdAvailable, isEmailChecked, emailAvailable]);
+  }, [formData, errors, isMbrIdChecked, mbrIdAvailable, isEmailChecked, emailAvailable]);
 
   return (
     <>
@@ -480,14 +557,24 @@ export default function SignUpMbrInfo() {
                               <TextField
                                 id="userName"
                                 value={formData.userName}
+                                onChange={(e) => handleChange('userName', e.target.value)}
                                 size="large"
+                                fullWidth
+                                error={!!errors.userName}
+                                helperText={errors.userName || ''}
                                 slotProps={{
                                   htmlInput: {
                                     'aria-required': 'true',
+                                    'aria-describedby': errors.userName ? 'userName-alert' : undefined,
+                                    maxLength: 30,
+                                  },
+                                  formHelperText: {
+                                    id: 'userName-alert',
+                                    className: errors.userName ? 'error-alert' : '',
+                                    role: errors.userName ? 'alert' : undefined,
+                                    'aria-live': errors.userName ? 'polite' : undefined,
                                   },
                                 }}
-                                fullWidth
-                                // disabled
                               />
                             </Box>
                             {/* 휴대폰번호 (필수) - 본인인증에서 받은 값, 비활성화 */}
@@ -499,53 +586,65 @@ export default function SignUpMbrInfo() {
                               <TextField
                                 id="phone"
                                 value={formData.phone}
+                                onChange={(e) => handleChange('phone', e.target.value)}
                                 size="large"
+                                fullWidth
+                                error={!!errors.phone}
+                                helperText={errors.phone || ''}
                                 slotProps={{
                                   htmlInput: {
                                     'aria-required': 'true',
+                                    'aria-describedby': errors.phone ? 'phone-alert' : undefined,
+                                    type: 'tel',
+                                    inputMode: 'numeric',
+                                    maxLength: 13,
+                                  },
+                                  formHelperText: {
+                                    id: 'phone-alert',
+                                    className: errors.phone ? 'error-alert' : '',
+                                    role: errors.phone ? 'alert' : undefined,
+                                    'aria-live': errors.phone ? 'polite' : undefined,
                                   },
                                 }}
-                                fullWidth
-                                // disabled
                               />
                             </Box>
                           </Box>
 
                           {/* 아이디 (필수) + 중복확인버튼 */}
                           <Box className="form-item">
-                            <Typography component="label" htmlFor="loginId" className="label">
-                              {t('loginId')}
+                            <Typography component="label" htmlFor="mbrId" className="label">
+                              {t('mbrId')}
                               <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
                             </Typography>
                             <Stack direction="row" spacing={1} className="input-with-btn">
                               <TextField
-                                id="loginId"
-                                value={formData.loginId}
-                                onChange={(e) => handleChange('loginId', e.target.value)}
-                                placeholder={t('loginIdPlaceholder')}
+                                id="mbrId"
+                                value={formData.mbrId}
+                                onChange={(e) => handleChange('mbrId', e.target.value)}
+                                placeholder={t('mbrIdPlaceholder')}
                                 size="large"
                                 fullWidth
-                                error={!!errors.loginId}
-                                helperText={errors.loginId || successMessages.loginId || ''}
+                                error={!!errors.mbrId}
+                                helperText={errors.mbrId || successMessages.mbrId || ''}
                                 slotProps={{
                                   htmlInput: {
                                     'aria-required': 'true',
-                                    'aria-describedby': errors.loginId || successMessages.loginId ? 'loginId-alert' : undefined,
+                                    'aria-describedby': errors.mbrId || successMessages.mbrId ? 'mbrId-alert' : undefined,
                                     maxLength: 16,
                                   },
                                   formHelperText: {
-                                    id: 'loginId-alert',
-                                    className: errors.loginId ? 'error-alert' : successMessages.loginId ? 'success-message' : '',
-                                    role: (errors.loginId || successMessages.loginId) ? 'alert' : undefined,
-                                    'aria-live': (errors.loginId || successMessages.loginId) ? 'polite' : undefined,
+                                    id: 'mbrId-alert',
+                                    className: errors.mbrId ? 'error-alert' : successMessages.mbrId ? 'success-message' : '',
+                                    role: (errors.mbrId || successMessages.mbrId) ? 'alert' : undefined,
+                                    'aria-live': (errors.mbrId || successMessages.mbrId) ? 'polite' : undefined,
                                   },
                                 }}
                               />
                               <Button 
                                 variant="outlined" 
                                 size="large" 
-                                onClick={handleCheckLoginIdDuplicate}
-                                aria-label={t('loginIdDuplicateCheck')} 
+                                onClick={handleCheckMbrIdDuplicate}
+                                aria-label={t('mbrIdDuplicateCheck')} 
                                 className="btn-outline-02 btn-form-util"
                               >
                                 {t('duplicateCheck')}
@@ -586,6 +685,7 @@ export default function SignUpMbrInfo() {
                                 variant="outlined" 
                                 size="large" 
                                 onClick={handleCheckEmailDuplicate}
+                                onMouseDown={(e) => e.preventDefault()}
                                 aria-label={t('emailDuplicateCheck')} 
                                 className="btn-outline-02 btn-form-util"
                                 disabled={!formData.email || formData.email.trim().length === 0}

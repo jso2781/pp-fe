@@ -1,4 +1,9 @@
 /**
+ * 대국민포털_회원정보기본 정보 존재여부 조회(아이디, 이메일 기준으로 존재여부 조회)
+ */
+export const existMbrInfoApiPath = () => '/mbr/existMbrInfo'
+
+/**
  * 대국민포털_회원정보기본 정보 목록 조회 
  */
 export const selectMbrInfoListApiPath = () => '/mbr/selectMbrInfoList'

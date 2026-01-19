@@ -98,6 +98,14 @@ export default function DepsLocation() {
       labels: ["signUp"] // 회원가입 - 본인인증
     },
     {
+      pattern: /^\/[A-Za-z]{2}\/auth\/SignUpMbrInfo(\/)?$/,
+      labels: ["signUp"] // 회원가입 - 회원 정보 입력
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/auth\/SignUpComplete(\/)?$/,
+      labels: ["signUp"] // 회원가입 - 가입 신청 완료
+    },
+    {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsNoticeList(\/)?(\d+)?$/,
       labels: ["news", "noticeList"] // 기관소식 > 공지사항
     },

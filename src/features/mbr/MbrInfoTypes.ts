@@ -75,6 +75,23 @@ export const mockMbrInfoList = [
   }
 ]
 
+/**
+ * 대국민포털_회원정보기본 존재여부 조회 파라메터 정보 
+ */
+export interface ExistMbrInfoPVO {
+  /** 회원아이디 */
+  mbrId?: string
+  /** 회원암호화이메일 */
+  mbrEncptEml?: string
+}
+
+/**
+ * 대국민포털_회원정보기본 존재여부 조회 응답 정보 
+ */
+export interface ExistMbrInfoRVO {
+  /** 회원정보 존재여부 */
+  existYn?: string
+}
 
 /**
  * 대국민포털_회원정보기본 조회/입력/수정/저장 파라메터 정보 

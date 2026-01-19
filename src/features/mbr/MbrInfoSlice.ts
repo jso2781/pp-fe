@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectMbrInfoList, getMbrInfo, insertMbrInfo, updateMbrInfo, saveMbrInfo, deleteMbrInfo } from './MbrInfoThunks'
+import { selectMbrInfoList, getMbrInfo, insertMbrInfo, updateMbrInfo, saveMbrInfo, deleteMbrInfo, existMbrInfo } from './MbrInfoThunks'
 import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO  } from './MbrInfoTypes'
 
 /**
@@ -8,6 +8,7 @@ import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO
 export interface MbrInfoState {
   list: MbrInfoRVO[]
   totalCount: number | null
+  existYn: string | null
   current: MbrInfoRVO | null
   loading: boolean
   error: string | null
@@ -19,6 +20,7 @@ export interface MbrInfoState {
 const initialState: MbrInfoState = {
   list: [],
   totalCount: null,
+  existYn: null,
   current: null,
   loading: false,
   error: null
@@ -34,6 +36,18 @@ const MbrInfoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(existMbrInfo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(existMbrInfo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.existYn = action.payload.existYn as string | null;
+      })
+      .addCase(existMbrInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || action.error?.message || 'Failed to exist MbrInfo';
+      })
       .addCase(selectMbrInfoList.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -45,7 +59,7 @@ const MbrInfoSlice = createSlice({
       })
       .addCase(selectMbrInfoList.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message || 'Failed to load notice list';
+        state.error = (action.payload as string) || 'Failed to load notice list';
       })
       .addCase(getMbrInfo.pending, (state) => {
         state.loading = true;
@@ -66,12 +80,6 @@ const MbrInfoSlice = createSlice({
       })
       .addCase(insertMbrInfo.fulfilled, (state, action) => {
         state.loading = false;
-        //const created = action.payload;
-        //state.current = created || null;
-        //if(created) {
-        //  state.list = [created, ...state.list];
-        //  state.totalCount = (state.totalCount ?? state.list.length) + 1;
-        //}
       })
       .addCase(insertMbrInfo.rejected, (state, action) => {
         state.loading = false;

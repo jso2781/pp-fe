@@ -1,7 +1,29 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
 import { selectMbrInfoListApiPath, getMbrInfoApiPath, insertMbrInfoApiPath, updateMbrInfoApiPath, saveMbrInfoApiPath, deleteMbrInfoApiPath } from '@/api/mbr/MbrInfoApiPaths'
-import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO  } from './MbrInfoTypes'
+import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO, ExistMbrInfoPVO, ExistMbrInfoRVO  } from './MbrInfoTypes'
+import { existMbrInfoApiPath } from '@/api/mbr/MbrInfoApiPaths'
+
+
+/**
+ * 대국민포털_회원정보기본 존재여부 조회 
+ */
+export const existMbrInfo = createAsyncThunk<ExistMbrInfoRVO, ExistMbrInfoPVO | undefined, { rejectValue: string }>(
+  '/mbr/existMbrInfo',
+  async (params: ExistMbrInfoPVO = {}, { rejectWithValue }) => {
+    try {
+      const res = await https.post(existMbrInfoApiPath(), params);
+      const payload = res.data?.data;
+      return {
+        existYn: payload?.existYn as string
+      } as ExistMbrInfoRVO;
+    }
+    catch(e) {
+      console.log("MbrInfoThunks existMbrInfo error!!");
+      return rejectWithValue('MbrInfoThunks existMbrInfo error!!');
+    }
+  }
+)
 
 /**
  * 대국민포털_회원정보기본 정보 목록 조회 
@@ -66,20 +88,20 @@ export const getMbrInfo = createAsyncThunk<MbrInfoRVO, MbrInfoPVO | undefined>(
 /**
  * 대국민포털_회원정보기본 입력 
  */
-export const insertMbrInfo = createAsyncThunk<number, MbrInfoPVO>(
+export const insertMbrInfo = createAsyncThunk<number, MbrInfoPVO, { rejectValue: string }>(
   '/mbr/insertMbrInfo',
-  async (params: MbrInfoPVO) => {
+  async (params: MbrInfoPVO, { rejectWithValue }) => {
     try {
       const res = await https.post(insertMbrInfoApiPath(), params);
 
-      const insertCnt = res.data;
+      const insertCnt = (res.data?.data?.insertCnt as number) ?? -1;
 
       // 입력된 건수 반환함. 
       return insertCnt;
     }
     catch (e) {
       console.log("MbrInfoThunks insertMbrInfo");
-      return -1;
+      return rejectWithValue('MbrInfoThunks insertMbrInfo error!!');
     }
   }
 )
