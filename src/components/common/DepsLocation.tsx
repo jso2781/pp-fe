@@ -78,6 +78,10 @@ export default function DepsLocation() {
       labels: ["login", "idLogin"]
     },
     {
+      pattern: /^\/[A-Za-z]{2}\/auth\/PasswordConfirm(\/)?$/,
+      labels: ["editProfile", "passwordConfirm"]
+    },
+    {
       pattern: /^\/[A-Za-z]{2}\/auth\/SignUpSel(\/)?$/,
       labels: ["signUp"]  // 회원가입 선택
     },

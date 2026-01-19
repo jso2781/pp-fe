@@ -1,5 +1,6 @@
 {
     "contactHpTitle": "의약품 부작용신고 및 피해구제 상담",
+    "accountManagementMenu": "계정 관리 메뉴",
     "login": "로그인",
     "logout": "로그아웃",
     "loginExtend": "로그인 연장",
@@ -31,6 +32,13 @@
     "passwordConfirm": "비밀번호 확인",
     "passwordConfirmPlaceholder": "비밀번호를 동일하게 입력하세요.",
     "passwordConfirmMismatch": "비밀번호가 일치하지 않습니다.",
+    "passwordError5Times": "비밀번호 5회 오류",
+    "passwordError5TimesMessage": "비밀번호가 5회이상 잘못입력되어, 비밀번호를 재설정 후 이용할 수 있습니다. 비밀번호를 재설정하시겠습니까?",
+    "passwordChangeTitle": "비밀번호 변경 안내",
+    "passwordChangeReminderMessage": "회원님께서 비밀번호를 변경하신지 90일이 이상 경과되어 안내해드립니다.",
+    "passwordChangeReminderMessage2": "비밀번호를 변경하시려면 지금 변경 버튼을 클릭해주세요.",
+    "laterChange": "나중에 변경",
+    "nowChange": "지금 변경",
     "inputComplete": "입력완료",
     "duplicateCheck": "중복확인",
     "available": "사용가능합니다.",
@@ -50,7 +58,11 @@
     "legalGuardCertifyComplete": "법정 대리인 본인인증을 완료해주세요.",
     "birthDateError": "숫자 8자리로 입력해주세요.",
     "passwordPlaceholder": "비밀번호를 입력하세요.",
+    "forgotPassword": "비밀번호를 잊으셨다면?",
     "passwordMismatch": "아이디 또는 비밀번호가 일치하지 않습니다.",
+    "passwordConfirmMessage": "회원정보 수정을 위해 비밀번호를 입력해주세요.",
+    "passwordConfirmMismatchMessage": "비밀번호가 일치하지 않습니다. 다시 입력해주세요.",
+    "passwordConfirmMismatchWithCount": "비밀번호가 일치하지 않습니다. ({{count}}/5)",
     "passwordErrorReminder": "개인정보 보호를 위해 비밀번호 5회 이상 오류 시, 비밀번호 재설정이 필요합니다.",
     "passwordChangeReminder": "비밀번호는 주기적(3개월)으로 변경하시고, 서비스 이용 후 반드시 로그아웃 하시기 바랍니다.",
     "logoutAfter60Minutes": "로그인 후 60분 동안 미동작 시 자동으로 로그아웃 됩니다.",
@@ -255,5 +267,4 @@
     "page": "페이지",
     "notFound": "찾을 수 없음",
     "news": "기관소식"
-
 }

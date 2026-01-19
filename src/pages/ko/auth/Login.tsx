@@ -231,37 +231,34 @@ export default function Login() {
                   {/* --- 본문 시작 --- */}
                   <Box className="page-content__login">
                     <Box className="login-section__form">
-                      <Box component="form" onSubmit={onSubmit} noValidate>
+                      <Box component="form" onSubmit={onSubmit} noValidate autoComplete="off">
+                        {/* 브라우저 자동입력이 더미를 채우도록 유도 (Chrome 등은 autocomplete="off"를 로그인 필드에서 무시함) */}
+                        <div style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }} aria-hidden="true">
+                          <input type="text" name="username" autoComplete="username" tabIndex={-1} />
+                          <input type="password" name="password" autoComplete="current-password" tabIndex={-1} />
+                        </div>
                         <Box className="form-item">
                           <Typography component="label" htmlFor="loginId" className="label">
                             {t('login')}
                           </Typography>
                           <TextField
-                            id="loginId" // 라벨의 htmlFor와 일치
+                            id="loginId"
+                            name="kids_uid"
                             placeholder={t('idPlaceholder')}
                             size="large"
                             value={values.loginId}
                             onChange={(e) => {
                               let v = e.target.value.replace(KOREAN_REGEX, '')
-                              // 최대 20자 제한
-                              if (v.length > MAX_LENGTH) {
-                                v = v.slice(0, MAX_LENGTH)
-                              }
+                              if (v.length > MAX_LENGTH) v = v.slice(0, MAX_LENGTH)
                               setValues((p) => ({ ...p, loginId: v }))
-                              // 입력 시 에러 초기화
-                              if (errors.loginId) {
-                                setErrors((prev) => ({ ...prev, loginId: undefined }))
-                              }
+                              if (errors.loginId) setErrors((prev) => ({ ...prev, loginId: undefined }))
                             }}
                             error={!!errors.loginId}
                             helperText={errors.loginId}
                             fullWidth
-                            inputProps={{ maxLength: MAX_LENGTH }}
-                            // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                            inputProps={{ maxLength: MAX_LENGTH, autoComplete: 'new-password' }}
                             slotProps={{
-                              htmlInput: {
-                                'aria-describedby': errors.loginId ? 'loginId-alert' : undefined,
-                              },
+                              htmlInput: { 'aria-describedby': errors.loginId ? 'loginId-alert' : undefined },
                               formHelperText: {
                                 id: 'loginId-alert',
                                 className: 'error-alert',
@@ -273,23 +270,20 @@ export default function Login() {
                         </Box>
 
                         <Box className="form-item">
-                          <Typography  component="label" htmlFor="password-input" className="label">
+                          <Typography component="label" htmlFor="password-input" className="label">
                             {t('password')}
                           </Typography>
                           <TextField
                             id="password-input"
+                            name="kids_cred"
                             placeholder={t('passwordPlaceholder')}
                             size="large"
                             type="password"
                             value={values.password}
                             onChange={(e) => {
                               let v = e.target.value
-                              // 최대 20자 제한
-                              if (v.length > MAX_LENGTH) {
-                                v = v.slice(0, MAX_LENGTH)
-                              }
+                              if (v.length > MAX_LENGTH) v = v.slice(0, MAX_LENGTH)
                               setValues((p) => ({ ...p, password: v }))
-                              // 입력 시 에러 초기화
                               if (errors.password) {
                                 setErrors((prev) => ({ ...prev, password: undefined }))
                                 setLoginFail(null)
@@ -298,12 +292,9 @@ export default function Login() {
                             error={!!errors.password || !!loginFail}
                             helperText={errors.password || (loginFail ? `${loginFail.reason} (${loginFail.failedCount}/${MAX_FAIL_COUNT})` : '')}
                             fullWidth
-                            inputProps={{ maxLength: MAX_LENGTH }}
-                            // 스크린 리더가 입력 형식을 미리 알 수 있도록 설명 연결
+                            inputProps={{ maxLength: MAX_LENGTH, autoComplete: 'new-password' }}
                             slotProps={{
-                              htmlInput: {
-                                'aria-describedby': (errors.password || loginFail) ? 'password-input-alert' : undefined,
-                              },
+                              htmlInput: { 'aria-describedby': (errors.password || loginFail) ? 'password-input-alert' : undefined },
                               formHelperText: {
                                 id: 'password-input-alert',
                                 className: 'error-alert',
@@ -346,7 +337,7 @@ export default function Login() {
                             {t('login')}
                           </Button>
                         </Box>
-                        <List className="account-utils" component="nav" aria-label="계정 관리 메뉴">
+                        <List className="account-utils" component="nav" aria-label={t('accountManagementMenu')}>
                           <React.Fragment key="signup">
                             <ListItem disablePadding className="account-utils__item">
                               <Link
@@ -408,15 +399,15 @@ export default function Login() {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>비밀번호 5회 오류</DialogTitle>
+        <DialogTitle>{t('passwordError5Times')}</DialogTitle>
         <Divider />
         <DialogContent>
           <Typography variant="body1">
-            비밀번호가 5회이상 잘못입력되어, 비밀번호를 재설정 후 이용할 수 있습니다. 비밀번호를 재설정하시겠습니까?
+            {t('passwordError5TimesMessage')}
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowPasswordErrorPopup(false)}>취소</Button>
+          <Button onClick={() => setShowPasswordErrorPopup(false)}>{t('cancel')}</Button>
           <Button
             variant="contained"
             onClick={() => {
@@ -424,7 +415,7 @@ export default function Login() {
               navigate('/screens/KIDS-PP-US-LG-08') // 비밀번호 찾기 페이지로 이동
             }}
           >
-            확인
+            {t('confirm')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -436,14 +427,14 @@ export default function Login() {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>비밀번호 변경 안내</DialogTitle>
+        <DialogTitle>{t('passwordChangeTitle')}</DialogTitle>
         <Divider />
         <DialogContent>
           <Typography variant="body1" sx={{ mb: 1 }}>
-            회원님께서 비밀번호를 변경하신지 90일이 이상 경과되어 안내해드립니다.
+            {t('passwordChangeReminderMessage')}
           </Typography>
           <Typography variant="body1">
-            비밀번호를 변경하시려면 지금 변경 버튼을 클릭해주세요.
+            {t('passwordChangeReminderMessage2')}
           </Typography>
         </DialogContent>
         <DialogActions>
@@ -466,7 +457,7 @@ export default function Login() {
               // }
             }}
           >
-            나중에 변경
+            {t('laterChange')}
           </Button>
           <Button
             variant="contained"
@@ -476,7 +467,7 @@ export default function Login() {
               navigate('/screens/KIDS-PP-US-LG-09')
             }}
           >
-            지금 변경
+            {t('nowChange')}
           </Button>
         </DialogActions>
       </Dialog>

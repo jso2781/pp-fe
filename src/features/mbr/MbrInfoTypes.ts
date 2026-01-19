@@ -128,13 +128,13 @@ export interface MbrInfoPVO {
   mbrWhdwlRsn?: string
 
   /** 회원탈퇴일시 */
-  mbrWhdwlDt?: string
+  mbrWhdwlDt?: string | null
 
   /** 이전암호화비밀번호 */
   bfrEnpswd?: string
 
   /** 비밀번호변경일시 */
-  pswdChgDt?: string
+  pswdChgDt?: string | null
 
   /** 비밀번호오류횟수 */
   pswdErrNmtm?: number
@@ -149,7 +149,7 @@ export interface MbrInfoPVO {
   rgtrId?: string
 
   /** 등록일시 */
-  regDt?: string
+  regDt?: string | null
 
   /** 등록프로그램아이디 */
   regPrgrmId?: string
@@ -158,7 +158,7 @@ export interface MbrInfoPVO {
   mdfrId?: string
 
   /** 수정일시 */
-  mdfcnDt?: string
+  mdfcnDt?: string | null
 
   /** 수정프로그램아이디 */
   mdfcnPrgrmId?: string

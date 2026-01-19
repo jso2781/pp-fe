@@ -18,6 +18,7 @@ import SignUpMbrInfoKo from '@/pages/ko/auth/SignUpMbrInfo'
 import SignUpCompleteKo from '@/pages/ko/auth/SignUpComplete'
 import LoginKo from '@/pages/ko/auth/Login'
 import LoginMethodKo from '@/pages/ko/auth/LoginMethod'
+import PasswordConfirmKo from '@/pages/ko/auth/PasswordConfirm'
 import NewsFaqNoticeKo from '@/pages/ko/news/NewsFaqNotice';
 import TermsKo from '@/pages/ko/etc/Terms';
 import PrivacyPolicyKo from '@/pages/ko/etc/PrivacyPolicy';
@@ -189,6 +190,7 @@ export default function Router() {
             <Route path="/:lang/auth/CertifySelf" element={<LangElement byLang={{ ko: <CertifySelfKo />, en: <CertifySelfKo /> }} />} />
             <Route path="/:lang/auth/SignUpMbrInfo" element={<LangElement byLang={{ ko: <SignUpMbrInfoKo />, en: <SignUpMbrInfoKo /> }} />} />
             <Route path="/:lang/auth/SignUpComplete" element={<LangElement byLang={{ ko: <SignUpCompleteKo />, en: <SignUpCompleteKo /> }} />} />
+            <Route path="/:lang/auth/PasswordConfirm" element={<LangElement byLang={{ ko: <PasswordConfirmKo />, en: <PasswordConfirmKo /> }} />} />
 
             {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
             <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />

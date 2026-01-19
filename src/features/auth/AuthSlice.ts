@@ -66,6 +66,7 @@ const AuthSlice = createSlice({
       // sessionStorage에서 통일된 키 제거
       sessionStorage.removeItem("auth");
       sessionStorage.removeItem("refreshToken"); // 하위 호환성을 위해 유지
+      sessionStorage.removeItem("legalGuardFormData"); // 회원가입 잔여 데이터 제거 (이전 사용자/다른 흐름 노출 방지)
     }
   },
   extraReducers: (builder) => {
@@ -148,6 +149,7 @@ const AuthSlice = createSlice({
         // sessionStorage에서 통일된 키 제거
         sessionStorage.removeItem("auth");
         sessionStorage.removeItem("refreshToken");
+        sessionStorage.removeItem("legalGuardFormData"); // 회원가입 잔여 데이터 제거
       })
       .addCase(logout.rejected, (state, action) => {
         state.loading = false;
@@ -157,6 +159,7 @@ const AuthSlice = createSlice({
         state.accessToken = null;
         state.refreshToken = null;
         state.pswdErrNmtm = null;
+        sessionStorage.removeItem("legalGuardFormData"); // 만 14세 미만 회원가입인 경우 법정대리인 동의 step에서 입력한 폼 데이터 제거
       })
       .addCase(loginExtend.pending, (state) => {
         state.loading = true;

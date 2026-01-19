@@ -86,8 +86,9 @@ export default function SignUpMbrInfo() {
   }, [steps, t]);
 
   // 전달받은 legalGuardFormData(법정대리인 동의 폼 데이터들) 또는 sessionStorage에서 불러온 legalGuardFormData(법정대리인 동의 폼 데이터들) 사용
+  // 14세 이상 일반 가입: state.legalGuardFormData 없음 → sessionStorage를 사용하지 않고 빈 값 사용 (이전 로그인/다른 흐름의 잔여 데이터 노출 방지)
   const initialFormData = useMemo(() => {
-    // location.state에서 전달받은 legalGuardFormData(법정대리인 동의 폼 데이터들)가 있으면 우선 사용하고 저장
+    // location.state에서 전달받은 legalGuardFormData(법정대리인 동의 폼 데이터들)가 있으면 우선 사용하고 저장 (만 14세 미만 가입)
     if (state && state.legalGuardFormData) {
       saveLegalGuardFormDataToStorage(state.legalGuardFormData);
       return {
@@ -95,14 +96,7 @@ export default function SignUpMbrInfo() {
         phone: state.legalGuardFormData.phone || '',
       };
     }
-    // 없으면 sessionStorage에서 legalGuardFormData(법정대리인 동의 폼 데이터) 불러오기
-    const storedLegalGuardFormData = getLegalGuardFormData();
-    if (storedLegalGuardFormData) {
-      return {
-        userName: storedLegalGuardFormData.userName || '',
-        phone: storedLegalGuardFormData.phone || '',
-      };
-    }
+    // 14세 이상 일반 가입: sessionStorage의 legalGuardFormData를 사용하지 않음 (이전 세션/다른 사용자·14세 미만 시도 잔여 데이터 방지)
     return {
       userName: '',
       phone: '',
@@ -366,6 +360,14 @@ export default function SignUpMbrInfo() {
     return Object.keys(newErrors).length === 0;
   }
 
+  /**
+   * PostgreSQL timestamp without time zone 컬럼에 맞는 형식으로 반환.
+   * - toISOString()('2026-01-19T14:28:43.646Z')은 DB에서 varchar로 인식되어 타입 오류 유발.
+   * - 'yyyy-MM-dd HH:mm:ss' 형식은 timestamp로 암시 변환 가능.
+   */
+  const toTimestampString = (): string =>
+    new Date().toISOString().slice(0, 19).replace('T', ' ');
+
   // 입력완료 버튼 클릭 핸들러
   const handleInputComplete = async () => {
     if (!validateForm()) {
@@ -385,39 +387,39 @@ export default function SignUpMbrInfo() {
       }
     }
 
-    try {
+    try{
+      const now = toTimestampString();
+
       // formData를 MbrInfoPVO 형식으로 변환
       // TODO: 실제로는 암호화 처리가 필요하지만, 현재는 평문으로 전송 (백엔드에서 암호화 처리 예상)
-      /*
       const mbrInfoPVO: MbrInfoPVO = {
         mbrId: formData.mbrId,
         mbrEncptFlnm: formData.userName,
         mbrEncptEml: formData.email || undefined,
         mbrEnpswd: formData.password,
         mbrEncptTelno: formData.phone,
-        mbrTypeCd: '1',
-        mbrJoinStts: '1',
-        mbrJoinDt: new Date().toISOString(),
+        mbrTypeCd: 'G',                       // 회원유형가입(G - 일반회원, Y - 14세미만회원, E - 전문가회원)
+        mbrJoinStts: 'N',                     // 회원가입상태(N - 정상, W - 탈퇴)
+        mbrJoinDt: now,
         rgtrId: 'system',
-        regDt: new Date().toISOString(),
+        regDt: null,
         regPrgrmId: 'system',
         mdfrId: 'system',
-        mdfcnDt: new Date().toISOString(),
+        mdfcnDt: null,
         mdfcnPrgrmId: 'system',
         linkInfoIdntfId: 'system',
         certToken: 'system',
-        pswdChgDt: new Date().toISOString(),
+        pswdChgDt: null,
         pswdErrNmtm: 0,
         bfrEnpswd: '',
         mbrWhdwlRsn: 'system',
-        mbrWhdwlDt: new Date().toISOString(),
+        mbrWhdwlDt: null,
       };
 
       const result = await dispatch(insertMbrInfo(mbrInfoPVO)).unwrap();
-      */
-      const result = 1;
+
       // 회원정보 1건이 입력되었는지 확인
-      if (result > 0) {
+      if(result > 0){
         // 다음 단계로 이동 (가입 신청 완료 페이지)
         navigate('/ko/auth/SignUpComplete', { state: { steps } });
       } else {
@@ -428,9 +430,9 @@ export default function SignUpMbrInfo() {
       alert(t('insertMbrInfoFailed'));
     }finally{
       // 회원가입 완료 시 만 14세 미만 가입의 경우 법정대리인 동의 폼 데이터를 sessionStorage에서 제거
-      try {
+      try{
         sessionStorage.removeItem('legalGuardFormData');
-      } catch (error) {
+      }catch(error){
         console.error('Failed to clear form data from storage:', error);
       }
     }
@@ -567,6 +569,7 @@ export default function SignUpMbrInfo() {
                                     'aria-required': 'true',
                                     'aria-describedby': errors.userName ? 'userName-alert' : undefined,
                                     maxLength: 30,
+                                    autoComplete: 'off',
                                   },
                                   formHelperText: {
                                     id: 'userName-alert',
@@ -598,6 +601,7 @@ export default function SignUpMbrInfo() {
                                     type: 'tel',
                                     inputMode: 'numeric',
                                     maxLength: 13,
+                                    autoComplete: 'off',
                                   },
                                   formHelperText: {
                                     id: 'phone-alert',
@@ -631,6 +635,7 @@ export default function SignUpMbrInfo() {
                                     'aria-required': 'true',
                                     'aria-describedby': errors.mbrId || successMessages.mbrId ? 'mbrId-alert' : undefined,
                                     maxLength: 16,
+                                    autoComplete: 'off',
                                   },
                                   formHelperText: {
                                     id: 'mbrId-alert',
@@ -717,6 +722,7 @@ export default function SignUpMbrInfo() {
                                     'aria-required': 'true',
                                     'aria-describedby': errors.password ? 'password-alert' : undefined,
                                     maxLength: 20,
+                                    autoComplete: 'new-password',
                                   },
                                   formHelperText: {
                                     id: 'password-alert',
@@ -749,6 +755,7 @@ export default function SignUpMbrInfo() {
                                     'aria-required': 'true',
                                     'aria-describedby': errors.confirmPassword ? 'confirmPassword-alert' : undefined,
                                     maxLength: 20,
+                                    autoComplete: 'new-password',
                                   },
                                   formHelperText: {
                                     id: 'confirmPassword-alert',

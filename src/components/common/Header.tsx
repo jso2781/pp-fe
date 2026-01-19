@@ -1364,7 +1364,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   ) : (
                     <Button
                       size="small"
-                      onClick={() => navigate(to('/signup'))}
+                      onClick={() => navigate(to('/auth/PasswordConfirm'))}
                       className="btn-util edit-profile" 
                     >
                       {t('editProfile')}
