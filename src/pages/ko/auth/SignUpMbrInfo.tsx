@@ -12,9 +12,6 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
 
-// sessionStorage 키
-const SIGNUP_FORM_DATA_KEY = 'signUpFormData';
-
 export default function SignUpMbrInfo() {
   const { t } = useTranslation();
   const navigate = useNavigate()
@@ -24,11 +21,11 @@ export default function SignUpMbrInfo() {
   const { list } = useAppSelector((s) => s.menu);
 
   // 본인인증에서 전달받은 데이터
-  // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 formData (법정대리인 동의 데이터 포함)
-  // 일반 가입의 경우: formData 없음 (본인인증에서 받은 데이터는 별도 처리)
+  // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)
+  // 일반 가입의 경우: legalGuardFormData 없음 (본인인증에서 받은 데이터는 별도 처리)
   const state = location.state as { 
     steps?: ReturnType<typeof getSignUpSteps>; 
-    formData?: {
+    legalGuardFormData?: {
       userName?: string;           // 신청인 이름 (만 14세 미만)
       birthDate?: string;          // 신청인 생년월일 (만 14세 미만)
       phone?: string;             // 신청인 휴대전화번호 (만 14세 미만)
@@ -39,7 +36,7 @@ export default function SignUpMbrInfo() {
   } | null;
 
   // formData 타입 정의
-  type SignUpFormData = {
+  type LegalGuardFormData = {
     userName?: string;
     birthDate?: string;
     phone?: string;
@@ -48,12 +45,12 @@ export default function SignUpMbrInfo() {
     parentPhone?: string;
   };
 
-  // sessionStorage에서 저장된 formData 불러오기
-  const getStoredFormData = (): SignUpFormData | null => {
+  // sessionStorage에서 저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 불러오기
+  const getLegalGuardFormData = (): LegalGuardFormData | null => {
     try {
-      const stored = sessionStorage.getItem(SIGNUP_FORM_DATA_KEY);
-      if (stored) {
-        return JSON.parse(stored);
+      const storedLegalGuardFormData = sessionStorage.getItem('legalGuardFormData');
+      if (storedLegalGuardFormData) {
+        return JSON.parse(storedLegalGuardFormData);
       }
     } catch (error) {
       console.error('Failed to parse stored form data:', error);
@@ -62,10 +59,10 @@ export default function SignUpMbrInfo() {
   };
 
   // formData를 sessionStorage에 저장
-  const saveFormDataToStorage = (formData: SignUpFormData) => {
+  const saveLegalGuardFormDataToStorage = (formData: LegalGuardFormData) => {
     if (formData) {
       try {
-        sessionStorage.setItem(SIGNUP_FORM_DATA_KEY, JSON.stringify(formData));
+        sessionStorage.setItem('legalGuardFormData', JSON.stringify(formData));
       } catch (error) {
         console.error('Failed to save form data to storage:', error);
       }
@@ -85,22 +82,22 @@ export default function SignUpMbrInfo() {
     return steps.findIndex(step => step.description === t('inputMbrInfo'));
   }, [steps, t]);
 
-  // 전달받은 formData 또는 sessionStorage에서 불러온 formData 사용
+  // 전달받은 legalGuardFormData(법정대리인 동의 폼 데이터들) 또는 sessionStorage에서 불러온 legalGuardFormData(법정대리인 동의 폼 데이터들) 사용
   const initialFormData = useMemo(() => {
-    // location.state에서 전달받은 formData가 있으면 우선 사용하고 저장
-    if (state && state.formData) {
-      saveFormDataToStorage(state.formData);
+    // location.state에서 전달받은 legalGuardFormData(법정대리인 동의 폼 데이터들)가 있으면 우선 사용하고 저장
+    if (state && state.legalGuardFormData) {
+      saveLegalGuardFormDataToStorage(state.legalGuardFormData);
       return {
-        userName: state.formData.userName || '',
-        phone: state.formData.phone || '',
+        userName: state.legalGuardFormData.userName || '',
+        phone: state.legalGuardFormData.phone || '',
       };
     }
-    // 없으면 sessionStorage에서 불러오기
-    const stored = getStoredFormData();
-    if (stored) {
+    // 없으면 sessionStorage에서 legalGuardFormData(법정대리인 동의 폼 데이터) 불러오기
+    const storedLegalGuardFormData = getLegalGuardFormData();
+    if (storedLegalGuardFormData) {
       return {
-        userName: stored.userName || '',
-        phone: stored.phone || '',
+        userName: storedLegalGuardFormData.userName || '',
+        phone: storedLegalGuardFormData.phone || '',
       };
     }
     return {
@@ -119,14 +116,14 @@ export default function SignUpMbrInfo() {
     confirmPassword: '',                  // 비밀번호 확인
   });
 
-  // location.state에서 새로운 formData가 전달되면 업데이트
+  // location.state에서 새로운 legalGuardFormData(법정대리인 동의 폼 데이터들)가 전달되면 업데이트
   useEffect(() => {
-    if (state && state.formData) {
-      saveFormDataToStorage(state.formData);
+    if (state && state.legalGuardFormData) {
+      saveLegalGuardFormDataToStorage(state.legalGuardFormData);
       setFormData(prev => ({
         ...prev,
-        userName: state.formData?.userName || prev.userName,
-        phone: state.formData?.phone || prev.phone,
+        userName: state.legalGuardFormData?.userName || prev.userName,
+        phone: state.legalGuardFormData?.phone || prev.phone,
       }));
     }
   }, [state]);
@@ -351,9 +348,9 @@ export default function SignUpMbrInfo() {
       }
     }
 
-    // 회원가입 완료 시 sessionStorage 정리
+    // 회원가입 완료 시 만 14세 미만 가입의 경우 법정대리인 동의 폼 데이터를 sessionStorage에서 제거
     try {
-      sessionStorage.removeItem(SIGNUP_FORM_DATA_KEY);
+      sessionStorage.removeItem('legalGuardFormData');
     } catch (error) {
       console.error('Failed to clear form data from storage:', error);
     }
@@ -364,8 +361,8 @@ export default function SignUpMbrInfo() {
 
   // 취소하기 버튼 클릭 핸들러
   const handleCancel = () => {
-    // sessionStorage에서 저장된 formData 불러오기
-    const storedFormData = getStoredFormData();
+    // sessionStorage에서 저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 불러오기
+    const storedLegalGuardFormData = getLegalGuardFormData();
     
     // 본인인증 단계 인덱스 찾기
     const certifySelfIndex = steps.findIndex(step => step.description === t('certifySelf'));
@@ -374,11 +371,11 @@ export default function SignUpMbrInfo() {
       // 일반 가입: 본인인증 단계가 3번째(인덱스 2) → 약관동의 페이지로 이동
       navigate('/ko/auth/GeneralSignUpAgrTrms', { state: { steps } });
     } else if (certifySelfIndex === 3) {
-      // 만 14세 미만 가입: 본인인증 단계가 4번째(인덱스 3) → 본인인증 페이지로 이동 (저장된 formData 전달)
+      // 만 14세 미만 가입: 본인인증 단계가 4번째(인덱스 3) → 본인인증 페이지로 이동 (저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 전달)
       navigate('/ko/auth/CertifySelf', { 
         state: { 
           steps,
-          formData: storedFormData  // sessionStorage에서 불러온 formData 전달
+          legalGuardFormData: storedLegalGuardFormData  // sessionStorage에서 불러온 legalGuardFormData(법정대리인 동의 폼 데이터들) 전달
         } 
       });
     } else {
@@ -490,7 +487,7 @@ export default function SignUpMbrInfo() {
                                   },
                                 }}
                                 fullWidth
-                                disabled
+                                // disabled
                               />
                             </Box>
                             {/* 휴대폰번호 (필수) - 본인인증에서 받은 값, 비활성화 */}
@@ -509,7 +506,7 @@ export default function SignUpMbrInfo() {
                                   },
                                 }}
                                 fullWidth
-                                disabled
+                                // disabled
                               />
                             </Box>
                           </Box>

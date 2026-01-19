@@ -1353,20 +1353,23 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   >
                     {t('integratedSearch')}
                   </Button>
-                  <Button
-                    size="small"
-                    onClick={() => navigate(to('/auth/SignUpSel'))}
-                    className="btn-util signup" 
-                  >
-                    {t('signUp')}
-                  </Button>
-                  <Button
-                    size="small"
-                    onClick={() => navigate(to('/signup'))}
-                    className="btn-util edit-profile" 
-                  >
-                    {t('editProfile')}
-                  </Button>
+                  {!isAuthenticated ? (
+                    <Button
+                      size="small"
+                      onClick={() => navigate(to('/auth/SignUpSel'))}
+                      className="btn-util signup" 
+                    >
+                      {t('signUp')}
+                    </Button>
+                  ) : (
+                    <Button
+                      size="small"
+                      onClick={() => navigate(to('/signup'))}
+                      className="btn-util edit-profile" 
+                    >
+                      {t('editProfile')}
+                    </Button>
+                  )}
                   <Button
                     size="small"
                     onClick={() => navigate(to('/expert/ExpertMemberApply'))}

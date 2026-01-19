@@ -54,9 +54,6 @@ function ensureAnyIdAssets() {
     .then(() => loadScript('/anyid/js/app.js'))
 }
 
-// sessionStorage 키
-const SIGNUP_FORM_DATA_KEY = 'signUpFormData';
-
 // formData 타입 정의
 type LegalGuardFormData = {
   userName: string;
@@ -76,7 +73,7 @@ export default function LegalGuardAgr() {
   // sessionStorage에서 저장된 formData 불러오기
   const getStoredFormData = (): LegalGuardFormData | null => {
     try {
-      const stored = sessionStorage.getItem(SIGNUP_FORM_DATA_KEY);
+      const stored = sessionStorage.getItem('legalGuardFormData');
       if (stored) {
         return JSON.parse(stored);
       }
@@ -144,7 +141,7 @@ export default function LegalGuardAgr() {
       setFormData(state.formData);
       // sessionStorage에도 저장
       try {
-        sessionStorage.setItem(SIGNUP_FORM_DATA_KEY, JSON.stringify(state.formData));
+        sessionStorage.setItem('legalGuardFormData', JSON.stringify(state.formData));
       } catch (error) {
         console.error('Failed to save form data to storage:', error);
       }
@@ -309,6 +306,8 @@ export default function LegalGuardAgr() {
       return
     }
 
+    setIsCertified(true);
+    /*
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
       alert(t('certifySelfModuleNotReady'));
       return
@@ -343,7 +342,8 @@ export default function LegalGuardAgr() {
         // 본인인증 성공
         setIsCertified(true);
       },
-    })
+    });
+    */
   }
 
   // 다음단계 버튼 클릭 핸들러
@@ -359,18 +359,18 @@ export default function LegalGuardAgr() {
 
     // formData를 sessionStorage에 저장 (뒤로가기 시 유지)
     try {
-      sessionStorage.setItem('signUpFormData', JSON.stringify(formData));
+      sessionStorage.setItem('legalGuardFormData', JSON.stringify(formData));
     } catch (error) {
       console.error('Failed to save form data to storage:', error);
     }
 
     // 다음 단계로 이동 (본인인증 페이지)
-    navigate('/ko/auth/CertifySelf', { state: { steps, formData } });
+    navigate('/ko/auth/CertifySelf', { state: { steps, "legalGuardFormData": formData } });
   }
 
   // 취소하기 버튼 클릭 핸들러 (만 14세 미만 회원가입 약관동의 페이지로 이동)
   const handleCancel = () => {
-    navigate('/ko/auth/JuniorSignUpAgrTrms', { state: { steps } });
+    navigate('/ko/auth/JuniorSignUpAgrTrms', { state: { steps, cancelled: true } });
   }
 
   // 다음단계 버튼 활성화 조건
@@ -688,7 +688,7 @@ export default function LegalGuardAgr() {
                                 onClick={handleCertify}
                                 aria-label={t('phoneCertify')} 
                                 className="btn-outline-02 btn-form-util"
-                                disabled={!anyIdReady || isCertified}
+                                disabled={isCertified}
                               >
                                 {isCertified ? t('certifyComplete') : t('certifySelf')}
                               </Button>

@@ -75,6 +75,15 @@ export default function SignUpAgrTrms() {
     }
   }, [dispatch]);
 
+  // 취소하기로 돌아왔는지 확인
+  useEffect(() => {
+    const state = location.state as { cancelled?: boolean; steps?: ReturnType<typeof getSignUpSteps> } | null;
+    if (state?.cancelled) {
+      // 취소하기로 돌아온 경우 처리, 기존 법정대리인 동의 폼 데이터들 초기화
+      sessionStorage.removeItem('legalGuardFormData');
+    }
+  }, [location.state]);
+
   // console.log("list=",list);
   // console.log("totalCount=",totalCount);
   // console.log("loading=",loading);

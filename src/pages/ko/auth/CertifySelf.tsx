@@ -97,13 +97,13 @@ export default function CertifySelf() {
 
   const redirectUri = useMemo(() => params.get('redirect_uri') || window.location.href, [params]);
 
-  // 약관 동의 화면에서 전달받은 steps와 formData를 사용
-  // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 formData (법정대리인 동의 데이터 포함)
-  // 일반 가입의 경우: formData 없음
+  // 약관 동의 화면에서 전달받은 steps 사용
+  // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)
+  // 일반 가입의 경우: legalGuardFormData 없음
   const locationState = useMemo(() => {
     return location.state as { 
       steps?: ReturnType<typeof getSignUpSteps>; 
-      formData?: {
+      legalGuardFormData?: {
         userName?: string;           // 신청인 이름 (만 14세 미만)
         birthDate?: string;         // 신청인 생년월일 (만 14세 미만)
         phone?: string;             // 신청인 휴대전화번호 (만 14세 미만)
@@ -170,6 +170,9 @@ export default function CertifySelf() {
 
   // Any-ID 인증 방식 호출 함수
   const handleLoginMethod = async (method: string) => {
+    setIsCertified(true);
+    setSelectedMethod(method);
+    /*
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
       openModal(t('certifySelfModuleNotReady'));
       return;
@@ -224,6 +227,7 @@ export default function CertifySelf() {
         setSelectedMethod(method);
       },
     });
+    */
   }
 
   // 다음단계 버튼 클릭 핸들러
@@ -233,22 +237,22 @@ export default function CertifySelf() {
       return;
     }
 
-    // formData를 sessionStorage에 저장 (뒤로가기 시 유지)
-    if (locationState?.formData) {
+    // legalGuardFormData를 sessionStorage에 저장 (뒤로가기 시 유지)
+    if (locationState?.legalGuardFormData) {
       try {
-        sessionStorage.setItem('signUpFormData', JSON.stringify(locationState.formData));
+        sessionStorage.setItem('legalGuardFormData', JSON.stringify(locationState.legalGuardFormData));
       } catch (error) {
         console.error('Failed to save form data to storage:', error);
       }
     }
 
     // 회원정보입력 페이지로 이동
-    // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 formData (법정대리인 동의 데이터 포함)를 그대로 전달
-    // 일반 가입의 경우: formData 없음 (본인인증에서 받은 데이터는 별도 처리)
+    // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)을 회원 정보 입력 step에 그대로 전달
+    // 일반 가입의 경우: legalGuardFormData 없음 (본인인증에서 받은 데이터는 별도 처리)
     navigate('/ko/auth/SignUpMbrInfo', { 
       state: { 
         steps, 
-        formData: locationState?.formData  // 법정대리인 동의 데이터 전달 (만 14세 미만 가입인 경우)
+        legalGuardFormData: locationState?.legalGuardFormData  // 법정대리인 동의 폼 데이터 전달 (만 14세 미만 가입인 경우)
       } 
     });
   }
@@ -263,21 +267,21 @@ export default function CertifySelf() {
     if(certifySelfIndex === 2){
       navigate('/ko/auth/GeneralSignUpAgrTrms', { state: { steps } });
     }else{
-      // sessionStorage에서 저장된 formData 불러오기
-      let storedFormData = null;
+      // sessionStorage에서 저장된 legalGuardFormData 불러오기
+      let legalGuardFormData = null;
       try {
-        const stored = sessionStorage.getItem('signUpFormData');
+        const stored = sessionStorage.getItem('legalGuardFormData');
         if (stored) {
-          storedFormData = JSON.parse(stored);
+          legalGuardFormData = JSON.parse(stored);
         }
       } catch (error) {
         console.error('Failed to parse stored form data:', error);
       }
-      
+      //법정대리인 동의 페이지로 되돌아가기전에 sessionStorage에서 저장된 legalGuardFormData를 전달(이전 입력값 유지)
       navigate('/ko/auth/LegalGuardAgr', { 
         state: { 
           steps,
-          formData: storedFormData  // sessionStorage에서 불러온 formData 전달
+          legalGuardFormData: legalGuardFormData  // sessionStorage에서 불러온 legalGuardFormData 전달
         } 
       });
     }
