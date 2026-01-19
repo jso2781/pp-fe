@@ -1,26 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import DepsLocation from '@/components/common/DepsLocation';
+import FileUploadField from '@/components/form/FileUploadField';
+import { CheckCircle } from '@mui/icons-material';
 import {
   Box,
   Button,
   Card,
-  CardContent,
   Checkbox,
   FormControlLabel,
   FormHelperText,
-  Link,
   Paper,
   Radio,
   RadioGroup,
   Stack,
-  Stepper,
   Step,
   StepLabel,
+  Stepper,
   TextField,
-  Typography,
+  Typography
 } from '@mui/material';
-import { CheckCircle, Delete } from '@mui/icons-material';
-import DepsLocation from '@/components/common/DepsLocation';
-import FileUploadField from '@/components/form/FileUploadField';
+import { useEffect, useRef, useState } from 'react';
 
 type StepRefs = {
   step1: HTMLDivElement | null;
@@ -29,11 +27,6 @@ type StepRefs = {
 };
 
 export default function ExpertMemberApply() {
-  // 스크롤 상단 이동
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);    
-
   const [currentStep, setCurrentStep] = useState(0);
   const stepRefs = useRef<StepRefs>({
     step1: null,
@@ -55,6 +48,7 @@ export default function ExpertMemberApply() {
   const [emailDuplicateChecked, setEmailDuplicateChecked] = useState(false);
   const [emailDuplicateMessage, setEmailDuplicateMessage] = useState('');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [fileErrors, setFileErrors] = useState<Array<{ index: number; message: string }>>([]);
   const [selectedSystems, setSelectedSystems] = useState<string[]>([]);
 
   const steps = [
@@ -111,16 +105,6 @@ export default function ExpertMemberApply() {
     }
   };
 
-  // 프리랜서 선택
-  const handleSelectFreelancer = () => {
-    setSelectedCompany({
-      name: '프리랜서',
-      number: '',
-      address: '',
-    });
-    setCompanySearchError('');
-  };
-
   // 이메일 중복확인
   const handleCheckEmailDuplicate = () => {
     if (!organizationEmail || !organizationEmail.includes('@')) {
@@ -132,7 +116,7 @@ export default function ExpertMemberApply() {
     // TODO: 실제 API 호출로 대체
     // 예시: 사용 가능한 경우
     setEmailDuplicateChecked(true);
-    setEmailDuplicateMessage('사용 가능한 이메일입니다.');
+    // setEmailDuplicateMessage('사용 가능한 이메일입니다.');
   };
 
   // 업무 시스템 선택 변경
@@ -167,10 +151,6 @@ export default function ExpertMemberApply() {
     }
   };
 
-  // 파일 삭제
-  const handleDeleteFile = (index: number) => {
-    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
-  };
 
   // 전체 파일 삭제
   const handleDeleteAllFiles = () => {
@@ -182,6 +162,35 @@ export default function ExpertMemberApply() {
     if (bytes < 1024) return `${bytes}B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)}KB`;
     return `${(bytes / 1024 / 1024).toFixed(2)}MB`;
+  };
+
+  // 파일 추가 처리 (크기 검증 포함)
+  const handleFilesChange = (files: File[]) => {
+    const maxSizeMB = 20;
+    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+    
+    const errors: Array<{ index: number; message: string }> = [];
+    
+    files.forEach((file, index) => {
+      if (file.size > maxSizeBytes) {
+        errors.push({
+          index,
+          message: `등록 가능한 파일 용량을 초과하였습니다. 20MB 미만의 파일만 등록할 수 있습니다.`,
+        });
+      }
+    });
+    
+    setFileErrors(errors);
+    setUploadedFiles(files);
+  };
+
+  // 파일 삭제 시 에러도 제거
+  const handleDeleteFile = (index: number) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+    setFileErrors((prev) => prev.filter((err) => err.index !== index).map((err) => ({
+      ...err,
+      index: err.index > index ? err.index - 1 : err.index,
+    })));
   };
 
   return (
@@ -267,43 +276,33 @@ export default function ExpertMemberApply() {
                               setBusinessNumber(value);
                               setCompanySearchError('');
                             }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                handleSearchCompany();
+                              }
+                            }}
                             inputProps={{ maxLength: 15 }}
-                            error={!!companySearchError && !selectedCompany}
-                            helperText={
-                              companySearchError && !selectedCompany
-                                ? companySearchError
-                                : ''
-                            }
                           />
                           <Button
                             variant="contained"
                             onClick={handleSearchCompany}
-                            sx={{ minWidth: 100, height: 56 }}
+                            sx={{ minWidth: 100}}
                           >
                             조회
                           </Button>
                         </Stack>
                       </Box>
 
-                      {/* 프리랜서 옵션 */}
-                      <Box>
-                        <Link
-                          component="button"
-                          onClick={handleSelectFreelancer}
-                          sx={{
-                            textDecoration: 'none',
-                            color: 'primary.main',
-                            cursor: 'pointer',
-                            '&:hover': { textDecoration: 'underline' },
-                          }}
-                        >
-                          소속이 없는 프리랜서 전문가이신가요? &gt;
-                        </Link>
-                      </Box>
-
                       {/* 조회 결과 */}
                       {selectedCompany && (
-                        <Box>
+                        <Paper
+                          variant="outlined"
+                          sx={{
+                            p: 2,
+                            bgcolor: 'grey.50',
+                            borderColor: 'grey.300',
+                          }}
+                        >
                           <RadioGroup
                             value={selectedCompany.name}
                             onChange={() => {}}
@@ -317,14 +316,37 @@ export default function ExpertMemberApply() {
                                     {selectedCompany.name}
                                   </Typography>
                                   <Typography variant="body2" color="text.secondary">
-                                    {selectedCompany.number && `${selectedCompany.number} | `}
+                                    {selectedCompany.number && `${selectedCompany.number} `}
                                     {selectedCompany.address}
                                   </Typography>
                                 </Box>
                               }
                             />
                           </RadioGroup>
-                        </Box>
+                        </Paper>
+                      )}
+
+                      {/* 조회 실패 에러 메시지 */}
+                      {companySearchError && !selectedCompany && (
+                        <Paper
+                          variant="outlined"
+                          sx={{
+                            p: 2,
+                            bgcolor: 'grey.50',
+                            borderColor: 'grey.300',
+                          }}
+                        >
+                          <Typography variant="body2" color="error">
+                            {companySearchError}
+                          </Typography>
+                        </Paper>
+                      )}
+
+                      {/* 안내 메시지 */}
+                      {!selectedCompany && (
+                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                          사업자등록번호 조회에 입력 후 조회 버튼을 클릭하여 조회된 업체를 선택해주세요.
+                        </Typography>
                       )}
 
                       {/* 버튼 영역 */}
@@ -385,6 +407,11 @@ export default function ExpertMemberApply() {
                               setEmailDuplicateChecked(false);
                               setEmailDuplicateMessage('');
                             }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                handleCheckEmailDuplicate();
+                              }
+                            }}                            
                             type="email"
                             error={!!emailDuplicateMessage && !emailDuplicateChecked}
                             helperText={emailDuplicateMessage}
@@ -392,7 +419,7 @@ export default function ExpertMemberApply() {
                           <Button
                             variant="outlined"
                             onClick={handleCheckEmailDuplicate}
-                            sx={{ minWidth: 100, height: 56 }}
+                            sx={{ minWidth: 100 }}
                           >
                             중복확인
                           </Button>
