@@ -57,13 +57,13 @@
     
     &.flex-half, &.col-3, &.col-4 {
       .form-item {
-        width: 100%; /* 너비를 꽉 채움 */
-        flex: none;  /* flex-grow 방해 방지 (선택사항) */
+        width: 100%;
+        flex: none;
       }
     }
 
     .form-item {
-      width: 100%; /* 일반 form-item도 꽉 차게 */
+      width: 100%;
       margin-top: 0 !important;
     }
     
@@ -73,9 +73,10 @@
   }
 }
 
-
+//회원페이지 공통
 .member-page{
-  max-width: 842px;margin:0 auto;
+  max-width: 842px;
+  margin:0 auto;
   .guide-text {
     margin:0 0 40px 0;
     text-align: center;
@@ -99,10 +100,61 @@
       color: var(--color-text-1);
     }
   
-    /* ✅ 미디어 쿼리 위치와 중첩 확인 */
     @media (max-width: 1023px) { 
       flex-direction: column !important;
       text-align: center; 
+    }
+  }
+
+  .member-caution-panel {
+    margin:0 0 40px 0;
+    padding: 40px;
+    background: #EEF2F7;
+    border-radius: 12px;
+
+    .caution-tit {
+      position: relative;
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin:0 0 10px 0;
+      padding:0 0 0 35px;
+      
+      &::before { 
+        content: '';
+        position: absolute;
+        left:0;
+        top:2px;
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        background: url("/img/ico_caution.svg") no-repeat center center;
+      }
+    }
+    .caution-txt{
+      font-size: 18px;
+    }
+    @media (max-width: 1023px) {
+      margin-bottom: 30px;
+      padding: 24px 20px;
+  
+      .caution-tit {
+        font-size: 20px;
+        padding-left: 30px;
+  
+        &::before {
+          width: 24px;
+          height: 24px;
+          top: 2px; 
+          background-size: contain;
+        }
+      }
+  
+      .caution-txt {
+        font-size: 16px; 
+        line-height: 1.5;
+      }
     }
   }
 }
@@ -499,8 +551,73 @@
 }
 
 // 회원탈퇴
-.pageCont-withdrawal{
+.pageCont-withdrawal {
+  .form-group-wrap {
+    width: 100%;
 
+    &.withdrawal {
+
+      .form-label {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 24px;
+        color: #333;
+      }
+
+      .radio-group-custom {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        .MuiFormControlLabel-root {
+          margin: 0;
+          display: flex;
+          align-items: center;
+
+          .MuiRadio-root {
+            padding: 4px;
+            svg {
+              width: 24px;
+              height: 24px;
+            }
+          }
+
+          .MuiFormControlLabel-label {
+            font-size: 19px;
+            color: #444;
+            line-height: 1.2;
+            margin-left: 6px;
+          }
+        }
+      }
+
+      @media (max-width: 1023px) {
+
+        .form-label {
+          font-size: 20px;
+          margin-bottom: 16px;
+        }
+
+        .radio-group-custom {
+          gap: 8px; 
+
+          .MuiFormControlLabel-root {
+            .MuiRadio-root {
+              svg {
+                width: 20px;
+                height: 20px;
+              }
+            }
+
+            .MuiFormControlLabel-label {
+              font-size: 17px;
+              margin-left: 4px;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 //로그인방식선택 Any-ID
