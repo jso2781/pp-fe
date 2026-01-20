@@ -29,7 +29,8 @@ export const login = createAsyncThunk<
       // 서버가 AuthRVO 형식으로 주므로 AuthRVO 형식으로 데이터 구조 재조정 
       return { userInfo: userInfo as AuthRVO, tokenId: tokenId ?? null, accessToken: accessToken ?? null, refreshToken: refreshToken ?? null, pswdErrNmtm: pswdErrNmtm ?? null };
     } catch (error) {
-      // Axios 에러 객체 구조:
+      console.log("AuthThunks login catch error=",error);
+      // AxiosError 에러 객체 구조:
       // - error.response: 서버가 응답을 반환한 경우 (4xx, 5xx 등)
       //   - error.response.data: 서버 응답 본문
       //   - error.response.status: HTTP 상태 코드 (예: 400, 401, 500)
@@ -38,40 +39,27 @@ export const login = createAsyncThunk<
       // - error.message: 에러 메시지
       // - error.config: 요청 설정 정보
       
-      const axiosError = error as AxiosError<{ 
-        message?: string; 
-        error?: string;
-        data?: {
-          pswdErrNmtm?: number;
-        };
-      }>;
+      const error1 = error as AxiosError<unknown>;
       
       // 서버 응답이 있는 경우 (4xx, 5xx 에러)
-      if (axiosError.response) {
-        // 서버 응답에 pswdErrNmtm이 포함되어 있을 수 있음 (예: 401 Unauthorized)
-        const errorData = axiosError.response.data as any;
-        const pswdErrNmtm = errorData?.data?.pswdErrNmtm ?? errorData?.pswdErrNmtm;
-        
-        // pswdErrNmtm이 있으면 에러 객체에 포함하여 반환
-        const errorMessage = 
-          errorData?.message || 
-          errorData?.error || 
-          `서버 오류 (${axiosError.response.status})`;
+      if (error1.response) {
+        const errorData = error1.response.data as { code: string, data: any, msg: string };
         
         // pswdErrNmtm을 포함한 에러 정보를 반환 (문자열로 직렬화)
         return rejectWithValue(JSON.stringify({ 
-          message: errorMessage, 
-          pswdErrNmtm: pswdErrNmtm 
+          code: errorData.code,
+          data: errorData.data,
+          msg: errorData.msg
         }));
       }
       
       // 요청은 보냈지만 응답을 받지 못한 경우 (네트워크 에러)
-      if (axiosError.request) {
+      if (error1.request) {
         return rejectWithValue('네트워크 오류가 발생했습니다. 연결을 확인해주세요.');
       }
       
       // 기타 에러
-      return rejectWithValue(axiosError.message || '로그인에 실패했습니다.');
+      return rejectWithValue('로그인에 실패했습니다.');
     }
   }
 )

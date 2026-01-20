@@ -86,6 +86,10 @@ export default function DepsLocation() {
       labels: ["editProfile"]
     },
     {
+      pattern: /^\/[A-Za-z]{2}\/auth\/WithDrawal(\/)?$/,
+      labels: ["withdrawal"]
+    },
+    {
       pattern: /^\/[A-Za-z]{2}\/auth\/SignUpSel(\/)?$/,
       labels: ["signUp"]  // 회원가입 선택
     },

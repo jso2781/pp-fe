@@ -177,6 +177,7 @@ export default function Login() {
         }, 100)
       }
     }catch(error: any){
+      console.log("login await dispatch(loginThunk~~ error=",error);
       // 서버 에러 처리
       // 에러 메시지에서 pswdErrNmtm 추출 시도 (서버 응답에 포함된 경우)
       let serverPswdErrNmtm: number | null = null;
@@ -256,7 +257,7 @@ export default function Login() {
                             error={!!errors.loginId}
                             helperText={errors.loginId}
                             fullWidth
-                            inputProps={{ maxLength: MAX_LENGTH, autoComplete: 'new-password' }}
+                            inputProps={{ maxLength: MAX_LENGTH, autoComplete: 'username', inputMode: 'text' }}
                             slotProps={{
                               htmlInput: { 'aria-describedby': errors.loginId ? 'loginId-alert' : undefined },
                               formHelperText: {

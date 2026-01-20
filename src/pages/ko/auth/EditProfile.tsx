@@ -322,11 +322,11 @@ export default function EditProfile() {
       };
 
       const result: UpdateMbrInfoRVO = await dispatch(updateMbrInfo(mbrInfoPVO)).unwrap();
-      if (result?.updateCnt && result.updateCnt > 0) {
+      if(result?.updateCnt && result.updateCnt > 0){
 
         const userInfo: MbrInfoRVO = result.userInfo;
 
-        // 회원정보 수정 성공 시 auth.userInfo 업데이트
+        // 회원정보 수정 성공 시 redux AuthReducer의 auth.userInfo 업데이트
         dispatch(setAuthUserInfo(userInfo));
 
         openDialog(
@@ -566,6 +566,7 @@ export default function EditProfile() {
                         variant="text"
                         className="btn-link"
                         endIcon={<ChevronRightIcon />}
+                        onClick={() => navigate('/ko/auth/WithDrawal')}
                       >
                         {t('mbrWithdrawal')}
                       </Button>
@@ -573,7 +574,7 @@ export default function EditProfile() {
 
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group between">
-                      <Button variant="outlined" size="large" onClick={() => navigate(-1)}>
+                      <Button variant="outlined" size="large" onClick={() => navigate('/ko')}>
                         {t('cancel')}
                       </Button>
                       <Button variant="contained" size="large" onClick={handleSave}>
