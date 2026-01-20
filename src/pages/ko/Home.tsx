@@ -1,8 +1,7 @@
 import { useMemo, useState, useRef} from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Button, Card, Grid, CardContent, Link, List, ListItem, ListItemText, Stack, Tab, Tabs, TextField, Typography, IconButton } from '@mui/material';
-// import Grid from '@mui/material/Grid';
-import { ChevronRight, OpenInNew, PlayArrow, Pause } from '@mui/icons-material'
+import { Box, Button, Card, Grid, CardContent, Link, List, ListItem, Tab, Tabs, Typography, IconButton } from '@mui/material';
+import { OpenInNew, PlayArrow, Pause } from '@mui/icons-material'
 
 // Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -130,7 +129,6 @@ export default function Home() {
     }
   };
 
-  
   // ==========================================
   // 기관소식
   // ==========================================
@@ -141,9 +139,11 @@ export default function Home() {
       label: '공지사항',
       path: '/ko/notice',
       items: [
-        { id: 1, title: '[입찰공고] 2026년 정보시스템 통합 운영관리(긴급입찰)', date: '2025-12-03' },
-        { id: 2, title: '임상시험용의약품 치료목적사용 상담 및 안내 사업 종료 안내', date: '2025-12-05' },
-        { id: 3, title: '[수의시담] 2026~2027년 마약류통합정보관리센터 정보시스템 운영관리 사업', date: '2025-12-15' },
+        { id: 1, title: '1[입찰공고] 2026년 정보시스템 통합 운영관리(긴급입찰)', date: '2025-12-03' },
+        { id: 2, title: '2임상시험용의약품 치료목적사용 상담 및 안내 사업 종료 안내', date: '2025-12-05' },
+        { id: 3, title: '3[수의시담] 2026~2027년 마약류통합정보관리센터 정보시스템 운영관리 사업', date: '2025-12-15' },
+        { id: 4, title: '4[수의시담] 2026~2027년 마약류통합정보관리센터 정보시스템 운영관리 사업', date: '2025-12-15' },
+        { id: 5, title: '5[수의시담] 2026~2027년 마약류통합정보관리센터 정보시스템 운영관리 사업', date: '2025-12-15' },
       ]
     },
     press: {
@@ -167,17 +167,23 @@ export default function Home() {
   // 현재 탭 데이터 추출
   const currentNews = newsData[newsTab as keyof typeof newsData];
 
-  
+  // ==========================================
+  // 카드뉴스
+  // ==========================================
+  const [prevEl3, setPrevEl3] = useState<HTMLButtonElement | null>(null);
+  const [nextEl3, setNextEl3] = useState<HTMLButtonElement | null>(null);
+  const [isPlaying3, setIsPlaying3] = useState(true);
+  const swiperRef3 = useRef<SwiperCore | null>(null);
+
+  const toggleAutoplay3 = () => {
+    if (swiperRef3.current?.autoplay) {
+      if (isPlaying3) swiperRef3.current.autoplay.stop();
+      else swiperRef3.current.autoplay.start();
+      setIsPlaying3(!isPlaying3);
+    }
+  };
 
 
-  /* const notices = useMemo(
-    () => [
-      { title: '[입찰공고] 2026년 정보시스템 통합 운영관리(긴급입찰)', date: '2025-12-03' },
-      { title: '임상시험용의약품 치료목적사용 상담 및 안내 사업 종료 안내', date: '2025-12-05' },
-      { title: '[수의시담] 2026~2027년 마약류통합정보관리센터 정보시스템 운영관리 사업', date: '2025-12-15' },
-    ],
-    []
-  ) */
 
   const doSearch = () => {
     const keyword = q.trim()
@@ -284,15 +290,16 @@ export default function Home() {
                   {isPlaying2 ? <Pause fontSize="small" /> : <PlayArrow fontSize="small" />}
                 </IconButton>
               </Box>
-            </Box>
-            <Box className="swiper-nav-group"> 
-              <button ref={setPrevEl2} className="swiper-button-prev service-prev" aria-label="이전 슬라이드"></button>
-              <button ref={setNextEl2} className="swiper-button-next service-next" aria-label="다음 슬라이드"></button>
+              <Box className="swiper-nav-group"> 
+                <button ref={setPrevEl2} className="swiper-button-prev service-prev" aria-label="이전 슬라이드"></button>
+                <button ref={setNextEl2} className="swiper-button-next service-next" aria-label="다음 슬라이드"></button>
+              </Box>
             </Box>
           </Box>
         </Box>
       </Box>
- 
+
+      {/* SNS */}
       <Box component="section" className="section main-sns-section">
         <Box className="inner">
           <h3 className="section-title">한국의약품안전관리원<span>SNS 지금!</span></h3>
@@ -334,6 +341,16 @@ export default function Home() {
                       rows: 2,
                       fill: 'row'
                     }}
+                    breakpoints={{
+                      0: {
+                        slidesPerView: 1,
+                        grid: { rows: 1 } 
+                      },
+                      640: {
+                        slidesPerView: 2,
+                        grid: { rows: 2 }
+                      }
+                    }}
                     navigation={{ prevEl: prevElSns, nextEl: nextElSns }}
                     pagination={{ clickable: true, type: 'fraction', el: '.sns-pagination' }}
                     autoplay={{ delay: 5000, disableOnInteraction: false }}
@@ -356,7 +373,7 @@ export default function Home() {
                                   {it.type === 'youtube' ? '유튜브' : it.type === 'insta' ? '인스타그램' : '블로그'}
                                 </Typography>
                               </Box>
-                              <Box component="span" className="blind"> (새창 열림)</Box>
+                              <Box component="span" className="sr-only"> (새창 열림)</Box>
                             </Link>
                           </CardContent>
                         </Card>
@@ -397,11 +414,11 @@ export default function Home() {
                             <Typography className="sns-desc">
                               {it.desc || '설명 문구가 들어가는 자리입니다.'}
                             </Typography>
-                            <Typography className={`sns-label ${it.type}`}>
+                            {/* <Typography className={`sns-label ${it.type}`}>
                               {it.type === 'youtube' ? '유튜브' : it.type === 'insta' ? '인스타그램' : '블로그'}
-                            </Typography>
+                            </Typography> */}
                           </Box>
-                          <Box component="span" className="blind"> (새창 열림)</Box>
+                          <Box component="span" className="sr-only"> (새창 열림)</Box>
                         </Link>
                       </CardContent>
                     </Card>
@@ -419,63 +436,110 @@ export default function Home() {
           {/* 기관소식 */}
           <Box className="news-area">
             <h3 className="section-title">기관<span>소식</span></h3>
-            <Tabs 
-              /* tabValue 대신 newsTab 사용 */
-              value={newsTab} 
-              /* handleTabChange 대신 직접 setNewsTab 사용 */
-              onChange={(_, v) => setNewsTab(v)} 
-              className="news-tabs"
-              aria-label="기관소식 카테고리 선택"
-              sx={{ '& .MuiTabs-indicator': { display: 'none' } }}
-            >
-              {/* value 속성을 추가하여 상태와 매칭 */}
-              <Tab className="tab-item" label="공지사항" value="notice" id="news-tab-notice" aria-controls="news-panel-notice" />
-              <Tab className="tab-item" label="보도자료" value="press" id="news-tab-press" aria-controls="news-panel-press" />
-              <Tab className="tab-item" label="뉴스레터" value="newsletter" id="news-tab-newsletter" aria-controls="news-panel-newsletter" />
-            </Tabs>
+            <Box className="news-content">
+              <Tabs 
+                value={newsTab} 
+                onChange={(_, v) => setNewsTab(v)} 
+                className="news-tabs"
+                aria-label="기관소식 카테고리 선택"
+                sx={{ '& .MuiTabs-indicator': { display: 'none' } }}
+              >
+                <Tab className="tab-item" label="공지사항" value="notice" id="news-tab-notice" aria-controls="news-panel-notice" />
+                <Tab className="tab-item" label="보도자료" value="press" id="news-tab-press" aria-controls="news-panel-press" />
+                <Tab className="tab-item" label="뉴스레터" value="newsletter" id="news-tab-newsletter" aria-controls="news-panel-newsletter" />
+              </Tabs>
 
-            <Box 
-              role="tabpanel" 
-              id={`news-panel-${newsTab}`} 
-              aria-labelledby={`news-tab-${newsTab}`}
-              tabIndex={0}
-              className="news-tabpanel"
-            >
-              <Card className="news-card-container">
-                <Box className="card-header-wrap">
-                  <Typography variant="h6" className="board-name">
-                    {currentNews.label}
-                  </Typography>
-                  <button 
-                    type="button" 
-                    className="btn-more"
-                    onClick={() => navigate(currentNews.path)}
-                    aria-label={`${currentNews.label} 더보기`}
-                  >
-                    더보기 +
-                  </button>
+              <Box 
+                role="tabpanel" 
+                id={`news-panel-${newsTab}`} 
+                aria-labelledby={`news-tab-${newsTab}`}
+                tabIndex={0}
+                className="news-tabpanel"
+              >
+                <Box className="news-board-wrap">
+                  <Box className="board-header">
+                    <Typography className="sr-only">
+                      {currentNews.label}
+                    </Typography>
+                    <button 
+                      type="button" 
+                      className="btn-more-view"
+                      onClick={() => navigate(currentNews.path)}
+                      aria-label={`${currentNews.label} 더보기`}
+                    >
+                      더보기 +
+                    </button>
+                  </Box>
+
+                  <Box className="board-body">
+                    <List className="board-list">
+                      {currentNews.items.map((item) => (
+                        <ListItem key={item.id} className="board-item" disableGutters>
+                          <a href={`${currentNews.path}/${item.id}`} className="board-link">
+                            <Typography className="subject">{item.title}</Typography>
+                            <Typography className="date">{item.date}</Typography>
+                          </a>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Box>
                 </Box>
 
-                <CardContent className="card-content-area">
-                  <List className="news-list">
-                    {/* currentData 대신 currentNews.items 사용 */}
-                    {currentNews.items.map((item) => (
-                      <ListItem key={item.id} className="news-item" disableGutters>
-                        <a href={`${currentNews.path}/${item.id}`} className="news-link">
-                          <Typography className="news-title">{item.title}</Typography>
-                          <Typography className="news-date">{item.date}</Typography>
-                        </a>
-                      </ListItem>
-                    ))}
-                  </List>
-                </CardContent>
-              </Card>
+              </Box>
             </Box>
           </Box>
 
           {/* 카드뉴스 */}
           <Box className="card-news-area">
             <h3 className="section-title">카드<span>뉴스</span></h3>
+            <Box className="card-news-content">
+              <Swiper
+                className="card-news-swiper"
+                onSwiper={(swiper) => (swiperRef3.current = swiper)}
+                modules={[Navigation, Pagination, Autoplay, A11y]}
+                spaceBetween={0}
+                slidesPerView={1}
+                navigation={{ 
+                  prevEl: prevEl3, 
+                  nextEl: nextEl3 
+                }}
+                pagination={{ 
+                  clickable: true, 
+                  type: 'fraction', 
+                  el: '.card-news-pagination' 
+                }}
+                autoplay={{ delay: 5000, disableOnInteraction: false }}
+                loop={true}
+                // key 값 변경 (리렌더링 시 ref 바인딩을 위함)
+                key={prevEl3 && nextEl3 ? 'ready3' : 'not-ready3'}
+              >
+                <SwiperSlide>
+                  <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner03.png")' }}>
+                    <a href="#none" className="slide-link"><span className="sr-only">카드뉴스 1 상세보러가기</span></a>
+                  </Box>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner03.png")' }}>
+                    <a href="#none" className="slide-link"><span className="sr-only">카드뉴스 2 상세보러가기</span></a>
+                  </Box>
+                </SwiperSlide>
+              </Swiper>
+
+              <Box className="pagination-wrapper">
+                <Box className="card-news-pagination"></Box>
+                <Box className="play-control">
+                  <IconButton 
+                    className={`btn-play-pause ${isPlaying3 ? 'is-playing' : 'is-paused'}`} 
+                    onClick={toggleAutoplay3} size="small">
+                    {isPlaying3 ? <Pause fontSize="small" /> : <PlayArrow fontSize="small" />}
+                  </IconButton>
+                </Box>
+                <Box className="swiper-nav-group"> 
+                  <button ref={setPrevEl3} className="swiper-button-prev card-news-prev" aria-label="이전 슬라이드"></button>
+                  <button ref={setNextEl3} className="swiper-button-next card-news-next" aria-label="다음 슬라이드"></button>
+                </Box>
+              </Box>
+            </Box>
           </Box>
         </Box>
       </Box>

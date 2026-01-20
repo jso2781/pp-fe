@@ -1,59 +1,57 @@
-/* 공통 Swiper 스타일 */
+/* 공통 Swiper 컨트롤  */
+.swiper-button-prev,
 .swiper-button-next,
-.swiper-button-prev {
-  &::after { display: none !important; }
+.play-control .btn-play-pause {
   width: 40px;
   height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  color: transparent !important;
   border: none;
   outline: none;
-  background: transparent;
-  box-shadow: none;
-  z-index: 3;
-}
-
-.swiper-button-prev { background-image: url('/img/btn_swiper_prev.png') !important; }
-.swiper-button-next { background-image: url('/img/btn_swiper_next.png') !important; }
-
-.swiper-button-prev,
-.swiper-button-next {
-  background-size: contain;
-  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 4;
 
   &:focus-visible {
-    outline: 1px solid var(--color-text-2);
-    outline-offset: 1px;
+    box-shadow: inset 0 0 0 2px #087c80;
   }
 }
 
-.swiper-button-disabled { 
-  opacity: 0.3 !important; 
-  cursor: default; 
-  pointer-events: none; 
+/* 화살표 버튼 */
+.swiper-button-prev,
+.swiper-button-next {
+  top:auto;
+  margin-top:auto;
+  color: transparent !important;
+  background-color: transparent;
+
+  &::after { display: none !important; } // 기본 Swiper 폰트 아이콘 제거
+
+  &.swiper-button-prev { background-image: url('/img/btn_swiper_prev.png') !important; }
+  &.swiper-button-next { background-image: url('/img/btn_swiper_next.png') !important; }
+
+  &.swiper-button-disabled {
+    opacity: 0.3 !important;
+    cursor: default;
+    pointer-events: none;
+  }
 }
 
+/* 재생/일시정지 버튼 */
 .play-control {
   .btn-play-pause {
-    width: 40px;
-    height: 40px;
     min-width: auto;
     padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: #fff;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
     border: 1px solid #CDD1D5;
     border-radius: 50%;
-    cursor: pointer;
 
     &:hover {
-      background-color: transparent !important;
+      background-color: #f8f9fa !important;
     }
 
     svg {
@@ -62,6 +60,29 @@
     }
   }
 }
+
+@media (max-width: 1024px) {
+  .swiper-button-prev,
+  .swiper-button-next,
+  .play-control .btn-play-pause {
+    width: 30px;
+    height: 30px;
+  }
+
+  .play-control .btn-play-pause {
+    svg {
+      font-size: 16px;
+    }
+  }
+  
+  // 필요한 경우 간격 조정 (pagination-wrapper 내부에서 사용 시)
+  /*
+  .pagination-wrapper {
+    gap: 4px; 
+  }
+  */
+}
+
 
 /* ====================
   메인 컨테이너 및 공통
@@ -73,6 +94,19 @@
     width: 100%;
     margin: 0 auto;
     padding: 56px 20px;
+
+    @media (max-width: 1024px) {
+      padding: 48px 20px;
+    }
+
+    @media (max-width: 768px) {
+      padding: 40px 16px;
+    }
+
+    @media (max-width: 480px) {
+      padding: 32px 16px;
+    }
+    
   }
 
   .section-title {
@@ -96,6 +130,38 @@
       opacity: 0.3;
       border-radius: 50%;
       z-index: -1;
+    }
+    @media (max-width: 1024px) {
+      font-size: 28px;
+      margin-bottom: 20px;
+
+      &::before {
+        width: 50px;
+        height: 50px;
+        top: -8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      font-size: 24px;
+      margin-bottom: 16px;
+
+      &::before {
+        width: 42px;
+        height: 42px;
+        top: -6px;
+        left: -2px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      font-size: 22px;
+      
+      &::before {
+        width: 38px;
+        height: 38px;
+        top: -5px;
+      }
     }
   }
 
@@ -171,7 +237,7 @@
         }
       }
 
-      .promotion-pagination {
+      .promotion-pagination { 
         position: relative !important;
         width: fit-content !important;
         inset: auto !important;
@@ -184,24 +250,101 @@
 
       .play-control {
         position: absolute;
-        top: auto;
+        left: auto;
         bottom: 20px;
         right: 104px;
-        display: flex;
-        align-items: center;
       }
 
       .swiper-nav-group {
         .swiper-button-prev {
           left: auto;
           right: 62px;
+          bottom: 20px;
         }
         .swiper-button-next {
           left: auto;
           right: 20px;
+          bottom: 20px;
         }
       }
     }
+
+
+    @media (max-width: 1200px) {
+      height: auto; // 높이 고정 해제하여 컨텐츠에 맞춤
+      padding-bottom: 80px; // 배너가 아래로 내려갈 대비 여백
+
+      .inner {
+        display: flex;
+        flex-direction: column; // 슬로건과 배너를 세로로 배치
+        align-items: center;
+        text-align: center;
+      }
+
+      .promotion-area {
+        position: relative; // absolute 해제
+        top: 40px;
+        right: auto;
+        width: 100%; // 너비를 가득 채우거나 적절히 조절
+        max-width: 600px; // 너무 커지지 않게 제한
+        height: auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      background-position: top center; // 배경 이미지 위치 조정
+
+      .slogan-title {
+        font-size: 30px; // 폰트 크기 축소
+        word-break: keep-all;
+      }
+
+      .slogan-desc {
+        font-size: 16px;
+        br { display: none; } // 모바일에서 강제 줄바꿈 해제
+      }
+
+      .promotion-area {
+        top: 30px;
+        
+        .promotion-swiper {
+          height: 320px; // 스와이퍼 높이 축소
+          border-radius: 20px 20px 0 0;
+        }
+
+        .pagination-wrapper {
+          height: 60px;
+          .swiper-tag { font-size: 16px; }
+        }
+
+        .play-control {
+          bottom: 15px;
+          right: 84px;
+        }
+
+        .swiper-nav-group {
+          .swiper-button-prev, .swiper-button-next {
+            bottom: 15px;
+          }
+          .swiper-button-prev { right: 50px; }
+          .swiper-button-next { right: 15px; }
+        }
+      }
+    }
+
+    @media (max-width: 480px) {
+      .slogan-title { font-size: 24px; }
+      
+      .promotion-area {
+        .promotion-swiper { height: 250px; }
+        
+        .pagination-wrapper {
+          padding: 0 15px;
+          .swiper-tag { font-size: 14px; }
+        }
+      }
+    }
+    
   }
 
   /* ====================
@@ -262,25 +405,29 @@
       }
     }
 
-    .swiper-button-next,
-    .swiper-button-prev {
-      top: 50%;
-      margin-top: -35px;
-      width: 40px;
-      height: 40px;
-      border-radius: 50% !important;
-      box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-      outline: none;
-      border: none;
-      z-index: 3;
+    .swiper-nav-group {
+      .swiper-button-prev,
+      .swiper-button-next {
+        top:85px;
+        border-radius: 50% !important;
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        outline: none;
+        transition: all 0.2s;
 
-      &::after {
-        display: none !important;
+        &:focus-visible {
+          box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25), inset 0 0 0 2px #087c80 !important;
+        }
+      }
+
+      .swiper-button-prev {
+        left: 0;
+      }
+
+      .swiper-button-next {
+        left: auto;
+        right: 0px;
       }
     }
-
-    .swiper-button-prev { left: 0; }
-    .swiper-button-next { right: 0; }
 
     .shortcut-item {
       display: flex;
@@ -310,7 +457,7 @@
       }
 
       .shortcut-text {
-        color: #464C53;
+        color: var(--color-text-3);
         font-size: 18px;
         font-weight: 700;
         line-height: normal;
@@ -323,13 +470,13 @@
         display: flex;
         align-items: center;
 
-        .shortcut-icon { font-size: 18px; color: #464C53; }
+        .shortcut-icon { font-size: 18px; color: var(--color-text-3); }
         .shortcut-link-text {
           display: inline-block;
           margin-right: 10px;
           font-size: 14px;
           font-weight: 400;
-          color: #464C53;
+          color: var(--color-text-3);
         }
       }
     }
@@ -389,13 +536,14 @@
           padding: 10px 20px;
           font-size: 17px;
           font-weight: 700;
-          color: #464C53;
+          color: var(--color-text-3);
           border-radius: 50px;
           min-height: auto;
           position: relative;
           transition: all 0.2s;
+          outline: none;
+          border: none;
 
-          // 🔥 아이콘 설정 (Mask 방식)
           &::before {
             content: "";
             position: absolute;
@@ -404,7 +552,7 @@
             transform: translateY(-50%);
             width: 20px;
             height: 20px;
-            background-color: #464C53;
+            background-color: var(--color-text-3);
             -webkit-mask-size: contain;
             mask-size: contain;
             -webkit-mask-repeat: no-repeat;
@@ -412,9 +560,8 @@
             display: none;
           }
 
-          // 2. 아이콘이 필요한 탭만 패딩 조정 및 아이콘 표시
           &.tab-youtube, &.tab-insta, &.tab-blog {
-            padding: 10px 45px 10px 20px; // 우측 아이콘 공간 확보
+            padding: 10px 45px 10px 20px; 
             &::before { display: block; }
           }
 
@@ -431,13 +578,28 @@
             mask-image: url('/img/tab_ico_blog.svg'); 
           }
 
-          &.Mui-selected {
-            border: none;
-            color: #fff;
-            background: #087c80;
-
+          &:hover, 
+          &.Mui-focusVisible {
+            background-color: rgba(39, 74, 75, 0.1);
+            color: #087c80;
+            box-shadow: inset 0 0 0 2px #087c80;
+            
             &::before {
-              background-color: #fff;
+              background-color: #087c80;
+            }
+          }
+
+          &.Mui-selected {
+              border: none;
+              color: #fff;
+              background: #087c80;
+
+              &::before {
+                background-color: #087c80;
+              }
+              &.Mui-focusVisible {
+                background-color: rgba(8, 124, 128, 0.1);
+                color: #087c80; 
             }
           }
         }
@@ -482,17 +644,7 @@
         }
       }
 
-      /* 좌우 내비게이션 화살표 */
       .swiper-nav-group {
-        .swiper-button-prev,
-        .swiper-button-next {
-          width: 40px;
-          height: 40px;
-          background: #fff;
-          border-radius: 50%;
-          color: #087c80;
-        }
-
         .swiper-button-prev {
           top: auto;
           left: auto;
@@ -554,7 +706,7 @@
             .sns-title {
               font-weight: 700;
               font-size: 19px;
-              color: #464C53;;
+              color: var(--color-text-3);;
               margin-bottom: 5px;
               display: -webkit-box;
               -webkit-line-clamp: 2;
@@ -565,7 +717,7 @@
 
             .sns-desc {
               font-size: 17px;
-              color: #464C53;;
+              color: var(--color-text-3);;
               line-height: 1.4;
               /* 내용 2줄 말줄임 */
               display: -webkit-box;
@@ -612,18 +764,84 @@
           flex-direction: column;
         }
       }
+    }
 
-      /* 접근성용 클래스 */
-      .blind {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
+    .sns-area {
+      @media (max-width: 1200px) {
+        .sns-card .MuiCardContent-root { padding: 20px !important; }
+        .sns-card .sns-link .thumb-area { flex: 0 0 160px; }
+      }
+
+      @media (max-width: 1024px) {
+        .sns-list {
+          grid-template-columns: 1fr;
+        }
+        .sns-banner .sns-swiper {
+          height: auto;
+          .swiper-slide {
+            height: auto !important;
+          }
+        }
+
+        
+        /* 컨트롤러 중앙 정렬 */
+        .pagination-wrapper {
+          
+          
+          .sns-pagination {
+            order: 2; /* 순서 조정 가능 */
+          }
+        }
+
+        .swiper-nav-group {
+          .swiper-button-prev,
+          .swiper-button-next {
+            bottom:5px;
+          }
+        }
+        
+      }
+
+      @media (max-width: 768px) {
+        .section-title {
+          font-size: 24px;
+          span::before { width: 40px; height: 40px; top: -2px; }
+        }
+
+        /* 탭 메뉴 가로 스크롤 처리 */
+        .sns-tabs {
+          .MuiTabs-flexContainer {
+            overflow-x: auto;
+            padding-bottom: 5px;
+            &::-webkit-scrollbar { display: none; }
+          }
+          .MuiTab-root {
+            font-size: 15px;
+            padding: 8px 16px;
+            white-space: nowrap; 
+            min-width: auto;
+          }
+        }
+
+        .sns-card {
+          height: auto;
+          .sns-link {
+            flex-direction: column;
+            .thumb-area {
+              flex: none;
+              width: 100%;
+              height: 180px;
+            }
+            .info-area {
+              padding: 15px 0 0 0;
+              .sns-title { font-size: 17px; }
+              .sns-desc { font-size: 15px; -webkit-line-clamp: 3; }
+            }
+          }
+        }
+
+        .sns-list .sns-card { height: auto; }
+
       }
     }
   }
@@ -642,26 +860,242 @@
         flex: 1;
         min-width: 0;
       }
+      @media (max-width: 1024px) {
+        flex-direction: column; 
+        gap: 24px;
+
+        > div {
+          width: 100%;
+          flex: none; 
+        }
+      }
+      
 
       .news-area {
-        
+        .news-content {
+          position: relative;
+          height: 386px;
+          padding: 32px;
+          border-radius: 12px;
+          border: 1px solid #B1B8BE;
+
+          @media (max-width: 1024px) {
+            height: auto;
+            padding: 20px;
+            padding-top: 60px;
+          }
+        }
+
+        .news-tabs {
+          margin: 0 0 20px 0;
+          // MUI 기본 하단 바 제거
+          :global(.MuiTabs-indicator) {
+            display: none !important;
+          }
+
+          @media (max-width: 1024px) {
+            min-height: auto;
+            .MuiTabs-flexContainer {
+              gap: 8px;
+            }
+          }
+
+          .tab-item {
+            min-height: auto;
+            font-size: 17px;
+            color: var(--color-text-3);
+            min-width: auto;
+            padding: 10px 20px 10px 20px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            opacity: 1;
+
+            &:hover {
+              color: #087C80;
+            }
+
+            &.Mui-selected {
+              color: #087C80 !important;
+              font-weight: 700;
+              box-shadow: inset 0 -3px 0 0 #087C80;
+            }
+
+            &:focus-visible {
+              outline: 2px solid #087C80 !important;
+              outline-offset: -2px;
+              background-color: rgba(8, 124, 128, 0.05);
+            }
+
+            @media (max-width: 1024px) {
+              font-size: 15px;
+              padding: 8px 12px;
+              flex: 1;
+            }
+          }
+        }
+
+        .news-tabpanel {
+          .btn-more-view {
+            position: absolute;
+            top: 37px;
+            right: 32px;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 17px;
+
+            @media (max-width: 1024px) {
+              top: 20px;
+              right: 20px;
+              font-size: 14px;
+            }
+          }
+
+          .board-body {
+            .board-list {
+              padding: 0;
+
+              .board-item {
+                margin: 0 0 10px 0;
+
+                .board-link {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  text-decoration: none;
+                  width: 100%;
+                  box-sizing: border-box;
+                  transition: background-color 0.2s;
+
+                  &:hover, &:focus-visible {
+                    background-color: rgba(8, 124, 128, 0.03);
+                    outline: none;
+                  }
+
+                  &:focus-visible {
+                    outline: 2px solid #087C80;
+                    outline-offset: -2px;
+                  }
+
+                  .subject {
+                    font-size: 17px;
+                    font-weight: 400;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    flex: 1;
+                    margin-right: 20px;
+
+                    @media (max-width: 1024px) {
+                      font-size: 15px;
+                      margin-right: 10px;
+                    }
+                  }
+
+                  .date {
+                    font-size: 17px;
+                    flex-shrink: 0;
+                    text-align: right;
+
+                    @media (max-width: 1024px) {
+                      font-size: 13px;
+                    }
+                  }
+
+                  &:hover .subject {
+                    color: #087C80;
+                    text-decoration: underline;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
 
       .card-news-area {
-        
+        position: relative;
+        .card-news-content {
+          height: 386px; 
+          border-radius: 12px;
+          overflow: hidden;
+          border: 1px solid #B1B8BE;
+
+          @media (max-width: 768px) {
+            height: 300px;
+          }
+        }
+
+        .card-news-swiper {
+          width: 100%;
+          height: 100%;
+
+          .slide-item {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            .slide-link {
+              display: block;
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+
+        // 페이지네이션 및 컨트롤 영역
+        .pagination-wrapper { 
+          position: absolute;
+          top: 5px;
+          right: 0px;
+          z-index: 10;
+          display: flex;
+          align-items: center; 
+
+          .card-news-pagination {
+            position: static;
+            width: auto !important;
+            display: none;
+          }
+
+          .play-control {
+            position: static;
+            display: flex;
+            align-items: center; 
+            margin-right:2px;
+            
+          }
+
+          .swiper-nav-group {
+            display: flex; 
+            align-items: center;
+            gap: 2px;
+
+            .swiper-button-prev,
+            .swiper-button-next {
+              position: static;
+              margin: 0;
+
+              &:focus-visible {
+                box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25), inset 0 0 0 2px #087c80 !important;
+              }
+            }
+          }
+        }
       }
     }
   }
 
-  /* 모바일 대응: 화면이 좁아지면 위아래로 배치 */
   @media (max-width: 1024px) {
     .section-04 {
       .inner {
-        flex-direction: column; // 세로 배치로 변경
+        flex-direction: column; 
         gap: 60px;
         
         > div {
-          width: 100%; // 모바일에서는 전체 너비 사용
+          width: 100%; 
         }
       }
     }
