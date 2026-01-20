@@ -79,9 +79,9 @@ export const login = createAsyncThunk<
 /**
  * 대국민포털_로그인 JWT Token 갱신 요청
  */
-export const refresh = createAsyncThunk<RefreshRVO, RefreshPVO | undefined>(
+export const refresh = createAsyncThunk<RefreshRVO, RefreshPVO | undefined, { rejectValue: string }>(
   '/auth/refresh',
-  async (params: RefreshPVO | undefined) => {
+  async (params: RefreshPVO | undefined, { rejectWithValue }) => {
     try {
       const res = await https.post(refreshApiPath(), params);
 
@@ -92,11 +92,11 @@ export const refresh = createAsyncThunk<RefreshRVO, RefreshPVO | undefined>(
         accessToken: payload.accessToken ?? null,
         refreshToken: payload.refreshToken ?? null,
         pswdErrNmtm: payload.pswdErrNmtm ?? null,
-        userInfo: payload.userInfo as MbrInfoRVO ?? null
+        userInfo: (payload.userInfo as MbrInfoRVO) ?? null
       };
-    }catch (e) {
-      console.log("AuthThunks refresh catch e=",e);
-      return null;
+    } catch (e) {
+      console.log("AuthThunks refresh catch e=", e);
+      return rejectWithValue('JWT Token 갱신에 실패했습니다.');
     }
   }
 )
@@ -140,7 +140,7 @@ export const logout = createAsyncThunk<LogoutRVO, LogoutPVO | undefined, { rejec
       }
       
       // 기타 에러
-      return rejectWithValue(axiosError.msg || '로그인에 실패했습니다.');
+      return rejectWithValue(axiosError.message || '로그아웃에 실패했습니다.');
     }
   }
 )
@@ -148,9 +148,9 @@ export const logout = createAsyncThunk<LogoutRVO, LogoutPVO | undefined, { rejec
 /**
  * 대국민포털_로그인 연장 요청
  */
-export const loginExtend = createAsyncThunk<LoginExtendRVO, undefined>(
+export const loginExtend = createAsyncThunk<LoginExtendRVO, undefined, { rejectValue: string }>(
   '/auth/extend',
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const res = await https.post(loginExtendApiPath());
       const payload = res.data?.data;
@@ -162,9 +162,8 @@ export const loginExtend = createAsyncThunk<LoginExtendRVO, undefined>(
     }
     // 서버가 없거나 에러 나면 강제로 mock 데이터 사용 
     catch (e) {
-      console.log("AuthThunks loginExtend catch e=",e);
-
-      return null;
+      console.log("AuthThunks loginExtend catch e=", e);
+      return rejectWithValue('로그인 연장에 실패했습니다.');
     }
   }
 )
