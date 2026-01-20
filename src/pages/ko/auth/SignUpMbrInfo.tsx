@@ -365,8 +365,7 @@ export default function SignUpMbrInfo() {
    * - toISOString()('2026-01-19T14:28:43.646Z')은 DB에서 varchar로 인식되어 타입 오류 유발.
    * - 'yyyy-MM-dd HH:mm:ss' 형식은 timestamp로 암시 변환 가능.
    */
-  const toTimestampString = (): string =>
-    new Date().toISOString().slice(0, 19).replace('T', ' ');
+  const toTimestampString = (): string => new Date().toISOString().slice(0, 19).replace('T', ' ');
 
   // 입력완료 버튼 클릭 핸들러
   const handleInputComplete = async () => {

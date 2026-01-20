@@ -1,9 +1,29 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectMbrInfoListApiPath, getMbrInfoApiPath, insertMbrInfoApiPath, updateMbrInfoApiPath, saveMbrInfoApiPath, deleteMbrInfoApiPath } from '@/api/mbr/MbrInfoApiPaths'
-import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO, ExistMbrInfoPVO, ExistMbrInfoRVO  } from './MbrInfoTypes'
+import { selectMbrInfoListApiPath, getMbrInfoApiPath, insertMbrInfoApiPath, updateMbrInfoApiPath, saveMbrInfoApiPath, deleteMbrInfoApiPath, verifyPasswordApiPath } from '@/api/mbr/MbrInfoApiPaths'
+import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO, ExistMbrInfoPVO, ExistMbrInfoRVO, VerifyPasswordRVO, VerifyPasswordPVO, UpdateMbrInfoRVO } from './MbrInfoTypes'
 import { existMbrInfoApiPath } from '@/api/mbr/MbrInfoApiPaths'
 
+
+/**
+ * 대국민포털_회원정보기본 기존 아이디, 패스워드 기준으로 데이터 존재 여부 조회
+ */
+export const verifyPassword = createAsyncThunk<VerifyPasswordRVO, VerifyPasswordPVO, { rejectValue: string }>(
+  '/mbr/verifyPassword',
+  async (params: VerifyPasswordPVO, { rejectWithValue }) => {
+    try {
+      const res = await https.post(verifyPasswordApiPath(), params);
+      const payload = res.data?.data;
+      return {
+        existYn: payload?.existYn
+      } as VerifyPasswordRVO;
+    }
+    catch(e) {
+      console.log("MbrInfoThunks verifyPassword error!!");
+      return rejectWithValue('MbrInfoThunks verifyPassword error!!');
+    }
+  }
+)
 
 /**
  * 대국민포털_회원정보기본 존재여부 조회 
@@ -63,13 +83,13 @@ export const selectMbrInfoList = createAsyncThunk<MbrInfoListRVO, MbrInfoListPVO
 /**
  * 대국민포털_회원정보기본 정보 조회 
  */
-export const getMbrInfo = createAsyncThunk<MbrInfoRVO, MbrInfoPVO | undefined>(
+export const getMbrInfo = createAsyncThunk<MbrInfoRVO, MbrInfoPVO, { rejectValue: string }>(
   '/mbr/getMbrInfo',
-  async (params: MbrInfoPVO = {}) => {
+  async (params: MbrInfoPVO, { rejectWithValue }) => {
     try {
       const res = await https.post(getMbrInfoApiPath(), params);
 
-      const payload = res.data;
+      const payload = res.data?.data as MbrInfoRVO;
 
       // 서버가 MbrInfoRVO 형식으로 단 건 데이터를 반환함. 
       return payload;
@@ -77,10 +97,11 @@ export const getMbrInfo = createAsyncThunk<MbrInfoRVO, MbrInfoPVO | undefined>(
     // 서버가 없거나 에러 나면 강제로 mock 데이터 사용 
     catch (e) {
       // 개발/데모 환경용 fallback (백엔드 연동 시 제거 가능)
-      console.log("MbrInfoThunks getMbrInfo mockMbrInfoList=",mockMbrInfoList);
-      return (mockMbrInfoList).find((n) => 
-        String(n.mbrNo) === String(params.mbrNo)
-      ) || null;
+      // console.log("MbrInfoThunks getMbrInfo mockMbrInfoList=",mockMbrInfoList);
+      // return (mockMbrInfoList).find((n) => 
+      //   String(n.mbrNo) === String(params.mbrNo)
+      // ) as MbrInfoRVO;
+      return rejectWithValue('MbrInfoThunks getMbrInfo error!!');
     }
   }
 )
@@ -109,20 +130,18 @@ export const insertMbrInfo = createAsyncThunk<number, MbrInfoPVO, { rejectValue:
 /**
  * 대국민포털_회원정보기본 수정 
  */
-export const updateMbrInfo = createAsyncThunk<number, MbrInfoPVO>(
+export const updateMbrInfo = createAsyncThunk<UpdateMbrInfoRVO, MbrInfoPVO, { rejectValue: string }>(
   '/mbr/updateMbrInfo',
-  async (params: MbrInfoPVO) => {
+  async (params: MbrInfoPVO, { rejectWithValue }) => {
     try {
       const res = await https.post(updateMbrInfoApiPath(), params);
 
-      const updateCnt = res.data;
-
       // 수정된 건수 반환함. 
-      return updateCnt;
+      return res.data?.data as UpdateMbrInfoRVO
     }
     catch (e) {
-      console.log("MbrInfoThunks updateMbrInfo");
-      return -1;
+      console.log("MbrInfoThunks updateMbrInfo error!!");
+      return rejectWithValue('MbrInfoThunks updateMbrInfo error!!');
     }
   }
 )

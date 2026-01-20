@@ -1,4 +1,9 @@
 /**
+ * 대국민포털_회원정보기본 기존 아이디, 패스워드 기준으로 데이터 존재 여부 조회
+ */
+export const verifyPasswordApiPath = () => '/mbr/verifyPassword'
+
+/**
  * 대국민포털_회원정보기본 정보 존재여부 조회(아이디, 이메일 기준으로 존재여부 조회)
  */
 export const existMbrInfoApiPath = () => '/mbr/existMbrInfo'

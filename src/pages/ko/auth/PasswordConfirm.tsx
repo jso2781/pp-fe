@@ -10,24 +10,38 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
+import { verifyPassword } from '@/features/mbr/MbrInfoThunks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 const MAX_FAIL_COUNT = 5;
 
 export default function PasswordConfirm() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  // Redux auth에서 userInfo.mbrId 가져오기
+  const mbrId = useAppSelector((state) => state.auth.userInfo?.mbrId || '');
 
   const [password, setPassword] = useState('');
   const [failCount, setFailCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [showPasswordErrorPopup, setShowPasswordErrorPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
 
+    // 비밀번호 입력 검증
     if (!password.trim()) {
       setErrorMessage(t('passwordPlaceholder'));
+      return;
+    }
+
+    // mbrId가 없으면 오류 처리
+    if (!mbrId) {
+      setErrorMessage(t('mbrIdRequired'));
       return;
     }
 
@@ -37,16 +51,46 @@ export default function PasswordConfirm() {
       return;
     }
 
-    // TODO: 실제 API 연동 (예: /api/auth/verify-password). 성공 시 회원정보수정(EditProfile) 화면으로 이동
-    // 현재는 실패 시나리오(n/5, 5회 팝업) UI 검증을 위해 실패로 처리
-    const nextCount = failCount + 1;
-    setFailCount(nextCount);
+    setIsLoading(true);
 
-    if (nextCount >= MAX_FAIL_COUNT) {
-      setErrorMessage(t('passwordConfirmMismatchWithCount', { count: nextCount }));
-      setShowPasswordErrorPopup(true);
-    } else {
-      setErrorMessage(t('passwordConfirmMismatchWithCount', { count: nextCount }));
+    try {
+      // 비밀번호 확인 API 호출
+      const result = await dispatch(verifyPassword({ 
+        mbrId: mbrId, 
+        mbrEnpswd: password 
+      })).unwrap();
+
+      // existYn이 'Y'이면 회원정보수정 화면으로 이동
+      if (result.existYn === 'Y') {
+        // 회원정보수정 화면으로 이동
+        // TODO: 실제 회원정보수정 화면 경로에 맞게 수정 필요
+        navigate('/ko/auth/EditProfile', { 
+          state: { mbrId } 
+        });
+      } else {
+        // 비밀번호 불일치: 실패 횟수 증가
+        const nextCount = failCount + 1;
+        setFailCount(nextCount);
+
+        if (nextCount >= MAX_FAIL_COUNT) {
+          setErrorMessage(t('passwordConfirmMismatchWithCount', { count: nextCount }));
+          setShowPasswordErrorPopup(true);
+        } else {
+          setErrorMessage(t('passwordConfirmMismatchWithCount', { count: nextCount }));
+        }
+      }
+    } catch (error) {
+      // API 호출 실패 시 오류 처리
+      console.error('비밀번호 확인 실패:', error);
+      const nextCount = failCount + 1;
+      setFailCount(nextCount);
+      setErrorMessage(t('passwordConfirmError') || '비밀번호 확인 중 오류가 발생했습니다.');
+
+      if (nextCount >= MAX_FAIL_COUNT) {
+        setShowPasswordErrorPopup(true);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -130,8 +174,13 @@ export default function PasswordConfirm() {
 
                       {/* 하단 버튼 그룹 */}
                       <Box className="btn-group right">
-                        <Button type="submit" variant="contained" size="large">
-                          {t('confirm')}
+                        <Button 
+                          type="submit" 
+                          variant="contained" 
+                          size="large"
+                          disabled={isLoading}
+                        >
+                          {isLoading ? t('loading') || '확인 중...' : t('confirm')}
                         </Button>
                       </Box>
                     </Box>

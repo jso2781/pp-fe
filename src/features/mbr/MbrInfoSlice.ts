@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectMbrInfoList, getMbrInfo, insertMbrInfo, updateMbrInfo, saveMbrInfo, deleteMbrInfo, existMbrInfo } from './MbrInfoThunks'
+import { selectMbrInfoList, getMbrInfo, insertMbrInfo, updateMbrInfo, saveMbrInfo, deleteMbrInfo, existMbrInfo, verifyPassword } from './MbrInfoThunks'
 import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO  } from './MbrInfoTypes'
 
 /**
@@ -9,6 +9,8 @@ export interface MbrInfoState {
   list: MbrInfoRVO[]
   totalCount: number | null
   existYn: string | null
+  insertCnt: number | null
+  updateCnt: number | null
   current: MbrInfoRVO | null
   loading: boolean
   error: string | null
@@ -21,6 +23,8 @@ const initialState: MbrInfoState = {
   list: [],
   totalCount: null,
   existYn: null,
+  insertCnt: null,
+  updateCnt: null,
   current: null,
   loading: false,
   error: null
@@ -36,6 +40,18 @@ const MbrInfoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(verifyPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(verifyPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.existYn = action.payload.existYn as string | null;
+      })
+      .addCase(verifyPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || 'Failed to verify Password';
+      })
       .addCase(existMbrInfo.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -80,10 +96,11 @@ const MbrInfoSlice = createSlice({
       })
       .addCase(insertMbrInfo.fulfilled, (state, action) => {
         state.loading = false;
+        state.insertCnt = action.payload;
       })
       .addCase(insertMbrInfo.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || action.error?.message || 'Failed to insert MbrInfo';
+        state.error = (action.payload as string) || 'Failed to insert MbrInfo';
       })
       .addCase(updateMbrInfo.pending, (state) => {
         state.loading = true;
@@ -91,16 +108,12 @@ const MbrInfoSlice = createSlice({
       })
       .addCase(updateMbrInfo.fulfilled, (state, action) => {
         state.loading = false;
-        const updated = action.payload;
-        //state.current = updated || null;
-        //if(updated?.id !== undefined) {
-        //  const idx = state.list.findIndex((n) => String(n.id) === String(updated.id));
-        //  if(idx >= 0)state.list[idx] = { ...state.list[idx], ...updated };
-        //}
+        state.updateCnt = action.payload.updateCnt;
+        state.current = action.payload.userInfo || null;
       })
       .addCase(updateMbrInfo.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || action.error?.message || 'Failed to update MbrInfo';
+        state.error = (action.payload as string) || 'Failed to update MbrInfo';
       })
       .addCase(saveMbrInfo.pending, (state) => {
         state.loading = true;

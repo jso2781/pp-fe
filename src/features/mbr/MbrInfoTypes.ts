@@ -332,6 +332,36 @@ export interface MbrInfoDVO {
 /**
  * 대국민포털_회원정보기본 기존 아이디, 이메일 존재여부 조회
  */
-export interface checkMbrInfoRVO {
+export interface CheckMbrInfoRVO {
   checkCnt: number
+}
+
+/**
+ * 대국민포털_회원정보기본 기존 아이디, 패스워드 기준으로 데이터 존재 여부 조회 파라메터 정보보
+ */
+export interface VerifyPasswordPVO {
+  /** 회원아이디 */
+  mbrId: string
+
+  /** 회원암호화비밀번호 */
+  mbrEnpswd: string
+}
+
+/**
+ * 대국민포털_회원정보기본 기존 아이디, 패스워드 기준으로 데이터 존재여부 조회 결과 정보 
+ */
+export interface VerifyPasswordRVO {
+  /** 회원정보 존재여부 */
+  existYn: string  
+}
+
+/**
+ * 대국민포털_회원정보기본 비밀번호 변경 파라메터 정보 
+ */
+export interface UpdateMbrInfoRVO {
+  /** 회원아이디 */
+  updateCnt: number
+
+  /** 대국민포털_회원정보기본 정보 */
+  userInfo: MbrInfoRVO
 }
