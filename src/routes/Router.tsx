@@ -3,6 +3,7 @@ import { JSX, useEffect, useMemo } from "react";
 import { Navigate, BrowserRouter, Routes, Route, useLocation, useParams } from 'react-router-dom'
 import Layout from './Layout'
 import BlankLayout from './BlankLayout'
+import ProtectedRoute from './ProtectedRoute'
 
 // ko 페이지들
 import HomeKo from '@/pages/ko/Home'
@@ -192,9 +193,9 @@ export default function Router() {
             <Route path="/:lang/auth/CertifySelf" element={<LangElement byLang={{ ko: <CertifySelfKo />, en: <CertifySelfKo /> }} />} />
             <Route path="/:lang/auth/SignUpMbrInfo" element={<LangElement byLang={{ ko: <SignUpMbrInfoKo />, en: <SignUpMbrInfoKo /> }} />} />
             <Route path="/:lang/auth/SignUpComplete" element={<LangElement byLang={{ ko: <SignUpCompleteKo />, en: <SignUpCompleteKo /> }} />} />
-            <Route path="/:lang/auth/PasswordConfirm" element={<LangElement byLang={{ ko: <PasswordConfirmKo />, en: <PasswordConfirmKo /> }} />} />
-            <Route path="/:lang/auth/EditProfile" element={<LangElement byLang={{ ko: <EditProfileKo />, en: <EditProfileKo /> }} />} />
-            <Route path="/:lang/auth/WithDrawal" element={<LangElement byLang={{ ko: <WithDrawalKo />, en: <WithDrawalKo /> }} />} />
+            <Route path="/:lang/auth/PasswordConfirm" element={<LangElement byLang={{ ko: <ProtectedRoute><PasswordConfirmKo /></ProtectedRoute>, en: <ProtectedRoute><PasswordConfirmKo /></ProtectedRoute> }} />} />
+            <Route path="/:lang/auth/EditProfile" element={<LangElement byLang={{ ko: <ProtectedRoute><EditProfileKo /></ProtectedRoute>, en: <ProtectedRoute><EditProfileKo /></ProtectedRoute> }} />} />
+            <Route path="/:lang/auth/WithDrawal" element={<LangElement byLang={{ ko: <ProtectedRoute><WithDrawalKo /></ProtectedRoute>, en: <ProtectedRoute><WithDrawalKo /></ProtectedRoute> }} />} />
 
             {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
             <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />
