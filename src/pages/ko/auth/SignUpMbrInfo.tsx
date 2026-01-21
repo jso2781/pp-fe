@@ -400,18 +400,18 @@ export default function SignUpMbrInfo() {
         mbrTypeCd: 'G',                       // 회원유형가입(G - 일반회원, Y - 14세미만회원, E - 전문가회원)
         mbrJoinStts: 'N',                     // 회원가입상태(N - 정상, W - 탈퇴)
         mbrJoinDt: now,
-        rgtrId: 'system',
+        rgtrId: formData.mbrId,
         regDt: null,
-        regPrgrmId: 'system',
-        mdfrId: 'system',
+        regPrgrmId: 'SignUpMbrInfo',
+        mdfrId: formData.mbrId,
         mdfcnDt: null,
-        mdfcnPrgrmId: 'system',
-        linkInfoIdntfId: 'system',
-        certToken: 'system',
+        mdfcnPrgrmId: 'SignUpMbrInfo',
+        linkInfoIdntfId: null,
+        certToken: null,
         pswdChgDt: null,
         pswdErrNmtm: 0,
-        bfrEnpswd: '',
-        mbrWhdwlRsn: 'system',
+        bfrEnpswd: null,
+        mbrWhdwlRsn: null,
         mbrWhdwlDt: null,
       };
 

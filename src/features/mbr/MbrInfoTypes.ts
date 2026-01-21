@@ -125,13 +125,13 @@ export interface MbrInfoPVO {
   mbrJoinDt?: string
 
   /** 회원탈퇴사유 */
-  mbrWhdwlRsn?: string
+  mbrWhdwlRsn?: string | null
 
   /** 회원탈퇴일시 */
   mbrWhdwlDt?: string | null
 
   /** 이전암호화비밀번호 */
-  bfrEnpswd?: string
+  bfrEnpswd?: string | null
 
   /** 비밀번호변경일시 */
   pswdChgDt?: string | null
@@ -140,10 +140,10 @@ export interface MbrInfoPVO {
   pswdErrNmtm?: number
 
   /** 연계정보식별아이디 */
-  linkInfoIdntfId?: string
+  linkInfoIdntfId?: string | null
 
   /** 인증토큰 */
-  certToken?: string
+  certToken?: string | null
 
   /** 등록자아이디 */
   rgtrId?: string
