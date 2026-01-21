@@ -18,6 +18,8 @@
 
   &:focus-visible {
     box-shadow: inset 0 0 0 2px #087c80;
+    outline: 2px solid #087c80; 
+    outline-offset: 2px;
   }
 }
 
@@ -52,6 +54,7 @@
 
     &:hover {
       background-color: #f8f9fa !important;
+      border-color: #087c80;
     }
 
     svg {
@@ -98,15 +101,6 @@
     @media (max-width: 1024px) {
       padding: 48px 20px;
     }
-
-    @media (max-width: 768px) {
-      padding: 40px 16px;
-    }
-
-    @media (max-width: 480px) {
-      padding: 32px 16px;
-    }
-    
   }
 
   .section-title {
@@ -211,6 +205,7 @@
           background-position: center;
           background-repeat: no-repeat;
           border-radius: inherit;
+          text-indent: -9999px;
         }
       }
 
@@ -275,40 +270,53 @@
       padding-bottom: 80px; // 배너가 아래로 내려갈 대비 여백
 
       .inner {
+        padding:40px 20px 0 20px;
         display: flex;
-        flex-direction: column; // 슬로건과 배너를 세로로 배치
+        flex-direction: column;
         align-items: center;
         text-align: center;
       }
 
       .promotion-area {
-        position: relative; // absolute 해제
+        position: relative;
         top: 40px;
         right: auto;
-        width: 100%; // 너비를 가득 채우거나 적절히 조절
-        max-width: 600px; // 너무 커지지 않게 제한
+        width: 100%;
+        max-width: 600px;
         height: auto;
       }
     }
 
+    @media (max-width: 1024px) {
+      .promotion-area {
+        .play-control {
+          right: 79px;
+        }
+        .swiper-nav-group {
+          .swiper-button-prev { right: 47px;}
+          .swiper-button-next { right: 15px; }
+        }
+      }
+    }
+
     @media (max-width: 768px) {
-      background-position: top center; // 배경 이미지 위치 조정
+      background-position: top center;
 
       .slogan-title {
-        font-size: 30px; // 폰트 크기 축소
+        font-size: 30px;
         word-break: keep-all;
       }
 
       .slogan-desc {
         font-size: 16px;
-        br { display: none; } // 모바일에서 강제 줄바꿈 해제
+        br { display: none; }
       }
 
       .promotion-area {
         top: 30px;
         
         .promotion-swiper {
-          height: 320px; // 스와이퍼 높이 축소
+          height: 320px;
           border-radius: 20px 20px 0 0;
         }
 
@@ -319,15 +327,12 @@
 
         .play-control {
           bottom: 15px;
-          right: 84px;
         }
 
         .swiper-nav-group {
           .swiper-button-prev, .swiper-button-next {
             bottom: 15px;
           }
-          .swiper-button-prev { right: 50px; }
-          .swiper-button-next { right: 15px; }
         }
       }
     }
@@ -441,6 +446,13 @@
       box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
       position: relative;
 
+      &:focus-visible {
+        background-color: #f0fbfc; 
+        outline: 2px solid #087c80;
+        outline-offset: 4px;
+        transform: translateY(-5px);
+      }
+
       &:hover {
         transform: translateY(-5px);
       }
@@ -532,6 +544,16 @@
       .sns-tabs {
         margin-bottom: 25px;
 
+        .MuiTabs-flexContainer {
+          display: flex;
+          gap: 2px;
+          /* 만약 gap이 안 먹는 구형 브라우저 대응이 필요하다면 아래 방식 사용 */
+          // .MuiTab-root {
+          //   margin-right: 8px;
+          //   &:last-child { margin-right: 0; }
+          // }
+        }
+
         .MuiTab-root {
           padding: 10px 20px;
           font-size: 17px;
@@ -595,7 +617,7 @@
               background: #087c80;
 
               &::before {
-                background-color: #087c80;
+                background-color: #ffffff;
               }
               &.Mui-focusVisible {
                 background-color: rgba(8, 124, 128, 0.1);
@@ -629,7 +651,7 @@
         display: flex;
         justify-content: end;
         align-items: center;
-        gap: 2px;
+        gap: 1px;
         margin-top: 30px;
         padding: 0 82px 0 0;
 
@@ -783,20 +805,17 @@
           }
         }
 
-        
-        /* 컨트롤러 중앙 정렬 */
         .pagination-wrapper {
-          
-          
+          padding: 0 65px 0 0;
           .sns-pagination {
+            padding:2px 14px;
             order: 2; /* 순서 조정 가능 */
           }
         }
 
         .swiper-nav-group {
-          .swiper-button-prev,
-          .swiper-button-next {
-            bottom:5px;
+          .swiper-button-prev{
+             right:32px;
           }
         }
         
@@ -813,13 +832,19 @@
           .MuiTabs-flexContainer {
             overflow-x: auto;
             padding-bottom: 5px;
-            &::-webkit-scrollbar { display: none; }
+            padding-right: 40px; 
+            &::-webkit-scrollbar { display: block; height: 4px; }
           }
           .MuiTab-root {
             font-size: 15px;
             padding: 8px 16px;
             white-space: nowrap; 
             min-width: auto;
+            &.Mui-selected {
+              background: #087c80;
+              color: #fff !important; 
+              font-weight: 800;
+            }
           }
         }
 
@@ -827,6 +852,11 @@
           height: auto;
           .sns-link {
             flex-direction: column;
+            &:focus-visible {
+              outline: 3px solid #087c80;
+              outline-offset: 2px;
+              border-radius: 12px;
+            }
             .thumb-area {
               flex: none;
               width: 100%;
@@ -882,7 +912,7 @@
           @media (max-width: 1024px) {
             height: auto;
             padding: 20px;
-            padding-top: 60px;
+            //padding-top: 60px;
           }
         }
 
@@ -943,10 +973,11 @@
             border: none;
             outline: none;
             font-size: 17px;
+            z-index:2;
 
             @media (max-width: 1024px) {
-              top: 20px;
-              right: 20px;
+              top: -48px;
+              right: 0px;
               font-size: 14px;
             }
           }
@@ -967,9 +998,10 @@
                   box-sizing: border-box;
                   transition: background-color 0.2s;
 
-                  &:hover, &:focus-visible {
+                  &:hover, 
+                  &:focus-visible {
                     background-color: rgba(8, 124, 128, 0.03);
-                    outline: none;
+                    outline: none; 
                   }
 
                   &:focus-visible {
@@ -977,6 +1009,12 @@
                     outline-offset: -2px;
                   }
 
+                  &:hover .subject, 
+                  &:focus-visible .subject {
+                    text-decoration: underline;
+                    color: #087C80;
+                  }
+                  
                   .subject {
                     font-size: 17px;
                     font-weight: 400;
