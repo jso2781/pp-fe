@@ -157,6 +157,7 @@
     "editComplete": "Edit Complete",
     "editCompleteReminder": "Member information has been modified.",
     "editFailed": "An error occurred while updating member information.",
+    "serverErrorMessage": "Server error occurred. Please try again later.",
     "signUpGeneral": "General Member (14 years old or older)",
     "signUpJunior": "General Member (under 14 years old)",
     "signUpGeneralDescription": "Sign up for a member over 14 years old.",

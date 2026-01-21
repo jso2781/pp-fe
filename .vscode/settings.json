@@ -1,22 +1,19 @@
 {
-    "editor.renderWhitespace": "all",
-    "editor.tabSize": 2,
-    "editor.insertSpaces": true,
-    "editor.detectIndentation": false,
-    "[typescript]": {
-        "editor.tabSize": 2,
-        "editor.insertSpaces": true
-    },
-    "[typescriptreact]": {
-        "editor.tabSize": 2,
-        "editor.insertSpaces": true
-    },
-    "[javascript]": {
-        "editor.tabSize": 2,
-        "editor.insertSpaces": true
-    },
-    "[javascriptreact]": {
-        "editor.tabSize": 2,
-        "editor.insertSpaces": true
-    }
+  // 파일을 클릭할 때 미리보기 모드가 아닌 새 탭으로 열기
+  "workbench.editor.enablePreview": false,
+  
+  // Quick Open에서도 미리보기 비활성화
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  
+  // 코드 네비게이션(Go to Definition 등)에서도 미리보기 비활성화
+  "workbench.editor.enablePreviewFromCodeNavigation": false,
+  
+  // 이미 열린 파일을 클릭해도 새 탭으로 열기 (중요!)
+  "workbench.editor.revealIfOpen": false,
+  
+  // 파일 탐색기에서 싱글 클릭으로도 새 탭 열기
+  "workbench.editor.openPositioning": "right",
+  
+  // 탭이 이미 열려있어도 새 탭으로 열기
+  "workbench.editor.focusRecentEditorAfterClose": false
 }

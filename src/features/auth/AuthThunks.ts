@@ -45,9 +45,9 @@ export const login = createAsyncThunk<
       if (error1.response) {
         const errorData = error1.response.data as { code: string, data: any, msg: string };
         
-        // pswdErrNmtm을 포함한 에러 정보를 반환 (문자열로 직렬화)
-        return rejectWithValue(JSON.stringify({ 
-          code: errorData.code,
+        // 에러 정보를 반환 (문자열로 직렬화)
+        return rejectWithValue(JSON.stringify({
+          code: errorData.code == '-1' ? -1 : errorData.code,
           data: errorData.data,
           msg: errorData.msg
         }));
@@ -55,6 +55,15 @@ export const login = createAsyncThunk<
       
       // 요청은 보냈지만 응답을 받지 못한 경우 (네트워크 에러)
       if (error1.request) {
+        if(error1.status && error1.status == 500){
+          // 에러 정보를 반환 (문자열로 직렬화)
+          return rejectWithValue(JSON.stringify({ 
+            code: -1,
+            data: {},
+            msg: error1.response
+          }));
+        }
+
         return rejectWithValue('네트워크 오류가 발생했습니다. 연결을 확인해주세요.');
       }
       

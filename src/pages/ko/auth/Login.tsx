@@ -178,21 +178,22 @@ export default function Login() {
       }
     }catch(error: any){
       console.log("login await dispatch(loginThunk~~ error=",error);
+
+      console.log("login await dispatch(loginThunk~~ typeof error === 'string' =",typeof error === 'string');
       // 서버 에러 처리
-      // 에러 메시지에서 pswdErrNmtm 추출 시도 (서버 응답에 포함된 경우)
-      let serverPswdErrNmtm: number | null = null;
       try{
         const errorInfo = typeof error === 'string' ? JSON.parse(error) : error;
-        if(errorInfo?.pswdErrNmtm !== undefined){
-          serverPswdErrNmtm = errorInfo.pswdErrNmtm;
+        if(errorInfo?.code === -1){
+          // alert(errorInfo.msg);
+          alert(t('serverErrorMessage'));
+          return;
         }
-      }catch (e){
+      }catch(e){
         // JSON 파싱 실패 시 무시 (일반 에러 메시지인 경우)
       }
 
-      // 서버에서 pswdErrNmtm을 제공한 경우 서버 값을 우선 사용
-      // 서버 값이 없으면 로컬 카운트를 증가시킴
-      const nextCount = serverPswdErrNmtm !== null ? serverPswdErrNmtm : (localFailCount + 1);
+      // 로컬 실패 카운트 증가
+      const nextCount = localFailCount + 1;
 
       setLocalFailCount(nextCount);
 
