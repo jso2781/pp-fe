@@ -150,60 +150,60 @@ export default function Router() {
     <AuthProvider>
       <DialogProvider>
         <BrowserRouter>
-        <Routes>
-          {/* 공통 레이아웃 */}
-          <Route element={<LangGuard><Layout /></LangGuard>}>
-            {/* ✅ 루트(/)로 들어오면 브라우저 언어 기반으로 /ko 또는 /en로 보내기 */}
-            <Route path="/" element={<Navigate to={`/${detectBrowserLang()}`} replace />} />
+          <Routes>
+            {/* 공통 레이아웃 */}
+            <Route element={<LangGuard><Layout /></LangGuard>}>
+              {/* ✅ 루트(/)로 들어오면 브라우저 언어 기반으로 /ko 또는 /en로 보내기 */}
+              <Route path="/" element={<Navigate to={`/${detectBrowserLang()}`} replace />} />
 
-            {/* 언어별로 화면 전환 */}
-            <Route path="/:lang" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
-            <Route path="/:lang/dur/notice" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListEn /> }} />} />
-            <Route path="/:lang/dur/notice/:id" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailEn /> }} />} />
+              {/* 언어별로 화면 전환 */}
+              <Route path="/:lang" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
+              <Route path="/:lang/dur/notice" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListEn /> }} />} />
+              <Route path="/:lang/dur/notice/:id" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailEn /> }} />} />
 
-            <Route path="/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalEn /> }} />} />
-            <Route path="/:lang/news/NewsFaqNotice" element={<LangElement byLang={{ ko: <NewsFaqNoticeKo />, en: <NewsFaqNoticeKo /> }} />} />
-            <Route path="/:lang/etc/Terms" element={<LangElement byLang={{ ko: <TermsKo />, en: <TermsKo /> }} />} />
-            <Route path="/:lang/etc/PrivacyPolicy" element={<LangElement byLang={{ ko: <PrivacyPolicyKo />, en: <PrivacyPolicyKo /> }} />} />
-            <Route path="/:lang/etc/CctvPolicy" element={<LangElement byLang={{ ko: <CctvPolicyKo />, en: <CctvPolicyKo /> }} />} />
-            <Route path="/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
-            <Route path="/:lang/expert/ExpertMemberApply" element={<LangElement byLang={{ ko: <ExpertMemberApplyKo />, en: <ExpertMemberApplyKo /> }} />} />                                  
+              <Route path="/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalEn /> }} />} />
+              <Route path="/:lang/news/NewsFaqNotice" element={<LangElement byLang={{ ko: <NewsFaqNoticeKo />, en: <NewsFaqNoticeKo /> }} />} />
+              <Route path="/:lang/etc/Terms" element={<LangElement byLang={{ ko: <TermsKo />, en: <TermsKo /> }} />} />
+              <Route path="/:lang/etc/PrivacyPolicy" element={<LangElement byLang={{ ko: <PrivacyPolicyKo />, en: <PrivacyPolicyKo /> }} />} />
+              <Route path="/:lang/etc/CctvPolicy" element={<LangElement byLang={{ ko: <CctvPolicyKo />, en: <CctvPolicyKo /> }} />} />
+              <Route path="/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
+              <Route path="/:lang/expert/ExpertMemberApply" element={<LangElement byLang={{ ko: <ExpertMemberApplyKo />, en: <ExpertMemberApplyKo /> }} />} />                                  
 
-            {/* 게시판 페이지 작업중 */}          
-            <Route path="/:lang/news/NewsNoticeList" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
-            <Route path="/:lang/news/NewsNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsNoticeDetailKo />, en: <NewsNoticeDetailKo /> }} />} />            
-            <Route path="/:lang/news/NewsJobNoticeList" element={<LangElement byLang={{ ko: <NewsJobNoticeListKo />, en: <NewsJobNoticeListKo /> }} />} />
-            <Route path="/:lang/news/NewsJobNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsJobNoticeDetailKo />, en: <NewsJobNoticeDetailKo /> }} />} />            
-            <Route path="/:lang/news/NewsDataRoomList" element={<LangElement byLang={{ ko: <NewsDataRoomListKo />, en: <NewsDataRoomListKo /> }} />} />
-            <Route path="/:lang/news/NewsDataRoomList/:pstSn" element={<LangElement byLang={{ ko: <NewsDataRoomDetailKo />, en: <NewsDataRoomDetailKo /> }} />} />
-            <Route path="/:lang/news/NewsCardNewsList" element={<LangElement byLang={{ ko: <NewsCardNewsListKo />, en: <NewsCardNewsListKo /> }} />} />
-            <Route path="/:lang/news/NewsCardNewsList/:pstSn" element={<LangElement byLang={{ ko: <NewsCardNewsDetailKo />, en: <NewsCardNewsDetailKo /> }} />} />         
-            <Route path="/:lang/news/NewsVidioList" element={<LangElement byLang={{ ko: <NewsVidioListKo />, en: <NewsVidioListKo /> }} />} />
-            <Route path="/:lang/news/NewsVidioList/:pstSn" element={<LangElement byLang={{ ko: <NewsVidioDetailKo />, en: <NewsVidioDetailKo /> }} />} />                        
+              {/* 게시판 페이지 작업중 */}          
+              <Route path="/:lang/news/NewsNoticeList" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
+              <Route path="/:lang/news/NewsNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsNoticeDetailKo />, en: <NewsNoticeDetailKo /> }} />} />            
+              <Route path="/:lang/news/NewsJobNoticeList" element={<LangElement byLang={{ ko: <NewsJobNoticeListKo />, en: <NewsJobNoticeListKo /> }} />} />
+              <Route path="/:lang/news/NewsJobNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsJobNoticeDetailKo />, en: <NewsJobNoticeDetailKo /> }} />} />            
+              <Route path="/:lang/news/NewsDataRoomList" element={<LangElement byLang={{ ko: <NewsDataRoomListKo />, en: <NewsDataRoomListKo /> }} />} />
+              <Route path="/:lang/news/NewsDataRoomList/:pstSn" element={<LangElement byLang={{ ko: <NewsDataRoomDetailKo />, en: <NewsDataRoomDetailKo /> }} />} />
+              <Route path="/:lang/news/NewsCardNewsList" element={<LangElement byLang={{ ko: <NewsCardNewsListKo />, en: <NewsCardNewsListKo /> }} />} />
+              <Route path="/:lang/news/NewsCardNewsList/:pstSn" element={<LangElement byLang={{ ko: <NewsCardNewsDetailKo />, en: <NewsCardNewsDetailKo /> }} />} />         
+              <Route path="/:lang/news/NewsVidioList" element={<LangElement byLang={{ ko: <NewsVidioListKo />, en: <NewsVidioListKo /> }} />} />
+              <Route path="/:lang/news/NewsVidioList/:pstSn" element={<LangElement byLang={{ ko: <NewsVidioDetailKo />, en: <NewsVidioDetailKo /> }} />} />                        
 
-            {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
-            <Route path="/screens" element={<Screens />} />
-            <Route path="/screens/:screenId" element={<ScreenViewer />} />
+              {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
+              <Route path="/screens" element={<Screens />} />
+              <Route path="/screens/:screenId" element={<ScreenViewer />} />
 
-            {/* 로그인 관련 라우트 - 와일드카드보다 먼저 배치 (더 구체적인 경로가 먼저 와야 함) */}
-            <Route path="/:lang/auth/LoginMethod" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />
-            <Route path="/:lang/auth/Login" element={<LangElement byLang={{ ko: <LoginKo />, en: <LoginEn /> }} />} />
-            <Route path="/:lang/auth/SignUpSel" element={<LangElement byLang={{ ko: <SignUpSelKo />, en: <SignUpSelKo /> }} />} />
-            <Route path="/:lang/auth/GeneralSignUpAgrTrms" element={<LangElement byLang={{ ko: <SignUpAgrTrmsKo />, en: <SignUpAgrTrmsKo /> }} />} />
-            <Route path="/:lang/auth/JuniorSignUpAgrTrms" element={<LangElement byLang={{ ko: <SignUpAgrTrmsKo />, en: <SignUpAgrTrmsKo /> }} />} />
-            <Route path="/:lang/auth/LegalGuardAgr" element={<LangElement byLang={{ ko: <LegalGuardAgrKo />, en: <LegalGuardAgrKo /> }} />} />
-            <Route path="/:lang/auth/CertifySelf" element={<LangElement byLang={{ ko: <CertifySelfKo />, en: <CertifySelfKo /> }} />} />
-            <Route path="/:lang/auth/SignUpMbrInfo" element={<LangElement byLang={{ ko: <SignUpMbrInfoKo />, en: <SignUpMbrInfoKo /> }} />} />
-            <Route path="/:lang/auth/SignUpComplete" element={<LangElement byLang={{ ko: <SignUpCompleteKo />, en: <SignUpCompleteKo /> }} />} />
-            <Route path="/:lang/auth/PasswordConfirm" element={<LangElement byLang={{ ko: <ProtectedRoute><PasswordConfirmKo /></ProtectedRoute>, en: <ProtectedRoute><PasswordConfirmKo /></ProtectedRoute> }} />} />
-            <Route path="/:lang/auth/EditProfile" element={<LangElement byLang={{ ko: <ProtectedRoute><EditProfileKo /></ProtectedRoute>, en: <ProtectedRoute><EditProfileKo /></ProtectedRoute> }} />} />
-            <Route path="/:lang/auth/WithDrawal" element={<LangElement byLang={{ ko: <ProtectedRoute><WithDrawalKo /></ProtectedRoute>, en: <ProtectedRoute><WithDrawalKo /></ProtectedRoute> }} />} />
+              {/* 로그인 관련 라우트 - 와일드카드보다 먼저 배치 (더 구체적인 경로가 먼저 와야 함) */}
+              <Route path="/:lang/auth/LoginMethod" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />
+              <Route path="/:lang/auth/Login" element={<LangElement byLang={{ ko: <LoginKo />, en: <LoginEn /> }} />} />
+              <Route path="/:lang/auth/SignUpSel" element={<LangElement byLang={{ ko: <SignUpSelKo />, en: <SignUpSelKo /> }} />} />
+              <Route path="/:lang/auth/GeneralSignUpAgrTrms" element={<LangElement byLang={{ ko: <SignUpAgrTrmsKo />, en: <SignUpAgrTrmsKo /> }} />} />
+              <Route path="/:lang/auth/JuniorSignUpAgrTrms" element={<LangElement byLang={{ ko: <SignUpAgrTrmsKo />, en: <SignUpAgrTrmsKo /> }} />} />
+              <Route path="/:lang/auth/LegalGuardAgr" element={<LangElement byLang={{ ko: <LegalGuardAgrKo />, en: <LegalGuardAgrKo /> }} />} />
+              <Route path="/:lang/auth/CertifySelf" element={<LangElement byLang={{ ko: <CertifySelfKo />, en: <CertifySelfKo /> }} />} />
+              <Route path="/:lang/auth/SignUpMbrInfo" element={<LangElement byLang={{ ko: <SignUpMbrInfoKo />, en: <SignUpMbrInfoKo /> }} />} />
+              <Route path="/:lang/auth/SignUpComplete" element={<LangElement byLang={{ ko: <SignUpCompleteKo />, en: <SignUpCompleteKo /> }} />} />
+              <Route path="/:lang/auth/PasswordConfirm" element={<LangElement byLang={{ ko: <ProtectedRoute><PasswordConfirmKo /></ProtectedRoute>, en: <ProtectedRoute><PasswordConfirmKo /></ProtectedRoute> }} />} />
+              <Route path="/:lang/auth/EditProfile" element={<LangElement byLang={{ ko: <ProtectedRoute><EditProfileKo /></ProtectedRoute>, en: <ProtectedRoute><EditProfileKo /></ProtectedRoute> }} />} />
+              <Route path="/:lang/auth/WithDrawal" element={<LangElement byLang={{ ko: <ProtectedRoute><WithDrawalKo /></ProtectedRoute>, en: <ProtectedRoute><WithDrawalKo /></ProtectedRoute> }} />} />
 
-            {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
-            <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+              {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
+              <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </DialogProvider>
     </AuthProvider>
   )
