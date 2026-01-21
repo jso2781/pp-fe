@@ -19,7 +19,7 @@ export default function NewsFaqNotice () {
   const { loading, error } = useAppSelector(s => s.faq);
   const categoryList = useAppSelector(selectFaqCategoryList);
   const { faqList, totalCount } = useAppSelector(s => selectViewFaqList(s, param));
-  
+
   useEffect(() =>{
     dispatch(selectFaqList({langSeCd: 'ko'}));
   }, [dispatch]);
@@ -44,7 +44,7 @@ export default function NewsFaqNotice () {
           <br/>
           검색 결과 {totalCount}건
           <br/>
-          { faqList.map(data => <FaqRow {...data} />) } 
+          { faqList.map(faqItem => <FaqRow {...faqItem} />)} 
           <Stack className="paging-wrap">
             <Pagination count={totalPages} page={param.page} onChange={(_, p) => {
               handleUI({...param, page: p})

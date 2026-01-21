@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectFaqList, sideEffectThunk } from './FaqThunks'
+import { selectFaqList } from './FaqThunks'
 import { FaqRVO } from './FaqTypes'
 
 /**
@@ -46,19 +46,6 @@ const FaqSlice = createSlice({
       .addCase(selectFaqList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error?.message || 'Failed to load notice list';
-      })
-
-      //테스트용
-      .addCase(sideEffectThunk.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(sideEffectThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error?.message || 'Failed to load notice list';
-      })
-      .addCase(sideEffectThunk.fulfilled, (state, action) => {
-        state.loading = false;
       })
   }
 });

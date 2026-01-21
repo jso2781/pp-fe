@@ -1,26 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectFaqListApiPath, getFaqApiPath, insertFaqApiPath, updateFaqApiPath, saveFaqApiPath, deleteFaqApiPath } from '@/api/faq/FaqApiPaths'
-import { mockFaqList, FaqPVO, FaqRVO, FaqListPVO, FaqListRVO, FaqDVO  } from './FaqTypes'
-
-export const sideEffectThunk = createAsyncThunk(
-  '/faq/test',
-  async () => {
-    const func = () => {
-      return new Promise((res, rej) => {
-        setTimeout(() => {
-          throw new Error('비동기 작업중 에러');
-          rej('무조건실패');
-        }, 3000);
-      });
-    }
-    try {
-      await func();
-
-    } catch (err){
-      console.error(err);
-    }
-  });
+import { selectFaqListApiPath } from '@/api/faq/FaqApiPaths'
+import { mockFaqList, FaqRVO, FaqListPVO, FaqListRVO } from './FaqTypes'
 
 /**
  * 대국민포털_FAQ기본 정보 목록 조회 
