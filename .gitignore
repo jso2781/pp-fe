@@ -3,3 +3,6 @@ node_modules
 dist
 .env
 .env.*
+# 예제는 커밋 (실제 값이 없고, 복사용 템플릿)
+!.env.example
+!.env.*.example

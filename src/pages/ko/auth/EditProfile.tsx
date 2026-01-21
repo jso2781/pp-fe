@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { existMbrInfo, updateMbrInfo } from '@/features/mbr/MbrInfoThunks';
 import { MbrInfoPVO, MbrInfoRVO, UpdateMbrInfoRVO } from '@/features/mbr/MbrInfoTypes';
 import { setAuthUserInfo } from '@/features/auth/AuthSlice';
+import { useDialog } from '@/contexts/DialogContext';
 
 
 /**
@@ -27,7 +28,7 @@ export default function EditProfile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const { showAlert } = useDialog();
   // Redux에서 사용자 정보 가져오기
   const userInfo = useAppSelector((state) => state.auth.userInfo);
 
@@ -51,11 +52,7 @@ export default function EditProfile() {
   const [anyIdReady, setAnyIdReady] = useState(false);
   const hasFetchedRef = useRef(false);
 
-  // Dialog 상태 관리
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogTitle, setDialogTitle] = useState('');
-  const [dialogMessage, setDialogMessage] = useState('');
-  const [dialogOnConfirm, setDialogOnConfirm] = useState<(() => void) | null>(null);
+
 
   // Any-ID 스크립트 로드 확인
   useEffect(() => {
@@ -191,34 +188,10 @@ export default function EditProfile() {
     }
   };
 
-  // Dialog 열기 함수
-  const openDialog = (title: string, message: string, onConfirm?: () => void) => {
-    setDialogTitle(title);
-    setDialogMessage(message);
-    setDialogOnConfirm(() => onConfirm || null);
-    setDialogOpen(true);
-  };
-
-  // Dialog 닫기 함수
-  const closeDialog = () => {
-    setDialogOpen(false);
-    setDialogTitle('');
-    setDialogMessage('');
-    setDialogOnConfirm(null);
-  };
-
-  // Dialog 확인 버튼 클릭 핸들러
-  const handleDialogConfirm = () => {
-    if (dialogOnConfirm) {
-      dialogOnConfirm();
-    }
-    closeDialog();
-  };
-
   // 휴대전화번호 변경 (Any-ID 본인인증)
   const handlePhoneChange = () => {
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
-      openDialog(t('error') || '오류', t('certifySelfModuleNotReady') || '본인인증 모듈이 준비되지 않았습니다.');
+      showAlert(t('certifySelfModuleNotReady'), t('error'));
       return;
     }
 
@@ -247,7 +220,7 @@ export default function EditProfile() {
       fail: function (err: any) {
         console.error(t('certifySelfFailed'), err);
         setIsPhoneCertified(false);
-        openDialog(t('error') || '오류', t('certifySelfFailedReminder') || '본인인증에 실패했습니다.');
+        showAlert(t('certifySelfFailedReminder'),t('error') || '오류');
       },
       log: function (data: any) {
         console.log('============================ ' + t('anyIdLog') + ' ============================', data);
@@ -299,7 +272,7 @@ export default function EditProfile() {
     // 이메일이 입력된 경우 중복확인 체크
     if (formData.email && formData.email.trim().length > 0) {
       if (!isEmailChecked || !emailAvailable) {
-        openDialog(t('error') || '오류', t('emailDuplicateCheckCompleteReminder') || '이메일 중복확인을 완료해주세요.');
+        showAlert(t('emailDuplicateCheckCompleteReminder'), t('error'));
         return;
       }
     }
@@ -329,292 +302,264 @@ export default function EditProfile() {
         // 회원정보 수정 성공 시 redux AuthReducer의 auth.userInfo 업데이트
         dispatch(setAuthUserInfo(userInfo));
 
-        openDialog(
+        showAlert(
           t('success') || '성공',
-          t('editComplete') || '회원정보가 수정되었습니다.',
+          t('editCompleteReminder'),
           () => navigate('/ko')
         );
       } else {
-        openDialog(t('error') || '오류', t('editFailed') || '회원정보 수정에 실패했습니다.');
+        showAlert(t('error'), t('editFailedReminder'));
       }
     } catch (error) {
-      console.error(t('editFailed'), error);
-      openDialog(t('error') || '오류', t('editFailed') || '회원정보 수정 중 오류가 발생했습니다.');
+      console.error(t('editingFailedReminder'), error);
+      showAlert(t('editingFailedReminder'), t('error'));
     }
   };
 
   return (
-    <>
-      <Box className="page-layout">
-        <Box className="sub-container">
-          <Box className="content-wrap">
-            {/* 서브 콘텐츠 영역 */}
-            <Box className="sub-content">
-              {/* 상단 현재 위치 정보 */}
-              <DepsLocation />
-              <Box className="content-view" id="content">
-                <Box className="page-content">
-                  {/* --- 본문 시작 --- */}
-                  <Box className="pageCont-memberEdit member-page">
-                    <Box className="bordered-box">
-                      <Box component="form" noValidate>
-                        <Box className="form-group-wrap">
-                          {/* 1.1 아이디 (필수) - 비활성화 */}
-                          <Box className="form-item">
-                            <Typography component="label" htmlFor="mbrId" className="label">
-                              {t('mbrId')}
-                              <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
-                            </Typography>
-                            <TextField
-                              id="mbrId"
-                              value={formData.mbrId}
-                              placeholder={t('mbrIdPlaceholder')}
-                              size="large"
-                              fullWidth
-                              disabled
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                },
-                              }}
-                            />
-                          </Box>
-
-                          {/* 1.2 이름 (필수) - 비활성화 */}
-                          <Box className="form-item">
-                            <Typography component="label" htmlFor="userName" className="label">
-                              {t('name')}
-                              <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
-                            </Typography>
-                            <TextField
-                              id="userName"
-                              value={formData.userName}
-                              placeholder={t('namePlaceholder')}
-                              size="large"
-                              fullWidth
-                              disabled
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                },
-                              }}
-                            />
-                          </Box>
-
-                          {/* 1.3 휴대전화번호 (필수) - 비활성화, 1.4 번호변경 버튼 */}
-                          <Box className="form-item">
-                            <Typography component="label" htmlFor="phone" className="label">
-                              {t('phone')}
-                              <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
-                            </Typography>
-                            <Stack direction="row" spacing={1} className="input-with-btn">
-                              <TextField
-                                id="phone"
-                                value={formData.phone}
-                                placeholder={t('phonePlaceholder')}
-                                size="large"
-                                fullWidth
-                                disabled
-                                slotProps={{
-                                  htmlInput: {
-                                    'aria-required': 'true',
-                                  },
-                                }}
-                              />
-                              <Button
-                                variant="outlined"
-                                size="large"
-                                onClick={handlePhoneChange}
-                                aria-label={t('phoneCertify')}
-                                className="btn-outline-02 btn-form-util"
-                              >
-                                {t('phoneChange')}
-                              </Button>
-                            </Stack>
-                          </Box>
-
-                          {/* 1.5 이메일 (선택) - 활성화, 1.6 중복확인 버튼 */}
-                          <Box className="form-item">
-                            <Typography component="label" htmlFor="email" className="label">
-                              {t('email')}
-                              <Box component="span" className="optional" aria-label={t('optionalInput')}>({t('optional')})</Box>
-                            </Typography>
-                            <Stack direction="row" spacing={1} className="input-with-btn">
-                              <TextField
-                                id="email"
-                                value={formData.email}
-                                onChange={(e) => handleChange('email', e.target.value)}
-                                placeholder={t('emailPlaceholder')}
-                                size="large"
-                                fullWidth
-                                error={!!errors.email}
-                                helperText={errors.email || successMessages.email || ''}
-                                slotProps={{
-                                  htmlInput: {
-                                    'aria-describedby': errors.email || successMessages.email ? 'email-alert' : undefined,
-                                    autoComplete: 'email',
-                                  },
-                                  formHelperText: {
-                                    id: 'email-alert',
-                                    className: errors.email ? 'error-alert' : successMessages.email ? 'success-message' : '',
-                                    role: (errors.email || successMessages.email) ? 'alert' : undefined,
-                                    'aria-live': (errors.email || successMessages.email) ? 'polite' : undefined,
-                                  },
-                                }}
-                              />
-                              <Button
-                                variant="outlined"
-                                size="large"
-                                onClick={handleCheckEmailDuplicate}
-                                onMouseDown={(e) => e.preventDefault()}
-                                aria-label={t('emailDuplicateCheck')}
-                                className="btn-outline-02 btn-form-util"
-                                disabled={!formData.email || formData.email.trim().length === 0}
-                              >
-                                {t('duplicateCheck')}
-                              </Button>
-                            </Stack>
-                          </Box>
-
-                          {/* 1.7 비밀번호 - 변경 버튼 클릭 시 활성화 */}
-                          <Box className="form-item">
-                            <Typography component="label" htmlFor="password" className="label">
-                              {t('password')}
-                              <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
-                            </Typography>
-                            <Stack direction="row" spacing={1} className="input-with-btn">
-                              <TextField
-                                id="password"
-                                type="password"
-                                value={formData.password}
-                                onChange={(e) => handleChange('password', e.target.value)}
-                                placeholder={isPasswordChangeMode ? t('passwordCombination') : t('passwordPlaceholder')}
-                                size="large"
-                                fullWidth
-                                disabled={!isPasswordChangeMode}
-                                error={!!errors.password}
-                                helperText={errors.password || ''}
-                                slotProps={{
-                                  htmlInput: {
-                                    'aria-required': 'true',
-                                    'aria-describedby': errors.password ? 'password-alert' : undefined,
-                                    autoComplete: 'new-password',
-                                  },
-                                  formHelperText: {
-                                    id: 'password-alert',
-                                    className: errors.password ? 'error-alert' : '',
-                                    role: errors.password ? 'alert' : undefined,
-                                    'aria-live': errors.password ? 'polite' : undefined,
-                                  },
-                                }}
-                              />
-                              <Button
-                                variant="outlined"
-                                size="large"
-                                onClick={handlePasswordChange}
-                                aria-label={t('passwordChange')}
-                                className="btn-outline-02 btn-form-util"
-                                disabled={isPasswordChangeMode}
-                              >
-                                {t('change')}
-                              </Button>
-                            </Stack>
-                          </Box>
-
-                          {/* 1.8 비밀번호 확인 - 비밀번호 변경 모드일 때만 표시 */}
-                          {isPasswordChangeMode && (
-                            <Box className="form-item">
-                              <Typography component="label" htmlFor="confirmPassword" className="label">
-                                {t('passwordConfirm')}
-                                <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
-                              </Typography>
-                              <TextField
-                                id="confirmPassword"
-                                type="password"
-                                value={formData.confirmPassword}
-                                onChange={(e) => handleChange('confirmPassword', e.target.value)}
-                                placeholder={t('passwordConfirmPlaceholder')}
-                                size="large"
-                                fullWidth
-                                error={!!errors.confirmPassword}
-                                helperText={errors.confirmPassword || ''}
-                                slotProps={{
-                                  htmlInput: {
-                                    'aria-required': 'true',
-                                    'aria-describedby': errors.confirmPassword ? 'confirmPassword-alert' : undefined,
-                                    autoComplete: 'new-password',
-                                  },
-                                  formHelperText: {
-                                    id: 'confirmPassword-alert',
-                                    className: errors.confirmPassword ? 'error-alert' : '',
-                                    role: errors.confirmPassword ? 'alert' : undefined,
-                                    'aria-live': errors.confirmPassword ? 'polite' : undefined,
-                                  },
-                                }}
-                              />
-                            </Box>
-                          )}
+    <Box className="page-layout">
+      <Box className="sub-container">
+        <Box className="content-wrap">
+          {/* 서브 콘텐츠 영역 */}
+          <Box className="sub-content">
+            {/* 상단 현재 위치 정보 */}
+            <DepsLocation />
+            <Box className="content-view" id="content">
+              <Box className="page-content">
+                {/* --- 본문 시작 --- */}
+                <Box className="pageCont-memberEdit member-page">
+                  <Box className="bordered-box">
+                    <Box component="form" noValidate>
+                      <Box className="form-group-wrap">
+                        {/* 1.1 아이디 (필수) - 비활성화 */}
+                        <Box className="form-item">
+                          <Typography component="label" htmlFor="mbrId" className="label">
+                            {t('mbrId')}
+                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
+                          </Typography>
+                          <TextField
+                            id="mbrId"
+                            value={formData.mbrId}
+                            placeholder={t('mbrIdPlaceholder')}
+                            size="large"
+                            fullWidth
+                            disabled
+                            slotProps={{
+                              htmlInput: {
+                                'aria-required': 'true',
+                              },
+                            }}
+                          />
                         </Box>
+
+                        {/* 1.2 이름 (필수) - 비활성화 */}
+                        <Box className="form-item">
+                          <Typography component="label" htmlFor="userName" className="label">
+                            {t('name')}
+                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
+                          </Typography>
+                          <TextField
+                            id="userName"
+                            value={formData.userName}
+                            placeholder={t('namePlaceholder')}
+                            size="large"
+                            fullWidth
+                            disabled
+                            slotProps={{
+                              htmlInput: {
+                                'aria-required': 'true',
+                              },
+                            }}
+                          />
+                        </Box>
+
+                        {/* 1.3 휴대전화번호 (필수) - 비활성화, 1.4 번호변경 버튼 */}
+                        <Box className="form-item">
+                          <Typography component="label" htmlFor="phone" className="label">
+                            {t('phone')}
+                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
+                          </Typography>
+                          <Stack direction="row" spacing={1} className="input-with-btn">
+                            <TextField
+                              id="phone"
+                              value={formData.phone}
+                              placeholder={t('phonePlaceholder')}
+                              size="large"
+                              fullWidth
+                              disabled
+                              slotProps={{
+                                htmlInput: {
+                                  'aria-required': 'true',
+                                },
+                              }}
+                            />
+                            <Button
+                              variant="outlined"
+                              size="large"
+                              onClick={handlePhoneChange}
+                              aria-label={t('phoneCertify')}
+                              className="btn-outline-02 btn-form-util"
+                            >
+                              {t('phoneChange')}
+                            </Button>
+                          </Stack>
+                        </Box>
+
+                        {/* 1.5 이메일 (선택) - 활성화, 1.6 중복확인 버튼 */}
+                        <Box className="form-item">
+                          <Typography component="label" htmlFor="email" className="label">
+                            {t('email')}
+                            <Box component="span" className="optional" aria-label={t('optionalInput')}>({t('optional')})</Box>
+                          </Typography>
+                          <Stack direction="row" spacing={1} className="input-with-btn">
+                            <TextField
+                              id="email"
+                              value={formData.email}
+                              onChange={(e) => handleChange('email', e.target.value)}
+                              placeholder={t('emailPlaceholder')}
+                              size="large"
+                              fullWidth
+                              error={!!errors.email}
+                              helperText={errors.email || successMessages.email || ''}
+                              slotProps={{
+                                htmlInput: {
+                                  'aria-describedby': errors.email || successMessages.email ? 'email-alert' : undefined,
+                                  autoComplete: 'email',
+                                },
+                                formHelperText: {
+                                  id: 'email-alert',
+                                  className: errors.email ? 'error-alert' : successMessages.email ? 'success-message' : '',
+                                  role: (errors.email || successMessages.email) ? 'alert' : undefined,
+                                  'aria-live': (errors.email || successMessages.email) ? 'polite' : undefined,
+                                },
+                              }}
+                            />
+                            <Button
+                              variant="outlined"
+                              size="large"
+                              onClick={handleCheckEmailDuplicate}
+                              onMouseDown={(e) => e.preventDefault()}
+                              aria-label={t('emailDuplicateCheck')}
+                              className="btn-outline-02 btn-form-util"
+                              disabled={!formData.email || formData.email.trim().length === 0}
+                            >
+                              {t('duplicateCheck')}
+                            </Button>
+                          </Stack>
+                        </Box>
+
+                        {/* 1.7 비밀번호 - 변경 버튼 클릭 시 활성화 */}
+                        <Box className="form-item">
+                          <Typography component="label" htmlFor="password" className="label">
+                            {t('password')}
+                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
+                          </Typography>
+                          <Stack direction="row" spacing={1} className="input-with-btn">
+                            <TextField
+                              id="password"
+                              type="password"
+                              value={formData.password}
+                              onChange={(e) => handleChange('password', e.target.value)}
+                              placeholder={isPasswordChangeMode ? t('passwordCombination') : t('passwordPlaceholder')}
+                              size="large"
+                              fullWidth
+                              disabled={!isPasswordChangeMode}
+                              error={!!errors.password}
+                              helperText={errors.password || ''}
+                              slotProps={{
+                                htmlInput: {
+                                  'aria-required': 'true',
+                                  'aria-describedby': errors.password ? 'password-alert' : undefined,
+                                  autoComplete: 'new-password',
+                                },
+                                formHelperText: {
+                                  id: 'password-alert',
+                                  className: errors.password ? 'error-alert' : '',
+                                  role: errors.password ? 'alert' : undefined,
+                                  'aria-live': errors.password ? 'polite' : undefined,
+                                },
+                              }}
+                            />
+                            <Button
+                              variant="outlined"
+                              size="large"
+                              onClick={handlePasswordChange}
+                              aria-label={t('passwordChange')}
+                              className="btn-outline-02 btn-form-util"
+                              disabled={isPasswordChangeMode}
+                            >
+                              {t('change')}
+                            </Button>
+                          </Stack>
+                        </Box>
+
+                        {/* 1.8 비밀번호 확인 - 비밀번호 변경 모드일 때만 표시 */}
+                        {isPasswordChangeMode && (
+                          <Box className="form-item">
+                            <Typography component="label" htmlFor="confirmPassword" className="label">
+                              {t('passwordConfirm')}
+                              <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
+                            </Typography>
+                            <TextField
+                              id="confirmPassword"
+                              type="password"
+                              value={formData.confirmPassword}
+                              onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                              placeholder={t('passwordConfirmPlaceholder')}
+                              size="large"
+                              fullWidth
+                              error={!!errors.confirmPassword}
+                              helperText={errors.confirmPassword || ''}
+                              slotProps={{
+                                htmlInput: {
+                                  'aria-required': 'true',
+                                  'aria-describedby': errors.confirmPassword ? 'confirmPassword-alert' : undefined,
+                                  autoComplete: 'new-password',
+                                },
+                                formHelperText: {
+                                  id: 'confirmPassword-alert',
+                                  className: errors.confirmPassword ? 'error-alert' : '',
+                                  role: errors.confirmPassword ? 'alert' : undefined,
+                                  'aria-live': errors.confirmPassword ? 'polite' : undefined,
+                                },
+                              }}
+                            />
+                          </Box>
+                        )}
                       </Box>
                     </Box>
-
-                    <Stack direction="row" className="form-helper-group">
-                      <Typography className="txt">
-                        {t('mbrWithdrawalReminder')}
-                      </Typography>
-                      <Button
-                        variant="text"
-                        className="btn-link"
-                        endIcon={<ChevronRightIcon />}
-                        onClick={() => navigate('/ko/auth/WithDrawal')}
-                      >
-                        {t('mbrWithdrawal')}
-                      </Button>
-                    </Stack>
-
-                    {/* 하단 버튼 영역 */}
-                    <Box className="btn-group between">
-                      <Button variant="outlined" size="large" onClick={() => navigate('/ko')}>
-                        {t('cancel')}
-                      </Button>
-                      <Button variant="contained" size="large" onClick={handleSave}>
-                        {t('editComplete')}
-                      </Button>
-                    </Box>
                   </Box>
-                  {/* --- 본문 끝 --- */}
+
+                  <Stack direction="row" className="form-helper-group">
+                    <Typography className="txt">
+                      {t('mbrWithdrawalReminder')}
+                    </Typography>
+                    <Button
+                      variant="text"
+                      className="btn-link"
+                      endIcon={<ChevronRightIcon />}
+                      onClick={() => navigate('/ko/auth/WithDrawal')}
+                    >
+                      {t('mbrWithdrawal')}
+                    </Button>
+                  </Stack>
+
+                  {/* 하단 버튼 영역 */}
+                  <Box className="btn-group between">
+                    <Button variant="outlined" size="large" onClick={() => navigate('/ko')}>
+                      {t('cancel')}
+                    </Button>
+                    <Button variant="contained" size="large" onClick={handleSave}>
+                      {t('editComplete')}
+                    </Button>
+                  </Box>
                 </Box>
+                {/* --- 본문 끝 --- */}
               </Box>
             </Box>
           </Box>
         </Box>
       </Box>
-
-      {/* 알림 Dialog */}
-      <Dialog
-        open={dialogOpen}
-        onClose={closeDialog}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>{dialogTitle}</DialogTitle>
-        <Divider />
-        <DialogContent>
-          <Typography variant="body1">
-            {dialogMessage}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialog}>{t('cancel')}</Button>
-          <Button
-            variant="contained"
-            onClick={handleDialogConfirm}
-            autoFocus
-          >
-            {t('confirm')}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    </Box>
   );
 }

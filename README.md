@@ -15,16 +15,31 @@ npm install
 npm run dev
 ```
 
-## API 설정
+## 환경 변수 (`.env`)
 
-기본 axios baseURL:
-- `.env`의 `VITE_API_BASE_URL` 값이 있으면 그 값을 사용
-- 없으면 `/api` 사용
+`.env`, `.env.development`, `.env.production` 등은 **보안상 Git에 포함되지 않습니다** (`.gitignore`의 `.env`, `.env.*`).  
+레포에는 **예제만** 들어 있습니다.
 
-예시:
+| 파일 | 용도 |
+|------|------|
+| `.env.example` | 공통 템플릿 |
+| `.env.development.example` | `npm run dev` (개발) |
+| `.env.production.example` | `npm run build` (프로덕션) |
+
+**로컬 셋업 (최초 1회):**
+```bash
+cp .env.development.example .env.development
+cp .env.production.example  .env.production
+# 필요 시 .env.development, .env.production 안의 값 수정
 ```
-VITE_API_BASE_URL=https://example.com/api
-```
+
+> `vite build --mode product` 처럼 `product` 모드를 쓰면 `.env.product`가 필요합니다. 이때는 `.env.production.example`을 복사해 `.env.product`로 쓰면 됩니다.
+
+**주요 변수:**
+- `VITE_API_BASE_URL` — API 베이스 (없으면 `/api`)
+- `VITE_APP_BASE` — UI base path (예: `/`, `/pp/`)
+- `VITE_APP_ID` — 앱 ID (로그인 등)
+- `PROXY_TARGET`, `PROXY_PREFIX` — dev 서버 프록시용 (`vite.config.ts`)
 
 ## 데모용 API 응답 형태(예시)
 

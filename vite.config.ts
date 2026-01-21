@@ -27,6 +27,8 @@ export default defineConfig(({ mode }) => {
     base,
     plugins: [react()],
     server: {
+      // 브라우저 자동 열기 비활성화 (외부 브라우저 사용)
+      open: false,
       proxy: {
         /**
          * Frontend always calls: /api/*
