@@ -638,6 +638,51 @@
   display: none;
 }
 
+.login-card-area {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  box-sizing: border-box;
+
+  &__left {
+    flex: 1;
+    display: flex;
+    flex-direction: column; 
+    gap: 20px; 
+    border-right: 1px solid #D8D8D8;
+
+    .login-method-card {
+      flex: 1; 
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &__right {
+    flex: 1;
+    display: flex;
+    // padding-left: 40px;
+    
+    .kids-login-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .kids-login-title {
+        margin:0;
+        padding:0 0 0 10px;
+      }
+
+      .kids-login-card-content {
+        flex: 1; // 공간을 차지하도록 설정
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end; 
+      }
+    }
+  }
+}
+
 /* 정부 통합 로그인 카드 */
 .gov-login-card {
   border: none;
@@ -681,9 +726,7 @@
 /* 로그인 방식 카드 / KIDS 카드 */
 .login-method-card,
 .kids-login-card {
-  border: none;
-  box-shadow: none;
-
+  
   .kids-login-title {
     font-size: var(--fs-18);
     font-weight: 600;

@@ -201,115 +201,121 @@ export default function LoginMethod() {
                   <Typography variant="h3" className="login-title">
                     로그인 방식을 선택해주세요.
                   </Typography>
-                  <Card className="gov-login-card">
-                    <CardContent className="gov-login-card-content">
-                      <Stack spacing={2}>
-                        <Stack direction="row" spacing={0} alignItems="center">
-                          <Stack direction="row" spacing={0} alignItems="center">
-                            <Typography className="gov-login-label"> 정부 통합로그인 사용</Typography>
-                            <Tooltip
-                              title="도글 ON 시 정부 통합 인증을 적용, 도글 OFF 시 정보 통합 인증을 미적용하고 1회성으로 본인인증 처리"
-                              arrow
+
+                  <Box className="login-card-area">
+                    <Box className="login-card-area__left">
+                      <Card className="gov-login-card">
+                        <CardContent className="gov-login-card-content">
+                          <Stack spacing={2}>
+                            <Stack direction="row" spacing={0} alignItems="center">
+                              <Stack direction="row" spacing={0} alignItems="center">
+                                <Typography className="gov-login-label"> 정부 통합로그인 사용</Typography>
+                                <Tooltip
+                                  title="도글 ON 시 정부 통합 인증을 적용, 도글 OFF 시 정보 통합 인증을 미적용하고 1회성으로 본인인증 처리"
+                                  arrow
+                                >
+                                  <IconButton size="small" className="help-icon-button">
+                                    <HelpIcon className="help-icon" />
+                                  </IconButton>
+                                </Tooltip>
+                              </Stack>
+
+                              <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
+                                {/* Base UI 스위치 */}
+                                <BaseSwitch.Root
+                                  className="base_switch_root"
+                                  checked={useGovLogin}
+                                  onCheckedChange={(checked) => setUseGovLogin(checked)}
+                                >
+                                  <BaseSwitch.Thumb className="base_switch_thumb" />
+                                </BaseSwitch.Root>
+                                {/* 텍스트 라벨 */}
+                                <Typography component="p" className="switch_label">
+                                  {useGovLogin ? '사용 중' : '미사용'}
+                                </Typography>
+                              </Stack>
+                            </Stack>
+
+                            <Stack spacing={1}>
+                              <Typography variant="body2" className="user-reg-text">
+                                아직 정부 통합인증(Any-ID) 사용자가 아니신가요?{' '}
+                                <Link component="button" variant="body2" onClick={handleUserReg} className="link">
+                                  사용자 등록 &gt;
+                                </Link>
+                              </Typography>
+                              <Typography variant="body2" className="user-mgmt-text">
+                                정부 통합인증(Any-ID){' '}
+                                <Link component="button" variant="body2" onClick={handleUserMgmt} className="link">
+                                  사용자 관리 &gt;
+                                </Link>
+                              </Typography>
+                            </Stack>
+                          </Stack>
+                        </CardContent>
+                      </Card>
+
+
+                      {/* 로그인 방식 선택 */}
+                      <Card className="login-method-card">
+                        <CardContent className="login-method-card-content">
+                          <Box className="login-button-group">
+                            <Button variant="outlined" onClick={() => handleLoginMethod('simple')} className="login-button">
+                              <Stack spacing={1} alignItems="center" className="login-button-stack">
+                                <AccountIcon className="login-icon" />
+                                <Typography variant="body1" className="login-label">간편 인증</Typography>
+                                <Typography variant="caption" className="login-desc">
+                                  네이버, 카카오, 금융기관 등의 전자서명으로 로그인
+                                </Typography>
+                              </Stack>
+                            </Button>
+                            
+                            {/* <Button variant="outlined" onClick={() => handleLoginMethod('sms')} className="login-button">
+                              <Stack spacing={1} alignItems="center" className="login-button-stack">
+                                <PhoneIcon className="login-icon" />
+                                <Typography variant="body1" className="login-label">휴대폰 SMS 인증</Typography>
+                                <Typography variant="caption" className="login-desc">
+                                  본인 명의로 가입된 휴대폰 인증으로 로그인
+                                </Typography>
+                              </Stack>
+                            </Button> */}
+
+                            <Button variant="outlined" onClick={() => handleLoginMethod('mobileId')} className="login-button">
+                              <Stack spacing={1} alignItems="center" className="login-button-stack">
+                                <FingerprintIcon className="login-icon" />
+                                <Typography variant="body1" className="login-label">모바일 신분증 인증</Typography>
+                                <Typography variant="caption" className="login-desc">
+                                  스마트폰의 모바일 신분증 인증으로 로그인
+                                </Typography>
+                              </Stack>
+                            </Button>
+                          </Box>
+                        </CardContent>
+                      </Card>
+                    </Box>
+                    <Box className="login-card-area__right">
+                      {/* KIDS 로그인 */}
+                      <Card className="kids-login-card">
+                        <Typography className="kids-login-title">KIDS 로그인</Typography>
+                        <CardContent className="kids-login-card-content">
+                          <Box className="login-button-group">
+                            <Button
+                              variant="outlined"
+                              onClick={() => navigate('/ko/auth/Login')}
+                              className="login-button"
                             >
-                              <IconButton size="small" className="help-icon-button">
-                                <HelpIcon className="help-icon" />
-                              </IconButton>
-                            </Tooltip>
-                          </Stack>
-
-                          <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
-                            {/* Base UI 스위치 */}
-                            <BaseSwitch.Root
-                              className="base_switch_root"
-                              checked={useGovLogin}
-                              onCheckedChange={(checked) => setUseGovLogin(checked)}
-                            >
-                              <BaseSwitch.Thumb className="base_switch_thumb" />
-                            </BaseSwitch.Root>
-                            {/* 텍스트 라벨 */}
-                            <Typography component="p" className="switch_label">
-                              {useGovLogin ? '사용 중' : '미사용'}
-                            </Typography>
-                          </Stack>
-                        </Stack>
-
-                        <Stack spacing={1}>
-                          <Typography variant="body2" className="user-reg-text">
-                            아직 정부 통합인증(Any-ID) 사용자가 아니신가요?{' '}
-                            <Link component="button" variant="body2" onClick={handleUserReg} className="link">
-                              사용자 등록 &gt;
-                            </Link>
-                          </Typography>
-                          <Typography variant="body2" className="user-mgmt-text">
-                            정부 통합인증(Any-ID){' '}
-                            <Link component="button" variant="body2" onClick={handleUserMgmt} className="link">
-                              사용자 관리 &gt;
-                            </Link>
-                          </Typography>
-                        </Stack>
-                      </Stack>
-                    </CardContent>
-                  </Card>
-
-
-                  {/* 로그인 방식 선택 */}
-                  <Card className="login-method-card">
-                    <CardContent className="login-method-card-content">
-                      <Box className="login-button-group">
-                        <Button variant="outlined" onClick={() => handleLoginMethod('simple')} className="login-button">
-                          <Stack spacing={1} alignItems="center" className="login-button-stack">
-                            <AccountIcon className="login-icon" />
-                            <Typography variant="body1" className="login-label">간편 인증</Typography>
-                            <Typography variant="caption" className="login-desc">
-                              네이버, 카카오, 금융기관 등의 전자서명으로 로그인
-                            </Typography>
-                          </Stack>
-                        </Button>
-                        
-                        <Button variant="outlined" onClick={() => handleLoginMethod('sms')} className="login-button">
-                          <Stack spacing={1} alignItems="center" className="login-button-stack">
-                            <PhoneIcon className="login-icon" />
-                            <Typography variant="body1" className="login-label">휴대폰 SMS 인증</Typography>
-                            <Typography variant="caption" className="login-desc">
-                              본인 명의로 가입된 휴대폰 인증으로 로그인
-                            </Typography>
-                          </Stack>
-                        </Button>
-
-                        <Button variant="outlined" onClick={() => handleLoginMethod('mobileId')} className="login-button">
-                          <Stack spacing={1} alignItems="center" className="login-button-stack">
-                            <FingerprintIcon className="login-icon" />
-                            <Typography variant="body1" className="login-label">모바일 신분증 인증</Typography>
-                            <Typography variant="caption" className="login-desc">
-                              스마트폰의 모바일 신분증 인증으로 로그인
-                            </Typography>
-                          </Stack>
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </Card>
-
-                  {/* KIDS 로그인 */}
-                  <Card className="kids-login-card">
-                    <Typography className="kids-login-title">KIDS 로그인</Typography>
-                    <CardContent className="kids-login-card-content">
-                      <Box className="login-button-group">
-                        <Button
-                          variant="outlined"
-                          onClick={() => navigate('/ko/auth/Login')}
-                          className="login-button"
-                        >
-                          <Stack spacing={1} alignItems="center" className="login-button-stack">
-                            <AccountIcon className="login-icon" />
-                            <Typography variant="body1" className="login-label">아이디 로그인</Typography>
-                            <Typography variant="caption" className="login-desc">
-                              한국의약품안전관리원 가입 시 등록한 아이디를 이용하여 로그인
-                            </Typography>
-                          </Stack>
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </Card>
+                              <Stack spacing={1} alignItems="center" className="login-button-stack">
+                                <AccountIcon className="login-icon" />
+                                <Typography variant="body1" className="login-label">아이디 로그인</Typography>
+                                <Typography variant="caption" className="login-desc">
+                                  한국의약품안전관리원 가입 시 등록한 아이디를 이용하여 로그인
+                                </Typography>
+                              </Stack>
+                            </Button>
+                          </Box>
+                        </CardContent>
+                      </Card>
+                    </Box>
+                  </Box>
                 </Box>
       
               {/* --- 본문 끝 --- */}
