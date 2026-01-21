@@ -54,8 +54,8 @@ export function DialogProvider({ children }: { children: ReactNode }) {
 
   const baseOpts = useMemo(
     () => ({
-      confirmText: t('confirm') || '확인',
-      cancelText: t('cancel') || '취소',
+      confirmText: t('confirm'),
+      cancelText: t('cancel'),
     }),
     [t]
   )
@@ -74,7 +74,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
     (message: string, title?: string, onConfirm?: () => void) => {
       showDialog({
         message,
-        title: title || (t('alert') || '알림'),
+        title: title || t('alert'),
         type: 'alert',
         onConfirm,
       })
@@ -86,7 +86,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
     (message: string, title?: string, onConfirm?: () => void, onCancel?: () => void) => {
       showDialog({
         message,
-        title: title || (t('confirm') || '확인'),
+        title: title || t('confirm'),
         type: 'confirm',
         onConfirm,
         onCancel,
@@ -119,7 +119,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
     (message: string, title?: string, onConfirm?: () => void) => {
       showDialogBackdrop({
         message,
-        title: title || (t('alert') || '알림'),
+        title: title || t('alert'),
         type: 'alert',
         onConfirm,
       })
@@ -131,7 +131,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
     (message: string, title?: string, onConfirm?: () => void, onCancel?: () => void) => {
       showDialogBackdrop({
         message,
-        title: title || (t('confirm') || '확인'),
+        title: title || t('confirm'),
         type: 'confirm',
         onConfirm,
         onCancel,
@@ -213,7 +213,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
           {optionsBackdrop.title && (
             <DialogTitle component="div" className="modal-title">
               <h2>{optionsBackdrop.title}</h2>
-              <IconButton aria-label="닫기" onClick={handleCloseBackdrop} className="btn-modal-close">
+              <IconButton aria-label={t('close')} onClick={handleCloseBackdrop} className="btn-modal-close">
                 <CloseIcon aria-hidden="true" />
               </IconButton>
             </DialogTitle>

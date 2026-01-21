@@ -7,7 +7,7 @@
 import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, TextField, Stack, Dialog, DialogTitle, DialogContent, DialogActions, Divider } from '@mui/material';
+import { Box, Button, Typography, TextField, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -239,14 +239,20 @@ export default function EditProfile() {
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    // 이메일이 입력된 경우에만 검증
-    if (formData.email && formData.email.trim().length > 0) {
+    // 이메일 (선택): 비어 있으면 검증 제외. 기존 값과 동일하면 중복확인 제외.
+    const emailTrimmed = formData.email?.trim() ?? '';
+    const originalEmail = (userInfo?.mbrEncptEml ?? '').trim();
+    const emailUnchanged = emailTrimmed === originalEmail;
+
+    if (emailTrimmed.length > 0) {
       const emailError = validateEmail(formData.email);
-      if (emailError) newErrors.email = emailError;
-      
-      // 이메일이 입력된 경우 중복확인 필수
-      if (!isEmailChecked || !emailAvailable) {
-        newErrors.email = t('emailDuplicateCheckCompleteReminder');
+      if (emailError) {
+        newErrors.email = emailError;
+      } else if (!emailUnchanged) {
+        // 이메일을 새로 입력했을 때만 중복확인 필수
+        if (!isEmailChecked || !emailAvailable) {
+          newErrors.email = t('emailDuplicateCheckCompleteReminder');
+        }
       }
     }
 
@@ -269,8 +275,10 @@ export default function EditProfile() {
       return;
     }
 
-    // 이메일이 입력된 경우 중복확인 체크
-    if (formData.email && formData.email.trim().length > 0) {
+    // 이메일 (선택): 비어 있거나 기존과 동일하면 중복확인 제외. 새로 입력한 경우에만 체크.
+    const emailTrimmed = formData.email?.trim() ?? '';
+    const originalEmail = (userInfo?.mbrEncptEml ?? '').trim();
+    if (emailTrimmed.length > 0 && emailTrimmed !== originalEmail) {
       if (!isEmailChecked || !emailAvailable) {
         showAlert(t('emailDuplicateCheckCompleteReminder'), t('error'));
         return;
