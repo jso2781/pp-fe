@@ -55,9 +55,9 @@ src/
 ├── routes/                # 라우팅 설정
 │   ├── Router.tsx        # 메인 라우터
 │   ├── Layout.tsx        # 공통 레이아웃
-│   ├── BlankLayout.tsx   # 빈 레이아웃 (Header/Footer 없음)
-│   └── muiTheme.ts       # MUI 테마 설정
+│   └── BlankLayout.tsx   # 빈 레이아웃 (Header/Footer 없음)
 └── styles/                # 스타일 파일
+    ├── muiTheme.ts       # MUI 테마 설정
     ├── ko/               # 한국어 스타일
     └── en/               # 영어 스타일
 ```

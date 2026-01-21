@@ -55,6 +55,7 @@ import ScreenViewer from '@/pages/screens/ScreenViewer'
 
 import { normalizeLang, FALLBACK_LANG, detectBrowserLang } from "./lang";
 import { AuthProvider } from '@/contexts/AuthContext';
+import { DialogProvider } from '@/contexts/DialogContext';
 
 type LangElementProps = {
   byLang: Record<string, JSX.Element>;
@@ -147,7 +148,8 @@ const LangGuard = ({ children }: { children: JSX.Element }) => {
 export default function Router() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <DialogProvider>
+        <BrowserRouter>
         <Routes>
           {/* 공통 레이아웃 */}
           <Route element={<LangGuard><Layout /></LangGuard>}>
@@ -202,6 +204,7 @@ export default function Router() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </DialogProvider>
     </AuthProvider>
   )
 }

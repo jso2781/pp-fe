@@ -1,0 +1,410 @@
+/**
+ * DialogContext 사용 예시 파일
+ * 
+ * 이 파일은 참고용 예시입니다. 실제 프로젝트에서 사용할 때는
+ * 각 컴포넌트에서 useDialog 훅을 import해서 사용하세요.
+ */
+
+import { useDialog } from '@/contexts/DialogContext'
+import { showAlert } from '@/features/ui/uiSlice'
+import { Button } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+
+/**
+ * 예시 컴포넌트: showAlert 사용법
+ */
+export function AlertExample() {
+  const { showAlert } = useDialog()
+  const { t } = useTranslation()
+
+  // 예시 1: 기본 사용 (메시지만)
+  const handleBasicAlert = () => {
+    showAlert('저장되었습니다.')
+  }
+
+  // 예시 2: 제목과 함께 사용
+  const handleAlertWithTitle = () => {
+    showAlert('저장되었습니다.', '성공')
+  }
+
+  // 예시 3: onConfirm 콜백 사용
+  const handleAlertWithCallback = () => {
+    showAlert(
+      '저장되었습니다.',
+      '성공',
+      () => {
+        console.log('확인 버튼 클릭됨')
+        // 추가 작업 수행 (예: 페이지 이동, 상태 업데이트 등)
+      }
+    )
+  }
+
+  // 예시 4: i18n 사용
+  const handleI18nAlert = () => {
+    showAlert(
+      t('saveSuccess') || '저장되었습니다.',
+      t('success') || '성공',
+      () => {
+        console.log('저장 완료 후 처리')
+      }
+    )
+  }
+
+  // 예시 5: API 호출 후 성공 메시지
+  const handleApiSuccess = async () => {
+    try {
+      // API 호출
+      // await someApiCall()
+      showAlert('데이터가 성공적으로 저장되었습니다.', '저장 완료')
+    } catch (error) {
+      showAlert('저장 중 오류가 발생했습니다.', '오류')
+    }
+  }
+
+  return (
+    <div>
+      <Button onClick={handleBasicAlert}>기본 Alert</Button>
+      <Button onClick={handleAlertWithTitle}>제목 포함 Alert</Button>
+      <Button onClick={handleAlertWithCallback}>콜백 포함 Alert</Button>
+      <Button onClick={handleI18nAlert}>i18n Alert</Button>
+      <Button onClick={handleApiSuccess}>API 성공 Alert</Button>
+    </div>
+  )
+}
+
+/**
+ * 예시 컴포넌트: showConfirm 사용법
+ */
+export function ConfirmExample() {
+  const { showConfirm } = useDialog()
+  const { t } = useTranslation()
+
+  // 예시 1: 기본 사용 (메시지만)
+  const handleBasicConfirm = () => {
+    showConfirm('정말 삭제하시겠습니까?')
+  }
+
+  // 예시 2: 제목과 함께 사용
+  const handleConfirmWithTitle = () => {
+    showConfirm('정말 삭제하시겠습니까?', '삭제 확인')
+  }
+
+  // 예시 3: onConfirm만 사용 (취소는 기본 동작)
+  const handleConfirmOnly = () => {
+    showConfirm(
+      '정말 삭제하시겠습니까?',
+      '삭제 확인',
+      () => {
+        console.log('삭제 실행')
+        // 실제 삭제 로직
+      }
+    )
+  }
+
+  // 예시 4: onConfirm과 onCancel 모두 사용
+  const handleConfirmWithBothCallbacks = () => {
+    showConfirm(
+      '변경사항이 저장되지 않았습니다.\n정말 나가시겠습니까?',
+      '나가기 확인',
+      () => {
+        console.log('확인 클릭 - 페이지 이동')
+        // 페이지 이동 로직
+      },
+      () => {
+        console.log('취소 클릭 - 현재 페이지 유지')
+        // 취소 시 아무 작업도 하지 않음
+      }
+    )
+  }
+
+  // 예시 5: 데이터 삭제 확인
+  const handleDeleteConfirm = () => {
+    showConfirm(
+      '이 데이터를 삭제하면 복구할 수 없습니다.\n정말 삭제하시겠습니까?',
+      '삭제 확인',
+      async () => {
+        try {
+          // await deleteApi(id)
+          console.log('삭제 완료')
+          // 삭제 성공 후 목록 새로고침 등
+        } catch (error) {
+          console.error('삭제 실패:', error)
+        }
+      },
+      () => {
+        console.log('삭제 취소')
+      }
+    )
+  }
+
+  // 예시 6: i18n 사용
+  const handleI18nConfirm = () => {
+    showConfirm(
+      t('deleteConfirmMessage') || '정말 삭제하시겠습니까?',
+      t('deleteConfirm') || '삭제 확인',
+      () => {
+        // 삭제 로직
+      },
+      () => {
+        // 취소 로직
+      }
+    )
+  }
+
+  // 예시 7: 로그아웃 확인
+  const handleLogoutConfirm = () => {
+    showConfirm(
+      '로그아웃 하시겠습니까?',
+      '로그아웃',
+      () => {
+        // 로그아웃 처리
+        // dispatch(logout())
+      },
+      () => {
+        // 취소 시 아무 작업도 하지 않음
+      }
+    )
+  }
+
+  return (
+    <div>
+      <Button onClick={handleBasicConfirm}>기본 Confirm</Button>
+      <Button onClick={handleConfirmWithTitle}>제목 포함 Confirm</Button>
+      <Button onClick={handleConfirmOnly}>확인만 콜백</Button>
+      <Button onClick={handleConfirmWithBothCallbacks}>확인/취소 콜백</Button>
+      <Button onClick={handleDeleteConfirm}>삭제 확인</Button>
+      <Button onClick={handleI18nConfirm}>i18n Confirm</Button>
+      <Button onClick={handleLogoutConfirm}>로그아웃 확인</Button>
+    </div>
+  )
+}
+
+/**
+ * 예시 컴포넌트: showDialog 사용법 (고급 옵션)
+ */
+export function DialogExample() {
+  const { showDialog } = useDialog()
+  const { t } = useTranslation()
+
+  // 예시 1: 기본 옵션 사용
+  const handleBasicDialog = () => {
+    showDialog({
+      message: '기본 다이얼로그입니다.',
+    })
+  }
+
+  // 예시 2: Alert 타입 (확인 버튼만)
+  const handleAlertDialog = () => {
+    showDialog({
+      message: '저장되었습니다.',
+      title: '성공',
+      type: 'alert',
+      confirmText: '확인',
+      onConfirm: () => {
+        console.log('확인 클릭')
+      },
+    })
+  }
+
+  // 예시 3: Confirm 타입 (확인/취소 버튼)
+  const handleConfirmDialog = () => {
+    showDialog({
+      message: '정말 삭제하시겠습니까?',
+      title: '삭제 확인',
+      type: 'confirm',
+      confirmText: '삭제',
+      cancelText: '취소',
+      onConfirm: () => {
+        console.log('삭제 실행')
+      },
+      onCancel: () => {
+        console.log('취소')
+      },
+    })
+  }
+
+  // 예시 4: 커스텀 버튼 텍스트
+  const handleCustomButtonText = () => {
+    showDialog({
+      message: '변경사항을 저장하시겠습니까?',
+      title: '저장 확인',
+      type: 'confirm',
+      confirmText: '저장',
+      cancelText: '저장 안 함',
+      onConfirm: () => {
+        console.log('저장 실행')
+      },
+      onCancel: () => {
+        console.log('저장 취소')
+      },
+    })
+  }
+
+  // 예시 5: i18n과 함께 사용
+  const handleI18nDialog = () => {
+    showDialog({
+      message: t('saveConfirmMessage') || '저장하시겠습니까?',
+      title: t('saveConfirm') || '저장 확인',
+      type: 'confirm',
+      confirmText: t('save') || '저장',
+      cancelText: t('cancel') || '취소',
+      onConfirm: () => {
+        // 저장 로직
+      },
+      onCancel: () => {
+        // 취소 로직
+      },
+    })
+  }
+
+  // 예시 6: 여러 줄 메시지
+  const handleMultiLineDialog = () => {
+    showDialog({
+      message: '다음 항목들이 삭제됩니다:\n- 항목 1\n- 항목 2\n- 항목 3\n\n정말 삭제하시겠습니까?',
+      title: '삭제 확인',
+      type: 'confirm',
+      confirmText: '삭제',
+      cancelText: '취소',
+      onConfirm: () => {
+        console.log('삭제 실행')
+      },
+    })
+  }
+
+  // 예시 7: API 호출과 함께 사용
+  const handleApiDialog = async () => {
+    try {
+      // API 호출
+      // const result = await someApiCall()
+      
+      showDialog({
+        message: '데이터가 성공적으로 저장되었습니다.',
+        title: '저장 완료',
+        type: 'alert',
+        confirmText: '확인',
+        onConfirm: () => {
+          // 저장 완료 후 추가 작업 (예: 페이지 이동)
+          // navigate('/somewhere')
+        },
+      })
+    } catch (error) {
+      showDialog({
+        message: '저장 중 오류가 발생했습니다.',
+        title: '오류',
+        type: 'alert',
+        confirmText: '확인',
+      })
+    }
+  }
+
+  // 예시 8: 조건부 다이얼로그
+  const handleConditionalDialog = (hasChanges: boolean) => {
+    if (hasChanges) {
+      showDialog({
+        message: '저장하지 않은 변경사항이 있습니다.\n정말 나가시겠습니까?',
+        title: '나가기 확인',
+        type: 'confirm',
+        confirmText: '나가기',
+        cancelText: '취소',
+        onConfirm: () => {
+          // 페이지 이동
+        },
+        onCancel: () => {
+          // 현재 페이지 유지
+        },
+      })
+    } else {
+      // 변경사항이 없으면 바로 이동
+      // navigate('/somewhere')
+    }
+  }
+
+  return (
+    <div>
+      <Button onClick={handleBasicDialog}>기본 Dialog</Button>
+      <Button onClick={handleAlertDialog}>Alert Dialog</Button>
+      <Button onClick={handleConfirmDialog}>Confirm Dialog</Button>
+      <Button onClick={handleCustomButtonText}>커스텀 버튼 텍스트</Button>
+      <Button onClick={handleI18nDialog}>i18n Dialog</Button>
+      <Button onClick={handleMultiLineDialog}>여러 줄 메시지</Button>
+      <Button onClick={handleApiDialog}>API 호출 예시</Button>
+      <Button onClick={() => handleConditionalDialog(true)}>조건부 Dialog</Button>
+    </div>
+  )
+}
+
+/**
+ * 실제 프로젝트에서 사용하는 예시: Login.tsx
+ */
+export function LoginExample() {
+  const { showAlert } = useDialog()
+  const { t } = useTranslation()
+
+  const handleLogin = async () => {
+    try {
+      // 로그인 API 호출
+      // const result = await loginApi(credentials)
+      
+      // 성공 시
+      showAlert(
+        t('loginSuccess') || '로그인되었습니다.',
+        t('success') || '성공',
+        () => {
+          // 로그인 성공 후 홈으로 이동
+          // navigate('/ko')
+        }
+      )
+    } catch (error: any) {
+      // 에러 처리
+      const errorInfo = typeof error === 'string' ? JSON.parse(error) : error
+      if (errorInfo?.code === -1) {
+        showAlert(
+          t('serverErrorMessage') || '서버 오류가 발생했습니다.',
+          t('error') || '오류'
+        )
+      } else {
+        showAlert(
+          t('loginFailed') || '로그인에 실패했습니다.',
+          t('error') || '오류'
+        )
+      }
+    }
+  }
+
+  return null // 실제 컴포넌트 내용
+}
+
+/**
+ * 실제 프로젝트에서 사용하는 예시: 삭제 기능
+ */
+export function DeleteExample() {
+  const { showConfirm } = useDialog()
+  const { t } = useTranslation()
+
+  const handleDelete = (id: number) => {
+    showConfirm(
+      t('deleteConfirmMessage') || '정말 삭제하시겠습니까?',
+      t('deleteConfirm') || '삭제 확인',
+      async () => {
+        try {
+          // await deleteApi(id)
+        //   showAlert(
+        //     t('deleteSuccess') || '삭제되었습니다.',
+        //     t('success') || '성공'
+        //   )
+          // 목록 새로고침
+        } catch (error) {
+        //   showAlert(
+        //     t('deleteFailed') || '삭제에 실패했습니다.',
+        //     t('error') || '오류'
+        //   )
+        }
+      },
+      () => {
+        // 취소 시 아무 작업도 하지 않음
+      }
+    )
+  }
+
+  return null // 실제 컴포넌트 내용
+}

@@ -13,6 +13,7 @@ import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitl
 import { useNavigate } from 'react-router-dom'
 import DepsLocation from '@/components/common/DepsLocation'
 import { useTranslation } from 'react-i18next';
+import { useDialog } from '@/contexts/DialogContext';
 
 const STORAGE_KEY_REMEMBER_ID = 'kids_login_remember_id'
 const STORAGE_KEY_PASSWORD_CHANGE_REMINDER = 'kids_password_change_reminder'
@@ -39,6 +40,7 @@ export default function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAuth(); // login 함수는 사용하지 않음 (Redux가 소스)
+  const { showAlert } = useDialog();
   const auth = useAppSelector((s) => s.auth);
   const { userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm, loading } = auth || {};
   // console.log("Login auth userInfo=", userInfo);
@@ -163,6 +165,9 @@ export default function Login() {
           setLoginFail(null)
           setErrors({})
         }
+        showAlert(t('loginFail'), t('error'),() =>{
+          return; // 로그인 실패 - 리다이렉트하지 않음
+        });
         return; // 로그인 실패 - 리다이렉트하지 않음
       }
       
@@ -170,11 +175,14 @@ export default function Login() {
       if (checkPasswordChangeReminder()) {
         setShowPasswordChangeReminder(true)
       } else {
-        // 비밀번호 변경 안내가 필요 없으면 정상 로그인 처리
-        // Redux 상태 업데이트 후 리다이렉트 (약간의 지연으로 동기화 완료 대기)
-        setTimeout(() => {
-          navigate('/ko', { replace: true }) // 일반 회원은 메인 페이지로
-        }, 100)
+
+        showAlert(t('loginSuccess'), t('success'),() =>{
+          // 비밀번호 변경 안내가 필요 없으면 정상 로그인 처리
+          // Redux 상태 업데이트 후 리다이렉트 (약간의 지연으로 동기화 완료 대기)
+          setTimeout(() => {
+            navigate('/ko', { replace: true }) // 일반 회원은 메인 페이지로
+          }, 100)
+        });
       }
     }catch(error: any){
       console.log("login await dispatch(loginThunk~~ error=",error);
@@ -185,7 +193,7 @@ export default function Login() {
         const errorInfo = typeof error === 'string' ? JSON.parse(error) : error;
         if(errorInfo?.code === -1){
           // alert(errorInfo.msg);
-          alert(t('serverErrorMessage'));
+          showAlert(t('systemErrorTitle'), t('systemErrorMessage'));
           return;
         }
       }catch(e){
