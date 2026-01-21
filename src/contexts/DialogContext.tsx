@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Divider } from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button,  Divider, ThemeProvider } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { muiTheme } from '@/styles/muiTheme';
 
 export type DialogType = 'alert' | 'confirm'
 
@@ -91,29 +92,31 @@ export function DialogProvider({ children }: { children: ReactNode }) {
   }), [showAlert, showConfirm, showDialog])
 
   return (
+    <ThemeProvider theme={muiTheme}>
     <DialogContext.Provider value={value}>
       {children}
       <Dialog
+        className="common-alert"
         open={open}
         onClose={handleClose}
-        maxWidth="sm"
+        maxWidth="xs"
         fullWidth
+        hideBackdrop
         disableEscapeKeyDown={dialogOptions.type === 'alert'}
       >
         {dialogOptions.title && (
           <>
-            <DialogTitle>{dialogOptions.title}</DialogTitle>
-            <Divider />
+            <DialogTitle className="modal-title">
+              <h2>{dialogOptions.title}</h2>
+            </DialogTitle>
           </>
         )}
-        <DialogContent>
-          <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
+        <DialogContent className="modal-content">
             {dialogOptions.message}
-          </Typography>
         </DialogContent>
-        <DialogActions>
+        <DialogActions className="modal-footer">
           {dialogOptions.type === 'confirm' && (
-            <Button onClick={handleClose}>
+            <Button variant="outlined" onClick={handleClose}>
               {dialogOptions.cancelText || t('cancel') || '취소'}
             </Button>
           )}
@@ -127,6 +130,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
         </DialogActions>
       </Dialog>
     </DialogContext.Provider>
+    </ThemeProvider>
   )
 }
 
