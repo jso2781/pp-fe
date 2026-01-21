@@ -9,7 +9,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useAuth } from '@/contexts/AuthContext'
 import { login as loginThunk } from '@/features/auth/AuthThunks';
-import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, Link, Stack, TextField, Typography, List, ListItem } from '@mui/material';
+import { Box, Button, Checkbox, Divider, FormControlLabel, Link, Stack, TextField, Typography, List, ListItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom'
 import DepsLocation from '@/components/common/DepsLocation'
 import { useTranslation } from 'react-i18next';
@@ -40,7 +40,7 @@ export default function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAuth(); // login 함수는 사용하지 않음 (Redux가 소스)
-  const { showAlert } = useDialog();
+  const { showAlert, showConfirmBackdrop, showDialogBackdrop } = useDialog();
   const auth = useAppSelector((s) => s.auth);
   const { userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm, loading } = auth || {};
   // console.log("Login auth userInfo=", userInfo);
@@ -54,8 +54,6 @@ export default function Login() {
   const [errors, setErrors] = useState<Partial<Record<keyof LoginValues, string>>>({})
   const [loginFail, setLoginFail] = useState<LoginFailInfo | null>(null)
   const [localFailCount, setLocalFailCount] = useState(0)
-  const [showPasswordErrorPopup, setShowPasswordErrorPopup] = useState(false)
-  const [showPasswordChangeReminder, setShowPasswordChangeReminder] = useState(false)
   const hasCheckedAuth = useRef(false);
   const [isRehydrated, setIsRehydrated] = useState(false) // Redux Persist rehydrate 완료 여부
 
@@ -146,10 +144,15 @@ export default function Login() {
       if(!userInfo && pswdErrNmtm > 0) {
         setLocalFailCount(pswdErrNmtm);
 
-        // 5회째 실패 시 팝업 표시
+        // 5회째 실패 시 팝업 표시 (showConfirmBackdrop)
         if (pswdErrNmtm >= MAX_FAIL_COUNT) {
-          setShowPasswordErrorPopup(true);
           setLoginFail(null);
+          showConfirmBackdrop(
+            t('passwordError5TimesMessage'),
+            t('passwordError5Times'),
+            () => navigate('/screens/KIDS-PP-US-LG-08'),
+            () => {}
+          );
           return; // 로그인 실패 - 리다이렉트하지 않음
         }
 
@@ -171,11 +174,25 @@ export default function Login() {
         return; // 로그인 실패 - 리다이렉트하지 않음
       }
       
-      // 비밀번호 변경 안내 팝업 표시 여부 확인
+      // 비밀번호 변경 안내 팝업 표시 여부 확인 (showDialogBackdrop)
       if (checkPasswordChangeReminder()) {
-        setShowPasswordChangeReminder(true)
+        showDialogBackdrop({
+          message: `${t('passwordChangeReminderMessage')}\n\n${t('passwordChangeReminderMessage2')}`,
+          title: t('passwordChangeTitle'),
+          type: 'confirm',
+          cancelText: t('laterChange'),
+          confirmText: t('nowChange'),
+          onCancel: () => {
+            const nextReminderDate = new Date();
+            nextReminderDate.setDate(nextReminderDate.getDate() + PASSWORD_CHANGE_REMINDER_DAYS);
+            sessionStorage.setItem(STORAGE_KEY_PASSWORD_CHANGE_REMINDER, nextReminderDate.toISOString());
+            navigate('/ko', { replace: true });
+          },
+          onConfirm: () => {
+            navigate('/screens/KIDS-PP-US-LG-09');
+          },
+        });
       } else {
-
         setTimeout(() => {
           navigate('/ko', { replace: true }) // 일반 회원은 메인 페이지로
         }, 100);
@@ -201,10 +218,15 @@ export default function Login() {
 
       setLocalFailCount(nextCount);
 
-      // 5회째 실패 시 팝업 표시
+      // 5회째 실패 시 팝업 표시 (showConfirmBackdrop)
       if (nextCount >= MAX_FAIL_COUNT) {
-        setShowPasswordErrorPopup(true);
         setLoginFail(null);
+        showConfirmBackdrop(
+          t('passwordError5TimesMessage'),
+          t('passwordError5Times'),
+          () => navigate('/screens/KIDS-PP-US-LG-08'),
+          () => {}
+        );
         return;
       }
 
@@ -398,85 +420,6 @@ export default function Login() {
         </Box>
       </Box>
 
-      {/* 비밀번호 5회 오류 팝업 */}
-      <Dialog
-        open={showPasswordErrorPopup}
-        onClose={() => setShowPasswordErrorPopup(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>{t('passwordError5Times')}</DialogTitle>
-        <Divider />
-        <DialogContent>
-          <Typography variant="body1">
-            {t('passwordError5TimesMessage')}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowPasswordErrorPopup(false)}>{t('cancel')}</Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setShowPasswordErrorPopup(false)
-              navigate('/screens/KIDS-PP-US-LG-08') // 비밀번호 찾기 페이지로 이동
-            }}
-          >
-            {t('confirm')}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* 비밀번호 변경 안내 팝업 (KIDS-PP-US-LG-16) */}
-      <Dialog
-        open={showPasswordChangeReminder}
-        onClose={undefined} // 팝업은 버튼으로만 닫을 수 있음
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>{t('passwordChangeTitle')}</DialogTitle>
-        <Divider />
-        <DialogContent>
-          <Typography variant="body1" sx={{ mb: 1 }}>
-            {t('passwordChangeReminderMessage')}
-          </Typography>
-          <Typography variant="body1">
-            {t('passwordChangeReminderMessage2')}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              // 나중에 변경: 팝업 닫고 +80일 후 다시 알림
-              // 해당 회원의 비밀번호 유효기간을 버튼을 클릭한 일자를 기준으로 +80일 뒤에 다시 알림 메시지 노출
-              const nextReminderDate = new Date()
-              nextReminderDate.setDate(nextReminderDate.getDate() + PASSWORD_CHANGE_REMINDER_DAYS)
-              sessionStorage.setItem(STORAGE_KEY_PASSWORD_CHANGE_REMINDER, nextReminderDate.toISOString())
-              setShowPasswordChangeReminder(false)
-              
-              // 정상 로그인 처리 계속
-              // TODO: 실제 로그인 성공 처리
-              // const userType = response.data.userType
-              // if (userType === 'expert') {
-              //   navigate('/screens/KIDS-PP-US-MT-01')
-              // } else {
-              //   navigate('/ko')
-              // }
-            }}
-          >
-            {t('laterChange')}
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              // 지금 변경: 팝업 닫고 비밀번호 재설정 페이지로 이동
-              setShowPasswordChangeReminder(false)
-              navigate('/screens/KIDS-PP-US-LG-09')
-            }}
-          >
-            {t('nowChange')}
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   )
 }
