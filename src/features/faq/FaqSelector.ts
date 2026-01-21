@@ -34,68 +34,37 @@ export const selectViewFaqList = createSelector(
 );
 
 const dummy: FaqItem[] = [
-  {category: 'tempClsf1', content: 'content', title: '1'},
-  {category: 'tempClsf1', content: 'content', title: '2'},
-  {category: 'tempClsf1', content: 'content', title: '3'},
-  {category: 'tempClsf1', content: 'content', title: '4'},
-  {category: 'tempClsf1', content: 'content', title: '5'},
-  {category: 'tempClsf1', content: 'content', title: '6'},
-  {category: 'tempClsf1', content: 'content', title: '7'},
-  {category: 'tempClsf1', content: 'content', title: '8'},
-  {category: 'tempClsf1', content: 'content', title: '9'},
-  {category: 'tempClsf1', content: 'content', title: '10'},
-  {category: 'tempClsf1', content: 'content', title: '11'},
-  {category: 'tempClsf1', content: 'content', title: '12'},
-  {category: 'tempClsf1', content: 'content', title: '13'},
-  {category: 'tempClsf1', content: 'content', title: '14'},
-  {category: 'tempClsf1', content: 'content', title: '15'},
-  {category: 'tempClsf1', content: 'content', title: '16'},
-  {category: 'tempClsf1', content: 'content', title: '17'},
-  {category: 'tempClsf1', content: 'content', title: '18'},
-  {category: 'tempClsf1', content: 'content', title: '19'},
-  {category: 'tempClsf1', content: 'content', title: '20'},
-  {category: 'tempClsf1', content: 'content', title: '21'},
-  {category: 'tempClsf1', content: 'content', title: '22'},
-  {category: 'tempClsf1', content: 'content', title: '23'},
-  {category: 'tempClsf1', content: 'content', title: '24'},
-  {category: 'tempClsf1', content: 'content', title: '25'},
-  {category: 'tempClsf1', content: 'content', title: '26'},
-  {category: 'tempClsf1', content: 'content', title: '27'},
-  {category: 'tempClsf1', content: 'content', title: '28'},
-  {category: 'tempClsf1', content: 'content', title: '29'},
-  {category: 'tempClsf1', content: 'content', title: '30'},
-  {category: 'tempClsf1', content: 'content', title: '31'},
-  {category: 'tempClsf1', content: 'content', title: '32'},
-  {category: 'tempClsf1', content: 'content', title: '33'},
+  {category: 'ADEF_DCLR', content: 'content', title: '1'},
+  {category: 'ADEF_DCLR', content: 'content', title: '2'},
+  {category: 'ADEF_DCLR', content: 'content', title: '3'},
+  {category: 'ADEF_DCLR', content: 'content', title: '4'},
+  {category: 'ADEF_DCLR', content: 'content', title: '5'},
+  {category: 'ADEF_DCLR', content: 'content', title: '6'},
+  {category: 'ADEF_DCLR', content: 'content', title: '7'},
+  {category: 'ADEF_DCLR', content: 'content', title: '8'},
+  {category: 'ADEF_DCLR', content: 'content', title: '9'},
+  {category: 'ADEF_DCLR', content: 'content', title: '10'},
+  {category: 'ADEF_DCLR', content: 'content', title: '11'},
+  {category: 'ADEF_DCLR', content: 'content', title: '12'},
+  {category: 'ADEF_DCLR', content: 'content', title: '13'},
+  {category: 'ADEF_DCLR', content: 'content', title: '14'},
+  {category: 'ADEF_DCLR', content: 'content', title: '15'},
+  {category: 'ADEF_DCLR', content: 'content', title: '16'},
+  {category: 'ADEF_DCLR', content: 'content', title: '17'},
+  {category: 'ADEF_DCLR', content: 'content', title: '18'},
+  {category: 'ADEF_DCLR', content: 'content', title: '19'},
+  {category: 'ADEF_DCLR', content: 'content', title: '20'},
+  {category: 'ADEF_DEFN', content: 'content', title: '21'},
+  {category: 'ADEF_DEFN', content: 'content', title: '22'},
+  {category: 'ADEF_DEFN', content: 'content', title: '23'},
+  {category: 'ADEF_DEFN', content: 'content', title: '24'},
+  {category: 'ADEF_DEFN', content: 'content', title: '25'},
+  {category: 'ADEF_DEFN', content: 'content', title: '26'},
+  {category: 'ADEF_DEFN', content: 'content', title: '27'},
+  {category: 'ADEF_DEFN', content: 'content', title: '28'},
+  {category: 'ADEF_DEFN', content: 'content', title: '29'},
+  {category: 'ADEF_DEFN', content: 'content', title: '30'},
+  {category: 'ADEF_DEFN', content: 'content', title: '31'},
+  {category: 'ADEF_DEFN', content: 'content', title: '32'},
+  {category: 'ADEF_DEFN', content: 'content', title: '33'},
 ]
-
-// export const sortedFaqAllListSelector = createSelector(
-//   [sortedFaqListSelector],
-//   (list: FaqRVO[]): FaqItem[] => list
-//     .filter((vo): vo is FaqRVO & { faqTtl: string; faqAns: string; faqClsf: string } =>
-//       typeof vo.faqTtl === 'string' && typeof vo.faqAns === 'string' && typeof vo.faqClsf === 'string')
-//     .map(vo => ({
-//       title: vo.faqTtl,
-//       content: vo.faqAns,
-//       category: vo.faqClsf
-//     }))
-// );
-
-// export const sortedFaqCategoriListSelector = createSelector(
-//   [sortedFaqAllListSelector],
-//   (list) => list.reduce((acc: FaqCategory[], cur: FaqItem) => {
-//     if(!cur.category) return acc;
-//     const idx = acc.findIndex(v => v.category === cur.category);
-//     if(idx !== -1) {
-//         acc[idx].item.push({title: cur.title, content: cur.content, category: cur.category})
-//         return acc;
-//     } else {
-//         acc.push({
-//             category: cur.category,
-//             item: [{title: cur.title, content: cur.content, category: cur.category}]
-//         })
-//         return acc;
-//     }
-//   }, [])
-// );
-
