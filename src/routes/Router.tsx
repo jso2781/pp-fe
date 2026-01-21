@@ -28,6 +28,8 @@ import PrivacyPolicyKo from '@/pages/ko/etc/PrivacyPolicy';
 import CctvPolicyKo from '@/pages/ko/etc/CctvPolicy';
 import EmailDenyKo from '@/pages/ko/etc/EmailDeny';
 import ExpertMemberApplyKo from '@/pages/ko/expert/ExpertMemberApply'
+import FindIdKo from '@/pages/ko/auth/FindId';
+import FindPwKo from '@/pages/ko/auth/FindPw';
 
 // 게시판 페이지 작업중
 import NewsNoticeListKo from '@/pages/ko/news/NewsNoticeList'
@@ -198,6 +200,8 @@ export default function Router() {
               <Route path="/:lang/auth/PasswordConfirm" element={<LangElement byLang={{ ko: <ProtectedRoute><PasswordConfirmKo /></ProtectedRoute>, en: <ProtectedRoute><PasswordConfirmKo /></ProtectedRoute> }} />} />
               <Route path="/:lang/auth/EditProfile" element={<LangElement byLang={{ ko: <ProtectedRoute><EditProfileKo /></ProtectedRoute>, en: <ProtectedRoute><EditProfileKo /></ProtectedRoute> }} />} />
               <Route path="/:lang/auth/WithDrawal" element={<LangElement byLang={{ ko: <ProtectedRoute><WithDrawalKo /></ProtectedRoute>, en: <ProtectedRoute><WithDrawalKo /></ProtectedRoute> }} />} />
+              <Route path="/:lang/auth/FindId" element={<LangElement byLang={{ ko: <FindIdKo />, en: <FindIdKo /> }} />} />
+              <Route path="/:lang/auth/FindPw" element={<LangElement byLang={{ ko: <FindPwKo />, en: <FindPwKo /> }} />} />
 
               {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
               <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />

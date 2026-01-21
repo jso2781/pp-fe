@@ -150,7 +150,7 @@ export default function Login() {
           showConfirmBackdrop(
             t('passwordError5TimesMessage'),
             t('passwordError5Times'),
-            () => navigate('/screens/KIDS-PP-US-LG-08'),
+            () => navigate('/ko/auth/findPw'),
             () => {}
           );
           return; // 로그인 실패 - 리다이렉트하지 않음
@@ -224,7 +224,7 @@ export default function Login() {
         showConfirmBackdrop(
           t('passwordError5TimesMessage'),
           t('passwordError5Times'),
-          () => navigate('/screens/KIDS-PP-US-LG-08'),
+          () => navigate('/ko/auth/findPw'),
           () => {}
         );
         return;
@@ -382,7 +382,7 @@ export default function Login() {
                             <ListItem disablePadding className="account-utils__item">
                               <Link
                                 component="button"
-                                onClick={() => navigate('/screens/KIDS-PP-US-LG-06')}
+                                onClick={() => navigate('/ko/auth/FindId')}
                                 className="account-utils__link"
                               >
                                 {t('findId')}
@@ -394,7 +394,7 @@ export default function Login() {
                             <ListItem disablePadding className="account-utils__item">
                               <Link
                                 component="button"
-                                onClick={() => navigate('/screens/KIDS-PP-US-LG-08')}
+                                onClick={() => navigate('/ko/auth/FindPw')}
                                 className="account-utils__link"
                               >
                                 {t('findPassword')}
