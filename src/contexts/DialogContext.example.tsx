@@ -1,13 +1,19 @@
 /**
  * DialogContext 사용 예시 파일
- * 
- * 이 파일은 참고용 예시입니다. 실제 프로젝트에서 사용할 때는
- * 각 컴포넌트에서 useDialog 훅을 import해서 사용하세요.
+ *
+ * [배경 음영 없음] showDialog, showAlert, showConfirm
+ *   - AlertExample, ConfirmExample, DialogExample
+ *
+ * [배경 음영 있음] showDialogBackdrop, showAlertBackdrop, showConfirmBackdrop
+ *   - AlertBackdropExample, ConfirmBackdropExample, DialogBackdropExample
+ *
+ * [동시 사용] BothAtOnceExample — 두 종류는 상태를 공유하지 않아 동시에 띄워도 서로 영향 없음
+ *
+ * 사용: useDialog() 훅으로 위 함수들을 꺼내 사용.
  */
 
 import { useDialog } from '@/contexts/DialogContext'
-import { showAlert } from '@/features/ui/uiSlice'
-import { Button } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 /**
@@ -330,6 +336,133 @@ export function DialogExample() {
       <Button onClick={handleApiDialog}>API 호출 예시</Button>
       <Button onClick={() => handleConditionalDialog(true)}>조건부 Dialog</Button>
     </div>
+  )
+}
+
+// --- 배경 음영 있는 모달 (showDialogBackdrop, showAlertBackdrop, showConfirmBackdrop) ---
+
+/**
+ * 예시: showAlertBackdrop (배경 음영 있음, X 버튼/바깥 클릭으로 닫기)
+ * - 중요한 알림, 블로킹 메시지에 적합
+ */
+export function AlertBackdropExample() {
+  const { showAlertBackdrop } = useDialog()
+  const { t } = useTranslation()
+
+  const handleImportantAlert = () => {
+    showAlertBackdrop('중요한 공지사항입니다. 배경이 어두워져 사용자 주의를 끕니다.', '중요 알림')
+  }
+
+  const handleWithCallback = () => {
+    showAlertBackdrop(
+      '처리가 완료되었습니다.',
+      '완료',
+      () => console.log('확인 후 다음 작업')
+    )
+  }
+
+  return (
+    <Stack gap={1}>
+      <Typography variant="subtitle2">배경 음영 있음 (Alert)</Typography>
+      <Stack direction="row" gap={1} flexWrap="wrap">
+        <Button variant="contained" onClick={handleImportantAlert}>중요 Alert (Backdrop)</Button>
+        <Button variant="outlined" onClick={handleWithCallback}>콜백 포함 (Backdrop)</Button>
+      </Stack>
+    </Stack>
+  )
+}
+
+/**
+ * 예시: showConfirmBackdrop (배경 음영 있음)
+ * - 삭제/나가기 등 중요 확인에 적합
+ */
+export function ConfirmBackdropExample() {
+  const { showConfirmBackdrop } = useDialog()
+
+  const handleDelete = () => {
+    showConfirmBackdrop(
+      '이 작업은 되돌릴 수 없습니다. 정말 진행하시겠습니까?',
+      '최종 확인',
+      () => console.log('확인'),
+      () => console.log('취소')
+    )
+  }
+
+  const handleLeave = () => {
+    showConfirmBackdrop(
+      '저장하지 않은 내용이 있습니다.\n정말 나가시겠습니까?',
+      '나가기',
+      () => console.log('나가기'),
+      () => console.log('취소')
+    )
+  }
+
+  return (
+    <Stack gap={1}>
+      <Typography variant="subtitle2">배경 음영 있음 (Confirm)</Typography>
+      <Stack direction="row" gap={1} flexWrap="wrap">
+        <Button variant="contained" color="error" onClick={handleDelete}>삭제 확인 (Backdrop)</Button>
+        <Button variant="outlined" onClick={handleLeave}>나가기 확인 (Backdrop)</Button>
+      </Stack>
+    </Stack>
+  )
+}
+
+/**
+ * 예시: showDialogBackdrop (배경 음영 있음, DialogOptions 전체 사용)
+ */
+export function DialogBackdropExample() {
+  const { showDialogBackdrop } = useDialog()
+
+  const handleCustom = () => {
+    showDialogBackdrop({
+      message: '배경 음영이 있는 커스텀 다이얼로그입니다. X 버튼과 바깥 클릭으로 닫을 수 있습니다.',
+      title: 'Backdrop Dialog',
+      type: 'confirm',
+      confirmText: '확인',
+      cancelText: '취소',
+      onConfirm: () => console.log('확인'),
+      onCancel: () => console.log('취소'),
+    })
+  }
+
+  return (
+    <Stack gap={1}>
+      <Typography variant="subtitle2">배경 음영 있음 (Dialog)</Typography>
+      <Button variant="contained" onClick={handleCustom}>showDialogBackdrop</Button>
+    </Stack>
+  )
+}
+
+/**
+ * 예시: no-backdrop와 backdrop 동시 사용
+ * - 두 종류는 상태를 공유하지 않으므로 동시에 띄워도 서로 영향 없음
+ */
+export function BothAtOnceExample() {
+  const { showAlert, showAlertBackdrop } = useDialog()
+
+  const handleNoBackdrop = () => {
+    showAlert('배경 음영 없는 알림입니다.', 'No Backdrop')
+  }
+
+  const handleBackdrop = () => {
+    showAlertBackdrop('배경 음영 있는 알림입니다.', 'With Backdrop')
+  }
+
+  const handleBoth = () => {
+    showAlert('먼저: 배경 없음 (뒤에 보임)', '1. No Backdrop')
+    showAlertBackdrop('나중: 배경 있음 (앞에 표시, 서로 독립)', '2. With Backdrop')
+  }
+
+  return (
+    <Stack gap={2}>
+      <Typography variant="subtitle2">no-backdrop / backdrop 동시 사용 (상태 독립)</Typography>
+      <Stack direction="row" gap={1} flexWrap="wrap">
+        <Button variant="outlined" onClick={handleNoBackdrop}>No Backdrop</Button>
+        <Button variant="contained" onClick={handleBackdrop}>With Backdrop</Button>
+        <Button variant="contained" color="secondary" onClick={handleBoth}>두 개 동시에 띄우기</Button>
+      </Stack>
+    </Stack>
   )
 }
 

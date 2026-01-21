@@ -176,13 +176,9 @@ export default function Login() {
         setShowPasswordChangeReminder(true)
       } else {
 
-        showAlert(t('loginSuccess'), t('success'),() =>{
-          // 비밀번호 변경 안내가 필요 없으면 정상 로그인 처리
-          // Redux 상태 업데이트 후 리다이렉트 (약간의 지연으로 동기화 완료 대기)
-          setTimeout(() => {
-            navigate('/ko', { replace: true }) // 일반 회원은 메인 페이지로
-          }, 100)
-        });
+        setTimeout(() => {
+          navigate('/ko', { replace: true }) // 일반 회원은 메인 페이지로
+        }, 100);
       }
     }catch(error: any){
       console.log("login await dispatch(loginThunk~~ error=",error);

@@ -1,7 +1,17 @@
 import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button,  Divider, ThemeProvider } from '@mui/material'
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  ThemeProvider,
+  IconButton,
+  Typography,
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 import { useTranslation } from 'react-i18next'
-import { muiTheme } from '@/styles/muiTheme';
+import { muiTheme } from '@/styles/muiTheme'
 
 export type DialogType = 'alert' | 'confirm'
 
@@ -15,121 +25,214 @@ export interface DialogOptions {
   onCancel?: () => void
 }
 
-interface DialogContextType {
+/** No-backdrop: showDialog, showAlert, showConfirm. With-backdrop: showDialogBackdrop, showAlertBackdrop, showConfirmBackdrop. */
+export interface DialogContextType {
+  /** No-backdrop Dialog */
+  showDialog: (options: DialogOptions) => void
   showAlert: (message: string, title?: string, onConfirm?: () => void) => void
   showConfirm: (message: string, title?: string, onConfirm?: () => void, onCancel?: () => void) => void
-  showDialog: (options: DialogOptions) => void
+  /** With-backdrop (overlay) Dialog */
+  showDialogBackdrop: (options: DialogOptions) => void
+  showAlertBackdrop: (message: string, title?: string, onConfirm?: () => void) => void
+  showConfirmBackdrop: (message: string, title?: string, onConfirm?: () => void, onCancel?: () => void) => void
 }
 
 const DialogContext = createContext<DialogContextType | undefined>(undefined)
 
+const defaultOptions: DialogOptions = { message: '', type: 'alert' }
+
 export function DialogProvider({ children }: { children: ReactNode }) {
   const { t } = useTranslation()
-  const [open, setOpen] = useState(false)
-  const [dialogOptions, setDialogOptions] = useState<DialogOptions>({
-    message: '',
-    type: 'alert',
-  })
 
-  const showDialog = useCallback((options: DialogOptions) => {
-    setDialogOptions({
-      type: 'alert',
+  // --- No-backdrop (independent state) ---
+  const [openNoBackdrop, setOpenNoBackdrop] = useState(false)
+  const [optionsNoBackdrop, setOptionsNoBackdrop] = useState<DialogOptions>(defaultOptions)
+
+  // --- With-backdrop (independent state) ---
+  const [openBackdrop, setOpenBackdrop] = useState(false)
+  const [optionsBackdrop, setOptionsBackdrop] = useState<DialogOptions>(defaultOptions)
+
+  const baseOpts = useMemo(
+    () => ({
       confirmText: t('confirm') || '확인',
       cancelText: t('cancel') || '취소',
-      ...options,
-    })
-    setOpen(true)
-  }, [t])
+    }),
+    [t]
+  )
 
-  const showAlert = useCallback((message: string, title?: string, onConfirm?: () => void) => {
-    showDialog({
-      message,
-      title: title || (t('alert') || '알림'),
-      type: 'alert',
-      onConfirm: () => {
-        setOpen(false)
-        onConfirm?.()
-      },
-    })
-  }, [showDialog, t])
+  // ----- No-backdrop APIs -----
 
-  const showConfirm = useCallback((
-    message: string,
-    title?: string,
-    onConfirm?: () => void,
-    onCancel?: () => void
-  ) => {
-    showDialog({
-      message,
-      title: title || (t('confirm') || '확인'),
-      type: 'confirm',
-      onConfirm: () => {
-        setOpen(false)
-        onConfirm?.()
-      },
-      onCancel: () => {
-        setOpen(false)
-        onCancel?.()
-      },
-    })
-  }, [showDialog, t])
+  const showDialog = useCallback(
+    (options: DialogOptions) => {
+      setOptionsNoBackdrop({ type: 'alert', ...baseOpts, ...options })
+      setOpenNoBackdrop(true)
+    },
+    [baseOpts]
+  )
 
-  const handleClose = useCallback(() => {
-    if (dialogOptions.type === 'alert' || dialogOptions.onCancel) {
-      setOpen(false)
-      dialogOptions.onCancel?.()
-    }
-  }, [dialogOptions])
+  const showAlert = useCallback(
+    (message: string, title?: string, onConfirm?: () => void) => {
+      showDialog({
+        message,
+        title: title || (t('alert') || '알림'),
+        type: 'alert',
+        onConfirm,
+      })
+    },
+    [showDialog, t]
+  )
 
-  const handleConfirm = useCallback(() => {
-    dialogOptions.onConfirm?.()
-  }, [dialogOptions])
+  const showConfirm = useCallback(
+    (message: string, title?: string, onConfirm?: () => void, onCancel?: () => void) => {
+      showDialog({
+        message,
+        title: title || (t('confirm') || '확인'),
+        type: 'confirm',
+        onConfirm,
+        onCancel,
+      })
+    },
+    [showDialog, t]
+  )
 
-  const value = useMemo(() => ({
-    showAlert,
-    showConfirm,
-    showDialog,
-  }), [showAlert, showConfirm, showDialog])
+  const handleCloseNoBackdrop = useCallback(() => {
+    setOpenNoBackdrop(false)
+    optionsNoBackdrop.onCancel?.()
+  }, [optionsNoBackdrop])
+
+  const handleConfirmNoBackdrop = useCallback(() => {
+    setOpenNoBackdrop(false)
+    optionsNoBackdrop.onConfirm?.()
+  }, [optionsNoBackdrop])
+
+  // ----- With-backdrop APIs -----
+
+  const showDialogBackdrop = useCallback(
+    (options: DialogOptions) => {
+      setOptionsBackdrop({ type: 'alert', ...baseOpts, ...options })
+      setOpenBackdrop(true)
+    },
+    [baseOpts]
+  )
+
+  const showAlertBackdrop = useCallback(
+    (message: string, title?: string, onConfirm?: () => void) => {
+      showDialogBackdrop({
+        message,
+        title: title || (t('alert') || '알림'),
+        type: 'alert',
+        onConfirm,
+      })
+    },
+    [showDialogBackdrop, t]
+  )
+
+  const showConfirmBackdrop = useCallback(
+    (message: string, title?: string, onConfirm?: () => void, onCancel?: () => void) => {
+      showDialogBackdrop({
+        message,
+        title: title || (t('confirm') || '확인'),
+        type: 'confirm',
+        onConfirm,
+        onCancel,
+      })
+    },
+    [showDialogBackdrop, t]
+  )
+
+  const handleCloseBackdrop = useCallback(() => {
+    setOpenBackdrop(false)
+    optionsBackdrop.onCancel?.()
+  }, [optionsBackdrop])
+
+  const handleConfirmBackdrop = useCallback(() => {
+    setOpenBackdrop(false)
+    optionsBackdrop.onConfirm?.()
+  }, [optionsBackdrop])
+
+  const value = useMemo(
+    () => ({
+      showDialog,
+      showAlert,
+      showConfirm,
+      showDialogBackdrop,
+      showAlertBackdrop,
+      showConfirmBackdrop,
+    }),
+    [
+      showDialog,
+      showAlert,
+      showConfirm,
+      showDialogBackdrop,
+      showAlertBackdrop,
+      showConfirmBackdrop,
+    ]
+  )
 
   return (
     <ThemeProvider theme={muiTheme}>
-    <DialogContext.Provider value={value}>
-      {children}
-      <Dialog
-        className="common-alert"
-        open={open}
-        onClose={handleClose}
-        maxWidth="xs"
-        fullWidth
-        hideBackdrop
-        disableEscapeKeyDown={dialogOptions.type === 'alert'}
-      >
-        {dialogOptions.title && (
-          <>
+      <DialogContext.Provider value={value}>
+        {children}
+
+        {/* No-backdrop: independent state, does not affect backdrop modal */}
+        <Dialog
+          className="common-alert"
+          open={openNoBackdrop}
+          onClose={handleCloseNoBackdrop}
+          maxWidth="xs"
+          fullWidth
+          hideBackdrop
+          disableEscapeKeyDown={optionsNoBackdrop.type === 'alert'}
+        >
+          {optionsNoBackdrop.title && (
             <DialogTitle className="modal-title">
-              <h2>{dialogOptions.title}</h2>
+              <h2>{optionsNoBackdrop.title}</h2>
             </DialogTitle>
-          </>
-        )}
-        <DialogContent className="modal-content">
-            {dialogOptions.message}
-        </DialogContent>
-        <DialogActions className="modal-footer">
-          {dialogOptions.type === 'confirm' && (
-            <Button variant="outlined" onClick={handleClose}>
-              {dialogOptions.cancelText || t('cancel') || '취소'}
-            </Button>
           )}
-          <Button
-            variant="contained"
-            onClick={handleConfirm}
-            autoFocus
-          >
-            {dialogOptions.confirmText || t('confirm') || '확인'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </DialogContext.Provider>
+          <DialogContent className="modal-content">{optionsNoBackdrop.message}</DialogContent>
+          <DialogActions className="modal-footer">
+            {optionsNoBackdrop.type === 'confirm' && (
+              <Button variant="outlined" onClick={handleCloseNoBackdrop}>
+                {optionsNoBackdrop.cancelText ?? baseOpts.cancelText}
+              </Button>
+            )}
+            <Button variant="contained" onClick={handleConfirmNoBackdrop} autoFocus>
+              {optionsNoBackdrop.confirmText ?? baseOpts.confirmText}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* With-backdrop: independent state, does not affect no-backdrop modal */}
+        <Dialog
+          open={openBackdrop}
+          onClose={handleCloseBackdrop}
+          maxWidth="md"
+          fullWidth
+          disableEscapeKeyDown={optionsBackdrop.type === 'alert'}
+        >
+          {optionsBackdrop.title && (
+            <DialogTitle component="div" className="modal-title">
+              <h2>{optionsBackdrop.title}</h2>
+              <IconButton aria-label="닫기" onClick={handleCloseBackdrop} className="btn-modal-close">
+                <CloseIcon aria-hidden="true" />
+              </IconButton>
+            </DialogTitle>
+          )}
+          <DialogContent className="modal-content">
+            <Typography variant="body1">{optionsBackdrop.message}</Typography>
+          </DialogContent>
+          <DialogActions className="modal-footer">
+            {optionsBackdrop.type === 'confirm' && (
+              <Button variant="outlined" onClick={handleCloseBackdrop}>
+                {optionsBackdrop.cancelText ?? baseOpts.cancelText}
+              </Button>
+            )}
+            <Button variant="contained" onClick={handleConfirmBackdrop} autoFocus>
+              {optionsBackdrop.confirmText ?? baseOpts.confirmText}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </DialogContext.Provider>
     </ThemeProvider>
   )
 }
