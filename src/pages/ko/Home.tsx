@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef} from 'react'
+import { useMemo, useState, useRef, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Card, Grid, CardContent, Link, List, ListItem, Tab, Tabs, Typography, IconButton } from '@mui/material';
 import { OpenInNew, PlayArrow, Pause } from '@mui/icons-material'
@@ -11,17 +11,47 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/grid';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { selectMainContents } from '@/features/main/MainThunks';
+import type { PostVO } from '@/features/main/MainTypes';
+import { Link as RouterLink } from 'react-router-dom';
 
 type TabKey = 'all' | 'youtube' | 'insta' | 'blog';
-type SnsItem = { title: string; url: string };
+type SnsItem = { 
+  type: 'youtube' | 'insta' | 'blog';
+  title: string; 
+  url: string;
+  thumbnail: string;
+  desc: string;
+  videoId?: string;
+  data?: PostVO;
+};
 type SnsTab = { label: string; items: SnsItem[] };
 type SnsTabs = Record<TabKey, SnsTab>;
 
 export default function Home() {
+  const dispatch = useAppDispatch();
+  const { current } = useAppSelector((s) => s.main);
+  useEffect(() => {
+    dispatch(selectMainContents());
+  }, [dispatch]);
+
   const navigate = useNavigate();
   const [q, setQ] = useState('');
   const [tab, setTab] = useState<TabKey>('all');
-
+  
+  const baseUrl = import.meta.env.VITE_ANY_ID_STATIC_URL || '';
+  
+  // 썸네일 이미지 URL 생성 헬퍼 함수
+  const getThumbnailUrl = (item: { thmbFilePath?: string | null; thmbFileNm?: string | null }) => {
+    if (item.thmbFilePath && item.thmbFileNm) {
+      // 백슬래시를 슬래시로 변환하고, 경로 끝의 슬래시 정리
+      const normalizedPath = item.thmbFilePath.replace(/\\/g, '/').replace(/\/+$/, '');
+      const normalizedFileName = item.thmbFileNm.replace(/^\/+/, '');
+      return `${baseUrl}/api/atch/thumb/${normalizedPath}/${normalizedFileName}`;
+    }
+    return '/img/img_test.png';
+  };
 
   // ==========================================
   // Promotion Zone
@@ -74,46 +104,64 @@ export default function Home() {
   // SNS 탭
   // ==========================================
   const snsTabs = useMemo(() => {
-  const youtube = {
+    const youtube = {
       label: '유튜브',
-      items: [
-        { type: 'youtube', title: '장애인을 위한 의약품·의약외품 표시 제도 및 서비스', url: 'https://youtu.be', thumbnail: '', desc: '' },
-        { type: 'youtube', title: '열탈진과 열사병, 어떻게 다를까요?', url: 'https://youtu.be', thumbnail: '', desc: '' },
-        { type: 'youtube', title: '자라나라 머리머리! 두피 건강 꽉! 잡아요!', url: 'https://youtu.be', thumbnail: '', desc: '' },
-        { type: 'youtube', title: '간염의 A, B, C!', url: 'https://youtu.be', thumbnail: '', desc: '' },
-      ],
+      items: (current?.youtube || []).map((item) => ({
+        type: 'youtube' as const,
+        title: item.pstTtl || '',
+        url: item.mdfcnPrgrmId || `https://youtu.be/${item.videoId || ''}`,
+        thumbnail: getThumbnailUrl(item),
+        desc: item.pstCn || '',
+        videoId: item.videoId || '',
+        data: item,
+      })),
     };
 
     const insta = {
       label: '인스타그램',
-      items: [
-        { type: 'insta', title: '포스터·카툰 공모전 개최', url: 'https://www.instagram.com', thumbnail: '', desc: '' },
-        { type: 'insta', title: '집중호우 상황별 행동수칙', url: 'https://www.instagram.com', thumbnail: '', desc: '' },
-        { type: 'insta', title: '폭염대비 온열질환 예방수칙', url: 'https://www.instagram.com', thumbnail: '', desc: '' },
-        { type: 'insta', title: '마약류 식욕억제제, 올바르게 사용하는 법', url: 'https://www.instagram.com', thumbnail: '', desc: '' },
-      ],
+      items: (current?.insta || []).map((item) => ({
+        type: 'insta' as const,
+        title: item.pstTtl || '',
+        url: item.mdfcnPrgrmId || 'https://www.instagram.com',
+        thumbnail: getThumbnailUrl(item),
+        desc: item.pstCn || '',
+        data: item,
+      })),
     };
 
     const blog = {
       label: '블로그',
-      items: [
-        { type: 'blog', title: '의약품 부작용 피해구제 감동사례 2탄', url: 'https://blog.naver.com', thumbnail: '', desc: '' },
-        { type: 'blog', title: '첨단바이오 국내동향', url: 'https://blog.naver.com', thumbnail: '', desc: '' },
-        { type: 'blog', title: '병원에서 사용하는 약물은 어떻게 감시되고 있을까?', url: 'https://blog.naver.com', thumbnail: '', desc: '' },
-        { type: 'blog', title: '동물용 마약류의 범죄목적 사용 장면', url: 'https://blog.naver.com', thumbnail: '', desc: '' },
-      ],
+      items: (current?.blog || []).map((item) => ({
+        type: 'blog' as const,
+        title: item.pstTtl || '',
+        url: item.mdfcnPrgrmId || 'https://blog.naver.com',
+        thumbnail: getThumbnailUrl(item),
+        desc: item.pstCn || '',
+        data: item,
+      })),
     };
+
+    // all_sns 사용
+    const allItems: SnsItem[] = (current?.all_sns || []).map((item) => ({
+      type: (item.snsType === '유튜브' ? 'youtube' : item.snsType === '인스타' ? 'insta' : 'blog') as 'youtube' | 'insta' | 'blog',
+      title: item.pstTtl || '',
+      url: item.mdfcnPrgrmId || (item.videoId ? `https://youtu.be/${item.videoId}` : 'https://www.instagram.com'),
+      thumbnail: getThumbnailUrl(item),
+      desc: item.pstCn || '',
+      videoId: item.videoId || '',
+      data: item,
+    }));
 
     return {
       all: {
         label: '전체',
-        items: [...youtube.items, ...insta.items, ...blog.items],
+        items: allItems,
       },
       youtube,
       insta,
       blog,
     };
-  }, []);
+  }, [current]);
 
   // SNS 슬라이드
   const swiperRefSns = useRef<SwiperCore | null>(null);
@@ -137,32 +185,38 @@ export default function Home() {
   const newsData = useMemo(() => ({
     notice: {
       label: '공지사항',
-      path: '/ko/notice',
-      items: [
-        { id: 1, title: '1[입찰공고] 2026년 정보시스템 통합 운영관리(긴급입찰)', date: '2025-12-03' },
-        { id: 2, title: '2임상시험용의약품 치료목적사용 상담 및 안내 사업 종료 안내', date: '2025-12-05' },
-        { id: 3, title: '3[수의시담] 2026~2027년 마약류통합정보관리센터 정보시스템 운영관리 사업', date: '2025-12-15' },
-        { id: 4, title: '4[수의시담] 2026~2027년 마약류통합정보관리센터 정보시스템 운영관리 사업', date: '2025-12-15' },
-        { id: 5, title: '5[수의시담] 2026~2027년 마약류통합정보관리센터 정보시스템 운영관리 사업', date: '2025-12-15' },
-      ]
+      path: '/ko/news/NewsNoticeList',
+      items: (current?.notice || []).map((item) => ({
+        id: item.pstSn || '',
+        title: item.pstTtl || '',
+        date: item.regDt ? item.regDt.split(' ')[0] : '',
+        pstSn: item.pstSn,
+        bbsId: item.bbsId,
+      }))
     },
     press: {
       label: '보도자료',
-      path: '/ko/press',
-      items: [
-        { id: 1, title: '보도자료: 신규 정보시스템 구축 완료 보고회 개최', date: '2025-12-10' },
-        { id: 2, title: '디지털 전환 가속화를 위한 유관기관 협력 강화', date: '2025-12-08' },
-      ]
+      path: '/ko/menu/3004', // FIXME 추후 변경
+      items: (current?.bodo || []).map((item) => ({
+        id: item.pstSn || '',
+        title: item.pstTtl || '',
+        date: item.regDt ? item.regDt.split(' ')[0] : '',
+        pstSn: item.pstSn,
+        bbsId: item.bbsId,
+      }))
     },
     newsletter: {
       label: '뉴스레터',
-      path: '/ko/newsletter',
-      items: [
-        { id: 1, title: '2025년 12월호: 이달의 주요 IT 트렌드 소식', date: '2025-12-01' },
-        { id: 2, title: '뉴스레터 구독자 대상 만족도 조사 결과 안내', date: '2025-11-20' },
-      ]
+      path: '/ko/menu/3012', // FIXME 추후 변경
+      items: (current?.news || []).map((item) => ({
+        id: item.pstSn || '',
+        title: item.pstTtl || '',
+        date: item.regDt ? item.regDt.split(' ')[0] : '',
+        pstSn: item.pstSn,
+        bbsId: item.bbsId,
+      }))
     }
-  }), []);
+  }), [current]);
 
   // 현재 탭 데이터 추출
   const currentNews = newsData[newsTab as keyof typeof newsData];
@@ -190,11 +244,240 @@ export default function Home() {
     navigate(`/ko/search?q=${encodeURIComponent(keyword)}`)
   }
 
+  // ==========================================
+  // 팝업 레이어
+  // ==========================================
+  const [prevElPopup, setPrevElPopup] = useState<HTMLButtonElement | null>(null);
+  const [nextElPopup, setNextElPopup] = useState<HTMLButtonElement | null>(null);
+  const swiperRefPopup = useRef<SwiperCore | null>(null);
+  const [isPopupClosed, setIsPopupClosed] = useState(false);
+  
+  // 오늘 하루 열지 않기 기능 (로컬 스토리지) - 모든 팝업에 적용
+  const POPUP_HIDE_TODAY_KEY = 'popup_hide_today_all';
+  const isPopupHiddenToday = () => {
+    const hiddenDate = localStorage.getItem(POPUP_HIDE_TODAY_KEY);
+    if (!hiddenDate) return false;
+    const today = new Date().toDateString();
+    return hiddenDate === today;
+  };
+
+  const handleHideToday = () => {
+    // 모든 팝업을 오늘 하루 숨기기
+    const today = new Date().toDateString();
+    localStorage.setItem(POPUP_HIDE_TODAY_KEY, today);
+    setIsPopupClosed(true);
+  };
+
+  const handleCloseAll = () => {
+    // localStorage 건드리지 않고 팝업만 닫기
+    setIsPopupClosed(true);
+  };
+
+  // 표시할 팝업 목록 (오늘 숨김 처리된 것 제외)
+  const visiblePopups = useMemo(() => {
+    if (isPopupClosed || isPopupHiddenToday()) {
+      return [];
+    }
+    return (current?.popup || []).filter((popup) => popup.thmbFileNm);
+  }, [current?.popup, isPopupClosed]);
+
+  const handlePopupClick = (popup: PostVO) => {
+    const url = popup.popupLnkgAddr || popup.mdfcnPrgrmId;
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   return (
     <Box className="main-container">
+      {/* 팝업 레이어 */}
+      {visiblePopups.length > 0 && (
+        <Box 
+          className="popup-layer"
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 2,
+          }}
+        >
+          <Box
+            sx={{
+              position: 'relative',
+              maxWidth: '1200px',
+              width: '100%',
+              maxHeight: '90vh',
+            }}
+          >
+            <Swiper
+              onSwiper={(swiper) => (swiperRefPopup.current = swiper)}
+              key={prevElPopup && nextElPopup ? 'readyPopup' : 'not-readyPopup'}
+              modules={[Navigation, Pagination, A11y]}
+              spaceBetween={20}
+              slidesPerView={3}
+              slidesPerGroup={3}
+              breakpoints={{
+                0: {
+                  slidesPerView: 1,
+                  slidesPerGroup: 1,
+                },
+                768: {
+                  slidesPerView: 2,
+                  slidesPerGroup: 2,
+                },
+                1024: {
+                  slidesPerView: 3,
+                  slidesPerGroup: 3,
+                },
+              }}
+              navigation={{ 
+                prevEl: prevElPopup, 
+                nextEl: nextElPopup 
+              }}
+              className="popup-swiper"
+              style={{ padding: '0 10px' }}
+            >
+              {visiblePopups.map((popup, index) => (
+                <SwiperSlide key={popup.atchFileId || index} style={{ overflow: 'hidden', display: 'flex', justifyContent: 'center' }}>
+                  <Card
+                    sx={{
+                      cursor: (popup.popupLnkgAddr || popup.mdfcnPrgrmId) ? 'pointer' : 'default',
+                      width: '380px', // 팝업사이즈 고정
+                      height: '480px', // 팝업사이즈 고정
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      borderRadius: '12px',
+                      padding: 0,
+                      '& .MuiCardContent-root': {
+                        padding: 0,
+                        '&:last-child': {
+                          paddingBottom: 0,
+                        },
+                      },
+                    }}
+                    onClick={() => handlePopupClick(popup)}
+                  >
+                    <CardContent sx={{ p: 0, m: 0, flex: 1, display: 'flex', flexDirection: 'column', height: '100%', width: '100%', minHeight: 0 }}>
+                      {popup.thmbFileNm && (
+                        <Box
+                          component="img"
+                          src={getThumbnailUrl(popup)}
+                          alt={popup.popupTtl || ''}
+                          sx={{
+                            width: '100%',
+                            height: '100%',
+                            minWidth: 0,
+                            minHeight: 0,
+                            display: 'block',
+                            objectFit: 'cover',
+                            flex: '1 1 auto',
+                          }}
+                        />
+                      )}
+                    </CardContent>
+                  </Card>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+
+            {/* 네비게이션 버튼 (3개 이상일 때만 표시) */}
+            {visiblePopups.length >= 3 && (
+              <>
+                <button
+                  ref={setPrevElPopup}
+                  className="swiper-button-prev popup-prev"
+                  aria-label="이전 팝업"
+                  style={{
+                    position: 'absolute',
+                    left: '-50px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    zIndex: 10,
+                  }}
+                />
+                <button
+                  ref={setNextElPopup}
+                  className="swiper-button-next popup-next"
+                  aria-label="다음 팝업"
+                  style={{
+                    position: 'absolute',
+                    right: '-50px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    zIndex: 10,
+                  }}
+                />
+              </>
+            )}
+
+            {/* 하단 버튼 영역 */}
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 2,
+                justifyContent: 'center',
+                mt: 3,
+              }}
+            >
+              <Button
+                variant="contained"
+                onClick={handleHideToday}
+                sx={{ 
+                  minWidth: '180px',
+                  py: 1.5,
+                  px: 3,                  
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  backgroundColor: '#ebf1fd', // 연한 파란색
+                  color: '#0a4fcf',
+                  '&:hover': {
+                    backgroundColor: '#bccff4',
+                  }
+                }}
+              >
+                오늘 하루 열지 않기
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleCloseAll}
+                sx={{ 
+                  minWidth: '180px',
+                  py: 1.5,
+                  px: 3,
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  backgroundColor: '#246df3', // 진한 파란색
+                  '&:hover': {
+                    backgroundColor: '#1565C0',
+                  }
+                }}
+              >
+                전체 닫기
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      )}
+
       {/* 메인비쥬얼 */}
-      <Box component="section" className="section main-promotion-section">
+      <Box 
+        component="section" 
+        className="section main-promotion-section" 
+        sx={{
+          // backgroundImage: current?.mainImageUrl 
+          //   ? `url("${current.mainImageUrl}")` 
+          //   : 'url("/img/main_bg01.png")'
+          backgroundImage: `url("${current?.mainImageUrl}")`
+        }}
+      >
         <Box className="inner">
           <Box className="slogan-group">
             <Typography className="slogan-title">의약품 안전관리로 <span>국민을 건강하게</span></Typography>
@@ -215,19 +498,34 @@ export default function Home() {
               navigation={{ prevEl: prevEl1, nextEl: nextEl1 }}
               pagination={{ clickable: true, type: 'fraction', el: '.promotion-pagination' }}
               autoplay={{ delay: 5000, disableOnInteraction: false }}
-              loop={true}
+              loop={current?.promotion && current.promotion.length > 1}
               key={prevEl1 && nextEl1 ? 'ready1' : 'not-ready1'}
             >
-              <SwiperSlide>
-                <Box className="slide-item">
-                  <img src="/img/img_test_banner01.jpg" alt="프로모션 배너 1" />
-                </Box>
-              </SwiperSlide>
-              <SwiperSlide>
-                <Box className="slide-item">
-                  <img src="/img/img_test_banner02.jpg" alt="프로모션 배너 2" />
-                </Box>
-              </SwiperSlide>
+              {(current?.promotion && current.promotion.length > 0) ? (
+                current.promotion.map((item, index) => (
+                  <SwiperSlide key={item.pstSn || index}>
+                    <Box 
+                      className="slide-item">
+                      <img src={`${getThumbnailUrl(item)}`} alt="프로모션 배너 1" />
+                      {/* sx={{ 
+                        backgroundImage: `url("${getThumbnailUrl(item)}")`
+                          // backgroundImage: item.thmbFilePath && item.thmbFileNm
+                          // ? `url("${getThumbnailUrl(item)}")`
+                          // : 'url("/img/img_test_banner01.jpg")'
+                      }}  */}
+                    </Box>
+                  </SwiperSlide>
+                ))
+              ) : (
+                <>
+                  {/* <SwiperSlide>
+                    <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner01.jpg")' }} />
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner02.jpg")' }} />
+                  </SwiperSlide> */}
+                </>
+              )}
             </Swiper>
             {/* 컨트롤 페이지네이션 , 재생/정지 */}
             <Box className="pagination-wrapper">
@@ -341,6 +639,7 @@ export default function Home() {
                     modules={[Navigation, Pagination, A11y, Autoplay, SwiperGrid]} 
                     spaceBetween={20}
                     slidesPerView={2}
+                    slidesPerGroup={2}
                     grid={{
                       rows: 2,
                       fill: 'row'
@@ -348,10 +647,12 @@ export default function Home() {
                     breakpoints={{
                       0: {
                         slidesPerView: 1,
+                        slidesPerGroup: 1,
                         grid: { rows: 1 } 
                       },
                       640: {
                         slidesPerView: 2,
+                        slidesPerGroup: 2,
                         grid: { rows: 2 }
                       }
                     }}
@@ -361,24 +662,51 @@ export default function Home() {
                     className="sns-swiper"
                   >
                     {snsTabs.all.items.map((it, index) => (
-                      <SwiperSlide key={`all-${index}`}>
+                      <SwiperSlide key={`all-${it.data?.pstSn || index}`}>
                         <Card className="sns-card">
                           <CardContent>
-                            <Link href={it.url} target="_blank" rel="noreferrer" title="새창 열림" className="sns-link">
-                              <Box className="thumb-area">
-                                <img src={it.thumbnail || '/img/img_test.png'} alt="" />
+                            {it.type === 'youtube' && it.videoId ? (
+                              <Box className="sns-link youtube-embed">
+                                <Box className="thumb-area">
+                                  <Box
+                                    component="iframe"
+                                    src={`https://www.youtube.com/embed/${it.videoId}`} 
+                                    title={`${it.title} 안내 영상`}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerPolicy="strict-origin-when-cross-origin"
+                                    sandbox="allow-scripts allow-same-origin allow-presentation"
+                                    allowFullScreen
+                                    className="iframe"
+                                    sx={{ width: '100%', height: '100%', border: 'none' }}
+                                  />
+                                </Box>
+                                <Box className="info-area">
+                                  <Typography className="sns-title">{it.title}</Typography>
+                                  <Typography className="sns-desc">
+                                    {it.desc || ''}
+                                  </Typography>
+                                  <Typography className={`sns-label ${it.type}`}>
+                                    {it.type === 'youtube' ? '유튜브' : it.type === 'insta' ? '인스타그램' : '블로그'}
+                                  </Typography>
+                                </Box>
                               </Box>
-                              <Box className="info-area">
-                                <Typography className="sns-title">{it.title}</Typography>
-                                <Typography className="sns-desc">
-                                  {it.desc || '설명 문구가 들어가는 자리입니다. 데이터에 맞게 표시됩니다.'}
-                                </Typography>
-                                <Typography className={`sns-label ${it.type}`}>
-                                  {it.type === 'youtube' ? '유튜브' : it.type === 'insta' ? '인스타그램' : '블로그'}
-                                </Typography>
-                              </Box>
-                              <Box component="span" className="sr-only"> (새창 열림)</Box>
-                            </Link>
+                            ) : (
+                              <Link href={it.url} target="_blank" rel="noreferrer" title="새창 열림" className="sns-link">
+                                <Box className="thumb-area">
+                                  <img src={it.thumbnail || '/img/img_test.png'} alt="" />
+                                </Box>
+                                <Box className="info-area">
+                                  <Typography className="sns-title">{it.title}</Typography>
+                                  <Typography className="sns-desc">
+                                    {it.desc || ''}
+                                  </Typography>
+                                  <Typography className={`sns-label ${it.type}`}>
+                                    {it.type === 'youtube' ? '유튜브' : it.type === 'insta' ? '인스타그램' : '블로그'}
+                                  </Typography>
+                                </Box>
+                                <Box component="span" className="sr-only"> (새창 열림)</Box>
+                              </Link>
+                            )}
                           </CardContent>
                         </Card>
                       </SwiperSlide>
@@ -406,24 +734,45 @@ export default function Home() {
               ) : (
                 /* 개별 탭: 리스트 */
                 <Box className="sns-list">
-                  {snsTabs[tab].items.map((it, index) => (
-                    <Card key={`${tab}-${index}`} className="sns-card">
+                  {(snsTabs[tab]?.items || []).map((it, index) => (
+                    <Card key={`${tab}-${it.data?.pstSn || index}`} className="sns-card">
                       <CardContent>
-                        <Link href={it.url} target="_blank" rel="noreferrer" title="새창 열림" className="sns-link">
-                          <Box className="thumb-area">
-                            <img src={it.thumbnail || '/img/img_test.png'} alt="" />
+                        {it.type === 'youtube' && it.videoId ? (
+                          <Box className="sns-link youtube-embed">
+                            <Box className="thumb-area">
+                              <Box
+                                component="iframe"
+                                src={`https://www.youtube.com/embed/${it.videoId}`} 
+                                title={`${it.title} 안내 영상`}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerPolicy="strict-origin-when-cross-origin"
+                                sandbox="allow-scripts allow-same-origin allow-presentation"
+                                allowFullScreen
+                                className="iframe"
+                                sx={{ width: '100%', height: '100%', border: 'none' }}
+                              />
+                            </Box>
+                            <Box className="info-area">
+                              <Typography className="sns-title">{it.title}</Typography>
+                              <Typography className="sns-desc">
+                                {it.desc || ''}
+                              </Typography>
+                            </Box>
                           </Box>
-                          <Box className="info-area">
-                            <Typography className="sns-title">{it.title}</Typography>
-                            <Typography className="sns-desc">
-                              {it.desc || '설명 문구가 들어가는 자리입니다.'}
-                            </Typography>
-                            {/* <Typography className={`sns-label ${it.type}`}>
-                              {it.type === 'youtube' ? '유튜브' : it.type === 'insta' ? '인스타그램' : '블로그'}
-                            </Typography> */}
-                          </Box>
-                          <Box component="span" className="sr-only"> (새창 열림)</Box>
-                        </Link>
+                        ) : (
+                          <Link href={it.url} target="_blank" rel="noreferrer" title="새창 열림" className="sns-link">
+                            <Box className="thumb-area">
+                              <img src={it.thumbnail || '/img/img_test.png'} alt="" />
+                            </Box>
+                            <Box className="info-area">
+                              <Typography className="sns-title">{it.title}</Typography>
+                              <Typography className="sns-desc">
+                                {it.desc || ''}
+                              </Typography>
+                            </Box>
+                            <Box component="span" className="sr-only"> (새창 열림)</Box>
+                          </Link>
+                        )}
                       </CardContent>
                     </Card>
                   ))}
@@ -478,8 +827,17 @@ export default function Home() {
                   <Box className="board-body">
                     <List className="board-list">
                       {currentNews.items.map((item) => (
-                        <ListItem key={item.id} className="board-item" disableGutters>
-                          <a href={`${currentNews.path}/${item.id}`} className="board-link">
+                        <ListItem key={item.id || item.pstSn} className="board-item" disableGutters>
+                          <a 
+                            href={item.pstSn ? `${currentNews.path}/${item.pstSn}` : '#'} 
+                            className="board-link"
+                            onClick={(e) => {
+                              if (item.pstSn) {
+                                e.preventDefault();
+                                navigate(`${currentNews.path}/${item.pstSn}`);
+                              }
+                            }}
+                          >
                             <Typography className="subject">{item.title}</Typography>
                             <Typography className="date">{item.date}</Typography>
                           </a>
@@ -513,25 +871,52 @@ export default function Home() {
                   el: '.card-news-pagination' 
                 }}
                 autoplay={{ delay: 5000, disableOnInteraction: false }}
-                loop={true}
+                loop={current?.card && current.card.length > 1}
+                // key 값 변경 (리렌더링 시 ref 바인딩을 위함)
                 key={prevEl3 && nextEl3 ? 'ready3' : 'not-ready3'}
               >
-                <SwiperSlide>
-                  <Box className="slide-item">
-                    <img src="/img/img_test_banner03.png" alt="카드뉴스 1"/>
-                    <a href="#none" className="slide-link">
-                      <span className="sr-only">카드뉴스 1 상세보러가기</span>
-                    </a>
-                  </Box>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <Box className="slide-item">
-                    <img src="/img/img_test_banner03.png" alt="카드뉴스 2"/>
-                    <a href="#none" className="slide-link">
-                      <span className="sr-only">카드뉴스 2 상세보러가기</span>
-                    </a>
-                  </Box>
-                </SwiperSlide>
+                {(current?.card && current.card.length > 0) ? (
+                  current.card.map((item, index) => (
+                    <SwiperSlide key={item.pstSn || index}   style={{
+                      minHeight: '100px',
+                    }}>
+                      <Box
+                        component={RouterLink}
+                        to={`/ko/news/NewsCardNewsList/${item.pstSn}`}
+                        sx={{
+                          width: '100%',
+                          height: '100%',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <img
+                          src={getThumbnailUrl(item)}
+                          style={{
+                            maxWidth: '100%',
+                            maxHeight: '100%',
+                            objectFit: 'contain',
+                          }}
+                        />
+                        <span className="sr-only">{item.pstTtl || `카드뉴스 ${index + 1} 상세보러가기`}</span>
+                      </Box>
+                    </SwiperSlide>
+                  ))
+                ) : (
+                  <>
+                    <SwiperSlide>
+                      <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner03.png")' }}>
+                        <a href="#none" className="slide-link"><span className="sr-only">카드뉴스 1 상세보러가기</span></a>
+                      </Box>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                      <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner03.png")' }}>
+                        <a href="#none" className="slide-link"><span className="sr-only">카드뉴스 2 상세보러가기</span></a>
+                      </Box>
+                    </SwiperSlide>
+                  </>
+                )}
               </Swiper>
 
               <Box className="pagination-wrapper">
