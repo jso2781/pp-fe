@@ -219,10 +219,14 @@ export default function Home() {
               key={prevEl1 && nextEl1 ? 'ready1' : 'not-ready1'}
             >
               <SwiperSlide>
-                <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner01.jpg")' }} />
+                <Box className="slide-item">
+                  <img src="/img/img_test_banner01.jpg" alt="프로모션 배너 1" />
+                </Box>
               </SwiperSlide>
               <SwiperSlide>
-                <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner02.jpg")' }} />
+                <Box className="slide-item">
+                  <img src="/img/img_test_banner02.jpg" alt="프로모션 배너 2" />
+                </Box>
               </SwiperSlide>
             </Swiper>
             {/* 컨트롤 페이지네이션 , 재생/정지 */}
@@ -510,17 +514,22 @@ export default function Home() {
                 }}
                 autoplay={{ delay: 5000, disableOnInteraction: false }}
                 loop={true}
-                // key 값 변경 (리렌더링 시 ref 바인딩을 위함)
                 key={prevEl3 && nextEl3 ? 'ready3' : 'not-ready3'}
               >
                 <SwiperSlide>
-                  <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner03.png")' }}>
-                    <a href="#none" className="slide-link"><span className="sr-only">카드뉴스 1 상세보러가기</span></a>
+                  <Box className="slide-item">
+                    <img src="/img/img_test_banner03.png" alt="카드뉴스 1"/>
+                    <a href="#none" className="slide-link">
+                      <span className="sr-only">카드뉴스 1 상세보러가기</span>
+                    </a>
                   </Box>
                 </SwiperSlide>
                 <SwiperSlide>
-                  <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner03.png")' }}>
-                    <a href="#none" className="slide-link"><span className="sr-only">카드뉴스 2 상세보러가기</span></a>
+                  <Box className="slide-item">
+                    <img src="/img/img_test_banner03.png" alt="카드뉴스 2"/>
+                    <a href="#none" className="slide-link">
+                      <span className="sr-only">카드뉴스 2 상세보러가기</span>
+                    </a>
                   </Box>
                 </SwiperSlide>
               </Swiper>
@@ -543,48 +552,6 @@ export default function Home() {
           </Box>
         </Box>
       </Box>
-
-            
-
-
-
-
-
-
-
-
-
-
-
-
-      {/* <Box component="section" className="ds-section ds-fullbleed">
-        <Box className="ds-container">
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, lg: 7 }}>
-            </Grid>
-            <Grid size={{ xs: 12, lg: 5 }}>
-              <Card className="ds-card" variant="outlined" sx={{ borderRadius: 2 }}>
-                <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pb: 1 }}>
-                  <Typography variant="h6">공지사항</Typography>
-                  <Button size="small" variant="text" onClick={() => navigate('/ko/notice')}>
-                    더보기
-                  </Button>
-                </CardContent>
-                <CardContent sx={{ pt: 0 }}>
-                  <List dense>
-                    {notices.map((n) => (
-                      <ListItem key={n.title} disableGutters>
-                        <ListItemText primary={n.title} secondary={n.date} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box> */}
-
     </Box>
   )
 }

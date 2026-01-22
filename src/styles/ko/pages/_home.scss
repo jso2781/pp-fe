@@ -187,25 +187,29 @@
       position: absolute;
       right: 0;
       top: 28px;
-      width: 455px;
-      height: 495px;
+      width: 430px;
+      height: 508px;
 
       .promotion-swiper {
         width: 100%;
-        height: 420px;
+        height: 430px;
         box-shadow: 4px 4px 14px 0 rgba(110, 118, 130, 0.25);
         border-radius: 30px 30px 0 0;
         overflow: hidden;
         //-webkit-mask-image: -webkit-radial-gradient(white, black);
 
-        .slide-item {
+        .slide-item { 
           width: 100%;
           height: 100%;
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
           border-radius: inherit;
-          text-indent: -9999px;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .slide-item img {
+          width: 100%;
+          height: 100%;
+          display: block;
         }
       }
 
@@ -220,7 +224,7 @@
         // bottom: 0px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 10;
+        z-index: 2;
         display: flex;
         align-items: center;
         //justify-content: center;
@@ -632,7 +636,7 @@
 
         .sns-swiper {
           // 2줄 배치를 위해 높이 지정 필수
-          height: 490px;
+          height: 516px;
 
           .swiper-wrapper {
             box-sizing: border-box;
@@ -690,7 +694,7 @@
         border: 1px solid #B1B8BE;
 
         .MuiCardContent-root {
-          padding: 32px !important;
+          padding: 24px !important;
           height: 100%;
         }
 
@@ -703,7 +707,7 @@
           /* 썸네일 영역 */
           .thumb-area {
             flex: 0 0 200px;
-            height: 100%;
+            height: 200px;
             overflow: hidden;
             background: #f4f4f4;
             border-radius: 10px;
@@ -791,7 +795,7 @@
     .sns-area {
       @media (max-width: 1200px) {
         .sns-card .MuiCardContent-root { padding: 20px !important; }
-        .sns-card .sns-link .thumb-area { flex: 0 0 160px; }
+        .sns-card .sns-link .thumb-area { flex: 0 0 150px; height:150px; }
       }
 
       @media (max-width: 1024px) {
@@ -860,7 +864,7 @@
             .thumb-area {
               flex: none;
               width: 100%;
-              height: 180px;
+              height: 200px;
             }
             .info-area {
               padding: 15px 0 0 0;
@@ -886,44 +890,33 @@
       gap: 40px;
       align-items: flex-start;
 
-      > div {
-        flex: 1;
-        min-width: 0;
-      }
-      @media (max-width: 1024px) {
-        flex-direction: column; 
-        gap: 24px;
-
-        > div {
-          width: 100%;
-          flex: none; 
-        }
-      }
-      
-
+      // 1. 뉴스 영역 (왼쪽)
       .news-area {
+        flex: 1;
+        min-width: 0; // 말줄임 보호
+
         .news-content {
           position: relative;
-          height: 386px;
+          height: 380px;
           padding: 32px;
           border-radius: 12px;
           border: 1px solid #B1B8BE;
 
-          @media (max-width: 1024px) {
+          @media (max-width: 1200px) {
             height: auto;
             padding: 20px;
-            //padding-top: 60px;
           }
         }
 
         .news-tabs {
           margin: 0 0 20px 0;
+          
           // MUI 기본 하단 바 제거
           :global(.MuiTabs-indicator) {
             display: none !important;
           }
 
-          @media (max-width: 1024px) {
+          @media (max-width: 1200px) {
             min-height: auto;
             .MuiTabs-flexContainer {
               gap: 8px;
@@ -956,7 +949,7 @@
               background-color: rgba(8, 124, 128, 0.05);
             }
 
-            @media (max-width: 1024px) {
+            @media (max-width: 1200px) {
               font-size: 15px;
               padding: 8px 12px;
               flex: 1;
@@ -973,9 +966,10 @@
             border: none;
             outline: none;
             font-size: 17px;
-            z-index:2;
+            z-index: 2;
+            cursor: pointer;
 
-            @media (max-width: 1024px) {
+            @media (max-width: 1200px) {
               top: -48px;
               right: 0px;
               font-size: 14px;
@@ -985,6 +979,8 @@
           .board-body {
             .board-list {
               padding: 0;
+              margin: 0;
+              list-style: none;
 
               .board-item {
                 margin: 0 0 10px 0;
@@ -997,24 +993,13 @@
                   width: 100%;
                   box-sizing: border-box;
                   transition: background-color 0.2s;
+                  color: inherit;
 
-                  &:hover, 
-                  &:focus-visible {
+                  &:hover, &:focus-visible {
                     background-color: rgba(8, 124, 128, 0.03);
-                    outline: none; 
+                    outline: none;
                   }
 
-                  &:focus-visible {
-                    outline: 2px solid #087C80;
-                    outline-offset: -2px;
-                  }
-
-                  &:hover .subject, 
-                  &:focus-visible .subject {
-                    text-decoration: underline;
-                    color: #087C80;
-                  }
-                  
                   .subject {
                     font-size: 17px;
                     font-weight: 400;
@@ -1024,7 +1009,7 @@
                     flex: 1;
                     margin-right: 20px;
 
-                    @media (max-width: 1024px) {
+                    @media (max-width: 1200px) {
                       font-size: 15px;
                       margin-right: 10px;
                     }
@@ -1034,8 +1019,9 @@
                     font-size: 17px;
                     flex-shrink: 0;
                     text-align: right;
+                    color: #888;
 
-                    @media (max-width: 1024px) {
+                    @media (max-width: 1200px) {
                       font-size: 13px;
                     }
                   }
@@ -1051,10 +1037,15 @@
         }
       }
 
+      // 카드 뉴스 영역
       .card-news-area {
         position: relative;
+        flex: 0 0 380px; 
+        max-width: 380px;
+        width: 100%;
+
         .card-news-content {
-          height: 386px; 
+          height: 380px; 
           border-radius: 12px;
           overflow: hidden;
           border: 1px solid #B1B8BE;
@@ -1067,14 +1058,12 @@
         .card-news-swiper {
           width: 100%;
           height: 100%;
-
           .slide-item {
             width: 100%;
             height: 100%;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-
+            img{
+              width:100%;
+            }
             .slide-link {
               display: block;
               width: 100%;
@@ -1083,7 +1072,7 @@
           }
         }
 
-        // 페이지네이션 및 컨트롤 영역
+        // 페이지네이션 및 컨트롤
         .pagination-wrapper { 
           position: absolute;
           top: 5px;
@@ -1092,48 +1081,50 @@
           display: flex;
           align-items: center; 
 
-          .card-news-pagination {
-            position: static;
-            width: auto !important;
+          .card-news-pagination{
             display: none;
           }
 
           .play-control {
-            position: static;
             display: flex;
             align-items: center; 
-            margin-right:2px;
-            
+            margin-right: 2px;
           }
 
           .swiper-nav-group {
             display: flex; 
-            align-items: center;
             gap: 2px;
-
-            .swiper-button-prev,
-            .swiper-button-next {
+            .swiper-button-prev, .swiper-button-next {
               position: static;
               margin: 0;
-
+              cursor: pointer;
               &:focus-visible {
-                box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25), inset 0 0 0 2px #087c80 !important;
+                box-shadow: 0 4px 4px 0 rgba(0,0,0,0.25), inset 0 0 0 2px #087c80 !important;
               }
             }
           }
         }
       }
-    }
-  }
 
-  @media (max-width: 1024px) {
-    .section-04 {
-      .inner {
-        flex-direction: column; 
+      // 3. 1200px 미만 통합 반응형 레이아웃
+      @media (max-width: 1200px) {
+        flex-direction: column;
         gap: 60px;
-        
-        > div {
-          width: 100%; 
+
+        .news-area {
+          width: 100%;
+          flex: none;
+        }
+
+        .card-news-area {
+          flex: none;
+          max-width: 100%;
+          width: 100%;
+
+          .card-news-content {
+            height: auto;
+            aspect-ratio: 1 / 0.8; // 태블릿에서 보기 좋은 비율
+          }
         }
       }
     }
