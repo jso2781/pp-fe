@@ -681,6 +681,15 @@
       }
     }
   }
+
+  @media (max-width: 1200px) {
+    flex-direction: column;
+    gap: 40px; 
+
+     &__left {
+      border-right:none;
+    }
+  }
 }
 
 /* 정부 통합 로그인 카드 */
