@@ -1,5 +1,6 @@
 import DepsLocation from '@/components/common/DepsLocation';
 import FileUploadField from '@/components/form/FileUploadField';
+import { useDialog } from '@/contexts/DialogContext';
 import { CheckCircle } from '@mui/icons-material';
 import {
   Box,
@@ -27,6 +28,19 @@ type StepRefs = {
 };
 
 export default function ExpertMemberApply() {
+  const { showDialogBackdrop } = useDialog();
+
+  const handleCustomConfirm = () => {
+    showDialogBackdrop({
+      message: '등록 하시겠습니까?',
+      title: '전문가 회원 신청 전환 등록',
+      type: 'confirm',
+      confirmText: '확인',
+      cancelText: '취소',
+      onConfirm: () => setCurrentStep(2),
+    })
+  }
+
   const [currentStep, setCurrentStep] = useState(0);
   const stepRefs = useRef<StepRefs>({
     step1: null,
@@ -147,10 +161,9 @@ export default function ExpertMemberApply() {
   // Step 2 완료
   const handleCompleteStep2 = () => {
     if (canCompleteStep2) {
-      setCurrentStep(2);
+      handleCustomConfirm();
     }
   };
-
 
   // 전체 파일 삭제
   const handleDeleteAllFiles = () => {
