@@ -1,4 +1,14 @@
 /**
+ * 대국민포털_회원정보기본 CI값 기준으로 ID 존재 여부 조회
+ */
+export const findMbrInfoIdApiPath = () => '/mbr/findMbrInfoId'
+
+/**
+ * 대국민포털_회원정보기본 CI값 기준으로 PW 수정
+ */
+export const updateMbrInfoPwApiPath = () => '/mbr/updateMbrInfoPw'
+
+/**
  * 대국민포털_회원정보기본 기존 아이디, 패스워드 기준으로 데이터 존재 여부 조회
  */
 export const verifyPasswordApiPath = () => '/mbr/verifyPassword'

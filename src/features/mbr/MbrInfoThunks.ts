@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectMbrInfoListApiPath, getMbrInfoApiPath, insertMbrInfoApiPath, updateMbrInfoApiPath, saveMbrInfoApiPath, deleteMbrInfoApiPath, verifyPasswordApiPath } from '@/api/mbr/MbrInfoApiPaths'
+import { selectMbrInfoListApiPath, getMbrInfoApiPath, insertMbrInfoApiPath, updateMbrInfoApiPath, saveMbrInfoApiPath, deleteMbrInfoApiPath, verifyPasswordApiPath, updateMbrInfoPwApiPath } from '@/api/mbr/MbrInfoApiPaths'
 import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO, ExistMbrInfoPVO, ExistMbrInfoRVO, VerifyPasswordRVO, VerifyPasswordPVO, UpdateMbrInfoRVO } from './MbrInfoTypes'
 import { existMbrInfoApiPath } from '@/api/mbr/MbrInfoApiPaths'
 
@@ -188,3 +188,22 @@ export const deleteMbrInfo = createAsyncThunk<number, MbrInfoDVO>(
   }
 )
 
+/**
+ * 대국민포털_회원정보기본 CI값 기준으로 PW 수정
+ */
+export const updateMbrInfoPw = createAsyncThunk<VerifyPasswordRVO, MbrInfoPVO, { rejectValue: string }>(
+  '/mbr/updateMbrInfoPw',
+  async (params: MbrInfoPVO, { rejectWithValue }) => {
+    try {
+      const res = await https.post(updateMbrInfoPwApiPath(), params);
+      const payload = res.data?.data;
+      return {
+        existYn: payload?.existYn
+      } as VerifyPasswordRVO;
+    }
+    catch(e) {
+      console.error("MbrInfoThunks updateMbrInfoPw error!!");
+      return rejectWithValue('MbrInfoThunks updateMbrInfoPw error!!');
+    }
+  }
+)

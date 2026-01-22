@@ -5,14 +5,16 @@
  * 화면설명: 비밀번호 찾기 화면.
  */
 
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import DepsLocation from "@/components/common/DepsLocation"
 import { useNavigate } from 'react-router-dom';
 
 export default function FindPw() {
+  
   const navigate = useNavigate();
   const handleAuthClick = () => {
-    navigate('/ko/auth/FindPwModify');
+    // mbrNo 1000000005 회원으로 고정
+    navigate('/ko/auth/FindPwModify', { state:{ mbrNo: '1000000005' }});
   }
 
   return (
@@ -30,7 +32,7 @@ export default function FindPw() {
                   <p className="guide-text">비밀번호 재설정을 위해 본인 확인을 진행합니다.</p>  
                   <Box className="AnyID-area">
                     Any-ID 영역
-                    <div onClick={handleAuthClick}>인증</div>
+                    <Button onClick={handleAuthClick}>인증</Button>
                   </Box>
                   <Box component="section" className="caution-area" aria-labelledby="caution-title">
                     <Typography component="h4" id="caution-title" className="caution-title">
