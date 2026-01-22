@@ -1279,41 +1279,147 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   // GNB =======================================
   const MENU_LIST = [
     {
-      title: "의약품 이상사례 보고",
+      title: "주요 업무",
       depth2: [
         {
-          title: "이상사례 보고란?",
-          depth3: ["KAERS란?", "보고 절차", "보고 대상", "KAERS란?", "KAERS란?"]
+          title: "의약품 이상사례보고",
+          depth3: [
+            { name: "이상사례 보고란?", url: "/safety/report1" },
+            { name: "KAERS란?", url: "/safety/report2" },
+            { name: "의약품이상사례", url: "https://nedrug.mfds.go.kr/CCCBA03F010/getReport" },
+            { name: "의약외품(생리대 등)", url: "https://nedrug.mfds.go.kr/CCCBA03F010/getReportQuasiDrug" },
+            { name: "오프라인 보고", url: "/safety/report5" },
+            { name: "이상사례보고자료실", url: "/safety/report6" },
+            { name: "온라인보고방법 안내", url: "/safety/report7" }
+          ]
         },
         {
-          title: "온라인 보고",
-          depth3: ["의약외품(생리대 등)", "의약외품(생리대 등)", "의약외품(생리대 등)", "의약외품(생리대 등)", "의약외품(생리대 등)", "의약외품(생리대 등)"]
+          title: "의약품 부작용 보고 자료",
+          depth3: [
+            { name: "의약품 부작용 보고1", url: "#" },
+            { name: "의약품 부작용 보고2", url: "#" },
+            { name: "의약품 부작용 보고3", url: "#" }
+          ]
+        },
+        {
+          title: "의약품 안전관리",
+          depth3: [
+            { name: "약물감시용어", url: "#" },
+            { name: "부작용 인과관계규명", url: "#" },
+            { name: "유관기관", url: "#" }
+          ]
+        },
+        {
+          title: "의약품.의료정보.연계분석",
+          depth3: [
+            { name: "의약품.의료정보.연계분석1", url: "#" },
+            { name: "의약품.의료정보.연계분석2", url: "#" },
+            { name: "의약품.의료정보.연계분석3", url: "#" }
+          ]
+        },
+        {
+          title: "DUR 정보",
+          depth3: [
+            { name: "DUR 이해", url: "#" },
+            { name: "DUR 통합검색", url: "#" },
+            { name: "병용금기", url: "#" },
+            { name: "특정연령대금기", url: "#" },
+            { name: "임부금기", url: "#" },
+            { name: "효능군중복주의", url: "#" },
+            { name: "용량주의", url: "#" },
+            { name: "투여기간주의", url: "#" },
+            { name: "노인주의", url: "#" },
+            { name: "DUR 게시판", url: "/dur/notice" },
+            { name: "DUR 제안", url: "/dur/proposal" }
+          ]
+        },
+        {
+          title: "부작용 피해구제",
+          depth3: [
+            { name: "제도소개", url: "#" },
+            { name: "피해구제 신청", url: "#" },
+            { name: "뉴스/소식", url: "#" },
+            { name: "자주하는 질문", url: "https://nedrug.mfds.go.kr" }
+          ]
+        },
+        {
+          title: "임상시험안전지원",
+          depth3: [
+            { name: "임상시험안전지원기관", url: "#" },
+            { name: "협약 안내", url: "#" },
+            { name: "중앙IRB신청", url: "#" },
+            { name: "임상시험헬프데스크", url: "#" },
+            { name: "공지사항", url: "#" },
+            { name: "자료실", url: "#" }
+          ]
         }
       ]
     },
     {
-      title: "의약품 안전관리",
+      title: "정보공개",
       depth2: [
-        {
-          title: "약물감시용어",
-          depth3: ["부작용 인과관계규명", "유관기관"]
-        }
+        { 
+          title: "정보공개", 
+          depth3: [
+            { name: "업무처리절차", url: "#" },
+            { name: "정보공개 청구", url: "https://open.go.kr" },
+            { name: "임직원국외출장", url: "#" },
+            { name: "원장 업무추진비 집행내역", url: "#" }
+          ] 
+        },
+        { title: "공공데이터 개방", depth3: [] },
+        { 
+          title: "경영공시", 
+          depth3: [
+            { name: "부패행위 징계현황", url: "#" },
+            { name: "징계기준", url: "#" },
+            { name: "징계현황", url: "#" }
+          ] 
+        },
+        { title: "사업실명제", depth3: [] }
       ]
     },
     {
-      title: "DUR 정보",
+      title: "기관소식",
       depth2: [
-        { title: "DUR 이해", depth3: [] },
-        {
-          title: "DUR 정보검색",
-          depth3: ["DUR 통합검색", "병용 금기", "특정연령대금기", "임부금기", "효능군중복주의", "용량주의", "투여기간주의", "노인주의"]
+        { title: "공지사항", url: "/notice", depth3: [] },
+        { title: "채용게시판", depth3: [] },
+        { title: "FAQ", depth3: [] },
+        { title: "국민신문고", depth3: [] },
+        { title: "보도자료", depth3: [] },
+        { 
+          title: "뉴스레터", 
+          depth3: [
+            { name: "첨단바이오 포커스", url: "https://ltfu.mfds.go.kr" },
+            { name: "마약류 안전정보지", url: "#" },
+            { name: "리플릿", url: "#" }
+          ] 
         },
-        {
-          title: "의약품 적정사용 정보",
-          depth3: ["노인 적정사용 정보집", "소아 적정사용 정보집", "임부 적정사용 정보집", "간질환 적정사용 정보집", "신질환 적정사용 정보집"]
+        { title: "카드뉴스", depth3: [] },
+        { title: "동영상", depth3: [] },
+        { title: "자료실", depth3: [] }
+      ]
+    },
+    {
+      title: "기관소개",
+      depth2: [
+        { title: "기관장 인사말", depth3: [] },
+        { title: "역대 기관장", depth3: [] },
+        { title: "연혁", depth3: [] },
+        { title: "비전 및 목표", depth3: [] },
+        { title: "조직도", depth3: [] },
+        { title: "설립근거 및 관련법령", depth3: [] },
+        { title: "고객헌장", depth3: [] },
+        { title: "우리원동정", depth3: [] },
+        { title: "CI소개", depth3: [] },
+        { 
+          title: "윤리경영", 
+          depth3: [
+            { name: "클린신고센터", url: "#" }
+          ] 
         },
-        { title: "알림 게시판", depth3: [] },
-        { title: "의견 제안", depth3: [] }
+        { title: "캐릭터소개", depth3: [] },
+        { title: "오시는 길", url: "https://www.drugsafe.or.kr/iwt/ds/ko/introduction/EgovLocation.do", depth3: [] }
       ]
     }
   ];
@@ -1322,22 +1428,21 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const [activeDepth1, setActiveDepth1] = useState<number | null>(null);
   const [activeDepth2, setActiveDepth2] = useState<number | null>(null);
 
-  // 1depth 메뉴 열기 로직
-  const openDepth1 = (idx: number) => {
+  // 메뉴 열기 함수 (마우스/키보드 공용)
+  const openMenu = (idx: number) => {
     setActiveDepth1(idx);
-    setActiveDepth2(null); // 다른 대메뉴로 이동 시 중메뉴 선택 초기화
+    setActiveDepth2(0); // 탭 진입 시 첫 번째 2뎁스 활성화
   };
 
-  // 모든 메뉴 닫기 로직 (마우스가 nav를 벗어날 때)
+  // 닫기 함수
   const closeAll = () => {
     setActiveDepth1(null);
     setActiveDepth2(null);
   };
 
-  // 포커스 아웃 메뉴 닫기
+  // blur 이벤트를 이용한 웹 접근성 처리
+  // 탭 키가 메뉴 영역 전체를 벗어날 때만 닫히도록 설정
   const handleBlur = (e: React.FocusEvent) => {
-    // e.relatedTarget은 다음에 포커스가 갈 요소
-    // 다음에 포커스될 요소가 nav(e.currentTarget) 내부에 있지 않다면 메뉴를 닫기
     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
       closeAll();
     }
@@ -1481,69 +1586,74 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         </Box>
         {/* s :: GNB */}
         <Box className="gnb" aria-label="주요 메뉴">
-            <nav 
-              className="gnb_wrapper" 
-              aria-label="주요 서비스 메뉴" 
-              onMouseLeave={closeAll}
-              onBlur={handleBlur} // 탭/빽탭으로 나갈 때 감지
-            >
-              <div id="nav" className="gnb_container">
-                <ul className="depth1_list">
-                  {MENU_LIST.map((menu1, idx1) => (
-                    <li
-                      key={idx1}
-                      className="depth1_item"
-                      onMouseEnter={() => openDepth1(idx1)}
+          <nav 
+            className="gnb_wrapper" 
+            onMouseLeave={closeAll} 
+            onBlur={handleBlur} // 키보드 포커스가 메뉴를 완전히 벗어나면 닫힘
+          >
+            <div className="gnb_container">
+              <ul className="depth1_list">
+                {MENU_LIST.map((menu1, idx1) => (
+                  <li 
+                    key={idx1} 
+                    className="depth1_item" 
+                    onMouseEnter={() => openMenu(idx1)}
+                  >
+                    <a
+                      href={(menu1 as any).url || "#"}
+                      className={`depth1_link ${activeDepth1 === idx1 ? 'active' : ''}`}
+                      onFocus={() => openMenu(idx1)} // 탭키로 포커스 서브메뉴 오픈
                     >
-                      <a 
-                        href="#" 
-                        className="depth1_link"
-                        style={{ color: activeDepth1 === idx1 ? '#087C80' : '#464C53' }}
-                        onFocus={() => openDepth1(idx1)} // 포커스 시 해당 depth1 열기
-                      >
-                        {menu1.title}
-                      </a>
+                      {menu1.title}
+                    </a>
 
-                      {/* 2depth */}
-                      {activeDepth1 === idx1 && (
-                        <ul className="depth2_list" style={{ display: 'block' }}>
-                          {menu1.depth2.map((menu2, idx2) => (
+                    {activeDepth1 === idx1 && (
+                      <div className="sub_menu_container">
+                        <ul className="depth2_list">
+                          {menu1.depth2.map((menu2: any, idx2: number) => (
                             <li 
                               key={idx2} 
                               className="depth2_item"
                               onMouseEnter={() => setActiveDepth2(idx2)}
                             >
                               <a 
-                                href="#" 
-                                className="depth2_link"
-                                onFocus={() => setActiveDepth2(idx2)} // 포커스 시 해당 depth2 열기
+                                href={menu2.url || "#"} 
+                                className={`depth2_link ${activeDepth2 === idx2 ? 'on' : ''}`}
+                                onFocus={() => setActiveDepth2(idx2)} // 2뎁스 포커스 시 해당 3뎁스 노출
                               >
                                 {menu2.title}
                               </a>
                               
-                              {/* 3depth */}
-                              {activeDepth2 === idx2 && menu2.depth3.length > 0 && (
-                                <ul className="depth3_list" style={{ display: 'block' }}>
-                                  {menu2.depth3.map((menu3, idx3) => (
-                                    <li key={idx3}>
-                                      <a href="#">{menu3}</a>
-                                    </li>
-                                  ))}
+                              {/* 3뎁스 영역 */}
+                              {(activeDepth2 === idx2 || (activeDepth2 === null && idx2 === 0)) && menu2.depth3.length > 0 && (
+                                <ul className="depth3_list">
+                                  {menu2.depth3.map((menu3: any, idx3: number) => {
+                                    const isObj = typeof menu3 === 'object' && menu3 !== null;
+                                    return (
+                                      <li key={idx3}>
+                                        <a 
+                                          href={isObj ? menu3.url : "#"}
+                                          onFocus={() => setActiveDepth2(idx2)} // 3뎁스 포커스 유지 시 2뎁스 강조 유지
+                                        >
+                                          {isObj ? menu3.name : menu3}
+                                        </a>
+                                      </li>
+                                    );
+                                  })}
                                 </ul>
                               )}
                             </li>
                           ))}
                         </ul>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {activeDepth1 !== null && (
-                <div className="gnb_bg" style={{ display: 'block' }} aria-hidden="true" />
-              )}
-            </nav>
+                        {/* GNB 배경 */}
+                        <div className="gnb_bg" />
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </nav>
         </Box>
         {/* e :: GNB */}
       </Box>
