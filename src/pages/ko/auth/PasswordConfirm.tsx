@@ -126,7 +126,7 @@ export default function PasswordConfirm() {
 
   // 비밀번호 찾기 화면으로 이동
   const handleFindPassword = () => {
-    navigate('/ko/auth/FindPwModify');
+    navigate('/ko/auth/FindPw');
   };
 
   return (
