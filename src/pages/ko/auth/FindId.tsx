@@ -1,7 +1,20 @@
+/**
+ * 화면ID: KIDS-PP-US-LG-06
+ * 화면명: 아이디 찾기
+ * 화면경로: /ko/auth/FindId
+ * 화면설명: 아이디 찾기 화면.
+ */
+
 import { Box, Typography,} from '@mui/material';
 import DepsLocation from "@/components/common/DepsLocation"
+import { useNavigate } from 'react-router-dom';
 
 export default function FindId() {
+  const navigate = useNavigate();
+  const handleAuthClick = () => {
+    navigate('/ko/auth/FindIdAuthSuccess');
+  }
+  
   return (
     <Box className="page-layout">
       <Box className="sub-container">
@@ -17,6 +30,7 @@ export default function FindId() {
                   <p className="guide-text">아이디를 찾을 방법을 선택해주세요.</p>  
                   <Box className="AnyID-area">
                     Any-ID 영역
+                    <div onClick={handleAuthClick}>인증</div>
                   </Box>
                   <Box component="section" className="caution-area" aria-labelledby="caution-title">
                     <Typography component="h4" id="caution-title" className="caution-title">

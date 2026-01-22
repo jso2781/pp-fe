@@ -1,7 +1,31 @@
+/**
+ * 화면ID: KIDS-PP-US-LG-09
+ * 화면명: 비밀번호 재설정
+ * 화면경로: /ko/auth/FindPwModify
+ * 화면설명: 비밀번호 재설정 화면.
+ */
+
 import { Box, Typography, TextField, Button, Stack, Alert } from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation';
+import { useDialog } from '@/contexts/DialogContext';
+import { useNavigate } from 'react-router-dom'
 
 export default function FindPwModify() {
+  const navigate = useNavigate();
+  const { showConfirmBackdrop } = useDialog();
+
+  const handleChangeClick = () => {
+    showConfirmBackdrop(
+      '비밀번호 변경이 완료되었습니다.<br/> 이제 정상적으로 로그인이 가능합니다.<br/> 지금 로그인 페이지로 이동하시겠습니까?',
+      '비밀번호 변경 완료',
+      () => navigate('/ko/auth/login'),
+      () => {}
+    );
+  }
+  const handleCancleClick = () => {
+    navigate('/ko/auth/findPw');
+  }
+
   return (
     <Box className="page-layout">
       <Box className="sub-container">
@@ -86,11 +110,10 @@ export default function FindPwModify() {
                   </Box>
                   {/* 하단 버튼 그룹 */}
                   <Box className="btn-group between">
-                    <Button variant="outlined" size="large">취소하기</Button>
-                    <Button variant="contained" size="large">변경하기</Button>
+                    <Button variant="outlined" size="large" onClick={handleCancleClick}>취소하기</Button>
+                    <Button variant="contained" size="large" onClick={handleChangeClick}>변경하기</Button>
                   </Box>
                 </Box>
-                
                 {/* --- 본문 끝 --- */}
               </Box>
             </Box>
@@ -98,26 +121,5 @@ export default function FindPwModify() {
         </Box>
       </Box>
     </Box>
-    // {/* <Box sx={{ maxWidth: 560, mx: 'auto' }}>
-    //   <Box component="form" noValidate onSubmit={(e) => e.preventDefault()}>
-    //     <Stack spacing={2}>
-    //       <Typography variant="h6">비밀번호 재설정</Typography>
-
-    //       <TextField label="아이디" name="username" />
-    //       <TextField label="인증코드" name="otp" />
-
-    //       <TextField label="새 비밀번호" name="newPassword" type="password" />
-    //       <TextField label="새 비밀번호 확인" name="confirmPassword" type="password" />
-
-    //       <Button type="submit" variant="contained" size="large">
-    //         저장
-    //       </Button>
-
-    //       <Alert severity="info">
-    //         본 화면은 UI 템플릿입니다. 실제 검증/저장 로직은 별도 구현이 필요합니다.
-    //       </Alert>
-    //     </Stack>
-    //   </Box>
-    // </Box> */} 
   );
 }

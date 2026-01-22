@@ -203,9 +203,9 @@ export default function Router() {
               <Route path="/:lang/auth/EditProfile" element={<LangElement byLang={{ ko: <ProtectedRoute><EditProfileKo /></ProtectedRoute>, en: <ProtectedRoute><EditProfileKo /></ProtectedRoute> }} />} />
               <Route path="/:lang/auth/WithDrawal" element={<LangElement byLang={{ ko: <ProtectedRoute><WithDrawalKo /></ProtectedRoute>, en: <ProtectedRoute><WithDrawalKo /></ProtectedRoute> }} />} />
               <Route path="/:lang/auth/FindId" element={<LangElement byLang={{ ko: <FindIdKo />, en: <FindIdKo /> }} />} />
-              <Route path="/:lang/auth/FindIdAuthSuccess" element={<LangElement byLang={{ ko: <ProtectedRoute><FindIdAuthSuccessKo /></ProtectedRoute>, en: <ProtectedRoute><FindIdAuthSuccessKo /></ProtectedRoute> }} />} />
+              <Route path="/:lang/auth/FindIdAuthSuccess" element={<LangElement byLang={{ ko: <FindIdAuthSuccessKo />, en: <FindIdAuthSuccessKo /> }} />} />
               <Route path="/:lang/auth/FindPw" element={<LangElement byLang={{ ko: <FindPwKo />, en: <FindPwKo /> }} />} />
-              <Route path="/:lang/auth/FindPwModify" element={<LangElement byLang={{ ko: <ProtectedRoute><FindPwModifyKo /></ProtectedRoute>, en: <ProtectedRoute><FindPwModifyKo /></ProtectedRoute> }} />} />
+              <Route path="/:lang/auth/FindPwModify" element={<LangElement byLang={{ ko: <FindPwModifyKo />, en: <FindPwModifyKo /> }} />} />
 
               {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
               <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />
