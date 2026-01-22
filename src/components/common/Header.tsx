@@ -1,21 +1,32 @@
-import React, { useMemo, useState, useEffect, useRef } from 'react'
-import { flushSync } from 'react-dom'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { AppBar, Box, Button, IconButton, Stack, Toolbar, Typography, Divider, Menu, MenuItem, Container, Drawer, Link as MuiLink, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import { Language, Menu as MenuIcon, ArrowDropDown, Search, Person, Login, Close, ChevronRight } from '@mui/icons-material'
+import React, { useMemo, useState, useEffect, useRef } from 'react';
+import { flushSync } from 'react-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+// MUI 컴포넌트
+import { 
+  Box, Button, IconButton, Stack, Typography, Divider, Menu, MenuItem, 
+  Drawer, Link as MuiLink, Dialog, DialogActions, DialogContent, 
+  DialogTitle, List, ListItem, ListItemText, ListItemButton, Collapse,
+  useTheme, useMediaQuery 
+} from '@mui/material';
+
+// MUI 아이콘
+import { Language, Menu as MenuIcon, Close, ChevronRight, ExpandLess, ExpandMore, OpenInNew } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
-import SkipNavigation from './SkipNavigation'
-import { getLangFromPathname, langPath } from '@/routes/lang'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { selectMenuList } from '@/features/auth/MenuThunks'
-import { clearMenuCache } from '@/features/auth/MenuSlice'
-import { useAuth } from '@/contexts/AuthContext'
-import { LOCALE_KEY } from '@/i18n/i18n'
-import type { MenuRVO } from '@/features/auth/MenuTypes'
-import { NavLink } from 'react-router-dom'
+
+import SkipNavigation from './SkipNavigation';
+import { getLangFromPathname, langPath } from '@/routes/lang';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { selectMenuList } from '@/features/auth/MenuThunks';
+import { clearMenuCache } from '@/features/auth/MenuSlice';
+import { useAuth } from '@/contexts/AuthContext';
+import { LOCALE_KEY } from '@/i18n/i18n';
 import { loginExtend } from '@/features/auth/AuthThunks';
-import { LoginExtendRVO } from '@/features/auth/AuthTypes';
+
+import type { MenuRVO } from '@/features/auth/MenuTypes';
+import type { LoginExtendRVO } from '@/features/auth/AuthTypes';
+
 
 /**
  * 사이트맵 아이템 타입 정의
@@ -1276,7 +1287,9 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   }
 
 
-  // GNB =======================================
+  // =======================================
+  // GNB
+  // =======================================
   const MENU_LIST = [
     {
       title: "주요 업무",
@@ -1286,7 +1299,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           depth3: [
             { name: "이상사례 보고란?", url: "/safety/report1" },
             { name: "KAERS란?", url: "/safety/report2" },
-            { name: "의약품이상사례", url: "https://nedrug.mfds.go.kr/CCCBA03F010/getReport" },
+            { name: "의약품이상사례", url: "https://nedrug.mfds.go.kr/CCCBA03F010/getReport", isNewWindow: true },
             { name: "의약외품(생리대 등)", url: "https://nedrug.mfds.go.kr/CCCBA03F010/getReportQuasiDrug" },
             { name: "오프라인 보고", url: "/safety/report5" },
             { name: "이상사례보고자료실", url: "/safety/report6" },
@@ -1447,8 +1460,36 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
       closeAll();
     }
   };
-  // //GNB =======================================
 
+  // =======================================
+  // 모바일메뉴 
+  // =======================================
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openMobileSub, setOpenMobileSub] = useState<number | null>(0);
+  const [openMobileDepth3, setOpenMobileDepth3] = useState<number | null>(null);
+
+  // 테마와 미디어 쿼리 설정
+  const theme = useTheme();
+  const isDesktop = useMediaQuery('(min-width:1200px)');
+
+  // 변수들이 모두 선언된 후 useEffect를 작성합니다.
+  useEffect(() => {
+    if (isDesktop && mobileMenuOpen) {
+      setMobileMenuOpen(false);
+    }
+  }, [isDesktop, mobileMenuOpen]);
+
+  // 1뎁스 클릭 시
+  const handleMobileMenuClick = (index: number) => {
+    setOpenMobileSub(index);
+    setOpenMobileDepth3(null);
+  };
+
+  // 2뎁스 클릭 시 (3뎁스가 있을 때만 실행됨)
+  const handleDepth2Click = (idx: number) => {
+    setOpenMobileDepth3(openMobileDepth3 === idx ? null : idx);
+  };
+  
   return (
     <>
       <SkipNavigation />
@@ -1457,9 +1498,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         {/* 정부 배지 영역 */}
         <Box className="gov-badge">
           <Box className="container">
-            <Typography className="txt">
-              {t("shutcutTitle")}
-            </Typography>
+            <Typography className="txt">{t("shutcutTitle")}</Typography>
           </Box>
         </Box>
         {/* 상단 바 */}
@@ -1467,28 +1506,13 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           <Box className="container">
             <Box className="top-link">
               {isAuthenticated && (
-                  <Box className="timer_box">
-                    <span className="time_text">{formatTime(sessionTime)}</span>
-                    <Button 
-                      size="small" 
-                      className="btn_extend"
-                      onClick={handleResetTimerClick}
-                    >
-                      시간연장
-                    </Button>
-                  </Box>
+                <Box className="timer_box">
+                  <span className="time_text">{formatTime(sessionTime)}</span>
+                  <Button size="small" className="btn_extend" onClick={handleResetTimerClick}>시간연장</Button>
+                </Box>
               )}
-              <Button
-                size="small"
-                onClick={() => navigate('/screens')}
-              >
-                Screens
-              </Button>
-              <Button
-                size="small"
-                onClick={onToggleLang}
-                startIcon={<Language />}
-              >
+              <Button size="small" onClick={() => navigate('/screens')}>Screens</Button>
+              <Button size="small" onClick={onToggleLang} startIcon={<Language />}>
                 {i18nInstance.language === 'ko' ? 'English' : '한국어'}
               </Button>
             </Box>
@@ -1497,60 +1521,42 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         {/* 로고, 유틸메뉴 */}
         <Box className="header_menu">
           <Box className="container">
-            <h1>
-              <Link
-                to={to('/')}
-                style={{
-                  textDecoration: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
+            <h1 className="logo">
+              <Link to={to('/')}>
                 <img
                   src={i18nInstance.language === 'ko' ? '/img/logo.png' : '/img/logo_eng02.png'}
                   alt={`KIDS ${t('kidsName')}`}
-                  style={{
-                    height: 'auto',
-                    maxHeight: '40px',
-                    cursor: 'pointer',
-                  }}
                 />
               </Link>
             </h1>
             <Box className="util-menu">
               {i18nInstance.language === 'ko' && (
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Button
-                    size="small"
-                    onClick={() => navigate(to('/search'))}
-                    className="btn-util search"
-                  >
-                    {t('integratedSearch')}
+                  <Button size="small" onClick={() => navigate(to('/search'))} className="btn-util search">
+                    {t('integratedSearch')} {/* 통합검색 */}
                   </Button>
+
+                  <Button size="small" onClick={() => navigate(to('/expert/ExpertMemberApply'))} className="btn-util user-reg">
+                    {t('usrSwtReg')} {/* 전문가 회원 전환 신청 */}
+                  </Button>
+
+                  <Button size="small" onClick={() => navigate(to('/'))} className="btn-util user-adv">
+                    {t('advAppReg')} {/* 자문위원신청 */}
+                  </Button>
+
+                  <Button size="small" onClick={() => navigate(to('/'))} className="btn-util adv-task">
+                    {t('advTask')} {/* 자문위원 업무 */}
+                  </Button>
+
                   {!isAuthenticated ? (
-                    <Button
-                      size="small"
-                      onClick={() => navigate(to('/auth/SignUpSel'))}
-                      className="btn-util signup" 
-                    >
-                      {t('signUp')}
+                    <Button size="small" onClick={() => navigate(to('/auth/SignUpSel'))} className="btn-util signup">
+                      {t('signUp')} {/* 회원가입 */}
                     </Button>
                   ) : (
-                    <Button
-                      size="small"
-                      onClick={() => navigate(to('/auth/PasswordConfirm'))}
-                      className="btn-util edit-profile" 
-                    >
-                      {t('editProfile')}
+                    <Button size="small" onClick={() => navigate(to('/auth/PasswordConfirm'))} className="btn-util edit-profile">
+                      {t('editProfile')} {/* 회원정보수정 */}
                     </Button>
                   )}
-                  <Button
-                    size="small"
-                    onClick={() => navigate(to('/expert/ExpertMemberApply'))}
-                    className="btn-util user-reg"
-                  >
-                    {t('usrSwtReg')}
-                  </Button>
 
                   {!isAuthenticated ? (
                     <Button
@@ -1562,80 +1568,102 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                       }}
                       className="btn-util login"
                     >
-                      {t('login')}
+                      {t('login')} {/* 로그인 */}
                     </Button>
                   ) : (
                     <Button
                       size="small"
                       onClick={() => {
-                        // AuthContext의 logout이 Redux 액션을 dispatch하므로 중복 호출 불필요
                         logoutContext()
-                        // 로그아웃 후 홈으로 이동
                         navigate(to('/'), { replace: true })
                       }}
                       className="btn-util logout"
                     >
-                      {t('logout')}
+                      {t('logout')} {/* 로그아웃 */}
                     </Button>
                   )}
-
                 </Stack>
               )}
             </Box>
+            <Box className="mo-header-util">
+              {i18nInstance.language === 'ko' && (
+                <Button
+                  onClick={() => navigate(to('/auth/LoginMethod'))}
+                  className="btn-util login"
+                >
+                  {t('login')}
+                </Button>
+              )}
+              
+              <Button
+                aria-label="모바일 메뉴 열기"
+                onClick={() => setMobileMenuOpen(true)}
+                className="btn-mo-menu" 
+              >
+                전체메뉴
+              </Button>
+            </Box>
           </Box>
         </Box>
-        {/* s :: GNB */}
-        <Box className="gnb" aria-label="주요 메뉴">
+
+        {/* GNB */}
+        <Box className="navigation" aria-label="주요 메뉴">
           <nav 
-            className="gnb_wrapper" 
+            className="gnb-wrapper" 
             onMouseLeave={closeAll} 
             onBlur={handleBlur} // 키보드 포커스가 메뉴를 완전히 벗어나면 닫힘
           >
-            <div className="gnb_container">
-              <ul className="depth1_list">
+            <div className="gnb-container">
+              <ul className="depth1-list">
                 {MENU_LIST.map((menu1, idx1) => (
-                  <li 
-                    key={idx1} 
-                    className="depth1_item" 
-                    onMouseEnter={() => openMenu(idx1)}
-                  >
+                  <li key={idx1} className="depth1-item" onMouseEnter={() => openMenu(idx1)}>
                     <a
                       href={(menu1 as any).url || "#"}
-                      className={`depth1_link ${activeDepth1 === idx1 ? 'active' : ''}`}
+                      className={`depth1-link ${activeDepth1 === idx1 ? 'active' : ''}`}
                       onFocus={() => openMenu(idx1)} // 탭키로 포커스 서브메뉴 오픈
                     >
                       {menu1.title}
                     </a>
 
                     {activeDepth1 === idx1 && (
-                      <div className="sub_menu_container">
-                        <ul className="depth2_list">
+                      <div className="sub-menu-container">
+                        <ul className="depth2-list">
                           {menu1.depth2.map((menu2: any, idx2: number) => (
-                            <li 
-                              key={idx2} 
-                              className="depth2_item"
-                              onMouseEnter={() => setActiveDepth2(idx2)}
-                            >
-                              <a 
-                                href={menu2.url || "#"} 
-                                className={`depth2_link ${activeDepth2 === idx2 ? 'on' : ''}`}
+                            <li key={idx2} className="depth2-item" onMouseEnter={() => setActiveDepth2(idx2)}>
+                              <a
+                                href={menu2.url || "#"}
+                                className={`depth2-link ${activeDepth2 === idx2 ? 'on' : ''}`}
                                 onFocus={() => setActiveDepth2(idx2)} // 2뎁스 포커스 시 해당 3뎁스 노출
                               >
                                 {menu2.title}
                               </a>
-                              
+
                               {/* 3뎁스 영역 */}
                               {(activeDepth2 === idx2 || (activeDepth2 === null && idx2 === 0)) && menu2.depth3.length > 0 && (
-                                <ul className="depth3_list">
+                                <ul className="depth3-list">
                                   {menu2.depth3.map((menu3: any, idx3: number) => {
                                     const isObj = typeof menu3 === 'object' && menu3 !== null;
+                                    const isNewWindow = isObj && menu3.isNewWindow;
                                     return (
                                       <li key={idx3}>
-                                        <a 
+                                        <a
                                           href={isObj ? menu3.url : "#"}
                                           onFocus={() => setActiveDepth2(idx2)} // 3뎁스 포커스 유지 시 2뎁스 강조 유지
+                                          target={isNewWindow ? "_blank" : "_self"}
+                                          rel={isNewWindow ? "noopener noreferrer" : undefined}
+                                          className={isNewWindow ? "ico-new" : ""}
                                         >
                                           {isObj ? menu3.name : menu3}
+                                          {isNewWindow && (
+                                            <OpenInNew
+                                              sx={{
+                                                fontSize: '16px',
+                                                marginLeft: '4px',
+                                                verticalAlign: 'middle',
+                                                color: 'inherit'
+                                              }}
+                                            />
+                                          )}
                                         </a>
                                       </li>
                                     );
@@ -1646,20 +1674,165 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                           ))}
                         </ul>
                         {/* GNB 배경 */}
-                        <div className="gnb_bg" />
+                        <div className="gnb-bg" />
                       </div>
                     )}
                   </li>
                 ))}
-              </ul>
+              </ul> 
+              {/* 사이트맵열기버튼 */}
+              <Box className="sitemap-open-btn">
+                <IconButton aria-label="사이트맵 열기" onClick={() => setSitemapOpen(true)} edge="end" sx={{ ml: 1 }}>
+                  <MenuIcon />
+                </IconButton>
+              </Box>
             </div>
           </nav>
         </Box>
         {/* e :: GNB */}
       </Box>
-     
-        
+      {/* e :: header */}
 
+      {/* 모바일 메뉴 */}
+      <Drawer
+        anchor="right"
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width: '100%',
+            maxWidth: '800px',
+            backgroundColor: '#fff',
+            boxSizing: 'border-box',
+          },
+          display: { xs: 'block', lg: 'none' } 
+        }}
+      >
+        {/* 상단 헤더 */}
+        <Box className="mo-drawer-header">
+          <Box className="mo-drawer-top">
+            <Button size="small" onClick={onToggleLang} startIcon={<Language />}>
+                {i18nInstance.language === 'ko' ? 'English' : '한국어'}
+              </Button>
+            <Button size="small" onClick={() => navigate(to('/search'))} className="btn-util search">
+              {t('integratedSearch')} {/* 통합검색 */}
+            </Button>
+          </Box>
+
+          <Box className="mo-drawer-util">
+            {i18nInstance.language === 'ko' && (
+              <Box className="user-info-area">
+                {!isAuthenticated ? (
+                  <p className="user-msg">로그인해주세요.</p>
+                ) : (
+                  <p className="user-name">홍길동님</p>
+                )}
+              </Box>
+            )}
+
+            {i18nInstance.language === 'ko' && (
+              <Stack direction="row" spacing={1} alignItems="center" className="util-buttons">
+                {!isAuthenticated ? (
+                  <Button size="small" onClick={() => navigate(to('/auth/SignUpSel'))} className="btn-util signup">
+                    {t('signUp')} {/* 회원가입 */}
+                  </Button>
+                ) : (
+                  <>
+                  <Button size="small" onClick={() => navigate(to('/'))} className="btn-util my-task">
+                    {t('myTask')} {/* 내업무 */}
+                  </Button>
+                  <Button size="small" onClick={() => navigate(to('/auth/PasswordConfirm'))} className="btn-util edit-profile">
+                    {t('editProfile')} {/* 회원정보수정 */}
+                  </Button>
+                  <Button size="small" onClick={() => { logoutContext(); navigate(to('/'), { replace: true }); }} className="btn-util logout">
+                    {t('logout')} {/* 로그아웃 */}
+                  </Button>
+                  </>
+                )}
+              </Stack>
+            )}
+          </Box>
+          <Box className="mobile-drawer-close">
+            <IconButton onClick={() => setMobileMenuOpen(false)}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Box>
+
+        <Box className="mobile-gnb-container">
+          {/* 1뎁스 */}
+          <List component="nav" className="mobile-depth1-area">
+            {MENU_LIST.map((menu1, idx1) => (
+              <ListItemButton 
+                key={idx1}
+                className={`depth1-btn ${openMobileSub === idx1 ? 'active' : ''}`}
+                onClick={() => handleMobileMenuClick(idx1)}
+              >
+                <ListItemText primary={menu1.title} />
+              </ListItemButton>
+            ))}
+          </List>
+
+          {/* 서브 영역 */}
+          <Box className="mobile-sub-area">
+            {MENU_LIST.map((menu1, idx1) => (
+              <Box key={idx1} sx={{ display: openMobileSub === idx1 ? 'block' : 'none' }}>
+                {menu1.depth2.map((menu2: any, idx2: number) => {
+                  const hasDepth3 = menu2.depth3 && menu2.depth3.length > 0;
+                  return (
+                    <Box key={idx2} className="sub-group">
+                      <ListItemButton 
+                        className={`depth2-btn ${openMobileDepth3 === idx2 ? 'active' : ''}`}
+                        onClick={hasDepth3 ? () => handleDepth2Click(idx2) : undefined}
+                        href={hasDepth3 ? "#" : (menu2.url || "#")}
+                        component={hasDepth3 ? "div" : "a"}
+                      >
+                        <ListItemText primary={menu2.title} />
+                        {hasDepth3 && (
+                          openMobileDepth3 === idx2 ? <ExpandLess /> : <ExpandMore />
+                        )}
+                      </ListItemButton>
+                      
+                      {hasDepth3 && (
+                        <Collapse in={openMobileDepth3 === idx2} timeout="auto" unmountOnExit>
+                          <List disablePadding className="depth3-list">
+                            {menu2.depth3.map((menu3: any, idx3: number) => {
+                              const isObj = typeof menu3 === 'object' && menu3 !== null;
+                              const isNewWindow = isObj && menu3.isNewWindow;
+                              return (
+                                <ListItemButton 
+                                  key={idx3} 
+                                  className="depth3-btn"
+                                  href={isObj ? menu3.url : "#"}
+                                  target={isNewWindow ? "_blank" : "_self"}
+                                  rel={isNewWindow ? "noopener noreferrer" : undefined}
+                                >
+                                  <ListItemText primary={isObj ? menu3.name : menu3} />
+                                  {isNewWindow && (
+                                    <OpenInNew 
+                                      sx={{ 
+                                        fontSize: '16px', 
+                                        marginLeft: '4px',
+                                        verticalAlign: 'middle',
+                                        color: 'inherit' 
+                                      }} 
+                                    />
+                                  )}
+                                </ListItemButton>
+                              );
+                            })}
+                          </List>
+                        </Collapse>
+                      )}
+                    </Box>
+                  );
+                })}
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      </Drawer>
+     
       {/* 사이트맵 Drawer */}
       <Drawer
         anchor="bottom"
