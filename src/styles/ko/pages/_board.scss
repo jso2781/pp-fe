@@ -11,7 +11,7 @@
   margin: 0 0 45px 0;
   padding: 13px 100px;
   border-radius: 10px;
-  border: 1px solid var(--border-2); border:1px solid red;
+  border: 1px solid var(--border-2);
 
   @media (max-width: 1024px) {
     padding: 15px !important;
@@ -435,6 +435,121 @@
     background: var(--btn-bg-2);
   }
 }
+
+
+// FAQ
+.board-search-info { 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  .board-count {
+    font-size: 18px !important;
+
+    .count {
+      margin: 0 5px;
+      color: var(--color-text-2);
+      font-weight: 700;
+    }
+  }
+}
+
+.category-tabs {
+  margin:0 0 40px 0;
+
+  .MuiTab-root {
+    font-size: 20px; 
+    font-weight: 700; 
+    color: #464C53; 
+    padding: 12px 20px;
+    min-height: auto;
+
+    &.Mui-selected {
+      color: #087C80; 
+    }
+  }
+
+  .MuiTabs-indicator {
+    background-color: #087C80; 
+    height: 3px;
+  }
+}
+
+.faq-list-area {
+  border-top: 1px solid #087C80;
+
+  .faq-item {
+    border-bottom: 1px solid #eee;
+
+    .MuiAccordionSummary-root {
+      padding: 0;
+      min-height: auto !important;
+      .MuiAccordionSummary-content {
+        margin: 26px 0 !important;
+      }
+    }
+
+    .MuiAccordionDetails-root {
+      padding: 0;
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: flex-start;
+
+      .label-q {
+        width: 60px;
+        text-align: center;
+        flex-shrink: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #087C80;
+        line-height: 1.4;
+      }
+      .question-text {
+        font-size: 16px;
+        font-weight: 700;
+        color: #333;
+        line-height: 1.4; 
+        word-break: keep-all; 
+      }
+    }
+
+    .faq-answer {
+      display: flex;
+      align-items: flex-start; 
+      padding: 10px 0;
+
+      .label-a {
+        width: 60px;
+        text-align: center;
+        flex-shrink: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #D23B27;
+        line-height: 1.6; 
+      }
+      .answer-text {
+        font-size: 15px;
+        color: #666;
+        line-height: 1.6;
+        white-space: pre-wrap;
+      }
+    }
+  }
+
+  .MuiPaper-root {
+    &::before { display: none; }
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+
+
+
+
 
 // 이전버전 ↓↓↓ //
 /* 제목 링크에 포커스가 갔을 때의 스타일 */
