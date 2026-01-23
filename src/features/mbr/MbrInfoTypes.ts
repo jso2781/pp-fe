@@ -16,7 +16,7 @@ export const mockMbrInfoList = [
     encptMbrFlnm: 'XXX',
 
     /** 회원암호화이메일 */
-    mbrEncptEml: 'XXX',
+    encptMbrEmlNm: 'XXX',
 
     /** 회원암호화비밀번호 */
     encptMbrPswd: 'XXX',
@@ -85,7 +85,7 @@ export interface ExistMbrInfoPVO {
   /** 회원아이디 */
   mbrId?: string
   /** 회원암호화이메일 */
-  mbrEncptEml?: string
+  encptMbrEmlNm?: string
 }
 
 /**
@@ -110,7 +110,7 @@ export interface MbrInfoPVO {
   encptMbrFlnm?: string
 
   /** 회원암호화이메일 */
-  mbrEncptEml?: string
+  encptMbrEmlNm?: string
 
   /** 회원암호화비밀번호 */
   encptMbrPswd?: string
@@ -188,7 +188,7 @@ export interface MbrInfoRVO {
   encptMbrFlnm?: string
 
   /** 회원암호화이메일 */
-  mbrEncptEml?: string
+  encptMbrEmlNm?: string
 
   /** 회원암호화비밀번호 */
   encptMbrPswd?: string
@@ -263,7 +263,7 @@ export interface MbrInfoListPVO {
   encptMbrFlnm?: string
 
   /** 회원암호화이메일 */
-  mbrEncptEml?: string
+  encptMbrEmlNm?: string
 
   /** 회원암호화비밀번호 */
   encptMbrPswd?: string

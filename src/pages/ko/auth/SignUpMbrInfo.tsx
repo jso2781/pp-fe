@@ -320,7 +320,7 @@ export default function SignUpMbrInfo() {
     }
 
     try {
-      const result = await dispatch(existMbrInfo({ mbrEncptEml: formData.email })).unwrap();
+      const result = await dispatch(existMbrInfo({ encptMbrEmlNm: formData.email })).unwrap();
       if(result.existYn === 'Y'){
         setEmailAvailable(false);
         setIsEmailChecked(true);
@@ -394,7 +394,7 @@ export default function SignUpMbrInfo() {
       const mbrInfoPVO: MbrInfoPVO = {
         mbrId: formData.mbrId,
         encptMbrFlnm: formData.userName,
-        mbrEncptEml: formData.email || undefined,
+        encptMbrEmlNm: formData.email || undefined,
         encptMbrPswd: formData.password,
         encptMbrTelno: formData.phone,
         mbrTypeCd: 'G',                       // 회원유형가입(G - 일반회원, Y - 14세미만회원, E - 전문가회원)
