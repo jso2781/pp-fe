@@ -145,7 +145,7 @@ export default function Home() {
     const allItems: SnsItem[] = (current?.all_sns || []).map((item) => ({
       type: (item.snsType === '유튜브' ? 'youtube' : item.snsType === '인스타' ? 'insta' : 'blog') as 'youtube' | 'insta' | 'blog',
       title: item.pstTtl || '',
-      url: item.mdfrId || (item.videoId ? `https://www.youtube.com/embed/${item.videoId}` : 'https://www.instagram.com'),
+      url: item.pstCn || (item.videoId ? `https://www.youtube.com/embed/${item.videoId}` : 'https://www.instagram.com'),
       thumbnail: getThumbnailUrl(item),
       desc: item.pstCn || '',
       videoId: item.videoId || '',
