@@ -52,6 +52,12 @@ declare module '@mui/material/Select' {
   interface SelectPropsSizeOverrides {large: true;}
 }
 
+declare module '@mui/material/styles' {
+  interface TypeText {
+    main?: string;
+  }
+}
+
 // 2. 테마 생성
 export const muiTheme = createTheme({
   palette: {
@@ -60,7 +66,7 @@ export const muiTheme = createTheme({
     gray: { main: '#D8D8D8', contrastText: '#1E2124' }, // 연한 회색
     dark: { main: '#303336', contrastText: '#ffffff' }, // 강조 검정
     error: { main: '#BD2C0F' },
-    text: { primary: '#1E2124', secondary: '#464C53' },
+    text: { primary: '#1E2124', secondary: '#464C53', main: '#087C80',},
     divider: '#D8D8D8',
   },
   typography: { 
