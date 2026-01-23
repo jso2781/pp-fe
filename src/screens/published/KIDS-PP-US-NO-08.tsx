@@ -54,35 +54,32 @@ export default function KIDS_PP_US_NO_08() {
               <DepsLocation />
               <Box className="content-view" id="content">
                 <Box className="page-content">
-                  
-                  {/* --- 본문 시작 --- */}
+                {/* --- 본문 시작 --- */}
+                  <Box component="form" className="board-search">
+                    <FormControl size="large" className="search-condition">
+                      <InputLabel id="search-condition-label" className="sr-only">검색조건</InputLabel>
+                      <Select 
+                        size="large" 
+                        value={searchCnd} 
+                        labelId="search-condition-label" 
+                        onChange={(e) => setSearchCnd(String(e.target.value))}
+                      >
+                        <MenuItem value="title">제목</MenuItem>
+                        <MenuItem value="content">내용</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <Box className="search-input-group">
+                      <TextField 
+                        size="large" 
+                        placeholder="검색어 입력" 
+                        value={searchWrd} 
+                        onChange={(e) => setSearchWrd(e.target.value)} 
+                        sx={{ flexGrow: 1 }}
+                      />
+                      <Button variant="contained" size="large" className="btn-search">검색</Button>
+                    </Box>
+                  </Box>
                   <Box className="board-list-area" component="section">
-                    {/* 검색 영역 */}
-                    <Stack component="form" className="board-search">
-                      <FormControl size="large" className="search-condition">
-                        <InputLabel id="search-condition-label" className="sr-only">검색조건</InputLabel>
-                        <Select 
-                          size="large" 
-                          value={searchCnd} 
-                          labelId="search-condition-label" 
-                          onChange={(e) => setSearchCnd(String(e.target.value))}
-                        >
-                          <MenuItem value="title">제목</MenuItem>
-                          <MenuItem value="content">내용</MenuItem>
-                        </Select>
-                      </FormControl>
-                      <Box className="search-input-group">
-                        <TextField 
-                          size="large" 
-                          placeholder="검색어 입력" 
-                          value={searchWrd} 
-                          onChange={(e) => setSearchWrd(e.target.value)} 
-                          sx={{ flexGrow: 1 }}
-                        />
-                        <Button variant="contained" size="large" className="btn-search">검색</Button>
-                      </Box>
-                    </Stack>
-
                     {/* 검색 결과 요약 */}
                     <Box className="board-info" aria-label="게시판 검색결과">
                       <Typography className="board-count">
@@ -134,12 +131,10 @@ export default function KIDS_PP_US_NO_08() {
                       />
                     </Stack>
                   </Box>
-                  {/* --- 본문 끝 --- */}
-
+                {/* --- 본문 끝 --- */}
                 </Box>
               </Box>
             </Box>
-
           </Box>
         </Box>
       </Box>

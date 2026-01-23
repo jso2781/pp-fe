@@ -153,39 +153,37 @@ export default function NewsJobNoticeList() {
               <DepsLocation />
               <Box className="content-view" id="content">
                 <Box className="page-content">
-                  
-                 {/* --- 본문 시작 --- */}
+                {/* --- 본문 시작 --- */}
+                  <Box component="form" className="board-search">
+                    <FormControl size="large" className="search-condition">
+                      <InputLabel id="search-condition-label" className="sr-only">검색조건</InputLabel>
+                      <Select 
+                        size="large" 
+                        value={searchCnd} 
+                        labelId="search-condition-label" 
+                        onChange={(e) => setSearchCnd(String(e.target.value))}
+                      >
+                        <MenuItem value="title">제목</MenuItem>
+                        <MenuItem value="content">내용</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <Box className="search-input-group">
+                      <TextField 
+                        size="large" 
+                        placeholder="검색어 입력" 
+                        value={searchWrd} 
+                        onChange={(e) => setSearchWrd(e.target.value)} 
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            onSearch();
+                          }
+                        }}
+                        sx={{ flexGrow: 1 }} // 남은 공간을 꽉 채우도록 설정
+                      />
+                      <Button variant="contained" size="large" className="btn-search" onClick={onSearch}>검색</Button>
+                    </Box>
+                  </Box>
                   <Box className="board-list-area" component="section">
-                    <Stack component="form" className="board-search">
-                      <FormControl size="large" className="search-condition">
-                        <InputLabel id="search-condition-label" className="sr-only">검색조건</InputLabel>
-                        <Select 
-                          size="large" 
-                          value={searchCnd} 
-                          labelId="search-condition-label" 
-                          onChange={(e) => setSearchCnd(String(e.target.value))}
-                        >
-                          <MenuItem value="title">제목</MenuItem>
-                          <MenuItem value="content">내용</MenuItem>
-                        </Select>
-                      </FormControl>
-                      <Box className="search-input-group">
-                        <TextField 
-                          size="large" 
-                          placeholder="검색어 입력" 
-                          value={searchWrd} 
-                          onChange={(e) => setSearchWrd(e.target.value)} 
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              onSearch();
-                            }
-                          }}
-                          sx={{ flexGrow: 1 }} // 남은 공간을 꽉 채우도록 설정
-                        />
-                        <Button variant="contained" size="large" className="btn-search" onClick={onSearch}>검색</Button>
-                      </Box>
-                    </Stack>
-
                     <Box className="board-info" aria-label="게시판 검색결과">
                       <Typography className="board-count">
                         검색결과 
@@ -253,8 +251,7 @@ export default function NewsJobNoticeList() {
                       />
                     </Stack>
                   </Box>
-                   {/* --- 본문 끝 --- */}
-
+                {/* --- 본문 끝 --- */}
                 </Box>
               </Box>
             </Box>
