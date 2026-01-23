@@ -1288,7 +1288,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
 
   // =======================================
-  // GNB
+  // GNB 메뉴관리
   // =======================================
   const MENU_LIST = [
     {
@@ -1437,6 +1437,10 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
     }
   ];
 
+  // =======================================
+  // 웹GNB
+  // =======================================
+
   // 상태 관리
   const [activeDepth1, setActiveDepth1] = useState<number | null>(null);
   const [activeDepth2, setActiveDepth2] = useState<number | null>(null);
@@ -1462,7 +1466,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   };
 
   // =======================================
-  // 모바일메뉴 
+  // 모바일GNB 
   // =======================================
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openMobileSub, setOpenMobileSub] = useState<number | null>(0);
@@ -1596,7 +1600,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
               )}
               
               <Button
-                aria-label="모바일 메뉴 열기"
+                aria-label="모바일메뉴 열기"
                 onClick={() => setMobileMenuOpen(true)}
                 className="btn-mo-menu" 
               >
@@ -1606,7 +1610,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           </Box>
         </Box>
 
-        {/* GNB */}
+        {/* 웹GNB */}
         <Box className="navigation" aria-label="주요 메뉴">
           <nav 
             className="gnb-wrapper" 
@@ -1617,26 +1621,26 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
               <ul className="depth1-list">
                 {MENU_LIST.map((menu1, idx1) => (
                   <li key={idx1} className="depth1-item" onMouseEnter={() => openMenu(idx1)}>
-                    <a
-                      href={(menu1 as any).url || "#"}
+                    <Link
+                      to={(menu1 as any).url || "#"}
                       className={`depth1-link ${activeDepth1 === idx1 ? 'active' : ''}`}
-                      onFocus={() => openMenu(idx1)} // 탭키로 포커스 서브메뉴 오픈
+                      onFocus={() => openMenu(idx1)} 
                     >
                       {menu1.title}
-                    </a>
+                    </Link>
 
                     {activeDepth1 === idx1 && (
                       <div className="sub-menu-container">
                         <ul className="depth2-list">
                           {menu1.depth2.map((menu2: any, idx2: number) => (
                             <li key={idx2} className="depth2-item" onMouseEnter={() => setActiveDepth2(idx2)}>
-                              <a
-                                href={menu2.url || "#"}
+                              <Link
+                                to={menu2.url || "#"}
                                 className={`depth2-link ${activeDepth2 === idx2 ? 'on' : ''}`}
-                                onFocus={() => setActiveDepth2(idx2)} // 2뎁스 포커스 시 해당 3뎁스 노출
+                                onFocus={() => setActiveDepth2(idx2)} 
                               >
                                 {menu2.title}
-                              </a>
+                              </Link>
 
                               {/* 3뎁스 영역 */}
                               {(activeDepth2 === idx2 || (activeDepth2 === null && idx2 === 0)) && menu2.depth3.length > 0 && (
@@ -1644,11 +1648,12 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                   {menu2.depth3.map((menu3: any, idx3: number) => {
                                     const isObj = typeof menu3 === 'object' && menu3 !== null;
                                     const isNewWindow = isObj && menu3.isNewWindow;
+                                    
                                     return (
                                       <li key={idx3}>
-                                        <a
-                                          href={isObj ? menu3.url : "#"}
-                                          onFocus={() => setActiveDepth2(idx2)} // 3뎁스 포커스 유지 시 2뎁스 강조 유지
+                                        <Link
+                                          to={isObj ? menu3.url : "#"}
+                                          onFocus={() => setActiveDepth2(idx2)} 
                                           target={isNewWindow ? "_blank" : "_self"}
                                           rel={isNewWindow ? "noopener noreferrer" : undefined}
                                           className={isNewWindow ? "ico-new" : ""}
@@ -1664,7 +1669,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                               }}
                                             />
                                           )}
-                                        </a>
+                                        </Link>
                                       </li>
                                     );
                                   })}
@@ -1693,7 +1698,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
       </Box>
       {/* e :: header */}
 
-      {/* 모바일 메뉴 */}
+      {/* 모바일메뉴 */}
       <Drawer
         anchor="right"
         open={mobileMenuOpen}
@@ -1759,78 +1764,86 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           </Box>
         </Box>
 
-        <Box className="mobile-gnb-container">
-          {/* 1뎁스 */}
-          <List component="nav" className="mobile-depth1-area">
+        {/* 모바일GNB */}
+        <div className="mobile-gnb-container" role="navigation">
+          <ul className="mobile-depth1-area">
             {MENU_LIST.map((menu1, idx1) => (
-              <ListItemButton 
-                key={idx1}
-                className={`depth1-btn ${openMobileSub === idx1 ? 'active' : ''}`}
-                onClick={() => handleMobileMenuClick(idx1)}
-              >
-                <ListItemText primary={menu1.title} />
-              </ListItemButton>
-            ))}
-          </List>
+              <li key={idx1} className={`depth1-item ${openMobileSub === idx1 ? 'active' : ''}`}>
+                <Link 
+                  to="#"
+                  className="depth1-btn"
+                  onClick={(e) => {
+                    e.preventDefault(); 
+                    handleMobileMenuClick(idx1);
+                  }}
+                >
+                  {menu1.title}
+                </Link>
 
-          {/* 서브 영역 */}
-          <Box className="mobile-sub-area">
-            {MENU_LIST.map((menu1, idx1) => (
-              <Box key={idx1} sx={{ display: openMobileSub === idx1 ? 'block' : 'none' }}>
-                {menu1.depth2.map((menu2: any, idx2: number) => {
-                  const hasDepth3 = menu2.depth3 && menu2.depth3.length > 0;
-                  return (
-                    <Box key={idx2} className="sub-group">
-                      <ListItemButton 
-                        className={`depth2-btn ${openMobileDepth3 === idx2 ? 'active' : ''}`}
-                        onClick={hasDepth3 ? () => handleDepth2Click(idx2) : undefined}
-                        href={hasDepth3 ? "#" : (menu2.url || "#")}
-                        component={hasDepth3 ? "div" : "a"}
-                      >
-                        <ListItemText primary={menu2.title} />
-                        {hasDepth3 && (
-                          openMobileDepth3 === idx2 ? <ExpandLess /> : <ExpandMore />
-                        )}
-                      </ListItemButton>
-                      
-                      {hasDepth3 && (
-                        <Collapse in={openMobileDepth3 === idx2} timeout="auto" unmountOnExit>
-                          <List disablePadding className="depth3-list">
-                            {menu2.depth3.map((menu3: any, idx3: number) => {
-                              const isObj = typeof menu3 === 'object' && menu3 !== null;
-                              const isNewWindow = isObj && menu3.isNewWindow;
-                              return (
-                                <ListItemButton 
-                                  key={idx3} 
-                                  className="depth3-btn"
-                                  href={isObj ? menu3.url : "#"}
-                                  target={isNewWindow ? "_blank" : "_self"}
-                                  rel={isNewWindow ? "noopener noreferrer" : undefined}
-                                >
-                                  <ListItemText primary={isObj ? menu3.name : menu3} />
-                                  {isNewWindow && (
-                                    <OpenInNew 
-                                      sx={{ 
-                                        fontSize: '16px', 
-                                        marginLeft: '4px',
-                                        verticalAlign: 'middle',
-                                        color: 'inherit' 
-                                      }} 
-                                    />
-                                  )}
-                                </ListItemButton>
-                              );
-                            })}
-                          </List>
-                        </Collapse>
-                      )}
-                    </Box>
-                  );
-                })}
-              </Box>
+                {openMobileSub === idx1 && (
+                  <div className="mobile-sub-area">
+                    <ul className="depth2-list">
+                      {menu1.depth2.map((menu2: any, idx2: number) => {
+                        const hasDepth3 = menu2.depth3 && menu2.depth3.length > 0;
+                        return (
+                          <li key={idx2} className="depth2-item">
+                            <Link 
+                              to={hasDepth3 ? "#" : (menu2.url || "/")} 
+                              className={`depth2-btn ${openMobileDepth3 === idx2 ? 'active' : ''}`}
+                              onClick={(e) => {
+                                if (hasDepth3) {
+                                  e.preventDefault();
+                                  handleDepth2Click(idx2);
+                                }
+                              }}
+                            >
+                              {menu2.title}
+                              {hasDepth3 && (openMobileDepth3 === idx2 ? <ExpandLess /> : <ExpandMore />)}
+                            </Link>
+
+                            {hasDepth3 && openMobileDepth3 === idx2 && (
+                              <ul className="depth3-list">
+                                {menu2.depth3.map((menu3: any, idx3: number) => {
+                                  const isObj = typeof menu3 === 'object' && menu3 !== null;
+                                  const isNewWindow = isObj && menu3.isNewWindow; // 새창 여부 확인
+                                  
+                                  return (
+                                    <li key={idx3} className="depth3-item">
+                                      <Link 
+                                        to={isObj ? menu3.url : "#"} 
+                                        className={`depth3-btn ${isNewWindow ? "ico-new" : ""}`}
+                                        target={isNewWindow ? "_blank" : "_self"}
+                                        rel={isNewWindow ? "noopener noreferrer" : undefined}
+                                        onClick={() => !isNewWindow && setMobileMenuOpen(false)} 
+                                      >
+                                        {isObj ? menu3.name : menu3}
+                                        {/* 새창 열기 아이콘 */}
+                                        {isNewWindow && (
+                                          <OpenInNew 
+                                            sx={{ 
+                                              fontSize: '16px', 
+                                              marginLeft: '4px',
+                                              verticalAlign: 'middle',
+                                              color: 'inherit' 
+                                            }} 
+                                          />
+                                        )}
+                                      </Link>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
+              </li>
             ))}
-          </Box>
-        </Box>
+          </ul>
+        </div>
       </Drawer>
      
       {/* 사이트맵 Drawer */}
