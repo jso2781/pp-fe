@@ -127,7 +127,7 @@ export default function Login() {
     }
 
     try{
-      const res = await dispatch(loginThunk({ mbrId: values.loginId, mbrEnpswd: values.password, appId: import.meta.env.VITE_APP_ID ?? 'kids-pp-dev' })).unwrap();
+      const res = await dispatch(loginThunk({ mbrId: values.loginId, encptMbrPswd: values.password, appId: import.meta.env.VITE_APP_ID ?? 'kids-pp-dev' })).unwrap();
 
       const userInfo = res.userInfo;
 

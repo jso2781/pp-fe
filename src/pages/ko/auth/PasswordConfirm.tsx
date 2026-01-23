@@ -66,7 +66,7 @@ export default function PasswordConfirm() {
       // 비밀번호 확인 API 호출
       const result = await dispatch(verifyPassword({ 
         mbrId: mbrId, 
-        mbrEnpswd: password 
+        encptMbrPswd: password 
       })).unwrap();
 
       // existYn이 'Y'이면 회원정보수정 화면으로 이동

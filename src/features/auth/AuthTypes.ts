@@ -17,7 +17,7 @@ export interface AuthPVO {
   /**
    * 회원암호화비밀번호
    */
-  mbrEnpswd?: string
+  encptMbrPswd?: string
 
   /**
    * 애플리케이션ID
@@ -52,7 +52,7 @@ export interface AuthRVO {
   /**
    * 회원암호화성명
    */
-  mbrEncptFlnm?: string
+  encptMbrFlnm?: string
 
   /**
    * 회원암호화이메일
@@ -62,12 +62,12 @@ export interface AuthRVO {
   /**
    * 회원암호화비밀번호
    */
-  mbrEnpswd?: string
+  encptMbrPswd?: string
 
   /**
    * 회원암호화전화번호
    */
-  mbrEncptTelno?: string
+  encptMbrTelno?: string
 
   /**
    * 회원유형코드
@@ -77,7 +77,7 @@ export interface AuthRVO {
   /**
    * 회원가입상태
    */
-  mbrJoinStts?: string
+  mbrJoinSttsCd?: string
 
   /**
    * 회원가입일시
@@ -117,7 +117,7 @@ export interface AuthRVO {
   /**
    * 인증토큰
    */
-  certToken?: string
+  certTokenVl?: string
 
   /**
    * 등록자아이디
@@ -169,6 +169,10 @@ export interface AuthRVO {
    */
   accessToken?: string
 
+  /**
+   * 자문위원여부
+   */
+   cnstnMbcmtYn?: string
 }
 
 export interface LoginRVO {

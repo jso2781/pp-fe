@@ -13,22 +13,22 @@ export const mockMbrInfoList = [
     mbrId: 'XXX',
 
     /** 회원암호화성명 */
-    mbrEncptFlnm: 'XXX',
+    encptMbrFlnm: 'XXX',
 
     /** 회원암호화이메일 */
     mbrEncptEml: 'XXX',
 
     /** 회원암호화비밀번호 */
-    mbrEnpswd: 'XXX',
+    encptMbrPswd: 'XXX',
 
     /** 회원암호화전화번호 */
-    mbrEncptTelno: 'XXX',
+    encptMbrTelno: 'XXX',
 
     /** 회원유형코드 */
     mbrTypeCd: 'XXX',
 
     /** 회원가입상태 */
-    mbrJoinStts: 'XXX',
+    mbrJoinSttsCd: 'XXX',
 
     /** 회원가입일시 */
     mbrJoinDt: '2026-01-23',
@@ -38,6 +38,9 @@ export const mockMbrInfoList = [
 
     /** 회원탈퇴일시 */
     mbrWhdwlDt: '2026-01-23',
+
+	/** 자문위원여부 */
+    cnstnMbcmtYn: 'Y',
 
     /** 이전암호화비밀번호 */
     bfrEnpswd: 'XXX',
@@ -52,7 +55,7 @@ export const mockMbrInfoList = [
     linkInfoIdntfId: 'XXX',
 
     /** 인증토큰 */
-    certToken: 'XXX',
+    certTokenVl: 'XXX',
 
     /** 등록자아이디 */
     rgtrId: 'XXX',
@@ -104,22 +107,22 @@ export interface MbrInfoPVO {
   mbrId?: string
 
   /** 회원암호화성명 */
-  mbrEncptFlnm?: string
+  encptMbrFlnm?: string
 
   /** 회원암호화이메일 */
   mbrEncptEml?: string
 
   /** 회원암호화비밀번호 */
-  mbrEnpswd?: string
+  encptMbrPswd?: string
 
   /** 회원암호화전화번호 */
-  mbrEncptTelno?: string
+  encptMbrTelno?: string
 
   /** 회원유형코드 */
   mbrTypeCd?: string
 
   /** 회원가입상태 */
-  mbrJoinStts?: string
+  mbrJoinSttsCd?: string
 
   /** 회원가입일시 */
   mbrJoinDt?: string
@@ -129,6 +132,9 @@ export interface MbrInfoPVO {
 
   /** 회원탈퇴일시 */
   mbrWhdwlDt?: string | null
+
+  /** 자문위원여부 */
+  cnstnMbcmtYn?: string | null
 
   /** 이전암호화비밀번호 */
   bfrEnpswd?: string | null
@@ -143,7 +149,7 @@ export interface MbrInfoPVO {
   linkInfoIdntfId?: string | null
 
   /** 인증토큰 */
-  certToken?: string | null
+  certTokenVl?: string | null
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -179,22 +185,22 @@ export interface MbrInfoRVO {
   mbrId?: string
 
   /** 회원암호화성명 */
-  mbrEncptFlnm?: string
+  encptMbrFlnm?: string
 
   /** 회원암호화이메일 */
   mbrEncptEml?: string
 
   /** 회원암호화비밀번호 */
-  mbrEnpswd?: string
+  encptMbrPswd?: string
 
   /** 회원암호화전화번호 */
-  mbrEncptTelno?: string
+  encptMbrTelno?: string
 
   /** 회원유형코드 */
   mbrTypeCd?: string
 
   /** 회원가입상태 */
-  mbrJoinStts?: string
+  mbrJoinSttsCd?: string
 
   /** 회원가입일시 */
   mbrJoinDt?: string
@@ -204,6 +210,9 @@ export interface MbrInfoRVO {
 
   /** 회원탈퇴일시 */
   mbrWhdwlDt?: string
+
+  /** 자문위원여부 */
+  cnstnMbcmtYn?: string
 
   /** 이전암호화비밀번호 */
   bfrEnpswd?: string
@@ -218,7 +227,7 @@ export interface MbrInfoRVO {
   linkInfoIdntfId?: string
 
   /** 인증토큰 */
-  certToken?: string
+  certTokenVl?: string
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -251,22 +260,22 @@ export interface MbrInfoListPVO {
   mbrId?: string
 
   /** 회원암호화성명 */
-  mbrEncptFlnm?: string
+  encptMbrFlnm?: string
 
   /** 회원암호화이메일 */
   mbrEncptEml?: string
 
   /** 회원암호화비밀번호 */
-  mbrEnpswd?: string
+  encptMbrPswd?: string
 
   /** 회원암호화전화번호 */
-  mbrEncptTelno?: string
+  encptMbrTelno?: string
 
   /** 회원유형코드 */
   mbrTypeCd?: string
 
   /** 회원가입상태 */
-  mbrJoinStts?: string
+  mbrJoinSttsCd?: string
 
   /** 회원가입일시 */
   mbrJoinDt?: string
@@ -276,6 +285,9 @@ export interface MbrInfoListPVO {
 
   /** 회원탈퇴일시 */
   mbrWhdwlDt?: string
+
+  /** 자문위원여부 */
+  cnstnMbcmtYn?: string
 
   /** 이전암호화비밀번호 */
   bfrEnpswd?: string
@@ -290,7 +302,7 @@ export interface MbrInfoListPVO {
   linkInfoIdntfId?: string
 
   /** 인증토큰 */
-  certToken?: string
+  certTokenVl?: string
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -344,7 +356,7 @@ export interface VerifyPasswordPVO {
   mbrId: string
 
   /** 회원암호화비밀번호 */
-  mbrEnpswd: string
+  encptMbrPswd: string
 }
 
 /**

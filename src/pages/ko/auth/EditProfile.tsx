@@ -35,8 +35,8 @@ export default function EditProfile() {
   // 폼 상태 관리
   const [formData, setFormData] = useState({
     mbrId: userInfo?.mbrId || '',
-    userName: userInfo?.mbrEncptFlnm || '', // 암호화된 이름 (평문으로 표시 불가, 실제로는 복호화 필요)
-    phone: userInfo?.mbrEncptTelno || '', // 암호화된 전화번호 (평문으로 표시 불가, 실제로는 복호화 필요)
+    userName: userInfo?.encptMbrFlnm || '', // 암호화된 이름 (평문으로 표시 불가, 실제로는 복호화 필요)
+    phone: userInfo?.encptMbrTelno || '', // 암호화된 전화번호 (평문으로 표시 불가, 실제로는 복호화 필요)
     email: userInfo?.mbrEncptEml || '', // 암호화된 이메일 (평문으로 표시 불가, 실제로는 복호화 필요)
     password: '',
     confirmPassword: '',
@@ -72,8 +72,8 @@ export default function EditProfile() {
       setFormData(prev => ({
         ...prev,
         mbrId: userInfo.mbrId || '',
-        userName: userInfo.mbrEncptFlnm || '',
-        phone: userInfo.mbrEncptTelno || '',
+        userName: userInfo.encptMbrFlnm || '',
+        phone: userInfo.encptMbrTelno || '',
         email: userInfo.mbrEncptEml || '',
       }));
     }
@@ -294,12 +294,12 @@ export default function EditProfile() {
         mbrEncptEml: formData.email || undefined,
         // 비밀번호 변경 모드인 경우에만 비밀번호 업데이트
         ...(isPasswordChangeMode && formData.password ? {
-          mbrEnpswd: formData.password,         // 새로운 비밀번호
-          bfrEnpswd: userInfo?.mbrEnpswd || '', // 이전 비밀번호 (현재 비밀번호를 이전 비밀번호로 저장)
+          encptMbrPswd: formData.password,         // 새로운 비밀번호
+          bfrEnpswd: userInfo?.encptMbrPswd || '', // 이전 비밀번호 (현재 비밀번호를 이전 비밀번호로 저장)
           pswdChgDt: now                        // 비밀번호 변경일시
         } : {}),
         // 휴대전화번호 변경이 완료된 경우에만 업데이트
-        ...(isPhoneCertified && formData.phone ? { mbrEncptTelno: formData.phone } : {}),
+        ...(isPhoneCertified && formData.phone ? { encptMbrTelno: formData.phone } : {}),
       };
 
       const result: UpdateMbrInfoRVO = await dispatch(updateMbrInfo(mbrInfoPVO)).unwrap();
