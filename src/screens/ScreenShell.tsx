@@ -37,7 +37,7 @@ export default function ScreenShell({ screenId, title, uiType, children, pdfUrl 
   }, [pdfUrl, screenId, uiType]);
 
   return (
-    <Box sx={{ py: 2 }} className="container">
+    <Box>
       <Card>
         <CardContent>
           <Stack direction="column" spacing={1}>

@@ -118,6 +118,22 @@ export default function DepsLocation() {
       labels: ["signUp"] // 회원가입 - 가입 신청 완료
     },
     {
+      pattern: /^\/[A-Za-z]{2}\/auth\/FindId(\/)?$/,
+      labels: ["login", "idLogin", "findId"] // 로그인 > 아이디 로그인 > 아이디 찾기
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/auth\/FindIdAuthSuccess(\/)?$/,
+      labels: ["login", "idLogin", "findId"] // 로그인 > 아이디 로그인 > 아이디 찾기
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/auth\/FindPw(\/)?$/,
+      labels: ["login", "idLogin", "findPassword"] // 로그인 > 아이디 로그인 > 비밀번호 찾기
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/auth\/FindPwModify(\/)?$/,
+      labels: ["login", "idLogin", "findPassword", "passwordChange"] // 로그인 > 아이디 로그인 > 비밀번호 찾기 > 비밀번호 변경
+    },
+    {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsNoticeList(\/)?(\d+)?$/,
       labels: ["news", "noticeList"] // 기관소식 > 공지사항
     },
