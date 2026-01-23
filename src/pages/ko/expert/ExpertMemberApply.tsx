@@ -273,7 +273,6 @@ export default function ExpertMemberApply() {
                         소속선택
                       </span>
                     </Typography>
-                    
 
                     <Box className="bordered-box">
                         {/* 사업자등록번호 조회 */}
@@ -469,13 +468,8 @@ export default function ExpertMemberApply() {
 
                     {/* 파일 첨부 */}
                     <h3 className="sub-section-title">증빙서류 제출</h3>
-                    <Box className="bordered-box">
-                      <Typography component="label" htmlFor="attach-file" className="label">
-                        첨부파일
-                        <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
-                      </Typography>
+                    <Box className="bordered-box attach-file-box">
                       <FileUploadField
-                        label="attach-file"
                         value={uploadedFiles}
                         onChange={setUploadedFiles}
                         accept=".pdf,.png,.jpg,.jpeg"
@@ -486,11 +480,12 @@ export default function ExpertMemberApply() {
                       {uploadedFiles.length > 0 && (
                         <Box sx={{ mt: 2 }}>
                           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="body2" color="text.main">
                               {uploadedFiles.length}개
                             </Typography>
                             <Button
                               size="small"
+                              variant="outlined"
                               onClick={handleDeleteAllFiles}
                               sx={{ textTransform: 'none' }}
                             >
@@ -528,7 +523,7 @@ export default function ExpertMemberApply() {
                     </Box>
 
                     {/* 업무 시스템 선택 */}
-                    <h3 className="sub-section-title">업무 시스템 선택<span className="necessary">(필수)</span></h3>
+                    <h3 className="sub-section-title">업무 시스템 선택 <span className="necessary">(필수)</span></h3>
                     <Box className="bordered-box">
                       <Stack spacing={1}>
                         {businessSystems.map((system) => (
@@ -586,6 +581,12 @@ export default function ExpertMemberApply() {
                   >
 
                     <Box className="step-header">
+                      <Typography className="step-title">
+                      <Box component="span" className="step-current">
+                        3단계
+                      </Box>
+                      {' / 3단계 '}
+                    </Typography>
                       <Typography className="step-description">
                         <span className="step-description-text">
                           전문가회원 전환신청 완료
@@ -594,7 +595,7 @@ export default function ExpertMemberApply() {
                     </Box>
 
                     <Box className="bordered-box">
-                      <Box className="join-complete-section">
+                      <Box className="join-complete-section expert-member-complete">
                         <Typography component="p" className="complete-title">
                           전문가회원 전환신청을 완료했습니다.
                         </Typography>
@@ -602,7 +603,6 @@ export default function ExpertMemberApply() {
                           신청하신 기관 관리자의 승인이 완료된 후 내 업무에서 확인 하실 수
                           있습니다.
                         </Typography>
-
                       </Box>
                     </Box>
                     {/* 버튼 영역 */}
