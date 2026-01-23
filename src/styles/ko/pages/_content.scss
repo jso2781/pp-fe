@@ -1,5 +1,16 @@
 @use '../base/mixins';
 
+
+.sub-section-title{
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom:10px;
+  & ~ & {
+    margin-top:30px;
+  }
+  .necessary{color:#DE3412;}
+}
+
 .form-item {
   margin:0 0 5px 0;
   &:not(:first-of-type) {
@@ -283,47 +294,47 @@
 }
 
 // 회원가입
-.pageCont-joinType{
-  // 회원가입 단계
-  .step-progress{
-    .step-label{
-      font-size: var(--fs-13);
-      color: var(--color-text-1);
-    }
-    .step-description{
-      font-size: var(--fs-15);
-      font-weight: var(--fw-700);
-      color: var(--color-text-5);
-      margin-top: 4px;
+// 회원가입 단계
+.step-progress{
+  .step-label{
+    font-size: var(--fs-13);
+    color: var(--color-text-1);
+  }
+  .step-description{
+    font-size: var(--fs-15);
+    font-weight: var(--fw-700);
+    color: var(--color-text-5);
+    margin-top: 4px;
+  }
+}
+// 단계 제목
+.step-header{
+  .step-title{
+    display: block;
+    margin:0 0 24px 0;
+    font-size: var(--fs-18);
+    font-weight: var(--fw-700);
+    margin: 30px 0 10px 0;
+
+    .step-current{
+      color: var(--color-text-2);
     }
   }
-  // 단계 제목
-  .step-header{
-    .step-title{
-      display: block;
-      margin:0 0 24px 0;
-      font-size: var(--fs-18);
+  .step-description {
+    margin:0 0 30px 0;
+    .step-description-text{
+      font-size: var(--fs-32);
       font-weight: var(--fw-700);
-      margin: 30px 0 10px 0;
-
-      .step-current{
-        color: var(--color-text-2);
-      }
     }
+  }
+
+ @media (max-width: 1023px) {
     .step-description {
-      margin:0 0 30px 0;
-      .step-description-text{
-        font-size: var(--fs-32);
-        font-weight: var(--fw-700);
-      }
-    }
-
-   @media (max-width: 1023px) {
-      .step-description {
-        margin-bottom: 20px;
-      }
+      margin-bottom: 20px;
     }
   }
+}
+.pageCont-joinType{
   // 회원가입 회원 유형 선택
   .member-type-list {
     display: flex;
@@ -522,6 +533,10 @@
     font-weight: 700;
   }
   .complete-info{
+    margin:10px 0 0 0;
+    text-align: center;
+  }
+  /* .complete-info{
     position: relative;
     margin:40px 0 0 0;
     padding: 15px 15px 15px 40px;
@@ -539,7 +554,7 @@
       height: 20px;
       background: url(/img/ico_exclamation_circle.svg) no-repeat center center;
     }
-  }
+  } */
   @media (max-width: 768px) {
     &::before {
       margin: 0 auto 15px auto;
@@ -809,6 +824,38 @@
     }
   }
 }
+
+
+/* 조회 검색 결과 메시지 박스 */
+.status-box {
+  position: relative;
+  padding: 50px 16px 16px;
+  background: #EEF2F7;
+  border: 1px solid #EEF2F7; 
+  border-radius: 12px;
+  text-align: center;
+
+  // 상단 중앙 아이콘
+  &::before {
+    content: '';
+    position: absolute;
+    top: 16px; 
+    left: 50%;
+    transform: translateX(-50%); 
+    width: 24px; 
+    height: 24px; 
+    background: url('/img/ico_exclamation_circle02.svg') no-repeat center;
+  }
+
+  .status-box__text {
+    font-size: 16px;
+    color: #4A5568;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+               
+
 
 
 

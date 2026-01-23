@@ -214,156 +214,172 @@ export default function ExpertMemberApply() {
             <DepsLocation />
             <Box className="content-view" id="content">
               <Box className="page-content">
-                {/* 단계 표시 */}
-                <Box
-                  className="step-progress"
-                  role="img"
-                  aria-label={`총 3단계 중 현재 ${currentStep + 1}단계 ${steps[currentStep].description} 진행 중`}
-                  sx={{ mb: 4 }}
-                >
-                  <Stepper activeStep={currentStep} alternativeLabel>
-                    {steps.map((step, index) => (
-                      <Step key={index}>
-                        <StepLabel
-                          aria-hidden="true"
-                          slotProps={{
-                            stepIcon: {
-                              classes: {
-                                root: 'step-icon',
-                                text: 'step-text',
-                              },
-                            },
-                          }}
-                        >
-                          <Typography variant="caption" className="step-label">
-                            {step.label}
-                          </Typography>
-                          <Typography
-                            className={`step-description ${
-                              index === currentStep ? 'current-step' : ''
-                            }`}
-                          >
-                            {step.description}
-                          </Typography>
-                        </StepLabel>
-                      </Step>
-                    ))}
-                  </Stepper>
-                </Box>
-
-                {/* Step 1: 소속선택 */}
-                <Box
-                  ref={(el: HTMLDivElement | null) => {
-                    stepRefs.current.step1 = el;
-                  }}
-                  sx={{
-                    display: currentStep === 0 ? 'block' : 'none',
-                    minHeight: '60vh',
-                  }}
-                >
-                  <Typography
-                    variant="h5"
-                    sx={{ mb: 1, fontWeight: 600 }}
-                    className="step-title"
+              {/* --- 본문 시작 --- */}
+                <Box className="member-page">
+                  {/* 단계 표시 */}
+                  <Box
+                    className="step-progress"
+                    role="img"
+                    aria-label={`총 3단계 중 현재 ${currentStep + 1}단계 ${steps[currentStep].description} 진행 중`}
+                   
                   >
-                    <Box component="span" className="step-current">
-                      1단계
-                    </Box>
-                    {' / 3단계 소속선택'}
-                  </Typography>
-
-                  <Card sx={{ mt: 3, p: 3 }}>
-                    <Stack spacing={3}>
-                      {/* 사업자등록번호 조회 */}
-                      <Box>
-                        <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
-                          사업자등록번호 조회 (필수)
-                        </Typography>
-                        <Stack direction="row" spacing={2} alignItems="flex-start">
-                          <TextField
-                            fullWidth
-                            placeholder="사업자등록번호를 입력하세요. ('-'제외 입력)"
-                            value={businessNumber}
-                            onChange={(e) => {
-                              const value = e.target.value.replace(/[^0-9]/g, '');
-                              setBusinessNumber(value);
-                              setCompanySearchError('');
+                    <Stepper activeStep={currentStep} alternativeLabel>
+                      {steps.map((step, index) => (
+                        <Step key={index}>
+                          <StepLabel
+                            aria-hidden="true"
+                            slotProps={{
+                              stepIcon: {
+                                classes: {
+                                  root: 'step-icon',
+                                  text: 'step-text',
+                                },
+                              },
                             }}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                handleSearchCompany();
-                              }
-                            }}
-                            inputProps={{ maxLength: 15 }}
-                          />
-                          <Button
-                            variant="contained"
-                            onClick={handleSearchCompany}
-                            sx={{ minWidth: 100}}
                           >
-                            조회
-                          </Button>
-                        </Stack>
+                            <Typography variant="caption" className="step-label">
+                              {step.label}
+                            </Typography>
+                            <Typography
+                              className={`step-description ${
+                                index === currentStep ? 'current-step' : ''
+                              }`}
+                            >
+                              {step.description}
+                            </Typography>
+                          </StepLabel>
+                        </Step>
+                      ))}
+                    </Stepper>
+                  </Box>
+
+                  {/* Step 1: 소속선택 */}
+                  <Box className="step-header"
+                    ref={(el: HTMLDivElement | null) => {
+                      stepRefs.current.step1 = el;
+                    }}
+                    sx={{
+                      display: currentStep === 0 ? 'block' : 'none',
+                    }}
+                  >
+                    <Typography className="step-title">
+                      <Box component="span" className="step-current">
+                        1단계
+                      </Box>
+                      {' / 3단계 '}
+                    </Typography>
+                    <Typography className="step-description">
+                      <span className="step-description-text">
+                        소속선택
+                      </span>
+                    </Typography>
+                    
+
+                    <Box className="bordered-box">
+                        {/* 사업자등록번호 조회 */}
+                        <Box className="form-item">
+                          <Typography component="label" htmlFor="bizNumber" className="label">
+                            사업자등록번호 조회
+                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                          </Typography>
+                          <Stack direction="row" spacing={1} className="input-with-btn">
+                            <TextField
+                              id="bizNumber"
+                              placeholder="사업자등록번호를 입력하세요. ('-'제외 입력)"
+                              value={businessNumber}
+                              onChange={(e) => {
+                                const value = e.target.value.replace(/[^0-9]/g, '');
+                                setBusinessNumber(value);
+                                setCompanySearchError('');
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  handleSearchCompany();
+                                }
+                              }}
+                              inputProps={{ maxLength: 15 }}
+                              size="large"
+                              fullWidth
+                            />
+                            <Button
+                              onClick={handleSearchCompany}
+                              aria-label="사업자등록번호 조회"
+                              variant="outlined"
+                              size="large"
+                              className="btn-outline-02 btn-form-util"
+                            >
+                              조회
+                            </Button>
+                          </Stack>
+                        </Box>
+
+
+                        {/* 조회 결과 */}
+                        {selectedCompany && (
+                          <Paper
+                            variant="outlined"
+                            role="region"
+                            aria-labelledby="company-info-title"
+                            sx={{
+                              p: 2,
+                              bgcolor: 'grey.50',
+                              borderColor: 'grey.300',
+                            }}
+                          >
+                            <Typography id="company-info-title" sx={{ display: 'none' }}>
+                              선택된 업체 정보
+                            </Typography>
+                            <RadioGroup
+                              value={selectedCompany.name}
+                              onChange={() => {}}
+                              aria-readonly="true"
+                            >
+                              <FormControlLabel
+                                value={selectedCompany.name}
+                                control={
+                                  <Radio 
+                                    checked 
+                                    slotProps={{ 
+                                      input: { 'aria-label': `${selectedCompany.name} 선택됨` } 
+                                    }}
+                                  />
+                                }
+                                label={
+                                  <Box>
+                                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                      {selectedCompany.name}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                      <span aria-label="사업자 번호">{selectedCompany.number}</span>
+                                      {selectedCompany.number && ' | '}
+                                      <span aria-label="주소">{selectedCompany.address}</span>
+                                    </Typography>
+                                  </Box>
+                                }
+                              />
+                            </RadioGroup>
+                          </Paper>
+                        )}
+
+                        {/* 조회 실패 에러 메시지 */}
+                        {companySearchError && !selectedCompany && (
+                          <Box className="status-box">
+                            <Typography className="status-box__text">
+                              {companySearchError}
+                            </Typography>
+                          </Box>
+                        )}
+
+                        {/* 안내 메시지 */}
+                        {!selectedCompany && (
+                          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                            사업자등록번호 조회에 입력 후 조회 버튼을 클릭하여 조회된 업체를 선택해주세요.
+                          </Typography>
+                        )}
                       </Box>
 
-                      {/* 조회 결과 */}
-                      {selectedCompany && (
-                        <Paper
-                          variant="outlined"
-                          sx={{
-                            p: 2,
-                            bgcolor: 'grey.50',
-                            borderColor: 'grey.300',
-                          }}
-                        >
-                          <RadioGroup
-                            value={selectedCompany.name}
-                            onChange={() => {}}
-                          >
-                            <FormControlLabel
-                              value={selectedCompany.name}
-                              control={<Radio checked />}
-                              label={
-                                <Box>
-                                  <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                                    {selectedCompany.name}
-                                  </Typography>
-                                  <Typography variant="body2" color="text.secondary">
-                                    {selectedCompany.number && `${selectedCompany.number} `}
-                                    {selectedCompany.address}
-                                  </Typography>
-                                </Box>
-                              }
-                            />
-                          </RadioGroup>
-                        </Paper>
-                      )}
-
-                      {/* 조회 실패 에러 메시지 */}
-                      {companySearchError && !selectedCompany && (
-                        <Paper
-                          variant="outlined"
-                          sx={{
-                            p: 2,
-                            bgcolor: 'grey.50',
-                            borderColor: 'grey.300',
-                          }}
-                        >
-                          <Typography variant="body2" color="error">
-                            {companySearchError}
-                          </Typography>
-                        </Paper>
-                      )}
-
-                      {/* 안내 메시지 */}
-                      {!selectedCompany && (
-                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                          사업자등록번호 조회에 입력 후 조회 버튼을 클릭하여 조회된 업체를 선택해주세요.
-                        </Typography>
-                      )}
-
                       {/* 버튼 영역 */}
-                      <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 4 }}>
+                      <Box className="btn-group between">
                         <Button
                           variant="outlined"
                           onClick={() => window.history.back()}
@@ -377,41 +393,47 @@ export default function ExpertMemberApply() {
                         >
                           선택완료
                         </Button>
-                      </Stack>
-                    </Stack>
-                  </Card>
-                </Box>
+                      </Box>
+                  </Box>
 
-                {/* Step 2: 추가정보입력 */}
-                <Box
-                  ref={(el: HTMLDivElement | null) => {
-                    stepRefs.current.step2 = el;
-                  }}
-                  sx={{
-                    display: currentStep === 1 ? 'block' : 'none',
-                    minHeight: '60vh',
-                  }}
-                >
-                  <Typography
-                    variant="h5"
-                    sx={{ mb: 1, fontWeight: 600 }}
-                    className="step-title"
+
+                  {/* Step 2: 추가정보입력 */}
+                  <Box
+                    ref={(el: HTMLDivElement | null) => {
+                      stepRefs.current.step2 = el;
+                    }}
+                    sx={{
+                      display: currentStep === 1 ? 'block' : 'none',
+                      minHeight: '60vh',
+                    }}
                   >
-                    <Box component="span" className="step-current">
-                      2단계
+                    <Box className="step-header">
+                      <Typography className="step-title">
+                        <Box component="span" className="step-current">
+                          2단계
+                        </Box>
+                        {' / 3단계 '}
+                      </Typography>
+                      <Typography className="step-description">
+                        <span className="step-description-text">
+                          추가정보입력
+                        </span>
+                      </Typography>
                     </Box>
-                    {' / 3단계 추가정보입력'}
-                  </Typography>
 
-                  <Card sx={{ mt: 3, p: 3 }}>
-                    <Stack spacing={4}>
+                    
+                    <h3 className="sub-section-title">소속 기관 이메일</h3>
+                    <Box className="bordered-box">
                       {/* 기관 이메일 */}
-                      <Box>
-                        <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
-                          기관 이메일 (필수)
+                      <Box className="form-item">
+                        <Typography component="label" htmlFor="eorg-email" className="label">
+                          기관 이메일
+                          <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
                         </Typography>
-                        <Stack direction="row" spacing={2} alignItems="flex-start">
+                        <Stack direction="row" spacing={1} className="input-with-btn">
                           <TextField
+                            id="eorg-email"
+                            size="large"
                             fullWidth
                             placeholder="이메일 주소를 입력하세요."
                             value={organizationEmail}
@@ -432,7 +454,7 @@ export default function ExpertMemberApply() {
                           <Button
                             variant="outlined"
                             onClick={handleCheckEmailDuplicate}
-                            sx={{ minWidth: 100 }}
+                            size="large"
                           >
                             중복확인
                           </Button>
@@ -443,166 +465,169 @@ export default function ExpertMemberApply() {
                           </FormHelperText>
                         )}
                       </Box>
+                    </Box>
 
-                      {/* 파일 첨부 */}
-                      <Box>
-                        <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
-                          첨부파일 (필수)
-                        </Typography>
-                        <FileUploadField
-                          label=""
-                          value={uploadedFiles}
-                          onChange={setUploadedFiles}
-                          accept=".pdf,.png,.jpg,.jpeg"
-                          maxFileSizeMB={10}
-                          maxTotalSizeMB={10}
-                          helperText="PDF, PNG, JPG 형식의 10MB 이하의 파일을 업로드해주세요."
-                        />
-                        {uploadedFiles.length > 0 && (
-                          <Box sx={{ mt: 2 }}>
-                            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                              <Typography variant="body2" color="text.secondary">
-                                {uploadedFiles.length}개
-                              </Typography>
-                              <Button
-                                size="small"
-                                onClick={handleDeleteAllFiles}
-                                sx={{ textTransform: 'none' }}
+                    {/* 파일 첨부 */}
+                    <h3 className="sub-section-title">증빙서류 제출</h3>
+                    <Box className="bordered-box">
+                      <Typography component="label" htmlFor="attach-file" className="label">
+                        첨부파일
+                        <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                      </Typography>
+                      <FileUploadField
+                        label="attach-file"
+                        value={uploadedFiles}
+                        onChange={setUploadedFiles}
+                        accept=".pdf,.png,.jpg,.jpeg"
+                        maxFileSizeMB={10}
+                        maxTotalSizeMB={10}
+                        helperText="PDF, PNG, JPG 형식의 10MB 이하의 파일을 업로드해주세요."
+                      />
+                      {uploadedFiles.length > 0 && (
+                        <Box sx={{ mt: 2 }}>
+                          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                            <Typography variant="body2" color="text.secondary">
+                              {uploadedFiles.length}개
+                            </Typography>
+                            <Button
+                              size="small"
+                              onClick={handleDeleteAllFiles}
+                              sx={{ textTransform: 'none' }}
+                            >
+                              전체 파일 삭제 &gt;
+                            </Button>
+                          </Stack>
+                          <Stack spacing={1}>
+                            {uploadedFiles.map((file, index) => (
+                              <Paper
+                                key={index}
+                                variant="outlined"
+                                sx={{
+                                  p: 1.5,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between',
+                                }}
                               >
-                                전체 파일 삭제 &gt;
-                              </Button>
-                            </Stack>
-                            <Stack spacing={1}>
-                              {uploadedFiles.map((file, index) => (
-                                <Paper
-                                  key={index}
-                                  variant="outlined"
-                                  sx={{
-                                    p: 1.5,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                  }}
+                                <Typography variant="body2">
+                                  {file.name} [
+                                  {file.name.split('.').pop()?.toLowerCase()}, {formatFileSize(file.size)}]
+                                </Typography>
+                                <Button
+                                  size="small"
+                                  onClick={() => handleDeleteFile(index)}
+                                  sx={{ minWidth: 'auto', color: 'error.main' }}
                                 >
-                                  <Typography variant="body2">
-                                    {file.name} [
-                                    {file.name.split('.').pop()?.toLowerCase()}, {formatFileSize(file.size)}]
-                                  </Typography>
-                                  <Button
-                                    size="small"
-                                    onClick={() => handleDeleteFile(index)}
-                                    sx={{ minWidth: 'auto', color: 'error.main' }}
-                                  >
-                                    삭제 x
-                                  </Button>
-                                </Paper>
-                              ))}
-                            </Stack>
-                          </Box>
-                        )}
-                      </Box>
+                                  삭제 x
+                                </Button>
+                              </Paper>
+                            ))}
+                          </Stack>
+                        </Box>
+                      )}
+                    </Box>
 
-                      {/* 업무 시스템 선택 */}
-                      <Box>
-                        <Typography variant="body2" sx={{ mb: 2, fontWeight: 600 }}>
-                          업무 시스템 선택 (필수)
-                        </Typography>
-                        <Stack spacing={1}>
-                          {businessSystems.map((system) => (
-                            <FormControlLabel
-                              key={system.id}
-                              control={
-                                <Checkbox
-                                  checked={selectedSystems.includes(system.id)}
-                                  onChange={() => handleSystemToggle(system.id)}
-                                />
-                              }
-                              label={
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                  <Typography variant="body2">{system.label} &gt;</Typography>
-                                  <Typography variant="caption" color="success.main">
-                                    신청가능
-                                  </Typography>
-                                </Box>
-                              }
-                            />
-                          ))}
-                        </Stack>
-                      </Box>
-
-                      {/* 버튼 영역 */}
-                      <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 4 }}>
-                        <Button
-                          variant="outlined"
-                          onClick={() => setCurrentStep(0)}
-                        >
-                          취소하기
-                        </Button>
-                        <Button
-                          variant="contained"
-                          disabled={!canCompleteStep2}
-                          onClick={handleCompleteStep2}
-                        >
-                          등록하기
-                        </Button>
+                    {/* 업무 시스템 선택 */}
+                    <h3 className="sub-section-title">업무 시스템 선택<span className="necessary">(필수)</span></h3>
+                    <Box className="bordered-box">
+                      <Stack spacing={1}>
+                        {businessSystems.map((system) => (
+                          <FormControlLabel
+                            key={system.id}
+                            control={
+                              <Checkbox
+                                checked={selectedSystems.includes(system.id)}
+                                onChange={() => handleSystemToggle(system.id)}
+                              />
+                            }
+                            label={
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Typography variant="body2">{system.label} &gt;</Typography>
+                                <Typography variant="caption" color="success.main">
+                                  신청가능
+                                </Typography>
+                              </Box>
+                            }
+                          />
+                        ))}
                       </Stack>
-                    </Stack>
-                  </Card>
-                </Box>
+                    </Box>
 
-                {/* Step 3: 신청완료 */}
-                <Box
-                  ref={(el: HTMLDivElement | null) => {
-                    stepRefs.current.step3 = el;
-                  }}
-                  sx={{
-                    display: currentStep === 2 ? 'block' : 'none',
-                    minHeight: '60vh',
-                    textAlign: 'center',
-                  }}
-                >
-                  <Typography
-                    variant="h5"
-                    sx={{ mb: 4, fontWeight: 600 }}
-                    className="step-title"
+                    {/* 버튼 영역 */}
+                    <Box className="btn-group between">
+                      <Button
+                        variant="outlined"
+                        onClick={() => setCurrentStep(0)}
+                        size="large"
+                      >
+                        취소하기
+                      </Button>
+                      <Button
+                        variant="contained"
+                        disabled={!canCompleteStep2}
+                        onClick={handleCompleteStep2}
+                        size="large"
+                      >
+                        등록하기
+                      </Button>
+                    </Box>
+                  </Box>
+
+
+                  {/* Step 3: 신청완료 */}
+                  <Box
+                    ref={(el: HTMLDivElement | null) => {
+                      stepRefs.current.step3 = el;
+                    }}
+                    sx={{
+                      display: currentStep === 2 ? 'block' : 'none',
+                      minHeight: '60vh',
+                    }}
                   >
-                    전문가회원 전환신청 완료
-                  </Typography>
 
-                  <Card sx={{ mt: 3, p: 6 }}>
-                    <Stack spacing={3} alignItems="center">
-                      <CheckCircle sx={{ fontSize: 80, color: 'success.main' }} />
-                      <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                        전문가회원 전환신청을 완료했습니다.
+                    <Box className="step-header">
+                      <Typography className="step-description">
+                        <span className="step-description-text">
+                          전문가회원 전환신청 완료
+                        </span>
                       </Typography>
-                      <Typography variant="body1" color="text.secondary">
-                        신청하신 기관 관리자의 승인이 완료된 후 내 업무에서 확인 하실 수
-                        있습니다.
-                      </Typography>
+                    </Box>
 
-                      {/* 버튼 영역 */}
-                      <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 4 }}>
-                        <Button
-                          variant="outlined"
-                          onClick={() => (window.location.href = '/ko')}
-                          sx={{ minWidth: 120 }}
-                        >
-                          홈으로
-                        </Button>
-                        <Button
-                          variant="contained"
-                          onClick={() => {
-                            // TODO: 내 업무 페이지로 이동
-                            window.location.href = '/ko/mytask';
-                          }}
-                          sx={{ minWidth: 120 }}
-                        >
-                          내 업무
-                        </Button>
-                      </Stack>
-                    </Stack>
-                  </Card>
+                    <Box className="bordered-box">
+                      <Box className="join-complete-section">
+                        <Typography component="p" className="complete-title">
+                          전문가회원 전환신청을 완료했습니다.
+                        </Typography>
+                        <Typography component="p" className="complete-info">
+                          신청하신 기관 관리자의 승인이 완료된 후 내 업무에서 확인 하실 수
+                          있습니다.
+                        </Typography>
+
+                      </Box>
+                    </Box>
+                    {/* 버튼 영역 */}
+                    <Box className="btn-group center">
+                      <Button
+                        variant="outlined"
+                        onClick={() => (window.location.href = '/ko')}
+                        sx={{ minWidth: 120 }}
+                      >
+                        홈으로
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          // TODO: 내 업무 페이지로 이동
+                          window.location.href = '/ko/mytask';
+                        }}
+                        sx={{ minWidth: 120 }}
+                      >
+                        내 업무
+                      </Button>
+                    </Box>
+                  </Box>
                 </Box>
+              {/* --- 본문 끝 --- */}
               </Box>
             </Box>
           </Box>

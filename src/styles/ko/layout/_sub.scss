@@ -20,6 +20,13 @@
     gap: 46px;
     align-items: stretch;
   }
+
+  @media (max-width: 1200px) {
+    padding: 20px;
+    .content-wrap {
+      gap: 0px;
+    }
+  }
 }
 
 // 2. LNB (Left Navigation Bar) 영역
@@ -27,7 +34,7 @@
   flex: 0 0 246px;
   transition: flex 0.2s ease;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     display: none;
   }
 
