@@ -33,8 +33,11 @@ export default function Home() {
   const dispatch = useAppDispatch();
   const { current } = useAppSelector((s) => s.main);
   useEffect(() => {
-    dispatch(selectMainContents());
-  }, [dispatch]);
+    // persist로 복원된 데이터가 있으면 API 호출 스킵
+    if (!current) {
+      dispatch(selectMainContents());
+    }
+  }, [dispatch, current]);
 
   const navigate = useNavigate();
   const [q, setQ] = useState('');

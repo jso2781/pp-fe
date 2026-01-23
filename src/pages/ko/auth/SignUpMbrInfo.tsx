@@ -393,12 +393,12 @@ export default function SignUpMbrInfo() {
       // TODO: 실제로는 암호화 처리가 필요하지만, 현재는 평문으로 전송 (백엔드에서 암호화 처리 예상)
       const mbrInfoPVO: MbrInfoPVO = {
         mbrId: formData.mbrId,
-        mbrEncptFlnm: formData.userName,
+        encptMbrFlnm: formData.userName,
         mbrEncptEml: formData.email || undefined,
-        mbrEnpswd: formData.password,
-        mbrEncptTelno: formData.phone,
+        encptMbrPswd: formData.password,
+        encptMbrTelno: formData.phone,
         mbrTypeCd: 'G',                       // 회원유형가입(G - 일반회원, Y - 14세미만회원, E - 전문가회원)
-        mbrJoinStts: 'N',                     // 회원가입상태(N - 정상, W - 탈퇴)
+        mbrJoinSttsCd: 'N',                     // 회원가입상태(N - 정상, W - 탈퇴)
         mbrJoinDt: now,
         rgtrId: formData.mbrId,
         regDt: null,
@@ -407,7 +407,7 @@ export default function SignUpMbrInfo() {
         mdfcnDt: null,
         mdfcnPrgrmId: 'SignUpMbrInfo',
         linkInfoIdntfId: null,
-        certToken: null,
+        certTokenVl: null,
         pswdChgDt: null,
         pswdErrNmtm: 0,
         bfrEnpswd: null,

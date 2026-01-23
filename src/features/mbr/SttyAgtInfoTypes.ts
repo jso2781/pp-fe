@@ -22,7 +22,7 @@ export const mockSttyAgtInfoList = [
     linkInfoIdntfId: 'XXX',
 
     /** 인증토큰 */
-    certToken: 'XXX',
+    certTokenVl: 'XXX',
 
     /** 등록자아이디 */
     rgtrId: 'XXX',
@@ -65,7 +65,7 @@ export interface SttyAgtInfoPVO {
   linkInfoIdntfId?: string
 
   /** 인증토큰 */
-  certToken?: string
+  certTokenVl?: string
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -110,7 +110,7 @@ export interface SttyAgtInfoRVO {
   linkInfoIdntfId?: string
 
   /** 인증토큰 */
-  certToken?: string
+  certTokenVl?: string
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -152,7 +152,7 @@ export interface SttyAgtInfoListPVO {
   linkInfoIdntfId?: string
 
   /** 인증토큰 */
-  certToken?: string
+  certTokenVl?: string
 
   /** 등록자아이디 */
   rgtrId?: string
