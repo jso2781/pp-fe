@@ -37,7 +37,7 @@ export default function EditProfile() {
     mbrId: userInfo?.mbrId || '',
     userName: userInfo?.encptMbrFlnm || '', // 암호화된 이름 (평문으로 표시 불가, 실제로는 복호화 필요)
     phone: userInfo?.encptMbrTelno || '', // 암호화된 전화번호 (평문으로 표시 불가, 실제로는 복호화 필요)
-    email: userInfo?.mbrEncptEml || '', // 암호화된 이메일 (평문으로 표시 불가, 실제로는 복호화 필요)
+    email: userInfo?.encptMbrEmlNm || '', // 암호화된 이메일 (평문으로 표시 불가, 실제로는 복호화 필요)
     password: '',
     confirmPassword: '',
   });
@@ -74,7 +74,7 @@ export default function EditProfile() {
         mbrId: userInfo.mbrId || '',
         userName: userInfo.encptMbrFlnm || '',
         phone: userInfo.encptMbrTelno || '',
-        email: userInfo.mbrEncptEml || '',
+        email: userInfo.encptMbrEmlNm || '',
       }));
     }
   }, [userInfo]);
@@ -168,7 +168,7 @@ export default function EditProfile() {
     }
 
     try {
-      const result = await dispatch(existMbrInfo({ mbrEncptEml: formData.email })).unwrap();
+      const result = await dispatch(existMbrInfo({ encptMbrEmlNm: formData.email })).unwrap();
       if (result.existYn === 'Y') {
         setEmailAvailable(false);
         setIsEmailChecked(true);
@@ -241,7 +241,7 @@ export default function EditProfile() {
 
     // 이메일 (선택): 비어 있으면 검증 제외. 기존 값과 동일하면 중복확인 제외.
     const emailTrimmed = formData.email?.trim() ?? '';
-    const originalEmail = (userInfo?.mbrEncptEml ?? '').trim();
+    const originalEmail = (userInfo?.encptMbrEmlNm ?? '').trim();
     const emailUnchanged = emailTrimmed === originalEmail;
 
     if (emailTrimmed.length > 0) {
@@ -277,7 +277,7 @@ export default function EditProfile() {
 
     // 이메일 (선택): 비어 있거나 기존과 동일하면 중복확인 제외. 새로 입력한 경우에만 체크.
     const emailTrimmed = formData.email?.trim() ?? '';
-    const originalEmail = (userInfo?.mbrEncptEml ?? '').trim();
+    const originalEmail = (userInfo?.encptMbrEmlNm ?? '').trim();
     if (emailTrimmed.length > 0 && emailTrimmed !== originalEmail) {
       if (!isEmailChecked || !emailAvailable) {
         showAlert(t('emailDuplicateCheckCompleteReminder'), t('error'));
@@ -291,7 +291,7 @@ export default function EditProfile() {
       // MbrInfoPVO 형식으로 변환
       const mbrInfoPVO: MbrInfoPVO = {
         mbrId: formData.mbrId,
-        mbrEncptEml: formData.email || undefined,
+        encptMbrEmlNm: formData.email || undefined,
         // 비밀번호 변경 모드인 경우에만 비밀번호 업데이트
         ...(isPasswordChangeMode && formData.password ? {
           encptMbrPswd: formData.password,         // 새로운 비밀번호

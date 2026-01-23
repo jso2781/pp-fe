@@ -16,7 +16,7 @@ const convertMbrInfoRVOToAuthRVO = (mbrInfo: MbrInfoRVO | null, existingAuthRVO:
     mbrNo: mbrInfo.mbrNo,
     mbrId: mbrInfo.mbrId,
     encptMbrFlnm: mbrInfo.encptMbrFlnm,
-    mbrEncptEml: mbrInfo.mbrEncptEml,
+    encptMbrEmlNm: mbrInfo.encptMbrEmlNm,
     encptMbrPswd: mbrInfo.encptMbrPswd,
     encptMbrTelno: mbrInfo.encptMbrTelno,
     mbrTypeCd: mbrInfo.mbrTypeCd,

@@ -57,7 +57,7 @@ export interface AuthRVO {
   /**
    * 회원암호화이메일
    */
-  mbrEncptEml?: string
+  encptMbrEmlNm?: string
 
   /**
    * 회원암호화비밀번호
