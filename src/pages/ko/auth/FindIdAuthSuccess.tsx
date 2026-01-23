@@ -9,9 +9,11 @@ import { Box, Typography, Button, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function FindIdAuthSuccess() {
   const navigate = useNavigate();
+  const { t, i18n: i18nInstance } = useTranslation();
   const handleFindPwClick = () => {
     navigate('/ko/auth/FindPw');
   }
@@ -33,12 +35,12 @@ export default function FindIdAuthSuccess() {
                 {/* --- 본문 시작 --- */}
                 <Box className="pageCont-idPwFind member-page">
                   <Typography className="guide-text">
-                    아이디를 찾았어요.
+                    {t('findIdFound')}
                   </Typography>
                   {/* 아이디 결과 영역 */}
                   <Box className="id-find-result">
-                    <p><span>$김철수$</span>님의 아이디는</p>
-                    <p><span className="txt-2">$chskim7788</span>$ 입니다.</p>
+                    <p><span>$김철수$</span>{t('findIdResultNameId')}</p>
+                    <p><span className="txt-2">$chskim7788</span>{i18nInstance.language === 'ko' ? ' 입니다' : ''}.</p>
                   </Box>
                   {/* 로그인 버튼 영역 */}
                   <Box className="login-actions">
@@ -49,13 +51,13 @@ export default function FindIdAuthSuccess() {
                       className="btn-login fw-700"
                       onClick={handleLoginClick}
                     >
-                      로그인
+                      {t('login')}
                     </Button>
                   </Box>
                   {/* 비밀번호 찾기 링크 영역 */}
                   <Stack direction="row" className="form-helper-group">
                     <Typography className="txt">
-                      비밀번호를 잊으셨다면?
+                      {t('forgotPassword')}
                     </Typography>
                     <Button 
                       variant="text" 
@@ -63,7 +65,7 @@ export default function FindIdAuthSuccess() {
                       endIcon={<ChevronRightIcon />}
                       onClick={handleFindPwClick}
                     >
-                      비밀번호 찾기
+                      {t('findPassword')}
                     </Button>
                   </Stack>
                 </Box>

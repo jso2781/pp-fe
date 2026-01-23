@@ -31,11 +31,11 @@ const RelatedSites = () => {
   }
 
   return (
-    <div className="footer_related">
+    <div className="footer-related">
       <div className="container">
-        <div className="related_grid_container">
+        <div className="related-group">
           {/* 정부 유관기관 셀렉트 */}
-          <div className="related_grid_item">
+          <div className="related-item">
             <FormControl fullWidth size="small">
               <Select
                 value=""
@@ -43,9 +43,9 @@ const RelatedSites = () => {
                 onChange={handleSelect}
                 renderValue={(selected) => {
                   if (selected === "") {
-                    return <span className="placeholder_text">{t('goToRelGov')}</span>;
+                    return <span className="placeholder-text">{t('goToRelGov')}</span>;
                   }
-                  return selected;
+                  return selected as string;
                 }}
               >
                 <MenuItem value="" disabled>
@@ -61,7 +61,7 @@ const RelatedSites = () => {
           </div>
 
           {/* 관련 단체 셀렉트 */}
-          <div className="related_grid_item">
+          <div className="related-item">
             <FormControl fullWidth size="small">
               <Select
                 value=""
@@ -69,9 +69,9 @@ const RelatedSites = () => {
                 onChange={handleSelect}
                 renderValue={(selected) => {
                   if (selected === "") {
-                    return <span className="placeholder_text">{t('goToRelOrg')}</span>;
+                    return <span className="placeholder-text">{t('goToRelOrg')}</span>;
                   }
-                  return selected;
+                  return selected as string;
                 }}
               >
                 <MenuItem value="" disabled>

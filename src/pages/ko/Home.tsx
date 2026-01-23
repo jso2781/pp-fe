@@ -33,8 +33,11 @@ export default function Home() {
   const dispatch = useAppDispatch();
   const { current } = useAppSelector((s) => s.main);
   useEffect(() => {
-    dispatch(selectMainContents());
-  }, [dispatch]);
+    // persist로 복원된 데이터가 있으면 API 호출 스킵
+    if (!current) {
+      dispatch(selectMainContents());
+    }
+  }, [dispatch, current]);
 
   const navigate = useNavigate();
   const [q, setQ] = useState('');
@@ -109,7 +112,7 @@ export default function Home() {
       items: (current?.youtube || []).map((item) => ({
         type: 'youtube' as const,
         title: item.pstTtl || '',
-        url: item.mdfcnPrgrmId || `https://youtu.be/${item.videoId || ''}`,
+        url: item.pstCn || `https://www.youtube.com/embed/${item.videoId || ''}`,
         thumbnail: getThumbnailUrl(item),
         desc: item.pstCn || '',
         videoId: item.videoId || '',
@@ -122,7 +125,7 @@ export default function Home() {
       items: (current?.insta || []).map((item) => ({
         type: 'insta' as const,
         title: item.pstTtl || '',
-        url: item.mdfcnPrgrmId || 'https://www.instagram.com',
+        url: item.pstCn || 'https://www.instagram.com',
         thumbnail: getThumbnailUrl(item),
         desc: item.pstCn || '',
         data: item,
@@ -134,7 +137,7 @@ export default function Home() {
       items: (current?.blog || []).map((item) => ({
         type: 'blog' as const,
         title: item.pstTtl || '',
-        url: item.mdfcnPrgrmId || 'https://blog.naver.com',
+        url: item.pstCn || 'https://blog.naver.com',
         thumbnail: getThumbnailUrl(item),
         desc: item.pstCn || '',
         data: item,
@@ -145,7 +148,7 @@ export default function Home() {
     const allItems: SnsItem[] = (current?.all_sns || []).map((item) => ({
       type: (item.snsType === '유튜브' ? 'youtube' : item.snsType === '인스타' ? 'insta' : 'blog') as 'youtube' | 'insta' | 'blog',
       title: item.pstTtl || '',
-      url: item.mdfcnPrgrmId || (item.videoId ? `https://youtu.be/${item.videoId}` : 'https://www.instagram.com'),
+      url: item.pstCn || (item.videoId ? `https://www.youtube.com/embed/${item.videoId}` : 'https://www.instagram.com'),
       thumbnail: getThumbnailUrl(item),
       desc: item.pstCn || '',
       videoId: item.videoId || '',
@@ -282,7 +285,7 @@ export default function Home() {
   }, [current?.popup, isPopupClosed]);
 
   const handlePopupClick = (popup: PostVO) => {
-    const url = popup.popupLnkgAddr || popup.mdfcnPrgrmId;
+    const url = popup.popupLnkgAddr || '';
     if (url) {
       window.open(url, '_blank', 'noopener,noreferrer');
     }
@@ -348,7 +351,7 @@ export default function Home() {
                 <SwiperSlide key={popup.atchFileId || index} style={{ overflow: 'hidden', display: 'flex', justifyContent: 'center' }}>
                   <Card
                     sx={{
-                      cursor: (popup.popupLnkgAddr || popup.mdfcnPrgrmId) ? 'pointer' : 'default',
+                      cursor: popup.popupLnkgAddr ? 'pointer' : 'default',
                       width: '380px', // 팝업사이즈 고정
                       height: '480px', // 팝업사이즈 고정
                       overflow: 'hidden',

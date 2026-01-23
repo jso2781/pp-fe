@@ -49,9 +49,6 @@ export interface PostVO {
 
   /** 팝업 링크 주소 */
   popupLnkgAddr?: string | null
-
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string | null
 }
 
 /**
