@@ -300,5 +300,21 @@
     "drugSafetyReportOnline": "Report an Adverse Event",
     "page": "page",
     "notFound": "not found",
-    "news": "Institution News"
+    "news": "Institution News",
+
+    "findIdSelectMethod": "Please select a method to find your ID.",
+    "cautionTitle": "Caution",
+    "findIdCaution1": "If your resident registration number has been changed, you can contact the call center or sign up as a new member to use the service.",
+    "findIdCaution2": "If you sign up as a new member, member information registered with your previous resident registration number cannot be verified.",
+    "findIdCaution3": "If you are an expert member, multiple IDs you have registered will be displayed.",
+    "findIdFound": "Your ID has been found.",
+    "findIdResultNameId": "'s ID is",
+    "findPwGuide": "We will proceed with identity verification to reset your password.",
+    "findPwCaution1": "Password reset is only possible with certificates registered in your KIDS member account.",
+    "findPwCaution2": "If you have difficulty resetting your password directly due to using a mobile phone that is not in your name, please contact the call center.",
+    "findPwCaution3": "For general members under 14 years old, password recovery is only possible with the identity verification information authenticated with guardian consent.",
+    "findPwModifyGuide": "Please enter a new password to change your password.",
+    "changeButton": "Change",
+    "findPwModifyCompleteMessage": "Password change has been completed. You can now log in normally. Would you like to go to the login page now?",
+    "findPwModifyCompleteTitle": "Password Change Complete"
 }

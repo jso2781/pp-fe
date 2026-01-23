@@ -125,8 +125,8 @@ export default function FindPwModify() {
     }
 
     showConfirmBackdrop(
-      '비밀번호 변경이 완료되었습니다.<br/> 이제 정상적으로 로그인이 가능합니다.<br/> 지금 로그인 페이지로 이동하시겠습니까?',
-      '비밀번호 변경 완료',
+      t('findPwModifyCompleteMessage'),
+      t('findPwModifyCompleteTitle'),
       () => navigate('/ko/auth/login'),
       () => {}
     );
@@ -150,7 +150,7 @@ export default function FindPwModify() {
                 
                 <Box className="pageCont-idPwFind member-page">
                   <Typography className="guide-text">
-                    비밀번호 변경을 위해 새로운 비밀번호를 입력해주세요.
+                    {t('findPwModifyGuide')}
                   </Typography>
                   <Box className="bordered-box">
                     <Box component="form" noValidate>
@@ -158,15 +158,15 @@ export default function FindPwModify() {
                         {/* 1. 새 비밀번호 */}
                         <Box className="form-item">
                           <Typography component="label" htmlFor="password" className="label">
-                            새 비밀번호 
-                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                            {t('newPassword')} 
+                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>{t('displayRequired')}</Box>
                           </Typography>
                           <TextField
                             id="password"
                             type="password"
                             onChange={(e) => handleChange('password', e.target.value)}
                             value={formData.password}
-                            placeholder="숫자+영문+특수문자 조합 10자리 이상"
+                            placeholder={t('passwordCombination')}
                             size="large"
                             fullWidth
                             error={!!errors.password}
@@ -191,15 +191,15 @@ export default function FindPwModify() {
                         {/* 2. 비밀번호 확인 */}
                         <Box className="form-item">
                           <Typography component="label" htmlFor="confirmPassword" className="label">
-                            비밀번호 확인 
-                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                            {t('passwordConfirm')} 
+                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>{t('displayRequired')}</Box>
                           </Typography>
                           <TextField
                             id="confirmPassword" 
                             type="password"
                             onChange={(e) => handleChange('confirmPassword', e.target.value)}
                             value={formData.confirmPassword}
-                            placeholder="비밀번호를 동일하게 입력하세요."
+                            placeholder={t('passwordConfirmPlaceholder')}
                             size="large"
                             fullWidth
                             error={!!errors.confirmPassword}
@@ -225,8 +225,8 @@ export default function FindPwModify() {
                   </Box>
                   {/* 하단 버튼 그룹 */}
                   <Box className="btn-group between">
-                    <Button variant="outlined" size="large" onClick={handleCancle}>취소하기</Button>
-                    <Button disabled={!isInputCompleteEnabled} variant="contained" size="large" onClick={handleInputComplete}>변경하기</Button>
+                    <Button variant="outlined" size="large" onClick={handleCancle}>{t('cancelButton')}</Button>
+                    <Button disabled={!isInputCompleteEnabled} variant="contained" size="large" onClick={handleInputComplete}>{t('changeButton')}</Button>
                   </Box>
                 </Box>
                 {/* --- 본문 끝 --- */}
