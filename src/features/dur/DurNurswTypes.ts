@@ -43,7 +43,7 @@ export const mockDurNurswList = [
     aplcnYm: 'XXX',
 
     /** 비고 */
-    rmrk: 'XXX',
+    rmrkCn: 'XXX',
 
     /** 유형코드 */
     typeCd: 'XXX',
@@ -54,17 +54,17 @@ export const mockDurNurswList = [
     /** 등록일시 */
     regDt: '2026-01-23',
 
-    /** 등록프로그램아이디 */
-    regPrgrmId: 'XXX',
+
+
 
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
-    mdfcnDt: '2026-01-23',
+    mdfcnDt: '2026-01-23'
 
-    /** 수정프로그램아이디 */
-    mdfcnPrgrmId: 'XXX',
+
+
 
   }
 ]
@@ -110,7 +110,7 @@ export interface DurNurswPVO {
   aplcnYm?: string
 
   /** 비고 */
-  rmrk?: string
+  rmrkCn?: string
 
   /** 유형코드 */
   typeCd?: string
@@ -121,8 +121,8 @@ export interface DurNurswPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -130,8 +130,8 @@ export interface DurNurswPVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 
@@ -179,7 +179,7 @@ export interface DurNurswRVO {
   aplcnYm?: string
 
   /** 비고 */
-  rmrk?: string
+  rmrkCn?: string
 
   /** 유형코드 */
   typeCd?: string
@@ -190,8 +190,8 @@ export interface DurNurswRVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -199,8 +199,8 @@ export interface DurNurswRVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 
@@ -245,7 +245,7 @@ export interface DurNurswListPVO {
   aplcnYm?: string
 
   /** 비고 */
-  rmrk?: string
+  rmrkCn?: string
 
   /** 유형코드 */
   typeCd?: string
@@ -256,8 +256,8 @@ export interface DurNurswListPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -265,8 +265,8 @@ export interface DurNurswListPVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 

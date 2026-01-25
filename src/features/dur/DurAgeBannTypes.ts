@@ -37,10 +37,10 @@ export const mockDurAgeBannList = [
     rlvtAge: -1,
 
     /** 해당연령단위 */
-    rlvtAgeUnit: 'XXX',
+    rlvtAgeUnitNm: 'XXX',
 
     /** 연령처리조건 */
-    agePrcsCnd: 'XXX',
+    agePrcsCndNm: 'XXX',
 
     /** 고시번호 */
     ancmntNo: 'XXX',
@@ -49,7 +49,7 @@ export const mockDurAgeBannList = [
     ancmntYmd: 'XXX',
 
     /** 상세정보 */
-    dtlInfo: 'XXX',
+    dtlInfoCn: 'XXX',
 
     /** 적용년월 */
     aplcnYm: 'XXX',
@@ -63,18 +63,11 @@ export const mockDurAgeBannList = [
     /** 등록일시 */
     regDt: '2026-01-23',
 
-    /** 등록프로그램아이디 */
-    regPrgrmId: 'XXX',
-
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
-    mdfcnDt: '2026-01-23',
-
-    /** 수정프로그램아이디 */
-    mdfcnPrgrmId: 'XXX',
-
+    mdfcnDt: '2026-01-23'
   }
 ]
 
@@ -113,10 +106,10 @@ export interface DurAgeBannPVO {
   rlvtAge?: number
 
   /** 해당연령단위 */
-  rlvtAgeUnit?: string
+  rlvtAgeUnitNm?: string
 
   /** 연령처리조건 */
-  agePrcsCnd?: string
+  agePrcsCndNm?: string
 
   /** 고시번호 */
   ancmntNo?: string
@@ -125,7 +118,7 @@ export interface DurAgeBannPVO {
   ancmntYmd?: string
 
   /** 상세정보 */
-  dtlInfo?: string
+  dtlInfoCn?: string
 
   /** 적용년월 */
   aplcnYm?: string
@@ -139,18 +132,11 @@ export interface DurAgeBannPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
-
 }
 
 /**
@@ -191,10 +177,10 @@ export interface DurAgeBannRVO {
   rlvtAge?: number
 
   /** 해당연령단위 */
-  rlvtAgeUnit?: string
+  rlvtAgeUnitNm?: string
 
   /** 연령처리조건 */
-  agePrcsCnd?: string
+  agePrcsCndNm?: string
 
   /** 고시번호 */
   ancmntNo?: string
@@ -203,7 +189,7 @@ export interface DurAgeBannRVO {
   ancmntYmd?: string
 
   /** 상세정보 */
-  dtlInfo?: string
+  dtlInfoCn?: string
 
   /** 적용년월 */
   aplcnYm?: string
@@ -217,18 +203,11 @@ export interface DurAgeBannRVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
-
 }
 
 /**
@@ -266,10 +245,10 @@ export interface DurAgeBannListPVO {
   rlvtAge?: number
 
   /** 해당연령단위 */
-  rlvtAgeUnit?: string
+  rlvtAgeUnitNm?: string
 
   /** 연령처리조건 */
-  agePrcsCnd?: string
+  agePrcsCndNm?: string
 
   /** 고시번호 */
   ancmntNo?: string
@@ -278,7 +257,7 @@ export interface DurAgeBannListPVO {
   ancmntYmd?: string
 
   /** 상세정보 */
-  dtlInfo?: string
+  dtlInfoCn?: string
 
   /** 적용년월 */
   aplcnYm?: string
@@ -292,18 +271,11 @@ export interface DurAgeBannListPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
-
 }
 
 /**
@@ -320,6 +292,5 @@ export interface DurAgeBannListRVO {
 export interface DurAgeBannDVO {
   /** 연령금기일련번호 */
   ageBannSn: string
-
 }
 

@@ -57,7 +57,7 @@ export const getDurDosage = createAsyncThunk<DurDosageRVO, DurDosagePVO | undefi
       // 개발/데모 환경용 fallback (백엔드 연동 시 제거 가능)
       console.log("DurDosageThunks getDurDosage mockDurDosageList=",mockDurDosageList);
       return (mockDurDosageList).find((n) => 
-        String(n.dosagePrdCutnSn) === String(params.dosagePrdCutnSn)
+        String(n.adminPrdCutnSn) === String(params.adminPrdCutnSn)
       ) || null;
     }
   }

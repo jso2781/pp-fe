@@ -135,8 +135,8 @@ export interface MenuPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -144,8 +144,8 @@ export interface MenuPVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 }
 
 /**
@@ -206,8 +206,8 @@ export interface MenuRVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -215,8 +215,8 @@ export interface MenuRVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 

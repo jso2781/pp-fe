@@ -22,13 +22,13 @@ export const mockDurCpctList = [
     gnrlNm: 'XXX',
 
     /** 1일최대투여용량 */
-    dailyMaxAdminCpct: 'XXX',
+    dayMaxAdminCpctCn: 'XXX',
 
     /** 1일최대투여기준용량 */
     dailyMaxAdminCrtrCpct: -1,
 
     /** 점검기준성분함량 */
-    chckCrtrIgrdCon: -1,
+    chckCrtrIgrdCpct: -1,
 
     /** 식약처제품명 */
     mfdsPrdctNm: 'XXX',
@@ -60,17 +60,17 @@ export const mockDurCpctList = [
     /** 등록일시 */
     regDt: '2026-01-23',
 
-    /** 등록프로그램아이디 */
-    regPrgrmId: 'XXX',
+
+
 
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
-    mdfcnDt: '2026-01-23',
+    mdfcnDt: '2026-01-23'
 
-    /** 수정프로그램아이디 */
-    mdfcnPrgrmId: 'XXX',
+
+
 
   }
 ]
@@ -95,13 +95,13 @@ export interface DurCpctPVO {
   gnrlNm?: string
 
   /** 1일최대투여용량 */
-  dailyMaxAdminCpct?: string
+  dayMaxAdminCpctCn?: string
 
   /** 1일최대투여기준용량 */
   dailyMaxAdminCrtrCpct?: number
 
   /** 점검기준성분함량 */
-  chckCrtrIgrdCon?: number
+  chckCrtrIgrdCpct?: number
 
   /** 식약처제품명 */
   mfdsPrdctNm?: string
@@ -133,8 +133,8 @@ export interface DurCpctPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -142,8 +142,8 @@ export interface DurCpctPVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 
@@ -170,13 +170,13 @@ export interface DurCpctRVO {
   gnrlNm?: string
 
   /** 1일최대투여용량 */
-  dailyMaxAdminCpct?: string
+  dayMaxAdminCpctCn?: string
 
   /** 1일최대투여기준용량 */
   dailyMaxAdminCrtrCpct?: number
 
   /** 점검기준성분함량 */
-  chckCrtrIgrdCon?: number
+  chckCrtrIgrdCpct?: number
 
   /** 식약처제품명 */
   mfdsPrdctNm?: string
@@ -208,8 +208,8 @@ export interface DurCpctRVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -217,8 +217,8 @@ export interface DurCpctRVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 
@@ -242,13 +242,13 @@ export interface DurCpctListPVO {
   gnrlNm?: string
 
   /** 1일최대투여용량 */
-  dailyMaxAdminCpct?: string
+  dayMaxAdminCpctCn?: string
 
   /** 1일최대투여기준용량 */
   dailyMaxAdminCrtrCpct?: number
 
   /** 점검기준성분함량 */
-  chckCrtrIgrdCon?: number
+  chckCrtrIgrdCpct?: number
 
   /** 식약처제품명 */
   mfdsPrdctNm?: string
@@ -280,8 +280,8 @@ export interface DurCpctListPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -289,8 +289,8 @@ export interface DurCpctListPVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 

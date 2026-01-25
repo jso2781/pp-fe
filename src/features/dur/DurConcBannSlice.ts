@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectConcBannList, getConcBann, insertConcBann, updateConcBann, saveConcBann, deleteConcBann } from './ConcBannThunks'
-import { mockConcBannList, ConcBannPVO, ConcBannRVO, ConcBannListPVO, ConcBannListRVO, ConcBannDVO  } from './ConcBannTypes'
+import { selectConcBannList, getConcBann, insertConcBann, updateConcBann, saveConcBann, deleteConcBann } from './DurConcBannThunks'
+import { mockConcBannList, ConcBannPVO, ConcBannRVO, ConcBannListPVO, ConcBannListRVO, ConcBannDVO  } from './DurConcBannTypes'
 
 /**
  * 대국민포털_DUR병용금기기본 정보 목록 조회(Redux 저장 구조) 

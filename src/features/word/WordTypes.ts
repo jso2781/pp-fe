@@ -33,17 +33,17 @@ export const mockWordList = [
     /** 등록일시 */
     regDt: '2026-01-23',
 
-    /** 등록프로그램아이디 */
-    regPrgrmId: 'XXX',
+
+
 
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
-    mdfcnDt: '2026-01-23',
+    mdfcnDt: '2026-01-23'
 
-    /** 수정프로그램아이디 */
-    mdfcnPrgrmId: 'XXX',
+
+
 
   }
 ]
@@ -79,8 +79,8 @@ export interface WordPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -88,8 +88,8 @@ export interface WordPVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 
@@ -127,8 +127,8 @@ export interface WordRVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -136,8 +136,8 @@ export interface WordRVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 
@@ -172,8 +172,8 @@ export interface WordListPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -181,8 +181,8 @@ export interface WordListPVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 

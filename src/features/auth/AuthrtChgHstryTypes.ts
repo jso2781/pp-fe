@@ -13,19 +13,19 @@ export const mockAuthrtChgHstryList = [
     menuSn: 'XXX',
 
     /** 적용대상유형 */
-    aplcnTrgtType: 'XXX',
+    aplcnTrgtTypeCd: 'XXX',
 
     /** 변경역할목록 */
-    chgRoleList: 'XXX',
+    chgRoleListCn: 'XXX',
 
     /** 적용대상 */
-    aplcnTrgt: 'XXX',
+    aplcnTrgtNm: 'XXX',
 
     /** 변경유형 */
-    chgType: 'XXX',
+    chgTypeCd: 'XXX',
 
     /** 비고 */
-    rmrk: 'XXX',
+    authrtChgRmrkCn: 'XXX',
 
     /** 등록자아이디 */
     rgtrId: 'XXX',
@@ -33,17 +33,17 @@ export const mockAuthrtChgHstryList = [
     /** 등록일시 */
     regDt: '2026-01-23',
 
-    /** 등록프로그램아이디 */
-    regPrgrmId: 'XXX',
+
+
 
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
-    mdfcnDt: '2026-01-23',
+    mdfcnDt: '2026-01-23'
 
-    /** 수정프로그램아이디 */
-    mdfcnPrgrmId: 'XXX',
+
+
 
   }
 ]
@@ -59,19 +59,19 @@ export interface AuthrtChgHstryPVO {
   menuSn?: string
 
   /** 적용대상유형 */
-  aplcnTrgtType?: string
+  aplcnTrgtTypeCd?: string
 
   /** 변경역할목록 */
-  chgRoleList?: string
+  chgRoleListCn?: string
 
   /** 적용대상 */
-  aplcnTrgt?: string
+  aplcnTrgtNm?: string
 
   /** 변경유형 */
-  chgType?: string
+  chgTypeCd?: string
 
   /** 비고 */
-  rmrk?: string
+  authrtChgRmrkCn?: string
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -79,8 +79,8 @@ export interface AuthrtChgHstryPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -88,8 +88,8 @@ export interface AuthrtChgHstryPVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 
@@ -107,19 +107,19 @@ export interface AuthrtChgHstryRVO {
   menuSn?: string
 
   /** 적용대상유형 */
-  aplcnTrgtType?: string
+  aplcnTrgtTypeCd?: string
 
   /** 변경역할목록 */
-  chgRoleList?: string
+  chgRoleListCn?: string
 
   /** 적용대상 */
-  aplcnTrgt?: string
+  aplcnTrgtNm?: string
 
   /** 변경유형 */
-  chgType?: string
+  chgTypeCd?: string
 
   /** 비고 */
-  rmrk?: string
+  authrtChgRmrkCn?: string
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -127,8 +127,8 @@ export interface AuthrtChgHstryRVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -136,8 +136,8 @@ export interface AuthrtChgHstryRVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 
@@ -152,19 +152,19 @@ export interface AuthrtChgHstryListPVO {
   menuSn?: string
 
   /** 적용대상유형 */
-  aplcnTrgtType?: string
+  aplcnTrgtTypeCd?: string
 
   /** 변경역할목록 */
-  chgRoleList?: string
+  chgRoleListCn?: string
 
   /** 적용대상 */
-  aplcnTrgt?: string
+  aplcnTrgtNm?: string
 
   /** 변경유형 */
-  chgType?: string
+  chgTypeCd?: string
 
   /** 비고 */
-  rmrk?: string
+  authrtChgRmrkCn?: string
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -172,8 +172,8 @@ export interface AuthrtChgHstryListPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -181,8 +181,8 @@ export interface AuthrtChgHstryListPVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 

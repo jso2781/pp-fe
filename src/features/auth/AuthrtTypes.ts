@@ -16,7 +16,7 @@ export const mockAuthrtList = [
     authrtNm: 'XXX',
 
     /** 권한유형 */
-    authrtType: 'XXX',
+    authrtTypeCd: 'XXX',
 
     /** 권한설명 */
     authrtExpln: 'XXX',
@@ -36,17 +36,17 @@ export const mockAuthrtList = [
     /** 등록일시 */
     regDt: '2026-01-23',
 
-    /** 등록프로그램아이디 */
-    regPrgrmId: 'XXX',
+
+
 
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
-    mdfcnDt: '2026-01-23',
+    mdfcnDt: '2026-01-23'
 
-    /** 수정프로그램아이디 */
-    mdfcnPrgrmId: 'XXX',
+
+
 
   }
 ]
@@ -65,7 +65,7 @@ export interface AuthrtPVO {
   authrtNm?: string
 
   /** 권한유형 */
-  authrtType?: string
+  authrtTypeCd?: string
 
   /** 권한설명 */
   authrtExpln?: string
@@ -85,8 +85,8 @@ export interface AuthrtPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -94,8 +94,8 @@ export interface AuthrtPVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 
@@ -116,7 +116,7 @@ export interface AuthrtRVO {
   authrtNm?: string
 
   /** 권한유형 */
-  authrtType?: string
+  authrtTypeCd?: string
 
   /** 권한설명 */
   authrtExpln?: string
@@ -136,8 +136,8 @@ export interface AuthrtRVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -145,8 +145,8 @@ export interface AuthrtRVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 
@@ -164,7 +164,7 @@ export interface AuthrtListPVO {
   authrtNm?: string
 
   /** 권한유형 */
-  authrtType?: string
+  authrtTypeCd?: string
 
   /** 권한설명 */
   authrtExpln?: string
@@ -184,8 +184,8 @@ export interface AuthrtListPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
+
+
 
   /** 수정자아이디 */
   mdfrId?: string
@@ -193,8 +193,8 @@ export interface AuthrtListPVO {
   /** 수정일시 */
   mdfcnDt?: string
 
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
+
+
 
 }
 

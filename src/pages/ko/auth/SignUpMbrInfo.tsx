@@ -402,10 +402,10 @@ export default function SignUpMbrInfo() {
         mbrJoinDt: now,
         rgtrId: formData.mbrId,
         regDt: null,
-        regPrgrmId: 'SignUpMbrInfo',
+
         mdfrId: formData.mbrId,
         mdfcnDt: null,
-        mdfcnPrgrmId: 'SignUpMbrInfo',
+
         linkInfoIdntfId: null,
         certTokenVl: null,
         pswdChgDt: null,

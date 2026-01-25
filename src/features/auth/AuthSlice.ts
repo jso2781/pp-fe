@@ -31,10 +31,10 @@ const convertMbrInfoRVOToAuthRVO = (mbrInfo: MbrInfoRVO | null, existingAuthRVO:
     certTokenVl: mbrInfo.certTokenVl,
     rgtrId: mbrInfo.rgtrId,
     regDt: mbrInfo.regDt,
-    regPrgrmId: mbrInfo.regPrgrmId,
+
     mdfrId: mbrInfo.mdfrId,
     mdfcnDt: mbrInfo.mdfcnDt,
-    mdfcnPrgrmId: mbrInfo.mdfcnPrgrmId,
+
     // AuthRVO에만 있는 필드들은 기존 값 유지
     tokenId: existingAuthRVO?.tokenId,
     appId: existingAuthRVO?.appId,

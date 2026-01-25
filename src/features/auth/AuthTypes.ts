@@ -132,7 +132,7 @@ export interface AuthRVO {
   /**
    * 등록프로그램아이디
    */
-  regPrgrmId?: string
+
 
   /**
    * 수정자아이디
@@ -147,7 +147,7 @@ export interface AuthRVO {
   /**
    * 수정프로그램아이디
    */
-  mdfcnPrgrmId?: string
+
 
   /**
    * JWT토큰ID

@@ -7,7 +7,7 @@ export const mockDurDosageList = [
     no: 1,
 
     /** 투여기간주의일련번호 */
-    dosagePrdCutnSn: 'XXX',
+    adminPrdCutnSn: 'XXX',
 
     /** 약품코드 */
     mdcnCd: 'XXX',
@@ -22,16 +22,7 @@ export const mockDurDosageList = [
     gnrlNm: 'XXX',
 
     /** 최대투여기간일수 */
-    maxDosagePrdDays: -1,
-
-    /** 식약처제품명 */
-    mfdsPrdctNm: 'XXX',
-
-    /** 식약처성분코드 */
-    mfdsIgrdCd: 'XXX',
-
-    /** 식약처성분명 */
-    mfdsIgrdNm: 'XXX',
+    maxAdminPrdDayCnt: -1,
 
     /** 공고일자 */
     pbancYmd: 'XXX',
@@ -43,7 +34,7 @@ export const mockDurDosageList = [
     aplcnYm: 'XXX',
 
     /** 비고 */
-    rmrk: 'XXX',
+    rmrkCn: 'XXX',
 
     /** 유형코드 */
     typeCd: 'XXX',
@@ -54,18 +45,11 @@ export const mockDurDosageList = [
     /** 등록일시 */
     regDt: '2026-01-23',
 
-    /** 등록프로그램아이디 */
-    regPrgrmId: 'XXX',
-
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
-    mdfcnDt: '2026-01-23',
-
-    /** 수정프로그램아이디 */
-    mdfcnPrgrmId: 'XXX',
-
+    mdfcnDt: '2026-01-23'
   }
 ]
 
@@ -74,7 +58,7 @@ export const mockDurDosageList = [
  */
 export interface DurDosagePVO {
   /** 투여기간주의일련번호 */
-  dosagePrdCutnSn?: string
+  adminPrdCutnSn?: string
 
   /** 약품코드 */
   mdcnCd?: string
@@ -89,16 +73,7 @@ export interface DurDosagePVO {
   gnrlNm?: string
 
   /** 최대투여기간일수 */
-  maxDosagePrdDays?: number
-
-  /** 식약처제품명 */
-  mfdsPrdctNm?: string
-
-  /** 식약처성분코드 */
-  mfdsIgrdCd?: string
-
-  /** 식약처성분명 */
-  mfdsIgrdNm?: string
+  maxAdminPrdDayCnt?: number
 
   /** 공고일자 */
   pbancYmd?: string
@@ -110,7 +85,7 @@ export interface DurDosagePVO {
   aplcnYm?: string
 
   /** 비고 */
-  rmrk?: string
+  rmrkCn?: string
 
   /** 유형코드 */
   typeCd?: string
@@ -121,18 +96,11 @@ export interface DurDosagePVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
-
 }
 
 /**
@@ -143,7 +111,7 @@ export interface DurDosageRVO {
   no?: 1
 
   /** 투여기간주의일련번호 */
-  dosagePrdCutnSn?: string
+  adminPrdCutnSn?: string
 
   /** 약품코드 */
   mdcnCd?: string
@@ -158,16 +126,7 @@ export interface DurDosageRVO {
   gnrlNm?: string
 
   /** 최대투여기간일수 */
-  maxDosagePrdDays?: number
-
-  /** 식약처제품명 */
-  mfdsPrdctNm?: string
-
-  /** 식약처성분코드 */
-  mfdsIgrdCd?: string
-
-  /** 식약처성분명 */
-  mfdsIgrdNm?: string
+  maxAdminPrdDayCnt?: number
 
   /** 공고일자 */
   pbancYmd?: string
@@ -179,7 +138,7 @@ export interface DurDosageRVO {
   aplcnYm?: string
 
   /** 비고 */
-  rmrk?: string
+  rmrkCn?: string
 
   /** 유형코드 */
   typeCd?: string
@@ -190,18 +149,11 @@ export interface DurDosageRVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
-
 }
 
 /**
@@ -209,7 +161,7 @@ export interface DurDosageRVO {
  */
 export interface DurDosageListPVO {
   /** 투여기간주의일련번호 */
-  dosagePrdCutnSn?: string
+  adminPrdCutnSn?: string
 
   /** 약품코드 */
   mdcnCd?: string
@@ -224,16 +176,7 @@ export interface DurDosageListPVO {
   gnrlNm?: string
 
   /** 최대투여기간일수 */
-  maxDosagePrdDays?: number
-
-  /** 식약처제품명 */
-  mfdsPrdctNm?: string
-
-  /** 식약처성분코드 */
-  mfdsIgrdCd?: string
-
-  /** 식약처성분명 */
-  mfdsIgrdNm?: string
+  maxAdminPrdDayCnt?: number
 
   /** 공고일자 */
   pbancYmd?: string
@@ -245,7 +188,7 @@ export interface DurDosageListPVO {
   aplcnYm?: string
 
   /** 비고 */
-  rmrk?: string
+  rmrkCn?: string
 
   /** 유형코드 */
   typeCd?: string
@@ -256,18 +199,11 @@ export interface DurDosageListPVO {
   /** 등록일시 */
   regDt?: string
 
-  /** 등록프로그램아이디 */
-  regPrgrmId?: string
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-  /** 수정프로그램아이디 */
-  mdfcnPrgrmId?: string
-
 }
 
 /**
@@ -283,7 +219,7 @@ export interface DurDosageListRVO {
  */
 export interface DurDosageDVO {
   /** 투여기간주의일련번호 */
-  dosagePrdCutnSn: string
+  adminPrdCutnSn: string
 
 }
 

@@ -127,10 +127,10 @@ function convertMenuListToSideItems(menuList: MenuRVO[]): SideItem[] {
  *              "useYn": null,
  *              "rgtrId": null,
  *              "regDt": null,
- *              "regPrgrmId": null,
+
  *              "mdfrId": null,
  *              "mdfcnDt": null,
- *              "mdfcnPrgrmId": null
+
  *          },
  *          {
  *              "menuSn": 1001,
@@ -150,10 +150,10 @@ function convertMenuListToSideItems(menuList: MenuRVO[]): SideItem[] {
  *              "useYn": null,
  *              "rgtrId": null,
  *              "regDt": null,
- *              "regPrgrmId": null,
+
  *              "mdfrId": null,
  *              "mdfcnDt": null,
- *              "mdfcnPrgrmId": null
+
  *          },
  *           ~~
  *           ~~

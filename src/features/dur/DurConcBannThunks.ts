@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
 import { selectConcBannListApiPath, getConcBannApiPath, insertConcBannApiPath, updateConcBannApiPath, saveConcBannApiPath, deleteConcBannApiPath } from '@/api/dur/ConcBannApiPaths'
-import { mockConcBannList, ConcBannPVO, ConcBannRVO, ConcBannListPVO, ConcBannListRVO, ConcBannDVO  } from './ConcBannTypes'
+import { mockConcBannList, ConcBannPVO, ConcBannRVO, ConcBannListPVO, ConcBannListRVO, ConcBannDVO  } from './DurConcBannTypes'
 
 /**
  * 대국민포털_DUR병용금기기본 정보 목록 조회 
