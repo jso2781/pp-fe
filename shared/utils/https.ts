@@ -3,8 +3,7 @@ import i18n from '@/i18n/i18n'
 import { store } from '@/store/store'
 import type { AppDispatch } from '@/store/store'
 import { setAccessToken } from '@/features/auth/AuthSlice'
-import { refresh, logout } from '@/features/auth/AuthThunks'
-import { RefreshPVO, LogoutPVO } from '@/features/auth/AuthTypes'
+import { logout } from '@/features/auth/AuthThunks'
 import { refreshApiPath } from '@/api/auth/AuthApiPaths'
 
 /**
@@ -116,17 +115,10 @@ https.interceptors.response.use(
         const tokenId = resp.data?.data?.tokenId ?? null;
         const newAccessToken = resp.data?.data?.accessToken ?? null;
         const newRefreshToken = resp.data?.data?.refreshToken ?? null;
-        const pswdErrNmtm = resp.data?.data?.pswdErrNmtm ?? null;
         const userInfo = resp.data?.data?.userInfo ?? null;
 
         // Redux store에 새 토큰 저장 (setAccessToken 액션 사용)
-        dispatch(setAccessToken({
-          tokenId,
-          accessToken: newAccessToken,
-          refreshToken: newRefreshToken,
-          pswdErrNmtm: pswdErrNmtm,
-          userInfo
-        }));
+        dispatch(setAccessToken(userInfo));
 
         // sessionStorage에 통일된 키로 저장 (AuthContext와 동기화)
         if (newRefreshToken) {

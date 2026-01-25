@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import https from '@/api/axiosInstance';
 import { loginApiPath, logoutApiPath, refreshApiPath, loginExtendApiPath } from '@/api/auth/AuthApiPaths';
-import { AuthPVO, AuthRVO, LoginExtendRVO, LoginRVO, LogoutPVO, LogoutRVO, RefreshPVO, RefreshRVO } from './AuthTypes';
+import { LoginExtendRVO, LoginPVO, LoginRVO, LogoutPVO, LogoutRVO, RefreshPVO, RefreshRVO } from './AuthTypes';
 import { MbrInfoRVO } from '../mbr/MbrInfoTypes';
 
 /**
@@ -10,11 +10,11 @@ import { MbrInfoRVO } from '../mbr/MbrInfoTypes';
  */
 export const login = createAsyncThunk<
   LoginRVO,
-  AuthPVO | undefined,
+  LoginPVO | undefined,
   { rejectValue: string }
 >(
   '/auth/login',
-  async (params: AuthPVO | undefined, { rejectWithValue }) => {
+  async (params: LoginPVO | undefined, { rejectWithValue }) => {
     try {
       const res = await https.post(loginApiPath(), params);
 
@@ -27,7 +27,7 @@ export const login = createAsyncThunk<
       const pswdErrNmtm = res.data?.data?.pswdErrNmtm;
       
       // 서버가 AuthRVO 형식으로 주므로 AuthRVO 형식으로 데이터 구조 재조정 
-      return { userInfo: userInfo as AuthRVO, tokenId: tokenId ?? null, accessToken: accessToken ?? null, refreshToken: refreshToken ?? null, pswdErrNmtm: pswdErrNmtm ?? null };
+      return { userInfo: userInfo as MbrInfoRVO, tokenId: tokenId ?? null, accessToken: accessToken ?? null, refreshToken: refreshToken ?? null, pswdErrNmtm: pswdErrNmtm ?? null };
     } catch (error) {
       console.log("AuthThunks login catch error=",error);
       // AxiosError 에러 객체 구조:

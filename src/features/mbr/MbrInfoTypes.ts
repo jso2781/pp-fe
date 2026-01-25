@@ -172,7 +172,7 @@ export interface MbrInfoPVO {
 }
 
 /**
- * 대국민포털_회원정보기본 정보 
+ * 대국민포털_회원정보기본 정보(회원정보 + 토큰정보)
  */
 export interface MbrInfoRVO {
   /** 순번 */
@@ -235,18 +235,31 @@ export interface MbrInfoRVO {
   /** 등록일시 */
   regDt?: string
 
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
 
+  /**
+   * JWT토큰ID
+   */
+  tokenId?: number
 
+  /**
+   * 애플리케이션ID
+   */
+  appId?: string
 
+  /**
+   * JWT_Refresh_Token
+   */
+  refreshToken?: string
 
+  /**
+   * JWT_Access_Token
+   */
+  accessToken?: string
 }
 
 /**
@@ -310,18 +323,11 @@ export interface MbrInfoListPVO {
   /** 등록일시 */
   regDt?: string
 
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**

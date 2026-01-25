@@ -1,53 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { login, refresh, logout, loginExtend} from './AuthThunks';
-import { AuthPVO, AuthRVO } from './AuthTypes';
 import { MbrInfoRVO } from '../mbr/MbrInfoTypes';
-
-/**
- * MbrInfoRVO를 AuthRVO로 변환하는 함수
- * MbrInfoRVO에는 없는 tokenId, appId, refreshToken, accessToken은 기존 값 유지
- */
-const convertMbrInfoRVOToAuthRVO = (mbrInfo: MbrInfoRVO | null, existingAuthRVO: AuthRVO | null): AuthRVO | null => {
-  if (!mbrInfo) {
-    return null;
-  }
-
-  return {
-    mbrNo: mbrInfo.mbrNo,
-    mbrId: mbrInfo.mbrId,
-    encptMbrFlnm: mbrInfo.encptMbrFlnm,
-    encptMbrEmlNm: mbrInfo.encptMbrEmlNm,
-    encptMbrPswd: mbrInfo.encptMbrPswd,
-    encptMbrTelno: mbrInfo.encptMbrTelno,
-    mbrTypeCd: mbrInfo.mbrTypeCd,
-    mbrJoinSttsCd: mbrInfo.mbrJoinSttsCd,
-    mbrJoinDt: mbrInfo.mbrJoinDt,
-    mbrWhdwlRsn: mbrInfo.mbrWhdwlRsn,
-    mbrWhdwlDt: mbrInfo.mbrWhdwlDt,
-    bfrEnpswd: mbrInfo.bfrEnpswd,
-    pswdChgDt: mbrInfo.pswdChgDt,
-    pswdErrNmtm: mbrInfo.pswdErrNmtm,
-    linkInfoIdntfId: mbrInfo.linkInfoIdntfId,
-    certTokenVl: mbrInfo.certTokenVl,
-    rgtrId: mbrInfo.rgtrId,
-    regDt: mbrInfo.regDt,
-
-    mdfrId: mbrInfo.mdfrId,
-    mdfcnDt: mbrInfo.mdfcnDt,
-
-    // AuthRVO에만 있는 필드들은 기존 값 유지
-    tokenId: existingAuthRVO?.tokenId,
-    appId: existingAuthRVO?.appId,
-    refreshToken: existingAuthRVO?.refreshToken,
-    accessToken: existingAuthRVO?.accessToken,
-  };
-};
 
 /**
  * 대국민포털_로그인 정보(Redux 저장 구조) 
  */
 export interface AuthState {
-  userInfo: AuthRVO | null;
+  userInfo: MbrInfoRVO | null;
   tokenId: number | null;
   accessToken: string | null;
   refreshToken: string | null;
@@ -74,54 +33,47 @@ const AuthSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAccessToken(state, action: PayloadAction<{ tokenId: number | null, accessToken: string | null, refreshToken: string | null, pswdErrNmtm: number | null, userInfo: MbrInfoRVO | null }>) {
-      state.tokenId = action.payload.tokenId;
-      state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
-      state.pswdErrNmtm = action.payload.pswdErrNmtm;
-      
-      // MbrInfoRVO를 AuthRVO로 변환
-      const authRVO = convertMbrInfoRVOToAuthRVO(action.payload.userInfo, state.userInfo);
-      // 변환된 AuthRVO에 토큰 정보 추가 (MbrInfoRVO에는 없는 필드)
-      if (authRVO) {
-        authRVO.tokenId = action.payload.tokenId ?? undefined;
-        authRVO.accessToken = action.payload.accessToken ?? undefined;
-        authRVO.refreshToken = action.payload.refreshToken ?? undefined;
-      }
-      state.userInfo = authRVO;
+    setAccessToken(state, action: PayloadAction<MbrInfoRVO | null>) {
+      state.tokenId = action.payload?.tokenId ?? null;
+      state.accessToken = action.payload?.accessToken ?? null;
+      state.refreshToken = action.payload?.refreshToken ?? null;
+      state.pswdErrNmtm = action.payload?.pswdErrNmtm ?? null;
+
+      state.userInfo = action.payload;
 
       // localStorage에 통일된 키로 저장 (AuthContext와 동기화)
-      if(authRVO && action.payload.accessToken) {
+      if(action.payload?.accessToken) {
         const authData = {
-          tokenId: action.payload.tokenId,
-          accessToken: action.payload.accessToken,
-          refreshToken: action.payload.refreshToken,
-          pswdErrNmtm: action.payload.pswdErrNmtm,
-          userInfo: authRVO
+          tokenId: action.payload?.tokenId,
+          accessToken: action.payload?.accessToken,
+          refreshToken: action.payload?.refreshToken,
+          pswdErrNmtm: action.payload?.pswdErrNmtm,
+          userInfo: action.payload
         };
+
         sessionStorage.setItem("auth", JSON.stringify(authData));
+
         // 하위 호환성을 위해 refreshToken도 별도로 저장
-        if(action.payload.refreshToken){
-          sessionStorage.setItem("refreshToken", action.payload.refreshToken);
+        if(action.payload?.refreshToken){
+          sessionStorage.setItem("refreshToken", action.payload?.refreshToken);
         }
+
       }
     },
     setAuthUserInfo: (state, action: PayloadAction<MbrInfoRVO | null>) => {
-      // MbrInfoRVO를 AuthRVO로 변환
-      const authRVO = convertMbrInfoRVOToAuthRVO(action.payload, state.userInfo);
-      state.userInfo = authRVO;
+      state.userInfo = action.payload;
       
       // sessionStorage의 auth 내부 userInfo도 함께 갱신
       try {
         const authDataStr = sessionStorage.getItem("auth");
         if (authDataStr) {
           const authData = JSON.parse(authDataStr);
-          authData.userInfo = authRVO;
+          authData.userInfo = action.payload;
           sessionStorage.setItem("auth", JSON.stringify(authData));
-        } else if (authRVO && state.accessToken) {
+        } else if (action.payload?.accessToken && state.accessToken) {
           // sessionStorage에 auth 데이터가 없지만 accessToken이 있는 경우 새로 생성
           const authData = {
-            userInfo: authRVO,
+            userInfo: action.payload,
             tokenId: state.tokenId,
             accessToken: state.accessToken,
             refreshToken: state.refreshToken,

@@ -350,7 +350,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const location = useLocation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { isAuthenticated, logoutContext } = useAuth();
+  const { isAuthenticated, user, logoutContext } = useAuth();
 
   useEffect(() => {
     console.log('========================= Header isAuthenticated', isAuthenticated);
@@ -1544,13 +1544,15 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     {t('usrSwtReg')} {/* 전문가 회원 전환 신청 */}
                   </Button>
 
-                  <Button size="small" onClick={() => navigate(to('/'))} className="btn-util user-adv">
-                    {t('advAppReg')} {/* 자문위원신청 */}
-                  </Button>
-
-                  <Button size="small" onClick={() => navigate(to('/'))} className="btn-util adv-task">
-                    {t('advTask')} {/* 자문위원 업무 */}
-                  </Button>
+                  {user && user.userInfo?.cnstnMbcmtYn === 'Y' ? (
+                    <Button size="small" onClick={() => navigate(to('/'))} className="btn-util adv-task">
+                      {t('advTask')} {/* 자문위원 업무 */}
+                    </Button>
+                  ) : (
+                    <Button size="small" onClick={() => navigate(to('/'))} className="btn-util user-adv">
+                      {t('advAppReg')} {/* 자문위원신청 */}
+                    </Button>
+                  )}
 
                   {!isAuthenticated ? (
                     <Button size="small" onClick={() => navigate(to('/auth/SignUpSel'))} className="btn-util signup">
