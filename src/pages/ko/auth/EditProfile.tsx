@@ -50,11 +50,7 @@ export default function EditProfile() {
   const [isPasswordChangeMode, setIsPasswordChangeMode] = useState(false);
   const [isPhoneCertified, setIsPhoneCertified] = useState(false);
   const [anyIdReady, setAnyIdReady] = useState(false);
-  const hasFetchedRef = useRef(false);
-
-
-
-  // Any-ID 스크립트 로드 확인
+  const hasFetchedRef = useRef(false);  // Any-ID 스크립트 로드 확인
   useEffect(() => {
     const checkAnyIdReady = () => {
       if (window.AnyidC?.LOAD_MODULE) {

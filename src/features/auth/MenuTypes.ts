@@ -134,19 +134,11 @@ export interface MenuPVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
-  mdfcnDt?: string
-
-
-
-}
+  mdfcnDt?: string}
 
 /**
  * 대국민포털_메뉴기본 정보 
@@ -205,19 +197,11 @@ export interface MenuRVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
