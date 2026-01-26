@@ -1,8 +1,8 @@
 /**
  * 화면ID: KIDS-PP-US-LG-09
- * 화면명: 비밀번호 재설정
+ * 화면명: 비밀번호 변경
  * 화면경로: /ko/auth/FindPwModify
- * 화면설명: 비밀번호 재설정 화면.
+ * 화면설명: 비밀번호 변경
  */
 
 import { Box, Typography, TextField, Button, Stack, Alert } from '@mui/material';
@@ -114,7 +114,7 @@ export default function FindPwModify() {
 
     //API dispatch
     try{
-      dispatch(updateMbrInfoPw({ mbrNo: location.state?.mbrNo, mbrEnpswd: formData.password })).unwrap();
+      dispatch(updateMbrInfoPw({ mbrNo: location.state?.mbrNo, encptMbrPswd: formData.password })).unwrap();
     } catch(e) {
 
     } finally {

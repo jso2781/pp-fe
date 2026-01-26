@@ -2,19 +2,25 @@
  * 화면ID: KIDS-PP-US-LG-08
  * 화면명: 비밀번호 찾기
  * 화면경로: /ko/auth/FindPw
- * 화면설명: 비밀번호 찾기 화면.
+ * 화면설명: 비밀번호 찾기
  */
 
-import { Box, Typography, Button } from '@mui/material';
 import DepsLocation from "@/components/common/DepsLocation"
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material';
+import {
+  PhoneAndroid as PhoneIcon,
+  AccountCircle as AccountIcon,
+  Fingerprint as FingerprintIcon,
+} from '@mui/icons-material';
 
 export default function FindPw() {
   
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const handleAuthClick = () => {
+  
+  const handleLoginMethod = (type: string) => {
     // mbrNo 1000000005 회원으로 고정
     navigate('/ko/auth/FindPwModify', { state:{ mbrNo: '1000000005' }});
   }
@@ -33,8 +39,41 @@ export default function FindPw() {
                 <Box className="pageCont-idPwFind member-page">
                   <p className="guide-text">{t('findPwGuide')}</p>  
                   <Box className="AnyID-area">
-                    Any-ID 영역
-                    <Button onClick={handleAuthClick}>인증</Button>
+                    <Card className="login-method-card">
+                      <CardContent className="login-method-card-content">
+                        <Box className="login-button-group">
+                          <Button variant="outlined" onClick={() => handleLoginMethod('simple')} className="login-button">
+                            <Stack spacing={1} alignItems="center" className="login-button-stack">
+                              <AccountIcon className="login-icon" />
+                              <Typography variant="body1" className="login-label">간편 인증</Typography>
+                              <Typography variant="caption" className="login-desc">
+                                네이버, 카카오, 금융기관 등의 전자서명으로 로그인
+                              </Typography>
+                            </Stack>
+                          </Button>
+                          
+                          <Button variant="outlined" onClick={() => handleLoginMethod('sms')} className="login-button">
+                            <Stack spacing={1} alignItems="center" className="login-button-stack">
+                              <PhoneIcon className="login-icon" />
+                              <Typography variant="body1" className="login-label">휴대폰 SMS 인증</Typography>
+                              <Typography variant="caption" className="login-desc">
+                                본인 명의로 가입된 휴대폰 인증으로 로그인
+                              </Typography>
+                            </Stack>
+                          </Button>
+
+                          <Button variant="outlined" onClick={() => handleLoginMethod('mobileId')} className="login-button">
+                            <Stack spacing={1} alignItems="center" className="login-button-stack">
+                              <FingerprintIcon className="login-icon" />
+                              <Typography variant="body1" className="login-label">모바일 신분증 인증</Typography>
+                              <Typography variant="caption" className="login-desc">
+                                스마트폰의 모바일 신분증 인증으로 로그인
+                              </Typography>
+                            </Stack>
+                          </Button>
+                        </Box>
+                      </CardContent>
+                    </Card>
                   </Box>
                   <Box component="section" className="caution-area" aria-labelledby="caution-title">
                     <Typography component="h4" id="caution-title" className="caution-title">

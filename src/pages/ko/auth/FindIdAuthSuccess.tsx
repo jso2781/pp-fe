@@ -2,7 +2,7 @@
  * 화면ID: KIDS-PP-US-LG-07
  * 화면명: 아이디 찾기 결과
  * 화면경로: /ko/auth/FindIdAuthSuccess
- * 화면설명: 아이디 찾기 결과 화면.
+ * 화면설명: 아이디 찾기 결과(일반 회원일 경우)
  */
 
 import { Box, Typography, Button, Stack } from '@mui/material';
@@ -10,9 +10,11 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 export default function FindIdAuthSuccess() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t, i18n: i18nInstance } = useTranslation();
   const handleFindPwClick = () => {
     navigate('/ko/auth/FindPw');
@@ -35,12 +37,17 @@ export default function FindIdAuthSuccess() {
                 {/* --- 본문 시작 --- */}
                 <Box className="pageCont-idPwFind member-page">
                   <Typography className="guide-text">
-                    {t('findIdFound')}
+                    {location.state?.name && location.state?.id 
+                    ? t('findIdFound') : t('systemErrorTitle')}
                   </Typography>
                   {/* 아이디 결과 영역 */}
                   <Box className="id-find-result">
-                    <p><span>$김철수$</span>{t('findIdResultNameId')}</p>
-                    <p><span className="txt-2">$chskim7788</span>{i18nInstance.language === 'ko' ? ' 입니다' : ''}.</p>
+                    {location.state?.name && location.state?.id
+                      ? <>
+                          <p><span>{location.state?.name}</span>{t('findIdResultNameId')}</p>
+                          <p><span className="txt-2">{location.state?.id}</span>{i18nInstance.language === 'ko' ? ' 입니다' : ''}.</p>
+                        </>
+                      : <p>{t('systemErrorMessage')}</p>}
                   </Box>
                   {/* 로그인 버튼 영역 */}
                   <Box className="login-actions">

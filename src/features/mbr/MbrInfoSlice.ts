@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectMbrInfoList, getMbrInfo, insertMbrInfo, updateMbrInfo, saveMbrInfo, deleteMbrInfo, existMbrInfo, verifyPassword } from './MbrInfoThunks'
+import { selectMbrInfoList, getMbrInfo, insertMbrInfo, updateMbrInfo, saveMbrInfo, deleteMbrInfo, existMbrInfo, verifyPassword, findMbrInfoId, updateMbrInfoPw } from './MbrInfoThunks'
 import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO  } from './MbrInfoTypes'
 
 /**
@@ -153,6 +153,28 @@ const MbrInfoSlice = createSlice({
       .addCase(deleteMbrInfo.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) || action.error?.message || 'Failed to delete MbrInfo';
+      })
+      .addCase(findMbrInfoId.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(findMbrInfoId.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(findMbrInfoId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = '에러처리'//TODOjiwoong
+      })
+      .addCase(updateMbrInfoPw.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateMbrInfoPw.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(updateMbrInfoPw.rejected, (state, action) => {
+        state.loading = false;
+        state.error = '에러처리'//TODOjiwoong
       })
   }
 });
