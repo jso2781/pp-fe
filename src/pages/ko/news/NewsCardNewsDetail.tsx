@@ -163,8 +163,8 @@ export default function NewsCardNewsDetail() {
                           </Box>
                         </Link>
                         <Box className="kogl-text">
-                          <Typography variant="body2" component="p">
-                            본 저작물은 <strong>"공공누리" 제4유형 : 출처표시 + 상업적 이용금지 + 변경금지</strong> 조건에 따라 이용할 수 있습니다.
+                          <Typography component="p">
+                            본 저작물은 "공공누리" 제4유형 : 출처표시 + 상업적 이용금지 + 변경금지 조건에 따라 이용할 수 있습니다.
                           </Typography>
                         </Box>
                       </Box>
