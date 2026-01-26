@@ -192,7 +192,7 @@ https.interceptors.response.use(
       // const navigate = useNavigate();
       // navigate('/ko/InternalServerError');
       //페이지 새로고침됨.
-      window.location.href = '/ko/InternalServerError';
+      // window.location.href = '/ko/InternalServerError';
     }
 
     return Promise.reject(error);
