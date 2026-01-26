@@ -11,33 +11,12 @@ export default function KIDS_PP_US_DI_01() {
   // --- lnb ---
   const sideItems = useMemo(() => [
     { 
-      key: '/1', 
+      key: '#', 
       label: 'DUR 정보',
       children: [
-        { key: '/1/1', label: 'DUR 정보 검색' },
-        { key: '/1/2', label: '내가 먹는 약의 DUR 정보' },
-        { key: '/1/3', label: '의약품 적정사용 정보집' },
-        { key: '/1/4', label: '알림 게시판' },
-        { key: '/1/5', label: '의견 제안' },
+        { key: '#', label: 'DUR 이해' }
       ] 
-    },
-    { 
-      key: '/2', 
-      label: '피해구제',
-      children: [
-        { key: '/2/1', label: '피해구제 제도' },
-        { key: '/2/2', label: '피해구제 신청방법' },
-        { key: '/2/3', label: '공지사항' },
-      ]
-    },
-    { 
-      key: '/3', 
-      label: '첨단바이오 포커스' 
-    },
-    { 
-      key: '/4', 
-      label: '마약류안전정보지' 
-    },
+    }
   ], []);
 
   return (
