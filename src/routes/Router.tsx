@@ -11,6 +11,7 @@ import DurProposalKo from '@/pages/ko/maintask/dur/DurProposal'
 import DurNoticeListKo from '@/pages/ko/dur/DurNoticeList'
 import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail'
 import NotFoundKo from '@/pages/ko/NotFound'
+import InternalServerErrorKo from '@/pages/ko/InternalServerError';
 import SignUpSelKo from '@/pages/ko/auth/SignUpSel'
 import SignUpAgrTrmsKo from '@/pages/ko/auth/SignUpAgrTrms'
 import LegalGuardAgrKo from '@/pages/ko/auth/LegalGuardAgr'
@@ -23,7 +24,7 @@ import LoginKo from '@/pages/ko/auth/Login'
 import LoginMethodKo from '@/pages/ko/auth/LoginMethod'
 import PasswordConfirmKo from '@/pages/ko/auth/PasswordConfirm'
 import FindIdKo from '@/pages/ko/auth/FindId';
-import FindIdAuthSuccessKo from '@/pages/ko/auth/findIdAuthSuccess';
+import FindIdAuthSuccessKo from '@/pages/ko/auth/FindIdAuthSuccess';
 import FindPwKo from '@/pages/ko/auth/FindPw';
 import FindPwModifyKo from '@/pages/ko/auth/FindPwModify';
 import NewsFaqNoticeKo from '@/pages/ko/news/NewsFaqNotice';
@@ -207,6 +208,7 @@ export default function Router() {
               <Route path="/:lang/auth/FindPw" element={<LangElement byLang={{ ko: <FindPwKo />, en: <FindPwKo /> }} />} />
               <Route path="/:lang/auth/FindPwModify" element={<LangElement byLang={{ ko: <FindPwModifyKo />, en: <FindPwModifyKo /> }} />} />
 
+              <Route path="/:lang/InternalServerError" element={<LangElement byLang={{ ko: <InternalServerErrorKo />, en: <InternalServerErrorKo /> }} />} />
               {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
               <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundEn /> }} />} />
             </Route>

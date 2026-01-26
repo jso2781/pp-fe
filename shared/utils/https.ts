@@ -5,6 +5,7 @@ import type { AppDispatch } from '@/store/store'
 import { setAccessToken } from '@/features/auth/AuthSlice'
 import { logout } from '@/features/auth/AuthThunks'
 import { refreshApiPath } from '@/api/auth/AuthApiPaths'
+import { useNavigate } from 'react-router-dom'
 
 /**
  * 공통 axios 인스턴스
@@ -185,6 +186,13 @@ https.interceptors.response.use(
         }catch(e){}
       }
 
+    }
+    // 500에러 페이징 처리.
+    else if(error.response.status === 500){
+      // const navigate = useNavigate();
+      // navigate('/ko/InternalServerError');
+      //페이지 새로고침됨.
+      window.location.href = '/ko/InternalServerError';
     }
 
     return Promise.reject(error);
