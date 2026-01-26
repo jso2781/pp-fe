@@ -65,7 +65,8 @@ export default function KIDS_PP_US_JM_04() {
       console.log('모바일 신분증 인증:', method)
       // TODO: 실제 모바일 신분증 인증 처리 로직 구현
     }
-  }  return (
+  }
+  return (
     <ScreenShell screenId="KIDS-PP-US-JM-04" title="본인 인증(14세 이상인 경우 3단계)" uiType="page">
 
       <Box className="page-layout">
