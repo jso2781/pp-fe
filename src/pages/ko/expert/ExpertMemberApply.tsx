@@ -421,7 +421,7 @@ export default function ExpertMemberApply() {
                     </Box>
 
                     
-                    <h3 className="sub-section-title">소속 기관 이메일</h3>
+                    <h3 className="form-section-title">소속 기관 이메일</h3>
                     <Box className="bordered-box">
                       {/* 기관 이메일 */}
                       <Box className="form-item">
@@ -467,7 +467,7 @@ export default function ExpertMemberApply() {
                     </Box>
 
                     {/* 파일 첨부 */}
-                    <h3 className="sub-section-title">증빙서류 제출</h3>
+                    <h3 className="form-section-title">증빙서류 제출</h3>
                     <Box className="bordered-box attach-file-box">
                       <FileUploadField
                         value={uploadedFiles}
@@ -523,7 +523,7 @@ export default function ExpertMemberApply() {
                     </Box>
 
                     {/* 업무 시스템 선택 */}
-                    <h3 className="sub-section-title">업무 시스템 선택 <span className="necessary">(필수)</span></h3>
+                    <h3 className="form-section-title">업무 시스템 선택 <span className="necessary">(필수)</span></h3>
                     <Box className="bordered-box">
                       <Stack spacing={1}>
                         {businessSystems.map((system) => (
