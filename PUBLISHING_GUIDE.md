@@ -611,9 +611,9 @@ import PageTitle from '@/components/common/PageTitle'
 @include mixins.container(1400px);  // 커스텀 너비
 ```
 
-#### sr_only (스크린 리더 전용)
+#### sr-only (스크린 리더 전용)
 ```scss
-@include mixins.sr_only;
+@include mixins.sr-only;
 ```
 접근성을 위한 스크린 리더 전용 텍스트 숨김
 

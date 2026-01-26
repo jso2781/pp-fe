@@ -1,13 +1,37 @@
 @use '../base/mixins';
 
-.form-section-title{
-  font-size: 24px;
+
+// 서브 타이틀 
+.section-title, 
+.form-section-title {
+  font-size: var(--fs-24);
   font-weight: 700;
-  margin-bottom:10px;
-  & ~ & {
-    margin-top:30px;
+  margin-bottom: 10px;
+  color:var(--color-text-1);
+
+  & ~ .section-title,
+  & ~ .form-section-title {
+    margin-top: 30px;
   }
-  .necessary{color:#DE3412;}
+}
+
+.section-title {
+  &::before {
+    content: "";
+    display: block;
+    width: 43px;
+    height: 4px;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, #35B895 34.1%, #D2DF1C 83.66%);
+    border-radius: 2px;
+  }
+}
+
+.form-section-title {
+  .necessary {
+    color: #DE3412;
+    margin-left: 4px; 
+  }
 }
 
 .form-item {
@@ -877,7 +901,389 @@
 }
 
 /* ==========================================================================
-   DUR 정보
+   DUR 이해
    ========================================================================== */
+.info-summary-box {
+  margin: 0 0 35px 0;
+  .info-summary-box__title {
+    font-size: var(--fs-24);
+    font-weight: 700;
+    text-align: center;
+  }
+  .info-summary-box__desc {
+    font-size: var(--fs-18);
+    text-align: center;
+    color: var(--color-text-3);
+  }
+}
 
+.section-desc {
+  margin: 0 0 24px 0;
+  font-size: var(--fs-18);
+  color: var(--color-text-3);
+}
 
+.definition-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .definition-list__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+
+    .definition-list__icon {
+      flex-shrink: 0; 
+      width: 90px;
+      height: 90px;
+      background: #EDF8F8;
+      display: flex; 
+      align-items: center;
+      justify-content: center;
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+
+    .definition-list__text {
+      display: flex;
+      flex-direction: column; 
+      gap: 12px; 
+    }
+
+    .definition-list__title {
+      font-size: var(--fs-24);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .definition-list__desc {
+      font-size: var(--fs-16);
+      color: var(--color-text-3);
+      line-height: 1.6;
+
+      strong {
+        font-weight: 600;
+      }
+    }
+
+    @media (max-width: 640px) {
+      flex-direction: column; 
+      align-items: center; 
+      text-align: center; 
+      gap: 20px;  
+
+      .definition-list__icon {
+        margin-bottom: 4px; 
+      }
+
+      .definition-list__text {
+        align-items: center;
+        
+        .definition-list__title {
+          font-size: var(--fs-20);
+        }
+        
+        .definition-list__desc {
+          word-break: keep-all;
+        }
+      }
+    }
+  }
+}
+
+.base-table-container {
+  margin: 20px 0;
+
+  .base-table-meta {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+    .update-date {
+      font-size: var(--fs-14);
+      color: var(--color-text-3);
+    }
+  }
+
+  .table-responsive {
+    width: 100%;
+
+    &.has-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      
+      .base-table {
+        min-width: 600px;
+        table-layout: auto;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      overflow-x: visible; 
+      &.has-scroll .base-table {
+        min-width: 100%;
+        table-layout: fixed;
+      }
+    }
+
+    &:not(.has-scroll) {
+      overflow-x: hidden;
+      .base-table {
+        width: 100%;
+        table-layout: fixed;
+      }
+    }
+  }
+
+  .base-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    
+    thead th {
+      font-size: var(--fs-16);
+      text-align: center;
+      font-weight: 700;
+      padding: 9px;
+      background: #EEF2F7;
+      border: 1px solid #B9B9B9;
+      border-bottom: none;
+    }
+
+    tbody th, tbody td {
+      font-size: var(--fs-16);
+      padding: 7px;
+      text-align: center;
+      color: var(--color-text-3);
+      border: 1px solid #B9B9B9;
+      word-break: break-all; 
+      word-wrap: break-word;
+      white-space: normal; 
+    }
+
+    tbody th {
+      font-weight: 400;
+    }
+  }
+}
+
+.info-action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .info-action-item {
+    &__title {
+      margin: 0 0 10px 0;
+      font-size: var(--fs-18);
+      font-weight: 700;
+      color: var(--color-text-1); 
+      line-height: 1.4;
+    }
+
+    &__desc {
+      font-size: var(--fs-16);
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+  .info-action__btn {
+    .btn-link { margin: 0; padding: 0; }
+  }
+}
+
+// 만족도
+.evaluation-box {
+  width: 100%;
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #D8D8D8;
+  border-radius: 12px;
+
+  .evaluation-fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; 
+    gap: 24px;
+  }
+
+  .evaluation-legend {
+    display: block;
+    float: left; 
+    width: auto;
+    margin: 0;
+    padding: 0;
+    font-size: var(--fs-18);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .evaluation-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+  }
+
+  .evaluation-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .a11y-radio {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--color-text-2, #35B895);
+      margin: 0;
+    }
+
+    .evaluation-label {
+      font-size: var(--fs-15);
+      color: #444;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .evaluation-fieldset {
+      flex-direction: column; 
+      align-items: flex-start; 
+      text-align: left;   
+      gap: 16px;
+    }
+
+    .evaluation-legend {
+      float: none; 
+      white-space: normal;
+    }
+
+    .evaluation-group {
+      justify-content: flex-start;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .evaluation-label {
+      font-size: var(--fs-14);
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px 15px; 
+
+    .evaluation-group {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%; 
+      margin: 0; 
+      gap: 12px;
+    }
+
+    .evaluation-legend {
+      margin: 0 0 10px 0;
+    }
+
+    .evaluation-item {
+      width: 100%;
+    }
+
+    .evaluation-btn {
+      width: 100%;
+      margin: 15px 0 0 0;
+    }
+  }
+}
+
+// 업무 담당 정보
+.contact-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #D8D8D8;
+  border-radius: 12px;
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    font-size: var(--fs-16);
+
+    .info-label {
+      font-weight: 500;
+      margin-right: 8px;
+    }
+
+    .info-tel {
+      color: inherit;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+
+    &:not(:last-child)::after {
+      content: '';
+      display: inline-block;
+      width: 1px;
+      height: 12px;
+      background-color: #d8d8d8;
+      margin-left: 20px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+
+    .info-item {
+      &::after {
+        display: none !important; 
+      }
+
+      flex-direction: row; 
+      align-items: flex-start;
+      flex-wrap: wrap; 
+      width: 100%;
+
+      .info-label {
+        min-width: 100px; 
+        margin-right: 12px;
+      }
+
+      .info-value {
+        flex: 1; 
+      }
+
+      .info-sub {
+        display: block;
+        width: 100%; 
+        margin-left: 0;
+        margin-top: 4px;
+        font-size: var(--fs-14);
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 15px;
+    gap: 12px;
+
+    .info-item {
+      font-size: var(--fs-15); 
+      
+      .info-label {
+        min-width: 85px;
+      }
+    }
+  }
+}

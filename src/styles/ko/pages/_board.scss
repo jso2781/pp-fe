@@ -204,7 +204,6 @@
   }
 
   .board-body-wrap {
-    border-bottom: 1px solid #404040;
 
     .board-content {
       padding: 40px 20px;
@@ -272,7 +271,10 @@
 
 /* 공공누리 */
 .kogl-license-wrap {
-  margin-top: 10px;
+  border-top:1px solid #404040;
+  margin-top: 20px;
+  margin-bottom:20px;
+  padding-top:20px;
 
   .kogl-container {
     display: flex;

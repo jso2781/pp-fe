@@ -60,7 +60,7 @@
 #skip-navigation a:focus,#skipnavigation a:active{display:block;width:100%;height:36px;color:#fff;background:#000;line-height:36px;text-decoration:underline!important;font-size:14px}
 
 /* 스크린 리더용 */
-.sr_only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 .sub-title{
   font-size: 18px;font-weight: 700;margin:24px 0 20px 0;
@@ -69,6 +69,61 @@
     margin-top: 0;
   }
 }
+
+/* 로딩바 */
+.loading-progress-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  width: 100%;
+  gap: 20px;
+
+  // 상단 안내 문구
+  .loading-msg-top {
+    font-size: var(--fs-18);
+    font-weight: 700;
+    color: var(--color-text-1);
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  // 막대기 로딩바 커스텀
+  .bar-style {
+    width: 100%;
+    max-width: 400px;
+    height: 4px;
+    border-radius: 10px;
+    background-color: #eef2f7; 
+
+    .MuiLinearProgress-bar {
+      background-color: #087C80;
+      border-radius: 10px;
+    }
+  }
+
+  .loading-msg-bottom {
+    font-size: var(--fs-15);
+    color: var(--color-text-3);
+    text-align: center;
+  }
+
+  @media (max-width: 720px) {
+    padding: 50px 16px;
+    
+    .loading-msg-top {
+      font-size: var(--fs-16);
+    }
+    
+    .bar-style {
+      max-width: 260px;
+      height: 10px;
+    }
+  }
+}
+
+
 /* ==========================================================================
    모달
    ========================================================================== */
@@ -273,6 +328,23 @@
 }
 
 /* 버튼 */
+.btn-link {
+  display: inline-flex;
+  align-items: center; 
+  justify-content: center;
+
+  .MuiButton-endIcon {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 4px;
+    svg {
+      font-size: 20px; 
+      display: block;
+      margin-top: -1px; 
+    }
+  }
+}
+
 .btn-outline-02 {
   color: var(--color-text-2)!important;
   border-color: var(--color-text-2) !important;
@@ -292,6 +364,8 @@
   &.between { justify-content: space-between; gap: 8px; }
   &.center  { justify-content: center; }
   &.right   { justify-content: flex-end; }
+
+  button{min-width:110px;}
 
   @media (max-width: 599px) {
     gap: 12px;
@@ -330,4 +404,34 @@
   .error-page .error-msg { font-size: 15px; margin-bottom: 40px; }
   .error-page .btn-group { flex-direction: column; align-items: center; gap: 8px; }
   .error-page .btn-group button { width: 100%; max-width: 280px; }
+}
+
+// 콘텐츠 내 이미지 반응형 처리
+.img-switcher {
+  text-align: center;
+
+  .pc-only { 
+    display: block; 
+    margin: 0 auto;
+  }
+  
+  .mo-only { 
+    display: none; 
+    margin: 0 auto; 
+  }
+
+  @media (max-width: 1024px) {
+    .pc-only { display: none; }
+    .mo-only { 
+      display: inline-block; 
+      max-width: 100%;
+    }
+  }
+}
+
+// 이미지 반응형 기본형
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
 }

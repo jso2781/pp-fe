@@ -368,4 +368,11 @@ export const screens: ScreenMeta[] = [
     "title": "내업무 등록",
     "uiType": "detail"
   },
+
+  //PUB
+  {
+    "id": "PUB",
+    "title": "PUB",
+    "uiType": "page"
+  },
 ]

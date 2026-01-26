@@ -4,8 +4,8 @@
   --footer_color: #CDD1D5;
 
 }
-.sr_only {
-  @include mixins.sr_only;
+.sr-only {
+  @include mixins.sr-only;
 }
 
 .footer{

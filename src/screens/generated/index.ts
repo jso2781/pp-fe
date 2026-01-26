@@ -73,4 +73,6 @@ export const screenComponentLoaders = {
   'KIDS-PP-US-MT-01-LAYOUT': () => import('../published/KIDS-PP-US-MT-01-LAYOUT'),
   'KIDS-PP-US-MT-01_List': () => import('../published/KIDS-PP-US-MT-01_List'),
   'KIDS-PP-US-MT-01_Write': () => import('../published/KIDS-PP-US-MT-01_Write'),
+
+  'PUB': () => import('../published/PUB'),
 }
