@@ -4,7 +4,7 @@ $default-width: 1200px;
   width: min($max-width, calc(100% - 0px));
   margin: 0 auto; 
 }
-@mixin sr_only {
+@mixin sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
