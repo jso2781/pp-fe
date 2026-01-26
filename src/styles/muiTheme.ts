@@ -49,7 +49,7 @@ declare module '@mui/material/FormControl' {
   interface FormControlPropsSizeOverrides { large: true; }
 }
 declare module '@mui/material/Select' {
-  interface SelectPropsSizeOverrides {large: true;}
+  interface SelectPropsSizeOverrides { large: true; }
 }
 
 declare module '@mui/material/styles' {
@@ -119,7 +119,6 @@ export const muiTheme = createTheme({
           // 탭 키로 이동했을 때(Focus) 스타일 제어
           '&.Mui-focusVisible': {
             outline: '2px solid #087C80',
-            //backgroundColor: 'rgba(0, 0, 0, 0.04)', 
             outlineOffset: '2px',
             color: '#087C80'
           },
@@ -139,10 +138,22 @@ export const muiTheme = createTheme({
           height: 48, 
           fontSize: 15, 
           padding: '0 20px',
+          // 1024px 이하 반응형 조절
+          '@media (max-width: 1024px)': { height: 44, padding: '0 16px' },
           '@media (max-width: 599px)': { height: 44, padding: '0 16px' },
         },
         sizeSmall: { height: 36, fontSize: 13, padding: '0 12px' },
-        sizeLarge: { height: 56, fontSize: 17, padding: '0 24px' },
+        sizeLarge: { 
+          height: 56, 
+          fontSize: 17, 
+          padding: '0 24px',
+          // [반응형] 1024px 이하에서 대형 사이즈 축소
+          '@media (max-width: 1024px)': {
+            height: 48,
+            fontSize: 16,
+            padding: '0 20px',
+          }
+        },
         outlined: { borderColor: '#58616A', color: '#464C53' },
       },
     },
@@ -156,19 +167,27 @@ export const muiTheme = createTheme({
           boxSizing: 'border-box', // 테두리 두께를 높이에 포함시킴
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': { boxShadow: 'none' },
 
-          // [핵심] 아무 사이즈도 주지 않았을 때 적용되는 기본 높이 (Medium과 동일)
+          // 아무 사이즈도 주지 않았을 때 적용되는 기본 높이 (Medium과 동일)
           height: 48, 
           fontSize: '15px',
 
-          // 1. Large 사이즈 (56px)
+          // 1. Large 사이즈 (56px) -> 1024px 이하 반응형 처리
           '&.MuiInputBase-sizeLarge': {
             height: 56,
             fontSize: '17px',
+            '@media (max-width: 1024px)': {
+              height: 48,
+              fontSize: '16px',
+            },
           },
           // 2. Medium 사이즈 (명시적으로 size="medium"을 줬을 때)
           '&.MuiInputBase-sizeMedium': {
             height: 48,
             fontSize: '15px',
+            '@media (max-width: 1024px)': {
+              height: 44,
+              fontSize: '14px',
+            },
           },
           // 3. Small 사이즈 (36px)
           '&.MuiInputBase-sizeSmall': {
@@ -193,18 +212,21 @@ export const muiTheme = createTheme({
           boxSizing: 'border-box',
           display: 'flex',
           alignItems: 'center',
+
+          // 플레이스홀더 색상 및 반응형 사이즈 설정
+          '&::placeholder': {
+            color: '#8A949E', // 요청하신 색상 반영
+            opacity: 1,      // 브라우저 기본 투명도 해제
+            '@media (max-width: 1024px)': {
+              fontSize: '14px',
+            },
+            '@media (max-width: 600px)': {
+              fontSize: '13px',
+            },
+          },
         },
       },
     },
-    /* MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': { boxShadow: 'none' },
-          '&.MuiInputBase-sizeLarge': { height: 56 },
-        },
-      },
-    }, */
 
     //셀렉트박스
     MuiSelect: {
@@ -218,7 +240,6 @@ export const muiTheme = createTheme({
           alignItems: 'center',
           paddingTop: '0 !important',
           paddingBottom: '0 !important',
-          // Select는 내부에 padding-right가 기본으로 잡혀있으므로 유지 혹은 미세조정
         },
         icon: {
           // 높이가 변해도 화살표 아이콘이 항상 중앙에 오도록 설정
