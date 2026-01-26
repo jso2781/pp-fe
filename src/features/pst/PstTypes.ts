@@ -44,19 +44,11 @@ export const mockPstList = [
 
     /** 등록일시 */
     regDt: '2026-01-23',
-
-
-
-
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
     mdfcnDt: '2026-01-23',
-
-
-
-
     /** 조회수 */
     pstInqCnt: 100
   }
@@ -104,19 +96,11 @@ export interface PstPVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
@@ -164,19 +148,11 @@ export interface PstRVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
   /** 조회수 */
   pstInqCnt?: number
 

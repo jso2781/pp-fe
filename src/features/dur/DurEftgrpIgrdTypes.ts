@@ -41,19 +41,11 @@ export const mockDurEftgrpIgrdList = [
 
     /** 등록일시 */
     regDt: '2026-01-23',
-
-
-
-
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
     mdfcnDt: '2026-01-23'
-
-
-
-
   }
 ]
 
@@ -96,19 +88,11 @@ export interface DurEftgrpIgrdPVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
@@ -153,19 +137,11 @@ export interface DurEftgrpIgrdRVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
@@ -207,19 +183,11 @@ export interface DurEftgrpIgrdListPVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**

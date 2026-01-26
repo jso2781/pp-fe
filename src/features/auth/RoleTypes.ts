@@ -32,19 +32,11 @@ export const mockRoleList = [
 
     /** 등록일시 */
     regDt: '2026-01-23',
-
-
-
-
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
     mdfcnDt: '2026-01-23'
-
-
-
-
   }
 ]
 
@@ -78,19 +70,11 @@ export interface RolePVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
@@ -126,19 +110,11 @@ export interface RoleRVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
@@ -171,19 +147,11 @@ export interface RoleListPVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**

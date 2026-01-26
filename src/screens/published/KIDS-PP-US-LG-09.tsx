@@ -102,11 +102,7 @@ export default function KIDS_PP_US_LG_09() {
             </Box>
           </Box>
         </Box>
-      </Box>
-
-
-
-      {/* <Box sx={{ maxWidth: 560, mx: 'auto' }}>
+      </Box>      {/* <Box sx={{ maxWidth: 560, mx: 'auto' }}>
         <Box component="form" noValidate onSubmit={(e) => e.preventDefault()}>
           <Stack spacing={2}>
             <Typography variant="h6">비밀번호 재설정</Typography>

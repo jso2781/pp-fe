@@ -238,11 +238,7 @@ export default function Home() {
       else swiperRef3.current.autoplay.start();
       setIsPlaying3(!isPlaying3);
     }
-  };
-
-
-
-  const doSearch = () => {
+  };  const doSearch = () => {
     const keyword = q.trim()
     navigate(`/ko/search?q=${encodeURIComponent(keyword)}`)
   }

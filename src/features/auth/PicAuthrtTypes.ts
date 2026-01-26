@@ -20,19 +20,11 @@ export const mockPicAuthrtList = [
 
     /** 등록일시 */
     regDt: '2026-01-23',
-
-
-
-
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
     mdfcnDt: '2026-01-23'
-
-
-
-
   }
 ]
 
@@ -54,19 +46,11 @@ export interface PicAuthrtPVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
@@ -90,19 +74,11 @@ export interface PicAuthrtRVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
@@ -123,19 +99,11 @@ export interface PicAuthrtListPVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**

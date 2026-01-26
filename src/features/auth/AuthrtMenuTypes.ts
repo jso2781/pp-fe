@@ -17,19 +17,11 @@ export const mockAuthrtMenuList = [
 
     /** 등록일시 */
     regDt: '2026-01-23',
-
-
-
-
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
     mdfcnDt: '2026-01-23'
-
-
-
-
   }
 ]
 
@@ -48,19 +40,11 @@ export interface AuthrtMenuPVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
@@ -81,19 +65,11 @@ export interface AuthrtMenuRVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
@@ -111,19 +87,11 @@ export interface AuthrtMenuListPVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
