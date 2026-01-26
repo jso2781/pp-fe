@@ -100,7 +100,7 @@
     width:30px;height:30px;
     background: url(/img/ico_sitemap.svg) no-repeat center center;
     span{
-      @include mixins.sr_only;
+      @include mixins.sr-only;
     }
     &:hover {
       background: url(/img/ico_sitemap.svg) no-repeat center center !important;
