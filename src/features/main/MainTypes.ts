@@ -26,8 +26,8 @@ export interface PostVO {
   /** 첨부파일경로 */
   atchFilePath?: string
 
-  /** 첨부파일아이디 */
-  atchFileId?: string | null
+  /** 첨부파일그룹아이디 */
+  atchFileGroupId?: string | null
 
   /** 썸네일아이디 */
   thmbId?: string | null
