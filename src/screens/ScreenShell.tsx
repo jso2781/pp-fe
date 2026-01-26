@@ -38,7 +38,7 @@ export default function ScreenShell({ screenId, title, uiType, children, pdfUrl 
 
   return (
     <Box>
-      <Card>
+      <Card  sx={{ maxWidth: 1200, margin: '10px auto 0 auto', width: '100%', border: '1px solid #eee'}}>
         <CardContent>
           <Stack direction="column" spacing={1}>
             {/* Header Row */}

@@ -98,7 +98,7 @@
 
 /* 모달 사이즈 */
 .modal-small {
-  width: 600px !important; border:1px solid red;
+  width: 600px !important;
 }
 .modal-md {
   width: 760px !important;
@@ -301,4 +301,33 @@
       margin: 0;
     }
   }
+}
+
+.error-page { display: flex; flex-direction: column; align-items: center; justify-content: center; padding:40px 0; }
+.error-content-wrap { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; max-width: 800px; margin: 0 auto; }
+/* 아이콘과 텍스트를 세로로 정렬 */
+.error-page .error-code { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 30px; width: 100%; }
+/* 아이콘 중앙 배치 및 하단 여백 추가 */
+.error-page .error-code .icon { position: relative; display: inline-block; width: 0; height: 0; margin-bottom: 30px; border-left: 45px solid transparent; border-right: 45px solid transparent; border-bottom: 80px solid var(--color-text-2, #35B895); filter: drop-shadow(0 8px 12px rgba(0,0,0,0.1)); }
+.error-page .error-code .icon:before { content: ''; position: absolute; left: 50%; top: 25px; width: 5px; height: 24px; background: #fff; border-radius: 2px; transform: translateX(-50%); }
+.error-page .error-code .icon:after { content: ''; position: absolute; left: 50%; top: 60px; width: 6px; height: 6px; background: #fff; border-radius: 50%; transform: translateX(-50%); }
+/* 왼쪽 선 제거 및 중앙 정렬 */
+.error-page .error-code .error-code__desc { text-align: center; padding-left: 0; border-left: 0; display: flex; flex-direction: column; gap: 4px; }
+.error-page .error-code .error-code__summary { font-size: 28px; font-weight: 500; color:var(--color-text-1); line-height: 1.2; }
+.error-page .error-code .error-code__number { font-size: 110px; font-weight: 700; line-height: 0.9; letter-spacing: -5px; color:var(--color-text-1); }
+.error-page .error-code .error-code__title { font-size: 32px; font-weight: 300; line-height: 1; text-transform: uppercase; color:var(--color-text-1); }
+/* 메시지도 중앙 정렬 */
+.error-page .error-msg { text-align: center; font-size: 18px; line-height: 1.7;  word-break: keep-all; }
+.error-page .btn-group { padding-top: 40px; border-top: 1px solid #d3d3d3; width: 100%; display: flex; justify-content: center; gap: 12px; }
+
+/* 반응형 (기존 모바일 스타일 유지 및 최적화) */
+@media (max-width: 1024px) {
+  .error-page { padding: 60px 20px; }
+  .error-page .error-code .icon { transform: scale(0.8); margin-bottom: 20px; }
+  .error-page .error-code .error-code__summary { font-size: 20px; }
+  .error-page .error-code .error-code__number { font-size: 80px; letter-spacing: -3px; }
+  .error-page .error-code .error-code__title { font-size: 22px; }
+  .error-page .error-msg { font-size: 15px; margin-bottom: 40px; }
+  .error-page .btn-group { flex-direction: column; align-items: center; gap: 8px; }
+  .error-page .btn-group button { width: 100%; max-width: 280px; }
 }
