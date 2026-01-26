@@ -4,14 +4,14 @@ import { FaqParam, FaqItem, FaqRVO, CategoryCode } from './FaqTypes';
 
 const faqList = (state: RootState) => state.faq.list;
 
-const typeGuard = (vo: FaqRVO) => typeof vo.faqSeq === 'number' && typeof vo.faqTtl === 'string' && typeof vo.faqAns === 'string' && typeof vo.faqClsf === 'string'
+const typeGuard = (vo: FaqRVO) => typeof vo.faqSeq === 'number' && typeof vo.faqTtl === 'string' && typeof vo.faqAnsCn === 'string' && typeof vo.faqClsfNm === 'string'
 
 const selectNormalizedFaqList = createSelector(
   [faqList],
   (list): FaqItem[] => [...list]
-  .filter((vo): vo is FaqRVO & { faqSeq: number; faqTtl: string; faqAns: string; faqClsf: CategoryCode } => (typeGuard(vo)))
+  .filter((vo): vo is FaqRVO & { faqSeq: number; faqTtl: string; faqAnsCn: string; faqClsfNm: CategoryCode } => (typeGuard(vo)))
   .sort((a, b) => a.faqSeq - b.faqSeq)
-  .map(vo => ({title: vo.faqTtl, content: vo.faqAns, category: vo.faqClsf})).concat(dummy)
+  .map(vo => ({title: vo.faqTtl, content: vo.faqAnsCn, category: vo.faqClsfNm})).concat(dummy)
 );
 
 export const selectFaqCategoryList = createSelector(

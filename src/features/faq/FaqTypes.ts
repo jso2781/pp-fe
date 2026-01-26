@@ -122,7 +122,7 @@ export interface FaqRVO {
   taskSeCd?: string
 
   /** FAQ분류 */
-  faqClsf?: string
+  faqClsfNm?: string
 
   /** FAQ제목 */
   faqTtl?: string
@@ -137,7 +137,7 @@ export interface FaqRVO {
   langSeCd?: string
 
   /** FAQ답변 */
-  faqAns?: string
+  faqAnsCn?: string
 
   /** 첨부파일아이디 */
   atchFileId?: string
