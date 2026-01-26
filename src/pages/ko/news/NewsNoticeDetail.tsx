@@ -9,7 +9,7 @@ import { useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SideItem } from '@/features/common/CommonTypes';
 import { BOARD_CONFIG_GROUP, BoardKey } from '@/features/pst/PstConfig';
-import KoglLicense from '@/components/common/KoglLicense';
+import KoglLicense from '@/contexts/KoglLicense';
 
 export default function NewsNoticeDetail() {
   const dispatch = useAppDispatch()
