@@ -125,17 +125,14 @@ export interface PstRVO {
   /** 게시물공공누리저작권유형코드 */
   pstKoglCprgtTypeCd?: string
 
-  /** 첨부파일아이디 */
-  atchFileId?: string
+  /** 첨부파일그룹아이디 */
+  atchFileGroupId?: string
 
   /** 썸네일아이디 */
   thmbId?: string
 
-  /** 공지여부 */
-  ntcYn?: string
-
-  /** 삭제여부 */
-  delYn?: string
+  /** 고정여부 */
+  fixYn?: string
 
   /** 작성자부서명 */
   wrtrDeptNm?: string

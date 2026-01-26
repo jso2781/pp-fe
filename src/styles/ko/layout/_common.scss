@@ -1,5 +1,35 @@
 @use '../base/mixins'as *;
 
+/* 모든 버튼, 탭, 아이콘 버튼 */
+.MuiButtonBase-root {
+  cursor: pointer !important;
+}
+
+/* 셀렉트 박스 전체와 클릭 영역 */
+.MuiSelect-root,
+.MuiSelect-select,
+.MuiNativeSelect-select {
+  cursor: pointer !important;
+}
+
+/* 체크박스, 라디오 버튼 및 그 라벨 텍스트 */
+.MuiFormControlLabel-root,
+.MuiFormControlLabel-label,
+.MuiCheckbox-root,
+.MuiRadio-root {
+  cursor: pointer !important;
+}
+
+/* 셀렉트 박스 열렸을 때 메뉴 아이템 */
+.MuiMenuItem-root {
+  cursor: pointer !important;
+}
+
+/* (추가) 비활성화된 요소는 포인터 제외 */
+.Mui-disabled, .Mui-disabled * {
+  cursor: not-allowed !important;
+}
+
 /* 폰트 */
 .txt-1 { color: var(--color-text-1) !important; }
 .txt-2 { color: var(--color-text-2) !important; }
