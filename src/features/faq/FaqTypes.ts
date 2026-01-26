@@ -41,19 +41,11 @@ export const mockFaqList = [
 
     /** 등록일시 */
     regDt: '2026-01-23',
-
-
-
-
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
     /** 수정일시 */
     mdfcnDt: '2026-01-23'
-
-
-
-
   }
 ]
 
@@ -96,19 +88,11 @@ export interface FaqPVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
@@ -122,7 +106,7 @@ export interface FaqRVO {
   taskSeCd?: string
 
   /** FAQ분류 */
-  faqClsfNm?: string
+  faqClsf?: string
 
   /** FAQ제목 */
   faqTtl?: string
@@ -137,7 +121,7 @@ export interface FaqRVO {
   langSeCd?: string
 
   /** FAQ답변 */
-  faqAnsCn?: string
+  faqAns?: string
 
   /** 첨부파일아이디 */
   atchFileId?: string
@@ -153,19 +137,11 @@ export interface FaqRVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
@@ -207,19 +183,11 @@ export interface FaqListPVO {
 
   /** 등록일시 */
   regDt?: string
-
-
-
-
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
-
-
-
-
 }
 
 /**
