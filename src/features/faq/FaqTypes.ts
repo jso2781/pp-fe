@@ -10,7 +10,7 @@ export const mockFaqList = [
     taskSeCd: 'XXX',
 
     /** FAQ분류 */
-    faqClsf: 'XXX',
+    faqClsfNm: 'XXX',
 
     /** FAQ제목 */
     faqTtl: 'XXX',
@@ -25,10 +25,10 @@ export const mockFaqList = [
     langSeCd: 'XXX',
 
     /** FAQ답변 */
-    faqAns: 'XXX',
+    faqAnsCn: 'XXX',
 
     /** 첨부파일아이디 */
-    atchFileId: 'XXX',
+    atchFileGroupId: 'XXX',
 
     /** 작성자부서명 */
     wrtrDeptNm: 'XXX',
@@ -57,7 +57,7 @@ export interface FaqPVO {
   taskSeCd?: string
 
   /** FAQ분류 */
-  faqClsf?: string
+  faqClsfNm?: string
 
   /** FAQ제목 */
   faqTtl?: string
@@ -72,10 +72,10 @@ export interface FaqPVO {
   langSeCd?: string
 
   /** FAQ답변 */
-  faqAns?: string
+  faqAnsCn?: string
 
   /** 첨부파일아이디 */
-  atchFileId?: string
+  atchFileGroupId?: string
 
   /** 작성자부서명 */
   wrtrDeptNm?: string
@@ -106,7 +106,7 @@ export interface FaqRVO {
   taskSeCd?: string
 
   /** FAQ분류 */
-  faqClsf?: string
+  faqClsfNm?: string
 
   /** FAQ제목 */
   faqTtl?: string
@@ -121,10 +121,10 @@ export interface FaqRVO {
   langSeCd?: string
 
   /** FAQ답변 */
-  faqAns?: string
+  faqAnsCn?: string
 
   /** 첨부파일아이디 */
-  atchFileId?: string
+  atchFileGroupId?: string
 
   /** 작성자부서명 */
   wrtrDeptNm?: string
@@ -152,7 +152,7 @@ export interface FaqListPVO {
   taskSeCd?: string
 
   /** FAQ분류 */
-  faqClsf?: string
+  faqClsfNm?: string
 
   /** FAQ제목 */
   faqTtl?: string
@@ -167,10 +167,10 @@ export interface FaqListPVO {
   langSeCd?: string
 
   /** FAQ답변 */
-  faqAns?: string
+  faqAnsCn?: string
 
   /** 첨부파일아이디 */
-  atchFileId?: string
+  atchFileGroupId?: string
 
   /** 작성자부서명 */
   wrtrDeptNm?: string
