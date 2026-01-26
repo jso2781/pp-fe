@@ -5,6 +5,7 @@ import { Box, Stack, Typography, Link, Button } from '@mui/material';
 import ScreenShell from '../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
+import KoglLicense from '@/components/common/KoglLicense';
 
 export default function KIDS_PP_US_NO_02() {
   const dispatch = useAppDispatch();
@@ -137,19 +138,8 @@ export default function KIDS_PP_US_NO_02() {
                       </Box>
                     </Box>
 
-                    <Box className="kogl-license-wrap">
-                      <Box className="kogl-container">
-                        <Box className="kogl-image">
-                          <img  src="/img/icon_kogl.png" alt="공공누리 제4유형: 출처표시, 상업적 이용금지, 변경금지" />
-                        </Box>
-                        
-                        <Box className="kogl-text">
-                          <Typography component="p">
-                            본 저작물은 "공공누리" 제4유형 : 출처표시 + 상업적 이용금지 + 변경금지 조건에 따라 이용할 수 있습니다.
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Box>
+                    {/* 공공(KOGL) 저작물 */}
+                    <KoglLicense />
                   </Box>
 
                   {/* 하단 버튼 영역 */}
