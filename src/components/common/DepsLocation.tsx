@@ -154,6 +154,10 @@ export default function DepsLocation() {
       labels: ["news", "menuEduVideo"] // 기관소식 > 동영상
     },
     {
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsFaqNotice(\/)?(\d+)?$/,
+      labels: ["news", "menuNoticeFaq"] // 기관소식 > FAQ
+    },
+    {
       pattern: /^\/[A-Za-z]{2}\/expert\/ExpertMemberApply(\/)?(\d+)?$/,
       labels: ["usrSwtReg"] // 전문가 회원 전환 신청
     },
