@@ -57,19 +57,18 @@ export default function FindId() {
                           <Button variant="outlined" onClick={() => handleLoginMethod('simple')} className="login-button">
                             <Stack spacing={1} alignItems="center" className="login-button-stack">
                               <AccountIcon className="login-icon" />
-                              <Typography variant="body1" className="login-label">간편 인증</Typography>
+                              <Typography variant="body1" className="login-label">{t('certifySelfSimple')}</Typography>
                               <Typography variant="caption" className="login-desc">
-                                네이버, 카카오, 금융기관 등의 전자서명으로 로그인
+                                {t('certifySelfSimpleDesc')}
                               </Typography>
                             </Stack>
                           </Button>
-                          
                           <Button variant="outlined" onClick={() => handleLoginMethod('sms')} className="login-button">
                             <Stack spacing={1} alignItems="center" className="login-button-stack">
                               <PhoneIcon className="login-icon" />
-                              <Typography variant="body1" className="login-label">휴대폰 SMS 인증</Typography>
+                              <Typography variant="body1" className="login-label">{t('certifySelfSms')}</Typography>
                               <Typography variant="caption" className="login-desc">
-                                본인 명의로 가입된 휴대폰 인증으로 로그인
+                                {t('certifySelfSmsDesc')}
                               </Typography>
                             </Stack>
                           </Button>
@@ -77,9 +76,9 @@ export default function FindId() {
                           <Button variant="outlined" onClick={() => handleLoginMethod('mobileId')} className="login-button">
                             <Stack spacing={1} alignItems="center" className="login-button-stack">
                               <FingerprintIcon className="login-icon" />
-                              <Typography variant="body1" className="login-label">모바일 신분증 인증</Typography>
+                              <Typography variant="body1" className="login-label">{t('certifySelfMobileId')}</Typography>
                               <Typography variant="caption" className="login-desc">
-                                스마트폰의 모바일 신분증 인증으로 로그인
+                                {t('certifySelfMobileIdDesc')}
                               </Typography>
                             </Stack>
                           </Button>
