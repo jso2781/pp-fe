@@ -448,12 +448,19 @@
     }
   }
 
+  // 기본 탭 스타일
   .MuiTab-root {
     min-width: auto;
     padding: 12px 24px;
     font-size: 20px;
     font-weight: 700;
     color: var(--color-text-1);
+    cursor: pointer !important;
+    position: relative; 
+    z-index: 1;
+    &.MuiButtonBase-root {
+      cursor: pointer !important;
+    }
 
     &.Mui-selected {
       color: #087C80;
@@ -491,7 +498,6 @@
       background-color: #8A949E;
       gap: 1px;
       
-      // 기본 그리드 형태를 여기에 선언해야 합니다.
       grid-template-columns: repeat(5, 1fr); 
 
       @media (max-width: 768px) {
@@ -499,14 +505,12 @@
       }
     }
 
-    // 부모 클래스(col-3, col-5)에 따라 컨테이너의 그리드 모양 변경
     &.col-3 .MuiTabs-flexContainer {
       grid-template-columns: repeat(3, 1fr) !important;
     }
 
     &.col-4 .MuiTabs-flexContainer {
       grid-template-columns: repeat(4, 1fr) !important;
-
       @media (max-width: 768px) {
         grid-template-columns: repeat(2, 1fr) !important;
       }
@@ -514,12 +518,12 @@
 
     &.col-5 .MuiTabs-flexContainer {
       grid-template-columns: repeat(5, 1fr) !important;
-      
       @media (max-width: 768px) {
         grid-template-columns: repeat(2, 1fr) !important;
       }
     }
 
+    // [박스 버전 탭 스타일]
     .MuiTab-root {
       width: 100% !important;
       max-width: none !important;
@@ -531,10 +535,10 @@
       font-size: 16px;
       color: #8A949E;
       padding: 12px 10px; 
-      cursor: pointer !important;
       
-      &.MuiButtonBase-root {
-        cursor: pointer !important;
+      // 모든 상태에서 커서 포인터 강제 (내부 글자 포함)
+      &, &.MuiButtonBase-root, &.Mui-selected, * { 
+        cursor: pointer !important; 
       }
 
       &.Mui-selected {
@@ -544,12 +548,14 @@
       }
 
       &.Mui-disabled {
-          background-color: #F8F9FA !important; 
-          color: #ADB5BD !important; 
-          cursor: not-allowed !important;
-          pointer-events: all !important;
-          border-right: 1px solid #E7E7E7 !important;
-          border-bottom: 1px solid #E7E7E7 !important;
+        background-color: #F8F9FA !important; 
+        color: #ADB5BD !important; 
+        // 비활성화만 '금지' 아이콘으로 차별화 (원하시면 pointer로 바꿔도 됨)
+        &, * { cursor: not-allowed !important; }
+        
+        pointer-events: all !important; 
+        border-right: 1px solid #E7E7E7 !important;
+        border-bottom: 1px solid #E7E7E7 !important;
 
         &:hover {
           background-color: #F8F9FA !important;
@@ -563,4 +569,3 @@
     }
   }
 }
-
