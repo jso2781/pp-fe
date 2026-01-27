@@ -7,6 +7,7 @@ import { Download as DownloadIcon} from '@mui/icons-material';
 import ScreenShell from '../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
+import KoglLicense from '@/contexts/KoglLicense';
 
 export default function KIDS_PP_US_DI_02() {
   // --- lnb ---
@@ -215,21 +216,29 @@ export default function KIDS_PP_US_DI_02() {
                   {/* DUR 정보 검색 결과 상세보기 */}
                   <h3 className="section-title">DUR 정보 검색 결과 상세보기</h3>
                   <Box className="category-tabs box-variant col-4" role="navigation" aria-label="기본 카테고리 선택">
+                    {/* 탭 5개씩 나열일경우 col-5 클래스명 변경 */}
                     <Tabs
                       value={activeCategory} 
                       onChange={handleTabChange}
                       scrollButtons="auto"
                       selectionFollowsFocus
                     >
-                      {Object.keys(categoryNaming).map((category) => (
-                        <Tab 
-                          key={`type1-${category}`} 
-                          value={category} 
-                          label={categoryNaming[category]}
-                          id={`tab-type1-${category}`}
-                          aria-controls={`tabpanel-type1-${category}`}
-                        />
-                      ))}
+                      {Object.keys(categoryNaming).map((category) => {
+                        // searchCount에서 0인지 확인
+                        const isDisable = (searchCount as any)[category.toLowerCase()] === 0;
+                        // 탭비활성화 조건
+                        const isFixedDisabled = ['TAB3', 'TAB6'].includes(category);
+                        return (
+                          <Tab 
+                            key={`type1-${category}`} 
+                            value={category} 
+                            label={categoryNaming[category]}
+                            id={`tab-type1-${category}`}
+                            aria-controls={`tabpanel-type1-${category}`}
+                            disabled={isDisable || isFixedDisabled} 
+                          />
+                        );
+                      })}
                     </Tabs>
                   </Box>
   
@@ -344,9 +353,49 @@ export default function KIDS_PP_US_DI_02() {
                     </Typography>
                   </Box>
 
-                  
+                  {/* 공공(KOGL) 저작물 */}
+                  <KoglLicense />
 
+                  <Box className="evaluation-box">
+                    <fieldset className="evaluation-fieldset">
+                      <legend className="evaluation-legend">현재 페이지의 콘텐츠에 만족하시나요? </legend>
+                      <Box className="evaluation-group">
+                        {[
+                          { id: 'v-good', label: '매우 만족' },
+                          { id: 'good', label: '만족' },
+                          { id: 'normal', label: '보통' },
+                          { id: 'bad', label: '불만족' },
+                          { id: 'v-bad', label: '매우 불만족' }
+                        ].map((item) => (
+                          <div key={item.id} className="evaluation-item">
+                            <input type="radio" id={item.id} name="page-eval" value={item.id} className="a11y-radio" />
+                            <label htmlFor={item.id} className="evaluation-label">{item.label}</label>
+                          </div>
+                        ))}
+                        <Button variant="contained" className="evaluation-btn">제출</Button>
+                      </Box>
+                    </fieldset>
+                  </Box>
 
+                  <Box className="contact-box">
+                    <div className="info-item">
+                      <span className="info-label">업무 담당 부서</span>
+                      <span className="info-value">정보화팀</span>
+                    </div>
+                    
+                    <div className="info-item">
+                      <span className="info-label">업무 담당자</span>
+                      <span className="info-value">하연경</span>
+                    </div>
+                    
+                    <div className="info-item">
+                      <span className="info-label">전화번호</span>
+                      <span className="info-value">
+                        <a href="tel:02-2172-6738" className="info-tel">02-2172-6738</a>
+                        <span className="info-sub">(응대시간: 평일 09:00 - 17:00, 국경일 및 휴일 제외)</span>
+                      </span>
+                    </div>
+                  </Box>
 
 
                 </section>

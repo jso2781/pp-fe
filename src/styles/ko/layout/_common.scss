@@ -454,7 +454,7 @@
     font-size: 20px;
     font-weight: 700;
     color: var(--color-text-1);
-    
+
     &.Mui-selected {
       color: #087C80;
     }
@@ -531,12 +531,29 @@
       font-size: 16px;
       color: #8A949E;
       padding: 12px 10px; 
+      cursor: pointer !important;
       
+      &.MuiButtonBase-root {
+        cursor: pointer !important;
+      }
 
       &.Mui-selected {
         background-color: #087C80;
         color: #fff !important;
         z-index: 1;
+      }
+
+      &.Mui-disabled {
+          background-color: #F8F9FA !important; 
+          color: #ADB5BD !important; 
+          cursor: not-allowed !important;
+          pointer-events: all !important;
+          border-right: 1px solid #E7E7E7 !important;
+          border-bottom: 1px solid #E7E7E7 !important;
+
+        &:hover {
+          background-color: #F8F9FA !important;
+        }
       }
 
       @media (max-width: 1024px) { 
