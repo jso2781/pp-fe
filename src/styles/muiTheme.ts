@@ -24,7 +24,7 @@ declare module '@mui/material/Button' {
     gray: true;
   }
   interface ButtonPropsVariantOverrides {
-    outline02: true;
+    outlined02: true;
     contained02: true;
   }
 }
@@ -185,7 +185,7 @@ export const muiTheme = createTheme({
           },
         },
         {
-          props: { variant: 'outline02' },
+          props: { variant: 'outlined02' },
           style: {
             color: '#1E2124', 
             border: '1px solid #1E2124',

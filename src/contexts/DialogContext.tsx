@@ -192,7 +192,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
           <DialogContent className="modal-content">{optionsNoBackdrop.message}</DialogContent>
           <DialogActions className="modal-footer">
             {optionsNoBackdrop.type === 'confirm' && (
-              <Button variant="outline02" onClick={handleCloseNoBackdrop}>
+              <Button variant="outlined02" onClick={handleCloseNoBackdrop}>
                 {optionsNoBackdrop.cancelText ?? baseOpts.cancelText}
               </Button>
             )}
@@ -223,7 +223,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
           </DialogContent>
           <DialogActions className="modal-footer">
             {optionsBackdrop.type === 'confirm' && (
-              <Button variant="outline02" onClick={handleCloseBackdrop}>
+              <Button variant="outlined02" onClick={handleCloseBackdrop}>
                 {optionsBackdrop.cancelText ?? baseOpts.cancelText}
               </Button>
             )}

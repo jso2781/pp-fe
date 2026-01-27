@@ -91,7 +91,7 @@ export default function KIDS_PP_US_LG_09() {
                     </Box>
                     {/* 하단 버튼 그룹 */}
                     <Box className="btn-group between">
-                      <Button variant="outline02" size="large">취소하기</Button>
+                      <Button variant="outlined02" size="large">취소하기</Button>
                       <Button variant="contained" size="large">변경하기</Button>
                     </Box>
                   </Box>
