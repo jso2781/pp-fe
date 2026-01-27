@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-DI-18
+ * 화면명: 의견 제안
+ * 화면경로: /maintask/dur/DurProposal
+ * 화면설명: 의견 제안
+ */
 import { useMemo } from 'react'
 import { Alert, Box, Button, Divider, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';import PageTitle from '@/components/common/PageTitle'
