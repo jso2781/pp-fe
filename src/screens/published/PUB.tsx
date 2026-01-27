@@ -1,14 +1,30 @@
 import React from 'react'
-import { Box, Button, Typography, TextField, Stack, LinearProgress } from '@mui/material';
+import { useState } from "react";
+import { Box, Button, Typography, TextField, Stack, LinearProgress, Tabs, Tab } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Download as DownloadIcon} from '@mui/icons-material';
 import ScreenShell from '../ScreenShell';
 
 export default function PUB() {
-  // TODO: uiType이 모호합니다. 템플릿/구성을 수정하세요.
-  const config = {
-  // fields: [{ key:'', label:'', type:'input', required:true }]
-  submitLabel: '저장'
-}
+  
+
+  // 탭
+  const categoryNaming: Record<string, string> = {
+    all: "전체",
+    TAB1: "탭1",
+    TAB2: "탭2",
+    TAB3: "탭3",
+    TAB4: "탭4",
+    TAB5: "탭5",
+    TAB6: "탭6",
+    TAB7: "탭7",
+    TAB8: "탭8",
+    TAB9: "탭9"
+  };
+  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
+    setActiveCategory(newValue);
+  };
 
   //return <FormTemplate screenId="PUB" title="고객센터 이용약관111" config={config} />
   return (
@@ -36,6 +52,69 @@ export default function PUB() {
               <Box className="content-view" id="content">
                 <Box className="page-content">
                 {/* --- 본문 시작 --- */}
+
+
+                <h3 className="section-title">탭</h3>
+                {/* 탭라인 스타일 */}
+                <Box className="category-tabs" role="navigation" aria-label="기본 카테고리 선택">
+                  <Tabs
+                    value={activeCategory} 
+                    onChange={handleTabChange}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    selectionFollowsFocus
+                  >
+                    {Object.keys(categoryNaming).map((category) => (
+                      <Tab 
+                        key={`type1-${category}`} 
+                        value={category} 
+                        label={categoryNaming[category]} 
+                        id={`tab-type1-${category}`}
+                        aria-controls={`tabpanel-type1-${category}`}
+                      />
+                    ))}
+                  </Tabs>
+                </Box>
+
+                {/* 탭박스 스타일 */}
+                <Box className="category-tabs box-variant" role="navigation" aria-label="기본 카테고리 선택">
+                  <Tabs
+                    value={activeCategory} 
+                    onChange={handleTabChange}
+                    scrollButtons="auto"
+                    selectionFollowsFocus
+                  >
+                    {Object.keys(categoryNaming).map((category) => (
+                      <Tab 
+                        key={`type1-${category}`} 
+                        value={category} 
+                        label={categoryNaming[category]} 
+                        id={`tab-type1-${category}`}
+                        aria-controls={`tabpanel-type1-${category}`}
+                      />
+                    ))}
+                  </Tabs>
+                </Box>
+
+                {Object.keys(categoryNaming).map((category) => (
+                  <Box
+                    key={`panel-type1-${category}`}
+                    role="tabpanel" 
+                    id={`tabpanel-type1-${category}`} // Tab의 aria-controls와 매칭
+                    aria-labelledby={`tab-type1-${category}`} // 이 패널의 이름이 무엇인지 연결
+                    hidden={activeCategory !== category} // 선택되지 않은 패널은 숨김
+                    className="tab-panel-container"
+                  >
+                    {activeCategory === category && (
+                      <Box className="panel-content">
+                        <Typography className="sr-only">{categoryNaming[category]} 탭 컨텐츠 </Typography>
+                        <Typography>
+                          {categoryNaming[category]} 내용이 출력됩니다.
+                        </Typography>
+                      </Box>
+                    )}
+                  </Box>
+                ))}
 
 
                 <h3 className="section-title">데이터 로딩</h3>
@@ -128,133 +207,163 @@ export default function PUB() {
                 </div>
 
                 <h3 className="section-title">폼</h3>
-                <Box component="form" noValidate>
-                  <Box className="form-group-wrap">
-                    <Box className="form-item">
-                      <Typography component="label" htmlFor="password" className="label">
-                        새 비밀번호 
-                        <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
-                      </Typography>
-                      <TextField
-                        id="password"
-                        type="password"
-                        placeholder="숫자+영문+특수문자 조합 10자리 이상"
-                        size="large"
-                        fullWidth
-                        error={true}
-                        helperText="사용할수없는 비밀번호입니다."
-                        slotProps={{
-                          htmlInput: {
-                            'aria-required': 'true',
-                            //'aria-describedby': errors.password ? 'password-alert' : undefined,
-                            
-                          },
-                          formHelperText: {
-                            id: 'password-alert',
-                            className: 'error-alert',
-                            //role: errors.password ? 'alert' : undefined,
-                            //'aria-live': errors.password ? 'polite' : undefined,
-                          },
-                        }}
-                      />
-                    </Box>
-
-                    <Box className="form-item">
-                      <Typography component="label" htmlFor="loginId" className="label">
-                        아이디
-                        <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
-                      </Typography>
-                      <Stack direction="row" spacing={1} className="input-with-btn">
+                <Box className="bordered-box">
+                  <Box component="form" noValidate>
+                    <Box className="form-group-wrap">
+                      <Box className="form-item">
+                        <Typography component="label" htmlFor="password" className="label">
+                          새 비밀번호 
+                          <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                        </Typography>
                         <TextField
-                          id="loginId"
-                          placeholder="아이디를 입력하세요."
+                          id="password"
+                          type="password"
+                          placeholder="숫자+영문+특수문자 조합 10자리 이상"
                           size="large"
                           fullWidth
                           error={true}
-                          helperText="사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요."
+                          helperText="사용할수없는 비밀번호입니다."
                           slotProps={{
                             htmlInput: {
                               'aria-required': 'true',
-                              //'aria-describedby': errors.loginId ? 'loginId-alert' : undefined,
+                              //'aria-describedby': errors.password ? 'password-alert' : undefined,
                               
                             },
                             formHelperText: {
-                              id: 'loginId-alert',
+                              id: 'password-alert',
                               className: 'error-alert',
-                              //role: errors.loginId ? 'alert' : undefined,
-                              //'aria-live': errors.loginId ? 'polite' : undefined,
+                              //role: errors.password ? 'alert' : undefined,
+                              //'aria-live': errors.password ? 'polite' : undefined,
                             },
                           }}
-                        />
-                        <Button variant="outlined" size="large" aria-label="아이디 중복확인" className="btn-outline-02 btn-form-util">중복확인</Button>
-                      </Stack>
-                    </Box>
-
-                    <Box className="flex-container flex-half">
-                      {/* 이름 (필수) */}
-                      <Box className="form-item">
-                        <Typography component="label" htmlFor="userName" className="label">
-                          이름
-                          <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
-                        </Typography>
-                        <TextField
-                          id="userName"
-                          placeholder="이름을 입력하세요."
-                          size="large"
-                          slotProps={{
-                            htmlInput: {
-                              'aria-required': 'true',
-                            },
-                          }}
-                          fullWidth
                         />
                       </Box>
-                      {/* 휴대폰번호 (필수) */}
+
                       <Box className="form-item">
-                        <Typography component="label" htmlFor="phone" className="label">
-                          휴대폰번호
+                        <Typography component="label" htmlFor="loginId" className="label">
+                          아이디
                           <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
                         </Typography>
-                        <TextField
-                          id="phone"
-                          placeholder="숫자만 입력하세요."
-                          size="large"
-                          slotProps={{
-                            htmlInput: {
-                              'aria-required': 'true',
-                            },
-                          }}
-                          fullWidth
-                        />
+                        <Stack direction="row" spacing={1} className="input-with-btn">
+                          <TextField
+                            id="loginId"
+                            placeholder="아이디를 입력하세요."
+                            size="large"
+                            fullWidth
+                            error={true}
+                            helperText="사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요."
+                            slotProps={{
+                              htmlInput: {
+                                'aria-required': 'true',
+                                //'aria-describedby': errors.loginId ? 'loginId-alert' : undefined,
+                                
+                              },
+                              formHelperText: {
+                                id: 'loginId-alert',
+                                className: 'error-alert',
+                                //role: errors.loginId ? 'alert' : undefined,
+                                //'aria-live': errors.loginId ? 'polite' : undefined,
+                              },
+                            }}
+                          />
+                          <Button variant="outlined" size="large" aria-label="아이디 중복확인" className="btn-form-util">중복확인</Button>
+                        </Stack>
                       </Box>
-                    </Box>
 
+                      <Box className="flex-container flex-half">
+                        {/* 이름 (필수) */}
+                        <Box className="form-item">
+                          <Typography component="label" htmlFor="userName" className="label">
+                            이름
+                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                          </Typography>
+                          <TextField
+                            id="userName"
+                            placeholder="이름을 입력하세요."
+                            size="large"
+                            slotProps={{
+                              htmlInput: {
+                                'aria-required': 'true',
+                              },
+                            }}
+                            fullWidth
+                          />
+                        </Box>
+                        {/* 휴대폰번호 (필수) */}
+                        <Box className="form-item">
+                          <Typography component="label" htmlFor="phone" className="label">
+                            휴대폰번호
+                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                          </Typography>
+                          <TextField
+                            id="phone"
+                            placeholder="숫자만 입력하세요."
+                            size="large"
+                            slotProps={{
+                              htmlInput: {
+                                'aria-required': 'true',
+                              },
+                            }}
+                            fullWidth
+                          />
+                        </Box>
+                      </Box>
+
+                    </Box>
                   </Box>
                 </Box>
 
                 <h3 className="section-title">버튼</h3>
+
+                <Button variant="contained">기본버튼 contained</Button>
+                <Button variant="contained02">기본버튼 contained02</Button>
+
+                <br/><br/> 
+                 
+                <Button variant="outlined">라인버튼 outlined</Button>
+                <Button variant="outlined02">라인버튼 outlined02</Button>
+
+
+                <h3 className="section-title">버튼 사이즈</h3>
+                <Button variant="contained" size="xsmall">xsmall</Button>
+                <Button variant="contained" size="small">small</Button>
+                <Button variant="contained" size="medium">medium</Button>
+                <Button variant="contained" size="large">large</Button>
+
+
+                {/* <Button variant="outlined" className="btn-outline-02">btn-outline-02</Button> */}
+                
+                <br/><br/>             
                 <Button 
                   variant="text" 
                   className="btn-link" 
                   endIcon={<ChevronRightIcon />}
+                  size="small"
                 >
                   링크버튼
                 </Button>
+                <Button 
+                  variant="outlined" 
+                  className="btn-detail" 
+                  endIcon={<ChevronRightIcon />}
+                  size="small"
+                >
+                  상세보기
+                </Button>
+                <Button 
+                  variant="text" 
+                  className="btn-download"
+                  startIcon={<DownloadIcon />}
+                  size="small"
+                >
+                  다운로드
+                </Button>
 
-                <Button variant="contained">
-                  버튼
-                </Button>
-                <Button variant="outlined">
-                  버튼
-                </Button>
-                <Button variant="outlined" className="btn-outline-02">
-                  버튼
-                </Button>
 
                   
                 <h3 className="section-title">하단버튼</h3>
                 <Box className="btn-group between">
-                  <Button variant="outlined" size="large">
+                  <Button variant="outlined02" size="large">
                     취소하기
                   </Button>
                   <Button variant="contained" size="large">
@@ -262,7 +371,7 @@ export default function PUB() {
                   </Button>
                 </Box>
                 <Box className="btn-group center">
-                  <Button variant="outlined" size="large">
+                  <Button variant="outlined02" size="large">
                     취소하기
                   </Button>
                   <Button variant="contained" size="large">
@@ -270,7 +379,7 @@ export default function PUB() {
                   </Button>
                 </Box>
                 <Box className="btn-group right">
-                  <Button variant="outlined" size="large">
+                  <Button variant="outlined02" size="large">
                     취소하기
                   </Button>
                   <Button variant="contained" size="large">
