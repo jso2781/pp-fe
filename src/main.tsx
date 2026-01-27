@@ -7,6 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { persistor, store } from '@/store/store'
 import { FALLBACK_LANG, normalizeLang } from './routes/lang'
 import MenuGate from "@/components/gate/MenuGate";
+import { HelmetProvider } from "react-helmet-async";
 import App from './App'
 // import '@/styles/main.scss'
 
@@ -41,7 +42,9 @@ ReactDOM.createRoot(rootEl).render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <MenuGate fallback={<div style={{ padding: 16 }}>메뉴 불러오는 중...</div>}>
-          <App />
+          <HelmetProvider>
+            <App />
+          </HelmetProvider>
         </MenuGate>
       </PersistGate>
     </Provider>

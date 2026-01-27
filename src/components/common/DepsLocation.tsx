@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { BreadcrumbNav } from '@/components/mui';
 import { useLocation } from 'react-router-dom';
 import { disabled } from 'node_modules/@base-ui/react/esm/utils/reason-parts';
+import { Helmet } from 'react-helmet-async';
 
 // 1. 경로별 한글 명칭 매핑 (데이터가 많아지면 별도 파일로 분리 추천)
 const pathLabels: Record<string, string[]> = {
@@ -196,17 +197,23 @@ export default function DepsLocation() {
   /**************************** SubMenu 상단 Top-Navigation 설정 시작(한국어/영어 사이트 변환 포함) *********************/
 
   return (
-    <div className="location">
-      <div className="local">
-        <BreadcrumbNav
-          className="breadcrumb"
-          separator=">"
-          items={breadcrumbItems}
-        />
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageTitle} />
+      </Helmet>
+      <div className="location">
+        <div className="local">
+          <BreadcrumbNav
+            className="breadcrumb"
+            separator=">"
+            items={breadcrumbItems}
+          />
+        </div>
+        <div className="page_path">
+          <h2 className="tit">{pageTitle}</h2>
+        </div>
       </div>
-      <div className="page_path">
-        <h2 className="tit">{pageTitle}</h2>
-      </div>
-    </div>
+    </>
   );
 }
