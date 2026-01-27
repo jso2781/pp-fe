@@ -626,6 +626,7 @@ export default function LegalGuardAgr() {
                                     'aria-required': 'true',
                                     'aria-describedby': errors.relationship ? 'relationship-alert' : undefined,
                                   }}
+                                  size="large"
                                 >
                                   <MenuItem value="">선택</MenuItem>
                                   <MenuItem value="부">부</MenuItem>
@@ -700,7 +701,7 @@ export default function LegalGuardAgr() {
 
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group between">
-                      <Button variant="outlined" size="large" onClick={handleCancel}>{t('cancel')}</Button>
+                      <Button variant="outlined02" size="large" onClick={handleCancel}>{t('cancel')}</Button>
                       <Button 
                         variant="contained" 
                         size="large" 
