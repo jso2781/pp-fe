@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectTrmsListForSignUpApiPath, selectTrmsSttListApiPath, getTrmsSttApiPath, insertTrmsSttApiPath, updateTrmsSttApiPath, saveTrmsSttApiPath, deleteTrmsSttApiPath } from '@/api/stt/TrmsSttApiPaths'
+import { selectTrmsListForSignUpApiPath, selectTrmsSttListApiPath, getTrmsSttLatestApiPath } from '@/api/stt/TrmsSttApiPaths'
 import { mockTrmsSttList, TrmsSttPVO, TrmsSttRVO, TrmsSttListPVO, TrmsSttListRVO, TrmsSttDVO, mockTrmsListForSignUp  } from './TrmsSttTypes'
 
 /**
@@ -77,11 +77,11 @@ export const selectTrmsSttList = createAsyncThunk<TrmsSttListRVO, TrmsSttListPVO
 /**
  * 대국민포털_약관법령기본 정보 조회 
  */
-export const getTrmsStt = createAsyncThunk<TrmsSttRVO, TrmsSttPVO | undefined>(
-  '/stt/getTrmsStt',
+export const getTrmsSttLatest = createAsyncThunk<TrmsSttRVO, TrmsSttPVO | undefined>(
+  '/stt/getTrmsSttLatest',
   async (params: TrmsSttPVO = {}) => {
     try {
-      const res = await https.post(getTrmsSttApiPath(), params);
+      const res = await https.post(getTrmsSttLatestApiPath(), params);
 
       const payload = res.data;
 
@@ -98,88 +98,3 @@ export const getTrmsStt = createAsyncThunk<TrmsSttRVO, TrmsSttPVO | undefined>(
     }
   }
 )
-
-/**
- * 대국민포털_약관법령기본 입력 
- */
-export const insertTrmsStt = createAsyncThunk<number, TrmsSttPVO>(
-  '/stt/insertTrmsStt',
-  async (params: TrmsSttPVO) => {
-    try {
-      const res = await https.post(insertTrmsSttApiPath(), params);
-
-      const insertCnt = res.data;
-
-      // 입력된 건수 반환함. 
-      return insertCnt;
-    }
-    catch (e) {
-      console.log("TrmsSttThunks insertTrmsStt");
-      return -1;
-    }
-  }
-)
-
-/**
- * 대국민포털_약관법령기본 수정 
- */
-export const updateTrmsStt = createAsyncThunk<number, TrmsSttPVO>(
-  '/stt/updateTrmsStt',
-  async (params: TrmsSttPVO) => {
-    try {
-      const res = await https.post(updateTrmsSttApiPath(), params);
-
-      const updateCnt = res.data;
-
-      // 수정된 건수 반환함. 
-      return updateCnt;
-    }
-    catch (e) {
-      console.log("TrmsSttThunks updateTrmsStt");
-      return -1;
-    }
-  }
-)
-
-/**
- * 대국민포털_약관법령기본 저장 
- */
-export const saveTrmsStt = createAsyncThunk<number, TrmsSttPVO>(
-  '/stt/saveTrmsStt',
-  async (params: TrmsSttPVO) => {
-    try {
-      const res = await https.post(saveTrmsSttApiPath(), params);
-
-      const saveCnt = res.data;
-
-      // 저장된 건수 반환함. 
-      return saveCnt;
-    }
-    catch (e) {
-      console.log("TrmsSttThunks saveTrmsStt error!!");
-      return -1;
-    }
-  }
-)
-
-/**
- * 대국민포털_약관법령기본 삭제 
- */
-export const deleteTrmsStt = createAsyncThunk<number, TrmsSttDVO>(
-  '/stt/deleteTrmsStt',
-  async (params: TrmsSttDVO) => {
-    try {
-      const res = await https.post(deleteTrmsSttApiPath(), params);
-
-      const deleteCnt = res.data;
-
-      // 삭제된 건수 반환함. 
-      return deleteCnt;
-    }
-    catch (e) {
-      console.log("TrmsSttThunks deleteTrmsStt error!!");
-      return -1;
-    }
-  }
-)
-
