@@ -27,6 +27,9 @@ declare module '@mui/material/Button' {
     outlined02: true;
     contained02: true;
   }
+  interface ButtonPropsSizeOverrides {
+    xsmall: true;
+  }
 }
 
 declare module '@mui/material/Checkbox' {
@@ -114,9 +117,11 @@ export const muiTheme = createTheme({
       styleOverrides: {
         root: { 
           textTransform: 'none', 
+          height: 'auto',
           fontWeight: 600, 
           borderRadius: 8, 
           boxShadow: 'none',
+          lineHeight: 1.4,
           // 모든 버튼 공통 호버 스타일
           '&:hover': { boxShadow: 'none' },
 
@@ -138,6 +143,14 @@ export const muiTheme = createTheme({
             textDecoration: 'underline',
           },
         },
+        ['sizeXsmall' as any]: { 
+          minHeight: 32,
+          fontSize: '16px',
+          padding: '0 8px',
+          minWidth: 'auto',
+          borderRadius: 4,
+        },
+        sizeSmall: { height: 36, fontSize: 13, padding: '0 12px' },
         sizeMedium: { 
           height: 48, 
           fontSize: 15, 
@@ -146,7 +159,6 @@ export const muiTheme = createTheme({
           '@media (max-width: 1024px)': { height: 44, padding: '0 16px' },
           '@media (max-width: 599px)': { height: 44, padding: '0 16px' },
         },
-        sizeSmall: { height: 36, fontSize: 13, padding: '0 12px' },
         sizeLarge: { 
           height: 56, 
           fontSize: 17, 
