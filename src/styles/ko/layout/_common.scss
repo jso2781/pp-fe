@@ -76,14 +76,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
+  padding: 40px 20px;
   width: 100%;
   gap: 20px;
+  border:1px solid #D8D8D8;
+  border-radius: 12px;
 
   // 상단 안내 문구
   .loading-msg-top {
     font-size: var(--fs-18);
-    font-weight: 700;
+    font-weight: 400;
     color: var(--color-text-1);
     text-align: center;
     line-height: 1.5;
@@ -345,15 +347,6 @@
   }
 }
 
-.btn-outline-02 {
-  color: var(--color-text-2)!important;
-  border-color: var(--color-text-2) !important;
-}
-.btn-outline-02:hover {
-  color: var(--color-text-2)!important;
-  border-color: var(--color-text-2) !important;
-  background-color: #EDF8F8;
-}
 /* 버튼 그룹 전체 컨테이너 */
 .btn-group {
   display: flex;
@@ -435,3 +428,97 @@
   height: auto;
   vertical-align: middle;
 }
+
+
+
+/* 카테고리 탭 영역 */
+.category-tabs {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #E7E7E7;
+
+  .MuiTabs-root {
+    min-height: 48px;
+    
+    .MuiTabs-scrollButtons {
+      @media (max-width: 600px) {
+        display: flex; 
+        &.Mui-disabled { opacity: 0.3; }
+      }
+    }
+  }
+
+  .MuiTab-root {
+    min-width: auto;
+    padding: 12px 24px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-text-1);
+    
+    &.Mui-selected {
+      color: #087C80;
+    }
+
+    @media (max-width: 1024px) {
+      padding: 10px 16px;
+      font-size: 14px; 
+      flex-shrink: 0;   
+    }
+  }
+
+  .MuiTabs-indicator {
+    height: 3px;
+    background-color: #087C80;
+  }
+
+  /* =========================================================
+     탭 박스스타일 (className="box-variant")
+  ========================================================= */
+  
+  &.box-variant {
+    border-bottom: none; 
+    margin-bottom: 24px;
+
+    .MuiTabs-indicator {
+      display: none !important;
+    }
+
+    .MuiTabs-flexContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 !important; 
+      border-top: 1px solid #8A949E; 
+      border-left: 1px solid #8A949E;
+      border-radius: 8px;
+      overflow: hidden; 
+    }
+
+    .MuiTab-root {
+      flex: 0 0 20%; 
+      max-width: 20%; 
+      min-width: auto;
+      
+      min-height: 56px;
+      box-sizing: border-box;
+      background-color: #fff;
+      border: none;
+      border-right: 1px solid #8A949E; 
+      border-bottom: 1px solid #8A949E;
+      margin: 0;
+      font-size: 16px;
+      color:#8A949E;
+
+      &.Mui-selected {
+        background-color: #087C80;
+        color: #fff !important;
+      }
+
+      @media (max-width: 1024px) {
+        flex: 0 0 20%; 
+        max-width: 20%;
+        font-size: 13px;
+      }
+    }
+  }
+
+}
+

@@ -649,7 +649,7 @@ export default function SignUpMbrInfo() {
                                 size="large" 
                                 onClick={handleCheckMbrIdDuplicate}
                                 aria-label={t('mbrIdDuplicateCheck')} 
-                                className="btn-outline-02 btn-form-util"
+                                className="btn-form-util"
                               >
                                 {t('duplicateCheck')}
                               </Button>
@@ -691,7 +691,7 @@ export default function SignUpMbrInfo() {
                                 onClick={handleCheckEmailDuplicate}
                                 onMouseDown={(e) => e.preventDefault()}
                                 aria-label={t('emailDuplicateCheck')} 
-                                className="btn-outline-02 btn-form-util"
+                                className="btn-form-util"
                                 disabled={!formData.email || formData.email.trim().length === 0}
                               >
                                 {t('duplicateCheck')}

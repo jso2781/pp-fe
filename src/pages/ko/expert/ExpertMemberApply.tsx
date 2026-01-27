@@ -311,7 +311,7 @@ export default function ExpertMemberApply() {
                               aria-label="사업자등록번호 조회"
                               variant="outlined"
                               size="large"
-                              className="btn-outline-02 btn-form-util"
+                              className="btn-form-util"
                             >
                               조회
                             </Button>

@@ -402,7 +402,7 @@ export default function EditProfile() {
                               size="large"
                               onClick={handlePhoneChange}
                               aria-label={t('phoneCertify')}
-                              className="btn-outline-02 btn-form-util"
+                              className="btn-form-util"
                             >
                               {t('phoneChange')}
                             </Button>
@@ -444,7 +444,7 @@ export default function EditProfile() {
                               onClick={handleCheckEmailDuplicate}
                               onMouseDown={(e) => e.preventDefault()}
                               aria-label={t('emailDuplicateCheck')}
-                              className="btn-outline-02 btn-form-util"
+                              className="btn-form-util"
                               disabled={!formData.email || formData.email.trim().length === 0}
                             >
                               {t('duplicateCheck')}
@@ -489,7 +489,7 @@ export default function EditProfile() {
                               size="large"
                               onClick={handlePasswordChange}
                               aria-label={t('passwordChange')}
-                              className="btn-outline-02 btn-form-util"
+                              className="btn-form-util"
                               disabled={isPasswordChangeMode}
                             >
                               {t('change')}

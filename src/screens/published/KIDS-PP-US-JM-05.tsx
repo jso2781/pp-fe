@@ -153,7 +153,7 @@ export default function KIDS_PP_US_JM_05() {
                                   },
                                 }}
                               />
-                              <Button variant="outlined" size="large" aria-label="아이디 중복확인" className="btn-outline-02 btn-form-util">중복확인</Button>
+                              <Button variant="outlined" size="large" aria-label="아이디 중복확인" className="btn-form-util">중복확인</Button>
                             </Stack>
                           </Box>
 
@@ -184,7 +184,7 @@ export default function KIDS_PP_US_JM_05() {
                                   },
                                 }}
                               />
-                              <Button variant="outlined" size="large" aria-label="이메일 주소 중복확인" className="btn-outline-02 btn-form-util">중복확인</Button>
+                              <Button variant="outlined" size="large" aria-label="이메일 주소 중복확인" className="btn-form-util">중복확인</Button>
                             </Stack>
                           </Box>
 

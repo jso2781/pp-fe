@@ -85,7 +85,7 @@ export default function KIDS_PP_US_JM_09() {
                                 }}
                                 fullWidth
                               />
-                              <Button variant="outlined" size="large" aria-label="휴대폰번호 인증" className="btn-outline-02 btn-form-util">번호변경</Button>
+                              <Button variant="outlined" size="large" aria-label="휴대폰번호 인증" className="btn-form-util">번호변경</Button>
                             </Stack>
                           </Box>
 
@@ -117,7 +117,7 @@ export default function KIDS_PP_US_JM_09() {
                                   },
                                 }}
                               />
-                              <Button variant="outlined" size="large" aria-label="이메일 주소 중복확인" className="btn-outline-02 btn-form-util">중복확인</Button>
+                              <Button variant="outlined" size="large" aria-label="이메일 주소 중복확인" className="btn-form-util">중복확인</Button>
                             </Stack>
                           </Box>
 
@@ -151,7 +151,7 @@ export default function KIDS_PP_US_JM_09() {
                                   },
                                 }}
                               />
-                              <Button variant="outlined" size="large" aria-label="비밀번호 변경" className="btn-outline-02 btn-form-util">변경</Button>
+                              <Button variant="outlined" size="large" aria-label="비밀번호 변경" className="btn-form-util">변경</Button>
                             </Stack>
                           </Box>
                           

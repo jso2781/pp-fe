@@ -238,7 +238,7 @@ export default function KIDS_PP_US_JM_07() {
                                   },
                                 }}
                               />
-                              <Button variant="outlined" size="large" aria-label="휴대전화번호 본인인증" className="btn-outline-02 btn-form-util">본인인증</Button>
+                              <Button variant="outlined" size="large" aria-label="휴대전화번호 본인인증" className="btn-form-util">본인인증</Button>
                             </Stack>
                           </Box>
                         </Box>

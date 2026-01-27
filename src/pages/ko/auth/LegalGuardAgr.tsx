@@ -687,7 +687,7 @@ export default function LegalGuardAgr() {
                                 size="large" 
                                 onClick={handleCertify}
                                 aria-label={t('phoneCertify')} 
-                                className="btn-outline-02 btn-form-util"
+                                className="btn-form-util"
                                 disabled={isCertified}
                               >
                                 {isCertified ? t('certifyComplete') : t('certifySelf')}
