@@ -216,5 +216,6 @@ export interface FaqItem {
 export interface FaqParam {
   activeCategory: CategoryCode;
   searchWord: string;
+  searchType: string;
   page: number;
 }
