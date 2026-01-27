@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BreadcrumbNav } from '@/components/mui';
 import { useLocation } from 'react-router-dom';
@@ -41,7 +41,14 @@ export default function DepsLocation() {
    * - pattern: 정규표현식. 
    * (\/.*)? 또는 (\/\d+)? 를 붙여서 뒤에 숫자가 오든 안 오든 매칭되게 설정합니다.
    */
-  const pathConfig = [
+  const pathConfig = useMemo(() => [
+
+    // 맨 위에 홈 경로 패턴 추가 (ko, en 모두 대응)
+    {
+      pattern: /^\/([A-Za-z]{2})?(\/)?$/, 
+      labels: ["home"] // i18n에 등록된 'home' 키 사용
+    },
+
     {
       // /notice 혹은 /notice/123 모두 매칭
       pattern: /^\/[A-Za-z]{2}\/notice(\/\d+)?$/, 
@@ -162,7 +169,7 @@ export default function DepsLocation() {
       pattern: /^\/[A-Za-z]{2}\/expert\/ExpertMemberApply(\/)?(\d+)?$/,
       labels: ["usrSwtReg"] // 전문가 회원 전환 신청
     },
-  ];
+  ], []);
 
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기
   const { pathname } = useLocation();
@@ -171,11 +178,15 @@ export default function DepsLocation() {
   useEffect(() => {
     console.log("DepsLocation.tsx pathname="+pathname);
   }, [pathname]);
+  
   // 2. 현재 경로에 일치하는 설정 찾기
   const matched = pathConfig.find(item => item.pattern.test(pathname));
   
   // 3. 라벨 설정 (매칭되는 게 없으면 기본값)
-  const currentLabels = matched ? matched.labels.map(labelKey => t(labelKey)) : [t("page"), t("notFound")];
+  const currentLabels = useMemo(() => {
+    return matched ? matched.labels.map(labelKey => t(labelKey)) : [t("page"), t("notFound")]; //currentLabels를 useMemo로 감싸야 뒤로가기 시 값이 정확히 계산
+  }, [matched, t]);
+  //const currentLabels = matched ? matched.labels.map(labelKey => t(labelKey)) : [t("page"), t("notFound")];
   // const currentLabels = pathLabels[pathname] || ["페이지", "찾을 수 없음"];
 
   // 4. 마지막 요소가 페이지의 큰 제목 (h2)
@@ -194,12 +205,54 @@ export default function DepsLocation() {
       className: index === currentLabels.length - 1 ? 'current' : 'route'
     }))
   ];
+
+  /* =========================================================
+   웹 접근성을 위한 <title> 경로 생성 로직 
+  ========================================================= */
+  const finalBrowserTitle = useMemo(() => {
+
+    // 홈일 때 처리
+    const isHome = pathname === '/' || pathname === '/ko' || pathname === '/ko/' || pathname === '/en' || pathname === '/en/';
+    if (isHome) {
+      return '한국의약품안전관리원';
+    }
+    // 매칭되는 게 없을 때
+    if (!matched) {
+      return '한국의약품안전관리원';
+    }
+    
+    // 외부 변수 currentLabels 대신 여기서 직접 최신 라벨을 생성하거나 
+    // 의존성 배열에 currentLabels를 확실히 넣어야 합니다.
+    let titleLabels = [...currentLabels]; 
+    const pathParts = pathname.split('/').filter(Boolean);
+    const lastPart = pathParts[pathParts.length - 1];
+    const isDetail = /^\d+$/.test(lastPart);
+    const isWrite = pathname.toLowerCase().endsWith('/write');
+
+    if (isDetail) {
+      titleLabels[titleLabels.length - 1] += ` ${t('detail', '상세')}`;
+    } else if (!isWrite && matched) {
+      if (/news|board|notice|list|dur/i.test(pathname)) {
+        titleLabels[titleLabels.length - 1] += ` ${t('list', '목록')}`;
+      }
+    }
+
+    const accessibilityPath = [...titleLabels].reverse();
+    accessibilityPath.push(t("home")); 
+
+    return `${accessibilityPath.join(' < ')} | ${t('siteName', 'KIDS')}`;
+  }, [pathname, t, currentLabels, matched]);
+
+  useEffect(() => {
+    document.title = finalBrowserTitle;
+  }, [finalBrowserTitle]);
+  
   /**************************** SubMenu 상단 Top-Navigation 설정 시작(한국어/영어 사이트 변환 포함) *********************/
 
   return (
     <>
-      <Helmet>
-        <title>{pageTitle}</title>
+      <Helmet key={pathname}>
+        <title>{finalBrowserTitle}</title>
         <meta name="description" content={pageTitle} />
       </Helmet>
       <div className="location">

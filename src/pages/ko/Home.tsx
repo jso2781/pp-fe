@@ -8,6 +8,7 @@ import { useMemo, useState, useRef, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Card, Grid, CardContent, Link, List, ListItem, Tab, Tabs, Typography, IconButton } from '@mui/material';
 import { OpenInNew, PlayArrow, Pause } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next';
 
 // Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -36,6 +37,14 @@ type SnsTab = { label: string; items: SnsItem[] };
 type SnsTabs = Record<TabKey, SnsTab>;
 
 export default function Home() {
+
+  // <title> 홈 페이지에 진입할 때 브라우저 타이틀을 강제로 초기화
+  const { t } = useTranslation();
+  useEffect(() => {
+    document.title = '한국의약품안전관리원';
+  }, [t]);
+
+
   const dispatch = useAppDispatch();
   const { current } = useAppSelector((s) => s.main);
   useEffect(() => {
