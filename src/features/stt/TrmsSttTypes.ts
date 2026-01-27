@@ -10,16 +10,16 @@ export const mockTrmsSttList = [
     trmsSttCd: 'XXX',
 
     /** 약관법령적용일 */
-    trmsSttAplcnDay: 'XXX',
+    trmsSttAplcnYmd: 'XXX',
 
     /** 약관법령종료일 */
-    trmsSttEndDay: 'XXX',
+    trmsSttEndYmd: 'XXX',
 
     /** 약관법령내용 */
     trmsSttCn: 'XXX',
 
-    /** 첨부파일아이디 */
-    atchFileId: 'XXX',
+    /** 첨부파일그룹아이디 */
+    atchFileGroupId: 'XXX',
 
     /** 작성자부서명 */
     wrtrDeptNm: 'XXX',
@@ -48,16 +48,16 @@ export interface TrmsSttPVO {
   trmsSttCd?: string
 
   /** 약관법령적용일 */
-  trmsSttAplcnDay?: string
+  trmsSttAplcnYmd?: string
 
   /** 약관법령종료일 */
-  trmsSttEndDay?: string
+  trmsSttEndYmd?: string
 
   /** 약관법령내용 */
   trmsSttCn?: string
 
-  /** 첨부파일아이디 */
-  atchFileId?: string
+  /** 첨부파일그룹아이디 */
+  atchFileGroupId?: string
 
   /** 작성자부서명 */
   wrtrDeptNm?: string
@@ -88,16 +88,16 @@ export interface TrmsSttRVO {
   trmsSttCd?: string
 
   /** 약관법령적용일 */
-  trmsSttAplcnDay?: string
+  trmsSttAplcnYmd?: string
 
   /** 약관법령종료일 */
-  trmsSttEndDay?: string
+  trmsSttEndYmd?: string
 
   /** 약관법령내용 */
   trmsSttCn?: string
 
-  /** 첨부파일아이디 */
-  atchFileId?: string
+  /** 첨부파일그룹아이디 */
+  atchFileGroupId?: string
 
   /** 작성자부서명 */
   wrtrDeptNm?: string
@@ -130,16 +130,16 @@ export interface TrmsSttListPVO {
   trmsSttCd?: string
 
   /** 약관법령적용일 */
-  trmsSttAplcnDay?: string
+  trmsSttAplcnYmd?: string
 
   /** 약관법령종료일 */
-  trmsSttEndDay?: string
+  trmsSttEndYmd?: string
 
   /** 약관법령내용 */
   trmsSttCn?: string
 
-  /** 첨부파일아이디 */
-  atchFileId?: string
+  /** 첨부파일그룹아이디 */
+  atchFileGroupId?: string
 
   /** 작성자부서명 */
   wrtrDeptNm?: string
@@ -188,10 +188,10 @@ export const mockTrmsListForSignUp = [
     taskCdNm: '이용약관',
 
     /** 약관법령적용일 */
-    trmsSttAplcnDay: '20260115',
+    trmsSttAplcnYmd: '20260115',
 
     /** 약관법령종료일 */
-    trmsSttEndDay: '20261231',
+    trmsSttEndYmd: '20261231',
 
     /** 약관법령내용 */
     trmsSttCn: '이용약관 상세 내용입니다.<br/>내용이 길어지면 자동으로 스크롤이 생성됩니다.11'
@@ -207,10 +207,10 @@ export const mockTrmsListForSignUp = [
     taskCdNm: '개인정보 수집〮이용 동의',
 
     /** 약관법령적용일 */
-    trmsSttAplcnDay: '20260115',
+    trmsSttAplcnYmd: '20260115',
 
     /** 약관법령종료일 */
-    trmsSttEndDay: '20261231',
+    trmsSttEndYmd: '20261231',
 
     /** 약관법령내용 */
     trmsSttCn: '개인정보 수집 및 이용동의 상세 내용입니다.22'
@@ -226,10 +226,10 @@ export const mockTrmsListForSignUp = [
     taskCdNm: '개인정보 수집〮이용 동의_법정대리인',
 
     /** 약관법령적용일 */
-    trmsSttAplcnDay: '20260115',
+    trmsSttAplcnYmd: '20260115',
 
     /** 약관법령종료일 */
-    trmsSttEndDay: '20261231',
+    trmsSttEndYmd: '20261231',
 
     /** 약관법령내용 */
     trmsSttCn: '만 14세 미만 아동에 관한 개인정보 수집〮이용 동의_법정대리인 상세 내용입니다.33'
@@ -245,10 +245,10 @@ export const mockTrmsListForSignUp = [
     taskCdNm: '개인정보취급방침',
 
     /** 약관법령적용일 */
-    trmsSttAplcnDay: '20260115',
+    trmsSttAplcnYmd: '20260115',
 
     /** 약관법령종료일 */
-    trmsSttEndDay: '20261231',
+    trmsSttEndYmd: '20261231',
 
     /** 약관법령내용 */
     trmsSttCn: '개인정보취급방침 상세 내용입니다.44'
