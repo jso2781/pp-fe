@@ -254,7 +254,7 @@ export default function KIDS_PP_US_JM_05() {
 
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group between">
-                      <Button variant="outlined" size="large" onClick={() => navigate(-1)}>취소하기</Button>
+                      <Button variant="outline02" size="large" onClick={() => navigate(-1)}>취소하기</Button>
                       <Button variant="contained" size="large">입력완료</Button>
                     </Box>
                   </Box>

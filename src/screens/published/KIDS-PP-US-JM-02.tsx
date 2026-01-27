@@ -202,7 +202,7 @@ export default function KIDS_PP_US_JM_02() {
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group between">
                       <Button 
-                        variant="outlined" 
+                        variant="outline02" 
                         size="large" 
                         onClick={() => navigate(-1)}
                       >

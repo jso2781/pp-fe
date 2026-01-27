@@ -386,7 +386,7 @@ export default function ExpertMemberApply() {
                       {/* 버튼 영역 */}
                       <Box className="btn-group between">
                         <Button
-                          variant="outlined"
+                          variant="outline02"
                           onClick={() => window.history.back()}
                         >
                           취소하기
@@ -557,7 +557,7 @@ export default function ExpertMemberApply() {
                     {/* 버튼 영역 */}
                     <Box className="btn-group between">
                       <Button
-                        variant="outlined"
+                        variant="outline02"
                         onClick={() => setCurrentStep(0)}
                         size="large"
                       >
