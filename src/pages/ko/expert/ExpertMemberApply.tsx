@@ -26,6 +26,9 @@ import {
   Typography
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
+import { existsInstByBrno } from '@/features/exprt/ExprtApplyThunks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { ExprtApplyTaskVO } from '@/features/exprt/ExprtApplyTypes';
 
 type StepRefs = {
   step1: HTMLDivElement | null;
@@ -34,12 +37,14 @@ type StepRefs = {
 };
 
 export default function ExpertMemberApply() {
+  const dispatch = useAppDispatch();
+
   const { showDialogBackdrop } = useDialog();
 
   const handleCustomConfirm = () => {
     showDialogBackdrop({
       message: '등록 하시겠습니까?',
-      title: '전문가 회원 신청 전환 등록',
+      title: '전문가 회원 전환 등록',
       type: 'confirm',
       confirmText: '확인',
       cancelText: '취소',
@@ -59,7 +64,7 @@ export default function ExpertMemberApply() {
   const [selectedCompany, setSelectedCompany] = useState<{
     name: string;
     number: string;
-    address: string;
+    task: ExprtApplyTaskVO[];
   } | null>(null);
   const [companySearchError, setCompanySearchError] = useState('');
 
@@ -103,26 +108,46 @@ export default function ExpertMemberApply() {
   }, [currentStep]);
 
   // 사업자등록번호 조회
-  const handleSearchCompany = () => {
+  const handleSearchCompany = async () => {
     if (!businessNumber || businessNumber.length < 10) {
       setCompanySearchError('사업자등록번호를 올바르게 입력해주세요.');
       setSelectedCompany(null);
       return;
     }
 
-    // TODO: 실제 API 호출로 대체
-    // 예시: 조회 성공 케이스
-    if (businessNumber === '1234567890') {
-      setSelectedCompany({
-        name: '한국제약회사',
-        number: '123-23-45678',
-        address: '경기도 안양시 동안구 부림로 169번길 30',
-      });
-      setCompanySearchError('');
-    } else {
+    const result = await dispatch(existsInstByBrno({ 
+      brno: businessNumber,
+    })).unwrap();
+
+    setSelectedCompany(null);
+    
+    if (result.instNm === null || result.instNm === '') {
       setCompanySearchError('조회하신 업체명이 없습니다. 다시 입력하여 조회해주세요.');
-      setSelectedCompany(null);
+    } else {
+      if (result.taskSystemList?.length != 0) {
+        setSelectedCompany({
+          name: result.instNm ?? '',
+          number: businessNumber,
+          task: result.taskSystemList ?? [],
+        });
+        setCompanySearchError('');
+      } else {
+        setCompanySearchError('조회하신 업체는 전문가회원 업무 시스템 사용이 불가합니다. 확인 후 신청해주세요.');        
+      }      
     }
+
+    // 예시: 조회 성공 케이스
+    // if (businessNumber === '1234567890') {
+    //   setSelectedCompany({
+    //     name: '한국제약회사',
+    //     number: '123-23-45678',
+    //     task: [],
+    //   });
+    //   setCompanySearchError('');
+    // } else {
+    //   setCompanySearchError('조회하신 업체명이 없습니다. 다시 입력하여 조회해주세요.');
+    //   setSelectedCompany(null);
+    // }
   };
 
   // 이메일 중복확인
@@ -302,7 +327,7 @@ export default function ExpertMemberApply() {
                                   handleSearchCompany();
                                 }
                               }}
-                              inputProps={{ maxLength: 15 }}
+                              inputProps={{ maxLength: 10 }}
                               size="large"
                               fullWidth
                             />
@@ -354,11 +379,11 @@ export default function ExpertMemberApply() {
                                     <Typography variant="body1" sx={{ fontWeight: 600 }}>
                                       {selectedCompany.name}
                                     </Typography>
-                                    <Typography variant="body2" color="text.secondary">
+                                    {/* <Typography variant="body2" color="text.secondary">
                                       <span aria-label="사업자 번호">{selectedCompany.number}</span>
                                       {selectedCompany.number && ' | '}
                                       <span aria-label="주소">{selectedCompany.address}</span>
-                                    </Typography>
+                                    </Typography> */}
                                   </Box>
                                 }
                               />
@@ -366,20 +391,21 @@ export default function ExpertMemberApply() {
                           </Paper>
                         )}
 
-                        {/* 조회 실패 에러 메시지 */}
-                        {companySearchError && !selectedCompany && (
+                        {/* 안내 & 실패 메시지 */}
+                        {companySearchError && !selectedCompany ? (
                           <Box className="status-box">
                             <Typography className="status-box__text">
                               {companySearchError}
                             </Typography>
                           </Box>
-                        )}
-
-                        {/* 안내 메시지 */}
-                        {!selectedCompany && (
-                          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                            사업자등록번호 조회에 입력 후 조회 버튼을 클릭하여 조회된 업체를 선택해주세요.
-                          </Typography>
+                          ) : ( 
+                          <>
+                            {!selectedCompany && (
+                              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                                사업자등록번호 조회에 입력 후 조회 버튼을 클릭하여 조회된 업체를 선택해주세요.
+                              </Typography>
+                            )}                          
+                          </>
                         )}
                       </Box>
 
@@ -614,7 +640,7 @@ export default function ExpertMemberApply() {
                     {/* 버튼 영역 */}
                     <Box className="btn-group center">
                       <Button
-                        variant="outlined"
+                        variant="outlined02"
                         onClick={() => (window.location.href = '/ko')}
                         sx={{ minWidth: 120 }}
                       >
