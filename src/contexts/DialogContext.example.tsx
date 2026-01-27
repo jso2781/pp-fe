@@ -366,7 +366,7 @@ export function AlertBackdropExample() {
       <Typography variant="subtitle2">배경 음영 있음 (Alert)</Typography>
       <Stack direction="row" gap={1} flexWrap="wrap">
         <Button variant="contained" onClick={handleImportantAlert}>중요 Alert (Backdrop)</Button>
-        <Button variant="outlined" onClick={handleWithCallback}>콜백 포함 (Backdrop)</Button>
+        <Button variant="outline02" onClick={handleWithCallback}>콜백 포함 (Backdrop)</Button>
       </Stack>
     </Stack>
   )

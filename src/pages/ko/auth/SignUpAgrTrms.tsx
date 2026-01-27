@@ -360,7 +360,7 @@ export default function SignUpAgrTrms() {
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group between">
                       <Button 
-                        variant="outlined" 
+                        variant="outline02" 
                         size="large" 
                         onClick={() => navigate('/ko/auth/SignUpSel')}
                       >
