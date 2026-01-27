@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-NO-05
+ * 화면명: FAQ 목록
+ * 화면경로: /ko/news/NewsFaqNotice
+ * 화면설명: FAQ 목록(FAQ 게시판 목록 유형)
+ */
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectFaqList } from "@/features/faq/FaqThunks";
 import { useEffect, useRef, useState } from "react";
