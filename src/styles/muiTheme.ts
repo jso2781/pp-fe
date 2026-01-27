@@ -23,6 +23,10 @@ declare module '@mui/material/Button' {
     dark: true;
     gray: true;
   }
+  interface ButtonPropsVariantOverrides {
+    outline02: true;
+    contained02: true;
+  }
 }
 
 declare module '@mui/material/Checkbox' {
@@ -154,8 +158,47 @@ export const muiTheme = createTheme({
             padding: '0 20px',
           }
         },
-        outlined: { borderColor: '#58616A', color: '#464C53' },
+        outlined: { 
+          borderColor: '#087C80', 
+          color: '#087C80',
+          backgroundColor: '#fff',
+          '&:hover': {
+            borderColor: '#087C80',
+            backgroundColor: '#EDF8F8', 
+            color: '#087C80', 
+            boxShadow: 'none',
+          },
+        },
       },
+      // --- 버튼타입 variant 추가 ---
+      variants: [
+        {
+          props: { variant: 'contained02' },
+          style: {
+            color: '#ffffff',
+            backgroundColor: '#414343',
+            border: 'none',
+            '&:hover': {
+              backgroundColor: '#363A3A', 
+              boxShadow: 'none',
+            },
+          },
+        },
+        {
+          props: { variant: 'outline02' },
+          style: {
+            color: '#1E2124', 
+            border: '1px solid #1E2124',
+            backgroundColor: '#fff',
+            '&:hover': {
+              color: '#1E2124',
+              borderColor: '#1E2124',
+              backgroundColor: '#CDD1D5', 
+              boxShadow: 'none',
+            },
+          },
+        },
+      ],
     },
 
     // 인풋 설정
