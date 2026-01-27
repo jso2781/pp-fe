@@ -6,45 +6,60 @@ import BlankLayout from './BlankLayout'
 import ProtectedRoute from './ProtectedRoute'
 
 // ko 페이지들
-import HomeKo from '@/pages/ko/Home'
-import DurProposalKo from '@/pages/ko/maintask/dur/DurProposal'
-import DurNoticeListKo from '@/pages/ko/dur/DurNoticeList'
-import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail'
-import NotFoundKo from '@/pages/ko/NotFound'
+import HomeKo from '@/pages/ko/Home';
+import NotFoundKo from '@/pages/ko/NotFound';
 import InternalServerErrorKo from '@/pages/ko/InternalServerError';
-import SignUpSelKo from '@/pages/ko/auth/SignUpSel'
-import SignUpAgrTrmsKo from '@/pages/ko/auth/SignUpAgrTrms'
-import LegalGuardAgrKo from '@/pages/ko/auth/LegalGuardAgr'
-import CertifySelfKo from '@/pages/ko/auth/CertifySelf'
-import SignUpMbrInfoKo from '@/pages/ko/auth/SignUpMbrInfo'
-import SignUpCompleteKo from '@/pages/ko/auth/SignUpComplete'
-import EditProfileKo from '@/pages/ko/auth/EditProfile'
-import WithDrawalKo from '@/pages/ko/auth/WithDrawal'
-import LoginKo from '@/pages/ko/auth/Login'
-import LoginMethodKo from '@/pages/ko/auth/LoginMethod'
-import PasswordConfirmKo from '@/pages/ko/auth/PasswordConfirm'
+
+//maintask(주요업무)
+import DurProposalKo from '@/pages/ko/maintask/dur/DurProposal'
+import DurUnderstandKo from '@/pages/ko/maintask/dur/DurUnderstand';
+
+//open(정보공개)
+
+//news(기관소식)
+import NewsFaqNoticeKo from '@/pages/ko/news/NewsFaqNotice';
+// 게시판 페이지 작업중
+import NewsNoticeListKo from '@/pages/ko/news/NewsNoticeList';
+import NewsNoticeDetailKo from '@/pages/ko/news/NewsNoticeDetail';
+import NewsJobNoticeListKo from '@/pages/ko/news/NewsJobNoticeList';
+import NewsJobNoticeDetailKo from '@/pages/ko/news/NewsJobNoticeDetail';
+import NewsDataRoomListKo from '@/pages/ko/news/NewsDataRoomList';
+import NewsDataRoomDetailKo from '@/pages/ko/news/NewsDataRoomDetail';
+import NewsCardNewsListKo from '@/pages/ko/news/NewsCardNewsList';
+import NewsCardNewsDetailKo from '@/pages/ko/news/NewsCardNewsDetail';
+import NewsVidioListKo from '@/pages/ko/news/NewsVidioList';
+import NewsVidioDetailKo from '@/pages/ko/news/NewsVidioDetail';
+
+//about(기관소개)
+
+//auth
+import DurNoticeListKo from '@/pages/ko/dur/DurNoticeList';
+import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail';
+import SignUpSelKo from '@/pages/ko/auth/SignUpSel';
+import SignUpAgrTrmsKo from '@/pages/ko/auth/SignUpAgrTrms';
+import LegalGuardAgrKo from '@/pages/ko/auth/LegalGuardAgr';
+import CertifySelfKo from '@/pages/ko/auth/CertifySelf';
+import SignUpMbrInfoKo from '@/pages/ko/auth/SignUpMbrInfo';
+import SignUpCompleteKo from '@/pages/ko/auth/SignUpComplete';
+import EditProfileKo from '@/pages/ko/auth/EditProfile';
+import WithDrawalKo from '@/pages/ko/auth/WithDrawal';
+import LoginKo from '@/pages/ko/auth/Login';
+import LoginMethodKo from '@/pages/ko/auth/LoginMethod';
+import PasswordConfirmKo from '@/pages/ko/auth/PasswordConfirm';
 import FindIdKo from '@/pages/ko/auth/FindId';
 import FindIdAuthSuccessKo from '@/pages/ko/auth/FindIdAuthSuccess';
 import FindPwKo from '@/pages/ko/auth/FindPw';
 import FindPwModifyKo from '@/pages/ko/auth/FindPwModify';
-import NewsFaqNoticeKo from '@/pages/ko/news/NewsFaqNotice';
-import TermsKo from '@/pages/ko/etc/Terms';
+
+//expert
+import ExpertMemberApplyKo from '@/pages/ko/expert/ExpertMemberApply';
+
+//etc
 import PrivacyPolicyKo from '@/pages/ko/etc/PrivacyPolicy';
+import TermsKo from '@/pages/ko/etc/Terms';
 import CctvPolicyKo from '@/pages/ko/etc/CctvPolicy';
 import EmailDenyKo from '@/pages/ko/etc/EmailDeny';
-import ExpertMemberApplyKo from '@/pages/ko/expert/ExpertMemberApply'
 
-// 게시판 페이지 작업중
-import NewsNoticeListKo from '@/pages/ko/news/NewsNoticeList'
-import NewsNoticeDetailKo from '@/pages/ko/news/NewsNoticeDetail'
-import NewsJobNoticeListKo from '@/pages/ko/news/NewsJobNoticeList'
-import NewsJobNoticeDetailKo from '@/pages/ko/news/NewsJobNoticeDetail'
-import NewsDataRoomListKo from '@/pages/ko/news/NewsDataRoomList'
-import NewsDataRoomDetailKo from '@/pages/ko/news/NewsDataRoomDetail'
-import NewsCardNewsListKo from '@/pages/ko/news/NewsCardNewsList'
-import NewsCardNewsDetailKo from '@/pages/ko/news/NewsCardNewsDetail'
-import NewsVidioListKo from '@/pages/ko/news/NewsVidioList'
-import NewsVidioDetailKo from '@/pages/ko/news/NewsVidioDetail'
 
 // en 페이지들 (프로젝트에 실제 존재한다고 가정)
 import HomeEn from "@/pages/en/Home";
@@ -161,19 +176,18 @@ export default function Router() {
               {/* ✅ 루트(/)로 들어오면 브라우저 언어 기반으로 /ko 또는 /en로 보내기 */}
               <Route path="/" element={<Navigate to={`/${detectBrowserLang()}`} replace />} />
 
-              {/* 언어별로 화면 전환 */}
               <Route path="/:lang" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
               <Route path="/:lang/dur/notice" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListEn /> }} />} />
               <Route path="/:lang/dur/notice/:id" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailEn /> }} />} />
 
+              {/* maintask(주요업무) */}
               <Route path="/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalEn /> }} />} />
-              <Route path="/:lang/news/NewsFaqNotice" element={<LangElement byLang={{ ko: <NewsFaqNoticeKo />, en: <NewsFaqNoticeKo /> }} />} />
-              <Route path="/:lang/etc/Terms" element={<LangElement byLang={{ ko: <TermsKo />, en: <TermsKo /> }} />} />
-              <Route path="/:lang/etc/PrivacyPolicy" element={<LangElement byLang={{ ko: <PrivacyPolicyKo />, en: <PrivacyPolicyKo /> }} />} />
-              <Route path="/:lang/etc/CctvPolicy" element={<LangElement byLang={{ ko: <CctvPolicyKo />, en: <CctvPolicyKo /> }} />} />
-              <Route path="/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
-              <Route path="/:lang/expert/ExpertMemberApply" element={<LangElement byLang={{ ko: <ExpertMemberApplyKo />, en: <ExpertMemberApplyKo /> }} />} />                                  
+              <Route path="/:lang/maintask/dur/DurUnderstand" element={<LangElement byLang={{ ko: <DurUnderstandKo />, en: <DurUnderstandKo /> }} />} />
 
+              {/* open(정보공개) */}
+
+              {/* news(기관소식) */}
+              <Route path="/:lang/news/NewsFaqNotice" element={<LangElement byLang={{ ko: <NewsFaqNoticeKo />, en: <NewsFaqNoticeKo /> }} />} />
               {/* 게시판 페이지 작업중 */}          
               <Route path="/:lang/news/NewsNoticeList" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
               <Route path="/:lang/news/NewsNoticeList/:pstSn" element={<LangElement byLang={{ ko: <NewsNoticeDetailKo />, en: <NewsNoticeDetailKo /> }} />} />            
@@ -186,11 +200,9 @@ export default function Router() {
               <Route path="/:lang/news/NewsVidioList" element={<LangElement byLang={{ ko: <NewsVidioListKo />, en: <NewsVidioListKo /> }} />} />
               <Route path="/:lang/news/NewsVidioList/:pstSn" element={<LangElement byLang={{ ko: <NewsVidioDetailKo />, en: <NewsVidioDetailKo /> }} />} />                        
 
-              {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
-              <Route path="/screens" element={<Screens />} />
-              <Route path="/screens/:screenId" element={<ScreenViewer />} />
+              {/* about(기관소개) */}
 
-              {/* 로그인 관련 라우트 - 와일드카드보다 먼저 배치 (더 구체적인 경로가 먼저 와야 함) */}
+              {/* auth */}
               <Route path="/:lang/auth/LoginMethod" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />
               <Route path="/:lang/auth/Login" element={<LangElement byLang={{ ko: <LoginKo />, en: <LoginEn /> }} />} />
               <Route path="/:lang/auth/SignUpSel" element={<LangElement byLang={{ ko: <SignUpSelKo />, en: <SignUpSelKo /> }} />} />
@@ -208,8 +220,21 @@ export default function Router() {
               <Route path="/:lang/auth/FindPw" element={<LangElement byLang={{ ko: <FindPwKo />, en: <FindPwKo /> }} />} />
               <Route path="/:lang/auth/FindPwModify" element={<LangElement byLang={{ ko: <FindPwModifyKo />, en: <FindPwModifyKo /> }} />} />
 
-              <Route path="/:lang/InternalServerError" element={<LangElement byLang={{ ko: <InternalServerErrorKo />, en: <InternalServerErrorKo /> }} />} />
+              {/* expert */}
+              <Route path="/:lang/expert/ExpertMemberApply" element={<LangElement byLang={{ ko: <ExpertMemberApplyKo />, en: <ExpertMemberApplyKo /> }} />} />                                  
+
+              {/* etc */}
+              <Route path="/:lang/etc/Terms" element={<LangElement byLang={{ ko: <TermsKo />, en: <TermsKo /> }} />} />
+              <Route path="/:lang/etc/PrivacyPolicy" element={<LangElement byLang={{ ko: <PrivacyPolicyKo />, en: <PrivacyPolicyKo /> }} />} />
+              <Route path="/:lang/etc/CctvPolicy" element={<LangElement byLang={{ ko: <CctvPolicyKo />, en: <CctvPolicyKo /> }} />} />
+              <Route path="/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
+
+              {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
+              <Route path="/screens" element={<Screens />} />
+              <Route path="/screens/:screenId" element={<ScreenViewer />} />
+
               {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
+              <Route path="/:lang/InternalServerError" element={<LangElement byLang={{ ko: <InternalServerErrorKo />, en: <InternalServerErrorKo /> }} />} />
               <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundKo /> }} />} />
             </Route>
           </Routes>
