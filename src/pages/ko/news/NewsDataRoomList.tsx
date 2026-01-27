@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-NO-01
+ * 화면명: 자료실 목록
+ * 화면경로: /news/NewsDataRoomList
+ * 화면설명: 자료실 목록(일반 게시판 목록 유형)
+ */
 import { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useNavigate, useSearchParams, useLocation, useParams } from 'react-router-dom';

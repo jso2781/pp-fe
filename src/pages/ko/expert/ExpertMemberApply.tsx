@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-EC-01 | KIDS-PP-US-EC-02 | KIDS-PP-US-EC-03
+ * 화면명: 소속 선택  | 추가 정보 입력 | 신청 완료
+ * 화면경로: /expert/ExpertMemberApply
+ * 화면설명: 소속 선택 | 추가 정보 입력 | 신청 완료
+ */
 import DepsLocation from '@/components/common/DepsLocation';
 import FileUploadField from '@/components/form/FileUploadField';
 import { useDialog } from '@/contexts/DialogContext';

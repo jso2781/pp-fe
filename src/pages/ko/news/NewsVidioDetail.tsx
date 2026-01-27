@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-NO-09
+ * 화면명: 동영상 상세
+ * 화면경로: /news/NewsVidioList/:pstSn
+ * 화면설명: 동영상 상세(동영상 게시판 상세 유형)
+ */
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import { getPst } from '@/features/pst/PstThunks';
