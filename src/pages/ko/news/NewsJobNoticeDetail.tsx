@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-NO-01
+ * 화면명: 채용게시판 상세
+ * 화면경로: /news/NewsJobNoticeList/:pstSn
+ * 화면설명: 채용게시판 상세(일반 게시판 상세 유형)
+ */
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import { getPst } from '@/features/pst/PstThunks';

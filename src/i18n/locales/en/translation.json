@@ -326,5 +326,15 @@
     "findPwModifyGuide": "Please enter a new password to change your password.",
     "changeButton": "Change",
     "findPwModifyCompleteMessage": "Password change has been completed. You can now log in normally. Would you like to go to the login page now?",
-    "findPwModifyCompleteTitle": "Password Change Complete"
+    "findPwModifyCompleteTitle": "Password Change Complete",
+    "notFoundCheckAgain": "Please check again!",
+    "notFoundPageMoved": "The page at the address you entered has been removed or moved to another page.",
+    "notFoundCheckUrl": "Please check the URL address again.",
+    "previousPage": "Previous Page",
+    "goHome": "Go to Home",
+    "internalServerErrorCheckLater": "Please check again later!",
+    "internalServerError": "Internal Server Error",
+    "internalServerErrorCannotConnect": "Unable to connect to the service page you are trying to use.",
+    "internalServerErrorWorkingOnIt": "We are working hard to resolve the issue",
+    "internalServerErrorTryAgainLater": "Please check again later."
 }

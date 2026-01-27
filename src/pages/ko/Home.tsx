@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-MN-01
+ * 화면명: 메인(홈)
+ * 화면경로: /
+ * 화면설명: 메인(홈)
+ */
 import { useMemo, useState, useRef, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Card, Grid, CardContent, Link, List, ListItem, Tab, Tabs, Typography, IconButton } from '@mui/material';
@@ -343,8 +349,8 @@ export default function Home() {
               className="popup-swiper"
               style={{ padding: '0 10px' }}
             >
-              {visiblePopups.map((popup, index) => (
-                <SwiperSlide key={popup.atchFileId || index} style={{ overflow: 'hidden', display: 'flex', justifyContent: 'center' }}>
+              {visiblePopups.map((popup, index) => (                            
+                <SwiperSlide key={`${popup.atchFileNm ?? 'file'}-${index}`} style={{ overflow: 'hidden', display: 'flex', justifyContent: 'center' }}>
                   <Card
                     sx={{
                       cursor: popup.popupLnkgAddr ? 'pointer' : 'default',

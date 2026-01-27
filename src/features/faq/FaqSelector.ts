@@ -26,9 +26,15 @@ export const selectFaqCategoryList = createSelector(
 
 export const selectViewFaqList = createSelector(
   [selectNormalizedFaqList, (_: RootState, param: FaqParam) => param],
-  (selectNormalizedFaqList, { activeCategory = 'all', searchWord = '', page = 1 }) => {
+  (selectNormalizedFaqList, { activeCategory = 'all', searchWord = '', searchType = 'all',  page = 1 }) => {
     const filteredCategoryFaqList = selectNormalizedFaqList.filter(faqItem => activeCategory === 'all' || faqItem.category === activeCategory);
-    const filteredSearchFaqList = filteredCategoryFaqList.filter(faqItem => faqItem.title.indexOf(searchWord) !== -1 || faqItem.content.indexOf(searchWord) !== -1);
+    const filteredSearchFaqList = filteredCategoryFaqList.filter(faqItem => {
+      const title = faqItem.title.indexOf(searchWord) !== -1;
+      const content = faqItem.content.indexOf(searchWord) !== -1
+      if(searchType === 'title') return title;
+      if(searchType === 'content') return content;
+      return title || content;
+    });
     return { faqList: filteredSearchFaqList.slice((page-1)*10, page*10), totalCount: filteredSearchFaqList.length }
   }
 );

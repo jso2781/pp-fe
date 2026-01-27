@@ -30,6 +30,9 @@ const FaqSlice = createSlice({
   reducers: {
     clearCurrent: (state) => {
       state.current = null;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -50,5 +53,5 @@ const FaqSlice = createSlice({
   }
 });
 
-export const { clearCurrent } = FaqSlice.actions
+export const { clearCurrent, setLoading } = FaqSlice.actions
 export default FaqSlice.reducer

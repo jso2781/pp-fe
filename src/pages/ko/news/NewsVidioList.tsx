@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-NO-10
+ * 화면명: 동영상 목록
+ * 화면경로: /news/NewsVidioList
+ * 화면설명: 동영상 목록(동영상 게시판 목록 유형)
+ */
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import { SideItem } from '@/features/common/CommonTypes';

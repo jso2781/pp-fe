@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-NO-05
+ * 화면명: FAQ 목록
+ * 화면경로: /ko/news/NewsFaqNotice
+ * 화면설명: FAQ 목록(FAQ 게시판 목록 유형)
+ */
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectFaqList } from "@/features/faq/FaqThunks";
 import { useEffect, useRef, useState } from "react";
@@ -7,6 +13,7 @@ import { Pagination, Stack, Box, Typography, TextField, FormControl, Select, Men
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Lnb from '@/components/common/Lnb';
 import DepsLocation from '@/components/common/DepsLocation';
+import { setLoading } from "@/features/faq/FaqSlice";
 
 const categoryNaming: Record<CategoryCode, string> = {
   all: "전체",
@@ -18,6 +25,8 @@ const categoryNaming: Record<CategoryCode, string> = {
 interface FaqRowProps extends FaqItem {
   expanded: boolean;
   onToggle: (isExpanded: boolean) => void;
+  searchWord: string;
+  searchType: string;
 }
 
 const FaqRow = (props: FaqRowProps) => {
@@ -32,7 +41,11 @@ const FaqRow = (props: FaqRowProps) => {
         <Box className="faq-question">
           <span className="label-q">Q.</span>
           <Typography className="question-text">
-            {props.title}
+            {
+              (props.searchType === 'all' || props.searchType === 'title') && props.searchWord
+                ? <SearchRow text={props.title} word={props.searchWord} />
+                : props.title
+            }
           </Typography>
         </Box>
       </AccordionSummary>
@@ -42,7 +55,11 @@ const FaqRow = (props: FaqRowProps) => {
         <Box className="faq-answer">
           <span className="label-a">A.</span>
           <Typography className="answer-text">
-            {props.content}
+            {
+              (props.searchType === 'all' || props.searchType === 'content') && props.searchWord
+                ? <SearchRow text={props.content} word={props.searchWord} />
+                : props.content
+            }
           </Typography>
         </Box>
       </AccordionDetails>
@@ -50,14 +67,22 @@ const FaqRow = (props: FaqRowProps) => {
   );
 }
 
+const SearchRow = ({ text, word }: { text: string, word: string }) => {
+  const parts = text.split(word);
+  return (
+    <>{parts.map((t, i) => (<>{t}{i < parts.length - 1 && (<span style={{ color: '#087c80', fontWeight: 'bold' }}>{word}</span>)}</>))}</>
+  )
+}
+
 export default function NewsFaqNotice() {
   const dispatch = useAppDispatch();
-  const [param, setParam] = useState<FaqParam>(() => ({ activeCategory: 'all', searchWord: '', page: 1 }));
+  const [param, setParam] = useState<FaqParam>(() => ({ activeCategory: 'all', searchWord: '', searchType: 'all', page: 1 }));
   
   // 현재 열려있는 패널의 고유 ID 하나만 저장
   const [expandedPanel, setExpandedPanel] = useState<string | number | null>(null);
 
-  const inputValue = useRef<HTMLInputElement>(null);
+  const searchInputValue = useRef<HTMLInputElement>(null);
+  const searchSelectValue = useRef<HTMLSelectElement>(null);
   const { loading, error } = useAppSelector(s => s.faq);
   const categoryList = useAppSelector(selectFaqCategoryList);
   const { faqList, totalCount } = useAppSelector(s => selectViewFaqList(s, param));
@@ -66,9 +91,20 @@ export default function NewsFaqNotice() {
     dispatch(selectFaqList({ langSeCd: 'ko' }));
   }, [dispatch]);
 
-  const handleUI = ({ activeCategory, searchWord, page }: FaqParam) => {
-    setParam({ activeCategory, searchWord, page });
-    setExpandedPanel(null); // 검색/카테고리 이동 시 열린 것 닫기
+  const handleUI = ({ activeCategory, searchWord, searchType, page }: FaqParam) => {
+
+    //의도적인 로딩처리.
+    dispatch(setLoading(true));
+    setTimeout(() => {
+      setParam({ activeCategory, searchWord, searchType, page });
+      setExpandedPanel(null); // 검색/카테고리 이동 시 열린 것 닫기
+      dispatch(setLoading(false));
+    }, 200);
+
+    //로딩처리 하지않음(화면 바로전환)
+    // setParam({ activeCategory, searchWord, searchType, page });
+    // setExpandedPanel(null); // 검색/카테고리 이동 시 열린 것 닫기
+    // dispatch(setLoading(false));
   }
 
   const totalPages = Math.max(1, Math.ceil((totalCount || 1) / 10));
@@ -107,30 +143,42 @@ export default function NewsFaqNotice() {
                     <InputLabel id="search-condition-label" className="sr-only">검색조건</InputLabel>
                     <Select 
                       size="large" 
-                      defaultValue="title"
-                      labelId="search-condition-label" 
+                      defaultValue="all"
+                      labelId="search-condition-label"
+                      inputRef={searchSelectValue}
                     >
+                      <MenuItem value="all">전체</MenuItem>
                       <MenuItem value="title">제목</MenuItem>
                       <MenuItem value="content">내용</MenuItem>
                     </Select>
                   </FormControl>
                   <Box className="search-input-group">
                     <TextField
-                      inputRef={inputValue}
+                      inputRef={searchInputValue}
                       size="large" 
                       fullWidth
                       placeholder="궁금하신 내용을 입력해주세요."
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           e.preventDefault();
-                          handleUI({ ...param, page: 1, searchWord: inputValue.current?.value || '' });
+                          handleUI({
+                            ...param,
+                            page: 1,
+                            searchWord: searchInputValue.current?.value || '',
+                            searchType: searchSelectValue.current?.value || 'all'
+                          });
                         }
                       }}
                     />
                     <Button
                       size="large" 
                       variant="contained"
-                      onClick={() => handleUI({ ...param, page: 1, searchWord: inputValue.current?.value || '' })}
+                      onClick={() => handleUI({
+                        ...param,
+                        page: 1,
+                        searchWord: searchInputValue.current?.value || '',
+                        searchType: searchSelectValue.current?.value || 'all'
+                      })}
                     >
                       검색
                     </Button>
@@ -175,13 +223,12 @@ export default function NewsFaqNotice() {
                     <Typography>데이터를 불러오는 중입니다...</Typography>
                   ) : (
                     faqList.map((faqItem, index) => {
-                      // 데이터에 id가 없으면 index라도 고유하게 사용
-                      const rowId = faqItem.id || `faq-${index}`;
-                      
+                      const rowId = `faq-${index}`;
                       return (
                         <FaqRow 
                           key={rowId} 
-                          {...faqItem} 
+                          {...faqItem}
+                          {...param}
                           // 현재 행의 ID가 상태에 저장된 ID와 같을 때만 expanded=true
                           expanded={expandedPanel === rowId}
                           onToggle={(isExpanded) => {
@@ -198,7 +245,7 @@ export default function NewsFaqNotice() {
                   <Pagination
                     count={totalPages}
                     page={param.page}
-                    onChange={(_, p) => handleUI({ ...param, page: p })}
+                    onChange={(_, page) => handleUI({ ...param, page })}
                   />
                 </Stack>
               {/* --- 본문 끝 --- */}

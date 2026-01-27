@@ -6,8 +6,10 @@
  */
 import { useNavigate } from 'react-router-dom'
 import { Box, Button} from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export default function InternalServerError() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(-1);
@@ -26,18 +28,18 @@ export default function InternalServerError() {
                   <Box className="error-code">
                       <i className="icon"></i>
                       <Box className="error-code__desc">
-                        <p className="error-code__summary">잠시 후 다시 확인해주세요!</p>
+                        <p className="error-code__summary">{t('internalServerErrorCheckLater')}</p>
                         <p className="error-code__number">500</p>
-                        <p className="error-code__title">Internal Server Error</p>
+                        <p className="error-code__title">{t('internalServerError')}</p>
                       </Box>
                   </Box>
                   <Box className="error-msg">
-                      <p>지금 사용하고자 하시는 서비스 페이지에 연결할 수 없습니다.</p>
-                      <p>문제를 해결하기 위해 열심히 노력하고 있습니다 </p>
-                      <p>잠시 후 다시 확인해주세요.  </p>
+                      <p>{t('internalServerErrorCannotConnect')}</p>
+                      <p>{t('internalServerErrorWorkingOnIt')}</p>
+                      <p>{t('internalServerErrorTryAgainLater')}</p>
                   </Box>
                   <Box className="btn-group center">
-                    <Button variant="outlined" size="large" onClick={handleClick}>이전 페이지</Button>
+                    <Button variant="outlined" size="large" onClick={handleClick}>{t('previousPage')}</Button>
                   </Box>
                 </Box>
               {/* --- 본문 끝 --- */}
