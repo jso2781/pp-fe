@@ -1,0 +1,462 @@
+[
+    {
+        "key": "/menu/1000",
+        "label": "주요업무",
+        "disabled": false,
+        "children": [
+            {
+                "key": "/menu/1001",
+                "label": "의약품 이상사례보고",
+                "disabled": false,
+                "children": [
+                    {
+                        "key": "/menu/1010",
+                        "label": "이상사례보고",
+                        "disabled": false,
+                        "children": [
+                            {
+                                "key": "/maintask/adverse/report/AdverseIntro",
+                                "label": "이상사례 보고란?",
+                                "disabled": false,
+                                "children": []
+                            },
+                            {
+                                "key": "/maintask/adverse/report/AdverseKaers",
+                                "label": "KAERS란?",
+                                "disabled": false,
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "key": "/menu/1011",
+                        "label": "온라인 보고",
+                        "disabled": false,
+                        "children": [
+                            {
+                                "key": "https://nedrug.mfds.go.kr/CCCBA03F010/getReport",
+                                "label": "의약품이상사례",
+                                "disabled": false,
+                                "children": []
+                            },
+                            {
+                                "key": "https://nedrug.mfds.go.kr/CCCBA03F010/getReportQuasiDrug",
+                                "label": "의약외품(생리대 등)",
+                                "disabled": false,
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "key": "/maintask/adverse/AdverseOffline",
+                        "label": "오프라인 보고",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/maintask/adverse/AdverseDataRoom",
+                        "label": "이상사례보고자료실",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/maintask/adverse/AdverseReportGuide",
+                        "label": "온라인보고방법 안내",
+                        "disabled": false,
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "key": "/menu/1002",
+                "label": "의약품 부작용 보고 자료",
+                "disabled": false,
+                "children": [
+                    {
+                        "key": "/menu/1040",
+                        "label": "의약품 부작용 보고1",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/1041",
+                        "label": "의약품 부작용 보고2",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/1042",
+                        "label": "의약품 부작용 보고3",
+                        "disabled": false,
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "key": "/menu/1003",
+                "label": "의약품 안전관리",
+                "disabled": false,
+                "children": [
+                    {
+                        "key": "/menu/1050",
+                        "label": "약물감시용어",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/1051",
+                        "label": "부작용 인과관계규명",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/1052",
+                        "label": "유관기관",
+                        "disabled": false,
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "key": "/menu/1004",
+                "label": "의약품.의료정보.연계분석",
+                "disabled": false,
+                "children": [
+                    {
+                        "key": "/menu/1060",
+                        "label": "의약품.의료정보.연계분석1",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/1061",
+                        "label": "의약품.의료정보.연계분석2",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/1062",
+                        "label": "의약품.의료정보.연계분석3",
+                        "disabled": false,
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "key": "/menu/1005",
+                "label": "DUR 정보",
+                "disabled": false,
+                "children": [
+                    {
+                        "key": "/menu/1070",
+                        "label": "DUR 이해",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/1071",
+                        "label": "DUR 정보검색",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/1072",
+                        "label": "내가 먹는 약의 DUR 정보",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/maintask/dur/DurNoticeList",
+                        "label": "의약품 적정사용 정보",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/maintask/dur/DurProposal",
+                        "label": "DUR 게시판",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/1075",
+                        "label": "DUR 제안",
+                        "disabled": false,
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "key": "/menu/1006",
+                "label": "부작용 피해구제",
+                "disabled": false,
+                "children": [
+                    {
+                        "key": "/menu/1110",
+                        "label": "제도소개",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/1111",
+                        "label": "피해구제 신청",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/1112",
+                        "label": "뉴스/소식",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "https://nedrug.mfds.go.kr",
+                        "label": "자주하는 질문",
+                        "disabled": false,
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "key": "/menu/1100",
+        "label": "정보공개",
+        "disabled": false,
+        "children": [
+            {
+                "key": "/menu/2000",
+                "label": "정보공개",
+                "disabled": false,
+                "children": [
+                    {
+                        "key": "/menu/2010",
+                        "label": "업무처리절차",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "https://open.go.kr",
+                        "label": "정보공개 청구",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/2012",
+                        "label": "임직원국외출장",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/2013",
+                        "label": "원장 업무추진비 집행내역",
+                        "disabled": false,
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "key": "/menu/2001",
+                "label": "공공데이터 개방",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/2002",
+                "label": "경영공시",
+                "disabled": false,
+                "children": [
+                    {
+                        "key": "/menu/2020",
+                        "label": "부패행위 징계현황",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/2021",
+                        "label": "징계기준",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/2022",
+                        "label": "징계현황",
+                        "disabled": false,
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "key": "/menu/2003",
+                "label": "사업실명제",
+                "disabled": false,
+                "children": []
+            }
+        ]
+    },
+    {
+        "key": "/menu/1200",
+        "label": "기관소식",
+        "disabled": false,
+        "children": [
+            {
+                "key": "/news/NewsNoticeList",
+                "label": "공지사항",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/news/NewsJobNoticeList",
+                "label": "채용게시판",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/news/NewsFaqNotice",
+                "label": "FAQ",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/3003",
+                "label": "국민신문고",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/3004",
+                "label": "보도자료",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/3005",
+                "label": "뉴스레터",
+                "disabled": false,
+                "children": [
+                    {
+                        "key": "https://ltfu.mfds.go.kr",
+                        "label": "첨단바이오 포커스",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/3011",
+                        "label": "마약류 안전정보지",
+                        "disabled": false,
+                        "children": []
+                    },
+                    {
+                        "key": "/menu/3012",
+                        "label": "리플릿",
+                        "disabled": false,
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "key": "/news/NewsCardNewsList",
+                "label": "카드뉴스",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/news/NewsVidioList",
+                "label": "동영상",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/news/NewsDataRoomList",
+                "label": "자료실",
+                "disabled": false,
+                "children": []
+            }
+        ]
+    },
+    {
+        "key": "/menu/1300",
+        "label": "기관소개",
+        "disabled": false,
+        "children": [
+            {
+                "key": "/menu/4000",
+                "label": "기관장 인사말",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/4001",
+                "label": "역대 기관장",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/4002",
+                "label": "연혁",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/4003",
+                "label": "비전 및 목표",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/4004",
+                "label": "조직도",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/4005",
+                "label": "설립근거 및 관련법령",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/4006",
+                "label": "고객헌장",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/4007",
+                "label": "우리원동정",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/4008",
+                "label": "CI소개",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "/menu/4009",
+                "label": "윤리경영",
+                "disabled": false,
+                "children": [
+                    {
+                        "key": "/menu/4012",
+                        "label": "클린신고센터",
+                        "disabled": false,
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "key": "/menu/4010",
+                "label": "캐릭터소개",
+                "disabled": false,
+                "children": []
+            },
+            {
+                "key": "https://www.drugsafe.or.kr/iwt/ds/ko/introduction/EgovLocation.do",
+                "label": "오시는 길",
+                "disabled": false,
+                "children": []
+            }
+        ]
+    }
+]
