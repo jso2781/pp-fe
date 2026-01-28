@@ -137,6 +137,7 @@ export default function NewsNoticeList() {
         writer: n.wrtrDeptNm  ?? '',
         date: n.regDt ?? '',
         views: n.pstInqCnt ?? 0,
+        fixYn: n.fixYn ?? 'N',
       };
     });
   }, [list]);
@@ -228,8 +229,8 @@ export default function NewsNoticeList() {
                           {rows.map((r, idx) => (
                             <TableRow key={String(r.id)}>
                               {/* 3. 행의 식별자 데이터도 component="th", scope="row"를 권장합니다. */}
-                              <TableCell component="th" scope="row" align="center">
-                                {(pageNum - 1) * 10 + idx + 1}
+                              <TableCell component="th" scope="row" align="center" sx={{fontWeight: r.fixYn === 'Y' ? 'bold' : 'normal',}}>                                
+                                {r.fixYn === 'Y' ? '[공지]' : (totalCount ?? 0) - ((Number(pageNum) - 1) * 10 + idx)}
                               </TableCell>
                               <TableCell align="center">
                                 {/* 4. 동작이 발생하는 요소에 명확한 aria-label을 제공합니다. */}
