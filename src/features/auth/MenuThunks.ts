@@ -69,7 +69,7 @@ export const getMenu = createAsyncThunk<MenuRVO, MenuPVO | undefined>(
     try {
       const res = await https.post(getMenuApiPath(), params);
 
-      const payload = res.data;
+      const payload = res.data.data;
 
       // 서버가 MenuRVO 형식으로 단 건 데이터를 반환함. 
       return payload;

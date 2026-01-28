@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 
 // MUI 아이콘
-import { Language, Menu as MenuIcon, Close, ExpandMore, OpenInNew } from '@mui/icons-material';
+import { Language, Menu as MenuIcon, Close, ExpandMore, OpenInNew, ExpandLess } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 
 import SkipNavigation from './SkipNavigation';
@@ -25,7 +25,6 @@ import { loginExtend } from '@/features/auth/AuthThunks';
 
 import type { MenuRVO } from '@/features/auth/MenuTypes';
 import type { LoginExtendRVO } from '@/features/auth/AuthTypes';
-import menuListForGnb from '@/components/common/sample/menuListForGnb.json';
 
 /**
  * 사이트맵 아이템 타입 정의
@@ -317,33 +316,6 @@ function SitemapItem({ item }: { item: SitemapLinkItem }) {
   )
 }
 
-/**
- * 메뉴 목록을 트리 구조로 변환하여 상위 메뉴(주요 업무, 정보공개, 기관소식, 기관소개)를 찾는 함수
- * 기존 프로젝트의 buildAntdMenuItems 로직을 참조
- */
-function buildMenuTree(list: MenuRVO[]) {
-  const byParent = new Map<number | null, MenuRVO[]>()
-
-  // 부모별로 그룹화
-  for (const m of list) {
-    const parent = m.upMenuSn ?? null
-    if (!byParent.has(parent)) {
-      byParent.set(parent, [])
-    }
-    byParent.get(parent)!.push(m)
-  }
-
-  // 각 그룹을 menuSeq로 정렬
-  for (const [key, arr] of byParent.entries()) {
-    arr.sort((a, b) => (a.menuSeq ?? 0) - (b.menuSeq ?? 0))
-  }
-
-  // 루트 메뉴들 (upMenuSn === null인 메뉴들, 기존 프로젝트와 동일한 로직)
-  const rootMenus = (byParent.get(null) ?? []).sort((a, b) => (a.menuSeq ?? 0) - (b.menuSeq ?? 0))
-
-  return { rootMenus, byParent }
-}
-
 export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const { t, i18n: i18nInstance } = useTranslation()
   const location = useLocation()
@@ -356,7 +328,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   }, [isAuthenticated]);
 
   // Rest API 호출로 메뉴 가져오기
-  const { list } = useAppSelector((s) => s.menu)
+  const { gnbList } = useAppSelector((s) => s.menu)
 
   const lang = getLangFromPathname(location.pathname) || 'ko'
   const to = (p: string) => {
@@ -712,9 +684,6 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   
   // const { rootMenus, byParent } = useMemo(() => buildMenuTree(menuItems1), [menuItems1]);
 
-  // 메뉴 트리 구조 생성 - Rest API에서 가져온 list 사용
-  const { rootMenus, byParent } = useMemo(() => buildMenuTree(list), [list])
-
   // Rest API 호출 - 언어 변경 시 메뉴 목록 재조회
   useEffect(() => {
     // 언어가 바뀔 때마다 해당 언어 메뉴 재조회
@@ -740,12 +709,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   }
 
   // =======================================
-  // GNB 메뉴관리
-  // =======================================
-  const MENU_LIST = menuListForGnb;
-
-  // =======================================
-  // 웹GNB
+  // 웹 GNB
   // =======================================
 
   // 메뉴 렌더링 상태 관리
@@ -773,7 +737,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   };
 
   // =======================================
-  // 모바일GNB 
+  // 모바일 GNB 
   // =======================================
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openMobileSub, setOpenMobileSub] = useState<number | null>(0);
@@ -928,7 +892,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           >
             <div className="gnb-container">
               <ul className="depth1-list">
-                {MENU_LIST.map((menu1, idx1) => (
+                {gnbList.map((menu1, idx1) => (
                   <li key={idx1} className="depth1-item" onMouseEnter={() => openMenu(idx1)}>
                     <Link
                       to={(menu1 as any).url || "#"}
@@ -1076,7 +1040,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         {/* 모바일GNB */}
         <div className="mobile-gnb-container" role="navigation">
           <ul className="mobile-depth1-area">
-            {MENU_LIST.map((menu1, idx1) => (
+            {gnbList.map((menu1, idx1) => (
               <li key={idx1} className={`depth1-item ${openMobileSub === idx1 ? 'active' : ''}`}>
                 <Link 
                   to="#"
