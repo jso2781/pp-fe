@@ -83,45 +83,44 @@ export interface AtchPVO {
  * 공통_첨부파일기본 정보 
  */
 export interface AtchRVO {
-  /** 첨부파일일련번호 */
-  atchFileSn?: string
-
   /** 순번 */
   no?: 1
 
-  /** 메뉴유형 */
-  menuType?: string
+  /** 첨부파일아이디 */
+  atchFileId?: string
 
-  /** 첨부파일업로드시간 */
-  atchFileUldHr?: string
+  /** 첨부파일그룹아이디 */
+  atchFileGroupId?: string
 
   /** 첨부파일사용여부 */
-  atchFileUseYn?: string
+  useYn?: string
 
   /** 첨부파일경로 */
-  atchFilePath?: string
+  fileStrgPathDsctn?: string
 
   /** 첨부파일명 */
-  atchFileNm?: string
+  fileNm?: string
 
   /** 첨부파일확장자명 */
-  atchFileExtnNm?: string
+  fileExtnNm?: string
 
   /** 첨부파일내용 */
-  atchFileCn?: string
+  fileCn?: string
 
   /** 등록자아이디 */
   rgtrId?: string
 
   /** 등록일시 */
   regDt?: string
+
   /** 수정자아이디 */
   mdfrId?: string
 
   /** 수정일시 */
   mdfcnDt?: string
+
   /** 첨부파일 크기 */
-  atchFileSz?: number
+  fileSz?: number
 }
 
 /**
@@ -179,6 +178,9 @@ export interface AtchDVO {
  * 공통_첨부파일기본 다운로드 파라메터 정보 
  */
 export interface AtchDownVO {
-  /** 첨부파일일련번호 */
-  atchFileSn?: string  
+  /** 첨부파일아이디 */
+  atchFileId?: string
+
+  /** 첨부파일그룹아이디 */
+  atchFileGroupId?: string
 }

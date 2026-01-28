@@ -49,9 +49,9 @@ export default function NewsDataRoomDetail() {
   const isHtml = typeof html === 'string' && /<\/?[a-z][\s\S]*>/i.test(html)
   const atchFiles = data?.atchRVOs || [];
 
-  const handleDownload = (atchFileSn: string) => {
+  const handleDownload = (atchFileGroupId: string, atchFileId: string) => {
     dispatch(
-      downloadAtch({atchFileSn})
+      downloadAtch({atchFileGroupId, atchFileId})
     );
   };
   
@@ -128,14 +128,14 @@ export default function NewsDataRoomDetail() {
                               className="attachment-item"
                               underline="none"
                               title="첨부파일 다운로드"
-                              onClick={() => handleDownload(file.atchFileSn ?? '')}
+                              onClick={() => handleDownload(file.atchFileGroupId ?? '', file.atchFileId ?? '')}
                             >
                               <Box className="file-info">
                                 <span className="file-label">{atchFiles.length === 1 ? '첨부파일' : `첨부파일${index + 1}`}</span>
-                                <span className="file-name">{file.atchFileNm}</span>
+                                <span className="file-name">{file.fileNm}</span>
                                 <span className="file-meta">
-                                  <span className="file-ext">[{file.atchFileExtnNm}]</span>
-                                  <span className="file-size">{file.atchFileSz}</span> {/** 파일 크기 단위 변환 로직 필요 */}
+                                  <span className="file-ext">[{file.fileExtnNm}]</span>
+                                  <span className="file-size">{file.fileSz}</span> {/** 파일 크기 단위 변환 로직 필요 */}
                                 </span>
                               </Box>
                             </Link>

@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
 import { selectAtchListApiPath, getAtchApiPath, insertAtchApiPath, updateAtchApiPath, saveAtchApiPath, deleteAtchApiPath, downloadAtchApiPath } from '@/api/atch/AtchApiPaths'
 import { mockAtchList, AtchPVO, AtchRVO, AtchListPVO, AtchListRVO, AtchDVO, AtchDownVO  } from './AtchTypes'
-import { mockPstList } from '../notice/PstTypes'
 
 /**
  * 공통_첨부파일기본 정보 목록 조회 
