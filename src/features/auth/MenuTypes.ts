@@ -229,15 +229,65 @@ export interface MenuListRVO {
 export interface MenuDVO {
 }
 
+/***************************************************************** LNB 메뉴 타입 정의 시작 ****************************************************************/
 /**
- * 대국민포털_메뉴기본 LNB 아이템 타입
+ * LNB 아이템 타입
  */
-export type SideItem = {
+export type LnbItem = {
   key: string;
   label: string;
   disabled?: boolean;
-  children?: SideItem[];
+  children?: LnbItem[];
 };
+/***************************************************************** LNB 메뉴 타입 정의 시작 ****************************************************************/
+
+
+/***************************************************************** GNB 메뉴 타입 정의 시작 ****************************************************************/
+/**
+ * GNB 메뉴 구조 타입 정의
+ * menuListForGnb.json의 JSON 구조를 TypeScript 타입으로 정의
+ */
+
+/**
+ * Depth3 메뉴 항목 (최하위 메뉴)
+ */
+export interface GnbDepth3Item {
+  /** 메뉴명 */
+  name: string
+  /** 메뉴 URL 주소 */
+  url: string
+  /** 새 창에서 열기 여부 (외부 링크인 경우) */
+  isNewWindow?: boolean
+}
+
+/**
+ * Depth2 메뉴 항목 (중간 메뉴)
+ */
+export interface GnbDepth2Item {
+  /** 메뉴명 */
+  title: string
+  /** 메뉴 URL 주소 (depth2에 직접 URL이 있는 경우, 선택적) */
+  url?: string
+  /** 하위 depth3 메뉴 목록 */
+  depth3: GnbDepth3Item[]
+}
+
+/**
+ * Depth1 메뉴 항목 (최상위 메뉴, root 메뉴)
+ */
+export interface GnbDepth1Item {
+  /** 메뉴명 */
+  title: string
+  /** 하위 depth2 메뉴 목록 */
+  depth2: GnbDepth2Item[]
+}
+
+/**
+ * GNB 메뉴 목록 타입
+ * menuListForGnb.json의 전체 구조를 나타냄
+ */
+export type MenuListForGnb = GnbDepth1Item[]
+/***************************************************************** GNB 메뉴 타입 정의 끝 ****************************************************************/
 
 // ✅ RootState 타입이 프로젝트에 있으면 그걸 쓰는 게 베스트.
 // 지금은 예시로 최소 형태만 잡아둠(컴파일 통과용).
@@ -247,6 +297,7 @@ export type RootStateLike = {
     loading: boolean
     langSeCd: string | null
     loaded: boolean
-    menuStructor: SideItem[]
+    lnbStructor: LnbItem[]
+    gnbList: GnbDepth1Item[]
   }
 }

@@ -1,25 +1,148 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { selectMenuList, getMenu, insertMenu, updateMenu, saveMenu, deleteMenu } from './MenuThunks'
-import { mockMenuList, MenuPVO, MenuRVO, MenuListPVO, MenuListRVO, MenuDVO, SideItem } from './MenuTypes'
+import { mockMenuList, MenuPVO, MenuRVO, MenuListPVO, MenuListRVO, MenuDVO, LnbItem, GnbDepth1Item, MenuListForGnb, GnbDepth3Item, GnbDepth2Item } from './MenuTypes'
 
 /**
- * LNB용 SideItem 구조체 변환
+ * GNB용 GnbDepth1Item [] 구조체 변환
  */
-function createLnbStructor(menuList: MenuRVO[]): SideItem[] {
+function createGnbStructor(
+  menuList: MenuRVO[]
+): GnbDepth1Item[] {
+  // 빈 배열이면 빈 배열 반환
+  if (!Array.isArray(menuList) || menuList.length === 0) {
+    return []
+  }
+
+  // depLevel별로 메뉴 분류 (필수 필드가 있는 메뉴만 필터링)
+  const depth1Menus = menuList.filter(
+    (menu) => menu.depLevel === 1 && menu.menuSn !== undefined && menu.menuNm !== undefined
+  )
+  const depth2Menus = menuList.filter(
+    (menu) => menu.depLevel === 2 && menu.menuSn !== undefined && menu.menuNm !== undefined
+  )
+  const depth3Menus = menuList.filter(
+    (menu) => menu.depLevel === 3 && menu.menuSn !== undefined && menu.menuNm !== undefined
+  )
+  const depth4Menus = menuList.filter(
+    (menu) => menu.depLevel === 4 && menu.menuSn !== undefined && menu.menuNm !== undefined
+  )
+
+  // rootSn 순서대로 depth1 메뉴 정렬
+  depth1Menus.sort((a, b) => {
+    // rootSn이 같으면 menuSeq로 정렬, 없으면 menuSn으로 정렬
+    const aRootSn = a.rootSn ?? 0
+    const bRootSn = b.rootSn ?? 0
+    if (aRootSn !== bRootSn) {
+      return aRootSn - bRootSn
+    }
+    const aSeq = a.menuSeq ?? a.menuSn ?? 0
+    const bSeq = b.menuSeq ?? b.menuSn ?? 0
+    return aSeq - bSeq
+  })
+
+  // depth1 메뉴별로 변환
+  const result: GnbDepth1Item[] = depth1Menus.map((depth1Menu) => {
+    // 해당 depth1 메뉴의 하위 depth2 메뉴들 찾기
+    const childDepth2Menus = depth2Menus
+      .filter((menu) => menu.upMenuSn === depth1Menu.menuSn)
+      .sort((a, b) => {
+        const aSeq = a.menuSeq ?? a.menuSn ?? 0
+        const bSeq = b.menuSeq ?? b.menuSn ?? 0
+        return aSeq - bSeq
+      })
+
+    // depth2 메뉴별로 변환
+    const depth2Items: GnbDepth2Item[] = childDepth2Menus.map((depth2Menu) => {
+      // 해당 depth2 메뉴의 하위 depth3 메뉴들 찾기
+      const childDepth3Menus = depth3Menus
+        .filter((menu) => menu.upMenuSn === depth2Menu.menuSn)
+        .sort((a, b) => {
+          const aSeq = a.menuSeq ?? a.menuSn ?? 0
+          const bSeq = b.menuSeq ?? b.menuSn ?? 0
+          return aSeq - bSeq
+        })
+
+      // depth3 항목들을 수집
+      // 1. depLevel=3이면서 menuUrlAddr이 있는 항목들 (직접 페이지)
+      // 2. depLevel=3이면서 menuUrlAddr이 없고, 하위에 depLevel=4가 있는 경우 → depLevel=4 항목들을 depth3로 사용
+      // 3. depLevel=3이면서 menuUrlAddr이 없고, 하위에 depLevel=4가 없는 경우 → 빈 배열
+      const depth3Items: GnbDepth3Item[] = []
+
+      childDepth3Menus.forEach((depth3Menu) => {
+        // depLevel=3이면서 menuUrlAddr이 있는 경우 → 직접 depth3 항목으로 추가
+        if (depth3Menu.menuUrlAddr && depth3Menu.menuNm) {
+          const url = depth3Menu.menuUrlAddr
+          const isNewWindow = url.startsWith('http://') || url.startsWith('https://')
+          depth3Items.push({
+            name: depth3Menu.menuNm,
+            url,
+            ...(isNewWindow && { isNewWindow: true })
+          })
+        } else {
+          // depLevel=3이면서 menuUrlAddr이 없는 경우 → 하위 depLevel=4 항목들을 찾아서 depth3로 사용
+          const childDepth4Menus = depth4Menus
+            .filter((menu) => menu.upMenuSn === depth3Menu.menuSn)
+            .sort((a, b) => {
+              const aSeq = a.menuSeq ?? a.menuSn ?? 0
+              const bSeq = b.menuSeq ?? b.menuSn ?? 0
+              return aSeq - bSeq
+            })
+
+          childDepth4Menus.forEach((depth4Menu) => {
+            if (depth4Menu.menuNm) {
+              const url = depth4Menu.menuUrlAddr || '#'
+              const isNewWindow = url.startsWith('http://') || url.startsWith('https://')
+              depth3Items.push({
+                name: depth4Menu.menuNm,
+                url,
+                ...(isNewWindow && { isNewWindow: true })
+              })
+            }
+          })
+        }
+      })
+
+      // depth2 메뉴 구성
+      const depth2Item: GnbDepth2Item = {
+        title: depth2Menu.menuNm || '',
+        depth3: depth3Items
+      }
+
+      // depth2 메뉴에 직접 URL이 있는 경우 추가 (depLevel=2이면서 menuUrlAddr이 있는 경우)
+      if (depth2Menu.menuUrlAddr) {
+        depth2Item.url = depth2Menu.menuUrlAddr
+      }
+
+      return depth2Item
+    })
+
+    return {
+      title: depth1Menu.menuNm || '',
+      depth2: depth2Items
+    }
+  })
+
+  return result
+}
+
+/**
+ * LNB용 LnbItem [] 구조체 변환
+ */
+function createLnbStructor(menuList: MenuRVO[]): LnbItem[] {
   if (!Array.isArray(menuList) || menuList.length === 0) {
     return [];
   }
 
   // menuSn을 키로 하는 맵 생성
-  const menuMap = new Map<number, SideItem>();
-  const rootItems: SideItem[] = [];
+  const menuMap = new Map<number, LnbItem>();
+  const rootItems: LnbItem[] = [];
 
   // 먼저 모든 메뉴를 SideItem으로 변환하여 맵에 저장
   menuList.forEach((menu) => {
     if (menu.menuSn === undefined) return;
 
     const key = menu.menuUrlAddr || `/menu/${menu.menuSn}`;
-    const sideItem: SideItem = {
+    const sideItem: LnbItem = {
       key,
       label: menu.menuNm || '',
       disabled: menu.useYn === 'N',
@@ -55,7 +178,7 @@ function createLnbStructor(menuList: MenuRVO[]): SideItem[] {
   });
 
   // menuSeq 기준으로 정렬
-  const sortByMenuSeq = (items: SideItem[]): SideItem[] => {
+  const sortByMenuSeq = (items: LnbItem[]): LnbItem[] => {
     return items
       .map((item) => {
         const menu = menuList.find((m) => {
@@ -92,7 +215,8 @@ export interface MenuState {
 
   langSeCd: string | null
   loaded: boolean
-  menuStructor: SideItem[]
+  lnbStructor: LnbItem[]
+  gnbList: GnbDepth1Item[]
 }
 
 /**
@@ -107,7 +231,8 @@ const initialState: MenuState = {
 
   langSeCd: null,
   loaded: false,
-  menuStructor: []
+  lnbStructor: [],
+  gnbList: []
 }
 
 const MenuSlice = createSlice({
@@ -125,7 +250,8 @@ const MenuSlice = createSlice({
       state.langSeCd = null;
       state.loaded = false;
       state.error = null;
-      state.menuStructor = [];
+      state.lnbStructor = [];
+      state.gnbList = [];
     }
   },
   extraReducers: (builder) => {
@@ -139,8 +265,11 @@ const MenuSlice = createSlice({
         state.list = action.payload.list;
         state.totalCount = action.payload.totalCount;
         
-        // Lnb menuStructor 저장
-        state.menuStructor = createLnbStructor(action.payload.list);     
+        // Lnb lnbStructor 저장
+        state.lnbStructor = createLnbStructor(action.payload.list);     
+
+        // GNB gnbList 저장
+        state.gnbList = createGnbStructor(action.payload.list);
 
         // 어떤 언어로 로딩됐는지 기록 + loaded
         state.langSeCd = action.meta.arg?.langSeCd ?? state.langSeCd ?? null;

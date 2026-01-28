@@ -9,7 +9,7 @@ export default function KoglLicense() {
           href="http://www.kogl.or.kr/info/licenseType4.do"
           underline="none"
           target="_blank"
-          title="새창열림: 공공누리 제4유형 저작권 상세정보"
+          title="공공누리 제4유형 저작권 상세정보"
           rel="noopener noreferrer"
         >
           <Box className="kogl-image">

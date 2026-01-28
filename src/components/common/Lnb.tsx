@@ -3,29 +3,29 @@ import { Box, List, ListItem, ListItemButton, ListItemText, Collapse } from '@mu
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { lnbStyles } from '../../styles/ko/layout/Lnb.styles';
 import { useAppSelector } from '@/store/hooks';
-import { SideItem } from '@/features/auth/MenuTypes'
+import { LnbItem } from '@/features/auth/MenuTypes'
 
 type LnbProps = {
-  /** (옵션) 기존처럼 직접 SideItem[]을 넘기고 싶을 때 사용 */
-  items?: SideItem[];
+  /** (옵션) 기존처럼 직접 LnbItem[]을 넘기고 싶을 때 사용 */
+  items?: LnbItem[];
   /** 현재 페이지의 URL (예: location.pathname) */
   currentUrl?: string;
 };
 
 // menuStructor에서 현재 URL에 해당하는 LNB용 아이템 배열을 찾는 함수
 const buildLnbItemsFromMenuStructor = (
-  menuStructor: SideItem[],
+  lnbStructor: LnbItem[],
   currentUrl: string,
-): SideItem[] => {
-  if (!menuStructor || menuStructor.length === 0) return [];
+): LnbItem[] => {
+  if (!lnbStructor || lnbStructor.length === 0) return [];
 
   // /ko 접두어 제거
   const normalize = (url: string) => url.replace(/^\/ko/, '');
   const target = normalize(currentUrl);
 
-  type FindResult = { node: SideItem; parent: SideItem | null };
+  type FindResult = { node: LnbItem; parent: LnbItem | null };
 
-  const dfs = (items: SideItem[], parent: SideItem | null): FindResult | null => {
+  const dfs = (items: LnbItem[], parent: LnbItem | null): FindResult | null => {
     for (const it of items) {
       const keyNorm = normalize(it.key);
 
@@ -42,7 +42,7 @@ const buildLnbItemsFromMenuStructor = (
   };
 
   // 현재 URL과 일치하는 노드 찾기
-  const findActiveNodeKey = (items: SideItem[]): string | null => {
+  const findActiveNodeKey = (items: LnbItem[]): string | null => {
     for (const it of items) {
       const keyNorm = normalize(it.key);
       if (keyNorm === target || target.startsWith(keyNorm + '/')) {
@@ -56,11 +56,11 @@ const buildLnbItemsFromMenuStructor = (
     return null;
   };
 
-  const activeKey = findActiveNodeKey(menuStructor);
+  const activeKey = findActiveNodeKey(lnbStructor);
 
   // SideItem을 깊은 복사하면서 disabled 설정하는 함수
-  const cloneWithDisabled = (item: SideItem): SideItem => {
-    const cloned: SideItem = {
+  const cloneWithDisabled = (item: LnbItem): LnbItem => {
+    const cloned: LnbItem = {
       ...item,
       disabled: item.key === activeKey || item.disabled,
       children: item.children ? item.children.map(cloneWithDisabled) : undefined,
@@ -68,10 +68,10 @@ const buildLnbItemsFromMenuStructor = (
     return cloned;
   };
 
-  const found = dfs(menuStructor, null);
+  const found = dfs(lnbStructor, null);
   if (!found) {
     // 못 찾으면 전체 구조를 그대로 복사하여 반환
-    return menuStructor.map(cloneWithDisabled);
+    return lnbStructor.map(cloneWithDisabled);
   }
 
   // 부모가 있으면 같은 레벨의 형제들을 LNB 루트로 사용
@@ -84,20 +84,20 @@ const buildLnbItemsFromMenuStructor = (
 };
 
 function Lnb({ currentUrl, items }: LnbProps) {
-  const { menuStructor } = useAppSelector((s) => s.menu);
+  const { lnbStructor } = useAppSelector((s) => s.menu);
 
   const [openKeys, setOpenKeys] = useState<Record<string, boolean>>({});
   const toggle = (k: string) => setOpenKeys((s) => ({ ...s, [k]: !s[k] }));
 
-  // items 프롭이 있으면 우선 사용, 없으면 menuStructor + currentUrl 기준으로 생성
-  const resolvedItems: SideItem[] = useMemo(() => {
+  // items 프롭이 있으면 우선 사용, 없으면 lnbStructor + currentUrl 기준으로 생성
+  const resolvedItems: LnbItem[] = useMemo(() => {
     if (items && items.length > 0) {
       return items;
     }
-    return buildLnbItemsFromMenuStructor(menuStructor || [], currentUrl || '');
-  }, [menuStructor, currentUrl, items]);
+    return buildLnbItemsFromMenuStructor(lnbStructor || [], currentUrl || '');
+  }, [lnbStructor, currentUrl, items]);
 
-  const renderItems = (arr: SideItem[], depth = 0) => (
+  const renderItems = (arr: LnbItem[], depth = 0) => (
     <List 
       component="ul" 
       disablePadding 

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
 import { selectMenuListApiPath, getMenuApiPath, insertMenuApiPath, updateMenuApiPath, saveMenuApiPath, deleteMenuApiPath } from '@/api/auth/MenuApiPaths'
-import { mockMenuList, MenuPVO, MenuRVO, MenuListPVO, MenuListRVO, MenuDVO, SideItem, RootStateLike } from './MenuTypes'
+import { mockMenuList, MenuPVO, MenuRVO, MenuListPVO, MenuListRVO, MenuDVO, LnbItem, RootStateLike } from './MenuTypes'
 
 export const selectMenuList = createAsyncThunk<MenuListRVO, MenuListPVO | undefined, {state: RootStateLike}>(
   '/auth/selectMenuList',

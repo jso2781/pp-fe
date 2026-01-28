@@ -6,7 +6,7 @@
  */
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import { SideItem } from '@/features/common/CommonTypes';
+import { LnbItem } from '@/features/common/CommonTypes';
 import { selectPstList } from '@/features/pst/PstThunks';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
@@ -34,12 +34,12 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 import { BoardKey, BOARD_CONFIG_GROUP } from '@/features/pst/PstConfig';
 
-function SideNav({ items }: { items: SideItem[] }) {
+function SideNav({ items }: { items: LnbItem[] }) {
   const location = useLocation();
   const [openKeys, setOpenKeys] = useState<Record<string, boolean>>({});
   const toggle = (k: string) => setOpenKeys((s) => ({ ...s, [k]: !s[k] }));
 
-  const renderItems = (arr: SideItem[], depth = 0) => (
+  const renderItems = (arr: LnbItem[], depth = 0) => (
     <List disablePadding>
       {arr.map((it) => {
         const active = location.pathname === it.key || location.pathname.startsWith(it.key + '/');
