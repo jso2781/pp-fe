@@ -7,10 +7,13 @@ export const mockOpnnList = [
     no: 1,
 
     /** 작성자암호화성명 */
-    wrtrEncptFlnm: 'XXX',
+    encptWrtrFlnm: 'XXX',
 
     /** 작성자암호화전화번호 */
-    wrtrEncptTelno: 'XXX',
+    encptWrtrTelno: 'XXX',
+
+    /** 작성자암호화이메일 */
+    encptMbrEmlNm: 'XXX',
 
     /** 작성구분코드 */
     wrtSeCd: 'XXX',
@@ -19,22 +22,26 @@ export const mockOpnnList = [
     pbptCn: 'XXX',
 
     /** 요청사항 */
-    dmndMttr: 'XXX',
+    dmndMttrCn: 'XXX',
 
     /** 요청사항상세내용 */
     dmndMttrDtlCn: 'XXX',
 
     /** 참고사항 */
-    refMttr: 'XXX',
+    refMttrCn: 'XXX',
 
-    /** 첨부파일일련번호 */
-    atchFileSn: 'XXX',
+    /** 내부참고사항내용 */
+    insdRefMttrCn: 'XXX',
+
+    /** 첨부파일그룹아이디 */
+    atchFileGroupId: 'XXX',
 
     /** 등록자아이디 */
     rgtrId: 'XXX',
 
     /** 등록일시 */
     regDt: '2026-01-23',
+    
     /** 수정자아이디 */
     mdfrId: 'XXX',
 
@@ -48,10 +55,13 @@ export const mockOpnnList = [
  */
 export interface OpnnPVO {
   /** 작성자암호화성명 */
-  wrtrEncptFlnm?: string
+  encptWrtrFlnm?: string
 
   /** 작성자암호화전화번호 */
-  wrtrEncptTelno?: string
+  encptWrtrTelno?: string
+
+  /** 작성자암호화이메일 */
+  encptMbrEmlNm?: string
 
   /** 작성구분코드 */
   wrtSeCd?: string
@@ -60,16 +70,19 @@ export interface OpnnPVO {
   pbptCn?: string
 
   /** 요청사항 */
-  dmndMttr?: string
+  dmndMttrCn?: string
 
   /** 요청사항상세내용 */
   dmndMttrDtlCn?: string
 
   /** 참고사항 */
-  refMttr?: string
+  refMttrCn?: string
 
-  /** 첨부파일일련번호 */
-  atchFileSn?: string
+  /** 내부참고사항내용 */
+  insdRefMttrCn?: string
+
+  /** 첨부파일그룹아이디 */
+  atchFileGroupId?: string
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -91,10 +104,10 @@ export interface OpnnRVO {
   no?: 1
 
   /** 작성자암호화성명 */
-  wrtrEncptFlnm?: string
+  encptWrtrFlnm?: string
 
   /** 작성자암호화전화번호 */
-  wrtrEncptTelno?: string
+  encptWrtrTelno?: string
 
   /** 작성구분코드 */
   wrtSeCd?: string
@@ -103,16 +116,19 @@ export interface OpnnRVO {
   pbptCn?: string
 
   /** 요청사항 */
-  dmndMttr?: string
+  dmndMttrCn?: string
 
   /** 요청사항상세내용 */
   dmndMttrDtlCn?: string
 
   /** 참고사항 */
-  refMttr?: string
+  refMttrCn?: string
 
-  /** 첨부파일일련번호 */
-  atchFileSn?: string
+  /** 내부참고사항내용 */
+  insdRefMttrCn?: string
+
+  /** 첨부파일그룹아이디 */
+  atchFileGroupId?: string
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -131,10 +147,10 @@ export interface OpnnRVO {
  */
 export interface OpnnListPVO {
   /** 작성자암호화성명 */
-  wrtrEncptFlnm?: string
+  encptWrtrFlnm?: string
 
   /** 작성자암호화전화번호 */
-  wrtrEncptTelno?: string
+  encptWrtrTelno?: string
 
   /** 작성구분코드 */
   wrtSeCd?: string
@@ -143,16 +159,19 @@ export interface OpnnListPVO {
   pbptCn?: string
 
   /** 요청사항 */
-  dmndMttr?: string
+  dmndMttrCn?: string
 
   /** 요청사항상세내용 */
   dmndMttrDtlCn?: string
 
   /** 참고사항 */
-  refMttr?: string
+  refMttrCn?: string
 
-  /** 첨부파일일련번호 */
-  atchFileSn?: string
+  /** 내부참고사항내용 */
+  insdRefMttrCn?: string
+
+  /** 첨부파일그룹아이디 */
+  atchFileGroupId?: string
 
   /** 등록자아이디 */
   rgtrId?: string
