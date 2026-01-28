@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Box, List, ListItem, ListItemButton, ListItemText, Collapse } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { lnbStyles } from './Lnb.styles';
+import { lnbStyles } from '../../styles/ko/layout/Lnb.styles';
 import { useAppSelector } from '@/store/hooks';
 
 type SideItem = {

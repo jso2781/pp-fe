@@ -7,7 +7,7 @@ import { Download as DownloadIcon} from '@mui/icons-material';
 import ScreenShell from '../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import KoglLicense from '@/contexts/KoglLicense';
+import KoglLicense from '@/components/common/KoglLicense';
 
 export default function KIDS_PP_US_DI_02() {
   // --- lnb ---

@@ -8,7 +8,7 @@ import React, { useMemo } from 'react';
 import { Box, Typography, Link, Button} from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import KoglLicense from '@/contexts/KoglLicense';
+import KoglLicense from '@/components/common/KoglLicense';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 // --- lnb ---
@@ -34,9 +34,9 @@ export default function DurUnderstand() {
             <Typography component="h2" className="lnb-tit">
               <span>DUR 정보</span>
             </Typography>
-            {/* <Box className="lnb-list">
+            <Box className="lnb-list">
               <Lnb items={sideItems} />
-            </Box> */}
+            </Box>
           </Box>
         </Box>
 

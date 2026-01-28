@@ -5,7 +5,7 @@ import { Box, Stack, Typography, Link, Button } from '@mui/material';
 import ScreenShell from '../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import KoglLicense from '@/contexts/KoglLicense';
+import KoglLicense from '@/components/common/KoglLicense';
 
 export default function KIDS_PP_US_NO_02() {
   const dispatch = useAppDispatch();
