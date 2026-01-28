@@ -1009,6 +1009,9 @@
       font-size: var(--fs-14);
       color: var(--color-text-3);
     }
+    .board-info{
+      margin:0;
+    }
   }
 
   .table-responsive {
@@ -1118,6 +1121,18 @@
     tbody th {
       font-weight: 400;
     }
+  }
+  .no-data{ 
+    min-height:150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    padding:0px 0 0 0;
+    background: url(/img/ico_exclamation_circle03.svg) no-repeat top 20px center;
+    font-size: 15px;
+    color:var(--color-text-1);
   }
 }
 
@@ -1357,7 +1372,7 @@
   .guide-title {
     display: flex;
     align-items: center;
-    font-size: 18px;
+    font-size: var(--fs-24);
     font-weight: 700;
     color: #1a1a1a;
     margin-bottom: 16px;
@@ -1587,4 +1602,231 @@
       }
     }
   }
+}
+
+/* ==========================================================================
+   내가 먹는 약의 DUR 정보
+   ========================================================================== */
+.info-drug-box {
+  margin:0 0 40px 0;
+  padding: 40px 40px 40px 110px;
+  background: #EEF2F7 url('/img/ico_drug_title.svg') no-repeat left 40px top 30px;
+  border-radius: 12px;
+
+  @media (max-width: 1024px) {
+    padding:20px 20px 20px 100px;
+  }
+
+  .drug-title {
+    position: relative;
+    font-size: var(--fs-24);
+    font-weight: 700;
+    margin-bottom: 8x;
+    display: flex;
+    align-items: center;
+  }
+
+  .drug-title--sub {
+    font-size: var(--fs-18);
+    font-weight: 700; 
+    margin:0 0 5px 0; 
+  }
+
+  .drug-list {
+    li {
+      position: relative;
+      padding-left: 15px;
+      font-size: var(--fs-18); 
+      line-height: 1.6;
+
+      &::before {
+        content: "*";
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    padding: 20px;
+    .drug-title { font-size: 20px; }
+    .drug-title--sub li { font-size: 16px; }
+    .drug-list li { font-size: 16px; }
+  }
+}
+
+.drug-step-box {
+  margin-bottom: 20px;
+
+  .drug-step-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+
+    li {
+      display: flex;
+      align-items: flex-start; 
+      gap: 12px; 
+      font-size: var(--fs-18);
+
+      .step-num {
+        flex-shrink: 0;
+        font-weight: 700;
+        line-height: 1.4;
+      }
+
+      .step-content {
+        .step-text {
+          font-weight: 700;
+          line-height: 1.4;
+          word-break: keep-all;
+        }
+
+        .step-desc {
+          font-weight: 400;
+          line-height: 1.5;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+.drug-selection-area {
+  position: relative;
+  margin-top: 40px;
+  align-items: stretch;
+  border: 1px solid #D8D8D8;
+  border-radius: 8px;
+  box-sizing: border-box;
+  .drug-select-box{
+    position: relative;
+    display: flex;
+    border-bottom: 1px solid #D8D8D8;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 55%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background-color: #D8D8D8;
+      z-index: 2;
+    }
+  }
+
+
+  .step-title-group {
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 30px 15px;
+    border-bottom: 1px solid #D8D8D8;
+    box-sizing: border-box;
+
+    .search-filter-section {
+      width: 100%; 
+      .board-search {
+        margin: 0; padding: 0; border: none;
+        display: flex; gap: 8px; 
+      }
+    }
+
+    .step-label {
+      margin:0 0 15px 0;
+      font-size: var(--fs-20);
+      font-weight: 700;
+      padding-left: 50px;
+      span {display: block;}
+    }
+  }
+
+  .search-section .step-label {
+    background: url('/img/ico_drug_search.png') no-repeat left top;
+  }
+  .basket-section .step-label {
+    background: url('/img/ico_drug_basket.png') no-repeat left top;
+  }
+
+  // 공통 테이블 컨테이너
+  .base-table-container {
+    margin: 0; 
+    .base-table-meta{display: block; height:60px;
+      .board-info{
+        justify-content: end;
+        align-items: flex-end;
+        margin-top: auto;
+        height:100%;
+
+      }
+    }
+    .base-table{
+      thead th {
+        padding:4px;
+        font-size:14px;
+      }
+      tbody th, tbody td {
+        padding:4px;
+        font-size:14px;
+      }
+    }
+  }
+
+  // 1단계: 왼쪽
+  .search-section {
+    flex: 0 0 55%;
+    min-width: 0;
+    .result-table-box { padding:15px 15px 15px 15px; }
+  }
+
+  // 2단계: 오른쪽
+  .basket-section {
+    flex: 0 0 45%;
+    min-width: 0;
+    position: relative; 
+
+    /* .base-table-meta {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      margin: 0;
+      z-index: 3;
+    } */
+
+    .basket-content-box {position: relative;
+      padding:15px 15px 15px 15px;
+    }
+  }
+
+  .btn-group{
+    margin:40px 0;
+    Button{
+      width:100%;
+      max-width:360px;
+    }
+  }
+}
+
+
+// 반응형
+@media (max-width: 1024px) {
+  .drug-selection-area {
+    flex-direction: column;
+    &::after { display: none; }
+    .search-section, .basket-section { flex: 0 0 100%; width: 100%; }
+    .search-section { border-bottom: 1px solid #D8D8D8; }
+    .step-title-group { height: auto; padding: 20px; }
+    .basket-section .base-table-meta { position: static; padding: 0 20px; margin-top: 10px; }
+  }
+  
 }

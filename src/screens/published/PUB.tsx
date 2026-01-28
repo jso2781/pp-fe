@@ -1,12 +1,15 @@
 import React from 'react'
 import { useState } from "react";
 import { Box, Button, Typography, TextField, Stack, LinearProgress, Tabs, Tab } from '@mui/material';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Switch as BaseSwitch } from '@base-ui/react';
 import { Download as DownloadIcon} from '@mui/icons-material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ScreenShell from '../ScreenShell';
 
 export default function PUB() {
   
+  //스위치
+  const [isCheck, setIsCheck] = useState(false);
 
   // 탭
   const categoryNaming: Record<string, string> = {
@@ -54,6 +57,20 @@ export default function PUB() {
                 {/* --- 본문 시작 --- */}
 
 
+                <h3 className="section-title">스위치</h3>
+                <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
+                  <BaseSwitch.Root
+                    className="base_switch_root"
+                    checked={isCheck}
+                    onCheckedChange={(checked) => setIsCheck(checked)}
+                  >
+                    <BaseSwitch.Thumb className="base_switch_thumb" />
+                  </BaseSwitch.Root>
+                  <Typography component="p" className="switch_label">
+                    {isCheck ? '사용 중' : '미사용'}
+                  </Typography>
+                </Stack>
+               
                 <h3 className="section-title">탭</h3>
                 {/* 탭라인 스타일 */}
                 <Box className="category-tabs" role="navigation" aria-label="기본 카테고리 선택">
@@ -429,6 +446,7 @@ export default function PUB() {
                   </Button>
                 </Box>
 
+                
 
                 {/* --- 본문 끝 --- */}
                 </Box>

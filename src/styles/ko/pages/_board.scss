@@ -3,7 +3,7 @@
 .board-search {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  //flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -13,6 +13,7 @@
   border: 1px solid var(--border-2);
 
   @media (max-width: 1024px) {
+    flex-wrap: wrap;
     padding: 10px 10px 10px 10px !important;
   }
 
