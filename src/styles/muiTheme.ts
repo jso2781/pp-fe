@@ -77,7 +77,7 @@ export const muiTheme = createTheme({
     divider: '#D8D8D8',
   },
   typography: { 
-    fontFamily: "'Pretendard', sans-serif" 
+    fontFamily: "'Pretendard GOV', sans-serif" 
   },
   shape: { borderRadius: 8 },
   components: {
