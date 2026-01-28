@@ -21,44 +21,42 @@ export const existsInstByBrno = createAsyncThunk<ExprtApplyRVO, ExprtApplyPVO | 
   }
 )
 
-// /**
-//  * 대국민포털_전문가회원전환신청관리 이메일 중복체크 
-//  */
-// export const existbyEmail = createAsyncThunk<ExprtInfoRVO, ExprtInfoPVO | undefined>(
-//   '/exprt/getExprtInfo',
-//   async (params: ExprtInfoPVO = {}) => {
-//     try {
-//       const res = await https.post(existbyEmailApiPath(), params);
+/**
+ * 대국민포털_전문가회원전환신청관리 이메일 중복체크 
+ */
+export const existbyEmail = createAsyncThunk<boolean, ExprtApplyPVO | undefined, { rejectValue: string }>(
+  '/exprt/apply/existbyemail',
+  async (params: ExprtApplyPVO = {}, { rejectWithValue }) => {
+    try {
+      const res = await https.post(existbyEmailApiPath(), params);
+      const payload = res.data?.data?.isExists;
+      return payload;
+    }
+    catch (e) {
+      console.log("ExprtInfoThunks existbyEmail error!!");
+      return rejectWithValue('ExprtInfoThunks existbyEmail error!!');
+    }
+  }
+)
 
-//       const payload = res.data;
-
-//       return payload;
-//     }
-//     catch (e) {
-//       console.log("ExprtInfoThunks getExprtInfo mockExprtInfoList=",mockExprtInfoList);
-//       return (mockExprtInfoList).find((n) => 
-//         String(n.mbrNo) === String(params.mbrNo)
-//       ) || null;
-//     }
-//   }
-// )
-
-// /**
-//  * 대국민포털_전문가회원전환신청관리 전환 신청
-//  */
-// export const expertApply = createAsyncThunk<number, ExprtInfoPVO>(
-//   '/exprt/saveExprtInfo',
-//   async (params: ExprtInfoPVO) => {
-//     try {
-//       const res = await https.post(expertApplyApiPath(), params);
-
-//       const saveCnt = res.data;
-
-//       return saveCnt;
-//     }
-//     catch (e) {
-//       console.log("ExprtInfoThunks saveExprtInfo error!!");
-//       return -1;
-//     }
-//   }
-// )
+/**
+ * 대국민포털_전문가회원전환신청관리 전환 신청
+ */
+export const expertApply = createAsyncThunk<string, FormData, { rejectValue: string }>(
+  '/exprt/apply',
+  async (formData: FormData, { rejectWithValue }) => {
+    try {
+      const res = await https.post(expertApplyApiPath(), formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const payload = res.data?.data?.result;
+      return payload;
+    }
+    catch (e) {
+      console.log("ExprtApplyThunks expertApply error!!", e);
+      return rejectWithValue('전문가 회원 전환 신청에 실패했습니다.');
+    }
+  }
+)

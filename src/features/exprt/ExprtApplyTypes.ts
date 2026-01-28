@@ -34,7 +34,7 @@ export interface ExprtApplyTaskVO {
 }
 
 /**
- * 대국민포털_전문가회원전환신청관리 조회 정보 
+ * 대국민포털_전문가회원전환신청관리 사업자등록번호 조회 정보 
  */
 export interface ExprtApplyRVO {
 

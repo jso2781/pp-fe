@@ -7,11 +7,12 @@
 import DepsLocation from '@/components/common/DepsLocation';
 import FileUploadField from '@/components/form/FileUploadField';
 import { useDialog } from '@/contexts/DialogContext';
-import { CheckCircle } from '@mui/icons-material';
+import { existbyEmail, existsInstByBrno, expertApply } from '@/features/exprt/ExprtApplyThunks';
+import { ExprtApplyPVO, ExprtApplyTaskVO } from '@/features/exprt/ExprtApplyTypes';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   Box,
   Button,
-  Card,
   Checkbox,
   FormControlLabel,
   FormHelperText,
@@ -26,9 +27,6 @@ import {
   Typography
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { existsInstByBrno } from '@/features/exprt/ExprtApplyThunks';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { ExprtApplyTaskVO } from '@/features/exprt/ExprtApplyTypes';
 
 type StepRefs = {
   step1: HTMLDivElement | null;
@@ -38,9 +36,9 @@ type StepRefs = {
 
 export default function ExpertMemberApply() {
   const dispatch = useAppDispatch();
+  const userInfo = useAppSelector((state) => state.auth.userInfo);
 
   const { showDialogBackdrop } = useDialog();
-
   const handleCustomConfirm = () => {
     showDialogBackdrop({
       message: '등록 하시겠습니까?',
@@ -48,9 +46,18 @@ export default function ExpertMemberApply() {
       type: 'confirm',
       confirmText: '확인',
       cancelText: '취소',
-      onConfirm: () => setCurrentStep(2),
+      onConfirm: () => apply(),
     })
   }
+
+  const [exprtApplyPVO, setExprtApplyPVO] = useState<ExprtApplyPVO>({
+    mbrNo: userInfo?.mbrNo,
+    mbrId: userInfo?.mbrId,
+    brno: '',
+    email: '',
+    exprtHdofYn: 'Y',
+    taskSystemCodes: [],    
+  });
 
   const [currentStep, setCurrentStep] = useState(0);
   const stepRefs = useRef<StepRefs>({
@@ -84,11 +91,11 @@ export default function ExpertMemberApply() {
 
   // 업무 시스템 목록 (예시 데이터)
   const businessSystems = [
-    { id: 'ecrf', label: 'eCRF 업무' },
-    { id: 'system2', label: '업무 시스템 2' },
-    { id: 'system3', label: '업무 시스템 3' },
-    { id: 'system4', label: '업무 시스템 4' },
-    { id: 'system5', label: '업무 시스템 5' },
+    { label: '업무 시스템 1', value: 'SYS1' },
+    { label: '업무 시스템 2', value: 'SYS2' },
+    { label: '업무 시스템 3', value: 'SYS3' },
+    { label: '업무 시스템 4', value: 'SYS4' },
+    { label: '업무 시스템 5', value: 'SYS5' },
   ];
 
   // 단계 변경 시 스크롤 이동
@@ -130,38 +137,42 @@ export default function ExpertMemberApply() {
           number: businessNumber,
           task: result.taskSystemList ?? [],
         });
+
+        setExprtApplyPVO(prev => ({
+          ...prev,
+          brno: businessNumber,
+        }))        
+
         setCompanySearchError('');
       } else {
         setCompanySearchError('조회하신 업체는 전문가회원 업무 시스템 사용이 불가합니다. 확인 후 신청해주세요.');        
       }      
     }
-
-    // 예시: 조회 성공 케이스
-    // if (businessNumber === '1234567890') {
-    //   setSelectedCompany({
-    //     name: '한국제약회사',
-    //     number: '123-23-45678',
-    //     task: [],
-    //   });
-    //   setCompanySearchError('');
-    // } else {
-    //   setCompanySearchError('조회하신 업체명이 없습니다. 다시 입력하여 조회해주세요.');
-    //   setSelectedCompany(null);
-    // }
   };
 
   // 이메일 중복확인
-  const handleCheckEmailDuplicate = () => {
+  const handleCheckEmailDuplicate = async () => {
     if (!organizationEmail || !organizationEmail.includes('@')) {
       setEmailDuplicateMessage('올바른 이메일 주소를 입력해주세요.');
       setEmailDuplicateChecked(false);
       return;
     }
 
-    // TODO: 실제 API 호출로 대체
-    // 예시: 사용 가능한 경우
-    setEmailDuplicateChecked(true);
-    // setEmailDuplicateMessage('사용 가능한 이메일입니다.');
+    const result = await dispatch(existbyEmail({ 
+      email: organizationEmail,
+    })).unwrap();    
+
+    if (result) {
+      setEmailDuplicateChecked(false);  
+      setEmailDuplicateMessage('입력하신 기관 이메일은 중복되어 사용할 수 없습니다. 다시 입력해주세요.');      
+    } else {
+      setEmailDuplicateChecked(true);  
+
+      setExprtApplyPVO(prev => ({
+        ...prev,
+        email: organizationEmail,
+      }))         
+    }
   };
 
   // 업무 시스템 선택 변경
@@ -172,6 +183,38 @@ export default function ExpertMemberApply() {
         : [...prev, systemId]
     );
   };
+
+  useEffect(() => {
+      setExprtApplyPVO(prev => ({
+        ...prev,
+        taskSystemCodes: selectedSystems,
+      }))         
+  }, [selectedSystems]);
+
+  // 전환 신청
+  async function apply() {
+    try {
+      const formData = new FormData();
+      formData.append(
+        'payload',
+        new Blob([JSON.stringify(exprtApplyPVO)], { type: 'application/json' }),
+      );
+      formData.append('file', uploadedFiles[0]);
+
+      const result = await dispatch(expertApply(formData)).unwrap();
+      if (result === 'SUCCESS') {
+        setCurrentStep(2);
+      }
+    } catch (error) {
+      console.error('전문가 회원 전환 신청 실패:', error);
+      showDialogBackdrop({
+        message: '전문가 회원 전환 신청에 실패했습니다. 다시 시도해주세요.',
+        title: '신청 실패',
+        type: 'alert',
+        confirmText: '확인',
+      });
+    }
+  }
 
   // Step 1 완료 조건
   const canCompleteStep1 = selectedCompany !== null;
@@ -207,27 +250,7 @@ export default function ExpertMemberApply() {
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)}KB`;
     return `${(bytes / 1024 / 1024).toFixed(2)}MB`;
   };
-
-  // 파일 추가 처리 (크기 검증 포함)
-  const handleFilesChange = (files: File[]) => {
-    const maxSizeMB = 20;
-    const maxSizeBytes = maxSizeMB * 1024 * 1024;
-    
-    const errors: Array<{ index: number; message: string }> = [];
-    
-    files.forEach((file, index) => {
-      if (file.size > maxSizeBytes) {
-        errors.push({
-          index,
-          message: `등록 가능한 파일 용량을 초과하였습니다. 20MB 미만의 파일만 등록할 수 있습니다.`,
-        });
-      }
-    });
-    
-    setFileErrors(errors);
-    setUploadedFiles(files);
-  };
-
+  
   // 파일 삭제 시 에러도 제거
   const handleDeleteFile = (index: number) => {
     setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
@@ -505,6 +528,8 @@ export default function ExpertMemberApply() {
                         value={uploadedFiles}
                         onChange={setUploadedFiles}
                         accept=".pdf,.png,.jpg,.jpeg"
+                        multiple={false}
+                        maxFiles={1}
                         maxFileSizeMB={10}
                         maxTotalSizeMB={10}
                         helperText="PDF, PNG, JPG 형식의 10MB 이하의 파일을 업로드해주세요."
@@ -558,13 +583,13 @@ export default function ExpertMemberApply() {
                     <h3 className="form-section-title">업무 시스템 선택 <span className="necessary">(필수)</span></h3>
                     <Box className="bordered-box">
                       <Stack spacing={1}>
-                        {businessSystems.map((system) => (
+                        {selectedCompany?.task.map((system) => (
                           <FormControlLabel
-                            key={system.id}
+                            key={system.value}
                             control={
                               <Checkbox
-                                checked={selectedSystems.includes(system.id)}
-                                onChange={() => handleSystemToggle(system.id)}
+                                checked={selectedSystems.includes(system.label ?? '')}
+                                onChange={() => handleSystemToggle(system.label ?? '')}
                               />
                             }
                             label={

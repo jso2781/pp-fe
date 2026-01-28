@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { existsInstByBrno, existbyEmail, expertApply } from './ExprtApplyThunks'
+import { existbyEmail, existsInstByBrno, expertApply } from './ExprtApplyThunks'
 import { ExprtApplyRVO } from './ExprtApplyTypes'
 
 /**
@@ -7,6 +7,8 @@ import { ExprtApplyRVO } from './ExprtApplyTypes'
  */
 export interface ExprtApplyState {
   current: ExprtApplyRVO | null
+  existEmailYn: boolean | null
+  applyResult: string | null
   loading: boolean
   error: string | null
 }
@@ -16,6 +18,8 @@ export interface ExprtApplyState {
  */
 const initialState: ExprtApplyState = {
   current: null,
+  existEmailYn: null,
+  applyResult: null,
   loading: false,
   error: null
 }
@@ -42,6 +46,30 @@ const ExprtApplySlice = createSlice({
         state.loading = false;
         state.error = (action.payload as string) || action.error?.message || 'Failed to load Brno';
       })
+      .addCase(existbyEmail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(existbyEmail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.existEmailYn = action.payload || false;
+      })
+      .addCase(existbyEmail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || action.error?.message || 'Failed to load Email';
+      })      
+      .addCase(expertApply.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(expertApply.fulfilled, (state, action) => {
+        state.loading = false;
+        state.applyResult = action.payload || null;
+      })
+      .addCase(expertApply.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || action.error?.message || 'Failed to Apply';
+      })            
   }
 });
 
