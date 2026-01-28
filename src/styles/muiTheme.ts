@@ -145,25 +145,31 @@ export const muiTheme = createTheme({
         },
         ['sizeXsmall' as any]: { 
           minHeight: 32,
+          fontWeigh: 400,
           fontSize: '16px',
           padding: '0 8px',
           minWidth: 'auto',
           borderRadius: 4,
+          '@media (max-width: 1024px)': { 
+            fontSize: '14px', 
+            padding: '0 6px', 
+            minHeight: 25, 
+          },
         },
         sizeSmall: { height: 36, fontSize: 13, padding: '0 12px' },
         sizeMedium: { 
           height: 48, 
           fontSize: 15, 
           padding: '0 20px',
-          // 1024px 이하 반응형 조절
-          '@media (max-width: 1024px)': { height: 44, padding: '0 16px' },
-          '@media (max-width: 599px)': { height: 44, padding: '0 16px' },
+          '@media (max-width: 1024px)': { 
+            height: 44, 
+            padding: '0 16px' 
+          },
         },
         sizeLarge: { 
           height: 56, 
           fontSize: 17, 
           padding: '0 24px',
-          // [반응형] 1024px 이하에서 대형 사이즈 축소
           '@media (max-width: 1024px)': {
             height: 48,
             fontSize: 16,
