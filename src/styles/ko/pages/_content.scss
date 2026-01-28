@@ -997,6 +997,10 @@
 .base-table-container {
   margin: 20px 0;
 
+  @media (max-width: 1024px) {
+    margin: 10px 0;
+  }
+
   .base-table-meta {
     display: flex;
     justify-content: flex-end;
@@ -1009,25 +1013,73 @@
 
   .table-responsive {
     width: 100%;
+    
+    //스크롤바
+    &::-webkit-scrollbar {
+      width: 8px; 
+    }
 
+    &::-webkit-scrollbar-track {
+      background: #EEF2F7; /* 스크롤바 배경 (레일) */
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #464C53; /* 스크롤바 막대 색상 */
+      border-radius: 10px;
+      border: 2px solid #EEF2F7; /* 막대와 레일 사이의 여백 효과 */
+
+      &:hover {
+        background: #999; 
+      }
+    }
+    // 가로스크롤
     &.has-scroll {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       
       .base-table {
-        min-width: 600px;
+        min-width: 720px;
         table-layout: auto;
       }
-    }
 
-    @media (min-width: 1024px) {
-      overflow-x: visible; 
-      &.has-scroll .base-table {
-        min-width: 100%;
-        table-layout: fixed;
+      @media (min-width: 1024px) {
+        overflow-x: visible; 
+        .base-table {
+          min-width: 100%;
+          table-layout: fixed;
+        }
       }
     }
 
+    // 세로스크롤
+    &.has-vscroll {
+      max-height: 250px;
+      overflow-y: auto;
+      border-top: 1px solid #B9B9B9; 
+      border-bottom: 1px solid #B9B9B9;
+
+      .base-table {
+        border-top: none; 
+        border-bottom: none;
+
+        thead th {
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          background-color: #EEF2F7;
+          //box-shadow: inset 0 -1px 0 #B9B9B9; 
+          border-top: none;
+          border-bottom: none;
+        }
+        tbody tr:last-child td,
+        tbody tr:last-child th {
+          border-bottom: none;
+        }
+      }
+    }
+
+    // 스크롤이 없을 때 기본 상태
     &:not(.has-scroll) {
       overflow-x: hidden;
       .base-table {
@@ -1049,7 +1101,7 @@
       padding: 9px;
       background: #EEF2F7;
       border: 1px solid #B9B9B9;
-      border-bottom: none;
+      border-bottom:none;
     }
 
     tbody th, tbody td {
@@ -1452,13 +1504,11 @@
         padding: 10px 20px 10px 0px; 
         display: flex;
         flex-direction: column;
-        /* center 대신 flex-start로 변경하여 첫 줄부터 쌓이게 함 */
         justify-content: flex-start; 
         gap: 8px;
 
         .detail-info-row {
           display: flex;
-          /* 중요: 텍스트와 버튼은 중앙 정렬하되, row 자체가 상단 패딩에 영향받음 */
           align-items: flex-start; 
           justify-content: space-between;
           width: 100%;
@@ -1466,17 +1516,14 @@
           .text {
             font-size: 18px;
             font-weight: 700;
-            /* line-height가 dt와 동일해야 첫 줄이 맞음 */
             line-height: 1.5; 
             word-break: break-all;
-            /* 텍스트가 버튼보다 위아래로 튀지 않게 조정 */
           }
 
           .btn-detail {
             margin-left: 20px;
             flex-shrink: 0; 
             background-color: #fff;
-            /* 버튼이 텍스트 라인을 밀어내지 않도록 높이 조절 */
             transform: translateY(-2px); 
           }
         }
@@ -1496,6 +1543,48 @@
     }
     dd {
       padding: 12px 15px;
+    }
+  }
+}
+
+/* DUR 성분명 팝업 */
+.ingredient-popup-wrapper {
+  padding: 30px;
+
+  .detail-info-row{
+    .text{margin:0 0 5px 0;}
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px 15px; 
+  }
+
+  .ingredient-result-header {
+    display: flex;
+    align-items: center;
+    font-size: var(--fs-20);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #D8D8D8;
+
+    @media (max-width: 768px) {
+      flex-wrap: wrap; 
+      gap: 4px 0;
+    }
+
+    .name {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 1px;
+        height: 14px;
+        background-color: #ddd;
+        margin: 0 12px;
+      }
     }
   }
 }

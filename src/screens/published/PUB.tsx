@@ -129,12 +129,12 @@ export default function PUB() {
                 </Box>
 
                 <h3 className="section-title">테이블</h3>
-                <div className="base-table-container">
-                  <div className="base-table-meta">
+                <Box className="base-table-container">
+                  <Box className="base-table-meta">
                     <p className="update-date">(2025.07.14 기준)</p>
-                  </div>
+                  </Box>
                   
-                  <div className="table-responsive">
+                  <Box className="table-responsive">
                     <table className="base-table">
                       <caption className="sr-only">테이블제목</caption>
                       <colgroup>
@@ -164,16 +164,12 @@ export default function PUB() {
                         </tr>
                       </tbody>
                     </table>
-                  </div>
-                </div>
+                  </Box>
+                </Box>
 
-                <h3 className="section-title">테이블 모바일 스크롤</h3>
-                <div className="base-table-container">
-                  <div className="base-table-meta">
-                    <p className="update-date">(2025.07.14 기준)</p>
-                  </div>
-                  
-                  <div className="table-responsive has-scroll">
+                <h3 className="section-title">테이블 모바일 스크롤 (가로)</h3>
+                <Box className="base-table-container">
+                  <Box className="table-responsive has-scroll">
                     <table className="base-table">
                       <caption className="sr-only">테이블제목</caption>
                       <colgroup>
@@ -203,8 +199,54 @@ export default function PUB() {
                         </tr>
                       </tbody>
                     </table>
-                  </div>
-                </div>
+                  </Box>
+                </Box>
+
+
+                <h3 className="section-title">테이블 모바일 스크롤 (세로)</h3>
+                <Box className="base-table-container">
+                  <Box className="table-responsive has-vscroll">
+                    <table className="base-table">
+                      <caption className="sr-only">테이블제목</caption>
+                      <colgroup>
+                        <col />
+                        <col style={{ width: '30%' }} />
+                      </colgroup>
+                      <thead>
+                        <tr>
+                          <th scope="col">정보 유형</th>
+                          <th scope="col">정보 건수</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>병용금기</td>
+                          <td>1,450</td>
+                        </tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                        <tr><td>특정연령대금기</td><td>207</td></tr>
+                      </tbody>
+                    </table>
+                  </Box>
+                </Box>
 
                 <h3 className="section-title">폼</h3>
                 <Box className="bordered-box">

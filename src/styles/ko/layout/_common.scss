@@ -30,6 +30,26 @@
   cursor: not-allowed !important;
 }
 
+.MuiButton-root {
+  // 모든 버튼의 endIcon 마진 제거
+  .MuiButton-endIcon {
+    margin-left: 0; 
+    
+    // 아이콘 크기를 텍스트와 맞추고 싶을 때
+    svg {
+      font-size: 1.2rem; 
+    }
+  }
+
+  // startIcon도 쓰고 계신다면 같이 제거
+  .MuiButton-startIcon {
+    margin-right: 0;
+  }
+
+  // 아이콘과 텍스트 사이의 간격은 gap으로 세밀하게 조절 (0~4px 추천)
+  gap: 2px; 
+}
+
 /* 폰트 */
 .txt-1 { color: var(--color-text-1) !important; }
 .txt-2 { color: var(--color-text-2) !important; }
@@ -53,6 +73,30 @@
 .fw-500 { font-weight: var(--fw-500); }
 .fw-600 { font-weight: var(--fw-600); }
 .fw-700 { font-weight: var(--fw-700); }
+
+/* Text Align */
+.tal { text-align: left !important; }
+.tac { text-align: center !important; }
+.tar { text-align: right !important; }
+
+/* Vertical Align */
+.vat { vertical-align: top !important; }
+.vam { vertical-align: middle !important; }
+.vab { vertical-align: bottom !important; }
+
+/* Display */
+.db { display: block !important; }
+.di { display: inline !important; }
+.dib { display: inline-block !important; }
+.df { display: flex !important; }
+.dn { display: none !important; }
+
+/* Float */
+.fl { float: left !important; }
+.fr { float: right !important; }
+.fn { float: none !important; }
+.clearfix::after { content: ""; display: block; clear: both; }
+
 
 /* 스킵네비 */
 #skip-navigation{position:absolute;left:0;top:0;width:100%;text-align:center;z-index:9999}
