@@ -169,11 +169,38 @@ export default function DepsLocation() {
       pattern: /^\/[A-Za-z]{2}\/expert\/ExpertMemberApply(\/)?(\d+)?$/,
       labels: ["usrSwtReg"] // 전문가 회원 전환 신청
     },
+    {
+      pattern: /^\/[A-Za-z]{2}\/etc\/Terms(\/)?(\d+)?$/,
+      labels: ["customerCenter", "termsOfUse"] // 고객센터 > 이용약관
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/etc\/PrivacyPolicy(\/)?(\d+)?$/,
+      labels: ["customerCenter", "privacyPolicy"] // 고객센터 > 개인정보처리방침
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/etc\/CctvPolicy(\/)?(\d+)?$/,
+      labels: ["customerCenter", "cctvPolicy"] // 고객센터 > 고정형 영상정보처리기기 운영관리방침
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/etc\/EmailDeny(\/)?(\d+)?$/,
+      labels: ["customerCenter", "rejectUnAuthorizedEmail"] // 고객센터 > 이메일 무단수집 거부
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/DurUnderstand(\/)?(\d+)?$/,
+      labels: ["menuDur", "menuDurUnderstand"] // dur 정보 > dur 이해
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/DurProposal(\/)?(\d+)?$/,
+      labels: ["menuDur", "menuDurSuggest"] // dur 정보 > 의견 제안
+    }
   ], []);
+  
+  
+
+  
 
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기
   const { pathname } = useLocation();
-
   // pathname 변경 시에만 로그 출력 (StrictMode로 인한 중복 호출 방지)
   useEffect(() => {
     console.log("DepsLocation.tsx pathname="+pathname);

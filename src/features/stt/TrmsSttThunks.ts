@@ -82,15 +82,10 @@ export const getTrmsSttLatest = createAsyncThunk<TrmsSttRVO, TrmsSttPVO | undefi
   async (params: TrmsSttPVO = {}) => {
     try {
       const res = await https.post(getTrmsSttLatestApiPath(), params);
-
-      const payload = res.data;
-
-      // 서버가 TrmsSttRVO 형식으로 단 건 데이터를 반환함. 
+      const payload = res.data?.data?.trmsSttRVO;
       return payload;
     }
-    // 서버가 없거나 에러 나면 강제로 mock 데이터 사용 
     catch (e) {
-      // 개발/데모 환경용 fallback (백엔드 연동 시 제거 가능)
       console.log("TrmsSttThunks getTrmsStt mockTrmsSttList=",mockTrmsSttList);
       return (mockTrmsSttList).find((n) => 
         String(n.trmsSttCd) === String(params.trmsSttCd)
