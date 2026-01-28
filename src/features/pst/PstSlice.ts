@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectPstList, getPst } from './PstThunks'
-import { mockPstList, PstPVO, PstRVO, PstListPVO, PstListRVO, PstDVO  } from './PstTypes'
+import { getPst, selectPstList } from './PstThunks'
+import { PstRVO } from './PstTypes'
 
 /**
  * 대국민포털_게시물기본 정보 목록 조회(Redux 저장 구조) 

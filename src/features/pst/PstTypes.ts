@@ -1,59 +1,5 @@
 import { AtchRVO } from '../atch/AtchTypes'
 
-
-/**
- * 대국민포털_게시물기본 조회 목업 정보 
- */
-export const mockPstList = [
-  {
-    /** 순번 */
-    no: 1,
-
-    /** 게시판아이디 */
-    bbsId: 'XXX',
-
-    /** 게시물제목 */
-    pstTtl: 'XXX',
-
-    /** 게시물내용 */
-    pstCn: 'XXX',
-
-    /** 게시물공공누리저작권유형코드 */
-    pstKoglCprgtTypeCd: 'XXX',
-
-    /** 첨부파일아이디 */
-    atchFileId: 'XXX',
-
-    /** 썸네일아이디 */
-    thmbId: 'XXX',
-
-    /** 공지여부 */
-    ntcYn: 'XXX',
-
-    /** 삭제여부 */
-    delYn: 'XXX',
-
-    /** 작성자부서명 */
-    wrtrDeptNm: 'XXX',
-
-    /** 수정자부서명 */
-    mdfrDeptNm: 'XXX',
-
-    /** 등록자아이디 */
-    rgtrId: 'XXX',
-
-    /** 등록일시 */
-    regDt: '2026-01-23',
-    /** 수정자아이디 */
-    mdfrId: 'XXX',
-
-    /** 수정일시 */
-    mdfcnDt: '2026-01-23',
-    /** 조회수 */
-    pstInqCnt: 100
-  }
-]
-
 /**
  * 대국민포털_게시물기본 조회/입력/수정/저장 파라메터 정보 
  */

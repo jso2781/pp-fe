@@ -6,16 +6,17 @@ import { MainRVO } from './MainTypes'
 /**
  * 대국민포털_메인화면 컨텐츠 조회 
  */
-export const selectMainContents = createAsyncThunk<MainRVO, void>(
+export const selectMainContents = createAsyncThunk<MainRVO, void, { rejectValue: string }>(
   '/api/main',
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const res = await https.post(selectMainContentsPath(), null);
       const payload = res.data?.data;
       return payload;
     }    
     catch (e) {
-      console.log("Not found Main Contents");
-    }
+      console.log("MainThunks selectMainContents error!!");
+      return rejectWithValue('MainThunks selectMainContents error!!');
+    }    
   }
 )
