@@ -8,17 +8,22 @@ import DepsLocation from '@/components/common/DepsLocation';
 import { getTrmsSttLatest } from '@/features/stt/TrmsSttThunks';
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { useEffect } from 'react';
+import CleanHtml from '@/components/common/CleanHtml';
 
 export default function EmailDeny() {
   const dispatch = useAppDispatch();
-  const { current } = useAppSelector(s => s.stt);
+  const { current, loading } = useAppSelector(s => s.stt);
+  
   useEffect(() => {
     dispatch(getTrmsSttLatest({ trmsSttCd: 'STT_EML' }));
-  }, []);
+  }, [dispatch]);
+  
   return (
-    <div className="page notfound">
+    <div>
       <DepsLocation />
-      <div dangerouslySetInnerHTML={{ __html: current?.trmsSttCn }}></div>
+      <CleanHtml html={current?.trmsSttCn} loading={loading}/>
     </div>
   )
 }
+
+
