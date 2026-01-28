@@ -1,0 +1,146 @@
+[
+    {
+        "title": "주요 업무",
+        "depth2": [
+        {
+            "title": "의약품 이상사례보고",
+            "depth3": [
+            { "name": "이상사례 보고란?", "url": "/safety/report1" },
+            { "name": "KAERS란?", "url": "/safety/report2" },
+            { "name": "의약품이상사례", "url": "https://nedrug.mfds.go.kr/CCCBA03F010/getReport", "isNewWindow": true },
+            { "name": "의약외품(생리대 등)", "url": "https://nedrug.mfds.go.kr/CCCBA03F010/getReportQuasiDrug" },
+            { "name": "오프라인 보고", "url": "/safety/report5" },
+            { "name": "이상사례보고자료실", "url": "/safety/report6" },
+            { "name": "온라인보고방법 안내", "url": "/safety/report7" }
+            ]
+        },
+        {
+            "title": "의약품 부작용 보고 자료",
+            "depth3": [
+            { "name": "의약품 부작용 보고1", "url": "#" },
+            { "name": "의약품 부작용 보고2", "url": "#" },
+            { "name": "의약품 부작용 보고3", "url": "#" }
+            ]
+        },
+        {
+            "title": "의약품 안전관리",
+            "depth3": [
+            { "name": "약물감시용어", "url": "#" },
+            { "name": "부작용 인과관계규명", "url": "#" },
+            { "name": "유관기관", "url": "#" }
+            ]
+        },
+        {
+            "title": "의약품.의료정보.연계분석",
+            "depth3": [
+            { "name": "의약품.의료정보.연계분석1", "url": "#" },
+            { "name": "의약품.의료정보.연계분석2", "url": "#" },
+            { "name": "의약품.의료정보.연계분석3", "url": "#" }
+            ]
+        },
+        {
+            "title": "DUR 정보",
+            "depth3": [
+            { "name": "DUR 이해", "url": "/maintask/dur/DurUnderstand" },
+            { "name": "DUR 통합검색", "url": "#" },
+            { "name": "병용금기", "url": "#" },
+            { "name": "특정연령대금기", "url": "#" },
+            { "name": "임부금기", "url": "#" },
+            { "name": "효능군중복주의", "url": "#" },
+            { "name": "용량주의", "url": "#" },
+            { "name": "투여기간주의", "url": "#" },
+            { "name": "노인주의", "url": "#" },
+            { "name": "DUR 게시판", "url": "/maintask/dur/DurNoticeList" },
+            { "name": "DUR 제안", "url": "/maintask/dur/DurProposal" }
+            ]
+        },
+        {
+            "title": "부작용 피해구제",
+            "depth3": [
+            { "name": "제도소개", "url": "#" },
+            { "name": "피해구제 신청", "url": "#" },
+            { "name": "뉴스/소식", "url": "#" },
+            { "name": "자주하는 질문", "url": "https://nedrug.mfds.go.kr" }
+            ]
+        },
+        {
+            "title": "임상시험안전지원",
+            "depth3": [
+            { "name": "임상시험안전지원기관", "url": "#" },
+            { "name": "협약 안내", "url": "#" },
+            { "name": "중앙IRB신청", "url": "#" },
+            { "name": "임상시험헬프데스크", "url": "#" },
+            { "name": "공지사항", "url": "#" },
+            { "name": "자료실", "url": "#" }
+            ]
+        }
+        ]
+    },
+    {
+        "title": "정보공개",
+        "depth2": [
+        { 
+            "title": "정보공개", 
+            "depth3": [
+            { "name": "업무처리절차", "url": "#" },
+            { "name": "정보공개 청구", "url": "https://open.go.kr" },
+            { "name": "임직원국외출장", "url": "#" },
+            { "name": "원장 업무추진비 집행내역", "url": "#" }
+            ] 
+        },
+        { "title": "공공데이터 개방", "depth3": [] },
+        { 
+            "title": "경영공시", 
+            "depth3": [
+            { "name": "부패행위 징계현황", "url": "#" },
+            { "name": "징계기준", "url": "#" },
+            { "name": "징계현황", "url": "#" }
+            ] 
+        },
+        { "title": "사업실명제", "depth3": [] }
+        ]
+    },
+    {
+        "title": "기관소식",
+        "depth2": [
+        { "title": "공지사항", "url": "/notice", "depth3": [] },
+        { "title": "채용게시판", "depth3": [] },
+        { "title": "FAQ", "depth3": [] },
+        { "title": "국민신문고", "depth3": [] },
+        { "title": "보도자료", "depth3": [] },
+        { 
+            "title": "뉴스레터", 
+            "depth3": [
+            { "name": "첨단바이오 포커스", "url": "https://ltfu.mfds.go.kr" },
+            { "name": "마약류 안전정보지", "url": "#" },
+            { "name": "리플릿", "url": "#" }
+            ] 
+        },
+        { "title": "카드뉴스", "depth3": [] },
+        { "title": "동영상", "depth3": [] },
+        { "title": "자료실", "depth3": [] }
+        ]
+    },
+    {
+        "title": "기관소개",
+        "depth2": [
+            { "title": "기관장 인사말", "depth3": [] },
+            { "title": "역대 기관장", "depth3": [] },
+            { "title": "연혁", "depth3": [] },
+            { "title": "비전 및 목표", "depth3": [] },
+            { "title": "조직도", "depth3": [] },
+            { "title": "설립근거 및 관련법령", "depth3": [] },
+            { "title": "고객헌장", "depth3": [] },
+            { "title": "우리원동정", "depth3": [] },
+            { "title": "CI소개", "depth3": [] },
+            { 
+                "title": "윤리경영", 
+                "depth3": [
+                { "name": "클린신고센터", "url": "#" }
+                ] 
+            },
+            { "title": "캐릭터소개", "depth3": [] },
+            { "title": "오시는 길", "url": "https://www.drugsafe.or.kr/iwt/ds/ko/introduction/EgovLocation.do", "depth3": [] }
+        ]
+    }
+]
