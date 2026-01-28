@@ -221,7 +221,7 @@ export default function Router() {
               <Route path="/:lang/auth/FindPwModify" element={<LangElement byLang={{ ko: <FindPwModifyKo />, en: <FindPwModifyKo /> }} />} />
 
               {/* expert */}
-              <Route path="/:lang/expert/ExpertMemberApply" element={<LangElement byLang={{ ko: <ExpertMemberApplyKo />, en: <ExpertMemberApplyKo /> }} />} />                                  
+              <Route path="/:lang/expert/ExpertMemberApply" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertMemberApplyKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertMemberApplyKo /></ProtectedRoute> }} />} />                                  
 
               {/* etc */}
               <Route path="/:lang/etc/Terms" element={<LangElement byLang={{ ko: <TermsKo />, en: <TermsKo /> }} />} />
