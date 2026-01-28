@@ -6,7 +6,7 @@
  */
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import { LnbItem } from '@/features/common/CommonTypes';
+import { LnbItem } from '@/features/auth/MenuTypes';
 import { selectPstList } from '@/features/pst/PstThunks';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';

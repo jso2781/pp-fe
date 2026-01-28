@@ -37,7 +37,7 @@ import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
-import { LnbItem } from '@/features/common/CommonTypes';
+import { LnbItem } from '@/features/auth/MenuTypes';
 import { BOARD_CONFIG_GROUP, BoardKey } from '@/features/pst/PstConfig';
 
 function SideNav({ items }: { items: LnbItem[] }) {
