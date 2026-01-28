@@ -367,10 +367,10 @@ export default function KIDS_PP_US_DI_02() {
                           { id: 'bad', label: '불만족' },
                           { id: 'v-bad', label: '매우 불만족' }
                         ].map((item) => (
-                          <div key={item.id} className="evaluation-item">
+                          <Box key={item.id} className="evaluation-item">
                             <input type="radio" id={item.id} name="page-eval" value={item.id} className="a11y-radio" />
                             <label htmlFor={item.id} className="evaluation-label">{item.label}</label>
-                          </div>
+                          </Box>
                         ))}
                         <Button variant="contained" className="evaluation-btn">제출</Button>
                       </Box>
@@ -378,23 +378,23 @@ export default function KIDS_PP_US_DI_02() {
                   </Box>
 
                   <Box className="contact-box">
-                    <div className="info-item">
+                    <Box className="info-item">
                       <span className="info-label">업무 담당 부서</span>
                       <span className="info-value">정보화팀</span>
-                    </div>
+                    </Box>
                     
-                    <div className="info-item">
+                    <Box className="info-item">
                       <span className="info-label">업무 담당자</span>
                       <span className="info-value">하연경</span>
-                    </div>
+                    </Box>
                     
-                    <div className="info-item">
+                    <Box className="info-item">
                       <span className="info-label">전화번호</span>
                       <span className="info-value">
                         <a href="tel:02-2172-6738" className="info-tel">02-2172-6738</a>
                         <span className="info-sub">(응대시간: 평일 09:00 - 17:00, 국경일 및 휴일 제외)</span>
                       </span>
-                    </div>
+                    </Box>
                   </Box>
 
 
