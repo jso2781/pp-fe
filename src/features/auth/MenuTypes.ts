@@ -229,3 +229,24 @@ export interface MenuListRVO {
 export interface MenuDVO {
 }
 
+/**
+ * 대국민포털_메뉴기본 LNB 아이템 타입
+ */
+export type SideItem = {
+  key: string;
+  label: string;
+  disabled?: boolean;
+  children?: SideItem[];
+};
+
+// ✅ RootState 타입이 프로젝트에 있으면 그걸 쓰는 게 베스트.
+// 지금은 예시로 최소 형태만 잡아둠(컴파일 통과용).
+export type RootStateLike = {
+  menu: {
+    list: MenuRVO[]
+    loading: boolean
+    langSeCd: string | null
+    loaded: boolean
+    menuStructor: SideItem[]
+  }
+}

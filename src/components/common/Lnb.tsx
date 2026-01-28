@@ -3,13 +3,7 @@ import { Box, List, ListItem, ListItemButton, ListItemText, Collapse } from '@mu
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { lnbStyles } from '../../styles/ko/layout/Lnb.styles';
 import { useAppSelector } from '@/store/hooks';
-
-type SideItem = {
-  key: string;
-  label: string;
-  disabled?: boolean;
-  children?: SideItem[];
-};
+import { SideItem } from '@/features/auth/MenuTypes'
 
 type LnbProps = {
   /** (옵션) 기존처럼 직접 SideItem[]을 넘기고 싶을 때 사용 */

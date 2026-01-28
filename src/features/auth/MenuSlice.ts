@@ -1,6 +1,84 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectMenuList, getMenu, insertMenu, updateMenu, saveMenu, deleteMenu, SideItem } from './MenuThunks'
-import { mockMenuList, MenuPVO, MenuRVO, MenuListPVO, MenuListRVO, MenuDVO  } from './MenuTypes'
+import { selectMenuList, getMenu, insertMenu, updateMenu, saveMenu, deleteMenu } from './MenuThunks'
+import { mockMenuList, MenuPVO, MenuRVO, MenuListPVO, MenuListRVO, MenuDVO, SideItem } from './MenuTypes'
+
+/**
+ * LNB용 SideItem 구조체 변환
+ */
+function createLnbStructor(menuList: MenuRVO[]): SideItem[] {
+  if (!Array.isArray(menuList) || menuList.length === 0) {
+    return [];
+  }
+
+  // menuSn을 키로 하는 맵 생성
+  const menuMap = new Map<number, SideItem>();
+  const rootItems: SideItem[] = [];
+
+  // 먼저 모든 메뉴를 SideItem으로 변환하여 맵에 저장
+  menuList.forEach((menu) => {
+    if (menu.menuSn === undefined) return;
+
+    const key = menu.menuUrlAddr || `/menu/${menu.menuSn}`;
+    const sideItem: SideItem = {
+      key,
+      label: menu.menuNm || '',
+      disabled: menu.useYn === 'N',
+      children: []
+    };
+
+    menuMap.set(menu.menuSn, sideItem);
+  });
+
+  // 부모-자식 관계 구성
+  menuList.forEach((menu) => {
+    if (menu.menuSn === undefined) return;
+
+    const sideItem = menuMap.get(menu.menuSn);
+    if (!sideItem) return;
+
+    // 상위 메뉴가 있으면 자식으로 추가, 없으면 루트로 추가
+    if (menu.upMenuSn !== undefined && menu.upMenuSn !== null) {
+      const parentItem = menuMap.get(menu.upMenuSn);
+      if (parentItem) {
+        if (!parentItem.children) {
+          parentItem.children = [];
+        }
+        parentItem.children.push(sideItem);
+      } else {
+        // 부모가 맵에 없으면 루트로 추가
+        rootItems.push(sideItem);
+      }
+    } else {
+      // upMenuSn이 null이면 루트 메뉴
+      rootItems.push(sideItem);
+    }
+  });
+
+  // menuSeq 기준으로 정렬
+  const sortByMenuSeq = (items: SideItem[]): SideItem[] => {
+    return items
+      .map((item) => {
+        const menu = menuList.find((m) => {
+          if (item.key.startsWith('/menu/')) {
+            const menuSn = parseInt(item.key.replace('/menu/', ''));
+            return m.menuSn === menuSn;
+          }
+          return m.menuUrlAddr === item.key;
+        });
+
+        return { item, menuSeq: menu?.menuSeq || 0 };
+      })
+      .sort((a, b) => a.menuSeq - b.menuSeq)
+      .map(({ item }) => {
+        if (item.children && item.children.length > 0) {
+          item.children = sortByMenuSeq(item.children);
+        }
+        return item;
+      });
+  };
+
+  return sortByMenuSeq(rootItems);
+}
 
 /**
  * 대국민포털_메뉴기본 정보 목록 조회(Redux 저장 구조) 
@@ -61,8 +139,8 @@ const MenuSlice = createSlice({
         state.list = action.payload.list;
         state.totalCount = action.payload.totalCount;
         
-        // menuStructor 저장
-        state.menuStructor = action.payload.menuStructor || [];
+        // Lnb menuStructor 저장
+        state.menuStructor = createLnbStructor(action.payload.list);     
 
         // 어떤 언어로 로딩됐는지 기록 + loaded
         state.langSeCd = action.meta.arg?.langSeCd ?? state.langSeCd ?? null;
