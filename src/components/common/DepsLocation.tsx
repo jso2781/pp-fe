@@ -142,23 +142,23 @@ export default function DepsLocation() {
       labels: ["login", "idLogin", "findPassword", "passwordChange"] // 로그인 > 아이디 로그인 > 비밀번호 찾기 > 비밀번호 변경
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsNoticeList(\/)?(\d+)?$/,
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsNoticeList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
       labels: ["news", "noticeList"] // 기관소식 > 공지사항
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsJobNoticeList(\/)?(\d+)?$/,
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsJobNoticeList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
       labels: ["news", "employmentBoard"] // 기관소식 > 채용게시판
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsDataRoomList(\/)?(\d+)?$/,
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsDataRoomList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
       labels: ["news", "menuEduArchive"] // 기관소식 > 자료실
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsCardNewsList(\/)?(\d+)?$/,
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsCardNewsList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
       labels: ["news", "menuEduCard"] // 기관소식 > 카드뉴스
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsVidioList(\/)?(\d+)?$/,
+      pattern: /^\/[A-Za-z]{2}\/news\/NewsVidioList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
       labels: ["news", "menuEduVideo"] // 기관소식 > 동영상
     },
     {

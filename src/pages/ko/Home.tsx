@@ -200,10 +200,21 @@ export default function Home() {
   // ==========================================
   const [newsTab, setNewsTab] = useState('notice');
 
+  const { list } = useAppSelector((s) => s.menu)
+  const noticeUrl = list.find(item =>
+    item.menuUrlAddr?.includes('news/NewsNoticeList')
+  ); 
+  const bodoUrl = list.find(item =>
+    item.menuUrlAddr?.includes('menu/3004')
+  );   
+  const letterUrl = list.find(item =>
+    item.menuUrlAddr?.includes('menu/3012')
+  );     
+
   const newsData = useMemo(() => ({
     notice: {
       label: '공지사항',
-      path: '/ko/news/NewsNoticeList',
+      path: noticeUrl?.menuUrlAddr ?? '/ko',
       items: (current?.notice || []).map((item) => ({
         id: item.pstSn || '',
         title: item.pstTtl || '',
@@ -214,7 +225,7 @@ export default function Home() {
     },
     press: {
       label: '보도자료',
-      path: '/ko/menu/3004', // FIXME 추후 변경
+      path: bodoUrl?.menuUrlAddr ?? '/ko', // FIXME 추후 변경
       items: (current?.bodo || []).map((item) => ({
         id: item.pstSn || '',
         title: item.pstTtl || '',
@@ -225,7 +236,7 @@ export default function Home() {
     },
     newsletter: {
       label: '뉴스레터',
-      path: '/ko/menu/3012', // FIXME 추후 변경
+      path: letterUrl?.menuUrlAddr ?? '/ko', // FIXME 추후 변경
       items: (current?.news || []).map((item) => ({
         id: item.pstSn || '',
         title: item.pstTtl || '',

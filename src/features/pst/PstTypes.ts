@@ -150,9 +150,10 @@ export interface PstListRVO {
   totalPages: number
 }
 
-/**
- * 대국민포털_게시물기본 삭제 파라메터 정보 
- */
-export interface PstDVO {
-}
-
+export type BoardKey =
+  | 'NewsNoticeList'
+  | 'NewsJobNoticeList'
+  | 'NewsDataRoomList'
+  | 'NewsCardNewsList'
+  | 'NewsVidioList'
+  ;

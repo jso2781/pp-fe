@@ -13,19 +13,17 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Box, Button, Link, Typography } from '@mui/material';
 import { useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BOARD_CONFIG_GROUP, BoardKey } from '@/features/pst/PstConfig';
+import { BoardKey } from '@/features/pst/PstTypes';
 import KoglLicense from '@/components/common/KoglLicense';
 
 export default function NewsCardNewsDetail() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  // URL 게시판 Key값을 통해 게시판 정보 설정
+  // 게시판 식별키, 게시판 ID 추출
   const match = location.pathname.match(/\/news\/([^/]+)/);
   const boardKey = match?.[1] as BoardKey;
-  const currentBoard = BOARD_CONFIG_GROUP[boardKey];
-  const currentGroup = currentBoard.group;
-  const bbsId = currentBoard.bbsId;
+  const { bbsId } = useParams<{ bbsId: string }>();
 
   // Lnb 랜더링용
   const currentUrl = location.pathname;
@@ -163,7 +161,7 @@ export default function NewsCardNewsDetail() {
                         color="dark" 
                         size="large"
                         className="btn-list-go"
-                        onClick={() => navigate(`/ko/news/${boardKey}`)}
+                        onClick={() => navigate(`/ko/news/${boardKey}/${bbsId}`)}
                       >
                       목록
                     </Button>
