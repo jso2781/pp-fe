@@ -374,6 +374,121 @@
   box-shadow: 0 0 0 2px rgba(10, 108, 112, 0.4);
 }
 
+
+
+.form-item {
+  margin:0 0 5px 0;
+  &:not(:first-of-type) {
+    margin-top: 20px;
+  }
+  .label{
+    display: block;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-700);
+    margin:0 0 5px 0;
+    .optional{
+      font-weight: var(--fw-400);
+    }
+    .required{
+      color: var(--danger);
+      font-weight: var(--fw-400);
+    }
+  }
+
+  .input-with-btn{
+    .btn-form-util{
+      min-width: 105px !important; 
+  width: 105px;
+    }
+  }
+}
+
+/* 가로 배치를 위한 공통 플렉스 컨테이너 */
+.flex-container {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 20px; 
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  .form-item {
+    flex: 1;
+    min-width: 0;
+    margin-top: 0 !important;
+  }
+
+  /* 2등분, 3등분, 4등분 공통*/
+  &.flex-half, &.col-3, &.col-4 {
+    .form-item {
+      flex: 1;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    gap: 12px;
+    
+    &.flex-half, &.col-3, &.col-4 {
+      .form-item {
+        width: 100%;
+        flex: none;
+      }
+    }
+
+    .form-item {
+      width: 100%;
+      margin-top: 0 !important;
+    }
+    
+    &:not(:first-of-type) {
+      margin-top: 20px;
+    }
+  }
+}
+
+// 체크박스
+.chk-field .required{
+  color: var(--danger);
+  font-weight: var(--fw-400);
+}
+
+.form-item-row {
+  display: flex;
+  align-items: center; 
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 20px;
+
+  .form-item {
+    margin: 0 !important; 
+    display: flex;
+    align-items: center;
+  }
+
+  .chk-field.MuiFormControlLabel-root {
+    margin: 0;
+    
+    .MuiCheckbox-root {
+      padding: 6px;
+    }
+
+    .MuiTypography-root {
+      display: flex;
+      align-items: center;
+      line-height: 1;
+      cursor: pointer;
+    }
+  }
+  .required {
+    margin-left: 4px;
+    color: #d32f2f;
+    font-weight: 400;
+  }
+}
+
 /* ==========================================================================
    error-alert
    ========================================================================== */
