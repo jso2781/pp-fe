@@ -30,9 +30,9 @@ import {
 } from '@mui/material';
 import { t } from 'i18next';
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
-import { BoardKey, BOARD_CONFIG_GROUP } from '@/features/pst/PstConfig';
+import { BoardKey } from '@/features/pst/PstTypes';
 
 function SideNav({ items }: { items: LnbItem[] }) {
   const location = useLocation();
@@ -94,12 +94,10 @@ export default function NewsCardNewsList() {
   const [pageNum, setPageNum] = useState(1)
   const [pageSize, setPageSize] = useState(12) // 화면에 페이지 사이즈 설정이 필요시 setPageSize 활용
 
-  // URL 게시판 Key값을 통해 게시판 정보 설정
+  // 게시판 식별키, 게시판 ID 추출
   const match = location.pathname.match(/\/news\/([^/]+)/);
   const boardKey = match?.[1] as BoardKey;
-  const currentBoard = BOARD_CONFIG_GROUP[boardKey];
-  const currentGroup = currentBoard.group;
-  const bbsId = currentBoard.bbsId;
+  const { bbsId } = useParams<{ bbsId: string }>();
 
   // Lnb 랜더링용
   const currentUrl = location.pathname;
@@ -204,7 +202,7 @@ export default function NewsCardNewsList() {
                             <Link
                               component={RouterLink}
                               className='card-item-link'                              
-                              to={`/ko/news/${boardKey}/${item.id}`}
+                              to={`/ko/news/${boardKey}/${bbsId}/${item.id}`}
                               underline="none"
                               aria-label={`${item.title} 상세보기`}
                             >

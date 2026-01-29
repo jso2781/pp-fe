@@ -38,7 +38,7 @@ import Lnb from '@/components/common/Lnb';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
 import { LnbItem } from '@/features/auth/MenuTypes';
-import { BoardKey, BOARD_CONFIG_GROUP } from '@/features/pst/PstConfig';
+import { BoardKey } from '@/features/pst/PstTypes';
 
 function SideNav({ items }: { items: LnbItem[] }) {
   const location = useLocation();
@@ -98,34 +98,18 @@ export default function NewsNoticeList() {
   const [pageNum, setPageNum] = useState(1)
   const [pageSize, setPageSize] = useState(10) // 화면에 페이지 사이즈 설정이 필요시 setPageSize 활용
 
-  // URL 게시판 Key값을 통해 게시판 정보 설정
+  // 게시판 식별키, 게시판 ID 추출
   const match = location.pathname.match(/\/news\/([^/]+)/);
   const boardKey = match?.[1] as BoardKey;
-  const currentBoard = BOARD_CONFIG_GROUP[boardKey];
-  const currentGroup = currentBoard.group;
-  const bbsId = currentBoard.bbsId;
+  const { bbsId } = useParams<{ bbsId: string }>();
 
   // Lnb 랜더링용
   const currentUrl = location.pathname;
-
-  // 기존 Lnb Props : sideItems
-  // const sideItems = useMemo(
-  //   () =>
-  //     Object.values(BOARD_CONFIG_GROUP)
-  //       .filter((board) => board.group === currentGroup)
-  //       .map((board) => ({
-  //         key: `/news/${board.key}`,
-  //         label: board.label,
-  //         disabled: board.key === boardKey,
-  //       })),
-  //   [boardKey, currentGroup],
-  // );  
 
   // 스크롤 상단 이동
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pageNum]);  
-
 
   const rows = useMemo(() => {
     const arr = Array.isArray(list) && list.length > 0 ? list : [];
@@ -236,7 +220,7 @@ export default function NewsNoticeList() {
                                 {/* 4. 동작이 발생하는 요소에 명확한 aria-label을 제공합니다. */}
                                 <Link
                                   component={RouterLink}
-                                  to={`/ko/news/${boardKey}/${r.id}`}
+                                  to={`/ko/news/${boardKey}/${bbsId}/${r.id}`}
                                   color="inherit"
                                   underline="hover" // 평소엔 밑줄 없고 마우스 올릴 때만 생성 (접근성 권장)
                                   aria-label={`${r.title} 상세보기`}

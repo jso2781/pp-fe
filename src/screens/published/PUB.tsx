@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from "react";
-import { Box, Button, Typography, TextField, Stack, LinearProgress, Tabs, Tab } from '@mui/material';
+import { Box, Button, Typography, TextField, Stack, LinearProgress, Tabs, Tab, FormControlLabel, Checkbox, Radio, RadioGroup } from '@mui/material';
 import { Switch as BaseSwitch } from '@base-ui/react';
 import { Download as DownloadIcon} from '@mui/icons-material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -269,10 +269,86 @@ export default function PUB() {
                 <Box className="bordered-box">
                   <Box component="form" noValidate>
                     <Box className="form-group-wrap">
+                      
+
+                      <Box className="form-item-row"> 
+                        <Box className="form-item">
+                          <FormControlLabel
+                            className="chk-field"
+                            control={<Checkbox id="check-11" size="small" />}
+                            label={
+                              <Typography component="label" htmlFor="check-11">
+                                <span>체크11</span>
+                                <Box component="span" className="required" aria-hidden="true">(필수)</Box>
+                              </Typography>
+                            }
+                          />
+                        </Box>
+                        <Box className="form-item">
+                          <FormControlLabel
+                            className="chk-field"
+                            control={<Checkbox id="check-12" size="small" />}
+                            label={
+                              <Typography component="label" htmlFor="check-12">
+                                <span>체크12</span>
+                                <Box component="span" className="optional" aria-hidden="true">(선택)</Box>
+                              </Typography>
+                            }
+                          />
+                        </Box>
+                        <Box className="form-item">
+                          <FormControlLabel
+                            className="chk-field"
+                            control={<Checkbox id="check-13" size="small" />}
+                            label={
+                              <Typography component="label" htmlFor="check-13">
+                                <span>체크13</span>
+                                <Box component="span" className="required" aria-hidden="true">(필수)</Box>
+                              </Typography>
+                            }
+                          />
+                        </Box>
+                      </Box>
+
+                      <Box className="form-item-row">
+                        <RadioGroup row name="-choice" className="radio-group-container">
+                          
+                          <Box className="form-item">
+                            <FormControlLabel
+                              className="rdo-field"
+                              value="choice1"
+                              control={<Radio id="radio-11" />}
+                              label={<Typography component="label" htmlFor="radio-11">선택11</Typography>}
+                            />
+                          </Box>
+
+                          <Box className="form-item">
+                            <FormControlLabel
+                              className="rdo-field"
+                              value="choice2"
+                              control={<Radio id="radio-12" />}
+                              label={<Typography component="label" htmlFor="radio-12">선택12</Typography>}
+                            />
+                          </Box>
+
+                          <Box className="form-item">
+                            <FormControlLabel
+                              className="rdo-field"
+                              value="choice3"
+                              control={<Radio id="radio-13" />}
+                              label={<Typography component="label" htmlFor="radio-13">선택13</Typography>}
+                            />
+                          </Box>
+
+                        </RadioGroup>
+                      </Box>
+
+
+
                       <Box className="form-item">
                         <Typography component="label" htmlFor="password" className="label">
                           새 비밀번호 
-                          <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                          <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                         </Typography>
                         <TextField
                           id="password"
@@ -301,7 +377,7 @@ export default function PUB() {
                       <Box className="form-item">
                         <Typography component="label" htmlFor="loginId" className="label">
                           아이디
-                          <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                          <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                         </Typography>
                         <Stack direction="row" spacing={1} className="input-with-btn">
                           <TextField
@@ -334,7 +410,7 @@ export default function PUB() {
                         <Box className="form-item">
                           <Typography component="label" htmlFor="userName" className="label">
                             이름
-                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                            <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
                           <TextField
                             id="userName"
@@ -352,7 +428,7 @@ export default function PUB() {
                         <Box className="form-item">
                           <Typography component="label" htmlFor="phone" className="label">
                             휴대폰번호
-                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                            <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
                           <TextField
                             id="phone"

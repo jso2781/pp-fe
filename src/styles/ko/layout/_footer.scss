@@ -18,14 +18,13 @@
   }
 
   .container {
-    max-width: 1200px;
     margin: 0 auto;
     padding:35px 0;
+
     @media (max-width: 1200px) {
-      padding:20px 0;
+      padding:15px 0
     }
   }
-
 
   .footer-related {
     border-top: 1px solid #CDD1D5;
@@ -42,7 +41,6 @@
     }
 
     .container {
-      max-width: 1200px;
       margin: 0 auto;
       padding:0;
     }
