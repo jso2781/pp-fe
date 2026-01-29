@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
    * (vite dev server에서만 사용됨)
    */
   const proxyTarget = env.PROXY_TARGET || 'http://localhost:8080'
-  const proxyPrefix = env.PROXY_PREFIX || '/pp/api'
+  const proxyPrefix = env.PROXY_PREFIX || '/api'
 
   return {
     base,

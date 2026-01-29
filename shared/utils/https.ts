@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom'
  */
 // 빌드 시에는 항상 '/pp/api' 사용 (환경 변수 무시)
 const apiBaseURL = import.meta.env.MODE === 'production' 
-  ? '/pp/api' 
+  ? '/api' 
   : (import.meta.env.VITE_API_BASE_URL ?? '/api')
 
 const https: AxiosInstance = axios.create({
