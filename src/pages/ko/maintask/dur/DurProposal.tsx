@@ -6,10 +6,8 @@
  */
 import { useMemo } from 'react'
 import { Alert, Box, Button, Divider, Stack, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid';import PageTitle from '@/components/common/PageTitle'
+import Grid from '@mui/material/Grid';
 import { FormPage, FormSection, FieldGroup } from '@/components/form/FormLayout'
-import { BreadcrumbNav } from '@/components/mui'
-import SectionSideNav from '@/components/navigation/SectionSideNav'
 import { ZodFormProvider } from '@/components/rhf/ZodFormProvider'
 import * as z from 'zod'
 import { useZodForm } from '@/components/rhf/useZodForm'
@@ -20,6 +18,10 @@ import RHFFileUploadField from '@/components/rhf/RHFFileUploadField'
 import { validateFiles } from '@/lib/validation/files'
 import { useAppDispatch } from '@/store/hooks';
 import { insertOpnn } from '@/features/opnn/OpnnThunks';
+import DepsLocation from '@/components/common/DepsLocation';
+import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import Lnb from '@/components/common/Lnb';
 
 const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'zip']
 const accept = allowedExtensions.map((e) => `.${e}`).join(',')
@@ -59,19 +61,12 @@ const defaultValues: FormValues = {
 }
 
 export default function DurProposal() {
-
+  const { t } = useTranslation();
+  const location = useLocation();
   const dispatch = useAppDispatch();
 
-  const sideItems = useMemo(
-    () => [
-      { key: '/ko/dur/understand', label: 'DUR 이해', disabled: true },
-      { key: '/ko/dur/search', label: 'DUR 정보검색', disabled: true },
-      { key: '/ko/dur/use', label: '의약품 적정사용정보', disabled: true },
-      { key: '/ko/dur/notice', label: '알림 게시판' },
-      { key: '/ko/dur/proposal', label: '의견 제안' },
-    ],
-    [],
-  )
+  // Lnb 랜더링용
+  const currentUrl = location.pathname;
 
   const procedureItems = useMemo(
     () => [
@@ -113,101 +108,116 @@ export default function DurProposal() {
   }
 
   return (
-    <div className="ds-page ds-dur-proposal">
-      <div className="ds-container">
-        <BreadcrumbNav className="ds-breadcrumb" items={[{ title: '홈' }, { title: 'DUR 정보' }, { title: '의견 제안' }]} />
-
-        <PageTitle title="의견 제안" subtitle="DUR 정보" />
-
-        <Grid container spacing={2} sx={{ alignItems: 'flex-start' }}>
-          <Grid size={{ xs: 12, md: 3 }}>
-            <SectionSideNav title="DUR 정보" items={sideItems} selectedKey="/ko/dur/proposal" />
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 9 }}>
-            <FormPage>
-              <FormSection title="안내">
-                <Typography variant="body2" sx={{ mb: 1.5 }}>
-                  한국의약품안전관리원에서는 DUR정보의 추가 또는 변경이 필요한 부분에 대해서 수시평가를 실시하고 있습니다.
-                  <br />
-                  의견제안은 검토 후 반영될 수 있으며, 처리 결과는 기재하신 연락처로 안내드립니다.
-                </Typography>
-
-                <Divider sx={{ my: 2 }} />
-
-                <Grid container spacing={2}>
-                  {procedureItems.map((p, idx) => (
-                    <Grid key={idx} size={{ xs: 12, sm: 6 }}>
-                      <Alert severity="info" icon={false} sx={{ borderRadius: 2 }}>
-                        <Typography variant="subtitle2" fontWeight={900}>
-                          {p.title}
-                        </Typography>
-                        {p.description && (
-                          <Typography variant="body2" color="text.secondary">
-                            {p.description}
-                          </Typography>
-                        )}
-                      </Alert>
-                    </Grid>
-                  ))}
-                </Grid>
-              </FormSection>
-
-              <FormSection title="의견 제안 등록">
-                <ZodFormProvider schema={schema} methods={form}>
-                  <Box component="form" onSubmit={form.handleSubmit(onSubmit)} noValidate>
-                    <Stack spacing={2}>
-                      <Typography variant="subtitle1" fontWeight={900}>
-                        개인정보 수집·이용 동의
+    <Box className="page-layout">
+      <Box className="sub-container">
+        <Box className="content-wrap">
+        
+          {/* Lnb 영역 */}
+          <Box className="lnb-wrap">
+            <Box className="lnb-menu">
+              <Typography component="h2" className="lnb-tit">
+                <span>{t('menuDur')}</span>
+              </Typography>
+              <Box className="lnb-list">
+                <Lnb currentUrl={currentUrl} />
+              </Box>
+            </Box>
+          </Box>
+        
+          {/* 컨텐츠 본문 영역 */}
+          <Box className="sub-content">
+            <DepsLocation />
+            <Box className="content-view" id="content">
+              <Box className="page-content">
+                {/* --- 본문 시작 --- */}
+                <Grid size={{ xs: 12, md: 9 }}>
+                  <FormPage>
+                    <FormSection title="안내">
+                      <Typography variant="body2" sx={{ mb: 1.5 }}>
+                        한국의약품안전관리원에서는 DUR정보의 추가 또는 변경이 필요한 부분에 대해서 수시평가를 실시하고 있습니다.
+                        <br />
+                        의견제안은 검토 후 반영될 수 있으며, 처리 결과는 기재하신 연락처로 안내드립니다.
                       </Typography>
 
-                      <RHFRadioGroup
-                        name="agree"
-                        label="동의 여부"
-                        row
-                        options={[
-                          { value: 'Y', label: '동의함' },
-                          { value: 'N', label: '동의하지 않음' },
-                        ]}
-                      />
+                      <Divider sx={{ my: 2 }} />
 
-                      <RHFCheckbox name="age14" label="만 14세 이상입니다." helperText="만 14세 이상만 이용 가능합니다." />
+                      <Grid container spacing={2}>
+                        {procedureItems.map((p, idx) => (
+                          <Grid key={idx} size={{ xs: 12, sm: 6 }}>
+                            <Alert severity="info" icon={false} sx={{ borderRadius: 2 }}>
+                              <Typography variant="subtitle2" fontWeight={900}>
+                                {p.title}
+                              </Typography>
+                              {p.description && (
+                                <Typography variant="body2" color="text.secondary">
+                                  {p.description}
+                                </Typography>
+                              )}
+                            </Alert>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </FormSection>
 
-                      <Divider />
+                    <FormSection title="의견 제안 등록">
+                      <ZodFormProvider schema={schema} methods={form}>
+                        <Box component="form" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+                          <Stack spacing={2}>
+                            <Typography variant="subtitle1" fontWeight={900}>
+                              개인정보 수집·이용 동의
+                            </Typography>
 
-                      <RHFTextField name="name" label="성명" fullWidth />
-                      <RHFTextField name="role" label="구분(직업)" fullWidth />
-                      <RHFTextField name="contact" label="연락처(전화 또는 이메일)" fullWidth />
-                      <RHFTextField name="problem" label="현황 및 문제점" fullWidth multiline minRows={3} />
-                      <RHFTextField name="detail" label="상세 내용" fullWidth multiline minRows={5} />
-                      <RHFTextField name="etc" label="기타" fullWidth multiline minRows={2} />
+                            <RHFRadioGroup
+                              name="agree"
+                              label="동의 여부"
+                              row
+                              options={[
+                                { value: 'Y', label: '동의함' },
+                                { value: 'N', label: '동의하지 않음' },
+                              ]}
+                            />
 
-                      <RHFFileUploadField
-                        name="files"
-                        label="첨부파일"
-                        helperText="허용: pdf, doc, docx, xls, xlsx, ppt, pptx, jpg, jpeg, png, zip / 총 10MB 이하 (샘플 화면: 업로드는 저장되지 않습니다)"
-                        accept={accept}
-                        allowedExtensions={allowedExtensions}
-                        maxTotalSizeMB={10}
-                        showImagePreview
-                      />
+                            <RHFCheckbox name="age14" label="만 14세 이상입니다." helperText="만 14세 이상만 이용 가능합니다." />
 
-                      <Stack direction="row" spacing={1} justifyContent="flex-end">
-                        <Button variant="outlined" onClick={() => form.reset(defaultValues)}>
-                          초기화
-                        </Button>
-                        <Button variant="contained" type="submit">
-                          등록
-                        </Button>
-                      </Stack>
-                    </Stack>
-                  </Box>
-                </ZodFormProvider>
-              </FormSection>
-            </FormPage>
-          </Grid>
-        </Grid>
-      </div>
-    </div>
+                            <Divider />
+
+                            <RHFTextField name="name" label="성명" fullWidth />
+                            <RHFTextField name="role" label="구분(직업)" fullWidth />
+                            <RHFTextField name="contact" label="연락처(전화 또는 이메일)" fullWidth />
+                            <RHFTextField name="problem" label="현황 및 문제점" fullWidth multiline minRows={3} />
+                            <RHFTextField name="detail" label="상세 내용" fullWidth multiline minRows={5} />
+                            <RHFTextField name="etc" label="기타" fullWidth multiline minRows={2} />
+
+                            <RHFFileUploadField
+                              name="files"
+                              label="첨부파일"
+                              helperText="허용: pdf, doc, docx, xls, xlsx, ppt, pptx, jpg, jpeg, png, zip / 총 10MB 이하 (샘플 화면: 업로드는 저장되지 않습니다)"
+                              accept={accept}
+                              allowedExtensions={allowedExtensions}
+                              maxTotalSizeMB={10}
+                              showImagePreview
+                            />
+
+                            <Stack direction="row" spacing={1} justifyContent="flex-end">
+                              <Button variant="outlined" onClick={() => form.reset(defaultValues)}>
+                                초기화
+                              </Button>
+                              <Button variant="contained" type="submit">
+                                등록
+                              </Button>
+                            </Stack>
+                          </Stack>
+                        </Box>
+                      </ZodFormProvider>
+                    </FormSection>
+                  </FormPage>
+                </Grid>
+                {/* --- 본문 끝 --- */}
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   )
 }

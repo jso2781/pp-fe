@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -35,7 +35,9 @@ export default function Layout() {
           {/* keep spacing consistent under sticky AppBar */}
           {/* <Toolbar sx={{ display: 'none' }} /> */}
           <Box className="app-main" sx={{ flex: 1 }}>
-            <Outlet />
+            <Suspense fallback={<div style={{ padding: 24, textAlign: 'center' }}>로딩 중...</div>}>
+              <Outlet />
+            </Suspense>
           </Box>
         <Footer />
         {/* </Box> */}

@@ -2,8 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BreadcrumbNav } from '@/components/mui';
 import { useLocation } from 'react-router-dom';
-import { disabled } from 'node_modules/@base-ui/react/esm/utils/reason-parts';
-import { Helmet } from 'react-helmet-async';
+import { HeadTitle } from './HeadTitle';
 
 // 1. 경로별 한글 명칭 매핑 (데이터가 많아지면 별도 파일로 분리 추천)
 const pathLabels: Record<string, string[]> = {
@@ -63,14 +62,6 @@ export default function DepsLocation() {
       // /board 혹은 /board/123 모두 매칭
       pattern: /^\/[A-Za-z]{2}\/board(\/\d+)?$/,
       labels: ["community", "board"]
-    },
-    {
-      pattern: /^\/[A-Za-z]{2}\/dur\/notice(\/\d+)?$/,
-      labels: ["durInfo", "durNotice"]
-    },
-    {
-      pattern: /^\/[A-Za-z]{2}\/dur\/proposal$/,
-      labels: ["durInfo", "durSuggest"]
     },
     {
       pattern: /^\/[A-Za-z]{2}\/safety\/report\/online$/,
@@ -187,17 +178,17 @@ export default function DepsLocation() {
     },
     {
       pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/DurUnderstand(\/)?(\d+)?$/,
-      labels: ["menuDur", "menuDurUnderstand"] // dur 정보 > dur 이해
+      labels: ["menuDur", "menuDurUnderstand"] // DUR 정보 > dur 이해
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/DurNoticeList(\/\d+)?$/,
+      labels: ["menuDur", "menuDurNotice"]    // DUR 정보 > 알림 게시판
     },
     {
       pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/DurProposal(\/)?(\d+)?$/,
-      labels: ["menuDur", "menuDurSuggest"] // dur 정보 > 의견 제안
+      labels: ["menuDur", "menuDurSuggest"]   // DUR 정보 > 의견 제안
     }
   ], []);
-  
-  
-
-  
 
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기
   const { pathname } = useLocation();
@@ -241,11 +232,11 @@ export default function DepsLocation() {
     // 홈일 때 처리
     const isHome = pathname === '/' || pathname === '/ko' || pathname === '/ko/' || pathname === '/en' || pathname === '/en/';
     if (isHome) {
-      return '한국의약품안전관리원';
+      return t('kidsName');
     }
     // 매칭되는 게 없을 때
     if (!matched) {
-      return '한국의약품안전관리원';
+      return t('kidsName');
     }
     
     // 외부 변수 currentLabels 대신 여기서 직접 최신 라벨을 생성하거나 
@@ -267,7 +258,10 @@ export default function DepsLocation() {
     const accessibilityPath = [...titleLabels].reverse();
     accessibilityPath.push(t("home")); 
 
-    return `${accessibilityPath.join(' < ')} | ${t('siteName', 'KIDS')}`;
+    const titleStr = `${accessibilityPath.join(' < ')} | ${t('siteName', 'KIDS')}`;
+
+    console.log('HeadTitle pageTitle='+pageTitle+', finalBrowserTitle=', titleStr);
+    return titleStr;
   }, [pathname, t, currentLabels, matched]);
 
   useEffect(() => {
@@ -278,10 +272,9 @@ export default function DepsLocation() {
 
   return (
     <>
-      <Helmet key={pathname}>
-        <title>{finalBrowserTitle}</title>
+      <HeadTitle title={finalBrowserTitle}>
         <meta name="description" content={pageTitle} />
-      </Helmet>
+      </HeadTitle>
       <div className="location">
         <div className="local">
           <BreadcrumbNav

@@ -1,77 +1,60 @@
 import i18n from '@/i18n/i18n'
-import { JSX, useEffect, useMemo } from "react";
+import { JSX, useEffect, useMemo, lazy } from "react";
 import { Navigate, BrowserRouter, Routes, Route, useLocation, useParams } from 'react-router-dom'
 import Layout from './Layout'
 import BlankLayout from './BlankLayout'
 import ProtectedRoute from './ProtectedRoute'
 
-// ko 페이지들
-import HomeKo from '@/pages/ko/Home';
-import NotFoundKo from '@/pages/ko/NotFound';
-import InternalServerErrorKo from '@/pages/ko/InternalServerError';
+// ko 페이지들 (라우트 방문 시에만 로드 → 초기 번들 크기 감소)
+const HomeKo = lazy(() => import('@/pages/ko/Home'))
+const NotFoundKo = lazy(() => import('@/pages/ko/NotFound'))
+const InternalServerErrorKo = lazy(() => import('@/pages/ko/InternalServerError'))
 
-//maintask(주요업무)
-import DurProposalKo from '@/pages/ko/maintask/dur/DurProposal'
-import DurUnderstandKo from '@/pages/ko/maintask/dur/DurUnderstand';
+const DurUnderstandKo = lazy(() => import('@/pages/ko/maintask/dur/DurUnderstand'))
+const DurNoticeListKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeList'))
+const DurNoticeDetailKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeDetail'))
+const DurProposalKo = lazy(() => import('@/pages/ko/maintask/dur/DurProposal'))
 
-//open(정보공개)
+const NewsFaqNoticeKo = lazy(() => import('@/pages/ko/news/NewsFaqNotice'))
+const NewsNoticeListKo = lazy(() => import('@/pages/ko/news/NewsNoticeList'))
+const NewsNoticeDetailKo = lazy(() => import('@/pages/ko/news/NewsNoticeDetail'))
+const NewsJobNoticeListKo = lazy(() => import('@/pages/ko/news/NewsJobNoticeList'))
+const NewsJobNoticeDetailKo = lazy(() => import('@/pages/ko/news/NewsJobNoticeDetail'))
+const NewsDataRoomListKo = lazy(() => import('@/pages/ko/news/NewsDataRoomList'))
+const NewsDataRoomDetailKo = lazy(() => import('@/pages/ko/news/NewsDataRoomDetail'))
+const NewsCardNewsListKo = lazy(() => import('@/pages/ko/news/NewsCardNewsList'))
+const NewsCardNewsDetailKo = lazy(() => import('@/pages/ko/news/NewsCardNewsDetail'))
+const NewsVidioListKo = lazy(() => import('@/pages/ko/news/NewsVidioList'))
+const NewsVidioDetailKo = lazy(() => import('@/pages/ko/news/NewsVidioDetail'))
 
-//news(기관소식)
-import NewsFaqNoticeKo from '@/pages/ko/news/NewsFaqNotice';
-// 게시판 페이지 작업중
-import NewsNoticeListKo from '@/pages/ko/news/NewsNoticeList';
-import NewsNoticeDetailKo from '@/pages/ko/news/NewsNoticeDetail';
-import NewsJobNoticeListKo from '@/pages/ko/news/NewsJobNoticeList';
-import NewsJobNoticeDetailKo from '@/pages/ko/news/NewsJobNoticeDetail';
-import NewsDataRoomListKo from '@/pages/ko/news/NewsDataRoomList';
-import NewsDataRoomDetailKo from '@/pages/ko/news/NewsDataRoomDetail';
-import NewsCardNewsListKo from '@/pages/ko/news/NewsCardNewsList';
-import NewsCardNewsDetailKo from '@/pages/ko/news/NewsCardNewsDetail';
-import NewsVidioListKo from '@/pages/ko/news/NewsVidioList';
-import NewsVidioDetailKo from '@/pages/ko/news/NewsVidioDetail';
+const SignUpSelKo = lazy(() => import('@/pages/ko/auth/SignUpSel'))
+const SignUpAgrTrmsKo = lazy(() => import('@/pages/ko/auth/SignUpAgrTrms'))
+const LegalGuardAgrKo = lazy(() => import('@/pages/ko/auth/LegalGuardAgr'))
+const CertifySelfKo = lazy(() => import('@/pages/ko/auth/CertifySelf'))
+const SignUpMbrInfoKo = lazy(() => import('@/pages/ko/auth/SignUpMbrInfo'))
+const SignUpCompleteKo = lazy(() => import('@/pages/ko/auth/SignUpComplete'))
+const EditProfileKo = lazy(() => import('@/pages/ko/auth/EditProfile'))
+const WithDrawalKo = lazy(() => import('@/pages/ko/auth/WithDrawal'))
+const LoginKo = lazy(() => import('@/pages/ko/auth/Login'))
+const LoginMethodKo = lazy(() => import('@/pages/ko/auth/LoginMethod'))
+const PasswordConfirmKo = lazy(() => import('@/pages/ko/auth/PasswordConfirm'))
+const FindIdKo = lazy(() => import('@/pages/ko/auth/FindId'))
+const FindIdAuthSuccessKo = lazy(() => import('@/pages/ko/auth/FindIdAuthSuccess'))
+const FindPwKo = lazy(() => import('@/pages/ko/auth/FindPw'))
+const FindPwModifyKo = lazy(() => import('@/pages/ko/auth/FindPwModify'))
 
-//about(기관소개)
+const ExpertMemberApplyKo = lazy(() => import('@/pages/ko/expert/ExpertMemberApply'))
 
-//auth
-import DurNoticeListKo from '@/pages/ko/dur/DurNoticeList';
-import DurNoticeDetailKo from '@/pages/ko/dur/DurNoticeDetail';
-import SignUpSelKo from '@/pages/ko/auth/SignUpSel';
-import SignUpAgrTrmsKo from '@/pages/ko/auth/SignUpAgrTrms';
-import LegalGuardAgrKo from '@/pages/ko/auth/LegalGuardAgr';
-import CertifySelfKo from '@/pages/ko/auth/CertifySelf';
-import SignUpMbrInfoKo from '@/pages/ko/auth/SignUpMbrInfo';
-import SignUpCompleteKo from '@/pages/ko/auth/SignUpComplete';
-import EditProfileKo from '@/pages/ko/auth/EditProfile';
-import WithDrawalKo from '@/pages/ko/auth/WithDrawal';
-import LoginKo from '@/pages/ko/auth/Login';
-import LoginMethodKo from '@/pages/ko/auth/LoginMethod';
-import PasswordConfirmKo from '@/pages/ko/auth/PasswordConfirm';
-import FindIdKo from '@/pages/ko/auth/FindId';
-import FindIdAuthSuccessKo from '@/pages/ko/auth/FindIdAuthSuccess';
-import FindPwKo from '@/pages/ko/auth/FindPw';
-import FindPwModifyKo from '@/pages/ko/auth/FindPwModify';
+const PrivacyPolicyKo = lazy(() => import('@/pages/ko/etc/PrivacyPolicy'))
+const TermsKo = lazy(() => import('@/pages/ko/etc/Terms'))
+const CctvPolicyKo = lazy(() => import('@/pages/ko/etc/CctvPolicy'))
+const EmailDenyKo = lazy(() => import('@/pages/ko/etc/EmailDeny'))
 
-//expert
-import ExpertMemberApplyKo from '@/pages/ko/expert/ExpertMemberApply';
+const HomeEn = lazy(() => import('@/pages/en/Home'))
+const LoginEn = lazy(() => import('@/pages/en/auth/Login'))
 
-//etc
-import PrivacyPolicyKo from '@/pages/ko/etc/PrivacyPolicy';
-import TermsKo from '@/pages/ko/etc/Terms';
-import CctvPolicyKo from '@/pages/ko/etc/CctvPolicy';
-import EmailDenyKo from '@/pages/ko/etc/EmailDeny';
-
-
-// en 페이지들 (프로젝트에 실제 존재한다고 가정)
-import HomeEn from "@/pages/en/Home";
-import DurNoticeListEn from "@/pages/en/dur/DurNoticeList";
-import DurNoticeDetailEn from "@/pages/en/dur/DurNoticeDetail";
-import DurProposalEn from "@/pages/en/dur/DurProposal";
-import NotFoundEn from "@/pages/en/NotFound";
-import LoginEn from "@/pages/en/auth/Login";
-
-// 언어 무관 화면
-import Screens from '@/pages/screens/Screens'
-import ScreenViewer from '@/pages/screens/ScreenViewer'
+const Screens = lazy(() => import('@/pages/screens/Screens'))
+const ScreenViewer = lazy(() => import('@/pages/screens/ScreenViewer'))
 
 import { normalizeLang, FALLBACK_LANG, detectBrowserLang } from "./lang";
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -177,27 +160,26 @@ export default function Router() {
               <Route path="/" element={<Navigate to={`/${detectBrowserLang()}`} replace />} />
 
               <Route path="/:lang" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
-              <Route path="/:lang/dur/notice" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListEn /> }} />} />
-              <Route path="/:lang/dur/notice/:id" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailEn /> }} />} />
 
               {/* maintask(주요업무) */}
-              <Route path="/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalEn /> }} />} />
+              <Route path="/:lang/maintask/dur/DurNoticeList" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListKo /> }} />} />
+              <Route path="/:lang/maintask/dur/DurNoticeList/:id" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailKo /> }} />} />
+              <Route path="/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalKo /> }} />} />
               <Route path="/:lang/maintask/dur/DurUnderstand" element={<LangElement byLang={{ ko: <DurUnderstandKo />, en: <DurUnderstandKo /> }} />} />
 
               {/* open(정보공개) */}
 
               {/* news(기관소식) */}
               <Route path="/:lang/news/NewsFaqNotice" element={<LangElement byLang={{ ko: <NewsFaqNoticeKo />, en: <NewsFaqNoticeKo /> }} />} />
-              {/* 게시판 페이지 작업중 */}          
-              <Route path="/:lang/news/NewsNoticeList/:bbsId" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
+              <Route path="/:lang/news/NewsNoticeList" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
               <Route path="/:lang/news/NewsNoticeList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsNoticeDetailKo />, en: <NewsNoticeDetailKo /> }} />} />            
-              <Route path="/:lang/news/NewsJobNoticeList/:bbsId" element={<LangElement byLang={{ ko: <NewsJobNoticeListKo />, en: <NewsJobNoticeListKo /> }} />} />
+              <Route path="/:lang/news/NewsJobNoticeList" element={<LangElement byLang={{ ko: <NewsJobNoticeListKo />, en: <NewsJobNoticeListKo /> }} />} />
               <Route path="/:lang/news/NewsJobNoticeList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsJobNoticeDetailKo />, en: <NewsJobNoticeDetailKo /> }} />} />            
-              <Route path="/:lang/news/NewsDataRoomList/:bbsId" element={<LangElement byLang={{ ko: <NewsDataRoomListKo />, en: <NewsDataRoomListKo /> }} />} />
+              <Route path="/:lang/news/NewsDataRoomList" element={<LangElement byLang={{ ko: <NewsDataRoomListKo />, en: <NewsDataRoomListKo /> }} />} />
               <Route path="/:lang/news/NewsDataRoomList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsDataRoomDetailKo />, en: <NewsDataRoomDetailKo /> }} />} />
-              <Route path="/:lang/news/NewsCardNewsList/:bbsId" element={<LangElement byLang={{ ko: <NewsCardNewsListKo />, en: <NewsCardNewsListKo /> }} />} />
+              <Route path="/:lang/news/NewsCardNewsList" element={<LangElement byLang={{ ko: <NewsCardNewsListKo />, en: <NewsCardNewsListKo /> }} />} />
               <Route path="/:lang/news/NewsCardNewsList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsCardNewsDetailKo />, en: <NewsCardNewsDetailKo /> }} />} />         
-              <Route path="/:lang/news/NewsVidioList/:bbsId" element={<LangElement byLang={{ ko: <NewsVidioListKo />, en: <NewsVidioListKo /> }} />} />
+              <Route path="/:lang/news/NewsVidioList" element={<LangElement byLang={{ ko: <NewsVidioListKo />, en: <NewsVidioListKo /> }} />} />
               <Route path="/:lang/news/NewsVidioList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsVidioDetailKo />, en: <NewsVidioDetailKo /> }} />} />                        
 
               {/* about(기관소개) */}

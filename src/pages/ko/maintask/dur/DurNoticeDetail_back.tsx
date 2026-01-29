@@ -1,3 +1,9 @@
+/**
+ * 화면ID: KIDS-PP-US-DI-03
+ * 화면명: DUR 정보 > 알림 게시판 상세
+ * 화면경로: /ko/maintask/dur/DurNoticeDetail
+ * 화면설명: DUR 정보 > 알림 게시판 상세
+ */
 import { useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button, Card, CardContent, Divider, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';

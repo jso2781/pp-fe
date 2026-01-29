@@ -156,4 +156,5 @@ export type BoardKey =
   | 'NewsDataRoomList'
   | 'NewsCardNewsList'
   | 'NewsVidioList'
+  | 'DurNoticeList'
   ;
