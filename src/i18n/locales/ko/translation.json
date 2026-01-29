@@ -358,6 +358,27 @@
     "internalServerErrorWorkingOnIt": "문제를 해결하기 위해 열심히 노력하고 있습니다",
     "internalServerErrorTryAgainLater": "잠시 후 다시 확인해주세요.",
 
+    "koglCprgtType1KoTitle" : "공공누리 제1유형 저작권 상세정보",
+    "koglCprgtType1KoUrl" : "http://www.kogl.or.kr/info/licenseType1.do",
+    "koglCprgtType1KoNm" : "공공누리 제1유형: 출처표시, 상업적 이용금지, 변경금지",
+    "koglCprgtType1KoImage" : "/img/kogl/mark_type1_ko.gif",
+    "koglCprgtType1KoImageAlt" : "공공누리 제1유형 저작권 상세정보",
+    "koglCprgtType1KoDescription" : "본 저작물은 \"공공누리\" 제1유형 : 출처표시 조건에 따라 이용할 수 있습니다.",
+
+    "koglCprgtType2KoTitle" : "공공누리 제2유형 저작권 상세정보",
+    "koglCprgtType2KoUrl" : "http://www.kogl.or.kr/info/licenseType2.do",
+    "koglCprgtType2KoNm" : "공공누리 제2유형: 출처표시, 상업적 이용금지, 변경금지",
+    "koglCprgtType2KoImage" : "/img/kogl/mark_type2_ko.gif",
+    "koglCprgtType2KoImageAlt" : "공공누리 제2유형 저작권 상세정보",
+    "koglCprgtType2KoDescription" : "본 저작물은 \"공공누리\" 제2유형 : 출처표시 + 상업적 이용금지 + 변경금지 조건에 따라 이용할 수 있습니다.",
+
+    "koglCprgtType3KoTitle" : "공공누리 제3유형 저작권 상세정보",
+    "koglCprgtType3KoUrl" : "http://www.kogl.or.kr/info/licenseType3.do",
+    "koglCprgtType3KoNm" : "공공누리 제3유형: 출처표시, 상업적 이용금지, 변경금지",
+    "koglCprgtType3KoImage" : "/img/kogl/mark_type3_ko.gif",
+    "koglCprgtType3KoImageAlt" : "공공누리 제3유형 저작권 상세정보",
+    "koglCprgtType3KoDescription" : "본 저작물은 \"공공누리\" 제3유형 : 출처표시 + 상업적 이용금지 + 변경금지 조건에 따라 이용할 수 있습니다.",
+
     "koglCprgtType4KoTitle" : "공공누리 제4유형 저작권 상세정보",
     "koglCprgtType4KoUrl" : "http://www.kogl.or.kr/info/licenseType4.do",
     "koglCprgtType4KoNm" : "공공누리 제4유형: 출처표시, 상업적 이용금지, 변경금지",

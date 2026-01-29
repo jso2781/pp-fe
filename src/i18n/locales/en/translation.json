@@ -352,10 +352,31 @@
     "internalServerErrorWorkingOnIt": "We are working hard to resolve the issue",
     "internalServerErrorTryAgainLater": "Please check again later.",
 
-    "koglCprgtType4EnTitle" : "Kogl Type 4 Title",
+    "koglCprgtType1EnTitle" : "Kogl Type 1 Copyright Information",
+    "koglCprgtType1EnUrl" : "http://www.kogl.or.kr/info/licenseType1.do",
+    "koglCprgtType1EnNm" : "Kogl Type 1: Attribution + Prohibition on Commercial Use + Prohibition on Modification",
+    "koglCprgtType1EnImage" : "/img/kogl/mark_type1_en.gif",
+    "koglCprgtType1EnImageAlt" : "Kogl Type 1 Copyright Information",
+    "koglCprgtType1EnDescription" : "This work is licensed under the \"Kogl\" Type 1: Attribution + Prohibition on Commercial Use + Prohibition on Modification",
+
+    "koglCprgtType2EnTitle" : "Kogl Type 2 Copyright Information",
+    "koglCprgtType2EnUrl" : "http://www.kogl.or.kr/info/licenseType2.do",
+    "koglCprgtType2EnNm" : "Kogl Type 2: Attribution + Prohibition on Commercial Use + Prohibition on Modification",
+    "koglCprgtType2EnImage" : "/img/kogl/mark_type2_en.gif",
+    "koglCprgtType2EnImageAlt" : "Kogl Type 2 Copyright Information",
+    "koglCprgtType2EnDescription" : "This work is licensed under the \"Kogl\" Type 2: Attribution + Prohibition on Commercial Use + Prohibition on Modification",
+
+    "koglCprgtType3EnTitle" : "Kogl Type 3 Copyright Information",
+    "koglCprgtType3EnUrl" : "http://www.kogl.or.kr/info/licenseType3.do",
+    "koglCprgtType3EnNm" : "Kogl Type 3: Attribution + Prohibition on Commercial Use + Prohibition on Modification",
+    "koglCprgtType3EnImage" : "/img/kogl/mark_type3_en.gif",
+    "koglCprgtType3EnImageAlt" : "Kogl Type 3 Copyright Information",
+    "koglCprgtType3EnDescription" : "This work is licensed under the \"Kogl\" Type 3: Attribution + Prohibition on Commercial Use + Prohibition on Modification",
+
+    "koglCprgtType4EnTitle" : "Kogl Type 4 Copyright Information",
     "koglCprgtType4EnUrl" : "http://www.kogl.or.kr/info/licenseType4.do",
-    "koglCprgtType4EnNm" : "Kogl Type 4 Nm",
-    "koglCprgtType4EnImage" : "/img/kogl/mark_type4.png",
-    "koglCprgtType4EnImageAlt" : "Kogl Type 4 Image Alt",
-    "koglCprgtType4EnDescription" : "Kogl Type 4 Description"
+    "koglCprgtType4EnNm" : "Kogl Type 4: Attribution + Prohibition on Commercial Use + Prohibition on Modification",
+    "koglCprgtType4EnImage" : "/img/kogl/mark_type4_en.gif",
+    "koglCprgtType4EnImageAlt" : "Kogl Type 4 Copyright Information",
+    "koglCprgtType4EnDescription" : "This work is licensed under the \"Kogl\" Type 4: Attribution + Prohibition on Commercial Use + Prohibition on Modification"
 }

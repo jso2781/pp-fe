@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { Box, Typography, Link } from '@mui/material';
 import { useAuth } from '@/contexts/AuthContext';
@@ -5,31 +6,47 @@ import { useLocation } from 'react-router-dom';
 
 export default function KoglLicense() {
   const location = useLocation();
+  const { t, i18n } = useTranslation();
   const { getMenuInfo } = useAuth();
-
-  // ex) /maintask/dur/DurUnderstand
-  console.log('KoglLicense location.pathname=', location.pathname);
 
   const menuInfo = getMenuInfo(location.pathname);
   let koglCprgtTypeCd = '4';
-  let koglCprgtTypeTitle = '공공누리 제4유형 저작권 상세정보';
-  let koglCprgtTypeUrl = 'http://www.kogl.or.kr/info/licenseType4.do';
-  let koglCprgtTypeNm = '공공누리 제4유형: 출처표시, 상업적 이용금지, 변경금지';
-  let koglCprgtTypeImage = '/img/kogl/mark_type4.png';
-  let koglCprgtTypeImageAlt = '공공누리 제4유형 저작권 상세정보';
-  let koglCprgtTypeDescription = '본 저작물은 "공공누리" 제4유형 : 출처표시 + 상업적 이용금지 + 변경금지 조건에 따라 이용할 수 있습니다.';
+  let koglCprgtTypeTitle = i18n.language === 'ko' ? t('koglCprgtType4KoTitle') : t('koglCprgtType4EnTitle');
+  let koglCprgtTypeUrl = i18n.language === 'ko' ? t('koglCprgtType4KoUrl') : t('koglCprgtType4EnUrl');
+  let koglCprgtTypeNm = i18n.language === 'ko' ? t('koglCprgtType4KoNm') : t('koglCprgtType4EnNm');
+  let koglCprgtTypeImage = i18n.language === 'ko' ? t('koglCprgtType4KoImage') : t('koglCprgtType4EnImage');
+  let koglCprgtTypeImageAlt = i18n.language === 'ko' ? t('koglCprgtType4KoImageAlt') : t('koglCprgtType4EnImageAlt');
+  let koglCprgtTypeDescription = i18n.language === 'ko' ? t('koglCprgtType4KoDescription') : t('koglCprgtType4EnDescription');
+
 
   if(menuInfo && menuInfo.menuKoglCprgtTypeCd && menuInfo.menuKoglCprgtTypeCd !== '') {
     koglCprgtTypeCd = menuInfo.menuKoglCprgtTypeCd;
-    
-    if(koglCprgtTypeCd === '1') {
-      koglCprgtTypeNm = '공공누리 제1유형: 출처표시, 상업적 이용금지, 변경금지';
-    } else if(koglCprgtTypeCd === '2') {
-      koglCprgtTypeNm = '공공누리 제2유형: 출처표시, 상업적 이용금지, 변경금지';
-    } else if(koglCprgtTypeCd === '3') {
-      koglCprgtTypeNm = '공공누리 제3유형: 출처표시, 상업적 이용금지, 변경금지';
+
+    // ex) /maintask/dur/DurUnderstand
+    console.log('KoglLicense menuInfo.menuKoglCprgtTypeCd='+koglCprgtTypeCd+", location.pathname="+location.pathname);
+
+    if(koglCprgtTypeCd === '1'){
+      koglCprgtTypeTitle = i18n.language === 'ko' ? t('koglCprgtType1KoTitle') : t('koglCprgtType1EnTitle');
+      koglCprgtTypeUrl = i18n.language === 'ko' ? t('koglCprgtType1KoUrl') : t('koglCprgtType1EnUrl');
+      koglCprgtTypeNm = i18n.language === 'ko' ? t('koglCprgtType1KoNm') : t('koglCprgtType1EnNm');
+      koglCprgtTypeImage = i18n.language === 'ko' ? t('koglCprgtType1KoImage') : t('koglCprgtType1EnImage');
+      koglCprgtTypeImageAlt = i18n.language === 'ko' ? t('koglCprgtType1KoImageAlt') : t('koglCprgtType1EnImageAlt');
+      koglCprgtTypeDescription = i18n.language === 'ko' ? t('koglCprgtType1KoDescription') : t('koglCprgtType1EnDescription');
+    }else if(koglCprgtTypeCd === '2'){
+      koglCprgtTypeTitle = i18n.language === 'ko' ? t('koglCprgtType2KoTitle') : t('koglCprgtType2EnTitle');
+      koglCprgtTypeUrl = i18n.language === 'ko' ? t('koglCprgtType2KoUrl') : t('koglCprgtType2EnUrl');
+      koglCprgtTypeNm = i18n.language === 'ko' ? t('koglCprgtType2KoNm') : t('koglCprgtType2EnNm');
+      koglCprgtTypeImage = i18n.language === 'ko' ? t('koglCprgtType2KoImage') : t('koglCprgtType2EnImage');
+      koglCprgtTypeImageAlt = i18n.language === 'ko' ? t('koglCprgtType2KoImageAlt') : t('koglCprgtType2EnImageAlt');
+      koglCprgtTypeDescription = i18n.language === 'ko' ? t('koglCprgtType2KoDescription') : t('koglCprgtType2EnDescription');
+    }else if(koglCprgtTypeCd === '3'){
+      koglCprgtTypeTitle = i18n.language === 'ko' ? t('koglCprgtType3KoTitle') : t('koglCprgtType3EnTitle');
+      koglCprgtTypeUrl = i18n.language === 'ko' ? t('koglCprgtType3KoUrl') : t('koglCprgtType3EnUrl');
+      koglCprgtTypeNm = i18n.language === 'ko' ? t('koglCprgtType3KoNm') : t('koglCprgtType3EnNm');
+      koglCprgtTypeImage = i18n.language === 'ko' ? t('koglCprgtType3KoImage') : t('koglCprgtType3EnImage');
+      koglCprgtTypeImageAlt = i18n.language === 'ko' ? t('koglCprgtType3KoImageAlt') : t('koglCprgtType3EnImageAlt');
+      koglCprgtTypeDescription = i18n.language === 'ko' ? t('koglCprgtType3KoDescription') : t('koglCprgtType3EnDescription');
     }
-    console.log(menuInfo.menuKoglCprgtTypeCd);
   }
 
   return (
@@ -51,7 +68,7 @@ export default function KoglLicense() {
         </Link>
         <Box className="kogl-text">
           <Typography component="p">
-            본 저작물은 "공공누리" 제4유형 : 출처표시 + 상업적 이용금지 + 변경금지 조건에 따라 이용할 수 있습니다.
+            {koglCprgtTypeDescription}
           </Typography>
         </Box>
       </Box>
