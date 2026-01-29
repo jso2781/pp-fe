@@ -12,17 +12,17 @@
 *********************************************************/
 
 .sign-step {height:51px; margin-left:15px}
-.sign-step li {position:relative; float:left; width:27%; max-width:216px; height:51px; margin-left:-15px; background-image:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_step_off.png); background-repeat:no-repeat; font-size:1.333em; font-weight:900; font-family:ngttf, sans-serif; line-height:51px; text-align:center}
+.sign-step li {position:relative; float:left; width:27%; max-width:216px; height:51px; margin-left:-15px; /* background-image:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_step_off.png); */ background-repeat:no-repeat; font-size:1.333em; font-weight:900; font-family:ngttf, sans-serif; line-height:51px; text-align:center}
 .sign-step li span {display:block; height:51px; margin:0 0 0 10px}
 .sign-step li.st1 {z-index:4; border-left:1px solid #d8d8d8}
 .sign-step li.st2 {z-index:3}
 .sign-step li.st3 {z-index:2}
 .sign-step li.st4 {z-index:1}
-.sign-step li.active {background-image:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_step_on.png); color:#fff}
+/* .sign-step li.active {background-image:url(../../../../../../images/egovframework/iwt/ds/ko/member/bg_step_on.png); color:#fff}
 .sign-step li.active span {padding-left:30px}
 .sign-step li.st1.active span {background:url(../../../../../../images/egovframework/iwt/ds/ko/member/ico_step_01.png) 44px 10px no-repeat}
 .sign-step li.st2.active span {background:url(../../../../../../images/egovframework/iwt/ds/ko/member/ico_step_02.png) 44px 10px no-repeat}
-
+ */
 p.step {margin:12px 0 20px 0}
 
 .real-name {padding:20px 16px 20px 26px; border:1px solid #d8d8d8}
@@ -33,7 +33,7 @@ p.step {margin:12px 0 20px 0}
 .real-name label {display:inline-block;color:#000000}
 .real-name p {margin:18px 0 0 0; clear:both; line-height:1.5em; color:#000000}
 .real-name.login_area{position: relative;}
-.real-name.login_area:before{content: "";position: absolute;top:40px;left:50px;display: block;width:135px;height:135px;background: url('/images/front/common/icon_login.png') no-repeat center center;z-index: 99;}
+.real-name.login_area:before{content: "";position: absolute;top:40px;left:50px;display: block;width:135px;height:135px;/* background: url('/images/front/common/icon_login.png') no-repeat center center; */z-index: 99;}
 .real-name.login_area:after{content: "";position: absolute;top:40px;left:50px;display: block;width:135px;height:135px;background:#f4f4f4;border-radius: 50%;}
 .real-name.login_area .login_area_in{padding-left:210px;}
 .real-name.login_area .login_area_in .login_con{position:relative;width:350px;float:none;padding-bottom: 20px;margin-bottom:20px;border-bottom: 1px #ddd solid;}
