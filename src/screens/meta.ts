@@ -111,7 +111,12 @@ export const screens: ScreenMeta[] = [
     "uiType": "page"
   },
   {
-    "id": "KIDS-PP-US-DI-16",
+    "id": "KIDS-PP-US-DI-15",
+    "title": "의약품 적정사용 정보집",
+    "uiType": "page"
+  },
+  {
+    "id": "KIDS-PP-US-DI-18",
     "title": "의견 제안",
     "uiType": "page"
   },

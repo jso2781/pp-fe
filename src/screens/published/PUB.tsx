@@ -265,86 +265,112 @@ export default function PUB() {
                   </Box>
                 </Box>
 
+
+                <h3 className="section-title">체크박스,라디오</h3>
+                {/* 체크박스 가로형 */}
+                <Box className="form-item-row">
+                  <Typography className="label">
+                    체크박스 가로형
+                    <Box component="span" className="required">(필수)</Box>
+                  </Typography>
+                  <Box className="group-container">
+                    <Box className="form-item">
+                      <FormControlLabel
+                        className="chk-field"
+                        control={<Checkbox id="chk-r1" />}
+                        label={<Typography component="label" htmlFor="chk-r1">체크1</Typography>}
+                      />
+                    </Box>
+                    <Box className="form-item">
+                      <FormControlLabel
+                        className="chk-field"
+                        control={<Checkbox id="chk-r2" />}
+                        label={<Typography component="label" htmlFor="chk-r2">체크2</Typography>}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+
+                {/* 체크박스 세로형 */}
+                <Box className="form-item-row-vertical">
+                  <Typography className="label">
+                    체크박스 세로형
+                    <Box component="span" className="required">(필수)</Box>
+                  </Typography>
+                  <Box className="group-container">
+                    <Box className="form-item">
+                      <FormControlLabel
+                        className="chk-field"
+                        control={<Checkbox id="chk-v1" />}
+                        label={<Typography component="label" htmlFor="chk-v1">항목1</Typography>}
+                      />
+                    </Box>
+                    <Box className="form-item">
+                      <FormControlLabel
+                        className="chk-field"
+                        control={<Checkbox id="chk-v2" />}
+                        label={<Typography component="label" htmlFor="chk-v2">항목2</Typography>}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+
+                {/* 라디오 가로형 */}
+                <Box className="form-item-row">
+                  <Typography className="label">
+                    라디오 가로형
+                    <Box component="span" className="required">(필수)</Box>
+                  </Typography>
+                  <RadioGroup row className="radio-group-container">
+                    <Box className="form-item">
+                      <FormControlLabel
+                        className="rdo-field"
+                        value="1"
+                        control={<Radio id="rdo-r1" />}
+                        label={<Typography component="label" htmlFor="rdo-r1">선택1</Typography>}
+                      />
+                    </Box>
+                    <Box className="form-item">
+                      <FormControlLabel
+                        className="rdo-field"
+                        value="2"
+                        control={<Radio id="rdo-r2" />}
+                        label={<Typography component="label" htmlFor="rdo-r2">선택2</Typography>}
+                      />
+                    </Box>
+                  </RadioGroup>
+                </Box>
+
+                {/* 라디오 세로형 */}
+                <Box className="form-item-row-vertical">
+                  <Typography className="label">
+                    라디오 세로형
+                    <Box component="span" className="required">(필수)</Box>
+                  </Typography>
+                  <RadioGroup row className="radio-group-container">
+                    <Box className="form-item">
+                      <FormControlLabel
+                        className="rdo-field"
+                        value="1"
+                        control={<Radio id="rdo-v1" />}
+                        label={<Typography component="label" htmlFor="rdo-v1">선택1</Typography>}
+                      />
+                    </Box>
+                    <Box className="form-item">
+                      <FormControlLabel
+                        className="rdo-field"
+                        value="2"
+                        control={<Radio id="rdo-v2" />}
+                        label={<Typography component="label" htmlFor="rdo-v2">선택2</Typography>}
+                      />
+                    </Box>
+                  </RadioGroup>
+                </Box>
+
                 <h3 className="section-title">폼</h3>
                 <Box className="bordered-box">
                   <Box component="form" noValidate>
                     <Box className="form-group-wrap">
-                      
-
-                      <Box className="form-item-row"> 
-                        <Box className="form-item">
-                          <FormControlLabel
-                            className="chk-field"
-                            control={<Checkbox id="check-11" size="small" />}
-                            label={
-                              <Typography component="label" htmlFor="check-11">
-                                <span>체크11</span>
-                                <Box component="span" className="required" aria-hidden="true">(필수)</Box>
-                              </Typography>
-                            }
-                          />
-                        </Box>
-                        <Box className="form-item">
-                          <FormControlLabel
-                            className="chk-field"
-                            control={<Checkbox id="check-12" size="small" />}
-                            label={
-                              <Typography component="label" htmlFor="check-12">
-                                <span>체크12</span>
-                                <Box component="span" className="optional" aria-hidden="true">(선택)</Box>
-                              </Typography>
-                            }
-                          />
-                        </Box>
-                        <Box className="form-item">
-                          <FormControlLabel
-                            className="chk-field"
-                            control={<Checkbox id="check-13" size="small" />}
-                            label={
-                              <Typography component="label" htmlFor="check-13">
-                                <span>체크13</span>
-                                <Box component="span" className="required" aria-hidden="true">(필수)</Box>
-                              </Typography>
-                            }
-                          />
-                        </Box>
-                      </Box>
-
-                      <Box className="form-item-row">
-                        <RadioGroup row name="-choice" className="radio-group-container">
-                          
-                          <Box className="form-item">
-                            <FormControlLabel
-                              className="rdo-field"
-                              value="choice1"
-                              control={<Radio id="radio-11" />}
-                              label={<Typography component="label" htmlFor="radio-11">선택11</Typography>}
-                            />
-                          </Box>
-
-                          <Box className="form-item">
-                            <FormControlLabel
-                              className="rdo-field"
-                              value="choice2"
-                              control={<Radio id="radio-12" />}
-                              label={<Typography component="label" htmlFor="radio-12">선택12</Typography>}
-                            />
-                          </Box>
-
-                          <Box className="form-item">
-                            <FormControlLabel
-                              className="rdo-field"
-                              value="choice3"
-                              control={<Radio id="radio-13" />}
-                              label={<Typography component="label" htmlFor="radio-13">선택13</Typography>}
-                            />
-                          </Box>
-
-                        </RadioGroup>
-                      </Box>
-
-
-
                       <Box className="form-item">
                         <Typography component="label" htmlFor="password" className="label">
                           새 비밀번호 

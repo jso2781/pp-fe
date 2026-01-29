@@ -34,7 +34,7 @@ $default-width: 1200px;
       content: "";
       position: absolute;
       left: 0;
-      top: 6px;
+      top: 8px;
       width: 6px;
       height: 6px;
       background-color: var(--color-text-1);
@@ -44,4 +44,31 @@ $default-width: 1200px;
     &:last-child { margin-bottom: 0; }
   }
 }
+
+@mixin bullet-list-2 {
+  li {
+    position: relative;
+    padding-left: 15px;
+    font-size: var(--fs-18);
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 8px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 3px;
+      height: 3px;
+      background-color: var(--color-text-1);
+      border-radius: 50%;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
 

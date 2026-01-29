@@ -1871,12 +1871,89 @@
       font-size: var(--fs-20);
       font-weight: 700;
       padding-left: 50px;
-      background: url('/img/ico_drug_search.png') no-repeat left center; 
+      background: url('/img/ico_drug_sresult.png') no-repeat left center; 
       span { display: block; }
     }
   }
 }
 
-.dur-result-section .step-label {
-  background: url('/img/ico_drug_sresult.png') no-repeat left top; 
+
+// 의약품 적정사용 정보집
+.appr-use-book-download {
+  margin: 40px 0;
+  padding: 26px 10px;
+  border-radius: 10px;
+  border: 1px solid #AAA;
+
+  @media (max-width: 1024px) {
+    padding: 20px 10px;
+  }
+
+   .guide-txt {
+    position: relative;
+    font-size: var(--fs-16);
+    margin-bottom: 18px;
+    padding-left: 28px; 
+    line-height: 1.4;
+    display: block;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 1px;
+      width: 20px; 
+      height: 20px;
+      background: url('/img/ico_exclamation_circle03.svg') no-repeat center / contain;
+    }
+  }
+
+  .book-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      width: calc(20% - 16px);
+      min-width: 0;
+
+      .btn-book {
+        all: unset;
+        display: block;
+        width: 100%;
+        cursor: pointer;
+        text-align: center;
+
+        img {
+          width: 100%;
+          height: auto;
+          display: block;
+          margin-bottom: 12px;
+          border-radius: 12px;
+          box-sizing: border-box;
+        }
+
+        .book-name {
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 1.4;
+          margin: 0;
+          word-break: keep-all;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        width: calc(50% - 10px);
+      }
+
+      @media (max-width: 640px) {
+        width: 100%;
+        max-width: 150px; 
+        margin: 0 auto; 
+      }
+    }
+  }
 }

@@ -297,7 +297,7 @@
 }
 
 /* ==========================================================================
-   MUI Base UI - Custom Switch Styles
+   스위치
    ========================================================================== */
 
 /* 1. 전체 트랙 (막대기) */
@@ -374,8 +374,7 @@
   box-shadow: 0 0 0 2px rgba(10, 108, 112, 0.4);
 }
 
-
-
+/* 폼 필드 */
 .form-item {
   margin:0 0 5px 0;
   &:not(:first-of-type) {
@@ -455,6 +454,7 @@
   font-weight: var(--fw-400);
 }
 
+/* 가로형 */
 .form-item-row {
   display: flex;
   align-items: center; 
@@ -462,19 +462,28 @@
   gap: 12px 20px;
   margin-bottom: 20px;
 
+  .label {
+    margin-right: 10px;
+    font-weight: 700;
+  }
+
+  .group-container, 
+  .radio-group-container {
+    display: flex;
+    align-items: center;
+    gap: 0 20px;
+  }
+
   .form-item {
     margin: 0 !important; 
     display: flex;
     align-items: center;
   }
 
-  .chk-field.MuiFormControlLabel-root {
+  .chk-field.MuiFormControlLabel-root,
+  .rdo-field.MuiFormControlLabel-root {
     margin: 0;
-    
-    .MuiCheckbox-root {
-      padding: 6px;
-    }
-
+    .MuiCheckbox-root, .MuiRadio-root { padding: 6px; }
     .MuiTypography-root {
       display: flex;
       align-items: center;
@@ -482,6 +491,50 @@
       cursor: pointer;
     }
   }
+
+  .required {
+    margin-left: 4px;
+    color: #d32f2f;
+    font-weight: 400;
+  }
+}
+
+/* 세로형 */
+.form-item-row-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 20px;
+
+  .label {
+    font-weight: 700;
+  }
+
+  .group-container, 
+  .radio-group-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 20px;
+  }
+
+  .form-item {
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+  }
+
+  .chk-field.MuiFormControlLabel-root,
+  .rdo-field.MuiFormControlLabel-root {
+    margin: 0;
+    .MuiCheckbox-root, .MuiRadio-root { padding: 6px; }
+    .MuiTypography-root {
+      display: flex;
+      align-items: center;
+      line-height: 1;
+    }
+  }
+
   .required {
     margin-left: 4px;
     color: #d32f2f;
@@ -502,10 +555,30 @@
   background: url('/img/icon_error_circle.svg') no-repeat left top 2px;
 }
 
-// 리스트 스타일
+// 리스트, 텍스트 스타일
 .bullet-list {
   @include bullet-list;
 }
+.bullet-list-2 {
+  @include bullet-list-2;
+}
+
+.desc-text{
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 1.6;
+    word-break: keep-all;
+    display: flex; 
+    align-items: flex-start;
+
+    &::before {
+      content: "*";
+      display: inline-block;
+      margin-right: 4px; 
+      flex-shrink: 0; 
+    }
+  }
+
 // 박스 스타일
 .bordered-box{
   padding:40px 32px;
