@@ -962,6 +962,30 @@ export default function Home() {
           </Box>
         </Box>
       </Box>
+      <Box component="aside" className="quick-menu-wrap" aria-label="퀵 메뉴">
+        <Box className="quick-item">
+          <button type="button" className="btn-quick open-popup">
+            <i className="ico-popup" aria-hidden="true" />
+          </button>
+          <span className="quick-txt">닫힌 팝업<br />다시 열기</span>
+        </Box>
+        <Box className="quick-item">
+          <button type="button" className="btn-quick faq">
+            <i className="ico-faq" aria-hidden="true" />
+          </button>
+          <span className="quick-txt">자주 묻는<br />질문</span>
+        </Box>
+        <Box className="quick-item">
+          <button 
+            type="button" 
+            className="btn-quick top" 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            <i className="ico-top" aria-hidden="true" />
+          </button>
+          <span className="quick-txt">위로가기</span>
+        </Box>
+      </Box>
     </Box>
   )
 }
