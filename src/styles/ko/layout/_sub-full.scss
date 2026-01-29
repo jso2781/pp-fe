@@ -1,24 +1,45 @@
-.layout-full{
+.layout-full {
   width: 100%;
-  .app-main,
-  .container{
-    position: relative;
-    width:100%;
-    padding:0 10px;
+
+  .navigation{
+    display: none;
   }
 
-  .sub-container{
-    width:100%;
-    padding-left:300px;
-    transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    .container{
-      min-width:100%;
-      width:100%;
+  .app-main,
+  .container {
+    position: relative;
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  .footer {
+    .container {
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
-    .content-wrap{
-      width:100%;
+
+    .footer-related {
+      .container {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  .sub-container {
+    width: 100%;
+    padding-left: 300px;
+    transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .container {
+      width: 100%;
+      min-width: 100%;
+    }
+
+    .content-wrap {
+      width: 100%;
       gap: 0;
-      padding:0 20px 0 0;
+      padding: 0 20px 0 0;
     }
   }
 }
