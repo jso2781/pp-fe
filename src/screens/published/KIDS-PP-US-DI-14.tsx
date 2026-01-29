@@ -260,7 +260,6 @@ export default function KIDS_PP_US_DI_14() {
                                     ))
                                   ) : (
                                     <tr>
-                                      {/* 셀이 4개가 되었으므로 colSpan을 4로 수정 */}
                                       <td colSpan={4}>
                                         <Box className="no-data">
                                           제공할 정보가 없거나, 허가 취하된 의약품은 검색 되지 않을 수 있습니다.
