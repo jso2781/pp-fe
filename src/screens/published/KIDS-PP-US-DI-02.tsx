@@ -333,6 +333,65 @@ export default function KIDS_PP_US_DI_02() {
                                     </dl>
                                   </Box>
                                 </li>
+                                <li className="result-set-item">
+                                  <Box className="detail-card">
+                                    {/* 검색한 성분 */}
+                                    <dl className="detail-item">
+                                      <dt>검색한 제품</dt>
+                                      <dd>
+                                        <Box className="detail-info-row">
+                                          <span className="text">명인할로페리돌정1.5밀리그람_(1.5mg/1정)ol</span>
+                                        </Box>
+                                      </dd>
+                                    </dl>
+
+                                    {/* 검색한 제품의 성분 */}
+                                    <dl className="detail-item">
+                                      <dt>검색한 제품의 성분</dt>
+                                      <dd>
+                                        <Box className="detail-info-row">
+                                          <span className="text">haloperidol</span>
+                                        </Box>
+                                      </dd>
+                                    </dl> 
+
+                                    {/* 성분 */}
+                                    <dl className="detail-item">
+                                      <dt>병용금기 성분</dt>
+                                      <dd>
+                                        <Box className="detail-info-row">
+                                          <span className="text">benserazide hydrochloride (as benserazide) + levodopa</span>
+                                          <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />}>
+                                            제품검색
+                                          </Button>
+                                        </Box>
+                                        <Box className="detail-info-row">
+                                          <span className="text">benserazide hydrochloride (as benserazide) + levodopa</span>
+                                        </Box>
+                                      </dd>
+                                    </dl>
+
+                                    {/* 상세정보 */}
+                                    <dl className="detail-item">
+                                      <dt>상세정보</dt>
+                                      <dd>
+                                        <Box className="detail-info-row">
+                                          <span className="text">Levodopa의 치료감소</span>
+                                        </Box>
+                                      </dd>
+                                    </dl>
+
+                                    {/* 비고 */}
+                                    <dl className="detail-item">
+                                      <dt>비고</dt>
+                                      <dd>
+                                        <Box className="detail-info-row">
+                                          <span className="text">없음</span>
+                                        </Box>
+                                      </dd>
+                                    </dl>
+                                  </Box>
+                                </li>
                               </ul>
                             </Box>
                           </Box>
@@ -367,10 +426,10 @@ export default function KIDS_PP_US_DI_02() {
                           { id: 'bad', label: '불만족' },
                           { id: 'v-bad', label: '매우 불만족' }
                         ].map((item) => (
-                          <Box key={item.id} className="evaluation-item">
+                          <div key={item.id} className="evaluation-item">
                             <input type="radio" id={item.id} name="page-eval" value={item.id} className="a11y-radio" />
                             <label htmlFor={item.id} className="evaluation-label">{item.label}</label>
-                          </Box>
+                          </div>
                         ))}
                         <Button variant="contained" className="evaluation-btn">제출</Button>
                       </Box>
@@ -378,23 +437,23 @@ export default function KIDS_PP_US_DI_02() {
                   </Box>
 
                   <Box className="contact-box">
-                    <Box className="info-item">
+                    <div className="info-item">
                       <span className="info-label">업무 담당 부서</span>
                       <span className="info-value">정보화팀</span>
-                    </Box>
+                    </div>
                     
-                    <Box className="info-item">
+                    <div className="info-item">
                       <span className="info-label">업무 담당자</span>
                       <span className="info-value">하연경</span>
-                    </Box>
+                    </div>
                     
-                    <Box className="info-item">
+                    <div className="info-item">
                       <span className="info-label">전화번호</span>
                       <span className="info-value">
                         <a href="tel:02-2172-6738" className="info-tel">02-2172-6738</a>
                         <span className="info-sub">(응대시간: 평일 09:00 - 17:00, 국경일 및 휴일 제외)</span>
                       </span>
-                    </Box>
+                    </div>
                   </Box>
 
 
