@@ -30,7 +30,7 @@ export const selectMenuList = createAsyncThunk<MenuListRVO, MenuListPVO | undefi
         return true; // edit !! 
       });
 
-      const list = filtered as MenuRVO[];
+      const list = filtered as unknown as MenuRVO[];
       const result: MenuListRVO = { 
         list, 
         totalCount: list.length,

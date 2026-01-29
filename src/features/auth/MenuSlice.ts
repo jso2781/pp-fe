@@ -71,12 +71,43 @@ function createGnbStructor(
       childDepth3Menus.forEach((depth3Menu) => {
         // depLevel=3이면서 menuUrlAddr이 있는 경우 → 직접 depth3 항목으로 추가
         if (depth3Menu.menuUrlAddr && depth3Menu.menuNm) {
-          const url = depth3Menu.menuUrlAddr
-          const isNewWindow = url.startsWith('http://') || url.startsWith('https://')
+          const url = depth3Menu.menuUrlAddr;
+          const isNewWindow = url.startsWith('http://') || url.startsWith('https://');
+
+          /* 메뉴상세 정보 */
+          const menuNpagNm = depth3Menu.menuNpagNm ?? null;                   /* 메뉴새창명 */
+          const prvcInclYn = depth3Menu.prvcInclYn ?? null;                   /* 개인정보포함여부 */
+          const dgstfnExmnYn = depth3Menu.dgstfnExmnYn ?? null;               /* 만족도조사여부 */
+          const menuExpsrYn = depth3Menu.menuExpsrYn ?? null;                 /* 메뉴노출여부 */
+          const deptInfoExpsrYn = depth3Menu.deptInfoExpsrYn ?? null;         /* 부서정보노출여부 */
+          const picInfoExpsrYn = depth3Menu.picInfoExpsrYn ?? null;           /* 담당자정보노출여부 */
+          const moblAplcnYn = depth3Menu.moblAplcnYn ?? null;                 /* 모바일적용여부 */
+          const lgnYn = depth3Menu.lgnYn ?? null;                             /* 로그인여부 */
+          const encptPicTelno = depth3Menu.encptPicTelno ?? null;             /* 암호화담당자전화번호 */
+          const menuKoglCprgtTypeCd = depth3Menu.menuKoglCprgtTypeCd ?? null; /* 메뉴공공누리저작권유형코드 */
+          const menuPicId = depth3Menu.menuPicId ?? null;                     /* 메뉴담당자아이디 */
+          const menuPicFlnm = depth3Menu.menuPicFlnm ?? null;                 /* 메뉴담당자명 */
+          const menuTkcgDeptNo = depth3Menu.menuTkcgDeptNo ?? null;           /* 메뉴담당부서번호 */
+          const menuTkcgDeptNm = depth3Menu.menuTkcgDeptNm ?? null;           /* 메뉴담당부서명 */
+
           depth3Items.push({
             name: depth3Menu.menuNm,
             url,
-            ...(isNewWindow && { isNewWindow: true })
+            ...(isNewWindow && { isNewWindow: true }),
+            ...(menuNpagNm && { menuNpagNm }),
+            ...(prvcInclYn && { prvcInclYn }),
+            ...(dgstfnExmnYn && { dgstfnExmnYn }),
+            ...(menuExpsrYn && { menuExpsrYn }),
+            ...(deptInfoExpsrYn && { deptInfoExpsrYn }),
+            ...(picInfoExpsrYn && { picInfoExpsrYn }),
+            ...(moblAplcnYn && { moblAplcnYn }),
+            ...(lgnYn && { lgnYn }),
+            ...(encptPicTelno && { encptPicTelno }),
+            ...(menuKoglCprgtTypeCd && { menuKoglCprgtTypeCd }),
+            ...(menuPicId && { menuPicId }),
+            ...(menuPicFlnm && { menuPicFlnm }),
+            ...(menuTkcgDeptNo && { menuTkcgDeptNo }),
+            ...(menuTkcgDeptNm && { menuTkcgDeptNm })
           })
         } else {
           // depLevel=3이면서 menuUrlAddr이 없는 경우 → 하위 depLevel=4 항목들을 찾아서 depth3로 사용
@@ -90,13 +121,44 @@ function createGnbStructor(
 
           childDepth4Menus.forEach((depth4Menu) => {
             if (depth4Menu.menuNm) {
-              const url = depth4Menu.menuUrlAddr || '#'
-              const isNewWindow = url.startsWith('http://') || url.startsWith('https://')
+              const url = depth4Menu.menuUrlAddr || '#';
+              const isNewWindow = url.startsWith('http://') || url.startsWith('https://');
+
+              /* 메뉴상세 정보 */
+              const menuNpagNm = depth4Menu.menuNpagNm ?? null;                   /* 메뉴새창명 */
+              const prvcInclYn = depth4Menu.prvcInclYn ?? null;                   /* 개인정보포함여부 */
+              const dgstfnExmnYn = depth4Menu.dgstfnExmnYn ?? null;               /* 만족도조사여부 */
+              const menuExpsrYn = depth4Menu.menuExpsrYn ?? null;                 /* 메뉴노출여부 */
+              const deptInfoExpsrYn = depth4Menu.deptInfoExpsrYn ?? null;         /* 부서정보노출여부 */
+              const picInfoExpsrYn = depth4Menu.picInfoExpsrYn ?? null;           /* 담당자정보노출여부 */
+              const moblAplcnYn = depth4Menu.moblAplcnYn ?? null;                 /* 모바일적용여부 */
+              const lgnYn = depth4Menu.lgnYn ?? null;                             /* 로그인여부 */
+              const encptPicTelno = depth4Menu.encptPicTelno ?? null;             /* 암호화담당자전화번호 */
+              const menuKoglCprgtTypeCd = depth4Menu.menuKoglCprgtTypeCd ?? null; /* 메뉴공공누리저작권유형코드 */
+              const menuPicId = depth4Menu.menuPicId ?? null;                     /* 메뉴담당자아이디 */
+              const menuPicFlnm = depth4Menu.menuPicFlnm ?? null;                 /* 메뉴담당자명 */
+              const menuTkcgDeptNo = depth4Menu.menuTkcgDeptNo ?? null;           /* 메뉴담당부서번호 */
+              const menuTkcgDeptNm = depth4Menu.menuTkcgDeptNm ?? null;           /* 메뉴담당부서명 */
+
               depth3Items.push({
                 name: depth4Menu.menuNm,
                 url,
-                ...(isNewWindow && { isNewWindow: true })
-              })
+                ...(isNewWindow && { isNewWindow: true }),
+                ...(menuNpagNm && { menuNpagNm }),
+                ...(prvcInclYn && { prvcInclYn }),
+                ...(dgstfnExmnYn && { dgstfnExmnYn }),
+                ...(menuExpsrYn && { menuExpsrYn }),
+                ...(deptInfoExpsrYn && { deptInfoExpsrYn }),
+                ...(picInfoExpsrYn && { picInfoExpsrYn }),
+                ...(moblAplcnYn && { moblAplcnYn }),
+                ...(lgnYn && { lgnYn }),
+                ...(encptPicTelno && { encptPicTelno }),
+                ...(menuKoglCprgtTypeCd && { menuKoglCprgtTypeCd }),
+                ...(menuPicId && { menuPicId }),
+                ...(menuPicFlnm && { menuPicFlnm }),
+                ...(menuTkcgDeptNo && { menuTkcgDeptNo }),
+                ...(menuTkcgDeptNm && { menuTkcgDeptNm })
+              });
             }
           })
         }
@@ -252,7 +314,7 @@ const MenuSlice = createSlice({
       state.error = null;
       state.lnbStructor = [];
       state.gnbList = [];
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -371,5 +433,6 @@ const MenuSlice = createSlice({
   }
 });
 
-export const { clearCurrent, clearMenuCache } = MenuSlice.actions
-export default MenuSlice.reducer
+
+export const { clearCurrent, clearMenuCache } = MenuSlice.actions;
+export default MenuSlice.reducer;

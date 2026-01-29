@@ -337,5 +337,12 @@
     "internalServerError": "Internal Server Error",
     "internalServerErrorCannotConnect": "Unable to connect to the service page you are trying to use.",
     "internalServerErrorWorkingOnIt": "We are working hard to resolve the issue",
-    "internalServerErrorTryAgainLater": "Please check again later."
+    "internalServerErrorTryAgainLater": "Please check again later.",
+
+    "koglCprgtType4EnTitle" : "Kogl Type 4 Title",
+    "koglCprgtType4EnUrl" : "http://www.kogl.or.kr/info/licenseType4.do",
+    "koglCprgtType4EnNm" : "Kogl Type 4 Nm",
+    "koglCprgtType4EnImage" : "/img/kogl/mark_type4.png",
+    "koglCprgtType4EnImageAlt" : "Kogl Type 4 Image Alt",
+    "koglCprgtType4EnDescription" : "Kogl Type 4 Description"
 }

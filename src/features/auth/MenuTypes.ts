@@ -272,6 +272,7 @@ export type LnbItem = {
 
 /**
  * Depth3 메뉴 항목 (최하위 메뉴)
+ * 메뉴상세 정보를 담고 있는 구조체
  */
 export interface GnbDepth3Item {
   /** 메뉴명 */
@@ -280,6 +281,34 @@ export interface GnbDepth3Item {
   url: string
   /** 새 창에서 열기 여부 (외부 링크인 경우) */
   isNewWindow?: boolean
+  /** 메뉴새창명 */
+  menuNpagNm?: string
+  /** 개인정보포함여부 */
+  prvcInclYn?: string
+  /** 만족도조사여부 */
+  dgstfnExmnYn?: string
+  /** 메뉴노출여부 */
+  menuExpsrYn?: string
+  /** 부서정보노출여부 */
+  deptInfoExpsrYn?: string
+  /** 담당자정보노출여부 */
+  picInfoExpsrYn?: string
+  /** 모바일적용여부 */
+  moblAplcnYn?: string
+  /** 로그인여부 */
+  lgnYn?: string
+  /** 암호화담당자전화번호 */
+  encptPicTelno?: string
+  /** 메뉴공공누리저작권유형코드 */
+  menuKoglCprgtTypeCd?: string
+  /** 메뉴담당자아이디 */
+  menuPicId?: string
+  /** 메뉴담당자명 */
+  menuPicFlnm?: string
+  /** 메뉴담당부서번호 */
+  menuTkcgDeptNo?: string
+  /** 메뉴담당부서명 */
+  menuTkcgDeptNm?: string
 }
 
 /**
