@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Box, Button, Card, CardContent, Link, Stack, Typography, IconButton, Tooltip, Grid} from '@mui/material'
 import { Switch as BaseSwitch } from '@base-ui/react';
-// import Grid from '@mui/material/Grid'
+import { v4 as uuidv4 } from "uuid";
 import {
   PhoneAndroid as PhoneIcon,
   AccountCircle as AccountIcon,
@@ -53,7 +53,7 @@ export default function KIDS_PP_US_LG_01() {
 
   const tx = useMemo(() => {
     // SSO를 쓰는 구조라면 SSO 모듈이 txId를 내려줌(가이드). 없으면 로컬에서 생성.
-    return params.get('tx') || crypto.randomUUID()
+    return params.get('tx') || uuidv4()
   }, [params])
 
   const acrValues = useMemo(() => {
