@@ -171,16 +171,17 @@ export default function Router() {
 
               {/* news(기관소식) */}
               <Route path="/:lang/news/NewsFaqNotice" element={<LangElement byLang={{ ko: <NewsFaqNoticeKo />, en: <NewsFaqNoticeKo /> }} />} />
-              <Route path="/:lang/news/NewsNoticeList" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
+              <Route path="/:lang/news/NewsNoticeList/:bbsId" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
               <Route path="/:lang/news/NewsNoticeList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsNoticeDetailKo />, en: <NewsNoticeDetailKo /> }} />} />            
-              <Route path="/:lang/news/NewsJobNoticeList" element={<LangElement byLang={{ ko: <NewsJobNoticeListKo />, en: <NewsJobNoticeListKo /> }} />} />
+              <Route path="/:lang/news/NewsJobNoticeList/:bbsId" element={<LangElement byLang={{ ko: <NewsJobNoticeListKo />, en: <NewsJobNoticeListKo /> }} />} />
               <Route path="/:lang/news/NewsJobNoticeList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsJobNoticeDetailKo />, en: <NewsJobNoticeDetailKo /> }} />} />            
-              <Route path="/:lang/news/NewsDataRoomList" element={<LangElement byLang={{ ko: <NewsDataRoomListKo />, en: <NewsDataRoomListKo /> }} />} />
+              <Route path="/:lang/news/NewsDataRoomList/:bbsId" element={<LangElement byLang={{ ko: <NewsDataRoomListKo />, en: <NewsDataRoomListKo /> }} />} />
               <Route path="/:lang/news/NewsDataRoomList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsDataRoomDetailKo />, en: <NewsDataRoomDetailKo /> }} />} />
-              <Route path="/:lang/news/NewsCardNewsList" element={<LangElement byLang={{ ko: <NewsCardNewsListKo />, en: <NewsCardNewsListKo /> }} />} />
+              <Route path="/:lang/news/NewsCardNewsList/:bbsId" element={<LangElement byLang={{ ko: <NewsCardNewsListKo />, en: <NewsCardNewsListKo /> }} />} />
               <Route path="/:lang/news/NewsCardNewsList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsCardNewsDetailKo />, en: <NewsCardNewsDetailKo /> }} />} />         
-              <Route path="/:lang/news/NewsVidioList" element={<LangElement byLang={{ ko: <NewsVidioListKo />, en: <NewsVidioListKo /> }} />} />
-              <Route path="/:lang/news/NewsVidioList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsVidioDetailKo />, en: <NewsVidioDetailKo /> }} />} />                        
+              <Route path="/:lang/news/NewsVidioList/:bbsId" element={<LangElement byLang={{ ko: <NewsVidioListKo />, en: <NewsVidioListKo /> }} />} />
+              <Route path="/:lang/news/NewsVidioList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsVidioDetailKo />, en: <NewsVidioDetailKo /> }} />} />        
+                                               
 
               {/* about(기관소개) */}
 
