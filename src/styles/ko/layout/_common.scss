@@ -834,14 +834,16 @@
   }
 }
 
+// 퀵메뉴
 .quick-menu-wrap {
   position: fixed;
   right: 20px;
-  bottom: 50px;
+  bottom: 350px;
   z-index: 1000;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
 
   .quick-item {
     display: flex;
@@ -860,6 +862,7 @@
       box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
       cursor: pointer;
       transition: all 0.2s ease;
+      flex-shrink: 0;
 
       i {
         display: block;
@@ -878,7 +881,6 @@
         background-color: #f8faff;
         transform: scale(1.05);
       }
-
     }
 
     .quick-txt {
@@ -887,15 +889,24 @@
       font-weight: 500;
       color: #333;
       word-break: keep-all;
+      white-space: nowrap;
     }
   }
 
-  @media (max-width: 1024px) {
-    right: 10px;
-    bottom: 30px;
-    
+  @media (max-width: 1200px) {
+    right: -100px; 
+    opacity: 0;
+    pointer-events: none;
+
+    // 스크롤 중일 때 나타남
+    &.show {
+      right: 15px;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     .quick-item {
-      gap: 6px;
+      gap: 8px;
       .btn-quick {
         width: 50px;
         height: 50px;
