@@ -325,15 +325,15 @@ export default function KIDS_PP_US_DI_14() {
                                         <td className="text-left">{item.name}</td>
                                         <td>{item.company}</td>
                                         <td>
-                                          <button 
-                                            type="button" 
+                                          <Button 
                                             className="btn-delete-circle" 
                                             onClick={() => handleDelete(item.id)}
                                             aria-label={`${item.name} 삭제`}
+                                            sx={{ textTransform: 'none' }}
                                             title="삭제" 
                                           >
                                             <span aria-hidden="true">×</span>
-                                          </button>
+                                          </Button>
                                         </td>
                                       </tr>
                                     ))
