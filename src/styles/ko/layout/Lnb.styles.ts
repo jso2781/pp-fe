@@ -29,6 +29,19 @@ export const lnbStyles = {
   itemButton: (depth: number, isOpen?: boolean): SxProps<Theme> => ({
     padding: '10px 10px 10px 10px',
     transition: 'none',
+    '&.Mui-disabled': {
+      opacity: 1, // 흐릿해지는 것 방지
+      cursor: 'default',
+      '& .MuiTypography-root': {
+        color: 'var(--color-text-2)', 
+        fontWeight: 700,
+        // 웹킷 브라우저에서 폰트 색상이 강제로 회색이 되는 현상 방지
+        WebkitTextFillColor: 'var(--color-text-2)', 
+      },
+      '& .MuiSvgIcon-root': {
+        color: 'var(--color-text-2)',
+      }
+    },
     '& .MuiTypography-root': {
         fontSize: depth === 0 ? '17px' : '17px',
         // ★ 핵심: 1단 메뉴(depth 0)이고 열려있으면(isOpen) 녹색 적용
@@ -55,7 +68,7 @@ export const lnbStyles = {
       },
       '&:hover': {
         backgroundColor: depth === 0 ? 'transparent' : '#c5ebee',
-      }
+      },
     },
     // 서브메뉴 아이템일 때 추가 스타일
     ...(depth > 0 && {
