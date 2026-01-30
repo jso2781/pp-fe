@@ -36,7 +36,7 @@ type StepRefs = {
 
 export default function ExpertMemberApply() {
   const dispatch = useAppDispatch();
-  const userInfo = useAppSelector((state) => state.auth.userInfo);
+  const userInfo = useAppSelector((s) => s.auth.userInfo);
 
   const { showDialogBackdrop } = useDialog();
   const handleCustomConfirm = () => {
@@ -53,6 +53,7 @@ export default function ExpertMemberApply() {
   const [exprtApplyPVO, setExprtApplyPVO] = useState<ExprtApplyPVO>({
     mbrNo: userInfo?.mbrNo,
     mbrId: userInfo?.mbrId,
+    name: userInfo?.encptMbrFlnm,
     brno: '',
     email: '',
     exprtHdofYn: 'Y',
@@ -588,8 +589,8 @@ export default function ExpertMemberApply() {
                             key={system.value}
                             control={
                               <Checkbox
-                                checked={selectedSystems.includes(system.label ?? '')}
-                                onChange={() => handleSystemToggle(system.label ?? '')}
+                                checked={selectedSystems.includes(system.value ?? '')}
+                                onChange={() => handleSystemToggle(system.value ?? '')}
                               />
                             }
                             label={

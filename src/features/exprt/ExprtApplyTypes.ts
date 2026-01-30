@@ -11,6 +11,9 @@ export interface ExprtApplyPVO {
   /** 사업자등록번호 */
   brno?: string
 
+  /** 성명 */
+  name?: string
+  
   /** 이메일 */
   email?: string
 
