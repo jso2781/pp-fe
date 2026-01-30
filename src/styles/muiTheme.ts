@@ -232,15 +232,24 @@ export const muiTheme = createTheme({
           height: 48, 
           fontSize: '15px',
 
+          //textarea
+          '&.MuiInputBase-multiline': {
+            height: 'auto',            // 높이를 가변적으로 변경
+            padding: '16px 0px',      // 플레이스홀더와 테두리 사이 간격 (일괄 적용)
+          },
+
           // 1. Large 사이즈 (56px) -> 1024px 이하 반응형 처리
           '&.MuiInputBase-sizeLarge': {
             height: 56,
             fontSize: '17px',
+            // Large 사이즈이면서 멀티라인일 때 처리
+            '&.MuiInputBase-multiline': { height: 'auto' }, 
             '@media (max-width: 1024px)': {
               height: 48,
               fontSize: '16px',
             },
           },
+
           // 2. Medium 사이즈 (명시적으로 size="medium"을 줬을 때)
           '&.MuiInputBase-sizeMedium': {
             height: 48,
