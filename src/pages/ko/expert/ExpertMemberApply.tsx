@@ -524,7 +524,7 @@ export default function ExpertMemberApply() {
 
                     {/* 파일 첨부 */}
                     <h3 className="form-section-title">증빙서류 제출</h3>
-                    <Box className="bordered-box attach-file-box">
+                    <Box className="attach-file-box">
                       <FileUploadField
                         value={uploadedFiles}
                         onChange={setUploadedFiles}
@@ -533,49 +533,44 @@ export default function ExpertMemberApply() {
                         maxFiles={1}
                         maxFileSizeMB={10}
                         maxTotalSizeMB={10}
-                        helperText="PDF, PNG, JPG 형식의 10MB 이하의 파일을 업로드해주세요."
+                        //helperText="PDF, PNG, JPG 형식의 10MB 이하의 파일을 업로드해주세요."
                       />
                       {uploadedFiles.length > 0 && (
-                        <Box sx={{ mt: 2 }}>
-                          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                            <Typography variant="body2" color="text.main">
-                              {uploadedFiles.length}개
+                        <Box className="file-viewer">
+                          <Stack direction="row" className="uploader-info">
+                            <Typography component="p" className="file-count">
+                              <Box component="span">{uploadedFiles.length}개</Box>
                             </Typography>
                             <Button
-                              size="small"
-                              variant="outlined"
+                              size="xsmall"
+                              variant="outlined02"
                               onClick={handleDeleteAllFiles}
                               sx={{ textTransform: 'none' }}
                             >
-                              전체 파일 삭제 &gt;
+                              전체 파일 삭제
                             </Button>
                           </Stack>
-                          <Stack spacing={1}>
+                          <Box className="file-list">
                             {uploadedFiles.map((file, index) => (
-                              <Paper
+                              <Box
                                 key={index}
-                                variant="outlined"
-                                sx={{
-                                  p: 1.5,
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'space-between',
-                                }}
+                                className="file-item"
                               >
-                                <Typography variant="body2">
+                                <Typography className="file-name">
                                   {file.name} [
                                   {file.name.split('.').pop()?.toLowerCase()}, {formatFileSize(file.size)}]
                                 </Typography>
-                                <Button
+                                <Button 
+                                  className="btn-delete-circle" 
                                   size="small"
                                   onClick={() => handleDeleteFile(index)}
-                                  sx={{ minWidth: 'auto', color: 'error.main' }}
+                                  title="삭제" 
                                 >
-                                  삭제 x
+                                  <span aria-hidden="true">×</span>
                                 </Button>
-                              </Paper>
+                              </Box>
                             ))}
-                          </Stack>
+                          </Box>
                         </Box>
                       )}
                     </Box>

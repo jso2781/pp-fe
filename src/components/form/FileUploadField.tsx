@@ -161,8 +161,8 @@ export default function FileUploadField({
   }, [allowedExtensions, maxFiles, maxFileSizeMB, maxTotalSizeMB])
 
   return (
-    <Box>
-      <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between" sx={{ mb: 0.5 }}>
+    <Box className="file-uploader">
+      <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between" sx={{ mb: 0.5, }}>
         <Stack direction="row" spacing={1} alignItems="center">
           {label && (
             <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
@@ -178,7 +178,7 @@ export default function FileUploadField({
             파일 선택
           </Button>
           {!!(value?.length) && (
-            <Tooltip title="전체 삭제">
+            <Tooltip title="전체 삭제" sx={{ display: 'none' }}>
               <IconButton size="small" onClick={clearAll}>
                 <ClearAll fontSize="small" />
               </IconButton>
@@ -187,7 +187,7 @@ export default function FileUploadField({
         </Stack>
 
         {totalSizeText && (
-          <Typography variant="caption" color="text.secondary">
+          <Typography component="p">
             총 용량: {totalSizeText}
           </Typography>
         )}
@@ -210,13 +210,23 @@ export default function FileUploadField({
       <Paper
         variant="outlined"
         sx={{
-          p: 1.5,
-          borderStyle: 'dashed',
+          p: 2,
+          borderStyle: 'none',
           cursor: 'pointer',
           transition: 'all 120ms ease',
-          ...(dragActive
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          bgcolor: dragActive ? '#DDE5F0' : '#EEF2F7', 
+          
+          '&:hover': {
+            bgcolor: '#E5EBF4',
+          },
+
+          /* ...(dragActive
             ? { borderColor: 'primary.main', bgcolor: 'action.hover' }
-            : { borderColor: 'divider', bgcolor: 'background.paper' }),
+            : { borderColor: 'divider', bgcolor: 'background.paper' }), */
         }}
         onDragEnter={(e) => {
           e.preventDefault()
@@ -247,23 +257,23 @@ export default function FileUploadField({
         }}
         onClick={() => document.getElementById(inputId)?.click()}
       >
-        <Typography variant="body2" color="text.secondary">
+        <Typography component="p">
           파일을 이 영역에 드래그&드롭 하거나 클릭해서 선택하세요.
         </Typography>
         {constraintsText && (
-          <Typography variant="caption" color="text.secondary">
+          <Typography component="p">
             {constraintsText}
           </Typography>
         )}
         {preventDuplicates && (
-          <Typography variant="caption" color="text.secondary">
+          <Typography component="p" >
             중복 파일은 자동으로 제거됩니다.
           </Typography>
         )}
       </Paper>
 
       {!!(imagePreviews.length) && (
-        <Stack direction="row" spacing={1} sx={{ mt: 1, flexWrap: 'wrap' }}>
+        <Stack direction="row" spacing={1} sx={{ mt: 1, flexWrap: 'wrap', display: 'none' }}>
           {imagePreviews.map((p) => (
             <Box key={p.url} sx={{ position: 'relative' }}>
               <Box
@@ -305,7 +315,7 @@ export default function FileUploadField({
       )}
 
       {!!(value?.length) && (
-        <List dense sx={{ mt: 1, border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
+        <List dense sx={{ mt: 1, border: '1px solid', borderColor: 'divider', borderRadius: 1, display: 'none' }}>
           {value.map((f, idx) => (
             <ListItem key={fileKey(f)} divider={idx < value.length - 1}>
               <ListItemText
@@ -326,7 +336,7 @@ export default function FileUploadField({
       )}
 
       {(errorText || localError || helperText) && (
-        <FormHelperText error={!!(errorText || localError)} sx={{ mt: 0.5 }}>
+        <FormHelperText error={!!(errorText || localError)} sx={{ mt: 0.5 }} className="helperText">
           {errorText ?? localError ?? helperText}
         </FormHelperText>
       )}

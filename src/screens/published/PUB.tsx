@@ -1,8 +1,9 @@
 import React from 'react'
 import { useState } from "react";
-import { Box, Button, Typography, TextField, Stack, LinearProgress, Tabs, Tab, FormControlLabel, Checkbox, Radio, RadioGroup } from '@mui/material';
+import { Box, Button, Typography, TextField, Stack, LinearProgress, Tabs, Tab, FormControlLabel, Checkbox, Radio, RadioGroup, Paper } from '@mui/material';
 import { Switch as BaseSwitch } from '@base-ui/react';
 import { Download as DownloadIcon} from '@mui/icons-material';
+import FileUploadField from '@/components/form/FileUploadField';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ScreenShell from '../ScreenShell';
 
@@ -28,6 +29,13 @@ export default function PUB() {
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     setActiveCategory(newValue);
   };
+
+
+  //퍼블 파일첨부용
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const formatFileSize = (size) => (size / 1024 / 1024).toFixed(2) + 'MB';
+  const handleDeleteFile = (index) => setUploadedFiles(uploadedFiles.filter((_, i) => i !== index));
+  const handleDeleteAllFiles = () => setUploadedFiles([]);
 
   //return <FormTemplate screenId="PUB" title="고객센터 이용약관111" config={config} />
   return (
@@ -547,6 +555,59 @@ export default function PUB() {
                     확인
                   </Button>
                 </Box>
+
+
+
+
+                  <Box className="attach-file-box">
+                    <FileUploadField
+                      value={uploadedFiles}
+                      onChange={setUploadedFiles} 
+                      accept=".pdf,.png,.jpg,.jpeg"
+                      multiple={false}
+                      maxFiles={5}
+                      maxFileSizeMB={10}
+                      maxTotalSizeMB={10}
+                      helperText="PDF, PNG, JPG 형식의 10MB 이하의 파일을 업로드해주세요."
+                    />
+                    
+                    {uploadedFiles.length > 0 && (
+                      <Box className="file-viewer">
+                        <Stack direction="row" className="uploader-info">
+                          <Typography component="p" className="file-count">
+                            <Box component="span">{uploadedFiles.length}개</Box>
+                          </Typography>
+                          <Button
+                            size="xsmall"
+                            variant="outlined02"
+                            onClick={handleDeleteAllFiles}
+                            sx={{ textTransform: 'none' }}
+                          >
+                            전체 파일 삭제
+                          </Button>
+                        </Stack>
+                        <Box className="file-list">
+                          {uploadedFiles.map((file, index) => (
+                            <Box key={index} className="file-item">
+                              <Typography>
+                                {file.name} [
+                                {file.name.split('.').pop()?.toLowerCase()}, {formatFileSize(file.size)}]
+                              </Typography>
+                              <Button 
+                                className="btn-delete-circle" 
+                                size="small"
+                                onClick={() => handleDeleteFile(index)}
+                                title="삭제" 
+                              >
+                                <span aria-hidden="true">×</span>
+                              </Button>
+                            </Box>
+                          ))}
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+
 
                 
 
