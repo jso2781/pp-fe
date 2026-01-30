@@ -146,7 +146,7 @@ export const muiTheme = createTheme({
         ['sizeXsmall' as any]: { 
           minHeight: 32,
           fontWeigh: 400,
-          fontSize: '16px',
+          fontSize: '13px',
           padding: '0 8px',
           minWidth: 'auto',
           borderRadius: 4,
@@ -156,7 +156,7 @@ export const muiTheme = createTheme({
             minHeight: 25, 
           },
         },
-        sizeSmall: { height: 36, fontSize: 13, padding: '0 12px' },
+        sizeSmall: { height: 36, fontSize: 14, padding: '0 12px' },
         sizeMedium: { 
           height: 48, 
           fontSize: 15, 
