@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { v4 as uuidv4 } from "uuid";
 import https from '@/api/axiosInstance'
 
 function ensureAnyIdAssets() {
@@ -43,7 +42,7 @@ export default function Login() {
 
   const tx = useMemo(() => {
     // SSO를 쓰는 구조라면 SSO 모듈이 txId를 내려줌(가이드). 없으면 로컬에서 생성.
-    return params.get('tx') || uuidv4()
+    return params.get('tx');
   }, [params])
 
   const acrValues = useMemo(() => {

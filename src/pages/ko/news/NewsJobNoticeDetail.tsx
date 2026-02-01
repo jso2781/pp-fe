@@ -12,13 +12,17 @@ import { PstRVO } from '@/features/pst/PstTypes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Box, Button, Link, Typography } from '@mui/material';
 import { useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { BoardKey } from '@/features/pst/PstTypes';
 import KoglLicense from '@/components/common/KoglLicense';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function NewsJobNoticeDetail() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { getMenuInfo } = useAuth()
+  const menuKoglCprgtTypeCd = getMenuInfo(location.pathname)?.menuKoglCprgtTypeCd ?? '4'
 
   // 게시판 식별키, 게시판 ID 추출
   const match = location.pathname.match(/\/news\/([^/]+)/);
@@ -142,7 +146,7 @@ export default function NewsJobNoticeDetail() {
                       )}
                     </Box>
                     {/* 공공(KOGL) 저작물 */}
-                    <KoglLicense />
+                    <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
                   </Box>
                   {/* 하단 버튼 영역 */}
                   <Box className="board-actions">

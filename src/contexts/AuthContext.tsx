@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useCallback, ReactNode } from 'react'
+import { createContext, useContext, useMemo, useCallback, useRef, ReactNode } from 'react'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { logout } from '@/features/auth/AuthThunks'
 import { RootState } from '@/store/store'
@@ -75,26 +75,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const menu = useAppSelector((s: RootState) => s.menu) as MenuState
   const { gnbList, lnbStructor } = menu || {}
 
+  // pathname별 getMenuInfo 결과 캐시 (동일 pathname 중복 검색 방지)
+  const menuInfoCacheRef = useRef<{ gnbList: unknown; cache: Map<string, GnbDepth3Item | null> }>({
+    gnbList: undefined,
+    cache: new Map(),
+  })
+
   /**
    * MenuSlice Redux 상태에서
    * gnbList의 depth3 항목 중 url이 menuUrlAddr과 일치하는 메뉴상세정보 항목을 반환하는 셀렉터
+   * 
    * @param menuUrlAddr - 메뉴 URL 주소
    * @returns GnbDepth3Item | null
    * @example useAuth().getMenuInfo('/maintask/dur/DurUnderstand')
    */
   const getMenuInfo = useCallback((menuUrlAddr: string) => {
-    if(gnbList && gnbList.length > 0){
+    const key = menuUrlAddr.replace(/\/(ko|en)\//, '/')
+    const ref = menuInfoCacheRef.current
 
-      for(const d1 of gnbList){
-        for(const d2 of d1.depth2){
-          const found = d2.depth3.find((item) => item.url === menuUrlAddr);
-          if(found) return found;
-        }
-      }
-
+    // gnbList가 변경될 때마다 menuInfoCacheRef 캐시 초기화
+    if (ref.gnbList !== gnbList) {
+      ref.gnbList = gnbList
+      ref.cache = new Map()
     }
 
-    return null;
+    if(ref.cache.has(key)){
+      return ref.cache.get(key) ?? null
+    }
+
+    let result: GnbDepth3Item | null = null
+    if (gnbList && gnbList.length > 0) {
+      for (const d1 of gnbList) {
+        for (const d2 of d1.depth2) {
+          const found = d2.depth3.find(
+            (item) => item.url && item.url === key
+          )
+          if(found){
+            console.log('AuthContext getMenuInfo found=', found);
+            result = found
+            break
+          }
+        }
+        if (result) break
+      }
+    }
+
+    ref.cache.set(key, result)
+    return result
   }, [gnbList]);
   /********************************* MenuSlice Redux 상태 구독 및 상태 데이터 추출 끝 ************************************************/
 
@@ -104,7 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     logoutContext,
     getMenuInfo
-  }), [isAuthenticated, user, logoutContext])
+  }), [isAuthenticated, user, logoutContext, getMenuInfo])
 
   return (
     <AuthContext.Provider value={value}>

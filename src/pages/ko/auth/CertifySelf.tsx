@@ -17,7 +17,6 @@ import {
 } from '@mui/icons-material'
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
-import { v4 as uuidv4 } from "uuid";
 
 // Any-ID 타입 선언
 declare global {
@@ -87,7 +86,7 @@ export default function CertifySelf() {
 
   const tx = useMemo(() => {
     // SSO를 쓰는 구조라면 SSO 모듈이 txId를 내려줌(가이드). 없으면 로컬에서 생성.
-    return params.get('tx') || uuidv4();
+    return params.get('tx');
   }, [params]);
 
   const acrValues = useMemo(() => {

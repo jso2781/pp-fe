@@ -1,15 +1,19 @@
 import React, { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { Box, Stack, Typography, Link, Button } from '@mui/material';
 import ScreenShell from '../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import KoglLicense from '@/components/common/KoglLicense';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function KIDS_PP_US_NO_02() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { getMenuInfo } = useAuth();
+  const menuKoglCprgtTypeCd = getMenuInfo(location.pathname)?.menuKoglCprgtTypeCd ?? '4';
   const { id } = useParams(); // URL에서 게시글 ID 추출
   const [searchParams] = useSearchParams();
   
@@ -139,7 +143,7 @@ export default function KIDS_PP_US_NO_02() {
                     </Box>
 
                     {/* 공공(KOGL) 저작물 */}
-                    <KoglLicense />
+                    <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
                   </Box>
 
                   {/* 하단 버튼 영역 */}

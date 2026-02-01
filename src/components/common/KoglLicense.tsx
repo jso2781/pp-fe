@@ -1,8 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import React, { useMemo } from 'react';
 import { Box, Typography, Link } from '@mui/material';
-import { useAuth } from '@/contexts/AuthContext';
-import { useLocation } from 'react-router-dom';
 
 type KoglConfig = {
   url: string | undefined;
@@ -29,20 +27,21 @@ function getKoglConfigForType(
   };
 }
 
-export default function KoglLicense() {
-  const location = useLocation();
+export type KoglLicenseProps = {
+  /** KOGL 저작권 유형 코드 (1~4). 미전달 시 '4' 사용 */
+  menuKoglCprgtTypeCd?: string;
+};
+
+export default function KoglLicense({ menuKoglCprgtTypeCd = '4' }: KoglLicenseProps) {
   const { t, i18n } = useTranslation();
-  const { getMenuInfo } = useAuth();
 
   const config = useMemo<KoglConfig>(() => {
     const lang = i18n.language;
-    const menuInfo = getMenuInfo(location.pathname);
-    const typeCd = menuInfo?.menuKoglCprgtTypeCd && menuInfo.menuKoglCprgtTypeCd !== '' ? menuInfo.menuKoglCprgtTypeCd : '4';
-
-    return{
+    const typeCd = menuKoglCprgtTypeCd && menuKoglCprgtTypeCd !== '' ? menuKoglCprgtTypeCd : '4';
+    return {
       ...getKoglConfigForType(typeCd, lang, t),
     };
-  }, [i18n.language, t, location.pathname, getMenuInfo]);
+  }, [i18n.language, t, menuKoglCprgtTypeCd]);
 
   return (
     <Box className="kogl-license-wrap">

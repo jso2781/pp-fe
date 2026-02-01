@@ -6,6 +6,9 @@ export const mockDgstfnExmnList = [
     /** 순번 */
     no: 1,
 
+    /** 메뉴일련번호 */
+    menuSn: 1,
+
     /** 만족도점수 */
     dgstfnScr: -1,
 
@@ -26,6 +29,9 @@ export const mockDgstfnExmnList = [
  * 대국민포털_만족도조사기본 조회/입력/수정/저장 파라메터 정보 
  */
 export interface DgstfnExmnPVO {
+  /** 메뉴일련번호 */
+  menuSn: number
+
   /** 만족도점수 */
   dgstfnScr?: number
 

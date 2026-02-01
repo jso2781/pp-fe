@@ -1,15 +1,20 @@
 import React, { useMemo, useState } from 'react';
 import { Box, FormControl, InputLabel, Select, MenuItem, TextField, Button, Typography, Stack, Pagination, Tabs, Tab, LinearProgress } from '@mui/material';
 import { useAppSelector } from '@/store/hooks';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Download as DownloadIcon} from '@mui/icons-material';
 import ScreenShell from '../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import KoglLicense from '@/components/common/KoglLicense';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function KIDS_PP_US_DI_02() {
+  const location = useLocation();
+  const { getMenuInfo } = useAuth();
+  const menuKoglCprgtTypeCd = getMenuInfo(location.pathname)?.menuKoglCprgtTypeCd ?? '4';
+
   // --- lnb ---
   const sideItems = useMemo(() => [
     { 
@@ -413,7 +418,7 @@ export default function KIDS_PP_US_DI_02() {
                   </Box>
 
                   {/* 공공(KOGL) 저작물 */}
-                  <KoglLicense />
+                  <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
 
                   <Box className="evaluation-box">
                     <fieldset className="evaluation-fieldset">

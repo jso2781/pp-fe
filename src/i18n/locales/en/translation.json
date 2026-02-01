@@ -326,6 +326,19 @@
     "news": "Institution News",
     "customerCenter": "Customer Service",
 
+    "dgstfnExnmTitle": "Are you satisfied with the content of the current page?",
+    "verySatisfied": "Very Satisfied",
+    "satisfied": "Satisfied",
+    "normal": "Normal",
+    "unsatisfied": "Unsatisfied",
+    "veryUnsatisfied": "Very Unsatisfied",
+    "submit": "Submit",
+
+    "contactDepartment": "Contact Department",
+    "contactPerson": "Contact Person",
+    "contactPhone": "Contact Phone",
+    "contactPhoneTime": "(Response Time: Weekdays 09:00 - 17:00, excluding holidays)",
+
     "findIdSelectMethod": "Please select a method to find your ID.",
     "cautionTitle": "Caution",
     "findIdCaution1": "If your resident registration number has been changed, you can contact the call center or sign up as a new member to use the service.",

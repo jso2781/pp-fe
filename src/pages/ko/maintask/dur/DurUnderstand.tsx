@@ -11,9 +11,21 @@ import Lnb from '@/components/common/Lnb';
 import KoglLicense from '@/components/common/KoglLicense';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useLocation } from 'react-router-dom';
+import ContactArea from '@/components/common/ContactArea';
+import { useAuth } from '@/contexts/AuthContext';
+import DgstfnExnm from '@/components/common/DgstfnExnm';
+import { useTranslation } from 'react-i18next';
 
 export default function DurUnderstand() {
+  const { t } = useTranslation();
   const location = useLocation();
+  const { getMenuInfo } = useAuth();
+  const menuInfo = getMenuInfo(location.pathname);
+  const menuSn = menuInfo?.menuSn ?? 0;
+  const menuKoglCprgtTypeCd = menuInfo?.menuKoglCprgtTypeCd ?? '4';
+  const contactDepNm = menuInfo?.menuTkcgDeptNm ?? null;
+  const contactPersonNm = menuInfo?.menuPicFlnm ?? null;
+  const contactPhoneNum = menuInfo?.encptPicTelno ?? null;
 
   // Lnb 랜더링용
   const currentUrl = location.pathname;
@@ -27,7 +39,7 @@ export default function DurUnderstand() {
           <Box className="lnb-wrap">
             <Box className="lnb-menu">
               <Typography component="h2" className="lnb-tit">
-                <span>DUR 정보</span>
+                <span>{t('menuDur')}</span>
               </Typography>
               <Box className="lnb-list">
                 <Lnb currentUrl={currentUrl}/>
@@ -300,49 +312,17 @@ export default function DurUnderstand() {
                 </section> 
 
                 {/* 공공(KOGL) 저작물 */}
-                <KoglLicense />
+                <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
 
-                <Box className="evaluation-box">
-                  <fieldset className="evaluation-fieldset">
-                    <legend className="evaluation-legend">현재 페이지의 콘텐츠에 만족하시나요? </legend>
-                    <Box className="evaluation-group">
-                      {[
-                        { id: 'v-good', label: '매우 만족' },
-                        { id: 'good', label: '만족' },
-                        { id: 'normal', label: '보통' },
-                        { id: 'bad', label: '불만족' },
-                        { id: 'v-bad', label: '매우 불만족' }
-                      ].map((item) => (
-                        <div key={item.id} className="evaluation-item">
-                          <input type="radio" id={item.id} name="page-eval" value={item.id} className="a11y-radio" />
-                          <label htmlFor={item.id} className="evaluation-label">{item.label}</label>
-                        </div>
-                      ))}
-                      <Button variant="contained" className="evaluation-btn">제출</Button>
-                    </Box>
-                  </fieldset>
-                </Box>
+                {/* 만족도 조사 */}
+                <DgstfnExnm menuSn={menuSn} />
 
-                <Box className="contact-box">
-                  <div className="info-item">
-                    <span className="info-label">업무 담당 부서</span>
-                    <span className="info-value">정보화팀</span>
-                  </div>
-                  
-                  <div className="info-item">
-                    <span className="info-label">업무 담당자</span>
-                    <span className="info-value">하연경</span>
-                  </div>
-                  
-                  <div className="info-item">
-                    <span className="info-label">전화번호</span>
-                    <span className="info-value">
-                      <a href="tel:02-2172-6738" className="info-tel">02-2172-6738</a>
-                      <span className="info-sub">(응대시간: 평일 09:00 - 17:00, 국경일 및 휴일 제외)</span>
-                    </span>
-                  </div>
-                </Box>
-
+                {/* 업무 담당 부서 및 연락처 */}
+                <ContactArea
+                  contactDepNm={contactDepNm}
+                  contactPersonNm={contactPersonNm}
+                  contactPhoneNum={contactPhoneNum}
+                />
 
               {/* --- 본문 끝 --- */}
               </Box>

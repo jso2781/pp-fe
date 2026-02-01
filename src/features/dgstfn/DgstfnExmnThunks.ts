@@ -41,12 +41,11 @@ export const selectDgstfnExmnList = createAsyncThunk<DgstfnExmnListRVO, DgstfnEx
 /**
  * 대국민포털_만족도조사기본 정보 조회 
  */
-export const getDgstfnExmn = createAsyncThunk<DgstfnExmnRVO, DgstfnExmnPVO | undefined>(
+export const getDgstfnExmn = createAsyncThunk<DgstfnExmnRVO, DgstfnExmnPVO>(
   '/dgstfn/getDgstfnExmn',
-  async (params: DgstfnExmnPVO = {}) => {
+  async (params: DgstfnExmnPVO) => {
     try {
       const res = await https.post(getDgstfnExmnApiPath(), params);
-
       const payload = res.data;
 
       // 서버가 DgstfnExmnRVO 형식으로 단 건 데이터를 반환함. 
@@ -55,9 +54,12 @@ export const getDgstfnExmn = createAsyncThunk<DgstfnExmnRVO, DgstfnExmnPVO | und
     // 서버가 없거나 에러 나면 강제로 mock 데이터 사용 
     catch (e) {
       // 개발/데모 환경용 fallback (백엔드 연동 시 제거 가능)
-      console.log("DgstfnExmnThunks getDgstfnExmn mockDgstfnExmnList=",mockDgstfnExmnList);
-      return (mockDgstfnExmnList).find((n) => 
-      ) || null;
+      console.log("DgstfnExmnThunks getDgstfnExmn mockDgstfnExmnList=", mockDgstfnExmnList);
+
+      // 'menuSn' 속성이 없으므로 'no'로 변경 (mock 데이터 구조에 맞춤)
+      const result = mockDgstfnExmnList.find((n) => String(n.no) === String(params.menuSn)) || null;
+
+      return result;
     }
   }
 )

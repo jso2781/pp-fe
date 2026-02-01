@@ -71,6 +71,7 @@ function createGnbStructor(
       childDepth3Menus.forEach((depth3Menu) => {
         // depLevel=3이면서 menuUrlAddr이 있는 경우 → 직접 depth3 항목으로 추가
         if (depth3Menu.menuUrlAddr && depth3Menu.menuNm) {
+          const menuSn = depth3Menu.menuSn;
           const url = depth3Menu.menuUrlAddr;
           const isNewWindow = url.startsWith('http://') || url.startsWith('https://');
 
@@ -91,6 +92,7 @@ function createGnbStructor(
           const menuTkcgDeptNm = depth3Menu.menuTkcgDeptNm ?? null;           /* 메뉴담당부서명 */
 
           depth3Items.push({
+            menuSn: menuSn ?? 0,
             name: depth3Menu.menuNm,
             url,
             ...(isNewWindow && { isNewWindow: true }),
@@ -121,6 +123,7 @@ function createGnbStructor(
 
           childDepth4Menus.forEach((depth4Menu) => {
             if (depth4Menu.menuNm) {
+              const menuSn = depth4Menu.menuSn ?? 0;
               const url = depth4Menu.menuUrlAddr || '#';
               const isNewWindow = url.startsWith('http://') || url.startsWith('https://');
 
@@ -141,6 +144,7 @@ function createGnbStructor(
               const menuTkcgDeptNm = depth4Menu.menuTkcgDeptNm ?? null;           /* 메뉴담당부서명 */
 
               depth3Items.push({
+                menuSn: menuSn ?? 0,
                 name: depth4Menu.menuNm,
                 url,
                 ...(isNewWindow && { isNewWindow: true }),

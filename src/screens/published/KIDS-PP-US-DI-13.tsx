@@ -1,11 +1,17 @@
 import React, { useMemo } from 'react';
 import { Box, Typography, Button } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import ScreenShell from '../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import KoglLicense from '@/components/common/KoglLicense';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function KIDS_PP_US_DI_13() {
+  const location = useLocation();
+  const { getMenuInfo } = useAuth();
+  const menuKoglCprgtTypeCd = getMenuInfo(location.pathname)?.menuKoglCprgtTypeCd ?? '4';
+
   // --- lnb ---
   const sideItems = useMemo(() => [
     { 
@@ -94,7 +100,7 @@ export default function KIDS_PP_US_DI_13() {
                   </section>
 
                   {/* 공공(KOGL) 저작물 */}
-                  <KoglLicense />
+                  <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
 
                   <Box className="evaluation-box">
                     <fieldset className="evaluation-fieldset">

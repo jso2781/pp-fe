@@ -275,6 +275,8 @@ export type LnbItem = {
  * 메뉴상세 정보를 담고 있는 구조체
  */
 export interface GnbDepth3Item {
+  /** 메뉴일련번호 */
+  menuSn: number
   /** 메뉴명 */
   name: string
   /** 메뉴 URL 주소 */
