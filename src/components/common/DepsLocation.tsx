@@ -181,7 +181,7 @@ export default function DepsLocation() {
       labels: ["menuDur", "menuDurUnderstand"] // DUR 정보 > dur 이해
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/DurNoticeList(\/\d+)?$/,
+      pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/DurNoticeList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
       labels: ["menuDur", "menuDurNotice"]    // DUR 정보 > 알림 게시판
     },
     {

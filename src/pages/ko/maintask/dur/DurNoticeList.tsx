@@ -171,7 +171,7 @@ export default function NewsJobNoticeList() {
                                 {/* 4. 동작이 발생하는 요소에 명확한 aria-label을 제공합니다. */}
                                 <Link
                                   component={RouterLink}
-                                  to={`/ko/news/${boardKey}/${bbsId}/${r.id}`}
+                                  to={`/ko/maintask/dur/${boardKey}/${bbsId}/${r.id}`}
                                   color="inherit"
                                   underline="hover" // 평소엔 밑줄 없고 마우스 올릴 때만 생성 (접근성 권장)
                                   aria-label={`${r.title} 상세보기`}

@@ -25,7 +25,7 @@ export default function NewsJobNoticeDetail() {
   const menuKoglCprgtTypeCd = getMenuInfo(location.pathname)?.menuKoglCprgtTypeCd ?? '4'
 
   // 게시판 식별키, 게시판 ID 추출
-  const match = location.pathname.match(/\/news\/([^/]+)/);
+  const match = location.pathname.match(/\/maintask\/dur\/([^/]+)/);
   const boardKey = match?.[1] as BoardKey;
   const { bbsId } = useParams<{ bbsId: string }>();
 
@@ -155,7 +155,7 @@ export default function NewsJobNoticeDetail() {
                         color="dark" 
                         size="large"
                         className="btn-list-go"
-                        onClick={() => navigate(`/ko/news/${boardKey}/${bbsId}`)}
+                        onClick={() => navigate(`/ko/maintask/dur/${boardKey}/${bbsId}`)}
                       >
                       목록
                     </Button>
