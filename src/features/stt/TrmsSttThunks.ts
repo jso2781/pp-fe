@@ -42,54 +42,41 @@ export const selectTrmsListForSignUp = createAsyncThunk<TrmsSttListRVO>(
 /**
  * 대국민포털_약관법령기본 정보 목록 조회 
  */
-export const selectTrmsSttList = createAsyncThunk<TrmsSttListRVO, TrmsSttListPVO | undefined>(
+export const selectTrmsSttList = createAsyncThunk<TrmsSttListRVO, TrmsSttListPVO, { rejectValue: string }>(
   '/stt/selectTrmsSttList',
-  async (params: TrmsSttListPVO = {}) => {
+  async (params: TrmsSttListPVO = {}, { rejectWithValue }) => {
     try {
       const res = await https.post(selectTrmsSttListApiPath(), params);
+      const payload = res.data?.data?.list || [];
 
-      // ✅ 여기서 “서버 응답”을 표준 형태로 맞춰서 return
-      const payload = res.data;
-
-      // 서버가 TrmsStt[] 형식으로 주므로 TrmsSttListRVO 형식으로 데이터 구조 재조정 
       return {
-        list: Array.isArray(payload) ? payload : [],
-        totalCount: Array.isArray(payload) ? payload.length : 0
+        list: payload,
+        totalCount: payload.length
       } as TrmsSttListRVO;
     }
-    // 서버가 없거나 에러 나면 강제로 mock 데이터 사용 
     catch (e) {
-      // 개발/데모 환경용 fallback (백엔드 연동 시 제거 가능)
-      console.log("TrmsSttThunks selectTrmsSttList mockTrmsSttList=",mockTrmsSttList);
-      const filtered = mockTrmsSttList.filter((n) => {
-        //if (!params.searchWrd) return true;
-        //const v = (params.searchCnd === 'content' ? n.content : n.title) || '';
-        //return v.includes(params.searchWrd);
-        return true; // edit !! 
-      });
-
-      const result: TrmsSttListRVO = { list: filtered as TrmsSttRVO[], totalCount: filtered.length }
-      return result;
+      console.error('!!! TrmsSttThunks > selectTrmsSttList 에러.');
+      console.error(e);
+      return rejectWithValue('NETWORK_OR_SERVER_ERROR');
     }
   }
 )
-
+        
 /**
  * 대국민포털_약관법령기본 정보 조회 
  */
-export const getTrmsSttLatest = createAsyncThunk<TrmsSttRVO, TrmsSttPVO | undefined>(
+export const getTrmsSttLatest = createAsyncThunk<TrmsSttRVO, TrmsSttPVO, { rejectValue: string }>(
   '/stt/getTrmsSttLatest',
-  async (params: TrmsSttPVO = {}) => {
+  async (params: TrmsSttPVO = {}, { rejectWithValue }) => {
     try {
       const res = await https.post(getTrmsSttLatestApiPath(), params);
       const payload = res.data?.data?.trmsSttRVO;
+      
       return payload;
-    }
-    catch (e) {
-      console.log("TrmsSttThunks getTrmsStt mockTrmsSttList=",mockTrmsSttList);
-      return (mockTrmsSttList).find((n) => 
-        String(n.trmsSttCd) === String(params.trmsSttCd)
-      ) || null;
+    } catch (e) {
+      console.error('!!! TrmsSttThunks > getTrmsSttLatest 에러.');
+      console.error(e);
+      return rejectWithValue('NETWORK_OR_SERVER_ERROR');
     }
   }
 )

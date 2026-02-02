@@ -30,6 +30,12 @@ const TrmsSttSlice = createSlice({
   reducers: {
     clearCurrent: (state) => {
       state.current = null;
+    },
+    setCurrent: (state, action) => {
+      state.current = action.payload
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
     }
   },
 
@@ -48,23 +54,31 @@ const TrmsSttSlice = createSlice({
         state.loading = false;
         state.error = action.error?.message || 'Failed to load notice list';
       })
+      //다건
       .addCase(selectTrmsSttList.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.current = null;
+        state.list = [];
       })
       .addCase(selectTrmsSttList.fulfilled, (state, action) => {
+        const list = action.payload.list
         state.loading = false;
-        state.list = action.payload.list;
-        state.totalCount = action.payload.totalCount;
+        state.list = list;
+        if(Array.isArray(list) && list.length > 0) {
+          state.current = list[0];
+        }
       })
       .addCase(selectTrmsSttList.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message || 'Failed to load notice list';
+        state.error = action.payload ?? null;
       })
+      //단건
       .addCase(getTrmsSttLatest.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.current = null;
+        state.list = [];
       })
       .addCase(getTrmsSttLatest.fulfilled, (state, action) => {
         state.loading = false;
@@ -72,10 +86,10 @@ const TrmsSttSlice = createSlice({
       })
       .addCase(getTrmsSttLatest.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || action.error?.message || 'Failed to load notice';
+        state.error = action.payload ?? null;
       })
   }
 });
 
-export const { clearCurrent } = TrmsSttSlice.actions
+export const { clearCurrent, setCurrent, setLoading } = TrmsSttSlice.actions
 export default TrmsSttSlice.reducer
