@@ -6,6 +6,7 @@ import { setAccessToken } from '@/features/auth/AuthSlice'
 import { logout } from '@/features/auth/AuthThunks'
 import { refreshApiPath } from '@/api/auth/AuthApiPaths'
 import { useNavigate } from 'react-router-dom'
+import { setInternalServerError } from '@/features/ui/uiSlice'
 
 /**
  * 공통 axios 인스턴스
@@ -196,6 +197,7 @@ https.interceptors.response.use(
       // navigate('/ko/InternalServerError');
       //페이지 새로고침됨.
       // window.location.href = '/ko/InternalServerError';
+      dispatch(setInternalServerError(true));
     }
 
     return Promise.reject(error);

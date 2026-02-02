@@ -5,11 +5,13 @@ export type UiAlert = { type: 'info' | 'error' | 'success'; message: string }
 export interface UiState {
   globalLoading: boolean
   alert: UiAlert | null
+  internalServerError: boolean
 }
 
 const initialState: UiState = {
   globalLoading: false,
-  alert: null
+  alert: null,
+  internalServerError: false
 }
 
 const uiSlice = createSlice({
@@ -24,9 +26,12 @@ const uiSlice = createSlice({
     },
     clearAlert(state) {
       state.alert = null
+    },
+    setInternalServerError(state, action) {
+      state.internalServerError = action.payload
     }
   }
 })
 
-export const { setGlobalLoading, showAlert, clearAlert } = uiSlice.actions
+export const { setGlobalLoading, showAlert, clearAlert, setInternalServerError } = uiSlice.actions
 export default uiSlice.reducer
