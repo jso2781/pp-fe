@@ -58,6 +58,8 @@ body { overflow-x: auto; }
 /* 스크린 리더용 */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
+.underline{text-decoration: underline; cursor: pointer;}
+
 .sub-title{
   font-size: 18px;font-weight: 700;margin:24px 0 20px 0;
 
@@ -616,9 +618,6 @@ body { overflow-x: auto; }
   text-decoration: underline;
 }
 
-
-
-
 /* 버튼 그룹 전체 컨테이너 */
 .btn-group {
   display: flex;
@@ -626,20 +625,37 @@ body { overflow-x: auto; }
   margin-top: 32px;
   gap: 8px;
 
-  &.between { justify-content: space-between; gap: 8px; }
+  .left-group, .right-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  &.between { 
+    justify-content: space-between; 
+    gap: 0; 
+  }
   &.center  { justify-content: center; }
   &.right   { justify-content: flex-end; }
 
-  button{min-width:110px;}
+  button { 
+    min-width: 110px; 
+  }
 
   @media (max-width: 1024px) {
-    margin-top:20px;
+    margin-top: 20px;
     padding-top: 20px;
     gap: 12px;
+    flex-direction: column; 
 
-    .MuiButton-root {
+    .left-group, .right-group {
       width: 100%;
-      margin: 0;
+      gap: 8px;
+      
+      .MuiButton-root {
+        width: 100%; 
+        margin: 0;
+      }
     }
   }
 }

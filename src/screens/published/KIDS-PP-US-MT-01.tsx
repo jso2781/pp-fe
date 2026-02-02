@@ -1,48 +1,154 @@
 import { useMemo, useState } from 'react'
-import { Box, Card, CardContent, Typography } from '@mui/material'
-import ScreenShell from '../ScreenShell'
+import { Box, Typography, Stack, IconButton, Button } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import DepsLocation from '@/components/common/DepsLocation'
 import CollapsibleSideNav from '@/components/navigation/CollapsibleSideNav'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ScreenShell from '../ScreenShell'
 
 export default function KIDS_PP_US_MT_01() {
   const [collapsed, setCollapsed] = useState(false)
   const sideItems = useMemo(
     () => [
-      { key: '/1', label: '내 업무' },
-      { key: '/2', label: '업무 신청 관리', disabled: true },
-      { key: '/3', label: '업무 시스템 서브 메뉴 1' },
-      { key: '/4', label: '업무 시스템 서브 메뉴 2' },
-      { key: '/6', label: '업무 시스템 메뉴 2', disabled: true },
-      { key: '/7', label: '업무 시스템 메뉴 3', disabled: true },
+      { 
+        key: 'sub1', 
+        label: '내업무', 
+        children: [
+          { key: '/2-1', label: '서브메뉴2-1' },
+          { key: '/2-2', label: '서브메뉴2-2', isExternal: true },
+        ]
+      },
     ],
     [],
   )
 
   return (
     <ScreenShell screenId="KIDS-PP-US-MT-01" title="내업무" uiType="page">
-      <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-        <CollapsibleSideNav
-          title="알림마당"
-          collapsed={collapsed}
-          onToggle={() => setCollapsed((p) => !p)}
-          items={sideItems}
-          selectedKey="/1"
-          onSelect={(key) => window.alert(`navigate: ${key}`)}
-        />
+      <Box className={`page-layout ${collapsed ? 'is-collapsed' : ''}`}>
+        <Box className="sub-container">
+          <Box className="content-wrap">
+            {/* 사이드메뉴 */}
+            <Box className="side-nav">
+              <CollapsibleSideNav
+                title="내업무"
+                collapsed={collapsed}
+                onToggle={() => setCollapsed((p) => !p)}
+                items={sideItems}
+                onSelect={(key) => window.alert(`Maps: ${key}`)}
+              />
+            </Box>
+            {/* 서브 컨텐츠 영역 */}
+            <Box className="sub-content">
+              {/* 알림바 */}
+              <Box className="welcome-banner">
+                <Stack direction="row" alignItems="center" className="welcome-banner__inner">
+                  <Typography className="welcome-banner__message">
+                    <span className="user-name">김안전</span>님 환영합니다. ‘OOO’ 메뉴에 새로운 확인 사항이 있습니다.
+                  </Typography>
+                  <IconButton size="small" className="btn-close" aria-label="close">
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
+              </Box>
+              <DepsLocation />{/* 상단 현재 위치 정보 */}
+              <Box className="content-view" id="content">
+                <Box className="page-content">
+                  {/* --- 본문 시작 --- */}
 
-        <Box sx={{ flex: 1, p: 2 }}>
-          <DepsLocation />
-          <Card variant="outlined" sx={{ borderRadius: 2, mt: 2 }}>
-            <CardContent>
-              <Typography variant="h6" fontWeight={800} sx={{ mb: 1 }}>
-                내 업무
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                샘플 화면입니다. (기존 Ant Design 기반 레이아웃을 MUI Drawer/Navigation 패턴으로 통일했습니다.)
-              </Typography>
-            </CardContent>
-          </Card>
-        </Box>
+                    <h3 className="section-title-work">내 정보</h3>
+                    <Box className="panel-box">
+                      <Box className="my-account-info">
+                        <Box className="user-context">
+                          <Box className="status-badge-group">
+                            <span className="tag">전문가회원</span>
+                            <span className="badge pending">신청중</span>
+                            <span className="badge rejected">반려중</span>
+                            <Button 
+                              variant="text" 
+                              className="btn-view-reason" 
+                              endIcon={<ChevronRightIcon />}
+                              size="small"
+                            >
+                              반려사유보기
+                            </Button>
+                          </Box>
+                          <Box className="user-info-group">
+                            <span className="user-name">김국민</span>
+                            <span className="user-company">한국제약회사</span>
+                          </Box>
+                          <p className="last-login">마지막 접속일시 : 2025-10-16 14:23:32</p>
+                        </Box>
+
+                        <Box className="control-action">
+                          <Button variant="outlined04" size="small" className="s-lg">신청취소하기</Button>
+                          <Button variant="outlined03" size="small" className="s-lg">재신청하기</Button> 
+                        </Box>
+                      </Box>
+                    </Box>
+
+                    <h3 className="section-title-work">업무 시스템 선택</h3>
+                    <Box className="panel-box">
+                      <ul className="work-system-list">
+                        {/* 사용중 케이스 */}
+                        <li className="item">
+                          <Box className="system-info">
+                            <span className="tag using">사용중</span> 
+                            <Button 
+                              variant="text" 
+                              className="system-name" 
+                              endIcon={<ChevronRightIcon />}
+                            >
+                              eCRF 업무
+                            </Button>
+                          </Box>
+                          <Box className="control-action">
+                            <Button variant="outlined04" size="small" className="s-lg">신청취소하기</Button> 
+                          </Box>
+                        </li>
+
+                        {/* 승인중 케이스 */}
+                        <li className="item">
+                          <Box className="system-info">
+                            <span className="tag waiting">승인중</span>
+                            <Button 
+                              variant="text" 
+                              className="system-name" 
+                              endIcon={<ChevronRightIcon />}
+                            >
+                              eCRF 업무
+                            </Button>
+                          </Box>
+                          <Box className="control-action">
+                            <span className="status-text">승인 대기 중</span>
+                          </Box>
+                        </li>
+
+                        {/* 신청가능 케이스 */}
+                        <li className="item">
+                          <Box className="system-info">
+                            <span className="tag available">신청가능</span>
+                            <Button 
+                              variant="text" 
+                              className="system-name" 
+                              endIcon={<ChevronRightIcon />}
+                            >
+                              eCRF 업무
+                            </Button>
+                          </Box>
+                          <Box className="control-action">
+                            <Button variant="outlined02" size="small" className="s-lg">신청하기</Button> 
+                          </Box>
+                        </li>
+                      </ul>
+                    </Box>
+                  
+  
+                  {/* --- 본문 끝 --- */}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box> 
       </Box>
     </ScreenShell>
   )

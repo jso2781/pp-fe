@@ -491,6 +491,8 @@ export default function PUB() {
                   
                   <Button variant="outlined">라인버튼 outlined</Button>
                   <Button variant="outlined02">라인버튼 outlined02</Button>
+                  <Button variant="outlined03">라인버튼 outlined02</Button>
+                  <Button variant="outlined04">라인버튼 outlined04</Button>
 
 
                   <h3 className="section-title">버튼 사이즈</h3>
@@ -531,22 +533,12 @@ export default function PUB() {
 
                     
                   <h3 className="section-title">하단버튼</h3>
-                  <Box className="btn-group between">
-                    <Button variant="outlined02" size="large">
-                      취소하기
-                    </Button>
-                    <Button variant="contained" size="large">
-                      확인
+                  <Box className="btn-group">
+                    <Button variant="contained02" size="large">
+                      목록
                     </Button>
                   </Box>
-                  <Box className="btn-group center">
-                    <Button variant="outlined02" size="large">
-                      취소하기
-                    </Button>
-                    <Button variant="contained" size="large">
-                      확인
-                    </Button>
-                  </Box>
+
                   <Box className="btn-group right">
                     <Button variant="outlined02" size="large">
                       취소하기
@@ -556,11 +548,32 @@ export default function PUB() {
                     </Button>
                   </Box>
 
+                  <Box className="btn-group center">
+                    <Button variant="outlined02" size="large">
+                      취소하기
+                    </Button>
+                    <Button variant="contained" size="large">
+                      확인
+                    </Button>
+                  </Box>
 
+                  <Box className="btn-group between">
+                      <Box className="left-group">
+                        <Button variant="contained02" size="large">
+                          목록
+                        </Button>
+                      </Box>
+                      <Box className="right-group">
+                        <Button variant="outlined02" size="large">
+                          취소
+                        </Button>
+                        <Button variant="contained" size="large">
+                          수정
+                        </Button>
+                      </Box>
+                    </Box>
+                  
                   <h3 className="section-title">파일첨부</h3>
-
-
-
                   <Box className="attach-file-box">
                     <FileUploadField
                       value={uploadedFiles}

@@ -17,30 +17,15 @@ export default function Layout() {
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
       {/* <Box className="layout-full"> */}
-      <Header onOpenNav={() => setMobileOpen(true)} />
-      
+        <Header onOpenNav={() => setMobileOpen(true)} />
         {/* <AppNavDrawer mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} drawerWidth={DRAWER_WIDTH} /> */}
-
-        {/* <Box
-          component="main"
-          sx={{
-            flex: 1,
-            minWidth: 0,
-            // desktop drawer space
-            ml: { xs: 0, md: `${DRAWER_WIDTH}px` },
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        > */}
-          {/* keep spacing consistent under sticky AppBar */}
-          {/* <Toolbar sx={{ display: 'none' }} /> */}
-          <Box className="app-main" sx={{ flex: 1 }}>
-            <Suspense fallback={<div style={{ padding: 24, textAlign: 'center' }}>로딩 중...</div>}>
-              <Outlet />
-            </Suspense>
-          </Box>
+        <Box className="app-main" sx={{ flex: 1 }}>
+          <Suspense fallback={<div style={{ padding: 24, textAlign: 'center' }}>로딩 중...</div>}>
+            <Outlet />
+          </Suspense>
+        </Box>
         <Footer />
-        {/* </Box> */}
+      {/* </Box> */}
     </ThemeProvider>
   )
 }

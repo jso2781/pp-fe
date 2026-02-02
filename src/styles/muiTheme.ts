@@ -6,7 +6,7 @@ import '@mui/material/Button';
 import '@mui/material/Checkbox';
 import '@mui/material/Radio';
 
-// 1. TypeScript 타입 확장
+// 1. TypeScript 타입 확장 (기존 유지)
 declare module '@mui/material/styles' {
   interface Palette {
     dark: Palette['primary'];
@@ -19,59 +19,26 @@ declare module '@mui/material/styles' {
 }
 
 declare module '@mui/material/Button' {
-  interface ButtonPropsColorOverrides {
-    dark: true;
-    gray: true;
-  }
-  interface ButtonPropsVariantOverrides {
-    outlined02: true;
-    contained02: true;
-  }
-  interface ButtonPropsSizeOverrides {
-    xsmall: true;
-  }
+  interface ButtonPropsColorOverrides { dark: true; gray: true; }
+  interface ButtonPropsVariantOverrides { outlined02: true; outlined03: true; outlined04: true; contained02: true; }
+  interface ButtonPropsSizeOverrides { xsmall: true; }
 }
 
-declare module '@mui/material/Checkbox' {
-  interface CheckboxPropsColorOverrides {
-    dark: true;
-    gray: true;
-  }
-}
-
-declare module '@mui/material/Radio' {
-  interface RadioPropsColorOverrides {
-    dark: true;
-    gray: true;
-  }
-}
-
-declare module '@mui/material/TextField' {
-  interface TextFieldPropsSizeOverrides { large: true; }
-}
-declare module '@mui/material/InputBase' {
-  interface InputBasePropsSizeOverrides { large: true; }
-}
-declare module '@mui/material/FormControl' {
-  interface FormControlPropsSizeOverrides { large: true; }
-}
-declare module '@mui/material/Select' {
-  interface SelectPropsSizeOverrides { large: true; }
-}
-
-declare module '@mui/material/styles' {
-  interface TypeText {
-    main?: string;
-  }
-}
+declare module '@mui/material/Checkbox' { interface CheckboxPropsColorOverrides { dark: true; gray: true; } }
+declare module '@mui/material/Radio' { interface RadioPropsColorOverrides { dark: true; gray: true; } }
+declare module '@mui/material/TextField' { interface TextFieldPropsSizeOverrides { large: true; } }
+declare module '@mui/material/InputBase' { interface InputBasePropsSizeOverrides { large: true; } }
+declare module '@mui/material/FormControl' { interface FormControlPropsSizeOverrides { large: true; } }
+declare module '@mui/material/Select' { interface SelectPropsSizeOverrides { large: true; } }
+declare module '@mui/material/styles' { interface TypeText { main?: string; } }
 
 // 2. 테마 생성
 export const muiTheme = createTheme({
   palette: {
-    primary: { main: '#087C80', contrastText: '#ffffff' }, // 메인 Teal
-    secondary: { main: '#464C53', contrastText: '#ffffff' }, // 보조 Gray
-    gray: { main: '#D8D8D8', contrastText: '#1E2124' }, // 연한 회색
-    dark: { main: '#303336', contrastText: '#ffffff' }, // 강조 검정
+    primary: { main: '#087C80', contrastText: '#ffffff' },
+    secondary: { main: '#464C53', contrastText: '#ffffff' },
+    gray: { main: '#D8D8D8', contrastText: '#1E2124' },
+    dark: { main: '#303336', contrastText: '#ffffff' },
     error: { main: '#BD2C0F' },
     text: { primary: '#1E2124', secondary: '#464C53', main: '#087C80',},
     divider: '#D8D8D8',
@@ -81,7 +48,6 @@ export const muiTheme = createTheme({
   },
   shape: { borderRadius: 8 },
   components: {
-    // 모든 Paper 그림자 제거
     MuiPaper: {
       defaultProps: { elevation: 0 },
       styleOverrides: {
@@ -93,16 +59,19 @@ export const muiTheme = createTheme({
     // 버튼 설정 베이스
     MuiButtonBase: {
       defaultProps: {
-        disableRipple: true, // 클릭 시 회색 원(물결)이 퍼지는 것 방지
-        disableTouchRipple: true, // 터치 시 발생하는 효과까지 차단
+        disableRipple: true,
+        disableTouchRipple: true,
       },
       styleOverrides: {
         root: {
-          // 탭 키로 이동했을 때만 생기는 테두리
+          cursor: 'pointer !important',
           '&.Mui-focusVisible': {
-            backgroundColor: 'transparent !important', // 배경 원 제거
+            backgroundColor: 'transparent !important',
             outline: '1px solid #087C80',
             outlineOffset: '2px',
+          },
+          '&.Mui-disabled': {
+            cursor: 'not-allowed !important',
           },
         },
       },
@@ -122,14 +91,25 @@ export const muiTheme = createTheme({
           borderRadius: 8, 
           boxShadow: 'none',
           lineHeight: 1.4,
-          // 모든 버튼 공통 호버 스타일
+          gap: '2px',
           '&:hover': { boxShadow: 'none' },
-
-          // 탭 키로 이동했을 때(Focus) 스타일 제어
           '&.Mui-focusVisible': {
             outline: '2px solid #087C80',
             outlineOffset: '2px',
             color: '#087C80'
+          },
+          '&.s-lg': {
+            fontSize: '18px !important',
+          },
+        },
+        // --- startIcon, endIcon 마진 및 크기 제어 ---
+        startIcon: {
+          marginRight: 0,
+        },
+        endIcon: {
+          marginLeft: 0,
+          '& svg': {
+            fontSize: '1.2rem',
           },
         },
         text: {
@@ -168,7 +148,7 @@ export const muiTheme = createTheme({
         },
         sizeLarge: { 
           height: 56, 
-          fontSize: 17, 
+          fontSize: 19, 
           padding: '0 24px',
           '@media (max-width: 1024px)': {
             height: 48,
@@ -188,7 +168,6 @@ export const muiTheme = createTheme({
           },
         },
       },
-      // --- 버튼타입 variant 추가 ---
       variants: [
         {
           props: { variant: 'contained02' },
@@ -216,6 +195,34 @@ export const muiTheme = createTheme({
             },
           },
         },
+        {
+          props: { variant: 'outlined03' },
+          style: {
+            color: '#0B50D0', 
+            border: '1px solid #0B50D0',
+            backgroundColor: '#fff',
+            '&:hover': {
+              color: '#0B50D0',
+              borderColor: '#0B50D0',
+              backgroundColor: 'rgba(11, 80, 208, 0.2)',
+              boxShadow: 'none',
+            },
+          },
+        },
+        {
+          props: { variant: 'outlined04' },
+          style: {
+            color: '#F05F42', 
+            border: '1px solid #F05F42',
+            backgroundColor: '#fff',
+            '&:hover': {
+              color: '#F05F42',
+              borderColor: '#F05F42',
+              backgroundColor: 'rgba(241, 226, 223, 0.2)',
+              boxShadow: 'none',
+            },
+          },
+        },
       ],
     },
 
@@ -225,32 +232,24 @@ export const muiTheme = createTheme({
         root: {
           borderRadius: 8,
           padding: 0, 
-          boxSizing: 'border-box', // 테두리 두께를 높이에 포함시킴
+          backgroundColor: '#ffffff',
+          boxSizing: 'border-box',
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': { boxShadow: 'none' },
-
-          // 아무 사이즈도 주지 않았을 때 적용되는 기본 높이 (Medium과 동일)
           height: 48, 
           fontSize: '15px',
-
-          //textarea
           '&.MuiInputBase-multiline': {
-            height: 'auto',            // 높이를 가변적으로 변경
-            padding: '16px 0px',      // 플레이스홀더와 테두리 사이 간격 (일괄 적용)
+            height: 'auto',
+            padding: '16px 0px',
           },
-
-          // 1. Large 사이즈 (56px) -> 1024px 이하 반응형 처리
           '&.MuiInputBase-sizeLarge': {
             height: 56,
             fontSize: '17px',
-            // Large 사이즈이면서 멀티라인일 때 처리
             '&.MuiInputBase-multiline': { height: 'auto' }, 
             '@media (max-width: 1024px)': {
               height: 48,
               fontSize: '16px',
             },
           },
-
-          // 2. Medium 사이즈 (명시적으로 size="medium"을 줬을 때)
           '&.MuiInputBase-sizeMedium': {
             height: 48,
             fontSize: '15px',
@@ -259,34 +258,28 @@ export const muiTheme = createTheme({
               fontSize: '14px',
             },
           },
-          // 3. Small 사이즈 (36px)
           '&.MuiInputBase-sizeSmall': {
             height: 36,
             fontSize: '13px',
           },
-
-          // 비활성화 상태 스타일
           '&.Mui-disabled': {
-            backgroundColor: '#CDD1D5', // 아주 연한 회색 배경으로 변경
-            color: '#8A949E',           // 글자색을 흐리게
-            cursor: 'not-allowed',      // 마우스 커서를 '금지' 모양으로
-            
+            backgroundColor: '#CDD1D5',
+            color: '#8A949E',
+            cursor: 'not-allowed !important',
             '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#CDD1D5 !important', // 보더 색상을 더 연하게 고정
+              borderColor: '#CDD1D5 !important',
             },
           },
         },
         input: {
           padding: '0 14px',
-          height: '100% !important', // 부모(root) 높이를 그대로 따라감
+          height: '100% !important',
           boxSizing: 'border-box',
           display: 'flex',
           alignItems: 'center',
-
-          // 플레이스홀더 색상 및 반응형 사이즈 설정
           '&::placeholder': {
-            color: '#8A949E', // 요청하신 색상 반영
-            opacity: 1,      // 브라우저 기본 투명도 해제
+            color: '#8A949E',
+            opacity: 1,
             '@media (max-width: 1024px)': {
               fontSize: '14px',
             },
@@ -301,7 +294,7 @@ export const muiTheme = createTheme({
     //셀렉트박스
     MuiSelect: {
       defaultProps: {
-        size: 'medium', // 기본값 설정
+        size: 'medium',
       },
       styleOverrides: {
         select: {
@@ -310,24 +303,26 @@ export const muiTheme = createTheme({
           alignItems: 'center',
           paddingTop: '0 !important',
           paddingBottom: '0 !important',
+          cursor: 'pointer !important',
+          backgroundColor: '#ffffff'
         },
         icon: {
-          // 높이가 변해도 화살표 아이콘이 항상 중앙에 오도록 설정
           top: 'calc(50% - 12px)', 
         },
       },
     },
 
-    // --- 체크박스 네모박스 스타일 커스텀 ---
+    // 체크박스
     MuiCheckbox: {
       defaultProps: {
         disableRipple: true, 
-        disableFocusRipple: true, // 포커스 시 웨이브 제거
+        disableFocusRipple: true,
       },
       styleOverrides: {
         root: {
           padding: 8,
           backgroundColor: 'transparent !important',
+          cursor: 'pointer !important',
           '&:hover, &.Mui-checked:hover': {
             backgroundColor: 'transparent !important',
           },
@@ -338,7 +333,7 @@ export const muiTheme = createTheme({
               boxShadow: '0 0 0 2px #ffffff, 0 0 0 4px #087C80',
             },
           },
-          '& .MuiSvgIcon-root': { display: 'none' }, // 기본 SVG 아이콘 숨기기
+          '& .MuiSvgIcon-root': { display: 'none' },
           '&::before': {
             content: '""',
             width: 20,
@@ -372,6 +367,7 @@ export const muiTheme = createTheme({
       styleOverrides: {
         root: {
           color: '#D8D8D8',
+          cursor: 'pointer !important',
           '&.Mui-checked': { color: '#087C80' },
           '&:hover': { backgroundColor: 'rgba(8, 124, 128, 0.04)' },
         },
@@ -381,11 +377,24 @@ export const muiTheme = createTheme({
     // 체크박스/라디오 라벨 간격 및 폰트 설정
     MuiFormControlLabel: {
       styleOverrides: {
+        root: {
+          cursor: 'pointer !important',
+        },
         label: {
           fontSize: '15px',
           color: '#131416',
           marginLeft: '4px',
-          userSelect: 'none', // 텍스트 드래그 방지
+          userSelect: 'none',
+          cursor: 'pointer !important',
+        },
+      },
+    },
+
+    // 셀렉트 메뉴 아이템 커서 추가
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          cursor: 'pointer !important',
         },
       },
     },
