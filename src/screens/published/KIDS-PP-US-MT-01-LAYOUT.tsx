@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Box, Typography, Stack, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-
 import DepsLocation from '@/components/common/DepsLocation'
 import CollapsibleSideNav from '@/components/navigation/CollapsibleSideNav'
 
@@ -36,7 +35,7 @@ export default function KIDS_PP_US_MT_01_LAYOUT() {
     <Box className={`page-layout ${collapsed ? 'is-collapsed' : ''}`}>
       <Box className="sub-container">
         <Box className="content-wrap">
-
+          {/* 사이드메뉴 */}
           <Box className="side-nav">
             <CollapsibleSideNav
               title="내업무"
@@ -46,7 +45,6 @@ export default function KIDS_PP_US_MT_01_LAYOUT() {
               onSelect={(key) => window.alert(`Maps: ${key}`)}
             />
           </Box>
-
           {/* 서브 콘텐츠 영역 */}
           <Box className="sub-content">
             <Box className="welcome-banner">
@@ -64,6 +62,7 @@ export default function KIDS_PP_US_MT_01_LAYOUT() {
             <Box className="content-view" id="content">
               <Box className="page-content">
                 {/* --- 본문 시작 --- */}
+
 
                 {/* --- 본문 끝 --- */}
               </Box>

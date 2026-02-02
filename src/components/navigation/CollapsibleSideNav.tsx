@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Box, Divider, Drawer, IconButton, List, ListItemButton, ListItemText, Typography, Collapse } from '@mui/material'
 import { Menu as MenuIcon, MenuOpen as MenuOpenIcon, ExpandLess, ExpandMore } from '@mui/icons-material'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import ChevronRight from '@mui/icons-material/ChevronRight';
 
 interface MenuItem {
   key: string;
@@ -62,7 +63,7 @@ export default function CollapsibleSideNav({
           height: '100%',
           borderRadius: '0 12px 12px 0',
           border: '1px solid #D8D8D8',
-          background: '#EDF8F8',
+          background: '#fff',
           zIndex: 1200,
           transition: (theme) =>
             theme.transitions.create('width', {
@@ -79,13 +80,21 @@ export default function CollapsibleSideNav({
         zIndex: 1200,
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', padding: '20px 20px', borderBottom: '1px solid #8A949E'}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', padding: '18px 20px', background:'#0A6C70', borderBottom: '1px solid #8A949E'}}>
         {!collapsed && (
-          <Typography className="nav_title">
+          <Typography 
+            className="nav_title"
+            sx={{
+              fontSize: '24px',
+              fontWeight: 700,
+              lineHeight: 1.2,
+              color:'#fff',
+            }}
+          >
             {title}
           </Typography>
         )}
-        <IconButton aria-label="toggle menu" onClick={onToggle} size="small" sx={{ color: '#1E2124' }}>
+        <IconButton aria-label="toggle menu" onClick={onToggle} size="small" sx={{ color: '#fff' }}>
           {collapsed ? <MenuIcon sx={{ fontSize: 32 }}/> : <MenuOpenIcon sx={{ fontSize: 32 }}/>}
         </IconButton>
       </Box>
@@ -98,19 +107,22 @@ export default function CollapsibleSideNav({
             <Box 
               key={it.key}
               sx={{
-                borderBottom: '1px solid #8A949E', 
+                borderBottom: collapsed ? 'none' : '1px solid #8A949E',
+                display: collapsed ? 'none' : 'block', // 1단계 메뉴 자체를 아예 안 보이게 함
               }}
             >
               <ListItemButton
                 selected={selected === it.key}
-                disabled={!!it.disabled}
+                disabled={!!it.disabled || collapsed} // 접혔을 때 비활성화
                 onClick={() => {
+                  // 접힌 상태에선 로직 실행 차단
+                  if (collapsed) return;
+
                   if (hasChildren) {
                     handleToggleOpen(it.key)
                   } else {
-                    // 만약 새창 속성이 있다면 window.open
                     if (it.isExternal) {
-                      window.open(it.key, '_blank'); // key가 URL일 경우
+                      window.open(it.key, '_blank'); 
                     } else {
                       onSelect?.(it.key);
                     }
@@ -118,8 +130,9 @@ export default function CollapsibleSideNav({
                 }}
                 sx={{ 
                   py: '15px',
-                  pl: '30px',
-                  pr: '25px',
+                  pr: '15px',
+                  // 접혔을 때 클릭 이벤트 차단
+                  pointerEvents: collapsed ? 'none' : 'auto',
                 }}
               >
                 <ListItemText
@@ -129,35 +142,34 @@ export default function CollapsibleSideNav({
                     fontWeight: 700,
                     noWrap: true,
                     sx: { opacity: collapsed ? 0 : 1 },
-                    //pl: '8px',
                   }}
                 />
-                {/* 하위 메뉴가 있고, 메뉴가 펼쳐진 상태일 때만 화살표 표시 */}
                 {!collapsed && hasChildren && (
                   isOpen 
-                    ? <ExpandLess sx={{ fontSize: 30 }} /> 
-                    : <ExpandMore sx={{ fontSize: 30 }} />
+                    ? <ExpandMore sx={{ fontSize: 30 }} /> 
+                    : <ChevronRight sx={{ fontSize: 30 }} /> 
                 )}
               </ListItemButton>
 
-              {/* 하위 메뉴 리스트 (Collapse) */}
-              {hasChildren && (
-                <Collapse in={isOpen && !collapsed} timeout="auto" unmountOnExit>
+              {/* 하위 메뉴 리스트 */}
+              {hasChildren && !collapsed && ( // collapsed일 때 렌더링 안 함
+                <Collapse in={isOpen} timeout="auto" unmountOnExit>
                   <List 
                     component="div" 
                     disablePadding 
                     dense
                     sx={{ 
-                      py: 1,
-                      backgroundColor: '#B1D2D2'
+                      backgroundColor: '#fff',
+                      borderTop: '1px solid #D8D8D8' 
                     }}
                   >
                     {it.children?.map((child) => (
                       <ListItemButton
                         key={child.key}
                         selected={selected === child.key}
+                        disabled={collapsed} // 접혔을 때 비활성화
                         onClick={() => {
-                          /* 하위 메뉴 새창 */
+                          if (collapsed) return;
                           if (child.isExternal) {
                             window.open(child.key, '_blank');
                           } else {
@@ -165,19 +177,14 @@ export default function CollapsibleSideNav({
                           }
                         }}
                         sx={{ 
-                          pl: collapsed ? 1.5 : 3,
-                          backgroundColor: '#B1D2D2',
+                          backgroundColor: '#fff',
+                          pointerEvents: collapsed ? 'none' : 'auto',
                           '&:hover': {
-                            backgroundColor: '#9DBFBF',
-                            '& .MuiTypography-root': {
-                              fontWeight: 700,
-                            },
+                            backgroundColor: 'rgba(8, 124, 128, 0.25);',
+                            '& .MuiTypography-root': { fontWeight: 700 },
                           },
-                          /* 선택되었을 때 */
-                          '&.Mui-selected .MuiTypography-root': {
-                            fontWeight: 700,
-                          }
-                         }}
+                          '&.Mui-selected .MuiTypography-root': { fontWeight: 700 }
+                        }}
                       >
                         <ListItemText
                           primary={child.label}
@@ -189,14 +196,11 @@ export default function CollapsibleSideNav({
                           }}
                         />
 
-                        {/* 3. 새창 아이콘 추가 위치 */}
-                        {!collapsed && child.isExternal && (
+                        {child.isExternal && (
                           <OpenInNewIcon 
-                            className="external-icon"
                             sx={{ 
                               fontSize: 16,
                               ml: 0.8,
-                              transition: 'opacity 0.2s',
                               color: 'inherit' 
                             }} 
                           />
