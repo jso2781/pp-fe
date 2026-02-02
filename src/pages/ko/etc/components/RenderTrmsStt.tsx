@@ -50,11 +50,11 @@ export default function RenderStt({ trmsSttCd, isList }: { trmsSttCd: string, is
           ? <Box dangerouslySetInnerHTML={{ __html: current.trmsSttCn }} />
           : <Box><pre>{current.trmsSttCn}</pre></Box>
       }
-      {list.length > 0 && list.map(trmsSttRVO => {
+      {list.length > 0 && list.map((trmsSttRVO, i) => {
         if(current.trmsSttAplcnYmd === trmsSttRVO.trmsSttAplcnYmd) {
-          return <Box style={{fontWeight: "bold", color: "#087c80"}} onClick={handleSetCurrentClick(trmsSttRVO)}>{trmsSttRVO.trmsSttAplcnYmd} - {trmsSttRVO.trmsSttEndYmd}(선택중)</Box>;
+          return <Box key={`faq-${i}`} style={{fontWeight: "bold", color: "#087c80"}} onClick={handleSetCurrentClick(trmsSttRVO)}>{trmsSttRVO.trmsSttAplcnYmd} - {trmsSttRVO.trmsSttEndYmd}(선택중)</Box>;
         }
-        return <Box onClick={handleSetCurrentClick(trmsSttRVO)}>{trmsSttRVO.trmsSttAplcnYmd} - {trmsSttRVO.trmsSttEndYmd}</Box>
+        return <Box key={`faq-${i}`} onClick={handleSetCurrentClick(trmsSttRVO)}>{trmsSttRVO.trmsSttAplcnYmd} - {trmsSttRVO.trmsSttEndYmd}</Box>
       })}
     </>
   );
