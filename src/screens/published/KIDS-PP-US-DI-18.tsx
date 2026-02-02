@@ -346,14 +346,15 @@ return (
                             )}
                           </Box>
                         </Box>
-
-
                       </Box>
                     </Box>
                   </ZodFormProvider>
                 </Box>
-                
-
+                <Box className="btn-group right">
+                  <Button variant="contained" size="large">
+                    제안등록
+                  </Button>
+                </Box>
                 {/* --- 본문 끝 --- */}
                 </Box>
               </Box>
