@@ -264,7 +264,7 @@ return (
                           <RHFTextField name="problem" id="problem" placeholder="현황 및 문제점을 100자 이내로 입력해주세요." size="large" fullWidth multiline minRows={3} />
                         </Box>
 
-                        {/* 의견 및 요청사항 간략기재 - id/name 추가 */}
+                        {/* 의견 및 요청사항 간략기재 */}
                         <Box className="form-item">
                           <Typography component="label" htmlFor="summary" className="label">
                             의견 및 요청사항 간략기재
@@ -280,15 +280,6 @@ return (
                             <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
                           </Typography>
                           <RHFTextField name="detail" id="detail" placeholder="의견 및 요청사항을 1,000자 이내로 입력해주세요." size="large" fullWidth multiline minRows={5} />
-                        </Box>
-
-                        {/* 기타 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="etc" className="label">
-                            참고사항 및 기타
-                            <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
-                          </Typography>
-                          <RHFTextField name="etc" id="etc" placeholder="참고사항 및 기타 사항을 1,000자 이내로 입력해주세요." size="large" fullWidth multiline minRows={2} />
                         </Box>
 
                         {/* 기타 */}
