@@ -237,7 +237,7 @@ return (
                           <RHFTextField name="name" id="name" placeholder="이름을 입력하세요." size="large" fullWidth />
                         </Box>
 
-                        {/* 휴대전화번호 (선택) */}
+                        {/* 휴대전화번호 */}
                         <Box className="form-item">
                           <Typography component="label" htmlFor="contact" className="label">
                             휴대전화번호
@@ -246,7 +246,7 @@ return (
                           <RHFTextField name="contact" id="contact" placeholder="010-1234-5678" size="large" fullWidth />
                         </Box>
 
-                        {/* 이메일 (필수) - label 텍스트 중복 수정 및 id/name 추가 */}
+                        {/* 이메일 */}
                         <Box className="form-item">
                           <Typography component="label" htmlFor="email" className="label">
                             이메일
