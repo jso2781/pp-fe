@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Alert, Box, Button, Divider, Stack, Typography } from '@mui/material';
+import { Alert, Box, Button, Divider, Stack, Typography, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { FormPage, FormSection, FieldGroup } from '@/components/form/FormLayout'
 import { ZodFormProvider } from '@/components/rhf/ZodFormProvider'
@@ -228,6 +228,59 @@ return (
                   <ZodFormProvider schema={schema} methods={form}>
                     <Box component="form" onSubmit={form.handleSubmit(onSubmit)} noValidate>
                       <Box className="form-group-wrap">
+
+
+                        <Box className="form-item-row-vertical">
+                          <Typography className="label">
+                            구분
+                            <Box component="span" className="required">(필수)</Box>
+                          </Typography>
+                          <RadioGroup row className="radio-group-container">
+                            <Box className="form-item">
+                              <FormControlLabel
+                                className="rdo-field"
+                                value="doctor"
+                                control={<Radio id="rdo-doctor" />}
+                                label={<Typography component="label" htmlFor="rdo-doctor">의사</Typography>}
+                              />
+                            </Box>
+                            <Box className="form-item">
+                              <FormControlLabel
+                                className="rdo-field"
+                                value="pharmacist"
+                                control={<Radio id="rdo-pharmacist" />}
+                                label={<Typography component="label" htmlFor="rdo-pharmacist">약사</Typography>}
+                              />
+                            </Box>
+                            <Box className="form-item">
+                              <FormControlLabel
+                                className="rdo-field"
+                                value="nurse"
+                                control={<Radio id="rdo-nurse" />}
+                                label={<Typography component="label" htmlFor="rdo-nurse">간호사</Typography>}
+                              />
+                            </Box>
+                            <Box className="form-item">
+                              <FormControlLabel
+                                className="rdo-field"
+                                value="consumer"
+                                control={<Radio id="rdo-consumer" />}
+                                label={<Typography component="label" htmlFor="rdo-consumer">소비자</Typography>}
+                              />
+                            </Box>
+                            <Box className="form-item">
+                              <FormControlLabel
+                                className="rdo-field"
+                                value="etc"
+                                control={<Radio id="rdo-etc" />}
+                                label={<Typography component="label" htmlFor="rdo-etc">기타</Typography>}
+                              />
+                            </Box>
+                          </RadioGroup>
+                        </Box>
+                        
+
+
                         {/* 이름 */}
                         <Box className="form-item">
                           <Typography component="label" htmlFor="name" className="label">
