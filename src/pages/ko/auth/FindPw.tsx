@@ -21,8 +21,8 @@ export default function FindPw() {
   const { t } = useTranslation();
   
   const handleLoginMethod = (type: string) => {
-    // mbrNo 1000000005 회원으로 고정
-    navigate('/ko/auth/FindPwModify', { state:{ mbrNo: '1000000005' }});
+    // mbrNo 2026000007 회원으로 고정
+    navigate('/ko/auth/FindPwModify', { state:{ mbrNo: '2026000007' }});
   }
 
   return (

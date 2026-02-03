@@ -5,13 +5,13 @@
  * 화면설명: 비밀번호 변경
  */
 
-import { Box, Typography, TextField, Button, Stack, Alert } from '@mui/material';
+import { Box, Typography, TextField, Button } from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation';
 import { useDialog } from '@/contexts/DialogContext';
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { updateMbrInfoPw } from '@/features/mbr/MbrInfoThunks';
 
 export default function FindPwModify() {
@@ -25,8 +25,9 @@ export default function FindPwModify() {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const { showConfirmBackdrop } = useDialog();
+  const { showConfirmBackdrop, showAlert } = useDialog();
   const dispatch = useAppDispatch();
+  const { error } = useAppSelector(s => s.mbrInfo);
 
   // 비밀번호 유효성 검사 (숫자, 영문, 특수문자 조합 10-20자리)
   const validatePassword = (password: string): string => {
@@ -107,29 +108,29 @@ export default function FindPwModify() {
   }
   
 
-  const handleInputComplete = () => {
+  const handleInputComplete = async () => {
     if (!validateForm()) {
       return;
     }
 
     //API dispatch
     try{
-      dispatch(updateMbrInfoPw({ mbrNo: location.state?.mbrNo, encptMbrPswd: formData.password })).unwrap();
-    } catch(e) {
+      await dispatch(updateMbrInfoPw({ mbrNo: location.state?.mbrNo, encptMbrPswd: formData.password })).unwrap();
 
+      showConfirmBackdrop(
+        t('findPwModifyCompleteMessage'),
+        t('findPwModifyCompleteTitle'),
+        () => navigate('/ko/auth/login'),
+        () => {}
+      );
+    } catch(e) {
+      showAlert('비밀번호 변경 실패');
     } finally {
       setFormData({
         password: '',
         confirmPassword: '',
       });
     }
-
-    showConfirmBackdrop(
-      t('findPwModifyCompleteMessage'),
-      t('findPwModifyCompleteTitle'),
-      () => navigate('/ko/auth/login'),
-      () => {}
-    );
   }
 
   const handleCancle = () => {
