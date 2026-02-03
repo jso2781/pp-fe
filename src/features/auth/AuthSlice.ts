@@ -7,7 +7,7 @@ import { MbrInfoRVO } from '../mbr/MbrInfoTypes';
  */
 export interface AuthState {
   userInfo: MbrInfoRVO | null;
-  tokenId: number | null;
+  tokenSn: number | null;
   accessToken: string | null;
   refreshToken: string | null;
   pswdErrNmtm: number | null;
@@ -20,7 +20,7 @@ export interface AuthState {
  */
 const initialState: AuthState = {
   userInfo: null,
-  tokenId: null,
+  tokenSn: null,
   accessToken: null,
   refreshToken: null,
   pswdErrNmtm: null,
@@ -34,7 +34,7 @@ const AuthSlice = createSlice({
   initialState,
   reducers: {
     setAccessToken(state, action: PayloadAction<MbrInfoRVO | null>) {
-      state.tokenId = action.payload?.tokenId ?? null;
+      state.tokenSn = action.payload?.tokenSn ?? null;
       state.accessToken = action.payload?.accessToken ?? null;
       state.refreshToken = action.payload?.refreshToken ?? null;
       state.pswdErrNmtm = action.payload?.pswdErrNmtm ?? null;
@@ -44,7 +44,7 @@ const AuthSlice = createSlice({
       // localStorage에 통일된 키로 저장 (AuthContext와 동기화)
       if(action.payload?.accessToken) {
         const authData = {
-          tokenId: action.payload?.tokenId,
+          tokenSn: action.payload?.tokenSn,
           accessToken: action.payload?.accessToken,
           refreshToken: action.payload?.refreshToken,
           pswdErrNmtm: action.payload?.pswdErrNmtm,
@@ -74,7 +74,7 @@ const AuthSlice = createSlice({
           // sessionStorage에 auth 데이터가 없지만 accessToken이 있는 경우 새로 생성
           const authData = {
             userInfo: action.payload,
-            tokenId: state.tokenId,
+            tokenSn: state.tokenSn,
             accessToken: state.accessToken,
             refreshToken: state.refreshToken,
             pswdErrNmtm: state.pswdErrNmtm,
@@ -87,7 +87,7 @@ const AuthSlice = createSlice({
     },
     clearUserInfo: (state) => {
       state.userInfo = null;
-      state.tokenId = null;
+      state.tokenSn = null;
       state.accessToken = null;
       state.refreshToken = null;
       state.pswdErrNmtm = null;
@@ -107,7 +107,7 @@ const AuthSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.userInfo = action.payload.userInfo;
-        state.tokenId = action.payload.tokenId;
+        state.tokenSn = action.payload.tokenSn;
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
         state.pswdErrNmtm = action.payload.pswdErrNmtm;
@@ -116,7 +116,7 @@ const AuthSlice = createSlice({
         if (action.payload.userInfo && action.payload.accessToken) {
           const authData = {
             userInfo: action.payload.userInfo,
-            tokenId: action.payload.tokenId,
+            tokenSn: action.payload.tokenSn,
             accessToken: action.payload.accessToken,
             refreshToken: action.payload.refreshToken,
             pswdErrNmtm: action.payload.pswdErrNmtm,
@@ -136,7 +136,7 @@ const AuthSlice = createSlice({
         // AuthThunks.ts login 함수에서 모든 에러를 rejectWithValue로 처리하므로 action.payload가 항상 존재
         state.error = action.payload ?? '로그인에 실패했습니다.';
         state.userInfo = null;
-        state.tokenId = null;
+        state.tokenSn = null;
         state.accessToken = null;
         state.refreshToken = null;
         state.pswdErrNmtm = null;
@@ -149,7 +149,7 @@ const AuthSlice = createSlice({
       .addCase(refresh.fulfilled, (state, action) => {
         state.loading = false;
         state.userInfo = action.payload.userInfo;
-        state.tokenId = action.payload.tokenId;
+        state.tokenSn = action.payload.tokenSn;
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
         state.pswdErrNmtm = action.payload.pswdErrNmtm;
@@ -158,7 +158,7 @@ const AuthSlice = createSlice({
         state.loading = false;
         state.error = (action.payload as string) ?? 'JWT Token 갱신에 실패했습니다.';
         state.userInfo = null;
-        state.tokenId = null;
+        state.tokenSn = null;
         state.accessToken = null;
         state.refreshToken = null;
         state.pswdErrNmtm = null;
@@ -170,7 +170,7 @@ const AuthSlice = createSlice({
       .addCase(logout.fulfilled, (state, action) => {
         state.loading = false;
         state.userInfo = null;
-        state.tokenId = null;
+        state.tokenSn = null;
         state.accessToken = null;
         state.refreshToken = null;
         state.pswdErrNmtm = null;
@@ -183,7 +183,7 @@ const AuthSlice = createSlice({
         state.loading = false;
         state.error = action.payload ?? '로그아웃에 실패했습니다.';
         state.userInfo = null;
-        state.tokenId = null;
+        state.tokenSn = null;
         state.accessToken = null;
         state.refreshToken = null;
         state.pswdErrNmtm = null;

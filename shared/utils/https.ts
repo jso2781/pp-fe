@@ -74,13 +74,13 @@ https.interceptors.response.use(
       // 세션 스토리지에서 인증정보(auth) 가져오기
       const authData = sessionStorage.getItem("auth");
 
-      let tokenId1: number | null = null;
+      let tokenSn1: number | null = null;
       let refreshToken1: string | null = null;
 
       if (authData) {
         try {
           const parsed = JSON.parse(authData);
-          tokenId1 = parsed.tokenId || null;
+          tokenSn1 = parsed.tokenSn || null;
           refreshToken1 = parsed.refreshToken || null;
         } catch (e) {
           // 파싱 실패 시 별도 키에서 가져오기
@@ -91,9 +91,9 @@ https.interceptors.response.use(
       }
       
       if (!refreshToken1) {
-        // tokenId가 있으면 로그아웃 처리, 없으면 그냥 에러 반환
-        if (tokenId1) {
-          dispatch(logout({ tokenId: tokenId1 }));
+        // tokenSn가 있으면 로그아웃 처리, 없으면 그냥 에러 반환
+        if (tokenSn1) {
+          dispatch(logout({ tokenSn: tokenSn1 }));
         }
         return Promise.reject(error);
       }
@@ -112,12 +112,12 @@ https.interceptors.response.use(
 
       try {
         // refresh API 호출 (baseURL 포함)
-        const resp = await axios.post(`${apiBaseURL}${refreshApiPath()}`,{ "tokenId": tokenId1 , "refreshToken": refreshToken1 });
+        const resp = await axios.post(`${apiBaseURL}${refreshApiPath()}`,{ "tokenSn": tokenSn1 , "refreshToken": refreshToken1 });
 
         console.log("/auth/refresh rest api response resp.data=", resp.data);
 
         // 서버 응답에서 토큰 정보 추출
-        const tokenId = resp.data?.data?.tokenId ?? null;
+        const tokenSn = resp.data?.data?.tokenSn ?? null;
         const newAccessToken = resp.data?.data?.accessToken ?? null;
         const newRefreshToken = resp.data?.data?.refreshToken ?? null;
         const userInfo = resp.data?.data?.userInfo ?? null;
@@ -139,7 +139,7 @@ https.interceptors.response.use(
           }
           
           // 토큰 정보 업데이트
-          authData.tokenId = tokenId;
+          authData.tokenSn = tokenSn;
           authData.accessToken = newAccessToken;
           authData.refreshToken = newRefreshToken;
           
@@ -160,9 +160,9 @@ https.interceptors.response.use(
       }catch (e){
         // refresh 실패 시 대기 중인 요청들 모두 실패 처리
         runQueue(null);
-        // 로그아웃 처리 (tokenId가 null이면 0 사용, AuthContext와 동일한 로직)
-        if (tokenId1) {
-          dispatch(logout({ tokenId: tokenId1 }));
+        // 로그아웃 처리 (tokenSn가 null이면 0 사용, AuthContext와 동일한 로직)
+        if (tokenSn1) {
+          dispatch(logout({ tokenSn: tokenSn1 }));
         }
         return Promise.reject(e);
       } finally {
@@ -178,14 +178,14 @@ https.interceptors.response.use(
       if(authData){
         try{
           const parsed = JSON.parse(authData);
-          let tokenId = parsed.tokenId || null;
+          let tokenSn = parsed.tokenSn || null;
 
-          if(tokenId){
-            console.log("408 Request Timeout 시 로그아웃 처리(서버 Idle Timeout 처리) tokenId=", tokenId);
-            dispatch(logout({ tokenId }));
+          if(tokenSn){
+            console.log("408 Request Timeout 시 로그아웃 처리(서버 Idle Timeout 처리) tokenSn=", tokenSn);
+            dispatch(logout({ tokenSn }));
             return Promise.reject(error);
           }else{
-            console.log("408 Request Timeout 시 로그아웃 처리(서버 Idle Timeout 처리) tokenId 없음");
+            console.log("408 Request Timeout 시 로그아웃 처리(서버 Idle Timeout 처리) tokenSn 없음");
           }
         }catch(e){}
       }

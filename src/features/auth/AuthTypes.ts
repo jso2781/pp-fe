@@ -5,9 +5,9 @@ import { MbrInfoRVO } from "../mbr/MbrInfoTypes"
  */
 export interface LoginPVO {
   /**
-   * JWT토큰ID
+   * JWT토큰일련번호
    */
-  tokenId?: number
+  tokenSn?: number
 
   /**
    * 회원아이디
@@ -42,9 +42,9 @@ export interface LoginRVO {
   userInfo: MbrInfoRVO
 
   /**
-   * JWT토큰ID
+   * JWT토큰일련번호
    */
-  tokenId: number
+  tokenSn: number
 
   /**
    * JWT_Access_Token
@@ -64,9 +64,9 @@ export interface LoginRVO {
 
 export interface RefreshPVO {
   /**
-   * JWT토큰ID
+   * JWT토큰일련번호
    */
-  tokenId: number
+  tokenSn: number
 
   /**
    * JWT_Refresh_Token
@@ -75,7 +75,7 @@ export interface RefreshPVO {
 }
 
 export interface RefreshRVO {
-  tokenId: number
+  tokenSn: number
   accessToken: string
   refreshToken: string
   pswdErrNmtm: number
@@ -84,9 +84,9 @@ export interface RefreshRVO {
 
 export interface LogoutPVO {
   /**
-   * JWT토큰ID
+   * JWT토큰일련번호
    */
-  tokenId: number
+  tokenSn: number
 }
 
 export interface LogoutRVO {

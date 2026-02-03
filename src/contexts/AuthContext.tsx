@@ -8,7 +8,7 @@ import { GnbDepth3Item } from '@/features/auth/MenuTypes'
 
 interface AuthData {
   userInfo?: any
-  tokenId?: number | null
+  tokenSn?: number | null
   accessToken?: string | null
   refreshToken?: string | null
   pswdErrNmtm?: number | null
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   /********************************* AuthSlice Redux 상태 구독 및 상태 데이터 추출 시작 ************************************************/
   // AuthSlice Redux 상태 구독
   const auth = useAppSelector((s: RootState) => s.auth) as AuthState
-  const { userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm } = auth || {}
+  const { userInfo, tokenSn, accessToken, refreshToken, pswdErrNmtm } = auth || {}
 
   // Redux 상태에서 직접 계산
   // userInfo가 실제 데이터를 가진 객체인지 확인 (빈 객체가 아닌지)
@@ -56,18 +56,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     return {
       userInfo,
-      tokenId,
+      tokenSn,
       accessToken,
       refreshToken,
       pswdErrNmtm,
     }
-  }, [userInfo, tokenId, accessToken, refreshToken, pswdErrNmtm])
+  }, [userInfo, tokenSn, accessToken, refreshToken, pswdErrNmtm])
 
   const logoutContext = useCallback(() => {
     // Redux logout 액션을 dispatch
-    // tokenId가 null이면 0을 사용 (LogoutPVO는 tokenId가 필수 필드)
-    dispatch(logout({ tokenId: tokenId ?? 0 }))
-  }, [dispatch, tokenId])
+    // tokenSn가 null이면 0을 사용 (LogoutPVO는 tokenSn가 필수 필드)
+    dispatch(logout({ tokenSn: tokenSn ?? 0 }))
+  }, [dispatch, tokenSn])
   /********************************* AuthSlice Redux 상태 구독 및 상태 데이터 추출 끝 ************************************************/
 
   /********************************* MenuSlice Redux 상태 구독 및 상태 데이터 추출 시작 ************************************************/

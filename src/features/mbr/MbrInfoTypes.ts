@@ -226,9 +226,9 @@ export interface MbrInfoRVO {
   mdfcnDt?: string
 
   /**
-   * JWT토큰ID
+   * JWT토큰일련번호
    */
-  tokenId?: number
+  tokenSn?: number
 
   /**
    * 애플리케이션ID
