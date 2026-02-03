@@ -7,7 +7,8 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
+  // process.env와 loadEnv 병합: npm run localout 시 cross-env 등으로 넘긴 값 + .env.[mode] 모두 반영
+  const env = { ...process.env, ...loadEnv(mode, process.cwd(), '') }
 
   /**
    * UI base path
@@ -19,6 +20,7 @@ export default defineConfig(({ mode }) => {
   /**
    * Dev-only proxy settings
    * (vite dev server에서만 사용됨)
+   * - /api/* 요청이 proxyTarget으로 전달됨 → 실제 백엔드 수신 URL: {proxyTarget}/api/...
    */
   const proxyTarget = env.PROXY_TARGET || 'http://localhost:8080'
   const proxyPrefix = env.PROXY_PREFIX || '/api'

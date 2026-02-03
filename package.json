@@ -6,7 +6,7 @@
   "scripts": {
     "local": "vite --mode development",
     "dev": "vite --mode development",
-    "localout": "vite --mode localout",
+    "localout": "dotenv -e .env.localout -- vite --mode localout",
     "build": "vite build --mode production",
     "preview": "vite preview",
     "lint": "eslint ."
@@ -47,6 +47,7 @@
     "@typescript-eslint/eslint-plugin": "^8.44.0",
     "@typescript-eslint/parser": "^8.44.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "dotenv-cli": "^7.4.4",
     "eslint": "^9.16.0",
     "eslint-plugin-react": "^7.35.2",
     "eslint-plugin-react-hooks": "^5.1.0",
