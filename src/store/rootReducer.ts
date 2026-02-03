@@ -8,6 +8,7 @@ import opnnReducer from '@/features/opnn/OpnnSlice'
 import mainReducer from '@/features/main/MainSlice'
 import sttReducer from '@/features/stt/TrmsSttSlice'
 import mbrInfoReducer from '@/features/mbr/MbrInfoSlice'
+import cmsReducer from '@/features/cms/CmsSlice'
 
 const rootReducer = combineReducers({
   ui: uiReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   faq: faqReducer, // FAQ
   opnn: opnnReducer, // 의견제안
   main: mainReducer, // 메인화면
-  mbrInfo: mbrInfoReducer // 회원정보
+  mbrInfo: mbrInfoReducer, // 회원정보
+  cms: cmsReducer // CMS
 })
 
 export default rootReducer

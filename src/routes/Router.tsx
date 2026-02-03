@@ -11,6 +11,8 @@ const HomeKo = lazy(() => import('@/pages/ko/Home'))
 const NotFoundKo = lazy(() => import('@/pages/ko/NotFound'))
 const InternalServerErrorKo = lazy(() => import('@/pages/ko/InternalServerError'))
 
+const CmsPageKo = lazy(() => import('@/pages/ko/cms/CmsPage'))
+
 const DurUnderstandKo = lazy(() => import('@/pages/ko/maintask/dur/DurUnderstand'))
 const DurNoticeListKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeList'))
 const DurNoticeDetailKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeDetail'))
@@ -162,6 +164,9 @@ export default function Router() {
                 <Route path="/" element={<Navigate to={`/${detectBrowserLang()}`} replace />} />
 
                 <Route path="/:lang" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
+
+                {/* cms */}
+                <Route path="/:lang/cms/CmsPage/:contsSn" element={<LangElement byLang={{ ko: <CmsPageKo />, en: <CmsPageKo /> }} />} />
 
                 {/* maintask(주요업무) */}
                 <Route path="/:lang/maintask/dur/DurNoticeList/:bbsId" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListKo /> }} />} />

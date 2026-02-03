@@ -1,0 +1,122 @@
+/**
+ * 화면ID: 모든 CMS 화면 보기용 템플릿 화면
+ * 화면명: 모든 CMS 화면 보기용 템플릿 화면
+ * 화면경로: /cms/CmsPage
+ * 화면설명: 모든 CMS 화면 보기용 템플릿 화면
+ */
+import DOMPurify from 'dompurify';
+import React, { useEffect, useMemo } from 'react';
+import { Box, Typography, Link, Button} from '@mui/material';
+import DepsLocation from '@/components/common/DepsLocation';
+import Lnb from '@/components/common/Lnb';
+import KoglLicense from '@/components/common/KoglLicense';
+import { useParams } from 'react-router-dom';
+import ContactArea from '@/components/common/ContactArea';
+import { useAuth } from '@/contexts/AuthContext';
+import DgstfnExnm from '@/components/common/DgstfnExnm';
+import { useTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { getCms } from '@/features/cms/CmsThunks';
+import CleanHtml from '@/components/common/CleanHtml';
+
+export default function CmsPage() {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  
+  const { current } = useAppSelector((s) => s.cms)
+  // const cleanHtml = DOMPurify.sanitize(current?.contsCn ?? '');
+  // console.log('CmsPage cms cleanHtml=', cleanHtml);
+
+  const { getMenuInfo } = useAuth();
+  const menuInfo = getMenuInfo(location.pathname);
+
+  /** 개인정보포함여부 */
+  const prvcInclYn = menuInfo?.prvcInclYn ?? null;
+
+  /** 만족도조사여부 */
+  const dgstfnExmnYn = menuInfo?.dgstfnExmnYn ?? null;
+
+  /** 메뉴노출여부 */
+  const menuExpsrYn = menuInfo?.menuExpsrYn ?? null;
+
+  /** 부서정보노출여부 */
+  const deptInfoExpsrYn = menuInfo?.deptInfoExpsrYn ?? null;
+
+  /** 담당자정보노출여부 */
+  const picInfoExpsrYn = menuInfo?.picInfoExpsrYn ?? null;
+
+  /** 메뉴공공누리저작권유형코드 */
+  const menuKoglCprgtTypeCd = menuInfo?.menuKoglCprgtTypeCd ?? null;
+
+  const menuSn = menuInfo?.menuSn ?? null;
+  const contactDepNm = menuInfo?.menuTkcgDeptNm ?? null;
+  const contactPersonNm = menuInfo?.menuPicFlnm ?? null;
+  const contactPhoneNum = menuInfo?.encptPicTelno ?? null;
+
+  // CMS 식별키(콘텐츠일련번호, contsSn) 추출 (예: /cms/CmsPage/cms001)
+  const match = location.pathname.match(/\/cms\/CmsPage\/([^/]+)/);
+  const contsSN1 = match?.[1] as string;
+  const { contsSn } = useParams<{ contsSn: string }>();
+
+  // Lnb 랜더링용
+  const currentUrl = location.pathname;
+
+  useEffect(() => {
+    if (contsSn) dispatch(getCms({contsSn}))
+  }, [dispatch, contsSn])
+
+  return (
+    <Box className="page-layout">
+      <Box className="sub-container">
+        <Box className="content-wrap">
+
+          {/* Lnb 영역 */}
+          <Box className="lnb-wrap">
+            <Box className="lnb-menu">
+              <Typography component="h2" className="lnb-tit">
+                <span>{t('menuDur')}</span>
+              </Typography>
+              <Box className="lnb-list">
+                <Lnb currentUrl={currentUrl}/>
+              </Box>
+            </Box>
+          </Box>
+
+          {/* 컨텐츠 본문 영역 */}
+          <Box className="sub-content">
+            <DepsLocation />
+            <Box className="content-view" id="content">
+              <Box className="page-content">
+                {/* --- 본문 시작 --- */}
+
+                {/* <CleanHtml html={current?.contsCn} loading={false} /> */}
+                {<div dangerouslySetInnerHTML={{ __html: current?.contsCn ?? '' }}></div>  }
+
+                {/* 공공(KOGL) 저작물 */}
+                {menuKoglCprgtTypeCd && (
+                  <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
+                )}
+
+                {/* 만족도 조사 */}
+                {dgstfnExmnYn && (
+                  <DgstfnExnm menuSn={menuSn} />
+                )}
+
+                {/* 업무 담당 부서 및 연락처 */}
+                {deptInfoExpsrYn && (
+                  <ContactArea
+                    contactDepNm={contactDepNm}
+                    contactPersonNm={contactPersonNm}
+                    contactPhoneNum={contactPhoneNum}
+                  />
+                )}
+
+                {/* --- 본문 끝 --- */}
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  )
+}
