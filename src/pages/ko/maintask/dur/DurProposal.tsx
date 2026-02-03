@@ -22,6 +22,10 @@ import DepsLocation from '@/components/common/DepsLocation';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Lnb from '@/components/common/Lnb';
+import { useAuth } from '@/contexts/AuthContext';
+import KoglLicense from '@/components/common/KoglLicense';
+import DgstfnExnm from '@/components/common/DgstfnExnm';
+import ContactArea from '@/components/common/ContactArea';
 
 const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'zip']
 const accept = allowedExtensions.map((e) => `.${e}`).join(',')
@@ -64,6 +68,13 @@ export default function DurProposal() {
   const { t } = useTranslation();
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const { getMenuInfo } = useAuth();
+  const menuInfo = getMenuInfo(location.pathname);
+  const menuSn = menuInfo?.menuSn ?? 0;
+  const menuKoglCprgtTypeCd = menuInfo?.menuKoglCprgtTypeCd ?? '4';
+  const contactDepNm = menuInfo?.menuTkcgDeptNm ?? null;
+  const contactPersonNm = menuInfo?.menuPicFlnm ?? null;
+  const contactPhoneNum = menuInfo?.encptPicTelno ?? null;
 
   // Lnb 랜더링용
   const currentUrl = location.pathname;
@@ -212,6 +223,17 @@ export default function DurProposal() {
                     </FormSection>
                   </FormPage>
                 </Grid>
+
+                {/* 공공(KOGL) 저작물 */}
+                <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
+                {/* 만족도 조사 */}
+                <DgstfnExnm menuSn={menuSn} />
+                {/* 업무 담당 부서 및 연락처 */}
+                <ContactArea
+                  contactDepNm={contactDepNm}
+                  contactPersonNm={contactPersonNm}
+                  contactPhoneNum={contactPhoneNum}
+                />
                 {/* --- 본문 끝 --- */}
               </Box>
             </Box>

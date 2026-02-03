@@ -14,6 +14,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Lnb from '@/components/common/Lnb';
 import DepsLocation from '@/components/common/DepsLocation';
 import { setLoading } from "@/features/faq/FaqSlice";
+import DgstfnExnm from "@/components/common/DgstfnExnm";
+import ContactArea from "@/components/common/ContactArea";
+import { useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import KoglLicense from "@/components/common/KoglLicense";
 
 const categoryNaming: Record<CategoryCode, string> = {
   all: "전체",
@@ -77,6 +82,14 @@ const SearchRow = ({ text, word }: { text: string, word: string }) => {
 export default function NewsFaqNotice() {
   const dispatch = useAppDispatch();
   const [param, setParam] = useState<FaqParam>(() => ({ activeCategory: 'all', searchWord: '', searchType: 'all', page: 1 }));
+  const location = useLocation();
+  const { getMenuInfo } = useAuth();
+  const menuInfo = getMenuInfo(location.pathname);
+  const menuSn = menuInfo?.menuSn ?? 0;
+  const menuKoglCprgtTypeCd = menuInfo?.menuKoglCprgtTypeCd ?? '4';
+  const contactDepNm = menuInfo?.menuTkcgDeptNm ?? null;
+  const contactPersonNm = menuInfo?.menuPicFlnm ?? null;
+  const contactPhoneNum = menuInfo?.encptPicTelno ?? null;
   
   // 현재 열려있는 패널의 고유 ID 하나만 저장
   const [expandedPanel, setExpandedPanel] = useState<string | number | null>(null);
@@ -248,6 +261,17 @@ export default function NewsFaqNotice() {
                     onChange={(_, page) => handleUI({ ...param, page })}
                   />
                 </Stack>
+
+                {/* 공공(KOGL) 저작물 */}
+                <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
+                {/* 만족도 조사 */}
+                <DgstfnExnm menuSn={menuSn} />
+                {/* 업무 담당 부서 및 연락처 */}
+                <ContactArea
+                  contactDepNm={contactDepNm}
+                  contactPersonNm={contactPersonNm}
+                  contactPhoneNum={contactPhoneNum}
+                />
               {/* --- 본문 끝 --- */}
               </Box>
             </Box>
