@@ -154,27 +154,30 @@ const MbrInfoSlice = createSlice({
         state.loading = false;
         state.error = (action.payload as string) || action.error?.message || 'Failed to delete MbrInfo';
       })
-      .addCase(findMbrInfoId.pending, (state, action) => {
+      //id찾기
+      .addCase(findMbrInfoId.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(findMbrInfoId.fulfilled, (state, action) => {
+      .addCase(findMbrInfoId.fulfilled, (state) => {
+        //id찾기 성공시 slice에 값 따로저장하지 않고 location.state로 바로 보내줌.
         state.loading = false;
       })
       .addCase(findMbrInfoId.rejected, (state, action) => {
         state.loading = false;
-        state.error = '에러처리'//TODOjiwoong
+        state.error = action.payload ?? null;
       })
-      .addCase(updateMbrInfoPw.pending, (state, action) => {
+      //pw변경
+      .addCase(updateMbrInfoPw.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateMbrInfoPw.fulfilled, (state, action) => {
+      .addCase(updateMbrInfoPw.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(updateMbrInfoPw.rejected, (state, action) => {
         state.loading = false;
-        state.error = '에러처리'//TODOjiwoong
+        state.error = action.payload ?? null;
       })
   }
 });

@@ -40,6 +40,7 @@ const FaqSlice = createSlice({
       .addCase(selectFaqList.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.list = [];
       })
       .addCase(selectFaqList.fulfilled, (state, action) => {
         state.loading = false;
@@ -48,7 +49,7 @@ const FaqSlice = createSlice({
       })
       .addCase(selectFaqList.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message || 'Failed to load notice list';
+        state.error = action.payload ?? null;
       })
   }
 });

@@ -38,18 +38,12 @@ const OpnnSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(insertOpnn.fulfilled, (state, action) => {
+      .addCase(insertOpnn.fulfilled, (state) => {
         state.loading = false;
-        //const created = action.payload;
-        //state.current = created || null;
-        //if(created) {
-        //  state.list = [created, ...state.list];
-        //  state.totalCount = (state.totalCount ?? state.list.length) + 1;
-        //}
       })
       .addCase(insertOpnn.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || action.error?.message || 'Failed to insert Opnn';
+        state.error = action.payload ?? null;
       })
   }
 });
