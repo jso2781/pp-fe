@@ -106,7 +106,7 @@
     gap: 0 20px;
   }
 
-  .form-item {
+  .form-item { 
     margin: 0 !important; 
     display: flex;
     align-items: center;
@@ -149,12 +149,12 @@
     flex-wrap: wrap;
     gap: 0 20px;
   }
-
   .form-item {
     margin: 0 !important;
     display: flex;
     align-items: center;
   }
+
 
   .chk-field.MuiFormControlLabel-root,
   .rdo-field.MuiFormControlLabel-root {
@@ -2306,10 +2306,4 @@
     }
   }
 }
-
-
-
-
-
-
 
