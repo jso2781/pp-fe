@@ -31,7 +31,7 @@ export default function KIDS_PP_US_JM_09() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="loginId" className="label">
                               아이디
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                             </Typography>
                             <TextField
                               id="loginId"
@@ -51,7 +51,7 @@ export default function KIDS_PP_US_JM_09() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="userName" className="label">
                               이름
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                             </Typography>
                             <TextField
                               id="userName"
@@ -71,7 +71,7 @@ export default function KIDS_PP_US_JM_09() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="phone" className="label">
                               휴대폰번호
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                             </Typography>
                             <Stack direction="row" spacing={1} className="input-with-btn">
                               <TextField
@@ -126,7 +126,7 @@ export default function KIDS_PP_US_JM_09() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="password" className="label">
                               비밀번호 
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                             </Typography>
                             <Stack direction="row" spacing={1} className="input-with-btn">
                               <TextField
@@ -160,7 +160,7 @@ export default function KIDS_PP_US_JM_09() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="confirm-password" className="label">
                               비밀번호 확인
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                             </Typography>
                             <TextField
                               id="confirm-password"

@@ -481,7 +481,7 @@ export default function LegalGuardAgr() {
                             <Box className="form-item">
                               <Typography component="label" htmlFor="userName" className="label">
                                 {t('name')}
-                                <Box component="span" className="necessary" aria-label={t("requiredInput")}>({t('required')})</Box>
+                                <Box component="span" className="required" aria-label={t("requiredInput")}>({t('required')})</Box>
                               </Typography>
                               <TextField
                                 id="userName"
@@ -511,7 +511,7 @@ export default function LegalGuardAgr() {
                             <Box className="form-item">
                               <Typography component="label" htmlFor="birthDate" className="label">
                                 {t('birthDate')}
-                                <Box component="span" className="necessary" aria-label={t("requiredInput")}>({t('required')})</Box>
+                                <Box component="span" className="required" aria-label={t("requiredInput")}>({t('required')})</Box>
                               </Typography>
                               <TextField
                                 id="birthDate"
@@ -544,7 +544,7 @@ export default function LegalGuardAgr() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="phone" className="label">
                               {t('phone')}
-                              <Box component="span" className="necessary" aria-label={t("requiredInput")}>({t('required')})</Box>
+                              <Box component="span" className="required" aria-label={t("requiredInput")}>({t('required')})</Box>
                             </Typography>
                             <TextField
                               id="phone"
@@ -582,7 +582,7 @@ export default function LegalGuardAgr() {
                             <Box className="form-item">
                               <Typography component="label" htmlFor="parentName" className="label">
                                 {t('name')}
-                                <Box component="span" className="necessary" aria-label={t("requiredInput")}>({t('required')})</Box>
+                                <Box component="span" className="required" aria-label={t("requiredInput")}>({t('required')})</Box>
                               </Typography>
                               <TextField
                                 id="parentName"
@@ -612,7 +612,7 @@ export default function LegalGuardAgr() {
                             <Box className="form-item">
                               <Typography component="label" htmlFor="relationship" className="label">
                                 신청인과의 관계
-                                <Box component="span" className="necessary" aria-label={t("requiredInput")}>({t('required')})</Box>
+                                <Box component="span" className="required" aria-label={t("requiredInput")}>({t('required')})</Box>
                               </Typography>
                               <FormControl fullWidth size="large" error={!!errors.relationship}>
                                 <InputLabel id="relationship-label">선택</InputLabel>
@@ -655,7 +655,7 @@ export default function LegalGuardAgr() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="parentPhone" className="label">
                               {t('phone')}
-                              <Box component="span" className="necessary" aria-label={t("requiredInput")}>({t('required')})</Box>
+                              <Box component="span" className="required" aria-label={t("requiredInput")}>({t('required')})</Box>
                             </Typography>
                             <Stack direction="row" spacing={1} className="input-with-btn">
                               <TextField

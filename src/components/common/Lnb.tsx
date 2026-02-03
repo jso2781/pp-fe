@@ -20,7 +20,7 @@ const buildLnbItemsFromMenuStructor = (
   if (!lnbStructor || lnbStructor.length === 0) return [];
 
   // /ko 접두어 제거
-  const normalize = (url: string) => url.replace(/^\/ko/, '');
+  const normalize = (url: string) => url.replace(/^\/(ko|en)(\/|$)/, '$2') || '/';
   const target = normalize(currentUrl);
 
   type FindResult = { node: LnbItem; parent: LnbItem | null };

@@ -1,32 +1,30 @@
 /**
- * 화면ID: KIDS-PP-US-NO-09
- * 화면명: 카드뉴스 상세
- * 화면경로: /news/NewsCardNewsList/:pstSn
- * 화면설명: 카드뉴스 상세(갤러리 게시판 상세 유형)
+ * 화면ID: KIDS-PP-US-NO-08
+ * 화면명: 일반형 게시판 상세
+ * 화면경로: /board/general/:bbsId/:pstSn
+ * 화면설명: 일반형 게시판 상세
  */
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
+import LnbSectionTitle from '@/components/common/LnbSectionTitle';
 import { getPst } from '@/features/pst/PstThunks';
 import { downloadAtch } from '@/features/atch/AtchThunks';
 import { PstRVO } from '@/features/pst/PstTypes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Box, Button, Link, Typography } from '@mui/material';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { BoardKey } from '@/features/pst/PstTypes';
 import KoglLicense from '@/components/common/KoglLicense';
 import { useAuth } from '@/contexts/AuthContext';
 
-export default function NewsCardNewsDetail() {
+export default function GeneralBoardDetail() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const { getMenuInfo } = useAuth()
   const menuKoglCprgtTypeCd = getMenuInfo(location.pathname)?.menuKoglCprgtTypeCd ?? '4'
 
-  // 게시판 식별키, 게시판 ID 추출
-  const match = location.pathname.match(/\/news\/([^/]+)/);
-  const boardKey = match?.[1] as BoardKey;
+  // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
   // Lnb 랜더링용
@@ -36,15 +34,13 @@ export default function NewsCardNewsDetail() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);  
-  
+
   const { pstSn } = useParams<{ pstSn: string }>();
   const { current } = useAppSelector((s) => s.pst)
 
   useEffect(() => {
     if (bbsId && pstSn) dispatch(getPst({bbsId, pstSn}))
   }, [dispatch, bbsId, pstSn])
-
-  const baseUrl = import.meta.env.VITE_ANY_ID_STATIC_URL || '';
 
   const data: PstRVO = current || {};
   const html = data?.pstCn || '';
@@ -66,7 +62,7 @@ export default function NewsCardNewsDetail() {
             <Box className="lnb-wrap">
               <Box className="lnb-menu">
                 <Typography component="h2" className="lnb-tit">
-                  <span>기관소식</span>
+                  <LnbSectionTitle />
                 </Typography>
                 <Box className="lnb-list">
                   <Lnb currentUrl={currentUrl} />
@@ -119,14 +115,6 @@ export default function NewsCardNewsDetail() {
                             {String(html || '')}
                           </Typography>
                         )}
-                          {/* 이미지 영역 */}
-                          {data.imgFilePath && data.imgFileNm && (
-                            <Box
-                              component="img"
-                              src={`${baseUrl}/api/atch/thumb/${data.imgFilePath}${data.imgFileNm}`}
-                              alt="공지사항 본문 테스트용 이미지"
-                            />
-                          )}
                       </Box>
                       {/* 첨부파일 */}
                       {atchFiles.length > 0 && (
@@ -165,7 +153,7 @@ export default function NewsCardNewsDetail() {
                         color="dark" 
                         size="large"
                         className="btn-list-go"
-                        onClick={() => navigate(`/ko/news/${boardKey}/${bbsId}`)}
+                        onClick={() => navigate(`/ko/board/general/${bbsId}`)}
                       >
                       목록
                     </Button>

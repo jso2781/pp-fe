@@ -1,26 +1,21 @@
 /**
- * 화면ID: KIDS-PP-US-NO-10
- * 화면명: 동영상 목록
- * 화면경로: /news/NewsVidioList
- * 화면설명: 동영상 목록(동영상 게시판 목록 유형)
+ * 화면ID: KIDS-PP-US-NO-08
+ * 화면명: 동영상 게시판 목록
+ * 화면경로: /board/video/:bbsId
+ * 화면설명: 동영상 게시판 목록
  */
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import { LnbItem } from '@/features/auth/MenuTypes';
+import LnbSectionTitle from '@/components/common/LnbSectionTitle';
 import { selectPstList } from '@/features/pst/PstThunks';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import {
   Box,
   Button,
-  Collapse,
   FormControl,
   Grid,
   InputLabel,
   Link,
-  List,
-  ListItemButton,
-  ListItemText,
   MenuItem,
   Pagination,
   Select,
@@ -28,58 +23,10 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import { t } from 'i18next';
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useParams, useSearchParams } from 'react-router-dom';
-import { Link as RouterLink } from 'react-router-dom';
-import { BoardKey } from '@/features/pst/PstTypes';
+import { Link as RouterLink, useParams, useSearchParams } from 'react-router-dom';
 
-function SideNav({ items }: { items: LnbItem[] }) {
-  const location = useLocation();
-  const [openKeys, setOpenKeys] = useState<Record<string, boolean>>({});
-  const toggle = (k: string) => setOpenKeys((s) => ({ ...s, [k]: !s[k] }));
-
-  const renderItems = (arr: LnbItem[], depth = 0) => (
-    <List disablePadding>
-      {arr.map((it) => {
-        const active = location.pathname === it.key || location.pathname.startsWith(it.key + '/');
-        const hasChildren = !!it.children?.length;
-        const disabled = !!it.disabled;
-        return (
-          <Box key={it.key} sx={{ pl: depth * 2 }}>
-            <ListItemButton
-              selected={active}
-              disabled={disabled}
-              onClick={() => {
-                if (disabled) return;
-                if (hasChildren) return toggle(it.key);
-                if (it.key.startsWith('http')) {
-                  window.open(it.key, '_blank');
-                  return;
-                }
-                // keys in source are mostly without lang prefix; normalize:
-                const dest = it.key.startsWith('/ko/') ? it.key : '/ko' + it.key;
-                window.location.href = dest;
-              }}
-            >
-              <ListItemText primary={it.label} />
-              {hasChildren ? (openKeys[it.key] ? <ExpandLess /> : <ExpandMore />) : null}
-            </ListItemButton>
-            {hasChildren ? (
-              <Collapse in={!!openKeys[it.key]} timeout="auto" unmountOnExit>
-                {renderItems(it.children!, depth + 1)}
-              </Collapse>
-            ) : null}
-          </Box>
-        );
-      })}
-    </List>
-  );
-
-  return <Box>{renderItems(items)}</Box>;
-}
-
-export default function NewsVidioList() {
+export default function VideoBoardList() {
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -94,9 +41,7 @@ export default function NewsVidioList() {
   const [pageNum, setPageNum] = useState(1)
   const [pageSize, setPageSize] = useState(12) // 화면에 페이지 사이즈 설정이 필요시 setPageSize 활용
   
-  // 게시판 식별키, 게시판 ID 추출
-  const match = location.pathname.match(/\/news\/([^/]+)/);
-  const boardKey = match?.[1] as BoardKey;
+  // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
   // Lnb 랜더링용
@@ -143,7 +88,7 @@ export default function NewsVidioList() {
             <Box className="lnb-wrap">
               <Box className="lnb-menu">
                 <Typography component="h2" className="lnb-tit">
-                  <span>기관소식</span>
+                  <LnbSectionTitle />
                 </Typography>
                 <Box className="lnb-list">
                   <Lnb currentUrl={currentUrl} />
@@ -202,7 +147,7 @@ export default function NewsVidioList() {
                             <Link
                               component={RouterLink}
                               className='card-item-link'                              
-                              to={`/ko/news/${boardKey}/${bbsId}/${item.id}`}
+                              to={`/ko/board/video/${bbsId}/${item.id}`}
                               underline="none"
                               aria-label={`${item.title} 상세보기`}
                             >

@@ -25,10 +25,11 @@ export default function FindId() {
   const handleLoginMethod = (type: string) => {
     //API dispatch
     try{
-      // mbrNo 1000000005 회원으로 고정
-      dispatch(findMbrInfoId({ mbrNo: '1000000005' })).unwrap()
+      // mbrNo 2026000007 회원으로 고정
+      dispatch(findMbrInfoId({ mbrNo: '2026000007' })).unwrap()
         .then((res) => {
-          navigate('/ko/auth/FindIdAuthSuccess', { state:{ ...res }});
+          console.log(res)
+          navigate('/ko/auth/FindIdAuthSuccess', { state:{ id: res?.mbrId, name: res?.encptMbrFlnm }});
         });
     } catch(e) {
       alert('아이디찾기 실패')

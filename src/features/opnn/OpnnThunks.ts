@@ -1,14 +1,13 @@
-import { createAsyncThunk } from '@reduxjs/toolkit'
-import https from '@/api/axiosInstance'
-import { selectOpnnListApiPath, getOpnnApiPath, insertOpnnApiPath, updateOpnnApiPath, saveOpnnApiPath, deleteOpnnApiPath } from '@/api/opnn/OpnnApiPaths'
-import { mockOpnnList, OpnnPVO, OpnnRVO, OpnnListPVO, OpnnListRVO, OpnnDVO  } from './OpnnTypes'
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import https from '@/api/axiosInstance';
+import { insertOpnnApiPath } from '@/api/opnn/OpnnApiPaths';
 
 /**
  * 대국민포털_의견제안 입력 
  */
-export const insertOpnn = createAsyncThunk<number, FormData>(
+export const insertOpnn = createAsyncThunk<void, FormData, { rejectValue: string }>(
   '/opnn/insertOpnn',
-  async (params: FormData) => {
+  async (params: FormData, { rejectWithValue }) => {
     try {
       const res = await https.post(insertOpnnApiPath(), params, {
         headers: {
@@ -16,13 +15,12 @@ export const insertOpnn = createAsyncThunk<number, FormData>(
         }
       });
 
-      const code = res.data?.code;
-      //code값에 따라서 에러처리
-      return code;
+      return;
     }
     catch (e) {
-      console.log("OpnnThunks insertOpnn");
-      return -1;
+      console.error('!!! opnnThunks > getTrmsSttLatest 에러.');
+      console.error(e);
+      return rejectWithValue('NETWORK_OR_SERVER_ERROR');
     }
   }
 )

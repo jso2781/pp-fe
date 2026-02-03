@@ -52,8 +52,6 @@
 }
 
 
-
-
 /* 일반 게시판 목록 */
 .board-list-area {
   width: 100%;
@@ -131,6 +129,28 @@
     &:not(.Mui-selected):hover {
       background-color: #f5f5f5;
     }
+  }
+}
+
+/* 테이블 데이터 없을경우 */
+.no-data {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px 0; 
+  font-size: 15px;
+  color: var(--color-text-1);
+
+  &::before {
+    content: '';
+    display: block;
+    width: 20px; 
+    height: 20px;
+    background: url('/img/ico_exclamation_circle03.svg') no-repeat center center;
+    background-size: contain;
+    margin-bottom: 12px;
   }
 }
 

@@ -274,6 +274,12 @@ export default function PUB() {
                   </Box>
 
 
+                  <h3 className="section-title">데이터없을경우</h3>
+                  <Box className="no-data">
+                    <p>게시물이없습니다.</p>
+                  </Box>
+
+
                   <h3 className="section-title">체크박스,라디오</h3>
                   {/* 체크박스 가로형 */}
                   <Box className="form-item-row">
@@ -478,9 +484,29 @@ export default function PUB() {
                           </Box>
                         </Box>
 
+                        <Box className="form-item">
+                          <Typography component="label" htmlFor="reportMotive" className="label">
+                            부정행위를 알게 된 계기 <Box component="span" className="optional">(선택)</Box>
+                          </Typography>
+                          
+                          {/* 플레이스홀더 대신 가이드 텍스트 */}
+                          <Typography variant="caption" sx={{ color: '#8A949E', display: 'block', mb: 1, lineHeight: 1.4 }}>
+                            * 알게 된 계기, 일시, 장소 등을 최대한 상세히 작성해 주시면 처리에 도움이 됩니다.
+                          </Typography>
+
+                          <TextField
+                            id="reportMotive"
+                            placeholder="내용을 입력하세요."
+                            multiline
+                            rows={4}
+                            fullWidth
+                          />
+                        </Box>
+
                       </Box>
                     </Box>
                   </Box>
+
 
                   <h3 className="section-title">버튼</h3>
 
@@ -558,6 +584,11 @@ export default function PUB() {
                   </Box>
 
                   <Box className="btn-group between">
+                    <Button variant="outlined02" size="large">취소하기</Button>
+                    <Button variant="contained" size="large">수정</Button>
+                  </Box>
+
+                  <Box className="btn-group between">
                       <Box className="left-group">
                         <Button variant="contained02" size="large">
                           목록
@@ -622,6 +653,36 @@ export default function PUB() {
                       </Box>
                     )}
                   </Box>
+
+
+                  <h3 className="section-title">버튼 html</h3>  
+                  <button type="button" className="btn-link-html">바로가기</button>
+                  <br/>
+
+                  <button className="btn_default">버튼</button>
+                  <button className="btn_default small">버튼 small</button>
+                  <button className="btn_default large">버튼 large</button>
+                  <br/>
+
+                  <button className="btn_default_sub">버튼</button>
+                  <button className="btn_default_sub small">버튼 small</button>
+                  <button className="btn_default_sub large">버튼 large</button>
+                  <br/>
+
+                  <button className="btn_outline">버튼</button>
+                  <button className="btn_outline small">버튼 small</button>
+                  <button className="btn_outline large">버튼 large</button>
+                  <br/>
+
+                  <button className="btn_outline_sub">버튼</button>
+                  <button className="btn_outline_sub small">버튼 small</button>
+                  <button className="btn_outline_sub large">버튼 large</button>
+
+
+                  <h3 className="section-title">사이간격</h3>
+                  <p>sx=mb: 5</p>
+                  <p>class mb40</p>
+                  <Box sx={{ mb: 5 }}></Box>
 
 
                 

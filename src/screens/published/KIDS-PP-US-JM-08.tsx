@@ -30,7 +30,7 @@ export default function KIDS_PP_US_JM_08() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="password" className="label">
                               비밀번호
-                              <Box component="span" className="necessary" aria-label="필수입력">
+                              <Box component="span" className="required" aria-label="필수입력">
                                 (필수)
                               </Box>
                             </Typography>

@@ -8,7 +8,7 @@
 import { Box, Typography, Button, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -16,6 +16,12 @@ export default function FindIdAuthSuccess() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t, i18n: i18nInstance } = useTranslation();
+
+  if(!location.state?.id || !location.state?.name) {
+    alert('잘못된 접근입니다.');
+    return <Navigate to="/" replace />;
+  }
+
   const handleFindPwClick = () => {
     navigate('/ko/auth/FindPw');
   }

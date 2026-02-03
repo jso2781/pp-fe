@@ -1,32 +1,30 @@
 /**
- * 화면ID: KIDS-PP-US-NO-01
- * 화면명: 공지사항 상세
- * 화면경로: /news/NewsNoticeList/:pstSn
- * 화면설명: 공지사항 상세(일반 게시판 상세 유형)
+ * 화면ID: KIDS-PP-US-NO-08
+ * 화면명: 갤러리형 게시판 상세
+ * 화면경로: /board/gallery/:bbsId/:pstSn
+ * 화면설명: 갤러리형 게시판 상세
  */
 import DepsLocation from '@/components/common/DepsLocation';
+import KoglLicense from '@/components/common/KoglLicense';
 import Lnb from '@/components/common/Lnb';
-import { getPst } from '@/features/pst/PstThunks';
+import LnbSectionTitle from '@/components/common/LnbSectionTitle';
+import { useAuth } from '@/contexts/AuthContext';
 import { downloadAtch } from '@/features/atch/AtchThunks';
+import { getPst } from '@/features/pst/PstThunks';
 import { PstRVO } from '@/features/pst/PstTypes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Box, Button, Link, Typography } from '@mui/material';
-import { useEffect, useMemo } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { BoardKey } from '@/features/pst/PstTypes';
-import KoglLicense from '@/components/common/KoglLicense';
-import { useAuth } from '@/contexts/AuthContext';
+import { useEffect } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-export default function NewsNoticeDetail() {
+export default function GalleryBoardDetail() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const { getMenuInfo } = useAuth()
   const menuKoglCprgtTypeCd = getMenuInfo(location.pathname)?.menuKoglCprgtTypeCd ?? '4'
 
-  // 게시판 식별키, 게시판 ID 추출
-  const match = location.pathname.match(/\/news\/([^/]+)/);
-  const boardKey = match?.[1] as BoardKey;
+  // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
   // Lnb 랜더링용
@@ -36,13 +34,15 @@ export default function NewsNoticeDetail() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);  
-
+  
   const { pstSn } = useParams<{ pstSn: string }>();
   const { current } = useAppSelector((s) => s.pst)
 
   useEffect(() => {
     if (bbsId && pstSn) dispatch(getPst({bbsId, pstSn}))
   }, [dispatch, bbsId, pstSn])
+
+  const baseUrl = import.meta.env.VITE_ANY_ID_STATIC_URL || '';
 
   const data: PstRVO = current || {};
   const html = data?.pstCn || '';
@@ -64,7 +64,7 @@ export default function NewsNoticeDetail() {
             <Box className="lnb-wrap">
               <Box className="lnb-menu">
                 <Typography component="h2" className="lnb-tit">
-                  <span>기관소식</span>
+                  <LnbSectionTitle />
                 </Typography>
                 <Box className="lnb-list">
                   <Lnb currentUrl={currentUrl} />
@@ -117,6 +117,14 @@ export default function NewsNoticeDetail() {
                             {String(html || '')}
                           </Typography>
                         )}
+                          {/* 이미지 영역 */}
+                          {data.imgFilePath && data.imgFileNm && (
+                            <Box
+                              component="img"
+                              src={`${baseUrl}/api/atch/thumb/${data.imgFilePath}${data.imgFileNm}`}
+                              alt="공지사항 본문 테스트용 이미지"
+                            />
+                          )}
                       </Box>
                       {/* 첨부파일 */}
                       {atchFiles.length > 0 && (
@@ -155,7 +163,7 @@ export default function NewsNoticeDetail() {
                         color="dark" 
                         size="large"
                         className="btn-list-go"
-                        onClick={() => navigate(`/ko/news/${boardKey}/${bbsId}`)}
+                        onClick={() => navigate(`/ko/board/gallery/${bbsId}`)}
                       >
                       목록
                     </Button>

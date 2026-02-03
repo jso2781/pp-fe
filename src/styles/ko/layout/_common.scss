@@ -1,7 +1,11 @@
 @use '../base/mixins'as *;
 
-
-body { overflow-x: auto; }
+body { overflow-x: hidden; }
+@media (max-width: 1199px) {
+  body {
+    overflow-x: auto;
+  }
+}
 
 /* 폰트 */
 .txt-1 { color: var(--color-text-1) !important; }
@@ -50,6 +54,18 @@ body { overflow-x: auto; }
 .fn { float: none !important; }
 .clearfix::after { content: ""; display: block; clear: both; }
 
+/* margn, padding */
+.mt0{margin-top:0!important}.mt5{margin-top:5px!important}.mt10{margin-top:10px!important}.mt15{margin-top:15px!important}.mt20{margin-top:20px!important}.mt25{margin-top:25px!important}.mt30{margin-top:30px!important}.mt35{margin-top:35px!important}.mt40{margin-top:40px!important}.mt45{margin-top:45px!important}.mt50{margin-top:50px!important}.mt55{margin-top:55px!important}.mt60{margin-top:60px!important}.mt65{margin-top:65px!important}.mt70{margin-top:70px!important}.mt75{margin-top:75px!important}.mt80{margin-top:80px!important}.mt85{margin-top:85px!important}.mt90{margin-top:90px!important}.mt95{margin-top:95px!important}.mt100{margin-top:100px!important}
+.mb0{margin-bottom:0!important}.mb5{margin-bottom:5px!important}.mb10{margin-bottom:10px!important}.mb15{margin-bottom:15px!important}.mb20{margin-bottom:20px!important}.mb25{margin-bottom:25px!important}.mb30{margin-bottom:30px!important}.mb35{margin-bottom:35px!important}.mb40{margin-bottom:40px!important}.mb45{margin-bottom:45px!important}.mb50{margin-bottom:50px!important}.mb55{margin-bottom:55px!important}.mb60{margin-bottom:60px!important}.mb65{margin-bottom:65px!important}.mb70{margin-bottom:70px!important}.mb75{margin-bottom:75px!important}.mb80{margin-bottom:80px!important}.mb85{margin-bottom:85px!important}.mb90{margin-bottom:90px!important}.mb95{margin-bottom:95px!important}.mb100{margin-bottom:100px!important}
+.ml0{margin-left:0!important}.ml5{margin-left:5px!important}.ml10{margin-left:10px!important}.ml15{margin-left:15px!important}.ml20{margin-left:20px!important}.ml25{margin-left:25px!important}.ml30{margin-left:30px!important}.ml35{margin-left:35px!important}.ml40{margin-left:40px!important}.ml45{margin-left:45px!important}.ml50{margin-left:50px!important}.ml55{margin-left:55px!important}.ml60{margin-left:60px!important}.ml65{margin-left:65px!important}.ml70{margin-left:70px!important}.ml75{margin-left:75px!important}.ml80{margin-left:80px!important}.ml85{margin-left:85px!important}.ml90{margin-left:90px!important}.ml95{margin-left:95px!important}.ml100{margin-left:100px!important}
+.mr0{margin-right:0!important}.mr5{margin-right:5px!important}.mr10{margin-right:10px!important}.mr15{margin-right:15px!important}.mr20{margin-right:20px!important}.mr25{margin-right:25px!important}.mr30{margin-right:30px!important}.mr35{margin-right:35px!important}.mr40{margin-right:40px!important}.mr45{margin-right:45px!important}.mr50{margin-right:50px!important}.mr55{margin-right:55px!important}.mr60{margin-right:60px!important}.mr65{margin-right:65px!important}.mr70{margin-right:70px!important}.mr75{margin-right:75px!important}.mr80{margin-right:80px!important}.mr85{margin-right:85px!important}.mr90{margin-right:90px!important}.mr95{margin-right:95px!important}.mr100{margin-right:100px!important}
+
+.pt0{padding-top:0!important}.pt5{padding-top:5px!important}.pt10{padding-top:10px!important}.pt15{padding-top:15px!important}.pt20{padding-top:20px!important}.pt25{padding-top:25px!important}.pt30{padding-top:30px!important}.pt35{padding-top:35px!important}.pt40{padding-top:40px!important}.pt45{padding-top:45px!important}.pt50{padding-top:50px!important}.pt55{padding-top:55px!important}.pt60{padding-top:60px!important}.pt65{padding-top:65px!important}.pt70{padding-top:70px!important}.pt75{padding-top:75px!important}.pt80{padding-top:80px!important}.pt85{padding-top:85px!important}.pt90{padding-top:90px!important}.pt95{padding-top:95px!important}.pt100{padding-top:100px!important}
+.pb0{padding-bottom:0!important}.pb5{padding-bottom:5px!important}.pb10{padding-bottom:10px!important}.pb15{padding-bottom:15px!important}.pb20{padding-bottom:20px!important}.pb25{padding-bottom:25px!important}.pb30{padding-bottom:30px!important}.pb35{padding-bottom:35px!important}.pb40{padding-bottom:40px!important}.pb45{padding-bottom:45px!important}.pb50{padding-bottom:50px!important}.pb55{padding-bottom:55px!important}.pb60{padding-bottom:60px!important}.pb65{padding-bottom:65px!important}.pb70{padding-bottom:70px!important}.pb75{padding-bottom:75px!important}.pb80{padding-bottom:80px!important}.pb85{padding-bottom:85px!important}.pb90{padding-bottom:90px!important}.pb95{padding-bottom:95px!important}.pb100{padding-bottom:100px!important}
+.pl0{padding-left:0!important}.pl5{padding-left:5px!important}.pl10{padding-left:10px!important}.pl15{padding-left:15px!important}.pl20{padding-left:20px!important}.pl25{padding-left:25px!important}.pl30{padding-left:30px!important}.pl35{padding-left:35px!important}.pl40{padding-left:40px!important}.pl45{padding-left:45px!important}.pl50{padding-left:50px!important}.pl55{padding-left:55px!important}.pl60{padding-left:60px!important}.pl65{padding-left:65px!important}.pl70{padding-left:70px!important}.pl75{padding-left:75px!important}.pl80{padding-left:80px!important}.pl85{padding-left:85px!important}.pl90{padding-left:90px!important}.pl95{padding-left:95px!important}.pl100{padding-left:100px!important}
+.pr0{padding-right:0!important}.pr5{padding-right:5px!important}.pr10{padding-right:10px!important}.pr15{padding-right:15px!important}.pr20{padding-right:20px!important}.pr25{padding-right:25px!important}.pr30{padding-right:30px!important}.pr35{padding-right:35px!important}.pr40{padding-right:40px!important}.pr45{padding-right:45px!important}.pr50{padding-right:50px!important}.pr55{padding-right:55px!important}.pr60{padding-right:60px!important}.pr65{padding-right:65px!important}.pr70{padding-right:70px!important}.pr75{padding-right:75px!important}.pr80{padding-right:80px!important}.pr85{padding-right:85px!important}.pr90{padding-right:90px!important}.pr95{padding-right:95px!important}.pr100{padding-right:100px!important}
+
+
 /* 스킵네비 */
 #skip-navigation{position:absolute;left:0;top:0;width:100%;text-align:center;z-index:9999}
 #skip-navigation a{overflow:hidden;white-space:nowrap;display:block;width:100%;height:0;color:#fff !important;}
@@ -58,10 +74,55 @@ body { overflow-x: auto; }
 /* 스크린 리더용 */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
+/* ETC */ 
 .underline{text-decoration: underline; cursor: pointer;}
+.ellipsis{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+
+// 타이틀 
+.section-title-group {
+  display: flex;
+  align-items: center; 
+  margin-bottom: 10px;
+
+  .section-title {
+    margin: 0; 
+  }
+  .controller {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.section-title, 
+.form-section-title {
+  font-size: var(--fs-24);
+  font-weight: 700;
+  margin-bottom: 10px;
+  color:var(--color-text-1);
+
+  & ~ .section-title,
+  & ~ .form-section-title {
+    margin-top: 30px;
+  }
+}
+
+.section-title {
+  &::before {
+    content: "";
+    display: block;
+    width: 43px;
+    height: 4px;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, #35B895 34.1%, #D2DF1C 83.66%);
+    border-radius: 2px;
+  }
+}
 
 .sub-title{
-  font-size: 18px;font-weight: 700;margin:24px 0 20px 0;
+  font-size: 18px;
+  font-weight: 700;
+  margin:24px 0 20px 0;
 
   &:first-of-type {
     margin-top: 0;
@@ -329,174 +390,6 @@ body { overflow-x: auto; }
   box-shadow: 0 0 0 2px rgba(10, 108, 112, 0.4);
 }
 
-/* 폼 필드 */
-.form-item {
-  margin:0 0 5px 0;
-  &:not(:first-of-type) {
-    margin-top: 20px;
-  }
-  .label{
-    display: block;
-    font-size: var(--fs-16);
-    font-weight: var(--fw-700);
-    margin:0 0 5px 0;
-    .optional{
-      font-weight: var(--fw-400);
-    }
-    .required{
-      color: var(--danger);
-      font-weight: var(--fw-400);
-    }
-  }
-
-  .input-with-btn{
-    .btn-form-util{
-      min-width: 105px !important; 
-  width: 105px;
-    }
-  }
-}
-
-/* 가로 배치를 위한 공통 플렉스 컨테이너 */
-.flex-container {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  width: 100%;
-  margin-top: 20px; 
-  &:first-of-type {
-    margin-top: 0;
-  }
-
-  .form-item {
-    flex: 1;
-    min-width: 0;
-    margin-top: 0 !important;
-  }
-
-  /* 2등분, 3등분, 4등분 공통*/
-  &.flex-half, &.col-3, &.col-4 {
-    .form-item {
-      flex: 1;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    gap: 12px;
-    
-    &.flex-half, &.col-3, &.col-4 {
-      .form-item {
-        width: 100%;
-        flex: none;
-      }
-    }
-
-    .form-item {
-      width: 100%;
-      margin-top: 0 !important;
-    }
-    
-    &:not(:first-of-type) {
-      margin-top: 20px;
-    }
-  }
-}
-
-// 체크박스
-.chk-field .required{
-  color: var(--danger);
-  font-weight: var(--fw-400);
-}
-
-/* 가로형 */
-.form-item-row {
-  display: flex;
-  align-items: center; 
-  flex-wrap: wrap;
-  gap: 12px 20px;
-  margin-bottom: 20px;
-
-  .label {
-    margin-right: 10px;
-    font-weight: 700;
-  }
-
-  .group-container, 
-  .radio-group-container {
-    display: flex;
-    align-items: center;
-    gap: 0 20px;
-  }
-
-  .form-item {
-    margin: 0 !important; 
-    display: flex;
-    align-items: center;
-  }
-
-  .chk-field.MuiFormControlLabel-root,
-  .rdo-field.MuiFormControlLabel-root {
-    margin: 0;
-    .MuiCheckbox-root, .MuiRadio-root { padding: 6px; }
-    .MuiTypography-root {
-      display: flex;
-      align-items: center;
-      line-height: 1;
-      cursor: pointer;
-    }
-  }
-
-  .required {
-    margin-left: 4px;
-    color: #d32f2f;
-    font-weight: 400;
-  }
-}
-
-/* 세로형 */
-.form-item-row-vertical {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 20px;
-
-  .label {
-    font-weight: 700;
-  }
-
-  .group-container, 
-  .radio-group-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 20px;
-  }
-
-  .form-item {
-    margin: 0 !important;
-    display: flex;
-    align-items: center;
-  }
-
-  .chk-field.MuiFormControlLabel-root,
-  .rdo-field.MuiFormControlLabel-root {
-    margin: 0;
-    .MuiCheckbox-root, .MuiRadio-root { padding: 6px; }
-    .MuiTypography-root {
-      display: flex;
-      align-items: center;
-      line-height: 1;
-    }
-  }
-
-  .required {
-    margin-left: 4px;
-    color: #d32f2f;
-    font-weight: 400;
-  }
-}
-
 /* ==========================================================================
    error-alert
    ========================================================================== */
@@ -588,35 +481,151 @@ body { overflow-x: auto; }
 
 /* 버튼 - html 타입*/ 
 .btn-link-html {
-  background: none;
-  border: none;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 0;
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   vertical-align: middle;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
   line-height: 1;
+
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-left: 6px;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    transform: rotate(45deg);
+    position: relative;
+    top: 0px;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
-.btn-link-html::after {
-  content: '';
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-left: 6px;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
-  transform: rotate(45deg);
-  position: relative;
-  top: 0px;
+/* ============================================================
+   1. 일괄 공통 레이아웃 (Base & Sizes)
+   ============================================================ */
+.btn_default, 
+.btn_default_sub, 
+.btn_outline, 
+.btn_outline_sub {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  min-height: 48px; // 기본 (Medium)
+  padding: 2px 20px;
+  
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  
+  border-radius: 8px;
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+  transition: all 0.2s ease;
+
+  /* 비활성화 상태 일괄 적용 */
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #CDD1D5 !important;
+    border-color: #CDD1D5 !important;
+    color: #8A949E !important;
+    opacity: 1;
+  }
+
+  /* 사이즈 확장: .small */
+  &.small {
+    min-height: 36px;
+    padding: 0 12px;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 4px;
+
+    @media (max-width: 1024px) {
+      min-height: 25px;
+      padding: 0 6px;
+      font-size: 13px;
+    }
+  }
+
+  /* 사이즈 확장: .large */
+  &.large {
+    min-height: 56px;
+    padding: 0 24px;
+    font-size: 19px;
+    min-width: 110px;
+
+    @media (max-width: 1024px) {
+      min-height: 48px;
+      font-size: 16px;
+      padding: 0 20px;
+    }
+  }
+
+  /* 기본 사이즈 반응형 (Medium) */
+  @media (max-width: 1024px) {
+    &:not(.small):not(.large) {
+      min-height: 44px;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+  }
 }
 
-.btn-link-html:hover {
-  text-decoration: underline;
+/* ============================================================
+   2. 스타일별 컬러 정의 (Variants)
+   ============================================================ */
+
+/* [Solid] 메인 버튼 */
+.btn_default {
+  color: #ffffff;
+  background-color: #087C80;
+  border: 1px solid #087C80;
+  &:hover { opacity: 0.9; }
 }
+
+/* [Solid] 서브 버튼 */
+.btn_default_sub {
+  color: #ffffff;
+  background-color: #414343;
+  border: 1px solid #414343;
+  &:hover { background-color: #363A3A; }
+}
+
+/* [Outline] 메인 라인 버튼 */
+.btn_outline {
+  color: #087C80;
+  background-color: #ffffff;
+  border: 1px solid #087C80;
+  &:hover { background-color: #EDF8F8; }
+  &:disabled { background-color: #ffffff !important; }
+}
+
+/* [Outline] 서브 라인 버튼 */
+.btn_outline_sub {
+  color: #1E2124;
+  background-color: #ffffff;
+  border: 1px solid #1E2124;
+  &:hover { background-color: #CDD1D5; }
+  &:disabled { background-color: #ffffff !important; }
+}
+
+
+
 
 /* 버튼 그룹 전체 컨테이너 */
 .btn-group {
@@ -638,8 +647,11 @@ body { overflow-x: auto; }
   &.center  { justify-content: center; }
   &.right   { justify-content: flex-end; }
 
-  button { 
+  button, .MuiButton-root { 
     min-width: 110px; 
+    &.w260 {
+      width: 260px !important;
+    }
   }
 
   @media (max-width: 1024px) {
@@ -647,15 +659,23 @@ body { overflow-x: auto; }
     padding-top: 20px;
     gap: 12px;
     flex-direction: column; 
+    gap: 12px !important;
+
+    > button, > .MuiButton-root, 
+    .left-group button, .left-group .MuiButton-root,
+    .right-group button, .right-group .MuiButton-root {
+      width: 100% !important;
+      margin: 0 !important;
+      
+      &.w260 {
+        width: 100% !important; 
+      }
+    }
 
     .left-group, .right-group {
       width: 100%;
       gap: 8px;
-      
-      .MuiButton-root {
-        width: 100%; 
-        margin: 0;
-      }
+      flex-direction: row; 
     }
   }
 }
@@ -718,8 +738,6 @@ body { overflow-x: auto; }
   height: auto;
   vertical-align: middle;
 }
-
-
 
 /* 카테고리 탭 영역 */
 .category-tabs {
@@ -856,6 +874,75 @@ body { overflow-x: auto; }
         max-width: none;
         min-height: 36px;
       }
+    }
+  }
+}
+
+
+//파일업로드
+.attach-file-box{
+  padding:40px 32px;
+  border-radius: 10px;
+  border: 1px solid #CDD1D5;
+  background: #FFF;
+
+  @media (max-width: 1023px) {
+    padding: 24px 20px; 
+  }
+  
+  .file-uploader{ 
+    width:100%;
+    min-height:100px;
+    border-radius: 12px;
+  }
+
+  .helperText{font-size: var(--fs-16);text-align: center;color: var(--color-text-1);}
+
+  //파일 리스트
+  .file-viewer {
+    margin-top: 24px;
+    width: 100%;
+
+    .uploader-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+
+      .file-count{
+        font-size: var(--fs-17);
+        font-weight: 700;
+        color: var(--color-text-2);
+      }
+    }
+
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    /* 개별 파일 아이템 */
+    .file-item {
+      display: flex;
+      align-items: center; 
+      justify-content: space-between;
+      padding: 8px 16px;
+      background-color: #fff; 
+      border: 1px solid #CDD1D5;
+      border-radius: 12px; 
+      transition: background-color 0.2s;
+
+    }
+
+    .file-item:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .file-item .MuiTypography-root {
+      font-size: var(--fs-18);
+      word-break: break-all;
     }
   }
 }

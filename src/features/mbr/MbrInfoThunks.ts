@@ -191,21 +191,19 @@ export const deleteMbrInfo = createAsyncThunk<number, MbrInfoDVO>(
 /**
  * 대국민포털_회원정보기본 ID 존재 여부 조회
  */
-export const findMbrInfoId = createAsyncThunk<VerifyPasswordRVO, MbrInfoPVO, { rejectValue: string }>(
+export const findMbrInfoId = createAsyncThunk<MbrInfoRVO, MbrInfoPVO, { rejectValue: string }>(
   '/mbr/findMbrInfoId',
-  //TODOjiwoong 작업중
-  async (params: MbrInfoPVO, { rejectWithValue }) => {
+  async (params: MbrInfoPVO = {}, { rejectWithValue }) => {
     try {
       const res = await https.post(findMbrInfoIdApiPath(), params);
-      const payload = res.data?.data.mbrInfoRVO;
-      return {
-        id: payload.mbrId,
-        name: payload.encptMbrFlnm,
-      }
+      const payload = res.data?.data?.mbrInfoRVO;
+
+      return payload;
     }
     catch(e) {
-      console.error("MbrInfoThunks updateMbrInfoPw error!!");
-      return rejectWithValue('MbrInfoThunks updateMbrInfoPw error!!');
+      console.error('!!! MbrInfoThunks > findMbrInfoId 에러.');
+      console.error(e);
+      return rejectWithValue('NETWORK_OR_SERVER_ERROR');
     }
   }
 )
@@ -213,20 +211,18 @@ export const findMbrInfoId = createAsyncThunk<VerifyPasswordRVO, MbrInfoPVO, { r
 /**
  * 대국민포털_회원정보기본 패스워드 수정
  */
-export const updateMbrInfoPw = createAsyncThunk<VerifyPasswordRVO, MbrInfoPVO, { rejectValue: string }>(
+export const updateMbrInfoPw = createAsyncThunk<void, MbrInfoPVO, { rejectValue: string }>(
   '/mbr/updateMbrInfoPw',
-  //TODOjiwoong 작업중
   async (params: MbrInfoPVO, { rejectWithValue }) => {
     try {
-      const res = await https.post(updateMbrInfoPwApiPath(), params);
-      const payload = res.data?.data;
-      return {
-        existYn: payload?.existYn
-      } as VerifyPasswordRVO;
+      await https.post(updateMbrInfoPwApiPath(), params);
+      
+      return;
     }
     catch(e) {
-      console.error("MbrInfoThunks updateMbrInfoPw error!!");
-      return rejectWithValue('MbrInfoThunks updateMbrInfoPw error!!');
+      console.error('!!! MbrInfoThunks > updateMbrInfoPw 에러.');
+      console.error(e);
+      return rejectWithValue('NETWORK_OR_SERVER_ERROR');
     }
   }
 )

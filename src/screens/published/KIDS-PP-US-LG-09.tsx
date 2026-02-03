@@ -30,7 +30,7 @@ export default function KIDS_PP_US_LG_09() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="password" className="label">
                               새 비밀번호 
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                             </Typography>
                             <TextField
                               id="password"
@@ -60,7 +60,7 @@ export default function KIDS_PP_US_LG_09() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="confirm-password" className="label">
                               비밀번호 확인 
-                              <Box component="span" className="necessary" aria-label="필수입력">
+                              <Box component="span" className="required" aria-label="필수입력">
                                 (필수)
                               </Box>
                             </Typography>

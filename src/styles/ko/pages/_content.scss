@@ -1,36 +1,176 @@
 @use '../base/mixins';
 
-
-// 서브 타이틀 
-.section-title, 
+/* 폼 필드 */
 .form-section-title {
-  font-size: var(--fs-24);
-  font-weight: 700;
-  margin-bottom: 10px;
-  color:var(--color-text-1);
-
-  & ~ .section-title,
-  & ~ .form-section-title {
-    margin-top: 30px;
-  }
-}
-
-.section-title {
-  &::before {
-    content: "";
-    display: block;
-    width: 43px;
-    height: 4px;
-    margin-bottom: 8px;
-    background: linear-gradient(90deg, #35B895 34.1%, #D2DF1C 83.66%);
-    border-radius: 2px;
-  }
-}
-
-.form-section-title {
-  .necessary {
-    color: #DE3412;
+  .required {
+    color: var(--danger);
     margin-left: 4px; 
+  }
+}
+.form-item {
+  margin:0 0 5px 0;
+  &:not(:first-of-type) {
+    margin-top: 20px;
+  }
+  .label{
+    display: block;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-700);
+    margin:0 0 5px 0;
+    .optional{
+      font-weight: var(--fw-400);
+    }
+    .required{
+      color: var(--danger);
+      font-weight: var(--fw-400);
+    }
+  }
+
+  .input-with-btn{
+    .btn-form-util{
+      min-width: 105px !important; 
+  width: 105px;
+    }
+  }
+}
+
+/* 가로 배치를 위한 공통 플렉스 컨테이너 */
+.flex-container {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 20px; 
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  .form-item {
+    flex: 1;
+    min-width: 0;
+    margin-top: 0 !important;
+  }
+
+  /* 2등분, 3등분, 4등분 공통*/
+  &.flex-half, &.col-3, &.col-4 {
+    .form-item {
+      flex: 1;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    gap: 12px;
+    
+    &.flex-half, &.col-3, &.col-4 {
+      .form-item {
+        width: 100%;
+        flex: none;
+      }
+    }
+
+    .form-item {
+      width: 100%;
+      margin-top: 0 !important;
+    }
+    
+    &:not(:first-of-type) {
+      margin-top: 20px;
+    }
+  }
+}
+
+// 체크박스
+.chk-field .required{
+  color: var(--danger);
+  font-weight: var(--fw-400);
+}
+
+/* 가로형 */
+.form-item-row {
+  display: flex;
+  align-items: center; 
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 20px;
+
+  .label {
+    margin-right: 10px;
+    font-weight: 700;
+  }
+
+  .group-container, 
+  .radio-group-container {
+    display: flex;
+    align-items: center;
+    gap: 0 20px;
+  }
+
+  .form-item {
+    margin: 0 !important; 
+    display: flex;
+    align-items: center;
+  }
+
+  .chk-field.MuiFormControlLabel-root,
+  .rdo-field.MuiFormControlLabel-root {
+    margin: 0;
+    .MuiCheckbox-root, .MuiRadio-root { padding: 6px; }
+    .MuiTypography-root {
+      display: flex;
+      align-items: center;
+      line-height: 1;
+      cursor: pointer;
+    }
+  }
+
+  .required {
+    margin-left: 4px;
+    color: #d32f2f;
+    font-weight: 400;
+  }
+}
+
+/* 세로형 */
+.form-item-row-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 20px;
+
+  .label {
+    font-weight: 700;
+  }
+
+  .group-container, 
+  .radio-group-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 20px;
+  }
+
+  .form-item {
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+  }
+
+  .chk-field.MuiFormControlLabel-root,
+  .rdo-field.MuiFormControlLabel-root {
+    margin: 0;
+    .MuiCheckbox-root, .MuiRadio-root { padding: 6px; }
+    .MuiTypography-root {
+      display: flex;
+      align-items: center;
+      line-height: 1;
+    }
+  }
+
+  .required {
+    margin-left: 4px;
+    color: #d32f2f;
+    font-weight: 400;
   }
 }
 
@@ -1021,18 +1161,6 @@
       font-weight: 400;
     }
   }
-  .no-data{ 
-    min-height:150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-
-    padding:0px 0 0 0;
-    background: url(/img/ico_exclamation_circle03.svg) no-repeat top 20px center;
-    font-size: 15px;
-    color:var(--color-text-1);
-  }
 }
 
 .info-action-list {
@@ -1336,6 +1464,44 @@
         font-size: 13px;
       }
     }
+  }
+
+  .guide-section {
+    margin-bottom: 24px;
+    &:last-of-type { margin-bottom: 0; }
+  }
+
+  .guide-item-title {
+    display: block;
+    font-size: var(--fs-24);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .guide-desc {
+    position: relative;
+    padding-left: 28px; 
+    margin-top: 10px;
+    border-radius: 6px;
+    font-size: var(--fs-16);
+    font-weight: 700;
+    line-height: 1.6;
+    word-break: keep-all;
+    position: relative;
+    
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 20px; 
+      height: 20px;
+      background: url('/img/ico_exclamation_circle03.svg') no-repeat center / contain;
+    }
+  }
+  
+  .guide-item-title + .guide-list {
+    margin-top: 0;
   }
 }
 
@@ -2092,74 +2258,54 @@
   }
 }
 
-//파일업로드
-.attach-file-box{
-  padding:40px 32px;
-  border-radius: 10px;
-  border: 1px solid #CDD1D5;
-  background: #FFF;
+//클린신고센터
+.form-group-wrap.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 24px;
+  width: 100%;
 
-  @media (max-width: 1023px) {
-    padding: 24px 20px; 
-  }
-  
-  .file-uploader{ 
-    width:100%;
-    min-height:100px;
-    border-radius: 12px;
-  }
-
-  .helperText{font-size: var(--fs-16);text-align: center;color: var(--color-text-1);}
-
-  //파일 리스트
-  .file-viewer {
-    margin-top: 24px;
-    width: 100%;
-
-    .uploader-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-
-      .file-count{
-        font-size: var(--fs-17);
-        font-weight: 700;
-        color: var(--color-text-2);
-      }
+  .summary-item {
+    .label {
+      display: block;
+      font-size: var(--fs-16);
+      font-weight: var(--fw-700);
+      margin: 0 0 5px 0;
     }
 
-    .file-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    /* 개별 파일 아이템 */
-    .file-item {
-      display: flex;
-      align-items: center; 
-      justify-content: space-between;
-      padding: 8px 16px;
-      background-color: #fff; 
-      border: 1px solid #CDD1D5;
-      border-radius: 12px; 
-      transition: background-color 0.2s;
-
-    }
-
-    .file-item:hover {
-      background-color: rgba(0, 0, 0, 0.02);
-    }
-
-    .file-item .MuiTypography-root {
-      font-size: var(--fs-18);
+    .view-value {
+      font-size: var(--fs-16);
+      font-weight: var(--fw-400); 
+      line-height: 1.5;
       word-break: break-all;
+    }
+
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr; 
+    gap: 0;
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between; 
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #F1F1F1;
+
+      &:first-of-type { padding-top: 0; }
+      &:last-of-type { border-bottom: none; padding-bottom: 0; }
+
+      .label {
+        margin-bottom: 0; 
+      }
+      
+      .view-value {
+        text-align: right;
+      }
     }
   }
 }
-
 
 
 
