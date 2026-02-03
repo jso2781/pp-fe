@@ -6,7 +6,7 @@
   "scripts": {
     "local": "vite --mode development",
     "dev": "vite --mode development",
-    "localout": "dotenv -e .env.localout -- vite --mode localout",
+    "localout": "vite --mode localout",
     "build": "vite build --mode production",
     "preview": "vite preview",
     "lint": "eslint ."
