@@ -147,7 +147,7 @@ export default function PasswordConfirm() {
                         <Box className="form-item">
                           <Typography component="label" htmlFor="password" className="label">
                             {t('password')}
-                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>
+                            <Box component="span" className="required" aria-label={t('requiredInput')}>
                               ({t('required')})
                             </Box>
                           </Typography>

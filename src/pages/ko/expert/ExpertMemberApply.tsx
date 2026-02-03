@@ -334,7 +334,7 @@ export default function ExpertMemberApply() {
                         <Box className="form-item">
                           <Typography component="label" htmlFor="bizNumber" className="label">
                             사업자등록번호 조회
-                            <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                            <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
                           <Stack direction="row" spacing={1} className="input-with-btn">
                             <TextField
@@ -483,7 +483,7 @@ export default function ExpertMemberApply() {
                       <Box className="form-item">
                         <Typography component="label" htmlFor="eorg-email" className="label">
                           기관 이메일
-                          <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                          <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                         </Typography>
                         <Stack direction="row" spacing={1} className="input-with-btn">
                           <TextField
@@ -576,7 +576,7 @@ export default function ExpertMemberApply() {
                     </Box>
 
                     {/* 업무 시스템 선택 */}
-                    <h3 className="form-section-title">업무 시스템 선택 <span className="necessary">(필수)</span></h3>
+                    <h3 className="form-section-title">업무 시스템 선택 <span className="required">(필수)</span></h3>
                     <Box className="bordered-box">
                       <Stack spacing={1}>
                         {selectedCompany?.task.map((system) => (

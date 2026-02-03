@@ -339,7 +339,7 @@ export default function EditProfile() {
                         <Box className="form-item">
                           <Typography component="label" htmlFor="mbrId" className="label">
                             {t('mbrId')}
-                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
+                            <Box component="span" className="required" aria-label={t('requiredInput')}>({t('required')})</Box>
                           </Typography>
                           <TextField
                             id="mbrId"
@@ -360,7 +360,7 @@ export default function EditProfile() {
                         <Box className="form-item">
                           <Typography component="label" htmlFor="userName" className="label">
                             {t('name')}
-                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
+                            <Box component="span" className="required" aria-label={t('requiredInput')}>({t('required')})</Box>
                           </Typography>
                           <TextField
                             id="userName"
@@ -381,7 +381,7 @@ export default function EditProfile() {
                         <Box className="form-item">
                           <Typography component="label" htmlFor="phone" className="label">
                             {t('phone')}
-                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
+                            <Box component="span" className="required" aria-label={t('requiredInput')}>({t('required')})</Box>
                           </Typography>
                           <Stack direction="row" spacing={1} className="input-with-btn">
                             <TextField
@@ -456,7 +456,7 @@ export default function EditProfile() {
                         <Box className="form-item">
                           <Typography component="label" htmlFor="password" className="label">
                             {t('password')}
-                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
+                            <Box component="span" className="required" aria-label={t('requiredInput')}>({t('required')})</Box>
                           </Typography>
                           <Stack direction="row" spacing={1} className="input-with-btn">
                             <TextField
@@ -502,7 +502,7 @@ export default function EditProfile() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="confirmPassword" className="label">
                               {t('passwordConfirm')}
-                              <Box component="span" className="necessary" aria-label={t('requiredInput')}>({t('required')})</Box>
+                              <Box component="span" className="required" aria-label={t('requiredInput')}>({t('required')})</Box>
                             </Typography>
                             <TextField
                               id="confirmPassword"

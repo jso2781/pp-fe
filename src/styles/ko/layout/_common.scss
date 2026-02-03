@@ -50,6 +50,7 @@ body { overflow-x: auto; }
 .fn { float: none !important; }
 .clearfix::after { content: ""; display: block; clear: both; }
 
+
 /* 스킵네비 */
 #skip-navigation{position:absolute;left:0;top:0;width:100%;text-align:center;z-index:9999}
 #skip-navigation a{overflow:hidden;white-space:nowrap;display:block;width:100%;height:0;color:#fff !important;}
@@ -58,10 +59,55 @@ body { overflow-x: auto; }
 /* 스크린 리더용 */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
+/* ETC */ 
 .underline{text-decoration: underline; cursor: pointer;}
+.ellipsis{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+
+// 타이틀 
+.section-title-group {
+  display: flex;
+  align-items: center; 
+  margin-bottom: 10px;
+
+  .section-title {
+    margin: 0; 
+  }
+  .controller {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.section-title, 
+.form-section-title {
+  font-size: var(--fs-24);
+  font-weight: 700;
+  margin-bottom: 10px;
+  color:var(--color-text-1);
+
+  & ~ .section-title,
+  & ~ .form-section-title {
+    margin-top: 30px;
+  }
+}
+
+.section-title {
+  &::before {
+    content: "";
+    display: block;
+    width: 43px;
+    height: 4px;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, #35B895 34.1%, #D2DF1C 83.66%);
+    border-radius: 2px;
+  }
+}
 
 .sub-title{
-  font-size: 18px;font-weight: 700;margin:24px 0 20px 0;
+  font-size: 18px;
+  font-weight: 700;
+  margin:24px 0 20px 0;
 
   &:first-of-type {
     margin-top: 0;
@@ -330,6 +376,12 @@ body { overflow-x: auto; }
 }
 
 /* 폼 필드 */
+.form-section-title {
+  .required {
+    color: var(--danger);
+    margin-left: 4px; 
+  }
+}
 .form-item {
   margin:0 0 5px 0;
   &:not(:first-of-type) {
@@ -638,8 +690,11 @@ body { overflow-x: auto; }
   &.center  { justify-content: center; }
   &.right   { justify-content: flex-end; }
 
-  button { 
+  button, .MuiButton-root { 
     min-width: 110px; 
+    &.w260 {
+      width: 260px !important;
+    }
   }
 
   @media (max-width: 1024px) {
@@ -647,15 +702,23 @@ body { overflow-x: auto; }
     padding-top: 20px;
     gap: 12px;
     flex-direction: column; 
+    gap: 12px !important;
+
+    > button, > .MuiButton-root, 
+    .left-group button, .left-group .MuiButton-root,
+    .right-group button, .right-group .MuiButton-root {
+      width: 100% !important;
+      margin: 0 !important;
+      
+      &.w260 {
+        width: 100% !important; 
+      }
+    }
 
     .left-group, .right-group {
       width: 100%;
       gap: 8px;
-      
-      .MuiButton-root {
-        width: 100%; 
-        margin: 0;
-      }
+      flex-direction: row; 
     }
   }
 }

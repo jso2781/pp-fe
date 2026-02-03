@@ -159,7 +159,7 @@ export default function FindPwModify() {
                         <Box className="form-item">
                           <Typography component="label" htmlFor="password" className="label">
                             {t('newPassword')} 
-                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>{t('displayRequired')}</Box>
+                            <Box component="span" className="required" aria-label={t('requiredInput')}>{t('displayRequired')}</Box>
                           </Typography>
                           <TextField
                             id="password"
@@ -192,7 +192,7 @@ export default function FindPwModify() {
                         <Box className="form-item">
                           <Typography component="label" htmlFor="confirmPassword" className="label">
                             {t('passwordConfirm')} 
-                            <Box component="span" className="necessary" aria-label={t('requiredInput')}>{t('displayRequired')}</Box>
+                            <Box component="span" className="required" aria-label={t('requiredInput')}>{t('displayRequired')}</Box>
                           </Typography>
                           <TextField
                             id="confirmPassword" 

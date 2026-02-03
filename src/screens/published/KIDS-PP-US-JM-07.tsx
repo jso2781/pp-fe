@@ -92,7 +92,7 @@ export default function KIDS_PP_US_JM_07() {
                             <Box className="form-item">
                               <Typography component="label" htmlFor="userName" className="label">
                                 이름
-                                <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                                <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                               </Typography>
                               <TextField
                                 id="userName"
@@ -119,7 +119,7 @@ export default function KIDS_PP_US_JM_07() {
                             <Box className="form-item">
                               <Typography component="label" htmlFor="birthDate" className="label">
                                 생년월일
-                                <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                                <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                               </Typography>
                               <TextField
                                 id="birthDate"
@@ -149,7 +149,7 @@ export default function KIDS_PP_US_JM_07() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="phone" className="label">
                               휴대전화번호
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                             </Typography>
                             <TextField
                               id="phone"
@@ -184,7 +184,7 @@ export default function KIDS_PP_US_JM_07() {
                             <Box className="form-item">
                               <Typography component="label" htmlFor="parentName" className="label">
                                 이름
-                                <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                                <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                               </Typography>
                               <TextField
                                 id="parentName"
@@ -214,7 +214,7 @@ export default function KIDS_PP_US_JM_07() {
                           <Box className="form-item">
                             <Typography component="label" htmlFor="parentPhone" className="label">
                               휴대전화번호
-                              <Box component="span" className="necessary" aria-label="필수입력">(필수)</Box>
+                              <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                             </Typography>
                             <Stack direction="row" spacing={1} className="input-with-btn">
                               <TextField
