@@ -280,6 +280,9 @@ export const muiTheme = createTheme({
           '&::placeholder': {
             color: '#8A949E',
             opacity: 1,
+            textOverflow: 'ellipsis', 
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
             '@media (max-width: 1024px)': {
               fontSize: '14px',
             },

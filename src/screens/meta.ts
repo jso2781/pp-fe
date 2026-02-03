@@ -356,6 +356,23 @@ export const screens: ScreenMeta[] = [
     "uiType": "page"
   },
 
+  {
+    "id": "KIDS-PP-US-IN-17",
+    "title": "클린신고센터  ",
+    "uiType": "form"
+  },
+  {
+    "id": "KIDS-PP-US-IN-18",
+    "title": "클린신고센터 등록",
+    "uiType": "form"
+  },
+  {
+    "id": "KIDS-PP-US-IN-19",
+    "title": "클린신고센터 상세",
+    "uiType": "detail"
+  },
+  
+
   //내업무 템플릿 예시
   {
     "id": "KIDS-PP-US-MT-01-LAYOUT",
@@ -363,7 +380,7 @@ export const screens: ScreenMeta[] = [
     "uiType": "detail"
   },
 
-  {
+  /* {
     "id": "KIDS-PP-US-MT-01_List",
     "title": "내업무 리스트",
     "uiType": "detail"
@@ -372,7 +389,7 @@ export const screens: ScreenMeta[] = [
     "id": "KIDS-PP-US-MT-01_Write",
     "title": "내업무 등록",
     "uiType": "detail"
-  },
+  }, */
 
   //PUB
   {
