@@ -2,6 +2,8 @@ import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BreadcrumbNav } from '@/components/mui';
 import { useLocation } from 'react-router-dom';
+import { useAppSelector } from '@/store/hooks';
+import { getLnbInfoByPath } from '@/features/auth/MenuUtils';
 import { HeadTitle } from './HeadTitle';
 
 // 1. 경로별 한글 명칭 매핑 (데이터가 많아지면 별도 파일로 분리 추천)
@@ -133,26 +135,6 @@ export default function DepsLocation() {
       labels: ["login", "idLogin", "findPassword", "passwordChange"] // 로그인 > 아이디 로그인 > 비밀번호 찾기 > 비밀번호 변경
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsNoticeList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
-      labels: ["news", "noticeList"] // 기관소식 > 공지사항
-    },
-    {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsJobNoticeList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
-      labels: ["news", "employmentBoard"] // 기관소식 > 채용게시판
-    },
-    {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsDataRoomList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
-      labels: ["news", "menuEduArchive"] // 기관소식 > 자료실
-    },
-    {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsCardNewsList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
-      labels: ["news", "menuEduCard"] // 기관소식 > 카드뉴스
-    },
-    {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsVidioList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
-      labels: ["news", "menuEduVideo"] // 기관소식 > 동영상
-    },
-    {
       pattern: /^\/[A-Za-z]{2}\/news\/NewsFaqNotice(\/)?(\d+)?$/,
       labels: ["news", "menuNoticeFaq"] // 기관소식 > FAQ
     },
@@ -192,20 +174,24 @@ export default function DepsLocation() {
 
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기
   const { pathname } = useLocation();
+  const { lnbStructor } = useAppSelector((s) => s.menu);
+  const lnbResult = useMemo(() => getLnbInfoByPath(lnbStructor, pathname), [lnbStructor, pathname]);
+
   // pathname 변경 시에만 로그 출력 (StrictMode로 인한 중복 호출 방지)
   useEffect(() => {
     console.log("DepsLocation.tsx pathname="+pathname);
   }, [pathname]);
-  
-  // 2. 현재 경로에 일치하는 설정 찾기
+
+  // 2. 현재 경로에 일치하는 설정 찾기 (lnbStructor 우선, 없으면 pathConfig)
   const matched = pathConfig.find(item => item.pattern.test(pathname));
-  
-  // 3. 라벨 설정 (매칭되는 게 없으면 기본값)
+
+  // 3. 라벨 설정: lnbStructor에서 경로로 찾은 breadcrumb이 있으면 사용, 없으면 pathConfig
   const currentLabels = useMemo(() => {
-    return matched ? matched.labels.map(labelKey => t(labelKey)) : [t("page"), t("notFound")]; //currentLabels를 useMemo로 감싸야 뒤로가기 시 값이 정확히 계산
-  }, [matched, t]);
-  //const currentLabels = matched ? matched.labels.map(labelKey => t(labelKey)) : [t("page"), t("notFound")];
-  // const currentLabels = pathLabels[pathname] || ["페이지", "찾을 수 없음"];
+    if (lnbResult.breadcrumb.length > 0) {
+      return lnbResult.breadcrumb.map((b) => b.label);
+    }
+    return matched ? matched.labels.map((labelKey) => t(labelKey)) : [t("page"), t("notFound")];
+  }, [lnbResult.breadcrumb, matched, t]);
 
   // 4. 마지막 요소가 페이지의 큰 제목 (h2)
   // 이제 /notice/854로 접속해도 labels의 마지막인 "공지사항"이 타이틀이 됩니다.
@@ -227,6 +213,7 @@ export default function DepsLocation() {
   /* =========================================================
    웹 접근성을 위한 <title> 경로 생성 로직 
   ========================================================= */
+  const hasMatch = lnbResult.breadcrumb.length > 0 || !!matched;
   const finalBrowserTitle = useMemo(() => {
 
     // 홈일 때 처리
@@ -234,8 +221,8 @@ export default function DepsLocation() {
     if (isHome) {
       return t('kidsName');
     }
-    // 매칭되는 게 없을 때
-    if (!matched) {
+    // 매칭되는 게 없을 때 (lnbStructor·pathConfig 모두 없음)
+    if (!hasMatch) {
       return t('kidsName');
     }
     
@@ -249,7 +236,7 @@ export default function DepsLocation() {
 
     if (isDetail) {
       titleLabels[titleLabels.length - 1] += ` ${t('detail', '상세')}`;
-    } else if (!isWrite && matched) {
+    } else if (!isWrite && hasMatch) {
       if (/news|board|notice|list|dur/i.test(pathname)) {
         titleLabels[titleLabels.length - 1] += ` ${t('list', '목록')}`;
       }
@@ -262,7 +249,7 @@ export default function DepsLocation() {
 
     console.log('HeadTitle pageTitle='+pageTitle+', finalBrowserTitle=', titleStr);
     return titleStr;
-  }, [pathname, t, currentLabels, matched]);
+  }, [pathname, t, currentLabels, hasMatch]);
 
   useEffect(() => {
     document.title = finalBrowserTitle;

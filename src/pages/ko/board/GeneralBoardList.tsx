@@ -1,20 +1,23 @@
 /**
- * 화면ID: KIDS-PP-US-NO-01
- * 화면명: 공지사항 목록
- * 화면경로: /news/NewsNoticeList
- * 화면설명: 공지사항 목록(일반 게시판 목록 유형)
+ * 화면ID: KIDS-PP-US-NO-08
+ * 화면명: 일반형 게시판 목록
+ * 화면경로: /board/general/:bbsId
+ * 화면설명: 일반형 게시판 목록
  */
-import { useEffect, useMemo, useState } from 'react';
+import DepsLocation from '@/components/common/DepsLocation';
+import Lnb from '@/components/common/Lnb';
+import LnbSectionTitle from '@/components/common/LnbSectionTitle';
+import { selectPstList } from '@/features/pst/PstThunks';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { useNavigate, useSearchParams, useLocation, useParams } from 'react-router-dom';
 import {
   Box,
   Button,
-  Card,
   FormControl,
   InputLabel,
+  Link,
   MenuItem,
   Pagination,
+  Paper,
   Select,
   Stack,
   Table,
@@ -23,73 +26,18 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
-  List,
-  ListItemButton,
-  ListItemText,
-  Collapse,
   TextField,
-  Paper,
+  Typography
 } from '@mui/material';
-import { ExpandLess, ExpandMore, Menu as MenuIcon, MenuOpen as MenuOpenIcon } from '@mui/icons-material';
-import { selectPstList } from '@/features/pst/PstThunks';
-import DepsLocation from '@/components/common/DepsLocation';
-import Lnb from '@/components/common/Lnb';
-import { Link as RouterLink } from 'react-router-dom';
-import { Link } from '@mui/material';
-import { LnbItem } from '@/features/auth/MenuTypes';
-import { BoardKey } from '@/features/pst/PstTypes';
+import { useEffect, useMemo, useState } from 'react';
+import { Link as RouterLink, useParams, useSearchParams } from 'react-router-dom';
 
-function SideNav({ items }: { items: LnbItem[] }) {
-  const location = useLocation();
-  const [openKeys, setOpenKeys] = useState<Record<string, boolean>>({});
-  const toggle = (k: string) => setOpenKeys((s) => ({ ...s, [k]: !s[k] }));
-
-  const renderItems = (arr: LnbItem[], depth = 0) => (
-    <List disablePadding>
-      {arr.map((it) => {
-        const active = location.pathname === it.key || location.pathname.startsWith(it.key + '/');
-        const hasChildren = !!it.children?.length;
-        const disabled = !!it.disabled;
-        return (
-          <Box key={it.key} sx={{ pl: depth * 2 }}>
-            <ListItemButton
-              selected={active}
-              disabled={disabled}
-              onClick={() => {
-                if (disabled) return;
-                if (hasChildren) return toggle(it.key);
-                if (it.key.startsWith('http')) {
-                  window.open(it.key, '_blank');
-                  return;
-                }
-                // keys in source are mostly without lang prefix; normalize:
-                const dest = it.key.startsWith('/ko/') ? it.key : '/ko' + it.key;
-                window.location.href = dest;
-              }}
-            >
-              <ListItemText primary={it.label} />
-              {hasChildren ? (openKeys[it.key] ? <ExpandLess /> : <ExpandMore />) : null}
-            </ListItemButton>
-            {hasChildren ? (
-              <Collapse in={!!openKeys[it.key]} timeout="auto" unmountOnExit>
-                {renderItems(it.children!, depth + 1)}
-              </Collapse>
-            ) : null}
-          </Box>
-        );
-      })}
-    </List>
-  );
-
-  return <Box>{renderItems(items)}</Box>;
-}
-
-export default function NewsNoticeList() {
+export default function GeneralBoardList() {
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { list, totalCount, totalPages, loading } = useAppSelector((s) => s.pst);
+  const { lnbStructor } = useAppSelector((s) => s.menu);
 
   const [searchCnd, setSearchCnd] = useState(searchParams.get('searchCnd') || 'title');
   const [searchWrd, setSearchWrd] = useState(searchParams.get('searchWrd') || '');
@@ -98,9 +46,7 @@ export default function NewsNoticeList() {
   const [pageNum, setPageNum] = useState(1)
   const [pageSize, setPageSize] = useState(10) // 화면에 페이지 사이즈 설정이 필요시 setPageSize 활용
 
-  // 게시판 식별키, 게시판 ID 추출
-  const match = location.pathname.match(/\/news\/([^/]+)/);
-  const boardKey = match?.[1] as BoardKey;
+  // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
   // Lnb 랜더링용
@@ -144,7 +90,7 @@ export default function NewsNoticeList() {
             <Box className="lnb-wrap">
               <Box className="lnb-menu">
                 <Typography component="h2" className="lnb-tit">
-                  <span>기관소식</span>
+                  <LnbSectionTitle />
                 </Typography>
                 <Box className="lnb-list">
                   <Lnb currentUrl={currentUrl} />
@@ -220,9 +166,9 @@ export default function NewsNoticeList() {
                                 {/* 4. 동작이 발생하는 요소에 명확한 aria-label을 제공합니다. */}
                                 <Link
                                   component={RouterLink}
-                                  to={`/ko/news/${boardKey}/${bbsId}/${r.id}`}
+                                  to={`/ko/board/general/${bbsId}/${r.id}`}
                                   color="inherit"
-                                  underline="hover" // 평소엔 밑줄 없고 마우스 올릴 때만 생성 (접근성 권장)
+                                  underline="hover" 
                                   aria-label={`${r.title} 상세보기`}
                                   sx={{ 
                                     display: 'inline-block',

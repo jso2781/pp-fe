@@ -17,16 +17,13 @@ const DurNoticeDetailKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeDe
 const DurProposalKo = lazy(() => import('@/pages/ko/maintask/dur/DurProposal'))
 
 const NewsFaqNoticeKo = lazy(() => import('@/pages/ko/news/NewsFaqNotice'))
-const NewsNoticeListKo = lazy(() => import('@/pages/ko/news/NewsNoticeList'))
-const NewsNoticeDetailKo = lazy(() => import('@/pages/ko/news/NewsNoticeDetail'))
-const NewsJobNoticeListKo = lazy(() => import('@/pages/ko/news/NewsJobNoticeList'))
-const NewsJobNoticeDetailKo = lazy(() => import('@/pages/ko/news/NewsJobNoticeDetail'))
-const NewsDataRoomListKo = lazy(() => import('@/pages/ko/news/NewsDataRoomList'))
-const NewsDataRoomDetailKo = lazy(() => import('@/pages/ko/news/NewsDataRoomDetail'))
-const NewsCardNewsListKo = lazy(() => import('@/pages/ko/news/NewsCardNewsList'))
-const NewsCardNewsDetailKo = lazy(() => import('@/pages/ko/news/NewsCardNewsDetail'))
-const NewsVidioListKo = lazy(() => import('@/pages/ko/news/NewsVidioList'))
-const NewsVidioDetailKo = lazy(() => import('@/pages/ko/news/NewsVidioDetail'))
+
+const GeneralBoardListKo = lazy(() => import('@/pages/ko/board/GeneralBoardList'))
+const GeneralBoardDetailKo = lazy(() => import('@/pages/ko/board/GeneralBoardDetail'))
+const GalleryBoardListKo = lazy(() => import('@/pages/ko/board/GalleryBoardList'))
+const GalleryBoardDetailKo = lazy(() => import('@/pages/ko/board/GalleryBoardDetail'))
+const VideoBoardListKo = lazy(() => import('@/pages/ko/board/VideoBoardList'))
+const VideoBoardDetailKo = lazy(() => import('@/pages/ko/board/VideoBoardDetail'))
 
 const SignUpSelKo = lazy(() => import('@/pages/ko/auth/SignUpSel'))
 const SignUpAgrTrmsKo = lazy(() => import('@/pages/ko/auth/SignUpAgrTrms'))
@@ -173,17 +170,14 @@ export default function Router() {
 
                 {/* news(기관소식) */}
                 <Route path="/:lang/news/NewsFaqNotice" element={<LangElement byLang={{ ko: <NewsFaqNoticeKo />, en: <NewsFaqNoticeKo /> }} />} />
-                <Route path="/:lang/news/NewsNoticeList/:bbsId" element={<LangElement byLang={{ ko: <NewsNoticeListKo />, en: <NewsNoticeListKo /> }} />} />
-                <Route path="/:lang/news/NewsNoticeList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsNoticeDetailKo />, en: <NewsNoticeDetailKo /> }} />} />            
-                <Route path="/:lang/news/NewsJobNoticeList/:bbsId" element={<LangElement byLang={{ ko: <NewsJobNoticeListKo />, en: <NewsJobNoticeListKo /> }} />} />
-                <Route path="/:lang/news/NewsJobNoticeList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsJobNoticeDetailKo />, en: <NewsJobNoticeDetailKo /> }} />} />            
-                <Route path="/:lang/news/NewsDataRoomList/:bbsId" element={<LangElement byLang={{ ko: <NewsDataRoomListKo />, en: <NewsDataRoomListKo /> }} />} />
-                <Route path="/:lang/news/NewsDataRoomList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsDataRoomDetailKo />, en: <NewsDataRoomDetailKo /> }} />} />
-                <Route path="/:lang/news/NewsCardNewsList/:bbsId" element={<LangElement byLang={{ ko: <NewsCardNewsListKo />, en: <NewsCardNewsListKo /> }} />} />
-                <Route path="/:lang/news/NewsCardNewsList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsCardNewsDetailKo />, en: <NewsCardNewsDetailKo /> }} />} />         
-                <Route path="/:lang/news/NewsVidioList/:bbsId" element={<LangElement byLang={{ ko: <NewsVidioListKo />, en: <NewsVidioListKo /> }} />} />
-                <Route path="/:lang/news/NewsVidioList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <NewsVidioDetailKo />, en: <NewsVidioDetailKo /> }} />} />        
                                                 
+                {/* 유형별 게시판 (공통) */}
+                <Route path="/:lang/board/general/:bbsId" element={<LangElement byLang={{ ko: <GeneralBoardListKo />, en: <GeneralBoardListKo /> }} />} />
+                <Route path="/:lang/board/general/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <GeneralBoardDetailKo />, en: <GeneralBoardDetailKo /> }} />} />                                                        
+                <Route path="/:lang/board/gallery/:bbsId" element={<LangElement byLang={{ ko: <GalleryBoardListKo />, en: <GalleryBoardListKo /> }} />} />
+                <Route path="/:lang/board/gallery/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <GalleryBoardDetailKo />, en: <GalleryBoardDetailKo /> }} />} />       
+                <Route path="/:lang/board/video/:bbsId" element={<LangElement byLang={{ ko: <VideoBoardListKo />, en: <VideoBoardListKo /> }} />} />
+                <Route path="/:lang/board/video/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <VideoBoardDetailKo />, en: <VideoBoardDetailKo /> }} />} />                       
 
                 {/* about(기관소개) */}
 
