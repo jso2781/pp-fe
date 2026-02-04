@@ -1,9 +1,9 @@
 /* 공통 Swiper 컨트롤  */
 .swiper-button-prev,
 .swiper-button-next,
-.play-control .btn-play-pause {
-  width: 40px;
-  height: 40px;
+.play-control .btn-play-pause { 
+  width: 40px !important;
+  height: 40px !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -64,12 +64,12 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .swiper-button-prev,
   .swiper-button-next,
   .play-control .btn-play-pause {
-    width: 30px;
-    height: 30px;
+    width: 34px !important;
+    height: 34px !important;
   }
 
   .play-control .btn-play-pause {
@@ -77,13 +77,6 @@
       font-size: 16px;
     }
   }
-  
-  // 필요한 경우 간격 조정 (pagination-wrapper 내부에서 사용 시)
-  /*
-  .pagination-wrapper {
-    gap: 4px; 
-  }
-  */
 }
 
 
@@ -165,7 +158,6 @@
   .main-promotion-section {
     position: relative;
     height: 452px;
-    // background: url(/img/main_bg01.png) no-repeat center center;
     background-size: cover;
 
     .slogan-title {
@@ -196,18 +188,22 @@
         box-shadow: 4px 4px 14px 0 rgba(110, 118, 130, 0.25);
         border-radius: 30px 30px 0 0;
         overflow: hidden;
-        //-webkit-mask-image: -webkit-radial-gradient(white, black);
 
         .slide-item { 
           width: 100%;
           height: 100%;
+          text-align: center;
+          margin:0 auto;
           border-radius: inherit;
           overflow: hidden;
           position: relative;
+          display: flex;
+          align-items: center; 
+          justify-content: center;
         }
 
         .slide-item img {
-          width: 100%;
+          //width: 100%;
           height: 100%;
           display: block;
         }
@@ -256,11 +252,13 @@
 
       .swiper-nav-group {
         .swiper-button-prev {
+          top:auto !important;
           left: auto;
-          right: 62px;
-          bottom: 20px;
+          right: 64px;
+          bottom: 20px; 
         }
         .swiper-button-next {
+          top:auto !important;
           left: auto;
           right: 20px;
           bottom: 20px;
@@ -291,13 +289,13 @@
       }
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1200px) {
       .promotion-area {
         .play-control {
-          right: 79px;
+          right: 85px;
         }
         .swiper-nav-group {
-          .swiper-button-prev { right: 47px;}
+          .swiper-button-prev { right: 50px;}
           .swiper-button-next { right: 15px; }
         }
       }
@@ -722,14 +720,15 @@
 
           /* 정보 영역 */
           .info-area {
+            position: relative;
             flex: 1;
             padding: 0 0 0 20px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             overflow: hidden;
 
             .sns-title {
+              height:57px;
               font-weight: 700;
               font-size: 19px;
               color: var(--color-text-3);;
@@ -742,6 +741,7 @@
             }
 
             .sns-desc {
+              height:50px;
               font-size: 17px;
               color: var(--color-text-3);;
               line-height: 1.4;
@@ -755,6 +755,9 @@
 
             /* 카테고리 라벨 */
             .sns-label {
+              position: absolute;
+              left:20px;
+              bottom:0;
               display: inline-block;
               width: fit-content;
               padding: 2px 10px;
@@ -785,7 +788,6 @@
         
         .sns-card {
           width: 100%;
-          height:234px;
           display: flex;
           flex-direction: column;
         }
@@ -798,7 +800,7 @@
         .sns-card .sns-link .thumb-area { flex: 0 0 150px; height:150px; }
       }
 
-      @media (max-width: 1024px) {
+      @media (max-width: 1200px) {
         .sns-list {
           grid-template-columns: 1fr;
         }
@@ -810,7 +812,7 @@
         }
 
         .pagination-wrapper {
-          padding: 0 65px 0 0;
+          padding: 0 71px 0 0;
           .sns-pagination {
             padding:2px 14px;
             order: 2; /* 순서 조정 가능 */
@@ -819,7 +821,7 @@
 
         .swiper-nav-group {
           .swiper-button-prev{
-             right:32px;
+             right:36px;
           }
         }
         
@@ -1049,10 +1051,6 @@
           border-radius: 12px;
           overflow: hidden;
           border: 1px solid #B1B8BE;
-
-          @media (max-width: 768px) {
-            height: 300px;
-          }
         }
 
         .card-news-swiper {
@@ -1106,7 +1104,6 @@
         }
       }
 
-      // 3. 1200px 미만 통합 반응형 레이아웃
       @media (max-width: 1200px) {
         flex-direction: column;
         gap: 60px;
@@ -1122,7 +1119,9 @@
           width: 100%;
 
           .card-news-content {
-            height: auto;
+            width:100%;
+            height:300px;
+            // height: auto;
             aspect-ratio: 1 / 0.8; // 태블릿에서 보기 좋은 비율
           }
         }
