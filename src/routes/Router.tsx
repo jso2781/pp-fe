@@ -13,7 +13,7 @@ const InternalServerErrorKo = lazy(() => import('@/pages/ko/InternalServerError'
 
 const CmsPageKo = lazy(() => import('@/pages/ko/cms/CmsPage'))
 
-const DurUnderstandKo = lazy(() => import('@/pages/ko/maintask/dur/DurUnderstand'))
+const DurSearchRoomKo = lazy(() => import('@/pages/ko/maintask/dur/DurSearchRoom'))
 const DurNoticeListKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeList'))
 const DurNoticeDetailKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeDetail'))
 const DurProposalKo = lazy(() => import('@/pages/ko/maintask/dur/DurProposal'))
@@ -169,10 +169,11 @@ export default function Router() {
                 <Route path="/:lang/cms/CmsPage/:contsSn" element={<LangElement byLang={{ ko: <CmsPageKo />, en: <CmsPageKo /> }} />} />
 
                 {/* maintask(주요업무) */}
+                <Route path="/:lang/maintask/dur/DurSearchRoom" element={<LangElement byLang={{ ko: <DurSearchRoomKo />, en: <DurSearchRoomKo /> }} />} />
                 <Route path="/:lang/maintask/dur/DurNoticeList/:bbsId" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListKo /> }} />} />
                 <Route path="/:lang/maintask/dur/DurNoticeList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailKo /> }} />} />
                 <Route path="/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalKo /> }} />} />
-                <Route path="/:lang/maintask/dur/DurUnderstand" element={<LangElement byLang={{ ko: <DurUnderstandKo />, en: <DurUnderstandKo /> }} />} />
+
 
                 {/* open(정보공개) */}
 
