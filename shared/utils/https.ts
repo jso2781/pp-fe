@@ -193,11 +193,8 @@ https.interceptors.response.use(
     }
     // 500에러 페이징 처리.
     else if(error.response.status === 500){
-      // const navigate = useNavigate();
-      // navigate('/ko/InternalServerError');
-      //페이지 새로고침됨.
-      // window.location.href = '/ko/InternalServerError';
-      dispatch(setInternalServerError(true));
+      //TODO 특정 restAPI주소만 화면 전환 지정작업 필요.
+      // dispatch(setInternalServerError(true));
     }
 
     return Promise.reject(error);

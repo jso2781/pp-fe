@@ -1,7 +1,7 @@
-/* 공통 Swiper 컨트롤  */
+/* 공통 Swiper 컨트롤 */
 .swiper-button-prev,
 .swiper-button-next,
-.play-control .btn-play-pause { 
+.play-control .btn-play-pause {
   width: 40px !important;
   height: 40px !important;
   display: flex;
@@ -18,7 +18,7 @@
 
   &:focus-visible {
     box-shadow: inset 0 0 0 2px #087c80;
-    outline: 2px solid #087c80; 
+    outline: 2px solid #087c80;
     outline-offset: 2px;
   }
 }
@@ -26,15 +26,21 @@
 /* 화살표 버튼 */
 .swiper-button-prev,
 .swiper-button-next {
-  top:auto;
-  margin-top:auto;
+  top: auto;
+  margin-top: auto;
   color: transparent !important;
   background-color: transparent;
 
-  &::after { display: none !important; } // 기본 Swiper 폰트 아이콘 제거
+  &::after {
+    display: none !important;
+  } // 기본 Swiper 폰트 아이콘 제거
 
-  &.swiper-button-prev { background-image: url('/img/btn_swiper_prev.png') !important; }
-  &.swiper-button-next { background-image: url('/img/btn_swiper_next.png') !important; }
+  &.swiper-button-prev {
+    background-image: url("/img/btn_swiper_prev.png") !important;
+  }
+  &.swiper-button-next {
+    background-image: url("/img/btn_swiper_next.png") !important;
+  }
 
   &.swiper-button-disabled {
     opacity: 0.3 !important;
@@ -49,7 +55,7 @@
     min-width: auto;
     padding: 0;
     background-color: #fff;
-    border: 1px solid #CDD1D5;
+    border: 1px solid #cdd1d5;
     border-radius: 50%;
 
     &:hover {
@@ -79,7 +85,6 @@
   }
 }
 
-
 /* ====================
   메인 컨테이너 및 공통
 ====================*/
@@ -104,7 +109,9 @@
     padding-left: 15px;
     z-index: 1;
 
-    span { color: #087C80; }
+    span {
+      color: #087c80;
+    }
 
     &::before {
       content: "";
@@ -113,11 +120,12 @@
       left: -5px;
       width: 60px;
       height: 60px;
-      background-color: #76D2D5;
+      background-color: #76d2d5;
       opacity: 0.3;
       border-radius: 50%;
       z-index: -1;
     }
+
     @media (max-width: 1024px) {
       font-size: 28px;
       margin-bottom: 20px;
@@ -143,7 +151,7 @@
 
     @media (max-width: 480px) {
       font-size: 22px;
-      
+
       &::before {
         width: 38px;
         height: 38px;
@@ -163,13 +171,15 @@
     .slogan-title {
       font-size: 40px;
       font-weight: 700;
-      color: #33363D;
-      span { color: #087C80; }
+      color: #33363d;
+      span {
+        color: #087c80;
+      }
     }
 
     .slogan-desc {
       margin: 10px 0 0 0;
-      color: #33363D;
+      color: #33363d;
       font-size: 20px;
       line-height: 1.4;
       font-weight: 500;
@@ -189,16 +199,16 @@
         border-radius: 30px 30px 0 0;
         overflow: hidden;
 
-        .slide-item { 
+        .slide-item {
           width: 100%;
           height: 100%;
           text-align: center;
-          margin:0 auto;
+          margin: 0 auto;
           border-radius: inherit;
           overflow: hidden;
           position: relative;
           display: flex;
-          align-items: center; 
+          align-items: center;
           justify-content: center;
         }
 
@@ -214,7 +224,7 @@
         height: 78px;
         padding: 0 20px;
         border-radius: 0 0 20px 20px;
-        background: #FFF;
+        background: #fff;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
         position: absolute;
         // bottom: 0px;
@@ -232,7 +242,7 @@
         }
       }
 
-      .promotion-pagination { 
+      .promotion-pagination {
         position: relative !important;
         width: fit-content !important;
         inset: auto !important;
@@ -252,13 +262,13 @@
 
       .swiper-nav-group {
         .swiper-button-prev {
-          top:auto !important;
+          top: auto !important;
           left: auto;
           right: 64px;
-          bottom: 20px; 
+          bottom: 20px;
         }
         .swiper-button-next {
-          top:auto !important;
+          top: auto !important;
           left: auto;
           right: 20px;
           bottom: 20px;
@@ -266,13 +276,12 @@
       }
     }
 
-
     @media (max-width: 1200px) {
       height: auto; // 높이 고정 해제하여 컨텐츠에 맞춤
       padding-bottom: 80px; // 배너가 아래로 내려갈 대비 여백
 
       .inner {
-        padding:40px 20px 0 20px;
+        padding: 40px 20px 0 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -284,7 +293,7 @@
         top: 40px;
         right: auto;
         width: 100%;
-        max-width: 600px;
+        max-width: 430px;
         height: auto;
       }
     }
@@ -295,14 +304,21 @@
           right: 85px;
         }
         .swiper-nav-group {
-          .swiper-button-prev { right: 50px;}
-          .swiper-button-next { right: 15px; }
+          .swiper-button-prev {
+            right: 50px;
+          }
+          .swiper-button-next {
+            right: 15px;
+          }
         }
       }
     }
 
     @media (max-width: 768px) {
       background-position: top center;
+      .promotion-area {
+        max-width: 320px;
+      }
 
       .slogan-title {
         font-size: 30px;
@@ -311,12 +327,14 @@
 
       .slogan-desc {
         font-size: 16px;
-        br { display: none; }
+        br {
+          display: none;
+        }
       }
 
       .promotion-area {
         top: 30px;
-        
+
         .promotion-swiper {
           height: 320px;
           border-radius: 20px 20px 0 0;
@@ -324,7 +342,9 @@
 
         .pagination-wrapper {
           height: 60px;
-          .swiper-tag { font-size: 16px; }
+          .swiper-tag {
+            font-size: 16px;
+          }
         }
 
         .play-control {
@@ -332,7 +352,8 @@
         }
 
         .swiper-nav-group {
-          .swiper-button-prev, .swiper-button-next {
+          .swiper-button-prev,
+          .swiper-button-next {
             bottom: 15px;
           }
         }
@@ -340,18 +361,23 @@
     }
 
     @media (max-width: 480px) {
-      .slogan-title { font-size: 24px; }
-      
+      .slogan-title {
+        font-size: 24px;
+      }
+
       .promotion-area {
-        .promotion-swiper { height: 250px; }
-        
+        .promotion-swiper {
+          height: 250px;
+        }
+
         .pagination-wrapper {
           padding: 0 15px;
-          .swiper-tag { font-size: 14px; }
+          .swiper-tag {
+            font-size: 14px;
+          }
         }
       }
     }
-    
   }
 
   /* ====================
@@ -390,7 +416,7 @@
         [class*="swiper-pagination-bullet"] {
           width: 10px;
           height: 10px;
-          background: #D9D9D9;
+          background: #d9d9d9;
           opacity: 1;
           margin: 0 5px !important;
           transition: all 0.3s;
@@ -415,14 +441,15 @@
     .swiper-nav-group {
       .swiper-button-prev,
       .swiper-button-next {
-        top:85px;
+        top: 85px;
         border-radius: 50% !important;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
         outline: none;
         transition: all 0.2s;
 
         &:focus-visible {
-          box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25), inset 0 0 0 2px #087c80 !important;
+          box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25),
+            inset 0 0 0 2px #087c80 !important;
         }
       }
 
@@ -449,7 +476,7 @@
       position: relative;
 
       &:focus-visible {
-        background-color: #f0fbfc; 
+        background-color: #f0fbfc;
         outline: 2px solid #087c80;
         outline-offset: 4px;
         transform: translateY(-5px);
@@ -484,7 +511,10 @@
         display: flex;
         align-items: center;
 
-        .shortcut-icon { font-size: 18px; color: var(--color-text-3); }
+        .shortcut-icon {
+          font-size: 18px;
+          color: var(--color-text-3);
+        }
         .shortcut-link-text {
           display: inline-block;
           margin-right: 10px;
@@ -496,15 +526,30 @@
     }
 
     @media (max-width: 1023px) {
-      .service-area { padding: 0 15px; }
-      .pagination-wrapper { margin-top: 20px; gap: 8px; }
-      .swiper-button-next, .swiper-button-prev { display: none; }
+      .service-area {
+        padding: 0 15px;
+      }
+      .pagination-wrapper {
+        margin-top: 20px;
+        gap: 8px;
+      }
+      .swiper-button-next,
+      .swiper-button-prev {
+        display: none;
+      }
 
       .shortcut-item {
         height: 100px;
         padding: 15px;
-        .shortcut-text { font-size: 16px; }
-        .icon-bg { width: 22px; height: 26px; left: 15px; bottom: 15px; }
+        .shortcut-text {
+          font-size: 16px;
+        }
+        .icon-bg {
+          width: 22px;
+          height: 26px;
+          left: 15px;
+          bottom: 15px;
+        }
       }
     }
   }
@@ -538,10 +583,12 @@
           opacity: 0.3;
         }
       }
-      &::before { content: normal; }
+      &::before {
+        content: normal;
+      }
     }
 
-    .sns-area{
+    .sns-area {
       /* 탭 스타일 */
       .sns-tabs {
         margin-bottom: 25px;
@@ -584,46 +631,50 @@
             display: none;
           }
 
-          &.tab-youtube, &.tab-insta, &.tab-blog {
-            padding: 10px 45px 10px 20px; 
-            &::before { display: block; }
+          &.tab-youtube,
+          &.tab-insta,
+          &.tab-blog {
+            padding: 10px 45px 10px 20px;
+            &::before {
+              display: block;
+            }
           }
 
-          &.tab-youtube::before { 
-            -webkit-mask-image: url('/img/tab_ico_youtube.svg'); 
-            mask-image: url('/img/tab_ico_youtube.svg'); 
+          &.tab-youtube::before {
+            -webkit-mask-image: url("/img/tab_ico_youtube.svg");
+            mask-image: url("/img/tab_ico_youtube.svg");
           }
-          &.tab-insta::before { 
-            -webkit-mask-image: url('/img/tab_ico_instagram.svg'); 
-            mask-image: url('/img/tab_ico_instagram.svg'); 
+          &.tab-insta::before {
+            -webkit-mask-image: url("/img/tab_ico_instagram.svg");
+            mask-image: url("/img/tab_ico_instagram.svg");
           }
-          &.tab-blog::before { 
-            -webkit-mask-image: url('/img/tab_ico_blog.svg'); 
-            mask-image: url('/img/tab_ico_blog.svg'); 
+          &.tab-blog::before {
+            -webkit-mask-image: url("/img/tab_ico_blog.svg");
+            mask-image: url("/img/tab_ico_blog.svg");
           }
 
-          &:hover, 
+          &:hover,
           &.Mui-focusVisible {
             background-color: rgba(39, 74, 75, 0.1);
             color: #087c80;
             box-shadow: inset 0 0 0 2px #087c80;
-            
+
             &::before {
               background-color: #087c80;
             }
           }
 
           &.Mui-selected {
-              border: none;
-              color: #fff;
-              background: #087c80;
+            border: none;
+            color: #fff;
+            background: #087c80;
 
-              &::before {
-                background-color: #ffffff;
-              }
-              &.Mui-focusVisible {
-                background-color: rgba(8, 124, 128, 0.1);
-                color: #087c80; 
+            &::before {
+              background-color: #ffffff;
+            }
+            &.Mui-focusVisible {
+              background-color: rgba(8, 124, 128, 0.1);
+              color: #087c80;
             }
           }
         }
@@ -661,8 +712,8 @@
           width: auto;
           bottom: 0 !important;
           position: relative;
-          border: 1px solid #CDD1D5;
-          background: #FFF;
+          border: 1px solid #cdd1d5;
+          background: #fff;
           padding: 7px 14px;
           border-radius: 100px;
         }
@@ -683,13 +734,12 @@
         }
       }
 
-
-      .sns-card { 
+      .sns-card {
         width: 100%;
         height: 100%;
         overflow: hidden;
         border-radius: 12px;
-        border: 1px solid #B1B8BE;
+        border: 1px solid #b1b8be;
 
         .MuiCardContent-root {
           padding: 24px !important;
@@ -728,10 +778,10 @@
             overflow: hidden;
 
             .sns-title {
-              height:57px;
+              height: 57px;
               font-weight: 700;
               font-size: 19px;
-              color: var(--color-text-3);;
+              color: var(--color-text-3);
               margin-bottom: 5px;
               display: -webkit-box;
               -webkit-line-clamp: 2;
@@ -741,9 +791,9 @@
             }
 
             .sns-desc {
-              height:50px;
+              height: 50px;
               font-size: 17px;
-              color: var(--color-text-3);;
+              color: var(--color-text-3);
               line-height: 1.4;
               /* 내용 2줄 말줄임 */
               display: -webkit-box;
@@ -756,26 +806,39 @@
             /* 카테고리 라벨 */
             .sns-label {
               position: absolute;
-              left:20px;
-              bottom:0;
+              left: 20px;
+              bottom: 0;
               display: inline-block;
               width: fit-content;
               padding: 2px 10px;
               border-radius: 4px;
               font-size: 15px;
               font-weight: 600;
-              background: #f0f0f0; 
+              background: #f0f0f0;
               color: #666;
 
-              &.youtube { background: #EEF2F7; color: #052B57; }
-              &.insta { background: #fce4ec; color: #BD2C0F; }
-              &.blog { background: #EAF6EC; color: #267337; }
+              &.youtube {
+                background: #eef2f7;
+                color: #052b57;
+              }
+              &.insta {
+                background: #fce4ec;
+                color: #bd2c0f;
+              }
+              &.blog {
+                background: #eaf6ec;
+                color: #267337;
+              }
             }
           }
 
           &:hover {
-            .thumb-area img { transform: scale(1.1); }
-            .sns-title { color: #087c80; }
+            .thumb-area img {
+              transform: scale(1.1);
+            }
+            .sns-title {
+              color: #087c80;
+            }
           }
         }
       }
@@ -785,7 +848,7 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
-        
+
         .sns-card {
           width: 100%;
           display: flex;
@@ -796,8 +859,13 @@
 
     .sns-area {
       @media (max-width: 1200px) {
-        .sns-card .MuiCardContent-root { padding: 20px !important; }
-        .sns-card .sns-link .thumb-area { flex: 0 0 150px; height:150px; }
+        .sns-card .MuiCardContent-root {
+          padding: 20px !important;
+        }
+        .sns-card .sns-link .thumb-area {
+          flex: 0 0 150px;
+          height: 150px;
+        }
       }
 
       @media (max-width: 1200px) {
@@ -814,23 +882,26 @@
         .pagination-wrapper {
           padding: 0 71px 0 0;
           .sns-pagination {
-            padding:2px 14px;
+            padding: 2px 14px;
             order: 2; /* 순서 조정 가능 */
           }
         }
 
         .swiper-nav-group {
-          .swiper-button-prev{
-             right:36px;
+          .swiper-button-prev {
+            right: 36px;
           }
         }
-        
       }
 
       @media (max-width: 768px) {
         .section-title {
           font-size: 24px;
-          span::before { width: 40px; height: 40px; top: -2px; }
+          span::before {
+            width: 40px;
+            height: 40px;
+            top: -2px;
+          }
         }
 
         /* 탭 메뉴 가로 스크롤 처리 */
@@ -838,17 +909,20 @@
           .MuiTabs-flexContainer {
             overflow-x: auto;
             padding-bottom: 5px;
-            padding-right: 40px; 
-            &::-webkit-scrollbar { display: block; height: 4px; }
+            padding-right: 40px;
+            &::-webkit-scrollbar {
+              display: block;
+              height: 4px;
+            }
           }
           .MuiTab-root {
             font-size: 15px;
             padding: 8px 16px;
-            white-space: nowrap; 
+            white-space: nowrap;
             min-width: auto;
             &.Mui-selected {
               background: #087c80;
-              color: #fff !important; 
+              color: #fff !important;
               font-weight: 800;
             }
           }
@@ -870,19 +944,24 @@
             }
             .info-area {
               padding: 15px 0 0 0;
-              .sns-title { font-size: 17px; }
-              .sns-desc { font-size: 15px; -webkit-line-clamp: 3; }
+              .sns-title {
+                font-size: 17px;
+              }
+              .sns-desc {
+                font-size: 15px;
+                -webkit-line-clamp: 3;
+              }
             }
           }
         }
 
-        .sns-list .sns-card { height: auto; }
-
+        .sns-list .sns-card {
+          height: auto;
+        }
       }
     }
   }
 
-  
   /* ====================
     Section 04 : 소식 및 카드뉴스
   ====================*/
@@ -902,7 +981,7 @@
           height: 380px;
           padding: 32px;
           border-radius: 12px;
-          border: 1px solid #B1B8BE;
+          border: 1px solid #b1b8be;
 
           @media (max-width: 1200px) {
             height: auto;
@@ -912,7 +991,7 @@
 
         .news-tabs {
           margin: 0 0 20px 0;
-          
+
           // MUI 기본 하단 바 제거
           :global(.MuiTabs-indicator) {
             display: none !important;
@@ -936,17 +1015,17 @@
             opacity: 1;
 
             &:hover {
-              color: #087C80;
+              color: #087c80;
             }
 
             &.Mui-selected {
-              color: #087C80 !important;
+              color: #087c80 !important;
               font-weight: 700;
-              box-shadow: inset 0 -3px 0 0 #087C80;
+              box-shadow: inset 0 -3px 0 0 #087c80;
             }
 
             &:focus-visible {
-              outline: 2px solid #087C80 !important;
+              outline: 2px solid #087c80 !important;
               outline-offset: -2px;
               background-color: rgba(8, 124, 128, 0.05);
             }
@@ -997,7 +1076,8 @@
                   transition: background-color 0.2s;
                   color: inherit;
 
-                  &:hover, &:focus-visible {
+                  &:hover,
+                  &:focus-visible {
                     background-color: rgba(8, 124, 128, 0.03);
                     outline: none;
                   }
@@ -1029,7 +1109,7 @@
                   }
 
                   &:hover .subject {
-                    color: #087C80;
+                    color: #087c80;
                     text-decoration: underline;
                   }
                 }
@@ -1042,15 +1122,15 @@
       // 카드 뉴스 영역
       .card-news-area {
         position: relative;
-        flex: 0 0 380px; 
+        flex: 0 0 380px;
         max-width: 380px;
         width: 100%;
 
         .card-news-content {
-          height: 380px; 
+          height: 380px;
           border-radius: 12px;
           overflow: hidden;
-          border: 1px solid #B1B8BE;
+          border: 1px solid #b1b8be;
         }
 
         .card-news-swiper {
@@ -1059,8 +1139,8 @@
           .slide-item {
             width: 100%;
             height: 100%;
-            img{
-              width:100%;
+            img {
+              width: 100%;
             }
             .slide-link {
               display: block;
@@ -1071,33 +1151,35 @@
         }
 
         // 페이지네이션 및 컨트롤
-        .pagination-wrapper { 
+        .pagination-wrapper {
           position: absolute;
           top: 5px;
           right: 0px;
           z-index: 10;
           display: flex;
-          align-items: center; 
+          align-items: center;
 
-          .card-news-pagination{
+          .card-news-pagination {
             display: none;
           }
 
           .play-control {
             display: flex;
-            align-items: center; 
+            align-items: center;
             margin-right: 2px;
           }
 
           .swiper-nav-group {
-            display: flex; 
+            display: flex;
             gap: 2px;
-            .swiper-button-prev, .swiper-button-next {
+            .swiper-button-prev,
+            .swiper-button-next {
               position: static;
               margin: 0;
               cursor: pointer;
               &:focus-visible {
-                box-shadow: 0 4px 4px 0 rgba(0,0,0,0.25), inset 0 0 0 2px #087c80 !important;
+                box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25),
+                  inset 0 0 0 2px #087c80 !important;
               }
             }
           }
@@ -1119,8 +1201,8 @@
           width: 100%;
 
           .card-news-content {
-            width:100%;
-            height:300px;
+            width: 100%;
+            height: 300px;
             // height: auto;
             aspect-ratio: 1 / 0.8; // 태블릿에서 보기 좋은 비율
           }
@@ -1128,5 +1210,4 @@
       }
     }
   }
-
 }

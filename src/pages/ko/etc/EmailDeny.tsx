@@ -10,9 +10,26 @@ import { Box } from '@mui/material';
 
 export default function EmailDeny() {
   return (
-    <Box>
-      <DepsLocation />
-      <RenderTrmsStt trmsSttCd='STT_EML' isList={false}/>
+    
+    <Box className="page-layout">
+      <Box className="sub-container">
+        <Box className="content-wrap">
+
+          {/* 컨텐츠 본문 영역 */}
+          <Box className="sub-content">
+            <DepsLocation />
+            <Box className="content-view" id="content">
+              <Box className="page-content">
+              {/* --- 본문 시작 --- */}
+
+                <RenderTrmsStt trmsSttCd='STT_EML' isList={false}/>
+
+              {/* --- 본문 끝 --- */}
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   )
 }

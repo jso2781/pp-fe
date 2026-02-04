@@ -11,7 +11,7 @@ export default function GlobalErrorHandler ({ children }: { children: ReactNode 
 
   useEffect(() => {
     if(internalServerError){
-      navigate('/ko/InternalServerError');
+      navigate('/ko/InternalServerError', { replace: true });
       dispatch(setInternalServerError(false));
     }
   }, [internalServerError]);
