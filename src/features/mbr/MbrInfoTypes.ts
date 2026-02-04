@@ -244,6 +244,12 @@ export interface MbrInfoRVO {
    * JWT_Access_Token
    */
   accessToken?: string
+
+  /**
+   * 전문가 회원 여부(Y: 전문가 회원, N: 일반 회원)
+   * 
+   */
+  expertYn?: string
 }
 
 /**

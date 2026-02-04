@@ -811,9 +811,15 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     {t('integratedSearch')} {/* 통합검색 */}
                   </Button>
 
+                  {user && user.userInfo?.expertYn === 'N' ? (
                   <Button size="small" onClick={() => navigate(to('/expert/ExpertMemberApply'))} className="btn-util user-reg">
                     {t('usrSwtReg')} {/* 전문가 회원 전환 신청 */}
                   </Button>
+                  ) : (
+                    <Button size="small" onClick={() => navigate(to('/expert/ExpertMyWork'))} className="btn-util user-reg">
+                      {t('expertMyWork')} {/* 내 업무 */}
+                    </Button>
+                  )}
 
                   {user && user.userInfo?.cnstnMbcmtYn === 'Y' ? (
                     <Button size="small" onClick={() => navigate(to('/'))} className="btn-util adv-task">
@@ -1016,9 +1022,15 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   </Button>
                 ) : (
                   <>
-                  <Button size="small" onClick={() => navigate(to('/'))} className="btn-util my-task">
-                    {t('myTask')} {/* 내업무 */}
-                  </Button>
+                  {user && user.userInfo?.expertYn === 'N' ? (
+                    <Button size="small" onClick={() => navigate(to('/expert/ExpertMemberApply'))} className="btn-util user-reg">
+                      {t('usrSwtReg')} {/* 전문가 회원 전환 신청 */}
+                    </Button>
+                  ) : (
+                    <Button size="small" onClick={() => navigate(to('/expert/ExpertMyWork'))} className="btn-util my-task">
+                      {t('expertMyWork')} {/* 내업무 */}
+                    </Button>
+                  )}
                   <Button size="small" onClick={() => navigate(to('/auth/PasswordConfirm'))} className="btn-util edit-profile">
                     {t('editProfile')} {/* 회원정보수정 */}
                   </Button>

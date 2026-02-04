@@ -1,7 +1,7 @@
 /**
  * 화면ID: KIDS-PP-US-MT-01
  * 화면명: 전문가 메뉴 - 내 업무
- * 화면경로: /expert/MyExpert
+ * 화면경로: /expert/ExpertMyWork
  * 화면설명: 전문가 메뉴 - 내 업무
  */
 import { useMemo, useState } from 'react'
@@ -11,7 +11,7 @@ import DepsLocation from '@/components/common/DepsLocation'
 import CollapsibleSideNav from '@/components/navigation/CollapsibleSideNav'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-export default function MyExpert() {
+export default function ExpertMyWork() {
   const [collapsed, setCollapsed] = useState(false)
   const sideItems = useMemo(
     () => [
