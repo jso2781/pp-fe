@@ -228,8 +228,6 @@ return (
                   <ZodFormProvider schema={schema} methods={form}>
                     <Box component="form" onSubmit={form.handleSubmit(onSubmit)} noValidate>
                       <Box className="form-group-wrap">
-
-
                         <Box className="form-item-row-vertical">
                           <Typography className="label">
                             구분
@@ -278,8 +276,6 @@ return (
                             </Box>
                           </RadioGroup>
                         </Box>
-                        
-
 
                         {/* 이름 */}
                         <Box className="form-item">

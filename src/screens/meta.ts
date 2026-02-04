@@ -5,26 +5,6 @@ export type ScreenMeta = {
 }
 
 export const screens: ScreenMeta[] = [
-  /* {
-    "id": "KIDS-PP-US-CS-01_KO",
-    "title": "고객센터 이용약관",
-    "uiType": "page"
-  },
-  {
-    "id": "KIDS-PP-US-CS-01_EN",
-    "title": "Custom Center Term Of Use",
-    "uiType": "page"
-  },
-  {
-    "id": "KIDS-PP-US-CS-02_KO",
-    "title": "고객센터 개인정보취급방침",
-    "uiType": "page"
-  },
-  {
-    "id": "KIDS-PP-US-CS-02_EN",
-    "title": "Custom Center privacyPolicy",
-    "uiType": "page"
-  }, */
   {
     "id": "KIDS-PP-US-CS-03",
     "title": "고객센터 고정형 영상정보처리기기 운영·관리 방침",

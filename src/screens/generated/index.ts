@@ -1,8 +1,5 @@
 // Auto-generated screen loaders by screenId
 export const screenComponentLoaders = {
-  'KIDS-PP-US-CS-01_KO': () => import('../published/KIDS-PP-US-CS-01_KO'),
-  'KIDS-PP-US-CS-01_EN': () => import('../published/KIDS-PP-US-CS-01_EN'),
-  'KIDS-PP-US-CS-02': () => import('./KIDS-PP-US-CS-02'),
   'KIDS-PP-US-CS-03': () => import('./KIDS-PP-US-CS-03'),
   'KIDS-PP-US-CS-04': () => import('./KIDS-PP-US-CS-04'),
   'KIDS-PP-US-CS-05': () => import('./KIDS-PP-US-CS-05'),
