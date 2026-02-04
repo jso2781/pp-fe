@@ -10,20 +10,22 @@ import AppNavDrawer from '@/components/navigation/AppNavDrawer'
 
 const DRAWER_WIDTH = 260
 
-export default function Layout() {
+export default function ExpertLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
-      <Header onOpenNav={() => setMobileOpen(true)} />
-      {/* <AppNavDrawer mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} drawerWidth={DRAWER_WIDTH} /> */}
-      <Box className="app-main" sx={{ flex: 1 }}>
-        <Suspense fallback={<div style={{ padding: 24, textAlign: 'center' }}>로딩 중...</div>}>
-          <Outlet />
-        </Suspense>
+      <Box className="layout-full">
+        <Header onOpenNav={() => setMobileOpen(true)} />
+        {/* <AppNavDrawer mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} drawerWidth={DRAWER_WIDTH} /> */}
+        <Box className="app-main" sx={{ flex: 1 }}>
+          <Suspense fallback={<div style={{ padding: 24, textAlign: 'center' }}>로딩 중...</div>}>
+            <Outlet />
+          </Suspense>
+        </Box>
+        <Footer />
       </Box>
-      <Footer />
     </ThemeProvider>
   )
 }

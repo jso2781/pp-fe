@@ -44,6 +44,7 @@ const FindPwKo = lazy(() => import('@/pages/ko/auth/FindPw'))
 const FindPwModifyKo = lazy(() => import('@/pages/ko/auth/FindPwModify'))
 
 const ExpertMemberApplyKo = lazy(() => import('@/pages/ko/expert/ExpertMemberApply'))
+const MyExpertKo = lazy(() => import('@/pages/ko/expert/MyExpert'))
 
 const PrivacyPolicyKo = lazy(() => import('@/pages/ko/etc/PrivacyPolicy'))
 const TermsKo = lazy(() => import('@/pages/ko/etc/Terms'))
@@ -59,6 +60,7 @@ const ScreenViewer = lazy(() => import('@/pages/screens/ScreenViewer'))
 import { normalizeLang, FALLBACK_LANG, detectBrowserLang } from "./lang";
 import { AuthProvider } from '@/contexts/AuthContext';
 import { DialogProvider } from '@/contexts/DialogContext';
+import ExpertLayout from './ExpertLayout';
 
 type LangElementProps = {
   byLang: Record<string, JSX.Element>;
@@ -155,14 +157,15 @@ export default function Router() {
         <BrowserRouter>
           <GlobalErrorHandler>
             <Routes>
-              {/* 공통 레이아웃 */}
+
+              {/* 일반사용자 메뉴에서 사용할 화면 레이아웃 */}
               <Route element={<LangGuard><Layout /></LangGuard>}>
                 {/* ✅ 루트(/)로 들어오면 브라우저 언어 기반으로 /ko 또는 /en로 보내기 */}
                 <Route path="/" element={<Navigate to={`/${detectBrowserLang()}`} replace />} />
 
                 <Route path="/:lang" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
 
-                {/* cms */}
+                {/* cms 화면 공용 템플릿 경로(콘텐츠 내용 표기) */}
                 <Route path="/:lang/cms/CmsPage/:contsSn" element={<LangElement byLang={{ ko: <CmsPageKo />, en: <CmsPageKo /> }} />} />
 
                 {/* maintask(주요업무) */}
@@ -221,6 +224,13 @@ export default function Router() {
                 <Route path="/:lang/InternalServerError" element={<LangElement byLang={{ ko: <InternalServerErrorKo />, en: <InternalServerErrorKo /> }} />} />
                 <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundKo /> }} />} />
               </Route>
+
+              {/* 전문가 메뉴에서 사용할 화면 레이아웃 */}
+              <Route element={<LangGuard><ExpertLayout /></LangGuard>}>
+                {/* 전문가 메뉴- 내 업무 */}
+                <Route path="/:lang/expert/MyExpert" element={<LangElement byLang={{ ko: <MyExpertKo />, en: <MyExpertKo /> }} />} />
+              </Route>
+
             </Routes>
           </GlobalErrorHandler>
         </BrowserRouter>
