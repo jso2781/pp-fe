@@ -3,7 +3,7 @@
 body { overflow-x: hidden; }
 @media (max-width: 1199px) {
   body {
-    overflow-x: auto;
+    overflow-x: auto; //내업무레이아웃 페이지용
   }
 }
 
@@ -839,8 +839,8 @@ body { overflow-x: hidden; }
       background-color: #fff;
       border: none !important; 
       margin: 0;
-      font-size: var(--fs-16);
-      color: #8A949E;
+      font-size: var(--fs-18);
+      /* color: #8A949E; */
       padding: 12px 10px; 
       
       // 모든 상태에서 커서 포인터 강제 (내부 글자 포함)

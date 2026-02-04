@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState } from "react";
-import { Box, Button, Typography, TextField, Stack, LinearProgress, Tabs, Tab, FormControlLabel, Checkbox, Radio, RadioGroup, Paper } from '@mui/material';
+import { Box, Button, Typography, TextField, Stack, LinearProgress, Tabs, Tab, FormControlLabel, Checkbox, Radio, RadioGroup, Pagination } from '@mui/material';
+import { useAppSelector } from '@/store/hooks';
+import { useSearchParams } from 'react-router-dom';
 import { Switch as BaseSwitch } from '@base-ui/react';
 import { Download as DownloadIcon} from '@mui/icons-material';
 import FileUploadField from '@/components/form/FileUploadField';
@@ -30,6 +32,11 @@ export default function PUB() {
     setActiveCategory(newValue);
   };
 
+  //페이징
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageIndex = Number(searchParams.get('page') || 1);
+  const { list, totalCount } = useAppSelector((s) => s.pst);
+  const totalPages = Math.max(1, Math.ceil((totalCount || 1) / 10));
 
   //퍼블 파일첨부용
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -133,9 +140,9 @@ export default function PUB() {
                       {activeCategory === category && (
                         <Box className="panel-content">
                           <Typography className="sr-only">{categoryNaming[category]} 탭 컨텐츠 </Typography>
-                          <Typography>
+                          <Box>
                             {categoryNaming[category]} 내용이 출력됩니다.
-                          </Typography>
+                          </Box>
                         </Box>
                       )}
                     </Box>
@@ -678,6 +685,15 @@ export default function PUB() {
                   <button className="btn_outline_sub small">버튼 small</button>
                   <button className="btn_outline_sub large">버튼 large</button>
 
+
+                  <h3 className="section-title">페이징</h3>
+                  <Stack className="paging-wrap">
+                    <Pagination count={totalPages} page={pageIndex} onChange={(_, p) => {
+                      const next = new URLSearchParams(searchParams);
+                      next.set('page', String(p));
+                      setSearchParams(next);
+                    }} />
+                  </Stack>
 
                   <h3 className="section-title">사이간격</h3>
                   <p>sx=mb: 5</p>
