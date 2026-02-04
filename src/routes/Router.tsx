@@ -27,6 +27,8 @@ const GalleryBoardDetailKo = lazy(() => import('@/pages/ko/board/GalleryBoardDet
 const VideoBoardListKo = lazy(() => import('@/pages/ko/board/VideoBoardList'))
 const VideoBoardDetailKo = lazy(() => import('@/pages/ko/board/VideoBoardDetail'))
 
+const AboutCleanCenterKo = lazy(() => import('@/pages/ko/about/ethics/AboutCleanCenter'))
+
 const SignUpSelKo = lazy(() => import('@/pages/ko/auth/SignUpSel'))
 const SignUpAgrTrmsKo = lazy(() => import('@/pages/ko/auth/SignUpAgrTrms'))
 const LegalGuardAgrKo = lazy(() => import('@/pages/ko/auth/LegalGuardAgr'))
@@ -189,6 +191,7 @@ export default function Router() {
                 <Route path="/:lang/board/video/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <VideoBoardDetailKo />, en: <VideoBoardDetailKo /> }} />} />                       
 
                 {/* about(기관소개) */}
+                <Route path="/:lang/about/ethics/AboutCleanCenter" element={<LangElement byLang={{ ko: <AboutCleanCenterKo />, en: <AboutCleanCenterKo /> }} />} />                       
 
                 {/* auth */}
                 <Route path="/:lang/auth/LoginMethod" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />
