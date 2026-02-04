@@ -80,7 +80,7 @@ export default function CollapsibleSideNav({
         zIndex: 1200,
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', padding: '18px 20px', background:'#0A6C70', borderBottom: '1px solid #8A949E'}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', padding: '18px 10px', background:'#0A6C70', borderBottom: '1px solid #8A949E'}}>
         {!collapsed && (
           <Typography 
             className="nav_title"
@@ -89,6 +89,7 @@ export default function CollapsibleSideNav({
               fontWeight: 700,
               lineHeight: 1.2,
               color:'#fff',
+              padding: '0 0 0 5px',
             }}
           >
             {title}
@@ -146,7 +147,7 @@ export default function CollapsibleSideNav({
                 />
                 {!collapsed && hasChildren && (
                   isOpen 
-                    ? <ExpandMore sx={{ fontSize: 30 }} /> 
+                    ? <ExpandMore sx={{ fontSize: 30, mr: 0.2 }} /> 
                     : <ChevronRight sx={{ fontSize: 30 }} /> 
                 )}
               </ListItemButton>
@@ -159,8 +160,9 @@ export default function CollapsibleSideNav({
                     disablePadding 
                     dense
                     sx={{ 
-                      backgroundColor: '#fff',
-                      borderTop: '1px solid #D8D8D8' 
+                      py: '10px',
+                      backgroundColor: '#F7FFFF',
+                      borderTop: '1px solid #D8D8D8',
                     }}
                   >
                     {it.children?.map((child) => (
@@ -177,7 +179,7 @@ export default function CollapsibleSideNav({
                           }
                         }}
                         sx={{ 
-                          backgroundColor: '#fff',
+                          backgroundColor: '#F7FFFF',
                           pointerEvents: collapsed ? 'none' : 'auto',
                           '&:hover': {
                             backgroundColor: 'rgba(8, 124, 128, 0.25);',
@@ -200,7 +202,7 @@ export default function CollapsibleSideNav({
                           <OpenInNewIcon 
                             sx={{ 
                               fontSize: 16,
-                              ml: 0.8,
+                              mr: 0.8,
                               color: 'inherit' 
                             }} 
                           />
