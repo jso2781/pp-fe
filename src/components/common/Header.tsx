@@ -822,7 +822,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   )}
 
                   {user && user.userInfo?.cnstnMbcmtYn === 'Y' ? (
-                    <Button size="small" onClick={() => navigate(to('/'))} className="btn-util adv-task">
+                    <Button size="small" onClick={() => window.open('https://www.drugsafe.or.kr/expert/main/main.do', '_blank', 'noopener,noreferrer')} className="btn-util adv-task">
                       {t('advTask')} {/* 자문위원 업무 */}
                     </Button>
                   ) : (
@@ -1031,6 +1031,17 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     {t('usrSwtReg')} {/* 전문가 회원 전환 신청 */}
                   </Button>
                   )}
+
+                  {isAuthenticated && user && user.userInfo?.cnstnMbcmtYn === 'N' ? (
+                    <Button size="small" onClick={() => window.open('https://www.drugsafe.or.kr/expert/main/main.do', '_blank', 'noopener,noreferrer')} className="btn-util adv-task">
+                      {t('advTask')} {/* 자문위원 업무 */}
+                    </Button>
+                  ) : (
+                    <Button size="small" onClick={() => navigate(to('/'))} className="btn-util user-adv">
+                      {t('advAppReg')} {/* 자문위원신청 */}
+                    </Button>
+                  )}
+
                   <Button size="small" onClick={() => navigate(to('/auth/PasswordConfirm'))} className="btn-util edit-profile">
                     {t('editProfile')} {/* 회원정보수정 */}
                   </Button>
