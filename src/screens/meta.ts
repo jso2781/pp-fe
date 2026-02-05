@@ -331,12 +331,6 @@ export const screens: ScreenMeta[] = [
     "uiType": "detail"
   },
   {
-    "id": "KIDS-PP-US-PI-01",
-    "title": "이상사례 보고란",
-    "uiType": "page"
-  },
-
-  {
     "id": "KIDS-PP-US-IN-17",
     "title": "클린신고센터  ",
     "uiType": "form"
@@ -350,6 +344,27 @@ export const screens: ScreenMeta[] = [
     "id": "KIDS-PP-US-IN-19",
     "title": "클린신고센터 상세",
     "uiType": "detail"
+  },
+
+  {
+    "id": "KIDS-PP-US-PI-01",
+    "title": "이상사례 보고란",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-PI-02",
+    "title": "KAERS란?",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-PI-03",
+    "title": "오프라인 보고",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-PI-11",
+    "title": "의약품부작용보고원시자료",
+    "uiType": "cms"
   },
   
 

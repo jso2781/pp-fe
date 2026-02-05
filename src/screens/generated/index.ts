@@ -65,15 +65,21 @@ export const screenComponentLoaders = {
   'KIDS-PP-US-NO-08': () => import('../published/KIDS-PP-US-NO-08'),
   'KIDS-PP-US-NO-09': () => import('./KIDS-PP-US-NO-09'),
   'KIDS-PP-US-NO-10': () => import('./KIDS-PP-US-NO-10'),
-  'KIDS-PP-US-NO-11': () => import('./KIDS-PP-US-NO-11'),
-  'KIDS-PP-US-PI-01': () => import('./KIDS-PP-US-PI-01'),
   'KIDS-PP-US-IN-17': () => import('../published/KIDS-PP-US-IN-17'),
   'KIDS-PP-US-IN-18': () => import('../published/KIDS-PP-US-IN-18'),
   'KIDS-PP-US-IN-19': () => import('../published/KIDS-PP-US-IN-19'),
+  'KIDS-PP-US-NO-11': () => import('./KIDS-PP-US-NO-11'),
+  //CMS
+  'KIDS-PP-US-PI-01': () => import('../published/KIDS-PP-US-PI-01'),
+  'KIDS-PP-US-PI-02': () => import('../published/KIDS-PP-US-PI-02'),
+  'KIDS-PP-US-PI-03': () => import('../published/KIDS-PP-US-PI-03'),
+  'KIDS-PP-US-PI-11': () => import('../published/KIDS-PP-US-PI-11'),
 
+  // 내업무
   'KIDS-PP-US-MT-01-LAYOUT': () => import('../published/KIDS-PP-US-MT-01-LAYOUT'),
   /* 'KIDS-PP-US-MT-01_List': () => import('../published/KIDS-PP-US-MT-01_List'),
   'KIDS-PP-US-MT-01_Write': () => import('../published/KIDS-PP-US-MT-01_Write'), */
 
+  // 퍼블
   'PUB': () => import('../published/PUB'),
 }

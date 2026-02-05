@@ -952,14 +952,7 @@
   .info-summary-box__desc {
     font-size: var(--fs-18);
     text-align: center;
-    color: var(--color-text-3);
   }
-}
-
-.section-desc {
-  margin: 0 0 24px 0;
-  font-size: var(--fs-18);
-  color: var(--color-text-3);
 }
 
 .definition-list {
@@ -1135,7 +1128,11 @@
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
-    
+
+    &.table-type-2 {
+      border-top: 2px solid #087C80;
+    }
+
     thead th {
       font-size: var(--fs-16);
       text-align: center;
@@ -1159,6 +1156,10 @@
 
     tbody th {
       font-weight: 400;
+    }
+
+    tbody td a:hover {
+      text-decoration: underline;
     }
   }
 }
@@ -1384,7 +1385,6 @@
 /* ==========================================================================
    DUR 정보검색
    ========================================================================== */
-
 .info-guide-box {
   margin:0 0 24px 0;
   padding: 40px;
@@ -1428,7 +1428,6 @@
   .guide-list {
     li {
       font-size: 16px;
-      color: #333;
       font-weight: 500;
 
       &::before {
@@ -2635,9 +2634,29 @@
 /* ==========================================================================
    CMS
    ========================================================================== */
-// CMS 텍스트, 리스트
-.section-text-group{font-size: var(--fs-18);line-height: 150%;}
-.txt-type-01{font-size: 18px;font-weight: 500;color: var(--color-text-2);}
+.box-type-1{padding:24px 18px;border-radius: 8px;border: 1px dashed #8A949E;}
+.box-type-2{padding:17px 24px;border-radius: 12px;border: 1px solid #CDD1D5;}
+
+.section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);}
+
+.txt-type-1{font-size: var(--fs-18);font-weight: 500;color: var(--color-text-2);}
+.txt-icon-1 {
+  position: relative;
+  font-size: var(--fs-18);
+  padding-left: 28px; 
+  line-height: 1.4;
+  display: block;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0px;
+    width: 25px; 
+    height: 25px;
+    background: url('/img/ico_exclamation_circle02.svg') no-repeat left top ;
+  }
+}
 .num-list {
   li {
     display: flex;
@@ -2649,6 +2668,7 @@
 
     .num {
       flex-shrink: 0;
+      margin-right:5px;
       
     }
 
@@ -2656,6 +2676,40 @@
       margin: 0;
       word-break: keep-all;
     }
+  }
+}
+
+.list-definition {
+  dt {
+    position: relative;
+    margin-bottom: 2px;
+    padding-left: 20px;
+    font-size: var(--fs-18);
+    font-weight: 700;
+    line-height: 1.4;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 10px; 
+      width: 5px;
+      height: 5px;
+      background-color: var(--color-text-1);
+      border-radius: 50%;
+    }
+  }
+
+  dd {
+    margin-left: 0; 
+    padding: 0 0 0 20px;
+    font-size: var(--fs-18);
+    color: var(--color-text-3);
+    line-height: 1.6;
+  }
+
+  & + & {
+    margin-top: 5px;
   }
 }
 
@@ -2705,6 +2759,7 @@
 
       dd {
         font-size: var(--fs-18);
+        color: var(--color-text-3);
         line-height: 1.4;
         margin: 0;           
         word-break: keep-all; 
@@ -2753,7 +2808,7 @@
           height: 30px;
           border-radius: 15px;
           background: #DCF3F4;
-          color: #222;
+          color: var(--color-text-3);
           font-size: var(--fs-18);
           font-style: normal;
           font-weight: 500;
@@ -2765,6 +2820,7 @@
           .txt {
             margin: 0;
             font-size: var(--fs-18);
+            color: var(--color-text-3);
             line-height: 1.4;
           }
         }

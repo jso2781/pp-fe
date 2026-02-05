@@ -11,6 +11,7 @@ body { overflow-x: hidden; }
 .txt-1 { color: var(--color-text-1) !important; }
 .txt-2 { color: var(--color-text-2) !important; }
 .txt-3 { color: var(--color-text-3) !important; }
+.txt-4 { color: var(--color-text-4) !important; }
 
 .fs-13 { font-size: var(--fs-13); }
 .fs-14 { font-size: var(--fs-14); }
@@ -723,7 +724,7 @@ body { overflow-x: hidden; }
     .pc-only { display: none; }
     .mo-only { 
       display: inline-block; 
-      width: 100%;
+      max-width: 100%;
     }
   }
 }
