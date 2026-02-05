@@ -44,7 +44,7 @@ export default function AboutCleanCenter() {
                     <div className="guide-section">
                       <span className="guide-item-title">2. 신고방법</span>
                       <ul className="guide-list">
-                        <li>홈페이지 로그인 후 ‘클린신고센터’ 에서 신고서 작성하여 제출하기 버튼 클릭하면 신고가 완료됩니다.</li>
+                        <li>본인인증 또는 정부통합로그인 후 신고서 작성 버튼을 클릭하여 작성하신 후 제출하기 버튼 클릭하면 신고가 완료됩니다.</li>
                       </ul>
                     </div>
                     <div className="guide-section">
