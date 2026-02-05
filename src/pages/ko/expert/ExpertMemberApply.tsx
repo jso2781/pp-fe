@@ -9,6 +9,7 @@ import FileUploadField from '@/components/form/FileUploadField';
 import { useDialog } from '@/contexts/DialogContext';
 import { existbyEmail, existsInstByBrno, expertApply } from '@/features/exprt/ExprtApplyThunks';
 import { ExprtApplyPVO, ExprtApplyTaskVO } from '@/features/exprt/ExprtApplyTypes';
+import { getLangFromPathname, langPath } from '@/routes/lang';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   Box,
@@ -24,9 +25,11 @@ import {
   StepLabel,
   Stepper,
   TextField,
-  Typography
+  Typography,
+  Link
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 type StepRefs = {
   step1: HTMLDivElement | null;
@@ -38,7 +41,22 @@ export default function ExpertMemberApply() {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector((s) => s.auth.userInfo);
 
-  const { showDialogBackdrop } = useDialog();
+  const navigate = useNavigate();
+  const { showDialogBackdrop, showAlertBackdrop } = useDialog();
+  const lang = getLangFromPathname(location.pathname) || 'ko'
+  const to = (p: string) => {
+    const raw = langPath(lang, p)
+    return raw.replace(/\/{2,}/g, '/')
+  }
+  
+  // 신청 이후 URL로 신청 페이지 접근 시 내 업무 페이지로 이동
+  useEffect(() => {
+    if (userInfo?.expertYn === 'Y') {
+      showAlertBackdrop('신청 이력이 있어 내 업무 페이지로 이동합니다.', '페이지 이동 알림');
+      navigate(to('/expert/ExpertMyWork'));
+    }
+  }, [userInfo]);
+
   const handleCustomConfirm = () => {
     showDialogBackdrop({
       message: '등록 하시겠습니까?',
@@ -90,15 +108,6 @@ export default function ExpertMemberApply() {
     { label: '3단계', description: '신청완료' },
   ];
 
-  // 업무 시스템 목록 (예시 데이터)
-  const businessSystems = [
-    { label: '업무 시스템 1', value: 'SYS1' },
-    { label: '업무 시스템 2', value: 'SYS2' },
-    { label: '업무 시스템 3', value: 'SYS3' },
-    { label: '업무 시스템 4', value: 'SYS4' },
-    { label: '업무 시스템 5', value: 'SYS5' },
-  ];
-
   // 단계 변경 시 스크롤 이동
   useEffect(() => {
     if (currentStep == 0) {
@@ -110,7 +119,6 @@ export default function ExpertMemberApply() {
     const ref = stepRefs.current[refKey];
 
     if (ref) {
-      // window.scrollTo({ top: ref.offsetTop - 100, behavior: 'smooth' });
       window.scrollTo(0, 0);
     }
   }, [currentStep]);
@@ -403,11 +411,6 @@ export default function ExpertMemberApply() {
                                     <Typography variant="body1" sx={{ fontWeight: 600 }}>
                                       {selectedCompany.name}
                                     </Typography>
-                                    {/* <Typography variant="body2" color="text.secondary">
-                                      <span aria-label="사업자 번호">{selectedCompany.number}</span>
-                                      {selectedCompany.number && ' | '}
-                                      <span aria-label="주소">{selectedCompany.address}</span>
-                                    </Typography> */}
                                   </Box>
                                 }
                               />
@@ -660,22 +663,26 @@ export default function ExpertMemberApply() {
                     </Box>
                     {/* 버튼 영역 */}
                     <Box className="btn-group center">
-                      <Button
-                        variant="outlined02"
-                        onClick={() => (window.location.href = '/ko')}
-                        sx={{ minWidth: 120 }}
-                      >
-                        홈으로
+                      <Button variant="outlined02" sx={{ minWidth: 120 }}>                      
+                        <Link
+                          component={RouterLink}           
+                          to={`/`}
+                          underline="none"
+                          aria-label={`홈 화면으로 이동`}
+                        >
+                          홈으로
+                        </Link>
                       </Button>
-                      <Button
-                        variant="contained"
-                        onClick={() => {
-                          // TODO: 내 업무 페이지로 이동
-                          window.location.href = '/ko/mytask';
-                        }}
-                        sx={{ minWidth: 120 }}
-                      >
-                        내 업무
+                      <Button variant="contained" sx={{ minWidth: 120 }}>
+                        <Link
+                          component={RouterLink}           
+                          to={`/expert/ExpertMyWork`}
+                          underline="none"
+                          aria-label={`내 업무 페이지로 이동`}
+                          sx={{ color: '#fff' }}
+                        >
+                          내 업무
+                        </Link>
                       </Button>
                     </Box>
                   </Box>
