@@ -199,6 +199,41 @@ export default function PUB() {
                     </Box>
                   </Box>
 
+                  <h3 className="section-title">테이블 type-2</h3>
+                  <Box className="base-table-container">
+                    <Box className="table-responsive">
+                      <table className="base-table table-type-2">
+                        <caption className="sr-only">테이블제목</caption>
+                        <colgroup>
+                          <col style={{ width: '25%' }} />
+                          <col style={{ width: '45%' }} />
+                          <col style={{ width: '30%' }} />
+                        </colgroup>
+                        <thead>
+                          <tr>
+                            <th scope="col" colSpan={2}>정보 유형</th>
+                            <th scope="col">정보 건수</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row" rowSpan={3}>금기성분 고시</th>
+                            <td>병용금기 (2004년~)</td>
+                            <td>1,450</td>
+                          </tr>
+                          <tr>
+                            <td>특정연령대금기 (2004년~)</td>
+                            <td>207</td>
+                          </tr>
+                          <tr>
+                            <td>임부금기 (2008년~)</td>
+                            <td>1,210</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </Box>
+                  </Box>
+
                   <h3 className="section-title">테이블 모바일 스크롤 (가로)</h3>
                   <Box className="base-table-container">
                     <Box className="table-responsive has-scroll">
@@ -665,6 +700,18 @@ export default function PUB() {
                   <h3 className="section-title">버튼 html</h3>  
                   <button type="button" className="btn-link-html">바로가기</button>
                   <br/>
+                  <a 
+                    href="https://nedrug.mfds.go.kr/CCCBA03F010/getReport" 
+                    className="btn_default" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    title="바로가기(새 창 열림)"
+                  >
+                     바로가기
+                    <span className="ico-link" aria-hidden="true"></span>
+                    <span className="sr-only">(새 창 열림)</span>
+                  </a>
+                  <br/>
 
                   <button className="btn_default">버튼</button>
                   <button className="btn_default small">버튼 small</button>
@@ -695,11 +742,61 @@ export default function PUB() {
                     }} />
                   </Stack>
 
+                  <h3 className="section-title">리스트, 텍스트</h3>
+
+                  <ul className="list-bullet">
+                      <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
+                      <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
+                  </ul>
+
+                  <br></br>
+
+                  <ul className="list-bullet-2">
+                      <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
+                      <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
+                  </ul>
+
+                  <br></br>
+
+                  <ul className="num-list">
+                    <li>
+                      <span className="num">1.</span>
+                      <p className="txt">사망을 초래하거나 생명을 위협하는 사례</p>
+                    </li>
+                    <li>
+                      <span className="num">2.</span>
+                      <p className="txt">사망을 초래하거나 생명을 위협하는 사례</p>
+                    </li>
+                    <li>
+                      <span className="num">3.</span>
+                      <p className="txt">사망을 초래하거나 생명을 위협하는 사례</p>
+                    </li>
+                  </ul>
+
+                  <br></br>
+
+                  <p className="txt-type-1">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
+                  
+                  <p className="txt-icon-1">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
+
+                  <h3 className="section-title">box</h3>
+                  <div className="box-type-1"></div>
+                  <div className="box-type-2"></div>
+
                   <h3 className="section-title">사이간격</h3>
                   <p>sx=mb: 5</p>
                   <p>class mb40</p>
                   <Box sx={{ mb: 5 }}></Box>
 
+
+
+                  <h3 className="section-title">이미지</h3>
+                  <div className="img-switcher">
+                    {/* PC용 이미지 */}
+                    <img src="/img/dadverseKaers_img01.png" alt="" className="responsive-img pc-only"/>
+                    {/* 모바일용 이미지 */}
+                    <img src="/img/dadverseKaers_img01_m.png"  alt="" className="responsive-img mo-only"/>
+                  </div>
 
                 
 
