@@ -49,7 +49,11 @@ export default function DepsLocation() {
       pattern: /^\/([A-Za-z]{2})?(\/)?$/, 
       labels: ["home"] // i18n에 등록된 'home' 키 사용
     },
-
+    {
+      // 통합검색
+      pattern: /^\/[A-Za-z]{2}\/search\/IntegratedSearch(\/\d+)?$/, 
+      labels: ["integratedSearch"]
+    },
     {
       // /notice 혹은 /notice/123 모두 매칭
       pattern: /^\/[A-Za-z]{2}\/notice(\/\d+)?$/, 

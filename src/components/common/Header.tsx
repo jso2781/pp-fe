@@ -807,7 +807,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             <Box className="util-menu">
               {i18nInstance.language === 'ko' && (
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Button size="small" onClick={() => navigate(to('/search'))} className="btn-util search">
+                  <Button size="small" onClick={() => navigate(to('/search/IntegratedSearch'))} className="btn-util search">
                     {t('integratedSearch')} {/* 통합검색 */}
                   </Button>
 
@@ -998,7 +998,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             <Button size="small" onClick={onToggleLang} startIcon={<Language />}>
                 {i18nInstance.language === 'ko' ? 'English' : '한국어'}
               </Button>
-            <Button size="small" onClick={() => navigate(to('/search'))} className="btn-util search">
+            <Button size="small" onClick={() => navigate(to('/search/IntegratedSearch'))} className="btn-util search">
               {t('integratedSearch')} {/* 통합검색 */}
             </Button>
           </Box>

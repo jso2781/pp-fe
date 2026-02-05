@@ -45,6 +45,7 @@ const FindIdAuthSuccessKo = lazy(() => import('@/pages/ko/auth/FindIdAuthSuccess
 const FindPwKo = lazy(() => import('@/pages/ko/auth/FindPw'))
 const FindPwModifyKo = lazy(() => import('@/pages/ko/auth/FindPwModify'))
 
+const IntegratedSearchKo = lazy(() => import('@/pages/ko/search/IntegratedSearch'))
 const ExpertMemberApplyKo = lazy(() => import('@/pages/ko/expert/ExpertMemberApply'))
 const ExpertMyWorkKo = lazy(() => import('@/pages/ko/expert/ExpertMyWork'))
 
@@ -210,6 +211,9 @@ export default function Router() {
                 <Route path="/:lang/auth/FindIdAuthSuccess" element={<LangElement byLang={{ ko: <FindIdAuthSuccessKo />, en: <FindIdAuthSuccessKo /> }} />} />
                 <Route path="/:lang/auth/FindPw" element={<LangElement byLang={{ ko: <FindPwKo />, en: <FindPwKo /> }} />} />
                 <Route path="/:lang/auth/FindPwModify" element={<LangElement byLang={{ ko: <FindPwModifyKo />, en: <FindPwModifyKo /> }} />} />
+
+                {/* IntegratedSearch(통합검색) */}
+                <Route path="/:lang/search/IntegratedSearch" element={<LangElement byLang={{ ko: <IntegratedSearchKo />, en: <IntegratedSearchKo /> }} />} />
 
                 {/* expert */}
                 <Route path="/:lang/expert/ExpertMemberApply" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertMemberApplyKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertMemberApplyKo /></ProtectedRoute> }} />} />                                  
