@@ -405,7 +405,7 @@ export default function Login() {
                       </Box>
                     </Box>
                     <Box className="login-section__notice">
-                      <Box component="ul" className="bullet-list">
+                      <Box component="ul" className="list-bullet">
                         <li>{t('passwordErrorReminder')}</li>
                         <li>{t('passwordChangeReminder')}</li>
                         <li>{t('logoutAfter60Minutes')}</li>

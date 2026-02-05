@@ -65,7 +65,6 @@ body { overflow-x: hidden; }
 .pl0{padding-left:0!important}.pl5{padding-left:5px!important}.pl10{padding-left:10px!important}.pl15{padding-left:15px!important}.pl20{padding-left:20px!important}.pl25{padding-left:25px!important}.pl30{padding-left:30px!important}.pl35{padding-left:35px!important}.pl40{padding-left:40px!important}.pl45{padding-left:45px!important}.pl50{padding-left:50px!important}.pl55{padding-left:55px!important}.pl60{padding-left:60px!important}.pl65{padding-left:65px!important}.pl70{padding-left:70px!important}.pl75{padding-left:75px!important}.pl80{padding-left:80px!important}.pl85{padding-left:85px!important}.pl90{padding-left:90px!important}.pl95{padding-left:95px!important}.pl100{padding-left:100px!important}
 .pr0{padding-right:0!important}.pr5{padding-right:5px!important}.pr10{padding-right:10px!important}.pr15{padding-right:15px!important}.pr20{padding-right:20px!important}.pr25{padding-right:25px!important}.pr30{padding-right:30px!important}.pr35{padding-right:35px!important}.pr40{padding-right:40px!important}.pr45{padding-right:45px!important}.pr50{padding-right:50px!important}.pr55{padding-right:55px!important}.pr60{padding-right:60px!important}.pr65{padding-right:65px!important}.pr70{padding-right:70px!important}.pr75{padding-right:75px!important}.pr80{padding-right:80px!important}.pr85{padding-right:85px!important}.pr90{padding-right:90px!important}.pr95{padding-right:95px!important}.pr100{padding-right:100px!important}
 
-
 /* 스킵네비 */
 #skip-navigation{position:absolute;left:0;top:0;width:100%;text-align:center;z-index:9999}
 #skip-navigation a{overflow:hidden;white-space:nowrap;display:block;width:100%;height:0;color:#fff !important;}
@@ -103,7 +102,7 @@ body { overflow-x: hidden; }
 
   & ~ .section-title,
   & ~ .form-section-title {
-    margin-top: 30px;
+    margin-top: 40px;
   }
 }
 
@@ -427,11 +426,11 @@ body { overflow-x: hidden; }
 
 
 // 리스트, 텍스트 스타일
-.bullet-list {
-  @include bullet-list;
+.list-bullet {
+  @include list-bullet;
 }
-.bullet-list-2 {
-  @include bullet-list-2;
+.list-bullet-2 {
+  @include list-bullet-2;
 }
 
 .desc-text{
@@ -624,9 +623,6 @@ body { overflow-x: hidden; }
   &:disabled { background-color: #ffffff !important; }
 }
 
-
-
-
 /* 버튼 그룹 전체 컨테이너 */
 .btn-group {
   display: flex;
@@ -727,7 +723,7 @@ body { overflow-x: hidden; }
     .pc-only { display: none; }
     .mo-only { 
       display: inline-block; 
-      max-width: 100%;
+      width: 100%;
     }
   }
 }
@@ -1029,3 +1025,6 @@ body { overflow-x: hidden; }
     }
   }
 }
+
+// html 아이콘
+.ico-link{overflow:hidden; position: relative;display: inline-block;width:35px;height:20px;vertical-align: middle;text-indent: -99999px;background:url(/img/ico_link.svg) no-repeat center;}

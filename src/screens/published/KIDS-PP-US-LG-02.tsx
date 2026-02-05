@@ -126,7 +126,7 @@ export default function KIDS_PP_US_LG_02() {
                     </Box>
                     
                     <Box className="login-section__notice">
-                      <Box component="ul" className="bullet-list">
+                      <Box component="ul" className="list-bullet">
                         <li>개인정보 보호를 위해 비밀번호 5회 이상 오류 시, 비밀번호 재설정이 필요합니다.</li>
                         <li>비밀번호는 주기적(3개월)으로 변경하시고, 서비스 이용 후 반드시 로그아웃 하시기 바랍니다.</li>
                         <li>로그인 후 60분 동안 미동작 시 자동으로 로그아웃 됩니다.</li>
