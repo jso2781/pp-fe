@@ -19,6 +19,17 @@ export default function PrivacyPolicy() {
     }
   };
 
+  if(!window.goToScroll) {
+    //리액트 dom으로 관리되지않는 innerHTML 내부 이벤트 처리를 위한 전역함수.
+    window.goToScroll = (className: string) => {
+      const element = document.querySelector(`.${className}`);
+      console.log(element)
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+  }
+
   return (
     <Box className="page-layout">
       <Box className="sub-container">
@@ -31,7 +42,7 @@ export default function PrivacyPolicy() {
               <Box className="page-content">
               {/* --- 본문 시작 --- */}
 
-                <RenderTrmsStt trmsSttCd='STT_PRVC' isList={true}/>
+                <RenderTrmsStt trmsSttCd='STT_PRVC' isList={true} />
                 {/* <RenderTrmsStt
                   trmsSttCd="STT_PRVC"
                   isList={true}

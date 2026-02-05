@@ -25,5 +25,8 @@ declare global {
     anyidAdaptor?: {
       success: (data: { ssob?: string } | null | undefined) => void | Promise<void>
     }
+    
+    //리액트 dom으로 관리되지않는 innerHTML 내부 이벤트 처리를 위한 전역함수.
+    goToScroll: (className: string) => void;
   }
 }
