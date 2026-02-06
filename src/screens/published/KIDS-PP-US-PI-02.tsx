@@ -50,9 +50,7 @@ export default function KIDS_PP_US_PI_02() {
                     </div> 
 
                     <div className="img-switcher">
-                      {/* PC용 이미지 */}
                       <img src="/img/adverseKaers_img01.png" alt="의약품이상사례보고시스템 (PC)" className="responsive-img pc-only"/>
-                      {/* 모바일용 이미지 */}
                       <img src="/img/adverseKaers_img01_m.png"  alt="의약품이상사례보고시스템 (모바일)" className="responsive-img mo-only"/>
                     </div>
                     <div className="sr-only">

@@ -43,7 +43,7 @@ export default function KIDS_PP_US_PI_11() {
                     <div className="box-type-2">
                       <p className="txt-icon-1 fw-500">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
                     </div>
-                     <div className="mb30"></div>
+                    <div className="mb30"></div>
                     <div className="info-summary-box">
                       <h3 className="info-summary-box__title">의약품이상사례보고시스템(KAERS)이란?</h3>
                       <div className="info-summary-box__desc">
@@ -166,23 +166,25 @@ export default function KIDS_PP_US_PI_11() {
                     </div>
 
                     <h3 className="section-title">의약품부작용보고원시자료 문의</h3> 
-                    <dl className="list-definition">
-                      <dt>운영시간: 평일 10~16시, 공휴일 제외</dt>
-                      <dt>규정 및 신청방법 문의</dt>
-                      <dd>
-                        <ul className="list-bullet-3">
-                            <li>이메일 : kids_kd@drugsafe.or.kr</li>
-                            <li>전화 : 02-2172-6700(-1-3)</li>
-                        </ul>
-                      </dd>
-                      <dt>신청 시스템 오류 문의</dt>
-                      <dd>
-                        <ul className="list-bullet-3">
-                            <li>1:1 온라인 문의: 의약품안전나라 홈페이지 &gt; 고객지원 &gt; 1:1 온라인 문의(회원)</li>
-                            <li> 전화 : 02-2172-6700(-1-2)</li>
-                        </ul>
-                      </dd>
-                    </dl>
+                    <div className="section-desc">
+                      <p className="txt-type-2">운영시간: 평일 10~16시, 공휴일 제외</p>
+                      <dl className="list-definition">
+                        <dt>규정 및 신청방법 문의</dt>
+                        <dd>
+                          <ul className="list-bullet-3">
+                              <li>이메일 : kids_kd@drugsafe.or.kr</li>
+                              <li>전화 : 02-2172-6700(-1-3)</li>
+                          </ul>
+                        </dd>
+                        <dt>신청 시스템 오류 문의</dt>
+                        <dd>
+                          <ul className="list-bullet-3">
+                              <li>1:1 온라인 문의: 의약품안전나라 홈페이지 &gt; 고객지원 &gt; 1:1 온라인 문의(회원)</li>
+                              <li> 전화 : 02-2172-6700(-1-2)</li>
+                          </ul>
+                        </dd>
+                      </dl>
+                    </div>
                   </section>
 
 
