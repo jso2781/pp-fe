@@ -9,7 +9,7 @@ export const insertOpnn = createAsyncThunk<void, FormData, { rejectValue: string
   '/opnn/insertOpnn',
   async (params: FormData, { rejectWithValue }) => {
     try {
-      const res = await https.post(insertOpnnApiPath(), params, {
+      await https.post(insertOpnnApiPath(), params, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
