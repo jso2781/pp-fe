@@ -72,21 +72,7 @@ export default function PUB() {
                 {/* --- 본문 시작 --- */}
 
 
-                  <h3 className="section-title">스위치</h3>
-                  <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
-                    <BaseSwitch.Root
-                      className="base_switch_root"
-                      checked={isCheck}
-                      onCheckedChange={(checked) => setIsCheck(checked)}
-                    >
-                      <BaseSwitch.Thumb className="base_switch_thumb" />
-                    </BaseSwitch.Root>
-                    <Typography component="p" className="switch_label">
-                      {isCheck ? '사용 중' : '미사용'}
-                    </Typography>
-                  </Stack>
-                
-                  <h3 className="section-title">탭</h3>
+                  <h3 className="section-title">탭 라인</h3>
                   {/* 탭라인 스타일 */}
                   <Box className="category-tabs" role="navigation" aria-label="기본 카테고리 선택">
                     <Tabs
@@ -107,6 +93,8 @@ export default function PUB() {
                       ))}
                     </Tabs>
                   </Box>
+
+                  <h3 className="section-title">탭 박스</h3>
 
                   {/* 탭박스 스타일 */}
                   <Box className="category-tabs box-variant" role="navigation" aria-label="기본 카테고리 선택">
@@ -321,6 +309,19 @@ export default function PUB() {
                     <p>게시물이없습니다.</p>
                   </Box>
 
+                  <h3 className="section-title">스위치</h3>
+                  <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
+                    <BaseSwitch.Root
+                      className="base_switch_root"
+                      checked={isCheck}
+                      onCheckedChange={(checked) => setIsCheck(checked)}
+                    >
+                      <BaseSwitch.Thumb className="base_switch_thumb" />
+                    </BaseSwitch.Root>
+                    <Typography component="p" className="switch_label">
+                      {isCheck ? '사용 중' : '미사용'}
+                    </Typography>
+                  </Stack>
 
                   <h3 className="section-title">체크박스,라디오</h3>
                   {/* 체크박스 가로형 */}
@@ -698,20 +699,34 @@ export default function PUB() {
 
 
                   <h3 className="section-title">버튼 html</h3>  
-                  <button type="button" className="btn-link-html">바로가기</button>
-                  <br/>
+                  <button type="button" className="btn-link-html">내부링크 바로가기</button>
+                  <br/><br/>
                   <a 
-                    href="https://nedrug.mfds.go.kr/CCCBA03F010/getReport" 
+                    href="#" 
+                    className="btn-link-blank-html"
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    title="바로가기(새 창 열림)"
+                  >
+                     텍스트타입 외부 바로가기
+                    <span className="ico-link-blank" aria-hidden="true"></span>
+                    <span className="sr-only">(새 창 열림)</span>
+                  </a>
+                  <br/><br/>
+                  <a 
+                    href="#" 
                     className="btn_default" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     title="바로가기(새 창 열림)"
                   >
-                     바로가기
+                     버튼타입 외부 바로가기
                     <span className="ico-link" aria-hidden="true"></span>
                     <span className="sr-only">(새 창 열림)</span>
                   </a>
-                  <br/>
+                  
+
+                  <br/><br/>
 
                   <button className="btn_default">버튼</button>
                   <button className="btn_default small">버튼 small</button>
@@ -742,11 +757,19 @@ export default function PUB() {
                     }} />
                   </Stack>
 
-                  <h3 className="section-title">리스트, 텍스트</h3>
 
+                  <h3 className="section-title">타이틀아래 텍스트 구성</h3>
+                  <div className="section-desc">
+                    <p>의약품은 시판 전 동물시험에 의한 전임상시험과 사람에 대한 임상시험을 거쳐 시판 허가를 받게 됩니다.</p>
+                    <p>이런한 임상시험은 관찰기간이 제한되고, 한정된 연구대상자를 대상으로 하기 때문에 모든 약물이상반응을 파악하는 것은 불가능합니다.</p>
+                    <p>따라서 시판 후 약물감시는 대단히 중요하며, 의약품 사용시 나타나는 각종 이상사례를 수집·평가하여 안전대책을 강구함으로써 국민의 안전한 의약품 사용을 도모할 수 있습니다.</p>
+                  </div>
+
+                  <h3 className="section-title">리스트 블릿</h3>
                   <ul className="list-bullet">
-                      <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
-                      <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
+                    <li>개인정보 보호를 위해 비밀번호 5회 이상 오류 시, 비밀번호 재설정이 필요합니다.</li>
+                    <li>비밀번호는 주기적(3개월)으로 변경하시고, 서비스 이용 후 반드시 로그아웃 하시기 바랍니다.</li>
+                    <li>로그인 후 60분 동안 미동작 시 자동으로 로그아웃 됩니다.</li>
                   </ul>
 
                   <br></br>
@@ -758,6 +781,12 @@ export default function PUB() {
 
                   <br></br>
 
+                  <ul className="list-bullet-3">
+                      <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
+                      <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
+                  </ul>
+
+                  <h3 className="section-title">리스트 넘버</h3>
                   <ul className="num-list">
                     <li>
                       <span className="num">1.</span>
@@ -773,12 +802,50 @@ export default function PUB() {
                     </li>
                   </ul>
 
-                  <br></br>
+                  <h3 className="section-title">dl 리스트</h3>
+                  <dl className="list-definition">
+                    <dt>제조·수입업체</dt>
+                    <dd>
+                      <p>1) 자료 요청서 작성 및 제출</p>
+                      <p>2) 순차적으로 검토 및 접수</p>
+                      <p>3) 자료 추출 및 제공</p>
+                    </dd>
+                    <dt>제조·수입업체</dt>
+                    <dd>
+                      <p>1) 자료 요청서 작성 및 제출</p>
+                      <p>2) 순차적으로 검토 및 접수</p>
+                      <p>3) 자료 추출 및 제공</p>
+                    </dd>
+                  </dl>
 
+                  <br/>
+
+                  <dl className="list-definition">
+                    <dt>규정 및 신청방법 문의</dt>
+                    <dd>
+                      <ul className="list-bullet-3">
+                          <li>이메일 : kids_kd@drugsafe.or.kr</li>
+                          <li>전화 : 02-2172-6700(-1-3)</li>
+                      </ul>
+                    </dd>
+                    <dt>규정 및 신청방법 문의</dt>
+                    <dd>
+                      <ul className="list-bullet-3">
+                          <li>이메일 : kids_kd@drugsafe.or.kr</li>
+                          <li>전화 : 02-2172-6700(-1-3)</li>
+                      </ul>
+                    </dd>
+                  </dl>
+
+
+                  <h3 className="section-title">텍스트타입</h3>
                   <p className="txt-type-1">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
-                  
+                  <p className="txt-type-1 txt-2">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
+                  <p className="txt-type-1 txt-4">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
+                 
+                  <h3 className="section-title">텍스트 아이콘타입</h3>
                   <p className="txt-icon-1">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
-
+                
                   <h3 className="section-title">box</h3>
                   <div className="box-type-1"></div>
                   <div className="box-type-2"></div>
