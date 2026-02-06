@@ -333,8 +333,6 @@ export default function KIDS_PP_US_PI_03() {
                         </table>
                       </div>
                     </div>
-                    
-                    
                   </section>
 
 

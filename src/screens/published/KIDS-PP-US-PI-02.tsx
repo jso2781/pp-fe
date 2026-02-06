@@ -85,9 +85,8 @@ export default function KIDS_PP_US_PI_02() {
                             <span className="sr-only">(새 창 열림)</span>
                           </a>
                         </li>
-                    </ul>
+                      </ul>
                     </div>
-
                   </section>
 
 
