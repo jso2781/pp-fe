@@ -13,33 +13,45 @@ export default function KIDS_PP_US_OI_01() {
     },
   ], []);
 
-  //앵커탭
+  // 앵커탭
   useEffect(() => {
-  const handleAnchorScroll = (e) => {
-    // 1. 클릭된 요소가 .tab-link 클래스를 가진 앵커인지 확인
-    const link = e.target.closest('.tab-link');
-    if (!link) return;
+    const handleAnchorScroll = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const link = target.closest('.category-anchor-tabs .tab-link') as HTMLAnchorElement | null;
+      
+      if (!link) return;
 
-    // 2. href 값을 가져와서 해당 ID를 가진 요소를 찾음
-    const targetId = link.getAttribute('href');
-    if (targetId && targetId.startsWith('#')) {
-      const targetElement = document.querySelector(targetId);
+      const targetId = link.getAttribute('href');
+      if (targetId && targetId.startsWith('#')) {
+        const targetElement = document.querySelector(targetId);
 
-      if (targetElement) {
-        e.preventDefault(); 
-        targetElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
+        if (targetElement) {
+          e.preventDefault(); 
+
+          const tabContainer = link.closest('.category-anchor-tabs');
+          if (tabContainer) {
+            const allTabs = tabContainer.querySelectorAll('.tab-link');
+            
+            allTabs.forEach((tab) => {
+              tab.classList.remove('active');
+              tab.setAttribute('aria-selected', 'false');
+            });
+
+            link.classList.add('active');
+            link.setAttribute('aria-selected', 'true');
+          }
+
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
       }
-    }
-  };
-
-  // 문서 전체에 클릭 이벤트 등록
-  document.addEventListener('click', handleAnchorScroll);
-
-  // 컴포넌트가 사라질 때 이벤트 제거 (메모리 관리)
-  return () => document.removeEventListener('click', handleAnchorScroll);
+    };
+    document.addEventListener('click', handleAnchorScroll);
+    return () => {
+      document.removeEventListener('click', handleAnchorScroll);
+    };
   }, []);
 
   return (
@@ -165,7 +177,7 @@ export default function KIDS_PP_US_OI_01() {
                             정보목록검색 -정보공개청구 -공개여부결정(10일) - 정보공개
                           </div>
                           <div className="mb5"></div>
-                          <div className="tar">
+                          <div className="shortcut-link">
                             <a 
                               href="https://nedrug.mfds.go.kr/CCCBA03F010/getReport" 
                               className="btn-link-blank-html"

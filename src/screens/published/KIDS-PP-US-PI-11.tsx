@@ -152,17 +152,19 @@ export default function KIDS_PP_US_PI_11() {
                     <div className="section-desc">
                       <p>약품부작용보고원시자료는 <span className="fw-700">[의약품안전나라 누리집] &gt; [전자민원/보고] &gt; [이상사례] &gt; [의약품부작용 보고원시자료]</span> 에서 신청할 수 있습니다.</p>
                       <p className="txt-4 mb10">※ 보다 자세한 사항은 <span className="fw-700">최신 버전의 이용지침서</span>를 확인하여 주시기 바랍니다.</p>
-                      <a 
-                        href="#" 
-                        className="btn-link-blank-html"
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        title="바로가기(새 창 열림)"
-                      >
-                        의약품부작용보고원시자료 시스템 바로가기
-                        <span className="ico-link-blank" aria-hidden="true"></span>
-                        <span className="sr-only">(새 창 열림)</span>
-                      </a>
+                      <div className="shortcut-link">
+                        <a 
+                          href="#" 
+                          className="btn-link-blank-html"
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          title="바로가기(새 창 열림)"
+                        >
+                          의약품부작용보고원시자료 시스템 바로가기
+                          <span className="ico-link-blank" aria-hidden="true"></span>
+                          <span className="sr-only">(새 창 열림)</span>
+                        </a>
+                      </div>
                     </div>
 
                     <h3 className="section-title">의약품부작용보고원시자료 문의</h3> 
