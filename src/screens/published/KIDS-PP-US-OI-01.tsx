@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
@@ -14,17 +14,33 @@ export default function KIDS_PP_US_OI_01() {
   ], []);
 
   //앵커탭
-  // 현재 어떤 탭이 활성화되어 있는지 저장
-  const [activeTab, setActiveTab] = useState('anchor-sec1');
+  useEffect(() => {
+  const handleAnchorScroll = (e) => {
+    // 1. 클릭된 요소가 .tab-link 클래스를 가진 앵커인지 확인
+    const link = e.target.closest('.tab-link');
+    if (!link) return;
 
-  const handleTabClick = (e, id) => {
-    e.preventDefault(); 
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' }); 
-      setActiveTab(id); 
+    // 2. href 값을 가져와서 해당 ID를 가진 요소를 찾음
+    const targetId = link.getAttribute('href');
+    if (targetId && targetId.startsWith('#')) {
+      const targetElement = document.querySelector(targetId);
+
+      if (targetElement) {
+        e.preventDefault(); 
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
     }
   };
+
+  // 문서 전체에 클릭 이벤트 등록
+  document.addEventListener('click', handleAnchorScroll);
+
+  // 컴포넌트가 사라질 때 이벤트 제거 (메모리 관리)
+  return () => document.removeEventListener('click', handleAnchorScroll);
+  }, []);
 
   return (
     <ScreenShell screenId="KIDS-PP-US-OI-01" title="정보공개 업무처리절차" uiType="cms">
@@ -53,23 +69,23 @@ export default function KIDS_PP_US_OI_01() {
                 {/* --- 본문 시작 --- */}
 
                   <section className="pageCont-TaskProgress">
-                      <div className="info-summary-box">
-                        <h3 className="info-summary-box__title">정보공개제도 란?</h3>
-                        <div className="info-summary-box__desc">
-                          <p>국가기관·지방자치단체 등 공공기관이 업무 수행 중 생산·접수하여 보유· 관리하는 정보를 국민에게 공개함으로써, <br/><span className="fw-700">국민의 알권리를 보장하고 더 많은 정보를 바탕으로 국정운영에 대한 참여를 유도</span>하기 위한 제도입니다.</p>
-                        </div>
-                      </div> 
-                      
-                      <div className="category-anchor-tabs" aria-label="카테고리 이동">
+                    <div className="info-summary-box">
+                      <h3 className="info-summary-box__title">정보공개제도 란?</h3>
+                      <div className="info-summary-box__desc">
+                        <p>국가기관·지방자치단체 등 공공기관이 업무 수행 중 생산·접수하여 보유· 관리하는 정보를 국민에게 공개함으로써, <br/><span className="fw-700">국민의 알권리를 보장하고 더 많은 정보를 바탕으로 국정운영에 대한 참여를 유도</span>하기 위한 제도입니다.</p>
+                      </div>
+                    </div> 
+                    
+                    <div className="category-anchor-tabs">
                       <ul className="tabs-list" role="tablist">
                         <li className="tab-item" role="none">
-                          <a href="#anchor-sec1" id="tab1" onClick={(e) => handleTabClick(e, 'anchor-sec1')} className={`tab-link ${activeTab === 'anchor-sec1' ? 'active' : ''}`} role="tab" aria-selected={activeTab === 'anchor-sec1' ? 'true' : 'false'} aria-controls="anchor-sec1">정보공개제도</a>
+                          <a href="#anchor-sec1" id="tab1" className="tab-link active" role="tab" aria-selected="true" aria-controls="anchor-sec1">사전협의</a>
                         </li>
                         <li className="tab-item" role="none">
-                          <a href="#anchor-sec2" id="tab2" onClick={(e) => handleTabClick(e, 'anchor-sec2')} className={`tab-link ${activeTab === 'anchor-sec2' ? 'active' : ''}`} role="tab" aria-selected={activeTab === 'anchor-sec2' ? 'true' : 'false'} aria-controls="anchor-sec2">주요내용</a>
+                          <a href="#anchor-sec2" id="tab2" className="tab-link" role="tab" aria-selected="false" aria-controls="anchor-sec2">활용결과 등록</a>
                         </li>
                         <li className="tab-item" role="none">
-                          <a href="#anchor-sec3" id="tab3" onClick={(e) => handleTabClick(e, 'anchor-sec3')} className={`tab-link ${activeTab === 'anchor-sec3' ? 'active' : ''}`} role="tab" aria-selected={activeTab === 'anchor-sec3' ? 'true' : 'false'} aria-controls="anchor-sec3">청구절차</a>
+                          <a href="#anchor-sec3" id="tab3" className="tab-link" role="tab" aria-selected="false" aria-controls="anchor-sec3">시스템 이용 문의</a>
                         </li>
                       </ul>
                     </div>
