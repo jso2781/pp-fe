@@ -143,6 +143,7 @@ export default function ExpertMyWork() {
           const newPVO: ExprtTaskPVO = {
             ...exprtTaskPVO,
             exprtNo: info?.exprtNo,
+            mbrId: auth.userInfo?.mbrId,
           };
           
           const result = await dispatch(applyExprtTask(newPVO)).unwrap();
@@ -200,18 +201,6 @@ export default function ExpertMyWork() {
             />
           </Box>
           <Box className="sub-content">
-            {info && (
-              <Box className="welcome-banner">
-                <Stack direction="row" alignItems="center" className="welcome-banner__inner">
-                  <Typography className="welcome-banner__message">
-                    <span className="user-name">{info.encptExprtFlnm ?? '-'}</span>님 환영합니다. &apos;OOO&apos; 메뉴에 새로운 확인 사항이 있습니다.
-                  </Typography>
-                  <IconButton size="small" className="btn-close" aria-label="close">
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </Stack>
-              </Box>
-            )}
             <DepsLocation />
             <Box className="content-view" id="content">
               <Box className="page-content">
@@ -243,7 +232,7 @@ export default function ExpertMyWork() {
                         <span className="user-name">{info?.encptExprtFlnm ?? '-'}</span>
                         <span className="user-company">{info?.instNm ?? '-'}</span>
                       </Box>
-                      <p className="last-login">마지막 접속일시 : -</p>
+                      <p className="last-login">마지막 접속일시 : {info?.lastLgnDt ?? '-'}</p>
                     </Box>
                     {info && (
                       <Box className="control-action">

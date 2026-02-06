@@ -69,6 +69,9 @@ export interface ExprtTaskRVO {
 
   /** 사업자업무관리번호 */
   bzmnTaskMngNo?: string
+
+  /** 최근로그인일시 */
+  lastLgnDt?: string  
 }
 
 /**
