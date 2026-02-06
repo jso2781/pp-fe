@@ -46,4 +46,7 @@ export interface ExprtApplyRVO {
 
   /** 사용중인 업무 시스템 목록 */
   taskSystemList?: ExprtApplyTaskVO[]
+
+  /** 전문가회원전환신청관리 존재여부 */
+  nextStepYn?: boolean
 }

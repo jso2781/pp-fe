@@ -266,6 +266,8 @@
       &.using { background: #3FA654; }
       &.waiting { background: #FFB114; }
       &.available { background: #256EF4; }
+      &.rejected { background: #f44d25; }
+      &.canceled { background: #575757; }
     }
 
     .system-name {

@@ -1,30 +1,19 @@
 /**
- * 대국민포털_전문가업무기본 정보 목록 조회 
+ * 대국민포털_전문가내업무관리 내 업무 조회 
  */
-export const selectExprtTaskListApiPath = () => '/exprt/selectExprtTaskList'
+export const selectExprtInfoApiPath = () => '/exprt/task/info'
 
 /**
- * 대국민포털_전문가업무기본 정보 조회 
+ * 대국민포털_전문가내업무관리 전문가 회원 전환 신청 취소
  */
-export const getExprtTaskApiPath = () => '/exprt/getExprtTask'
+export const withdrawExprtApiPath = () => '/exprt/task/apply/withdraw'
 
 /**
- * 대국민포털_전문가업무기본 정보 입력 
+ * 대국민포털_전문가내업무관리 전문가 회원 업무 신청 취소
  */
-export const insertExprtTaskApiPath = () => '/exprt/insertExprtTask'
+export const withdrawExprtTaskApiPath = () => '/exprt/task/withdraw'
 
 /**
- * 대국민포털_전문가업무기본 정보 수정 
+ * 대국민포털_전문가내업무관리 전문가 회원 업무 신청
  */
-export const updateExprtTaskApiPath = () => '/exprt/updateExprtTask'
-
-/**
- * 대국민포털_전문가업무기본 정보 저장 
- * 기존 데이터가 존재하지 않으면 입력하고, 존재하면 수정한다.
- */
-export const saveExprtTaskApiPath = () => '/exprt/saveExprtTask'
-
-/**
- * 대국민포털_전문가업무기본 정보 삭제 
- */
-export const deleteExprtTaskApiPath = () => '/exprt/deleteExprtTask'
+export const applyExprtTaskApiPath = () => '/exprt/task/apply'

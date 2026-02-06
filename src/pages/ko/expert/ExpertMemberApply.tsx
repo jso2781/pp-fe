@@ -7,9 +7,9 @@
 import DepsLocation from '@/components/common/DepsLocation';
 import FileUploadField from '@/components/form/FileUploadField';
 import { useDialog } from '@/contexts/DialogContext';
+import { refresh } from '@/features/auth/AuthThunks';
 import { existbyEmail, existsInstByBrno, expertApply } from '@/features/exprt/ExprtApplyThunks';
 import { ExprtApplyPVO, ExprtApplyTaskVO } from '@/features/exprt/ExprtApplyTypes';
-import { getLangFromPathname, langPath } from '@/routes/lang';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   Box,
@@ -17,6 +17,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormHelperText,
+  Link,
   Paper,
   Radio,
   RadioGroup,
@@ -25,11 +26,10 @@ import {
   StepLabel,
   Stepper,
   TextField,
-  Typography,
-  Link
+  Typography
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 type StepRefs = {
   step1: HTMLDivElement | null;
@@ -39,23 +39,15 @@ type StepRefs = {
 
 export default function ExpertMemberApply() {
   const dispatch = useAppDispatch();
-  const userInfo = useAppSelector((s) => s.auth.userInfo);
 
-  const navigate = useNavigate();
+  const auth = useAppSelector((s) => s.auth);
+  const userInfo = auth.userInfo;
+
   const { showDialogBackdrop, showAlertBackdrop } = useDialog();
-  const lang = getLangFromPathname(location.pathname) || 'ko'
-  const to = (p: string) => {
-    const raw = langPath(lang, p)
-    return raw.replace(/\/{2,}/g, '/')
-  }
-  
-  // 신청 이후 URL로 신청 페이지 접근 시 내 업무 페이지로 이동
+
   useEffect(() => {
-    if (userInfo?.expertYn === 'Y') {
-      showAlertBackdrop('신청 이력이 있어 내 업무 페이지로 이동합니다.', '페이지 이동 알림');
-      navigate(to('/expert/ExpertMyWork'));
-    }
-  }, [userInfo]);
+    console.log("auth", auth);
+  },[auth]);
 
   const handleCustomConfirm = () => {
     showDialogBackdrop({
@@ -93,6 +85,7 @@ export default function ExpertMemberApply() {
     task: ExprtApplyTaskVO[];
   } | null>(null);
   const [companySearchError, setCompanySearchError] = useState('');
+  const [nextStepYn, setNextStepYn] = useState(true);
 
   // Step 2: 추가정보입력
   const [organizationEmail, setOrganizationEmail] = useState('');
@@ -133,6 +126,7 @@ export default function ExpertMemberApply() {
 
     const result = await dispatch(existsInstByBrno({ 
       brno: businessNumber,
+      mbrNo: userInfo?.mbrNo ?? '',
     })).unwrap();
 
     setSelectedCompany(null);
@@ -153,6 +147,7 @@ export default function ExpertMemberApply() {
         }))        
 
         setCompanySearchError('');
+        setNextStepYn(result.nextStepYn ?? true);
       } else {
         setCompanySearchError('조회하신 업체는 전문가회원 업무 시스템 사용이 불가합니다. 확인 후 신청해주세요.');        
       }      
@@ -213,6 +208,12 @@ export default function ExpertMemberApply() {
       const result = await dispatch(expertApply(formData)).unwrap();
       if (result === 'SUCCESS') {
         setCurrentStep(2);
+
+        // jwt refresh 호출로 전문가 회원 정보 갱신
+        await dispatch(refresh({ 
+          tokenSn: auth.tokenSn ?? 0,
+          refreshToken: auth.refreshToken ?? '',
+        })).unwrap();
       }
     } catch (error) {
       console.error('전문가 회원 전환 신청 실패:', error);
@@ -236,6 +237,11 @@ export default function ExpertMemberApply() {
 
   // Step 1 완료
   const handleCompleteStep1 = () => {
+    if (nextStepYn === false) {
+      showAlertBackdrop('전문가 회원 전환 신청 이력이 존재합니다. 내 업무 페이지에서 확인해주세요.');
+      return;
+    }
+
     if (canCompleteStep1) {
       setCurrentStep(1);
     }
