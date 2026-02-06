@@ -51,7 +51,7 @@
 
   // LNB 타이틀 영역
   .lnb-tit {
-    display: flex;
+    /* display: flex;
     align-items: center;
     justify-content: center;
     flex: 0 0 105px;
@@ -60,6 +60,21 @@
     color: #fff;
     font-size: 24px;
     font-weight: 700;
+    overflow: hidden; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 105px;     
+    width: 100%;  
+    max-width: 249px; 
+    padding: 0 20px !important; 
+    box-sizing: border-box; 
+    background: #087C80 url(/img/bg_lnb_title.png) no-repeat center center;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
     overflow: hidden;
 
     .btn_toggle {
