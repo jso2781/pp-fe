@@ -45,10 +45,6 @@ export default function ExpertMemberApply() {
 
   const { showDialogBackdrop, showAlertBackdrop } = useDialog();
 
-  useEffect(() => {
-    console.log("auth", auth);
-  },[auth]);
-
   const handleCustomConfirm = () => {
     showDialogBackdrop({
       message: '등록 하시겠습니까?',
