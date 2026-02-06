@@ -28,7 +28,7 @@ $default-width: 1200px;
     position: relative;
     padding-left: 20px;
     font-size: var(--fs-17);
-    margin-bottom: 8px;
+    margin-bottom: 2px;
 
     &::before {
       content: "";
@@ -52,7 +52,7 @@ $default-width: 1200px;
     font-size: var(--fs-18);
     font-weight: 400;
     line-height: 1.5;
-    margin-bottom: 8px;
+    margin-bottom: 2px;
 
     &::before {
       content: "";
@@ -63,6 +63,31 @@ $default-width: 1200px;
       height: 4px;
       background-color: var(--color-text-1);
       border-radius: 50%;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@mixin list-bullet-3 {
+  li {
+    position: relative;
+    padding-left: 20px;
+    font-size: var(--fs-18);
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 2px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 12px;
+      width: 5px;
+      height: 1px;
+      background-color: var(--color-text-1);
     }
 
     &:last-child {

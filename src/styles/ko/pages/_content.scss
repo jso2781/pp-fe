@@ -2639,7 +2639,7 @@
 
 .section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);}
 
-.txt-type-1{font-size: var(--fs-18);font-weight: 500;color: var(--color-text-2);}
+.txt-type-1{font-size: var(--fs-18);font-weight: 500;}
 .txt-icon-1 {
   position: relative;
   font-size: var(--fs-18);
@@ -2657,6 +2657,7 @@
     background: url('/img/ico_exclamation_circle02.svg') no-repeat left top ;
   }
 }
+
 .num-list {
   li {
     display: flex;
@@ -2699,10 +2700,14 @@
       border-radius: 50%;
     }
   }
+  
+  dd + dt {
+    margin-top: 5px; 
+  }
 
   dd {
     margin-left: 0; 
-    padding: 0 0 0 20px;
+    padding: 0 0 0 25px;
     font-size: var(--fs-18);
     color: var(--color-text-3);
     line-height: 1.6;
@@ -2710,6 +2715,60 @@
 
   & + & {
     margin-top: 5px;
+  }
+}
+.list-definition-num {
+  counter-reset: dt-counter; 
+
+  dt {
+    position: relative;
+    margin-bottom: 2px;
+    padding-left: 20px; 
+    font-size: var(--fs-18);
+    font-weight: 700;
+    line-height: 1.4;
+
+    &::before {
+      counter-increment: dt-counter;
+      content: counter(dt-counter) "."; 
+      position: absolute;
+      left: 0;
+      top: 0; 
+      font-size: var(--fs-18);
+      font-weight: 700;
+      color: var(--color-text-3);
+    }
+
+    // 1번 뒤에 오는 2, 3, 4번 dt들에만 상단 간격 부여
+    & {
+      margin-top: 0; // 기본값
+    }
+  }
+
+  // dt 앞에 dd가 있는 경우
+  dd + dt {
+    margin-top: 20px;
+  }
+
+  dd {
+    margin-left: 0; 
+    padding: 0; 
+    font-size: var(--fs-18);
+    color: var(--color-text-3);
+    line-height: 1.6;
+
+    .list-bullet-2 {
+      li {
+        color: var(--color-text-3);
+        &::before {
+          background-color: var(--color-text-3);
+        }
+      }
+    }
+  }
+
+  & + .list-definition-num {
+    margin-top: 20px;
   }
 }
 
