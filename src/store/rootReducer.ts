@@ -10,6 +10,8 @@ import sttReducer from '@/features/stt/TrmsSttSlice'
 import mbrInfoReducer from '@/features/mbr/MbrInfoSlice'
 import cmsReducer from '@/features/cms/CmsSlice'
 import exprtTaskReducer from '@/features/exprt/ExprtTaskSlice'
+import DshstyDclrReucer from '@/features/dclr/DshstyDclrSlice'
+
 
 const rootReducer = combineReducers({
   ui: uiReducer,
@@ -22,7 +24,8 @@ const rootReducer = combineReducers({
   main: mainReducer, // 메인화면
   mbrInfo: mbrInfoReducer, // 회원정보
   cms: cmsReducer, // CMS
-  exprtTask: exprtTaskReducer // 전문가내업무관리
+  exprtTask: exprtTaskReducer, // 전문가내업무관리
+  dclr: DshstyDclrReucer // 부정신고
 })
 
 export default rootReducer

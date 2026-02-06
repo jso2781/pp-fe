@@ -1,13 +1,39 @@
 import DepsLocation from "@/components/common/DepsLocation";
 import Lnb from "@/components/common/Lnb";
+import { insertDshstyDclr } from "@/features/dclr/DshstyDclrThunks";
+import { useAppDispatch } from "@/store/hooks";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import type { DshstyDclrPVO } from "@/features/dclr/DshstyDclrTypes";
+import * as z from 'zod';
 
 export default function AboutCleanForm () {
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const currentUrl = location.pathname;
-  
+
+  if(false) {
+    //TODO Any-Id 인증이 안되있다면 본인인증 페이지로 이동
+    return <Navigate to="/" replace />;
+  }
+
+  const schema = z.object({
+    userName: z.string()
+  });
+
+  const handleSubmit = async () => {
+    try {
+      await dispatch(insertDshstyDclr({} as DshstyDclrPVO)).unwrap()
+    } catch(e) {
+
+    }
+  }
+
+  const handleCancle = () => {
+    navigate('/ko/about/ethics/AboutCleanCenter');
+  }
   return (
     <Box className="page-layout">
       <Box className="sub-container">
@@ -17,7 +43,7 @@ export default function AboutCleanForm () {
           <Box className="lnb-wrap">
             <Box className="lnb-menu">
               <Typography component="h2" className="lnb-tit">
-                <span>클린신고센터</span>
+                <span>윤리경영</span>
               </Typography>
               <Box className="lnb-list">
                 <Lnb currentUrl={currentUrl} />
@@ -262,8 +288,8 @@ export default function AboutCleanForm () {
                     </Box>
                   </Box>
                   <Box className="btn-group between">
-                    <Button variant="outlined02" size="large">취소하기</Button>
-                    <Button variant="contained" size="large">제줄하기</Button>
+                    <Button variant="outlined02" size="large" onClick={handleCancle}>취소하기</Button>
+                    <Button variant="contained" size="large" onClick={handleSubmit}>제줄하기</Button>
                   </Box>
                 </section> 
               {/* --- 본문 끝 --- */}

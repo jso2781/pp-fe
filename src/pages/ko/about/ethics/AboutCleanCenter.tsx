@@ -1,12 +1,35 @@
 import DepsLocation from '@/components/common/DepsLocation'
 import Lnb from '@/components/common/Lnb'
+import { useAuth } from '@/contexts/AuthContext';
+import { selectDshstyDclrList } from '@/features/dclr/DshstyDclrThunks';
+import { DshstyDclrListPVO } from '@/features/dclr/DshstyDclrTypes';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Box, Typography } from '@mui/material'
-import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function AboutCleanCenter() {
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  const { list } = useAppSelector(s => s.dclr);
+  const navigate = useNavigate();
 
   const currentUrl = location.pathname;
+
+  useEffect(() => {
+    if(true) {//TODO Any-Id 인증 여부
+      dispatch(selectDshstyDclrList({} as DshstyDclrListPVO));
+    }
+  }, []);
+
+  const handleWriteForm = () => {
+    if(true){
+      navigate('/ko/about/ethics/AboutCleanForm');
+    }
+    //TODO Any-Id 인증이 안되있다면 본인인증 페이지로 이동
+    // navigate('/');
+  }
 
   return (
     <Box className="page-layout">
@@ -54,64 +77,67 @@ export default function AboutCleanCenter() {
                       </ul>
                     </div>
                   </div>
-                  <div className="btn-group center">
+                  {/* <div className="btn-group center">
                     <button type="button" className="btn_default w260">로그인하기</button>
-                  </div>
+                  </div> */}
 
                   <div className="mb40"></div>
 
                   <div className="section-title-group">
                     <h3 className="section-title">클린신고서 목록</h3>
                     <div className="controller">
-                      <button className="btn_outline_sub small">신고서 작성</button>
+                      <button className="btn_outline_sub small" onClick={handleWriteForm}>신고서 작성</button>
                     </div>
                   </div>
-                  <div className="base-table-container">
-                    <div className="table-responsive has-scroll">
-                      <table className="base-table">
-                        <caption className="sr-only">신고서 목록</caption>
-                        <colgroup>
-                          <col style={{ width: '8%' }} />
-                          <col />
-                          <col style={{ width: '10%' }} />
-                          <col style={{ width: '20%' }} />
-                          <col style={{ width: '20%' }} />
-                        </colgroup>
-                        <thead>
-                          <tr>
-                            <th scope="col">번호</th>
-                            <th scope="col">제목</th>
-                            <th scope="col">진행상태</th>
-                            <th scope="col">등록일시</th>
-                            <th scope="col">처리일시</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <th>2</th>
-                            <td>클린한 관리원이 되기 위해 작성</td>
-                            <td>접수완료</td>
-                            <td>2026-03-31 12:34</td>
-                            <td>2026-04-02 12:34</td>
-                          </tr>
-                          <tr>
-                            <th>1</th>
-                            <td>클린한 관리원이 되기 위해 작성</td>
-                            <td>접수완료</td>
-                            <td>2026-03-31 12:34</td>
-                            <td>2026-04-02 12:34</td>
-                          </tr>
-                          <tr>
-                            <td colSpan={5}>
-                              <div className="no-data">
-                                <p>등록하신 클린신고서가 없습니다.</p>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                  {JSON.stringify(list)}
+                  {isAuthenticated && // (isAuthenticated || Any-Id 인증여부) TODO Any-Id 인증여부 확인 후 추가 필요
+                    <div className="base-table-container">
+                      <div className="table-responsive has-scroll">
+                        <table className="base-table">
+                          <caption className="sr-only">신고서 목록</caption>
+                          <colgroup>
+                            <col style={{ width: '8%' }} />
+                            <col />
+                            <col style={{ width: '10%' }} />
+                            <col style={{ width: '20%' }} />
+                            <col style={{ width: '20%' }} />
+                          </colgroup>
+                          <thead>
+                            <tr>
+                              <th scope="col">번호</th>
+                              <th scope="col">제목</th>
+                              <th scope="col">진행상태</th>
+                              <th scope="col">등록일시</th>
+                              <th scope="col">처리일시</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th>2</th>
+                              <td>클린한 관리원이 되기 위해 작성</td>
+                              <td>접수완료</td>
+                              <td>2026-03-31 12:34</td>
+                              <td>2026-04-02 12:34</td>
+                            </tr>
+                            <tr>
+                              <th>1</th>
+                              <td>클린한 관리원이 되기 위해 작성</td>
+                              <td>접수완료</td>
+                              <td>2026-03-31 12:34</td>
+                              <td>2026-04-02 12:34</td>
+                            </tr>
+                            <tr>
+                              <td colSpan={5}>
+                                <div className="no-data">
+                                  <p>등록하신 클린신고서가 없습니다.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
+                  }
                 </section> 
               {/* --- 본문 끝 --- */}
               </Box>

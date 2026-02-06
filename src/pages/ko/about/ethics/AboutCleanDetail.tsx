@@ -18,7 +18,7 @@ export default function AboutCleanDetail () {
           <Box className="lnb-wrap">
             <Box className="lnb-menu">
               <Typography component="h2" className="lnb-tit">
-                <span>클린신고센터</span>
+                <span>윤리경영</span>
               </Typography>
               <Box className="lnb-list">
                 <Lnb currentUrl={currentUrl} />
