@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectExprtInfoApiPath, withdrawExprtApiPath, withdrawExprtTaskApiPath, applyExprtTaskApiPath } from '@/api/exprt/ExprtTaskApiPaths'
+import { selectExprtInfoApiPath, withdrawExprtApiPath, withdrawExprtTaskApiPath, applyExprtTaskApiPath, selectExprtMenusApiPath } from '@/api/exprt/ExprtTaskApiPaths'
 import { ExprtTaskPVO, ExprtTaskFullVO } from './ExprtTaskTypes'
+import { MenuListRVO } from '../auth/MenuTypes'
 
 /**
  * 대국민포털_전문가내업무관리 내 업무 조회
@@ -71,6 +72,29 @@ export const applyExprtTask = createAsyncThunk<string, ExprtTaskPVO | undefined,
     catch (e) {
       console.error("ExprtTaskThunks applyExprtTask error!!", e);
       return rejectWithValue('ExprtTaskThunks applyExprtTask error!!');
+    }
+  }
+)
+
+/**
+ * 대국민포털_전문가내업무관리 업무시스템에 해당하는 메뉴 목록 조회
+ */
+export const selectExprtMenus = createAsyncThunk<MenuListRVO, ExprtTaskPVO | undefined, { rejectValue: string }>(
+  '/exprt/task/menus',
+  async (params: ExprtTaskPVO = {}, { rejectWithValue }) => {
+    try {
+      const res = await https.post(selectExprtMenusApiPath(), params);
+      const payload = res.data?.data?.exprtMenus;            
+      const list = Array.isArray(payload) ? payload : [];
+      return {
+        list,
+        totalCount: list.length,
+      } as MenuListRVO;
+
+    }
+    catch (e) {
+      console.error("ExprtTaskThunks selectExprtMenus error!!", e);
+      return rejectWithValue('ExprtTaskThunks selectExprtMenus error!!');
     }
   }
 )

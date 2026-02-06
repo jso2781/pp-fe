@@ -1,22 +1,16 @@
-import { useMemo, useState } from 'react'
-import { Box, Divider, Drawer, IconButton, List, ListItemButton, ListItemText, Typography, Collapse } from '@mui/material'
-import { Menu as MenuIcon, MenuOpen as MenuOpenIcon, ExpandLess, ExpandMore } from '@mui/icons-material'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { LnbItem } from '@/features/auth/MenuTypes';
+import { ExpandMore, Menu as MenuIcon, MenuOpen as MenuOpenIcon } from '@mui/icons-material';
 import ChevronRight from '@mui/icons-material/ChevronRight';
-
-interface MenuItem {
-  key: string;
-  label: string;
-  disabled?: boolean;
-  isExternal?: boolean; 
-  children?: MenuItem[];
-}
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { Box, Collapse, Drawer, IconButton, List, ListItemButton, ListItemText, Typography } from '@mui/material';
+import { useMemo, useState } from 'react';
 
 export type CollapsibleNavItem = {
   key: string
   label: string
   disabled?: boolean
   isExternal?: boolean
+  originalKey?: string // 원본 key (onSelect에서 사용)
   children?: CollapsibleNavItem[] // 하위 메뉴 추가
 }
 
@@ -24,18 +18,37 @@ type Props = {
   title: string
   collapsed: boolean
   onToggle: () => void
-  items: CollapsibleNavItem[]
+  items?: CollapsibleNavItem[]
+  /** LnbItem[] 형태의 메뉴 구조 (lnbStructor) */
+  lnbStructor?: LnbItem[]
   selectedKey?: string
   width?: number
   collapsedWidth?: number
   onSelect?: (key: string) => void
 }
 
+/** LnbItem을 CollapsibleNavItem으로 변환 (key 중복 방지를 위해 index 경로 사용) */
+const convertLnbItemToNavItem = (item: LnbItem, indexPath: string): CollapsibleNavItem => ({
+  key: `${indexPath}:${item.key}`,
+  label: item.label,
+  disabled: item.disabled,
+  isExternal: item.key.startsWith('http'),
+  originalKey: item.key,
+  children: item.children?.map((child, idx) => convertLnbItemToNavItem(child, `${indexPath}-${idx}`)),
+});
+
+/** lnbStructor 전체를 CollapsibleNavItem[]로 변환 */
+const buildNavItemsFromLnbStructor = (lnbStructor: LnbItem[]): CollapsibleNavItem[] => {
+  if (!lnbStructor || lnbStructor.length === 0) return [];
+  return lnbStructor.map((item, idx) => convertLnbItemToNavItem(item, String(idx)));
+};
+
 export default function CollapsibleSideNav({
   title,
   collapsed,
   onToggle,
   items,
+  lnbStructor,
   selectedKey,
   width = 280,
   collapsedWidth = 72,
@@ -50,6 +63,17 @@ export default function CollapsibleSideNav({
   const handleToggleOpen = (key: string) => {
     setOpenKeys((prev) => ({ ...prev, [key]: !prev[key] }))
   }
+
+  // items 또는 lnbStructor로부터 메뉴 항목 결정
+  const resolvedItems: CollapsibleNavItem[] = useMemo(() => {
+    if (items && items.length > 0) {
+      return items;
+    }
+    if (lnbStructor && lnbStructor.length > 0) {
+      return buildNavItemsFromLnbStructor(lnbStructor);
+    }
+    return [];
+  }, [items, lnbStructor]);
 
   return (
     <Drawer
@@ -100,7 +124,7 @@ export default function CollapsibleSideNav({
         </IconButton>
       </Box>
       <List dense disablePadding>
-        {items.map((it) => {
+        {resolvedItems.map((it) => {
           const hasChildren = !!(it.children && it.children.length > 0)
           const isOpen = openKeys[it.key] || false
           
@@ -119,13 +143,15 @@ export default function CollapsibleSideNav({
                   // 접힌 상태에선 로직 실행 차단
                   if (collapsed) return;
 
+                  const targetKey = it.originalKey ?? it.key;
+
                   if (hasChildren) {
                     handleToggleOpen(it.key)
                   } else {
                     if (it.isExternal) {
-                      window.open(it.key, '_blank'); 
+                      window.open(targetKey, '_blank'); 
                     } else {
-                      onSelect?.(it.key);
+                      onSelect?.(targetKey);
                     }
                   }
                 }}
@@ -145,6 +171,16 @@ export default function CollapsibleSideNav({
                     sx: { opacity: collapsed ? 0 : 1 },
                   }}
                 />
+                {/* 부모 메뉴도 외부 링크면 새창 아이콘 표시 */}
+                {it.isExternal && !hasChildren && !collapsed && (
+                  <OpenInNewIcon 
+                    sx={{ 
+                      fontSize: 16,
+                      ml: 0.8,
+                      color: 'inherit' 
+                    }} 
+                  />
+                )}
                 {!collapsed && hasChildren && (
                   isOpen 
                     ? <ExpandMore sx={{ fontSize: 30, mr: 0.2 }} /> 
@@ -172,10 +208,11 @@ export default function CollapsibleSideNav({
                         disabled={collapsed} // 접혔을 때 비활성화
                         onClick={() => {
                           if (collapsed) return;
+                          const targetKey = child.originalKey ?? child.key;
                           if (child.isExternal) {
-                            window.open(child.key, '_blank');
+                            window.open(targetKey, '_blank');
                           } else {
-                            onSelect?.(child.key);
+                            onSelect?.(targetKey);
                           }
                         }}
                         sx={{ 

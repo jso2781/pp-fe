@@ -8,25 +8,26 @@ import DepsLocation from '@/components/common/DepsLocation';
 import CollapsibleSideNav from '@/components/navigation/CollapsibleSideNav';
 import { useDialog } from '@/contexts/DialogContext';
 import { refresh } from '@/features/auth/AuthThunks';
-import { applyExprtTask, selectExprtInfo, withdrawExprt, withdrawExprtTask } from '@/features/exprt/ExprtTaskThunks';
+import { applyExprtTask, selectExprtInfo, withdrawExprt, withdrawExprtTask, selectExprtMenus } from '@/features/exprt/ExprtTaskThunks';
 import { ExprtTaskPVO } from '@/features/exprt/ExprtTaskTypes';
 import { getLangFromPathname, langPath } from '@/routes/lang';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function ExpertMyWork() {
   const dispatch = useAppDispatch();
   const current = useAppSelector((s) => s.exprtTask.current);
+  const lnbStructor = useAppSelector((s) => s.exprtTask.lnbStructor);
   const auth = useAppSelector((s) => s.auth);
   const mbrNo = auth?.userInfo?.mbrNo || '';
 
   const { showDialogBackdrop, showAlertBackdrop } = useDialog();
 
   const navigate = useNavigate();
+  const location = useLocation();
   const lang = getLangFromPathname(location.pathname) || 'ko'
   const to = (p: string) => {
     const raw = langPath(lang, p)
@@ -39,6 +40,13 @@ export default function ExpertMyWork() {
 
   const info = current?.info ?? null;
   const taskList = current?.task ?? [];
+
+  // 대국민포털_전문가내업무관리 업무시스템에 해당하는 메뉴 목록 조회
+  useEffect(() => {
+    if (mbrNo) {
+      dispatch(selectExprtMenus({ mbrNo }));
+    }
+  }, [dispatch, mbrNo]);
 
   // 대국민포털_전문가내업무관리 전문가 회원 전환 신청 취소
   const handleConfirmWithdrawExprt = () => {
@@ -114,6 +122,7 @@ export default function ExpertMyWork() {
               confirmText: '확인',
               onConfirm: () => {
                 dispatch(selectExprtInfo({ mbrNo }));
+                dispatch(selectExprtMenus({ mbrNo }));
               },
             })
           }
@@ -173,19 +182,6 @@ export default function ExpertMyWork() {
 
   // LNB
   const [collapsed, setCollapsed] = useState(false);
-  const sideItems = useMemo(
-    () => [
-      {
-        key: 'sub1',
-        label: '내업무',
-        children: [
-          { key: '/2-1', label: '서브메뉴2-1' },
-          { key: '/2-2', label: '서브메뉴2-2', isExternal: true },
-        ],
-      },
-    ],
-    [],
-  );
 
   return (
     <Box className={`page-layout ${collapsed ? 'is-collapsed' : ''}`}>
@@ -196,8 +192,15 @@ export default function ExpertMyWork() {
               title="내업무"
               collapsed={collapsed}
               onToggle={() => setCollapsed((p) => !p)}
-              items={sideItems}
-              onSelect={(key) => window.alert(`Maps: ${key}`)}
+              lnbStructor={lnbStructor}
+              onSelect={(key) => {
+                if (key.startsWith('http')) {
+                  window.open(key, '_blank');
+                } else {
+                  const dest = key.startsWith('/ko/') ? key : '/ko' + key;
+                  navigate(dest);
+                }
+              }}
             />
           </Box>
           <Box className="sub-content">
