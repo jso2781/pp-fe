@@ -96,9 +96,9 @@ export default function KIDS_PP_US_PI_11() {
                       <div className="mb40"></div>
                       <div className="img-switcher">
                         {/* PC용 이미지 */}
-                        <img src="/img/oriReport_img01.png" alt="" className="responsive-img pc-only"/>
+                        <img src="/img/oriReport_img01.png" alt="의약품부작용보고원시자료 제공절차 연구·의료·공공기관 도식" className="responsive-img pc-only"/>
                         {/* 모바일용 이미지 */}
-                        <img src="/img/oriReport_img01_m.png"  alt="" className="responsive-img mo-only"/>
+                        <img src="/img/oriReport_img01_m.png" alt="" aria-hidden="true" className="responsive-img mo-only"/>
                       </div>
                       <div className="mb24"></div>
                       <dl className="list-definition">
@@ -112,9 +112,9 @@ export default function KIDS_PP_US_PI_11() {
                       <div className="mb20"></div>
                       <div className="img-switcher">
                         {/* PC용 이미지 */}
-                        <img src="/img/oriReport_img02.png" alt="" className="responsive-img pc-only"/>
+                        <img src="/img/oriReport_img02.png" alt="의약품부작용보고원시자료 제공절차 제조·수입업체 도식" className="responsive-img pc-only"/>
                         {/* 모바일용 이미지 */}
-                        <img src="/img/oriReport_img02_m.png"  alt="" className="responsive-img mo-only"/>
+                        <img src="/img/oriReport_img02_m.png" alt="" aria-hidden="true" className="responsive-img mo-only"/>
                       </div>
                     </div>
 
@@ -142,9 +142,9 @@ export default function KIDS_PP_US_PI_11() {
 
                       <div className="img-switcher">
                         {/* PC용 이미지 */}
-                        <img src="/img/oriReport_img03.png" alt="" className="responsive-img pc-only"/>
+                        <img src="/img/oriReport_img03.png" alt="의약품부작용보고원시자료 활용 사전협의 및 활용결과 등록 도식" className="responsive-img pc-only"/>
                         {/* 모바일용 이미지 */}
-                        <img src="/img/oriReport_img03_m.png"  alt="" className="responsive-img mo-only"/>
+                        <img src="/img/oriReport_img03_m.png" alt="" aria-hidden="true" className="responsive-img mo-only"/>
                       </div>
                     </div>
 
