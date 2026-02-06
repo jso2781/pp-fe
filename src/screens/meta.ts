@@ -366,6 +366,11 @@ export const screens: ScreenMeta[] = [
     "title": "의약품부작용보고원시자료",
     "uiType": "cms"
   },
+  {
+    "id": "KIDS-PP-US-OI-01",
+    "title": "정보공개 - 업무처리절차",
+    "uiType": "cms"
+  },
   
 
   //내업무 템플릿 예시

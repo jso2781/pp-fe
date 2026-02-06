@@ -1,5 +1,16 @@
 @use '../base/mixins';
 
+// 리스트, 텍스트 스타일
+.list-bullet {
+  @include mixins.list-bullet;
+}
+.list-bullet-2 {
+  @include mixins.list-bullet-2;
+}
+.list-bullet-3 {
+  @include mixins.list-bullet-3;
+}
+
 /* 폼 필드 */
 .form-section-title {
   .required {
@@ -2640,6 +2651,42 @@
 .section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);}
 
 .txt-type-1{font-size: var(--fs-18);font-weight: 500;}
+.txt-type-2{
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 20px;
+  font-size: var(--fs-18);
+  font-weight: 700;
+  line-height: 1.4;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 10px; 
+    width: 5px;
+    height: 5px;
+    background-color: var(--color-text-1);
+    border-radius: 50%;
+  }
+}
+.txt-type-3{
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 20px;
+  font-size: var(--fs-18);
+  font-weight: 700;
+  line-height: 1.4;
+
+  &::before {
+    content: "*";
+    position: absolute;
+    left: 5px;
+    top: 0px; 
+    width: 5px;
+    height: 5px;
+  }
+}
 .txt-icon-1 {
   position: relative;
   font-size: var(--fs-18);
@@ -2914,6 +2961,68 @@
       .report-step-list{
         padding:0;
         background:none;
+      }
+    }
+  }
+}
+
+// 정보공개제도란?
+.pageCont-TaskProgress{
+  .claimant-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+
+    dl {
+      padding:30px;
+      border-radius: 8px;
+      border: 1px solid #D8D8D8;
+      background: #fff;
+      overflow: hidden; 
+
+      dt {
+        position: relative;
+        margin:0 0 10px 0;
+        text-align: center;
+        font-size: var(--fs-20);
+        font-weight: 700;
+        &::before {
+          content: "";         
+          display: block;
+          width: 85px;        
+          height: 85px;      
+          margin:0 auto;
+          background-repeat: no-repeat;
+          background-position: center ;
+        }
+      }
+
+      dd {
+        text-align: center;
+        font-size: var(--fs-18);
+        line-height: 1.6;
+        color: var(--color-text-3);
+      }
+    }
+
+    /* dt별 이미지 분기 */
+    dl:nth-child(1) dt::before {
+      background-image: url('/img/taskProgress_ico01.png');
+    }
+
+    dl:nth-child(2) dt::before {
+      background-image: url('/img/taskProgress_ico02.png');
+    }
+
+    dl:nth-child(3) dt::before {
+      background-image: url('/img/taskProgress_ico03.png'); 
+    }
+
+    @media (max-width: 1200px) {
+      grid-template-columns: 1fr; 
+      gap: 16px; 
+      dl {
+        padding: 24px 20px; 
       }
     }
   }
