@@ -65,32 +65,34 @@ export default function KIDS_PP_US_PI_01() {
                     <div className="mb40"></div>
 
                     <h3 className="section-title">중대한 이상사례·약물이상반응(Serious AE/ADR)이란?</h3>
-                    <p className="txt-type-1">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
-                    <div className="mb15"></div>
-                    <ul className="num-list">
-                      <li>
-                        <span className="num">1.</span>
-                        <p className="txt">사망을 초래하거나 생명을 위협하는 사례</p>
-                      </li>
-                      <li>
-                        <span className="num">2.</span>
-                        <p className="txt">입원 또는 입원기간의 연장이 필요한 사례</p>
-                      </li>
-                      <li>
-                        <span className="num">3.</span>
-                        <p className="txt">지속적 또는 중대한 불구나 기능저하를 초래하는 사례</p>
-                      </li>
-                      <li>
-                        <span className="num">4.</span>
-                        <p className="txt">선천적 기형 또는 이상을 초래하는 사례</p>
-                      </li>
-                      <li>
-                        <span className="num">5.</span>
-                        <p className="txt">
-                          제1호부터 제4호까지의 사례 외에 약물 의존성이나 남용의 발생 또는 혈액질환 등 그밖에 의학적으로 중요한 상황이 발생하여 치료가 필요한 사례
-                        </p>
-                      </li>
-                    </ul>
+                    <div className="section-desc">
+                      <p className="txt-type-1 txt-2">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
+                      <div className="mb15"></div>
+                      <ul className="num-list">
+                        <li>
+                          <span className="num">1.</span>
+                          <p className="txt">사망을 초래하거나 생명을 위협하는 사례</p>
+                        </li>
+                        <li>
+                          <span className="num">2.</span>
+                          <p className="txt">입원 또는 입원기간의 연장이 필요한 사례</p>
+                        </li>
+                        <li>
+                          <span className="num">3.</span>
+                          <p className="txt">지속적 또는 중대한 불구나 기능저하를 초래하는 사례</p>
+                        </li>
+                        <li>
+                          <span className="num">4.</span>
+                          <p className="txt">선천적 기형 또는 이상을 초래하는 사례</p>
+                        </li>
+                        <li>
+                          <span className="num">5.</span>
+                          <p className="txt">
+                            제1호부터 제4호까지의 사례 외에 약물 의존성이나 남용의 발생 또는 혈액질환 등 그밖에 의학적으로 중요한 상황이 발생하여 치료가 필요한 사례
+                          </p>
+                        </li>
+                      </ul>
+                    </div>
 
                     <h3 className="section-title">의약품 이상사례 보고의 필요성</h3>
                     <div className="section-desc">
@@ -100,33 +102,35 @@ export default function KIDS_PP_US_PI_01() {
                     </div>
 
                     <h3 className="section-title">이상사례 보고 방법</h3>
-                    <div className="report-info-box">
-                      <ul className="report-step-list">
-                        <li>
-                          <span className="label">온라인 보고</span>
-                          <div className="con">
-                            <p className="txt">의약품안전나라 의약품통합정보시스템을 이용하실 수 있습니다.</p>
-                          </div>
-                        </li>
-                        <li>
-                          <span className="label">전화</span>
-                          <div className="con">
-                            <p className="txt">한국의약품안전관리원 대표전화 1644-62243 (또는 14-3330)으로 보고 하실 수 있습니다.</p>
-                          </div>
-                        </li>
-                      </ul>
-                      <div className="btn-action">
-                        <a 
-                            href="https://nedrug.mfds.go.kr/CCCBA03F010/getReport" 
-                            className="btn_default" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            title="의약품안전나라 온라인 보고 바로가기(새 창 열림)"
-                          >
-                            온라인 보고 바로가기
-                            <span className="ico-link" aria-hidden="true"></span>
-                            <span className="sr-only">(새 창 열림)</span>
-                          </a>
+                    <div className="section-desc">
+                      <div className="report-info-box">
+                        <ul className="report-step-list">
+                          <li>
+                            <span className="label">온라인 보고</span>
+                            <div className="con">
+                              <p className="txt">의약품안전나라 의약품통합정보시스템을 이용하실 수 있습니다.</p>
+                            </div>
+                          </li>
+                          <li>
+                            <span className="label">전화</span>
+                            <div className="con">
+                              <p className="txt">한국의약품안전관리원 대표전화 1644-62243 (또는 14-3330)으로 보고 하실 수 있습니다.</p>
+                            </div>
+                          </li>
+                        </ul>
+                        <div className="btn-action">
+                          <a 
+                              href="https://nedrug.mfds.go.kr/CCCBA03F010/getReport" 
+                              className="btn_default" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              title="의약품안전나라 온라인 보고 바로가기(새 창 열림)"
+                            >
+                              온라인 보고 바로가기
+                              <span className="ico-link" aria-hidden="true"></span>
+                              <span className="sr-only">(새 창 열림)</span>
+                            </a>
+                        </div>
                       </div>
                     </div>
 
