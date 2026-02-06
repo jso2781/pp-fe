@@ -65,6 +65,47 @@ export default function CmsPage() {
     if (contsSn) dispatch(getCms({contsSn}))
   }, [dispatch, contsSn])
 
+  // 앵커탭
+  useEffect(() => {
+    const handleAnchorScroll = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const link = target.closest('.category-anchor-tabs .tab-link') as HTMLAnchorElement | null;
+      
+      if (!link) return;
+
+      const targetId = link.getAttribute('href');
+      if (targetId && targetId.startsWith('#')) {
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+          e.preventDefault(); 
+
+          const tabContainer = link.closest('.category-anchor-tabs');
+          if (tabContainer) {
+            const allTabs = tabContainer.querySelectorAll('.tab-link');
+            
+            allTabs.forEach((tab) => {
+              tab.classList.remove('active');
+              tab.setAttribute('aria-selected', 'false');
+            });
+
+            link.classList.add('active');
+            link.setAttribute('aria-selected', 'true');
+          }
+
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }
+    };
+    document.addEventListener('click', handleAnchorScroll);
+    return () => {
+      document.removeEventListener('click', handleAnchorScroll);
+    };
+  }, []);
+
   return (
     <Box className="page-layout">
       <Box className="sub-container">
