@@ -391,6 +391,16 @@ export const screens: ScreenMeta[] = [
     "title": "약물감시용어",
     "uiType": "cms"
   },
+  {
+    "id": "KIDS-PP-US-PI-09",
+    "title": "부작용인과관계규명",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-PI-10",
+    "title": "유관기관",
+    "uiType": "cms"
+  },
 
   
   

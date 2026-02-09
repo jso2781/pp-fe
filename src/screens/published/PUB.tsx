@@ -280,6 +280,11 @@ export default function PUB() {
                             <td>임부금기 (2008년~)</td>
                             <td>1,210</td>
                           </tr>
+                          <tr>
+                            <th scope="row" className="th2">th타입2</th>
+                            <td>병용금기 (2004년~)</td>
+                            <td>1,450</td>
+                          </tr>
                         </tbody>
                       </table>
                     </Box>
@@ -942,6 +947,29 @@ export default function PUB() {
                       <ul className="list-bullet-3">
                           <li>이메일 : kids_kd@drugsafe.or.kr</li>
                           <li>전화 : 02-2172-6700(-1-3)</li>
+                      </ul>
+                    </dd>
+                  </dl>
+
+                  <h3 className="section-title">dl 넘버리스트</h3>
+                  <dl className="list-definition-num">
+                    <dt>직접 자료수집</dt>
+                    <dd>
+                      <ul className="list-bullet-3">
+                          <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
+                          <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
+                      </ul>
+                    </dd>
+                  </dl>
+
+                  <br/>
+
+                  <dl className="list-definition-paren">
+                    <dt>직접 자료수집</dt>
+                    <dd>
+                      <ul className="list-bullet-3">
+                          <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
+                          <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
                       </ul>
                     </dd>
                   </dl>

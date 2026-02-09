@@ -81,13 +81,13 @@ export default function KIDS_PP_US_DR_01() {
                 {/* --- 본문 시작 --- */}
 
                   <section className="pageCont-reliefIntro">
-                      <div className="info-summary-box">
-                        <h3 className="info-summary-box__title">피해구제 제도란?</h3>
-                        <div className="info-summary-box__desc">
-                          <p>의약품 부작용으로 사망, 장애, 질병피해를 입은 유족 및 환자에게 사망일시보상금,장애일시보상금, 진료비 및 장례비를 지급하는 사업입니다.</p>
-                        </div>
-                      </div> 
-                      <div className="category-anchor-tabs" aria-label="카테고리 이동">
+                    <div className="info-summary-box">
+                      <h3 className="info-summary-box__title">피해구제 제도란?</h3>
+                      <div className="info-summary-box__desc">
+                        <p>의약품 부작용으로 사망, 장애, 질병피해를 입은 유족 및 환자에게 사망일시보상금,장애일시보상금, 진료비 및 장례비를 지급하는 사업입니다.</p>
+                      </div>
+                    </div> 
+                    <div className="category-anchor-tabs" aria-label="카테고리 이동">
                       <ul className="tabs-list" role="tablist">
                         <li className="tab-item" role="none">
                           <a href="#anchor-sec1" id="tab1" className="tab-link active" role="tab" aria-selected="true" aria-controls="anchor-sec1">사업 운영체계 및 절차</a>

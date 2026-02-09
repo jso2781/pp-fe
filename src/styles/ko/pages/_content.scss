@@ -1140,10 +1140,6 @@
     border-collapse: collapse;
     border-spacing: 0;
 
-    &.table-type-2 {
-      border-top: 2px solid #087C80;
-    }
-
     thead th {
       font-size: var(--fs-16);
       text-align: center;
@@ -1159,7 +1155,7 @@
       padding: 7px;
       text-align: center;
       border: 1px solid #B9B9B9;
-      word-break: break-all; 
+      word-break: break-word;
       word-wrap: break-word;
       white-space: normal; 
     }
@@ -1176,6 +1172,23 @@
     tbody td a:hover {
       text-decoration: underline;
     }
+
+    
+    &.table-type-2 {
+      border-top: 2px solid #087C80;
+    }
+
+    &.table-type-3 {
+      table-layout: fixed;width:100%;
+      thead th{padding: 7px 17px;border-left:none;border-right:none;}
+      tbody th{padding: 7px 17px;text-align: left;border-left:none;border-right:none;}
+      tbody td{padding: 7px 17px;text-align: left;border-left:none;border-right:none;
+        &:first-of-type {
+          border-left: 1px solid #B9B9B9; 
+        }
+      }
+    }
+
   }
 }
 
@@ -2764,7 +2777,7 @@
 
   dd {
     margin-left: 0; 
-    padding: 0 0 0 25px;
+    padding: 0 0 0 20px;
     font-size: var(--fs-18);
     color: var(--color-text-3);
     line-height: 1.6;
@@ -2774,7 +2787,9 @@
     margin-top: 5px;
   }
 }
-.list-definition-num {
+
+.list-definition-num,
+.list-definition-paren {
   counter-reset: dt-counter; 
 
   dt {
@@ -2787,7 +2802,6 @@
 
     &::before {
       counter-increment: dt-counter;
-      content: counter(dt-counter) "."; 
       position: absolute;
       left: 0;
       top: 0; 
@@ -2796,20 +2810,18 @@
       color: var(--color-text-3);
     }
 
-    // 1번 뒤에 오는 2, 3, 4번 dt들에만 상단 간격 부여
     & {
-      margin-top: 0; // 기본값
+      margin-top: 0;
     }
   }
 
-  // dt 앞에 dd가 있는 경우
   dd + dt {
     margin-top: 20px;
   }
 
   dd {
     margin-left: 0; 
-    padding: 0; 
+    padding: 0 0 0 15px;
     font-size: var(--fs-18);
     color: var(--color-text-3);
     line-height: 1.6;
@@ -2823,10 +2835,20 @@
       }
     }
   }
+}
 
-  & + .list-definition-num {
-    margin-top: 20px;
-  }
+/* 개별 숫자 스타일 정의 */
+.list-definition-num dt::before {
+  content: counter(dt-counter) "."; // 1. 형태
+}
+
+.list-definition-paren dt::before {
+  content: counter(dt-counter) ")"; // 1) 형태
+}
+
+.list-definition-num + .list-definition-num,
+.list-definition-paren + .list-definition-paren {
+  margin-top: 20px;
 }
 
 // 이상사례 보고란?
