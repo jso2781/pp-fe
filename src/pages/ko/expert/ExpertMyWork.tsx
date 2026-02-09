@@ -58,7 +58,7 @@ export default function ExpertMyWork() {
       cancelText: '취소',
       onConfirm: async () => {
         try {
-          const result = await dispatch(withdrawExprt({exprtNo: info?.exprtNo})).unwrap();
+          const result = await dispatch(withdrawExprt({exprtNo: info?.exprtNo, mbrNo: info?.mbrNo})).unwrap();
           if (result === 'SUCCESS') {
             showDialogBackdrop({
               message: '취소가 완료되었습니다.\n일반회원으로 전환되며 홈 화면으로 이동합니다.',
