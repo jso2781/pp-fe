@@ -3267,12 +3267,39 @@
     flex-wrap: wrap;
     border: 1px solid #D8D8D8;
     border-radius: 8px;
+    overflow: hidden; 
 
     .org-info-box {
-      width: calc((100% - 0px) / 2);
-      min-height:105px;
+      width: calc(100% / 2); 
+      min-height: 105px;
       background: #FFF;
-     
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:first-child {
+        border-right: 1px solid #D8D8D8;
+      }
+
+      .logo {
+        display: block;
+        line-height: 0;
+
+        img {
+          max-width: 100%;
+          height: auto; 
+          object-fit: contain;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        width: 100%;
+        
+        &:first-child {
+          border-right: none;
+          border-bottom: 1px solid #D8D8D8;
+        }
+      }
     }
   }
 }
