@@ -189,7 +189,7 @@ export default function ExpertMyWork() {
         <Box className="content-wrap">
           <Box className="side-nav">
             <CollapsibleSideNav
-              title="내업무"
+              title="내 업무"
               collapsed={collapsed}
               onToggle={() => setCollapsed((p) => !p)}
               lnbStructor={lnbStructor}

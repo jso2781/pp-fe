@@ -177,7 +177,11 @@ export default function DepsLocation() {
     {
       pattern: /^\/[A-Za-z]{2}\/expert\/ExpertMyWork(\/)?$/,
       labels: ["expertMyWork"]   // 내 업무
-    }    
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/expert\/ExpertApproval(\/)?$/,
+      labels: ["expertMyWork", "expertApproval"]   // 업무 신청 관리
+    }        
   ], []);
 
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기

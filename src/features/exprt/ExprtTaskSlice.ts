@@ -3,12 +3,20 @@ import { selectExprtInfo, withdrawExprt, withdrawExprtTask, applyExprtTask, sele
 import { ExprtTaskFullVO } from './ExprtTaskTypes'
 import { LnbItem, MenuRVO } from '../auth/MenuTypes'
 
+/** 전문가 LNB 첫 번째 고정 메뉴 */
+const EXPERT_LNB_FIRST_ITEM: LnbItem = {
+  key: '/expert/ExpertMyWork',
+  label: '내 업무',
+  disabled: false,
+  children: []
+};
+
 /**
  * LNB용 LnbItem [] 구조체 변환
  */
 function createLnbStructor(menuList: MenuRVO[]): LnbItem[] {
   if (!Array.isArray(menuList) || menuList.length === 0) {
-    return [];
+    return [EXPERT_LNB_FIRST_ITEM];
   }
 
   // menuSn을 키로 하는 맵 생성
@@ -132,7 +140,7 @@ function createLnbStructor(menuList: MenuRVO[]): LnbItem[] {
       });
   };
 
-  return sortByPath(rootItems);
+  return [EXPERT_LNB_FIRST_ITEM, ...sortByPath(rootItems)];
 }
 
 /**

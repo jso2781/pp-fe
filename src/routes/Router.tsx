@@ -50,6 +50,7 @@ const FindPwModifyKo = lazy(() => import('@/pages/ko/auth/FindPwModify'))
 const IntegratedSearchKo = lazy(() => import('@/pages/ko/search/IntegratedSearch'))
 const ExpertMemberApplyKo = lazy(() => import('@/pages/ko/expert/ExpertMemberApply'))
 const ExpertMyWorkKo = lazy(() => import('@/pages/ko/expert/ExpertMyWork'))
+const ExpertApprovalKo = lazy(() => import('@/pages/ko/expert/ExpertApproval'))
 
 const PrivacyPolicyKo = lazy(() => import('@/pages/ko/etc/PrivacyPolicy'))
 const TermsKo = lazy(() => import('@/pages/ko/etc/Terms'))
@@ -241,6 +242,7 @@ export default function Router() {
               <Route element={<LangGuard><ExpertLayout /></LangGuard>}>
                 {/* 전문가 메뉴- 내 업무 */}
                 <Route path="/:lang/expert/ExpertMyWork" element={<LangElement byLang={{ ko: <ExpertMyWorkKo />, en: <ExpertMyWorkKo /> }} />} />
+                <Route path="/:lang/expert/ExpertApproval" element={<LangElement byLang={{ ko: <ExpertApprovalKo />, en: <ExpertApprovalKo /> }} />} />
               </Route>
 
             </Routes>
