@@ -404,14 +404,31 @@ export const screens: ScreenMeta[] = [
 
   
   
-
-
-  //내업무 템플릿 예시
+  //내업무 템플릿
   {
     "id": "KIDS-PP-US-MT-01-LAYOUT",
     "title": "내업무 레이아웃",
     "uiType": "detail"
   },
+  //전문가 관리
+  {
+    "id": "UI-EX-05-02-09",
+    "title": "전문가관리 개인정보보호 등 서약서",
+    "uiType": "popup"
+  },
+  {
+    "id": "UI-EX-05-02-10",
+    "title": "전문가관리 이해관계확인서",
+    "uiType": "popup"
+  },
+  {
+    "id": "UI-EX-05-02-01",
+    "title": "참석 확인서",
+    "uiType": "page"
+  },
+
+
+  
 
   /* {
     "id": "KIDS-PP-US-MT-01_List",

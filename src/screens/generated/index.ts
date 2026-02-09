@@ -82,8 +82,13 @@ export const screenComponentLoaders = {
   'KIDS-PP-US-PI-09': () => import('../published/KIDS-PP-US-PI-09'),
   'KIDS-PP-US-PI-10': () => import('../published/KIDS-PP-US-PI-10'),
 
+  
+
   // 내업무
   'KIDS-PP-US-MT-01-LAYOUT': () => import('../published/KIDS-PP-US-MT-01-LAYOUT'),
+  'UI-EX-05-02-09': () => import('../published/UI-EX-05-02-09'),
+  'UI-EX-05-02-10': () => import('../published/UI-EX-05-02-10'),
+  'UI-EX-05-02-01': () => import('../published/UI-EX-05-02-01'),
   /* 'KIDS-PP-US-MT-01_List': () => import('../published/KIDS-PP-US-MT-01_List'),
   'KIDS-PP-US-MT-01_Write': () => import('../published/KIDS-PP-US-MT-01_Write'), */
 
