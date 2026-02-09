@@ -386,11 +386,15 @@ export const screens: ScreenMeta[] = [
     "title": "국민신문고",
     "uiType": "cms"
   },
+  {
+    "id": "KIDS-PP-US-PI-08",
+    "title": "약물감시용어",
+    "uiType": "cms"
+  },
+
+  
   
 
-
-  
-  
 
   //내업무 템플릿 예시
   {
