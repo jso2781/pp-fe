@@ -1158,7 +1158,6 @@
       font-size: var(--fs-16);
       padding: 7px;
       text-align: center;
-      color: var(--color-text-3);
       border: 1px solid #B9B9B9;
       word-break: break-all; 
       word-wrap: break-word;
@@ -1166,7 +1165,12 @@
     }
 
     tbody th {
+      font-size: var(--fs-16);
       font-weight: 400;
+      &.th2{
+        font-size: var(--fs-18);
+        font-weight: 700;
+      }
     }
 
     tbody td a:hover {
@@ -2649,7 +2653,12 @@
 .box-type-1{padding:24px 18px;border-radius: 8px;border: 1px dashed #8A949E;}
 .box-type-2{padding:17px 24px;border-radius: 12px;border: 1px solid #CDD1D5;}
 
-.section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);}
+.section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);
+  @media (max-width: 1200px) { 
+    font-size: var(--fs-16);
+  }
+
+}
 
 .txt-type-1{font-size: var(--fs-18);font-weight: 500;}
 .txt-type-2{
@@ -2969,6 +2978,7 @@
 
 // 정보공개제도란?
 .pageCont-TaskProgress{
+
   .claimant-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -3028,3 +3038,201 @@
     }
   }
 }
+
+// 피해구제 제도란?
+.pageCont-reliefIntro{
+  .org-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; 
+
+    .org-info-box {
+      width: calc((100% - 20px) / 2);
+      padding: 90px 35px 35px 35px;
+      background: #FFF;
+      border: 1px solid #D8D8D8;
+      border-radius: 8px;
+
+      &.item1 {
+          background: url(/img/logo_mfds.png) no-repeat center top 20px; 
+        
+      }
+      &.item2 {
+          background: url(/img/logo_drugsafe.png) no-repeat center top 20px; 
+      }
+
+      .org-title-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 12px;
+
+        .org-title {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          height: 33px;
+          padding: 0 16px;
+          background: #EDF8F8;
+          border-radius: 16.5px;
+          font-size: var(--fs-20);
+          font-style: normal;
+          font-weight: 700;
+          white-space: nowrap;
+        }
+
+        .org-name {
+          font-size: var(--fs-20);
+          font-weight: 700;
+        }
+      }
+
+      .org-desc {
+        margin: 0;
+        padding-left: 4px;
+        font-size: 16px;
+        line-height: 1.6;
+        word-break: keep-all;
+        text-align: center;
+      }
+      @media (max-width: 1024px) { 
+        padding: 80px 20px 30px 20px; 
+        
+        .org-title-group {
+          flex-direction: column;
+          gap: 8px;
+          
+        }
+      }
+      @media (max-width: 768px) { 
+        width: 100%; 
+        padding: 90px 20px 30px 20px;
+      }
+    }
+  }
+
+  .apply-info-row{
+    position: relative;
+    margin:0 0 26px 0;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0%;
+      width: 80px;
+      height: 80px;
+      border-radius: 80px;
+    }
+
+    padding:0 0 0 100px;
+
+    dt{
+      display: inline-block;
+      text-align: center;
+      min-width: 85px; 
+      margin:0 0 10px 0;
+      padding:0 10px;
+      font-size: var(--fs-18);
+      font-weight: 700;
+      color:var(--color-text-2);
+      border:1px solid var(--color-text-2);;
+      border-radius: 15px;
+    }
+    dd{
+      font-size: var(--fs-16);
+      .list-bullet-3 {
+        @include mixins.list-bullet-3;
+        li {
+          font-size: var(--fs-16);
+          line-height: 1.5; 
+        }
+      }
+    }
+
+    &.type-target::before {
+      background: #EDF8F8 url("/img/reliefIntro_ico01.png") no-repeat center center;
+    }
+    &.type-period::before {
+      background: #EDF8F8 url("/img/reliefIntro_ico02.png") no-repeat center center;
+    }
+    &.type-post::before {
+      background: #EDF8F8 url("/img/reliefIntro_ico03.png") no-repeat center center;
+    }
+    &.type-online::before {
+      background: #EDF8F8 url("/img/reliefIntro_ico04.png") no-repeat center center;
+    }
+  }
+ 
+  .location-map{
+    padding:15px;
+    border:1px solid #D8D8D8;
+    border-radius: 8px;
+  
+    .location-details {
+      display: flex;
+      align-items: center;
+      margin:24px 0 0 0;
+
+      .detail-item {
+        display: flex;
+        align-items: center;
+        position: relative;
+        
+        &:not(:first-child) {
+          margin-left: 24px;
+        }
+
+        .label {
+          font-weight: 700;
+          white-space: nowrap;
+          position: relative;
+          padding-right: 12px;
+          margin-right: 12px;
+
+          &::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 12px;
+            background-color: #D8D8D8;
+          }
+        }
+
+        .text {
+          word-break: keep-all;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+
+        .detail-item {
+          width: 100%;
+          margin-left: 0 !important; 
+          
+          .label {
+            min-width: 70px;
+            padding-right: 0;
+            margin-right: 12px;
+
+            &::after {
+              display: block; 
+            }
+          }
+
+          .text {
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+}
+
+

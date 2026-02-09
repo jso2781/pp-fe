@@ -371,6 +371,20 @@ export const screens: ScreenMeta[] = [
     "title": "정보공개 - 업무처리절차",
     "uiType": "cms"
   },
+  {
+    "id": "KIDS-PP-US-DR-01",
+    "title": "피해구제",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-PI-13",
+    "title": "의약품-의료정보 연계분석이란?",
+    "uiType": "cms"
+  },
+  
+
+
+  
   
 
   //내업무 템플릿 예시

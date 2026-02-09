@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import { Box, Button, Typography, TextField, Stack, LinearProgress, Tabs, Tab, FormControlLabel, Checkbox, Radio, RadioGroup, Pagination } from '@mui/material';
 import { useAppSelector } from '@/store/hooks';
 import { useSearchParams } from 'react-router-dom';
@@ -44,7 +44,48 @@ export default function PUB() {
   const handleDeleteFile = (index) => setUploadedFiles(uploadedFiles.filter((_, i) => i !== index));
   const handleDeleteAllFiles = () => setUploadedFiles([]);
 
-  //return <FormTemplate screenId="PUB" title="고객센터 이용약관111" config={config} />
+  // 앵커탭
+  useEffect(() => {
+    const handleAnchorScroll = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const link = target.closest('.category-anchor-tabs .tab-link') as HTMLAnchorElement | null;
+      
+      if (!link) return;
+
+      const targetId = link.getAttribute('href');
+      if (targetId && targetId.startsWith('#')) {
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+          e.preventDefault(); 
+
+          const tabContainer = link.closest('.category-anchor-tabs');
+          if (tabContainer) {
+            const allTabs = tabContainer.querySelectorAll('.tab-link');
+            
+            allTabs.forEach((tab) => {
+              tab.classList.remove('active');
+              tab.setAttribute('aria-selected', 'false');
+            });
+
+            link.classList.add('active');
+            link.setAttribute('aria-selected', 'true');
+          }
+
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }
+    };
+    document.addEventListener('click', handleAnchorScroll);
+    return () => {
+      document.removeEventListener('click', handleAnchorScroll);
+    };
+  }, []);
+
+
   return (
     <ScreenShell screenId="PUB" title="컴포넌트" uiType="page">
 
@@ -71,6 +112,63 @@ export default function PUB() {
                 <Box className="page-content">
                 {/* --- 본문 시작 --- */}
 
+
+
+                  <h3 className="section-title">html 컨텐츠 앵커탭</h3>
+                  <div className="category-anchor-tabs" aria-label="카테고리 이동">
+                    <ul className="tabs-list" role="tablist">
+                      <li className="tab-item" role="none">
+                        <a href="#anchor-sec1" id="tab1" className="tab-link active" role="tab" aria-selected="true" aria-controls="anchor-sec1">사전협의</a>
+                      </li>
+                      <li className="tab-item" role="none">
+                        <a href="#anchor-sec2" id="tab2" className="tab-link" role="tab" aria-selected="false" aria-controls="anchor-sec2">활용결과 등록</a>
+                      </li>
+                      <li className="tab-item" role="none">
+                        <a href="#anchor-sec3" id="tab3" className="tab-link" role="tab" aria-selected="false" aria-controls="anchor-sec3">시스템 이용 문의</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="anchor-contents-area">
+                    <section id="anchor-sec1" className="tab-section" role="tabpanel" tabIndex={0} aria-labelledby="tab1">
+                      <div className="inner-box">
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                      </div>
+                    </section>
+                    <section id="anchor-sec2" className="tab-section" role="tabpanel" tabIndex={0} aria-labelledby="tab2">
+                      <div className="inner-box">
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                      </div>
+                    </section>
+                    <section id="anchor-sec3" className="tab-section" role="tabpanel" tabIndex={0} aria-labelledby="tab3">
+                      <div className="inner-box">
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                      </div>
+                    </section>
+                  </div>
 
                   <h3 className="section-title">탭 라인</h3>
                   {/* 탭라인 스타일 */}
@@ -136,7 +234,7 @@ export default function PUB() {
                     </Box>
                   ))}
 
-
+              
                   <h3 className="section-title">데이터 로딩</h3>
                   <Box className="loading-progress-box">
                     <Typography className="loading-msg-top">
@@ -699,15 +797,11 @@ export default function PUB() {
 
 
                   <h3 className="section-title">버튼 html</h3>  
-                  <button type="button" className="btn-link-html">내부링크 바로가기</button>
+                  <button type="button" className="btn-link-html">버튼 내부링크 바로가기</button>
                   <br/><br/>
-                  <a 
-                    href="#" 
-                    className="btn-link-blank-html"
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    title="바로가기(새 창 열림)"
-                  >
+                  <a href="#" className="btn-link-html" target="_blank">a 내부링크 바로가기</a>
+                  <br/><br/>
+                  <a href="#" className="btn-link-blank-html" target="_blank"  rel="noopener noreferrer" title="바로가기(새 창 열림)">
                      텍스트타입 외부 바로가기
                     <span className="ico-link-blank" aria-hidden="true"></span>
                     <span className="sr-only">(새 창 열림)</span>
@@ -727,23 +821,38 @@ export default function PUB() {
                   
 
                   <br/><br/>
+                  <div className="btn-group-control right">
+                    <button type="button" className="btn_default xsmall">회원가입</button>
+                    <button type="button" className="btn_outline_sub xsmall"><span className="ico-down" aria-hidden="true"></span>민원신청 매뉴얼 다운로드</button>
+                    <button type="button" className="btn_outline_sub xsmall">피해구제 민원신청 바로가기<span className="ico-arr-right" aria-hidden="true"></span></button>
+                  </div>
+                  <br/><br/>
+
+                  <button className="btn_outline_sub xsmall"><span className="ico-down" aria-hidden="true"></span>다운로드</button>
+                  <br/><br/>
+                  <button className="btn_outline_sub xsmall">바로가기<span className="ico-arr-right" aria-hidden="true"></span></button>
+                  <br/><br/>
 
                   <button className="btn_default">버튼</button>
+                  <button className="btn_default xsmall">버튼 xsmall</button>
                   <button className="btn_default small">버튼 small</button>
                   <button className="btn_default large">버튼 large</button>
                   <br/>
 
                   <button className="btn_default_sub">버튼</button>
+                  <button className="btn_default_sub xsmall">버튼 xsmall</button>
                   <button className="btn_default_sub small">버튼 small</button>
                   <button className="btn_default_sub large">버튼 large</button>
                   <br/>
 
                   <button className="btn_outline">버튼</button>
+                  <button className="btn_outline xsmall">버튼 xsmall</button>
                   <button className="btn_outline small">버튼 small</button>
                   <button className="btn_outline large">버튼 large</button>
                   <br/>
 
                   <button className="btn_outline_sub">버튼</button>
+                  <button className="btn_outline_sub xsmall">버튼 xsmall</button>
                   <button className="btn_outline_sub small">버튼 small</button>
                   <button className="btn_outline_sub large">버튼 large</button>
 
@@ -842,6 +951,7 @@ export default function PUB() {
                   <p className="txt-type-1">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
                   <p className="txt-type-1 txt-2">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
                   <p className="txt-type-1 txt-4">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
+                  <p className="txt-type-2">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
                  
                   <h3 className="section-title">텍스트 아이콘타입</h3>
                   <p className="txt-icon-1">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
@@ -859,10 +969,8 @@ export default function PUB() {
 
                   <h3 className="section-title">이미지</h3>
                   <div className="img-switcher">
-                    {/* PC용 이미지 */}
-                    <img src="/img/dadverseKaers_img01.png" alt="" className="responsive-img pc-only"/>
-                    {/* 모바일용 이미지 */}
-                    <img src="/img/dadverseKaers_img01_m.png"  alt="" className="responsive-img mo-only"/>
+                    <img src="/img/dadverseKaers_img01.png" alt="이미지설명" className="responsive-img pc-only"/>
+                    <img src="/img/dadverseKaers_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                   </div>
 
                 
