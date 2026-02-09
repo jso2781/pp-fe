@@ -3048,19 +3048,15 @@
 
     .org-info-box {
       width: calc((100% - 20px) / 2);
-      padding: 90px 35px 35px 35px;
+      padding: 35px 35px 35px 35px;
       background: #FFF;
       border: 1px solid #D8D8D8;
       border-radius: 8px;
 
-      &.item1 {
-          background: url(/img/logo_mfds.png) no-repeat center top 20px; 
-        
+      .org-logo{
+        display: block; text-align: center; margin:0 0 40px 0;
+        img{max-width: 100%;}
       }
-      &.item2 {
-          background: url(/img/logo_drugsafe.png) no-repeat center top 20px; 
-      }
-
       .org-title-group {
         display: flex;
         align-items: center;
@@ -3097,8 +3093,8 @@
         text-align: center;
       }
       @media (max-width: 1024px) { 
-        padding: 80px 20px 30px 20px; 
-        
+        padding:20px;
+        .org-logo{margin:0 0 10px 0;}
         .org-title-group {
           flex-direction: column;
           gap: 8px;
@@ -3107,7 +3103,6 @@
       }
       @media (max-width: 768px) { 
         width: 100%; 
-        padding: 90px 20px 30px 20px;
       }
     }
   }
@@ -3235,4 +3230,50 @@
   }
 }
 
+// 의약품·의료정보 연계분석
+.video-area {
+  width: 100%;
+  max-width: 908px; 
+  margin: 0 auto;
+
+  .video-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 886 / 502; 
+    background-color: #000;
+    overflow: hidden;
+
+    video {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover; // wrapper에 빈 공간 없이 꽉 채움
+    }
+  }
+
+  .video-transcript {
+    margin-top: 15px;
+  }
+
+  @media (max-width: 940px) { 
+    padding: 0 16px; 
+    
+  }
+}
+
+.pageCont-analysis{
+  .org-list {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid #D8D8D8;
+    border-radius: 8px;
+
+    .org-info-box {
+      width: calc((100% - 0px) / 2);
+      min-height:105px;
+      background: #FFF;
+     
+    }
+  }
+}
 

@@ -113,14 +113,16 @@ export default function KIDS_PP_US_DR_01() {
                           <h3 className="section-title">사업 운영체계 및 절차</h3>
                           <div className="section-desc">
                             <div className="org-list">
-                              <div className="org-info-box item1">
+                              <div className="org-info-box">
+                                <span className="org-logo"><img src="/img/logo_mfds.png" alt="식품의약품안전처 로고" /></span>
                                 <div className="org-title-group">
                                   <strong className="org-title">주관기관</strong>
                                   <span className="org-name">식품의약품안전처</span>
                                 </div>
                                 <p className="org-desc">의약품부작용 피해구제 사업관리 및 의약품부작용 심의위원회 운영 등</p>
                               </div>
-                              <div className="org-info-box item2">
+                              <div className="org-info-box">
+                                <span className="org-logo"><img src="/img/logo_drugsafe.png" alt="한국의약품안전관리원 로고" /></span>
                                 <div className="org-title-group">
                                   <strong className="org-title">운영기관</strong>
                                   <span className="org-name">한국의약품안전관리원</span>
