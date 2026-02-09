@@ -381,7 +381,11 @@ export const screens: ScreenMeta[] = [
     "title": "의약품-의료정보 연계분석이란?",
     "uiType": "cms"
   },
-  
+  {
+    "id": "KIDS-PP-US-NO-14",
+    "title": "국민신문고",
+    "uiType": "cms"
+  },
   
 
 
