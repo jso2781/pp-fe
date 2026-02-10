@@ -1,27 +1,40 @@
+/**
+ * 화면ID: KIDS-PP-US-IN-17
+ * 화면명: 클린신고센터
+ * 화면경로: /ko/about/ethics/AboutCleanCenter
+ * 화면설명: 클린신고센터
+ */
 import DepsLocation from '@/components/common/DepsLocation'
 import Lnb from '@/components/common/Lnb'
 import { useAuth } from '@/contexts/AuthContext';
+import { paginationDshstyDclrList } from '@/features/dclr/DshstyDclrSelector';
 import { selectDshstyDclrList } from '@/features/dclr/DshstyDclrThunks';
-import { DshstyDclrListPVO } from '@/features/dclr/DshstyDclrTypes';
+import type { DshstyDclrListPVO, DshstyDclrRVO } from '@/features/dclr/DshstyDclrTypes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { Box, Typography } from '@mui/material'
-import { useEffect } from 'react';
+import { Box, Link, Pagination, Stack, Typography } from '@mui/material'
+import { useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function AboutCleanCenter() {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { list } = useAppSelector(s => s.dclr);
+  const [page, setPage] = useState<number>(1);
+  const { list, totalCount, loading } = useAppSelector(s => s.dclr);
+  const paginaList = useAppSelector(s => paginationDshstyDclrList(s, page));
   const navigate = useNavigate();
 
   const currentUrl = location.pathname;
+
+  const totalPages = Math.max(1, Math.ceil((totalCount || 1) / 10));
 
   useEffect(() => {
     if(true) {//TODO Any-Id 인증 여부
       dispatch(selectDshstyDclrList({} as DshstyDclrListPVO));
     }
   }, []);
+  
 
   const handleWriteForm = () => {
     if(true){
@@ -89,8 +102,7 @@ export default function AboutCleanCenter() {
                       <button className="btn_outline_sub small" onClick={handleWriteForm}>신고서 작성</button>
                     </div>
                   </div>
-                  {JSON.stringify(list)}
-                  {isAuthenticated && // (isAuthenticated || Any-Id 인증여부) TODO Any-Id 인증여부 확인 후 추가 필요
+                  {isAuthenticated || true && // (isAuthenticated || Any-Id 인증여부) TODO Any-Id 인증여부 확인 후 추가 필요
                     <div className="base-table-container">
                       <div className="table-responsive has-scroll">
                         <table className="base-table">
@@ -102,39 +114,66 @@ export default function AboutCleanCenter() {
                             <col style={{ width: '20%' }} />
                             <col style={{ width: '20%' }} />
                           </colgroup>
-                          <thead>
-                            <tr>
-                              <th scope="col">번호</th>
-                              <th scope="col">제목</th>
-                              <th scope="col">진행상태</th>
-                              <th scope="col">등록일시</th>
-                              <th scope="col">처리일시</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <th>2</th>
-                              <td>클린한 관리원이 되기 위해 작성</td>
-                              <td>접수완료</td>
-                              <td>2026-03-31 12:34</td>
-                              <td>2026-04-02 12:34</td>
-                            </tr>
-                            <tr>
-                              <th>1</th>
-                              <td>클린한 관리원이 되기 위해 작성</td>
-                              <td>접수완료</td>
-                              <td>2026-03-31 12:34</td>
-                              <td>2026-04-02 12:34</td>
-                            </tr>
-                            <tr>
-                              <td colSpan={5}>
-                                <div className="no-data">
-                                  <p>등록하신 클린신고서가 없습니다.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
+                          {list.length > 0
+                          ?
+                            <>
+                              <thead>
+                                <tr>
+                                  <th scope="col">번호</th>
+                                  <th scope="col">제목</th>
+                                  <th scope="col">진행상태</th>
+                                  <th scope="col">등록일시</th>
+                                  <th scope="col">처리일시</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {paginaList.map((dshstyDclrRVO: DshstyDclrRVO, i: number) => (
+                                  <tr key={`clean-${i}`}>
+                                    <td>{(list.length - i) - ((page - 1) * 10)}</td>
+                                    <td>
+                                      <Link
+                                        component={RouterLink}
+                                        to={`/ko/about/ethics/AboutCleanDetail`}
+                                        color="inherit"
+                                        aria-label={`${dshstyDclrRVO.dclrTtlNm} 상세보기`}
+                                        underline="hover"
+                                        sx={{ 
+                                          display: 'inline-block',
+                                          width: '100%',
+                                          fontWeight: 500,
+                                          cursor: 'pointer'
+                                        }}
+                                        state={dshstyDclrRVO}
+                                      >
+                                        {dshstyDclrRVO.dclrTtlNm}
+                                      </Link>
+                                    </td>
+                                    <td>진행상태?</td>
+                                    <td>{dshstyDclrRVO.regDt}</td>
+                                    <td>처리일시?</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </>
+                          :
+                            <tbody>
+                              <tr>
+                                <td colSpan={5}>
+                                  <div className="no-data">
+                                    <p>등록하신 클린신고서가 없습니다.</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          }
                         </table>
+                        <Stack className="paging-wrap">
+                          <Pagination
+                            count={totalPages}
+                            page={page}
+                            onChange={(_, page) => setPage(page)}
+                          />
+                        </Stack>
                       </div>
                     </div>
                   }
@@ -148,3 +187,5 @@ export default function AboutCleanCenter() {
     </Box>
   )
 }
+
+
