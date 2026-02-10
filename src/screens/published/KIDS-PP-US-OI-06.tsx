@@ -40,7 +40,7 @@ export default function KIDS_PP_US_OI_06() {
                 <Box className="page-content">
                 {/* --- 본문 시작 --- */}
 
-                  <section className="pageCont-AdverseIntro">
+                  <section className="pageCont-PublicData">
                     <div className="info-summary-box">
                       <h3 className="info-summary-box__title">공공데이터 개방이란?</h3>
                       <div className="info-summary-box__desc">
