@@ -307,7 +307,12 @@ export const muiTheme = createTheme({
           paddingTop: '0 !important',
           paddingBottom: '0 !important',
           cursor: 'pointer !important',
-          backgroundColor: '#ffffff'
+          backgroundColor: '#ffffff',
+          '&.Mui-disabled': {
+            backgroundColor: '#CDD1D5 !important', 
+            color: '#8A949E !important',   
+            cursor: 'not-allowed !important', 
+          },
         },
         icon: {
           top: 'calc(50% - 12px)', 
