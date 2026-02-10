@@ -12,7 +12,7 @@ import cmsReducer from '@/features/cms/CmsSlice'
 import exprtTaskReducer from '@/features/exprt/ExprtTaskSlice'
 import exprtApprovalReducer from '@/features/exprt/ExprtApprovalSlice'
 import DshstyDclrReucer from '@/features/dclr/DshstyDclrSlice'
-
+import DurSearchRoomReducer from '@/features/dur/DurSearchRoomSlice'
 
 const rootReducer = combineReducers({
   ui: uiReducer,
@@ -27,7 +27,8 @@ const rootReducer = combineReducers({
   cms: cmsReducer, // CMS
   exprtTask: exprtTaskReducer, // 전문가내업무관리
   exprtApproval: exprtApprovalReducer, // 전문가업무신청관리
-  dclr: DshstyDclrReucer // 부정신고
+  dclr: DshstyDclrReucer, // 부정신고,
+  durSearchRoom: DurSearchRoomReducer // DUR 정보 검색
 })
 
 export default rootReducer

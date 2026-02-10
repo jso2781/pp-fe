@@ -11,14 +11,22 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import DgstfnExnm from '@/components/common/DgstfnExnm';
 import ContactArea from '@/components/common/ContactArea';
+import { selectDurSearchRoomList } from '@/features/dur/DurSearchRoomThunks';
+import { DurSearchRoomRVO } from '@/features/dur/DurSearchRoomTypes';
 
 export default function DurSearchRoom(){
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
   
-  const { current } = useAppSelector((s) => s.cms)
-  // const cleanHtml = DOMPurify.sanitize(current?.contsCn ?? '');
-  // console.log('CmsPage cms cleanHtml=', cleanHtml);
+  const { list, totalCount, totalPages, loading } = useAppSelector((s) => s.durSearchRoom);
+
+  const [searchCnd, setSearchCnd] = useState<string>(searchParams.get('searchCnd') || 'igrdNm');
+  const [searchWrd, setSearchWrd] = useState<string>(searchParams.get('searchWrd') || '');
+
+  // 페이징
+  const [pageNum, setPageNum] = useState(1);
+  const [pageSize, setPageSize] = useState(10) // 화면에 페이지 사이즈 설정이 필요시 setPageSize 활용
 
   const { getMenuInfo } = useAuth();
   const menuInfo = getMenuInfo(location.pathname);
@@ -46,34 +54,43 @@ export default function DurSearchRoom(){
   const contactPersonNm = menuInfo?.menuPicFlnm ?? null;
   const contactPhoneNum = menuInfo?.encptPicTelno ?? null;
 
-  // CMS 식별키(콘텐츠일련번호, contsSn) 추출 (예: /cms/CmsPage/cms001)
-  // const match = location.pathname.match(/\/cms\/CmsPage\/([^/]+)/);
-  // const contsSN1 = match?.[1] as string;
-  // const { contsSn } = useParams<{ contsSn: string }>();
-
   // Lnb 랜더링용
   const currentUrl = location.pathname;
 
-  // useEffect(() => {
-  //   if (contsSn) dispatch(getCms({contsSn}))
-  // }, [dispatch, contsSn])
+  // 스크롤 상단 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pageNum]);
 
-  // --- lnb ---
-  const sideItems = useMemo(() => [
-    { 
-      key: '#', 
-      label: 'DUR 정보',
-      children: [
-        { key: '#', label: 'DUR 정보검색' }
-      ] 
-    }
-  ], []);
+  const rows = useMemo(() => {
+    const arr = Array.isArray(list) && list.length > 0 ? list : [];
+    return arr.map((n: DurSearchRoomRVO, idx: number) => {
+      return {
+        id: idx,
+        igrdNm: n.igrdNm ?? '',
+        prdctNm: n.prdctNm ?? '',
+        concList: n.concList ?? [],
+        ageList: n.ageList ?? [],
+        prgntList: n.prgntList ?? [],
+        cpctList: n.cpctList ?? [],
+        dosageList: n.dosageList ?? [],
+        eftgrpList: n.eftgrpList ?? [],
+        snctzList: n.snctzList ?? [],
+        nurswList: n.nurswList ?? []
+      };
+    });
+  }, [list]);
 
-  //페이징
-  const [searchParams, setSearchParams] = useSearchParams();
-  const pageIndex = Number(searchParams.get('page') || 1);
-  const { list, totalCount } = useAppSelector((s) => s.pst);
-  const totalPages = Math.max(1, Math.ceil((totalCount || 1) / 10));
+  useEffect(() => {
+    if((searchWrd ?? '').trim().length < 2)return;
+    dispatch(selectDurSearchRoomList({ pageNum, pageSize, igrdNm: searchCnd === 'igrdNm' ? searchWrd : undefined, prdctNm: searchCnd === 'prdctNm' ? searchWrd : undefined }));
+  }, [dispatch, pageNum]);
+
+  const onSearch = () => {
+    if((searchWrd ?? '').trim().length < 2)return;
+    setPageNum(1);
+    dispatch(selectDurSearchRoomList({ pageNum: 1, pageSize, igrdNm: searchCnd === 'igrdNm' ? searchWrd : undefined, prdctNm: searchCnd === 'prdctNm' ? searchWrd : undefined }));
+  };
 
   // 탭
   const searchCount = { //퍼블테스트용
@@ -181,23 +198,37 @@ export default function DurSearchRoom(){
                         <InputLabel id="search-condition-label" className="sr-only">검색조건</InputLabel>
                         <Select 
                           size="large" 
-                          //value={searchCnd} 
+                          value={searchCnd} 
                           labelId="search-condition-label" 
-                          //onChange={(e) => setSearchCnd(String(e.target.value))}
+                          onChange={(e) => setSearchCnd(String(e.target.value))}
                         >
-                          <MenuItem value="title">성분명(영)</MenuItem>
-                          <MenuItem value="content">제품명(한)</MenuItem>
+                          <MenuItem value="igrdNm">성분명(영)</MenuItem>
+                          <MenuItem value="prdctNm">제품명(한)</MenuItem>
                         </Select>
                       </FormControl>
                       <Box className="search-input-group">
                         <TextField 
                           size="large" 
                           placeholder="검색어 입력" 
-                          //value={searchWrd} 
-                          //onChange={(e) => setSearchWrd(e.target.value)} 
+                          value={searchWrd} 
+                          onChange={(e) => setSearchWrd(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              onSearch();
+                            }
+                          }}
                           sx={{ flexGrow: 1 }}
                         />
-                        <Button variant="contained" size="large" className="btn-search">검색</Button>
+                        <Button
+                          type="button"
+                          variant="contained"
+                          size="large"
+                          className="btn-search"
+                          disabled={(searchWrd ?? '').trim().length < 2}
+                          onClick={onSearch}
+                        >
+                          검색
+                        </Button>
                       </Box>
                     </Box>
                   </Box>
@@ -215,48 +246,61 @@ export default function DurSearchRoom(){
                         </colgroup>
                         <thead>
                           <tr>
-                            <th scope="col">성분명(영)</th>
+                            <th scope="col">{searchCnd === 'igrdNm' ? '성분명(영)' : '제품명(한)'}</th>
                             <th scope="col">DUR 유형</th>
                             <th scope="col">상세보기</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th scope="row">haloperidol</th>
-                            <td>
-                              <Box className="dur-icons">
-                                <img src="/img/ico_dur_01.png" alt="병용금기 성분 아이콘" />
-                                <img src="/img/ico_dur_02.png" alt="특정연령대 금기 성분 아이콘" />
-                                <img src="/img/ico_dur_03.png" alt="임부금기 성분 아이콘" />
-                                <img src="/img/ico_dur_04.png" alt="용량주의 성분 아이콘" />
-                                <img src="/img/ico_dur_05.png" alt="투여기간주의 성분 아이콘" />
-                                <img src="/img/ico_dur_06.png" alt="효능군중복주의 성분 아이콘" />
-                                <img src="/img/ico_dur_07.png" alt="노인주의 성분 아이콘" />
-                                <img src="/img/ico_dur_08.png" alt="수유부주의 성분 아이콘" />
-                                <img src="/img/ico_dur_09.png" alt="분할주의 의약품 아이콘" />
-                              </Box>
-                            </td>
-                            <td>
-                              <Button 
-                                size="xsmall"
-                                variant="outlined" 
-                                className="btn-detail" 
-                                endIcon={<ChevronRightIcon />}
-                              >
-                                상세보기
-                              </Button>
-                            </td>
-                          </tr>
+                          {
+                            rows.length > 0 ? (
+                              rows.map((row) => (
+                                <tr key={row.id}>
+                                  <th scope="row">{searchCnd === 'igrdNm' ? row.igrdNm : row.prdctNm}</th>
+                                  <td>
+                                    <Box className="dur-icons">
+                                      {row.concList.length > 0 ? <img src="/img/ico_dur_01.png" alt="병용금기 성분 아이콘" /> : ''}
+                                      {row.ageList.length > 0 ? <img src="/img/ico_dur_02.png" alt="특정연령대 금기 성분 아이콘" /> : ''}
+                                      {row.prgntList.length > 0 ? <img src="/img/ico_dur_03.png" alt="임부금기 성분 아이콘" /> : ''}
+                                      {row.cpctList.length > 0 ? <img src="/img/ico_dur_04.png" alt="용량주의 성분 아이콘" /> : ''}
+                                      {row.dosageList.length > 0 ? <img src="/img/ico_dur_05.png" alt="투여기간주의 성분 아이콘" /> : ''}
+                                      {row.eftgrpList.length > 0 ? <img src="/img/ico_dur_06.png" alt="효능군중복주의 성분 아이콘" /> : ''}
+                                      {row.snctzList.length > 0 ? <img src="/img/ico_dur_07.png" alt="노인주의 성분 아이콘" /> : ''}
+                                      {row.nurswList.length > 0 ? <img src="/img/ico_dur_08.png" alt="수유부주의 성분 아이콘" /> : ''}
+                                    </Box>
+                                  </td>
+                                  <td>
+                                    <Button 
+                                      size="xsmall"
+                                      variant="outlined" 
+                                      className="btn-detail" 
+                                      endIcon={<ChevronRightIcon />}
+                                    >
+                                      {t('detail')}
+                                    </Button>
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td colSpan={3} className="no-data">검색결과가 없습니다.</td>
+                              </tr>
+                            )
+                          }
                         </tbody>
                       </table>
                     </Box>
                   </Box>
                   <Stack className="paging-wrap">
-                    <Pagination count={totalPages} page={pageIndex} onChange={(_, p) => {
-                      const next = new URLSearchParams(searchParams);
-                      next.set('page', String(p));
-                      setSearchParams(next);
-                    }} />
+                    <Pagination
+                      page={pageNum}
+                      count={totalPages ?? 0}
+                      onChange={(_: React.ChangeEvent<unknown>, page: number) => {
+                        setPageNum(page)
+                      }}
+                      showFirstButton
+                      showLastButton
+                    />
                   </Stack>
 
                   {/* DUR 정보 검색 결과 상세보기 */}
