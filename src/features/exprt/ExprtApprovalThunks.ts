@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectExprtApprovalListApiPath, selectExprtApprovalApiPath, selectTaskAuthListApiPath, updateExprtApprovalApiPath } from '@/api/exprt/ExprtApprovalApiPaths'
+import { selectExprtApprovalListApiPath, selectExprtApprovalApiPath, selectTaskAuthListApiPath, updateExprtApprovalApiPath, withdrawExprtApprovalApiPath } from '@/api/exprt/ExprtApprovalApiPaths'
 import { ExprtApprovalPVO, ExprtApprovalRVO, ExprtApprovalDetailRVO, ExprtApprovalListRVO, ExprtTaskAuthRVO, ExprtApprovalUVO } from './ExprtApprovalTypes'
 
 /**
@@ -80,6 +80,24 @@ export const updateExprtApproval = createAsyncThunk<string, ExprtApprovalUVO | u
     catch (e) {
       console.error("ExprtApprovalThunks updateExprtApproval error!!", e);
       return rejectWithValue('ExprtApprovalThunks updateExprtApproval error!!');
+    }
+  }
+)
+
+/**
+ * 대국민포털_전문가업무신청관리 소속 전문가 회원 탈퇴 처리
+ */
+export const withdrawExprtApproval = createAsyncThunk<string, ExprtApprovalUVO | undefined, { rejectValue: string }>(
+  '/exprt/approval/withdraw',
+  async (params: ExprtApprovalUVO = {}, { rejectWithValue }) => {
+    try {
+      const res = await https.post(withdrawExprtApprovalApiPath(), params);
+      const payload = res.data?.data?.result;
+      return payload;
+    }
+    catch (e) {
+      console.error("ExprtApprovalThunks withdrawExprtApproval error!!", e);
+      return rejectWithValue('ExprtApprovalThunks withdrawExprtApproval error!!');
     }
   }
 )

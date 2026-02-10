@@ -8,7 +8,8 @@ import DepsLocation from '@/components/common/DepsLocation';
 import CollapsibleSideNav from '@/components/navigation/CollapsibleSideNav';
 import { useDialog } from '@/contexts/DialogContext';
 import { downloadAtch } from '@/features/atch/AtchThunks';
-import { selectExprtApproval } from '@/features/exprt/ExprtApprovalThunks';
+import { selectExprtApproval, withdrawExprtApproval } from '@/features/exprt/ExprtApprovalThunks';
+import { ExprtApprovalUVO } from '@/features/exprt/ExprtApprovalTypes';
 import { selectExprtMenus } from '@/features/exprt/ExprtTaskThunks';
 import { getLangFromPathname, langPath } from '@/routes/lang';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -53,6 +54,51 @@ export default function ExpertApprovalDetail() {
   useEffect(() => {
     dispatch(selectExprtApproval({ exprtTaskSn }));
   }, [dispatch, exprtTaskSn]);  
+
+
+  // 대국민포털_전문가내업무관리 소속 전문가 회원 탈퇴 처리
+  const handleWithdrawExprtApproval = () => {
+    showDialogBackdrop({
+      message: '해당 회원을 탈퇴 처리하시겠습니까?',
+      title: '전문가 회원 탈퇴',
+      type: 'confirm',
+      confirmText: '확인',
+      cancelText: '취소',
+      onConfirm: async () => {
+        try {
+          const newPVO: ExprtApprovalUVO = {
+            exprtTaskSn,
+            exprtAprvSttsCode: 'C',
+            exprtNo: current?.exprtNo,
+            mbrId: auth.userInfo?.mbrId || '',
+            mbrNo: current?.mbrNo,
+            taskAprvSttsCode: 'C',
+          };
+          
+          const result = await dispatch(withdrawExprtApproval(newPVO)).unwrap();
+          if (result === 'SUCCESS') {
+            showDialogBackdrop({
+              message: '탈퇴 처리되었습니다.',
+              title: '전문가 회원 탈퇴 완료',
+              type: 'alert',
+              confirmText: '확인',
+              onConfirm: () => {
+                navigate(`/ko/expert/ExpertApproval`);
+              },
+            })
+          }
+        } catch (error) {
+          console.error('전문가 회원 탈퇴 실패:', error);
+          showDialogBackdrop({
+            message: '전문가 회원 탈퇴에 실패했습니다. 다시 시도해주세요.',
+            title: '탈퇴 실패',
+            type: 'alert',
+            confirmText: '확인',
+          });
+        }
+      },
+    })
+  }  
 
   return (
     <Box className={`page-layout ${collapsed ? 'is-collapsed' : ''}`}>
@@ -218,7 +264,7 @@ export default function ExpertApprovalDetail() {
                     </Box>
                     <Box className="right-group">
                       {current?.exprtAprvSttsCode === 'A' && (
-                      <Button variant="outlined04" size="large" onClick={() => alert("탈퇴 기능 구현 예정")}>
+                      <Button variant="outlined04" size="large" onClick={handleWithdrawExprtApproval}>
                         전문가 탈퇴
                       </Button>
                       )}

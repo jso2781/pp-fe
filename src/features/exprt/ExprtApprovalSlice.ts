@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectExprtApproval, selectExprtApprovalList, selectTaskAuthList, updateExprtApproval } from './ExprtApprovalThunks'
+import { selectExprtApproval, selectExprtApprovalList, selectTaskAuthList, updateExprtApproval, withdrawExprtApproval } from './ExprtApprovalThunks'
 import { ExprtApprovalRVO, ExprtTaskAuthRVO } from './ExprtApprovalTypes'
 
 /**
@@ -91,6 +91,18 @@ const ExprtApprovalSlice = createSlice({
       .addCase(updateExprtApproval.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) || action.error?.message || 'Failed to update approval status';
+      })      
+      .addCase(withdrawExprtApproval.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(withdrawExprtApproval.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(withdrawExprtApproval.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || action.error?.message || 'Failed to withdraw approval';
       })      
   }
 });
