@@ -1155,7 +1155,7 @@
       padding: 7px;
       text-align: center;
       border: 1px solid #B9B9B9;
-      word-break: break-word;
+      word-break: keep-all;;
       word-wrap: break-word;
       white-space: normal; 
     }
@@ -3363,6 +3363,40 @@
       @media (max-width: 768px) { 
         .btn_default{width:100%;}
       }
+    }
+  }
+}
+
+// 의견제안
+.suggestion-section {
+  margin-top: 20px;
+  margin-bottom: 40px;
+
+  .suggestion-field-set {
+    display: flex;
+    gap: 10px; 
+    align-items: stretch; 
+
+    .suggestion-input {
+      flex: 1; 
+      min-height: 80px;
+      padding: 12px 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      resize: none; 
+      font-family: inherit;
+
+      &:focus {
+        border-color: #087C80;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(8, 124, 128, 0.1);
+      }
+    }
+
+    button {
+      min-width: 100px;
+      min-height: auto;
     }
   }
 }

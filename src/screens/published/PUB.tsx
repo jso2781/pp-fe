@@ -169,9 +169,8 @@ export default function PUB() {
                       </div>
                     </section>
                   </div>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">탭 라인</h3>
-                  {/* 탭라인 스타일 */}
                   <Box className="category-tabs" role="navigation" aria-label="기본 카테고리 선택">
                     <Tabs
                       value={activeCategory} 
@@ -191,10 +190,8 @@ export default function PUB() {
                       ))}
                     </Tabs>
                   </Box>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">탭 박스</h3>
-
-                  {/* 탭박스 스타일 */}
                   <Box className="category-tabs box-variant" role="navigation" aria-label="기본 카테고리 선택">
                     <Tabs
                       value={activeCategory} 
@@ -233,8 +230,7 @@ export default function PUB() {
                       )}
                     </Box>
                   ))}
-
-              
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">데이터 로딩</h3>
                   <Box className="loading-progress-box">
                     <Typography className="loading-msg-top">
@@ -245,13 +241,12 @@ export default function PUB() {
                       잠시만 기다려 주세요.
                     </Typography>
                   </Box>
-
-                  <h3 className="section-title">테이블</h3>
+                  {/* ------------------------------------------------------------------------------------------------ */}
+                  <h3 className="section-title">기본 테이블</h3>
                   <Box className="base-table-container">
                     <Box className="base-table-meta">
                       <p className="update-date">(2025.07.14 기준)</p>
                     </Box>
-                    
                     <Box className="table-responsive">
                       <table className="base-table">
                         <caption className="sr-only">테이블제목</caption>
@@ -289,7 +284,7 @@ export default function PUB() {
                       </table>
                     </Box>
                   </Box>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">테이블 type-2</h3>
                   <Box className="base-table-container">
                     <Box className="table-responsive">
@@ -324,7 +319,7 @@ export default function PUB() {
                       </table>
                     </Box>
                   </Box>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">테이블 모바일 스크롤 (가로)</h3>
                   <Box className="base-table-container">
                     <Box className="table-responsive has-scroll">
@@ -359,8 +354,7 @@ export default function PUB() {
                       </table>
                     </Box>
                   </Box>
-
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">테이블 모바일 스크롤 (세로)</h3>
                   <Box className="base-table-container">
                     <Box className="table-responsive has-vscroll">
@@ -405,13 +399,21 @@ export default function PUB() {
                       </table>
                     </Box>
                   </Box>
-
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">데이터없을경우</h3>
                   <Box className="no-data">
                     <p>게시물이없습니다.</p>
                   </Box>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
+                  <h3 className="section-title">페이징</h3>
+                  <Stack className="paging-wrap">
+                    <Pagination count={totalPages} page={pageIndex} onChange={(_, p) => {
+                      const next = new URLSearchParams(searchParams);
+                      next.set('page', String(p));
+                      setSearchParams(next);
+                    }} />
+                  </Stack>
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">스위치</h3>
                   <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
                     <BaseSwitch.Root
@@ -425,7 +427,7 @@ export default function PUB() {
                       {isCheck ? '사용 중' : '미사용'}
                     </Typography>
                   </Stack>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">체크박스,라디오</h3>
                   {/* 체크박스 가로형 */}
                   <Box className="form-item-row">
@@ -450,7 +452,6 @@ export default function PUB() {
                       </Box>
                     </Box>
                   </Box>
-
                   {/* 체크박스 세로형 */}
                   <Box className="form-item-row-vertical">
                     <Typography className="label">
@@ -474,7 +475,6 @@ export default function PUB() {
                       </Box>
                     </Box>
                   </Box>
-
                   {/* 라디오 가로형 */}
                   <Box className="form-item-row">
                     <Typography className="label">
@@ -500,7 +500,6 @@ export default function PUB() {
                       </Box>
                     </RadioGroup>
                   </Box>
-
                   {/* 라디오 세로형 */}
                   <Box className="form-item-row-vertical">
                     <Typography className="label">
@@ -526,7 +525,7 @@ export default function PUB() {
                       </Box>
                     </RadioGroup>
                   </Box>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">폼</h3>
                   <Box className="bordered-box">
                     <Box component="form" noValidate>
@@ -559,7 +558,6 @@ export default function PUB() {
                             }}
                           />
                         </Box>
-
                         <Box className="form-item">
                           <Typography component="label" htmlFor="loginId" className="label">
                             아이디
@@ -629,17 +627,14 @@ export default function PUB() {
                             />
                           </Box>
                         </Box>
-
                         <Box className="form-item">
                           <Typography component="label" htmlFor="reportMotive" className="label">
                             부정행위를 알게 된 계기 <Box component="span" className="optional">(선택)</Box>
                           </Typography>
-                          
                           {/* 플레이스홀더 대신 가이드 텍스트 */}
                           <Typography variant="caption" sx={{ color: '#8A949E', display: 'block', mb: 1, lineHeight: 1.4 }}>
                             * 알게 된 계기, 일시, 장소 등을 최대한 상세히 작성해 주시면 처리에 도움이 됩니다.
                           </Typography>
-
                           <TextField
                             id="reportMotive"
                             placeholder="내용을 입력하세요."
@@ -648,24 +643,18 @@ export default function PUB() {
                             fullWidth
                           />
                         </Box>
-
                       </Box>
                     </Box>
                   </Box>
-
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">버튼</h3>
-
                   <Button variant="contained">기본버튼 contained</Button>
                   <Button variant="contained02">기본버튼 contained02</Button>
 
-                  <br/><br/> 
-                  
                   <Button variant="outlined">라인버튼 outlined</Button>
                   <Button variant="outlined02">라인버튼 outlined02</Button>
                   <Button variant="outlined03">라인버튼 outlined02</Button>
                   <Button variant="outlined04">라인버튼 outlined04</Button>
-
 
                   <h3 className="section-title">버튼 사이즈</h3>
                   <Button variant="contained" size="xsmall">xsmall</Button>
@@ -673,10 +662,7 @@ export default function PUB() {
                   <Button variant="contained" size="medium">medium</Button>
                   <Button variant="contained" size="large">large</Button>
 
-
-                  {/* <Button variant="outlined" className="btn-outline-02">btn-outline-02</Button> */}
-                  
-                  <br/><br/>             
+                  <h3 className="section-title">버튼 종류</h3>         
                   <Button 
                     variant="text" 
                     className="btn-link" 
@@ -701,10 +687,8 @@ export default function PUB() {
                   >
                     다운로드
                   </Button>
-
-
-                    
-                  <h3 className="section-title">하단버튼</h3>
+                  {/* ------------------------------------------------------------------------------------------------ */}
+                  <h3 className="section-title">게시판 하단버튼</h3>
                   <Box className="btn-group">
                     <Button variant="contained02" size="large">
                       목록
@@ -799,9 +783,38 @@ export default function PUB() {
                       </Box>
                     )}
                   </Box>
+                  {/* ------------------------------------------------------------------------------------------------ */}
+                  <br/><br/>
+                  <h3 className="section-title">버튼 CMS html 사이즈</h3> 
+                  <button className="btn_default">버튼</button>
+                  <button className="btn_default xsmall">버튼 xsmall</button>
+                  <button className="btn_default small">버튼 small</button>
+                  <button className="btn_default large">버튼 large</button>
+                  <br/>
+                  <button className="btn_default_sub">버튼</button>
+                  <button className="btn_default_sub xsmall">버튼 xsmall</button>
+                  <button className="btn_default_sub small">버튼 small</button>
+                  <button className="btn_default_sub large">버튼 large</button>
+                  <br/>
+                  <button className="btn_outline">버튼</button>
+                  <button className="btn_outline xsmall">버튼 xsmall</button>
+                  <button className="btn_outline small">버튼 small</button>
+                  <button className="btn_outline large">버튼 large</button>
+                  <br/>
+                  <button className="btn_outline_sub">버튼</button>
+                  <button className="btn_outline_sub xsmall">버튼 xsmall</button>
+                  <button className="btn_outline_sub small">버튼 small</button>
+                  <button className="btn_outline_sub large">버튼 large</button>
 
-
-                  <h3 className="section-title">버튼 html</h3>  
+                  {/* ------------------------------------------------------------------------------------------------ */}
+                  <h3 className="section-title">버튼 CMS html 컨트롤 (클래스 - center, right)</h3> 
+                  <div className="btn-group-control right">
+                    <button type="button" className="btn_default xsmall">회원가입</button>
+                    <button type="button" className="btn_outline_sub xsmall"><span className="ico-down" aria-hidden="true"></span>민원신청 매뉴얼 다운로드</button>
+                    <button type="button" className="btn_outline_sub xsmall">피해구제 민원신청 바로가기<span className="ico-arr-right" aria-hidden="true"></span></button>
+                  </div>
+                  {/* ------------------------------------------------------------------------------------------------ */}
+                  <h3 className="section-title">버튼 CMS html</h3>  
                   <button type="button" className="btn-link-html">버튼 내부링크 바로가기</button>
                   <br/><br/>
                   <a href="#" className="btn-link-html" target="_blank">a 내부링크 바로가기</a>
@@ -823,83 +836,37 @@ export default function PUB() {
                     <span className="ico-link" aria-hidden="true"></span>
                     <span className="sr-only">(새 창 열림)</span>
                   </a>
-                  
-
                   <br/><br/>
-                  <div className="btn-group-control right">
-                    <button type="button" className="btn_default xsmall">회원가입</button>
-                    <button type="button" className="btn_outline_sub xsmall"><span className="ico-down" aria-hidden="true"></span>민원신청 매뉴얼 다운로드</button>
-                    <button type="button" className="btn_outline_sub xsmall">피해구제 민원신청 바로가기<span className="ico-arr-right" aria-hidden="true"></span></button>
-                  </div>
-                  <br/><br/>
-
                   <button className="btn_outline_sub xsmall"><span className="ico-down" aria-hidden="true"></span>다운로드</button>
                   <br/><br/>
                   <button className="btn_outline_sub xsmall">바로가기<span className="ico-arr-right" aria-hidden="true"></span></button>
                   <br/><br/>
-
-                  <button className="btn_default">버튼</button>
-                  <button className="btn_default xsmall">버튼 xsmall</button>
-                  <button className="btn_default small">버튼 small</button>
-                  <button className="btn_default large">버튼 large</button>
-                  <br/>
-
-                  <button className="btn_default_sub">버튼</button>
-                  <button className="btn_default_sub xsmall">버튼 xsmall</button>
-                  <button className="btn_default_sub small">버튼 small</button>
-                  <button className="btn_default_sub large">버튼 large</button>
-                  <br/>
-
-                  <button className="btn_outline">버튼</button>
-                  <button className="btn_outline xsmall">버튼 xsmall</button>
-                  <button className="btn_outline small">버튼 small</button>
-                  <button className="btn_outline large">버튼 large</button>
-                  <br/>
-
-                  <button className="btn_outline_sub">버튼</button>
-                  <button className="btn_outline_sub xsmall">버튼 xsmall</button>
-                  <button className="btn_outline_sub small">버튼 small</button>
-                  <button className="btn_outline_sub large">버튼 large</button>
-
-
-                  <h3 className="section-title">페이징</h3>
-                  <Stack className="paging-wrap">
-                    <Pagination count={totalPages} page={pageIndex} onChange={(_, p) => {
-                      const next = new URLSearchParams(searchParams);
-                      next.set('page', String(p));
-                      setSearchParams(next);
-                    }} />
-                  </Stack>
-
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">타이틀아래 텍스트 구성</h3>
                   <div className="section-desc">
                     <p>의약품은 시판 전 동물시험에 의한 전임상시험과 사람에 대한 임상시험을 거쳐 시판 허가를 받게 됩니다.</p>
                     <p>이런한 임상시험은 관찰기간이 제한되고, 한정된 연구대상자를 대상으로 하기 때문에 모든 약물이상반응을 파악하는 것은 불가능합니다.</p>
                     <p>따라서 시판 후 약물감시는 대단히 중요하며, 의약품 사용시 나타나는 각종 이상사례를 수집·평가하여 안전대책을 강구함으로써 국민의 안전한 의약품 사용을 도모할 수 있습니다.</p>
                   </div>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">리스트 블릿</h3>
                   <ul className="list-bullet">
                     <li>개인정보 보호를 위해 비밀번호 5회 이상 오류 시, 비밀번호 재설정이 필요합니다.</li>
                     <li>비밀번호는 주기적(3개월)으로 변경하시고, 서비스 이용 후 반드시 로그아웃 하시기 바랍니다.</li>
                     <li>로그인 후 60분 동안 미동작 시 자동으로 로그아웃 됩니다.</li>
                   </ul>
-
                   <br></br>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <ul className="list-bullet-2">
                       <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
                       <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
                   </ul>
-
                   <br></br>
-
                   <ul className="list-bullet-3">
                       <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
                       <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
                   </ul>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">리스트 넘버</h3>
                   <ul className="num-list">
                     <li>
@@ -915,7 +882,7 @@ export default function PUB() {
                       <p className="txt">사망을 초래하거나 생명을 위협하는 사례</p>
                     </li>
                   </ul>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">dl 리스트</h3>
                   <dl className="list-definition">
                     <dt>제조·수입업체</dt>
@@ -931,9 +898,7 @@ export default function PUB() {
                       <p>3) 자료 추출 및 제공</p>
                     </dd>
                   </dl>
-
                   <br/>
-
                   <dl className="list-definition">
                     <dt>규정 및 신청방법 문의</dt>
                     <dd>
@@ -950,7 +915,7 @@ export default function PUB() {
                       </ul>
                     </dd>
                   </dl>
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">dl 넘버리스트</h3>
                   <dl className="list-definition-num">
                     <dt>직접 자료수집</dt>
@@ -961,9 +926,7 @@ export default function PUB() {
                       </ul>
                     </dd>
                   </dl>
-
                   <br/>
-
                   <dl className="list-definition-paren">
                     <dt>직접 자료수집</dt>
                     <dd>
@@ -973,35 +936,25 @@ export default function PUB() {
                       </ul>
                     </dd>
                   </dl>
-
-
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">텍스트타입</h3>
                   <p className="txt-type-1">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
                   <p className="txt-type-1 txt-2">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
                   <p className="txt-type-1 txt-4">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
                   <p className="txt-type-2">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
-                 
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">텍스트 아이콘타입</h3>
                   <p className="txt-icon-1">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
-                
+                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">box</h3>
                   <div className="box-type-1"></div>
                   <div className="box-type-2"></div>
-
-                  <h3 className="section-title">사이간격</h3>
-                  <p>sx=mb: 5</p>
-                  <p>class mb40</p>
-                  <Box sx={{ mb: 5 }}></Box>
-
-
-
-                  <h3 className="section-title">이미지</h3>
+                  {/* ------------------------------------------------------------------------------------------------ */}
+                  <h3 className="section-title">웹,모바일 이미지</h3>
                   <div className="img-switcher">
-                    <img src="/img/dadverseKaers_img01.png" alt="이미지설명" className="responsive-img pc-only"/>
-                    <img src="/img/dadverseKaers_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                    <img src="/img/adverseKaers_img01.png" alt="이미지설명" className="responsive-img pc-only"/>
+                    <img src="/img/adverseKaers_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                   </div>
-
-                
 
                 {/* --- 본문 끝 --- */}
                 </Box>
