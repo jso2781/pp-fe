@@ -179,7 +179,11 @@ export default function DepsLocation() {
       labels: ["expertMyWork"]   // 내 업무
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/expert\/ExpertApproval(\/)?$/,
+      pattern: /^\/[A-Za-z]{2}\/expert\/ExpertApproval(\/\d+)?$/, 
+      labels: ["expertMyWork", "expertApproval"]   // 업무 신청 관리
+    },
+    {
+      pattern: /^\/[A-Za-z]{2}\/expert\/ExpertApprovalUpdate(\/\d+)?$/, 
       labels: ["expertMyWork", "expertApproval"]   // 업무 신청 관리
     }        
   ], []);

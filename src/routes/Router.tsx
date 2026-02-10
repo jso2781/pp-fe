@@ -51,6 +51,8 @@ const IntegratedSearchKo = lazy(() => import('@/pages/ko/search/IntegratedSearch
 const ExpertMemberApplyKo = lazy(() => import('@/pages/ko/expert/ExpertMemberApply'))
 const ExpertMyWorkKo = lazy(() => import('@/pages/ko/expert/ExpertMyWork'))
 const ExpertApprovalKo = lazy(() => import('@/pages/ko/expert/ExpertApproval'))
+const ExpertApprovalDetailKo = lazy(() => import('@/pages/ko/expert/ExpertApprovalDetail'))
+const ExpertApprovalUpdateKo = lazy(() => import('@/pages/ko/expert/ExpertApprovalUpdate'))
 
 const PrivacyPolicyKo = lazy(() => import('@/pages/ko/etc/PrivacyPolicy'))
 const TermsKo = lazy(() => import('@/pages/ko/etc/Terms'))
@@ -197,7 +199,7 @@ export default function Router() {
                 {/* about(기관소개) */}
                 <Route path="/:lang/about/ethics/AboutCleanCenter" element={<LangElement byLang={{ ko: <AboutCleanCenterKo />, en: <AboutCleanCenterKo /> }} />} />
                 <Route path="/:lang/about/ethics/AboutCleanForm" element={<LangElement byLang={{ ko: <AboutCleanFormKo />, en: <AboutCleanFormKo /> }} />} />
-                <Route path="/:lang/about/ethics/AboutCleanDetail/:dclrSn" element={<LangElement byLang={{ ko: <AboutCleanDetailKo />, en: <AboutCleanDetailKo /> }} />} />
+                <Route path="/:lang/about/ethics/AboutCleanDetail" element={<LangElement byLang={{ ko: <AboutCleanDetailKo />, en: <AboutCleanDetailKo /> }} />} />
 
                 {/* auth */}
                 <Route path="/:lang/auth/LoginMethod" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />
@@ -241,8 +243,10 @@ export default function Router() {
               {/* 전문가 메뉴에서 사용할 화면 레이아웃 */}
               <Route element={<LangGuard><ExpertLayout /></LangGuard>}>
                 {/* 전문가 메뉴- 내 업무 */}
-                <Route path="/:lang/expert/ExpertMyWork" element={<LangElement byLang={{ ko: <ExpertMyWorkKo />, en: <ExpertMyWorkKo /> }} />} />
-                <Route path="/:lang/expert/ExpertApproval" element={<LangElement byLang={{ ko: <ExpertApprovalKo />, en: <ExpertApprovalKo /> }} />} />
+                <Route path="/:lang/expert/ExpertMyWork" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertMyWorkKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertMyWorkKo /></ProtectedRoute> }} />} />
+                <Route path="/:lang/expert/ExpertApproval" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalKo /></ProtectedRoute> }} />} />
+                <Route path="/:lang/expert/ExpertApproval/:exprtTaskSn" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalDetailKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalDetailKo /></ProtectedRoute> }} />} />
+                <Route path="/:lang/expert/ExpertApprovalUpdate/:exprtTaskSn" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute> }} />} />                
               </Route>
 
             </Routes>

@@ -10,6 +10,7 @@ import sttReducer from '@/features/stt/TrmsSttSlice'
 import mbrInfoReducer from '@/features/mbr/MbrInfoSlice'
 import cmsReducer from '@/features/cms/CmsSlice'
 import exprtTaskReducer from '@/features/exprt/ExprtTaskSlice'
+import exprtApprovalReducer from '@/features/exprt/ExprtApprovalSlice'
 import DshstyDclrReucer from '@/features/dclr/DshstyDclrSlice'
 
 
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   mbrInfo: mbrInfoReducer, // 회원정보
   cms: cmsReducer, // CMS
   exprtTask: exprtTaskReducer, // 전문가내업무관리
+  exprtApproval: exprtApprovalReducer, // 전문가업무신청관리
   dclr: DshstyDclrReucer // 부정신고
 })
 
