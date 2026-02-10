@@ -3400,3 +3400,70 @@
     }
   }
 }
+
+// 경영공시
+.pageCont-disclosure {
+  .base-table-container .base-table {
+    display: block;
+    width: 100%;
+    tbody, tr {
+      display: block;
+      width: 100%;
+    }
+    th, td {
+      display: block !important;
+      width: 100% !important;
+      border: none;
+      
+    }
+    th {
+      padding:13px 24px;
+      border-bottom: 1px solid #B9B9B9;
+      background: #EEF2F7;
+      font-size: 16px;
+      font-weight: 700;
+      text-align: left;
+      
+    }
+    td {
+      padding:13px 24px;
+      border-bottom: 1px solid #B9B9B9;
+    }
+  }
+
+  .list-bul {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 10px 24px;
+    list-style: none; 
+    padding: 0;
+    margin: 0;
+    
+    li {
+      position: relative;
+      padding-left: 12px; 
+      font-size: 15px;
+      line-height: 1.4;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.6em; 
+        width: 3px;
+        height: 3px;
+        background-color: #1E2124; 
+        border-radius: 50%;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+        &:hover {
+          text-decoration: underline;
+          color: #087C80;
+        }
+      }
+    }
+  }
+}
