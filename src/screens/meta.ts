@@ -426,6 +426,11 @@ export const screens: ScreenMeta[] = [
     "title": "참석 확인서",
     "uiType": "page"
   },
+  {
+    "id": "UI-EX-05-02-02",
+    "title": "자문확인서",
+    "uiType": "page"
+  },
 
 
   
