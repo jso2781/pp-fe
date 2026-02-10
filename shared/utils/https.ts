@@ -193,10 +193,11 @@ https.interceptors.response.use(
     }
     // 500에러 페이징 처리.
     else if(error.response.status === 500){
-      //TODO 특정 restAPI주소만 화면 전환 지정작업 필요.
-      // dispatch(setInternalServerError(true));
+      //TODO 특정 restAPI주소만 500에러화면 전환 지정작업 필요.
       const API_URL = error.request.responseURL;
-      if(API_URL.includes('dshstyDclr/insertDshstyDclr')){
+      const criAPIs = ['/dshstyDclr/insertDshstyDclr', '/opnn/insertOpnn'];
+      
+      if(criAPIs.some(api => API_URL.includes(api))){
         dispatch(setInternalServerError(true));
       }
     }
