@@ -19,6 +19,7 @@ import { Link as RouterLink, useLocation, useNavigate, useParams, useSearchParam
 export default function ExpertApprovalDetail() {
   const dispatch = useAppDispatch();  
   const current = useAppSelector((s) => s.exprtApproval.current);
+  const authList = useAppSelector((s) => s.exprtApproval.authList);
   const lnbStructor = useAppSelector((s) => s.exprtTask.lnbStructor);
   const auth = useAppSelector((s) => s.auth);
   const mbrNo = auth?.userInfo?.mbrNo || '';
@@ -122,8 +123,8 @@ export default function ExpertApprovalDetail() {
                                           underline="none"
                                           title="첨부파일 다운로드"
                                           onClick={() => handleDownload('999', '1')}                                          
-                                        >
-                                          <span className="ico-down" aria-hidden="true"/>
+                                        >                                          
+                                          <span className="ico-down" aria-hidden="true" style={{cursor: 'pointer'}}/>
                                         </Link>
                                       </Box>                                      
                                     </li>
@@ -139,12 +140,6 @@ export default function ExpertApprovalDetail() {
                       <h3 className="section-title-work">처리 정보</h3>
                       <Box className="panel-box bg">
                         <dl className="info-list">
-
-                          {/* 업무 시스템 명 */}
-                          <div className="info-item">
-                            <dt>업무시스템</dt>
-                            <dd>{current?.label ?? '-'}</dd>
-                          </div>
 
                           {/* 전문가 회원 전환 신청 승인 정보 */}
                           <div className="info-item">
@@ -165,6 +160,12 @@ export default function ExpertApprovalDetail() {
                             <dd>{current?.exprtAprvPrcsDt ?? '-'}</dd>
                           </div>
 
+                          {/* 업무 시스템 명 */}
+                          <div className="info-item">
+                            <dt>업무시스템</dt>
+                            <dd>{current?.label ?? '-'}</dd>
+                          </div>
+
                           {/* 업무시스템 승인 정보 */}
                           <div className="info-item">
                             <dt>업무 시스템 신청 상태</dt>
@@ -178,7 +179,28 @@ export default function ExpertApprovalDetail() {
                                 <dt>반려 사유</dt>
                                 <dd className="reason-text rejected">{current?.taskRjctRsn ?? '반려 사유 없음'}</dd>
                               </div>
-                            )}                           
+                            )}                                                       
+                          {/* 업무시스템 권한 목록 */}                      
+                          <div className="info-item">
+                            <dt>업무 시스템 권한</dt>
+                            <dd>
+                              {authList && authList.length > 0 ? (
+                                authList.map((auth) => (
+                                  <Button
+                                    key={`auth_${auth.authrtCd}`}
+                                    variant="outlined02"
+                                    size="small"                                    
+                                    sx={{ marginRight: '10px', pointerEvents: 'none' }} 
+                                  >
+                                    {auth.authrtNm} 
+                                  </Button>
+                                ))
+                              ) : (
+                                <span>-</span>
+                              )}                                               
+                            </dd>
+                          </div>                              
+
                           <div className="info-item">
                             <dt>관리자 처리일</dt>
                             <dd>{current?.taskAprvPrcsDt ?? '-'}</dd>
@@ -195,15 +217,19 @@ export default function ExpertApprovalDetail() {
                       </Button>
                     </Box>
                     <Box className="right-group">
+                      {current?.exprtAprvSttsCode === 'A' && (
                       <Button variant="outlined04" size="large" onClick={() => alert("탈퇴 기능 구현 예정")}>
                         전문가 탈퇴
                       </Button>
+                      )}
                       <Button variant="outlined02" size="large" onClick={() => navigate(`/ko/expert/ExpertApproval`)}>
                         취소
                       </Button>
+                      {(current?.exprtAprvSttsCode === 'W' || current?.exprtAprvSttsCode === 'A') && (
                       <Button variant="contained" size="large" onClick={() => navigate(`/ko/expert/ExpertApprovalUpdate/${exprtTaskSn}`)}>
                         수정
                       </Button>
+                      )}
                     </Box>
                   </Box> 
                   

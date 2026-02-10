@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectExprtApprovalListApiPath, selectExprtApprovalApiPath, updateExprtApprovalApiPath } from '@/api/exprt/ExprtApprovalApiPaths'
-import { ExprtApprovalPVO, ExprtApprovalRVO, ExprtApprovalListRVO, ExprtApprovalUVO } from './ExprtApprovalTypes'
+import { selectExprtApprovalListApiPath, selectExprtApprovalApiPath, selectTaskAuthListApiPath, updateExprtApprovalApiPath } from '@/api/exprt/ExprtApprovalApiPaths'
+import { ExprtApprovalPVO, ExprtApprovalRVO, ExprtApprovalDetailRVO, ExprtApprovalListRVO, ExprtTaskAuthRVO, ExprtApprovalUVO } from './ExprtApprovalTypes'
 
 /**
  * 대국민포털_전문가업무신청관리 소속 전문가 회원 목록 조회
@@ -29,17 +29,39 @@ export const selectExprtApprovalList = createAsyncThunk<ExprtApprovalListRVO, Ex
 /**
  * 대국민포털_전문가업무신청관리 소속 전문가 회원 상세 조회
  */
-export const selectExprtApproval = createAsyncThunk<ExprtApprovalRVO, ExprtApprovalPVO | undefined, { rejectValue: string }>(
+export const selectExprtApproval = createAsyncThunk<ExprtApprovalDetailRVO, ExprtApprovalPVO | undefined, { rejectValue: string }>(
   '/exprt/approval/get',
   async (params: ExprtApprovalPVO = {}, { rejectWithValue }) => {
     try {
       const res = await https.post(selectExprtApprovalApiPath(), params);
-      const payload = res.data?.data?.detail;
-      return payload;
+      const payload = res.data?.data;
+
+      return {
+        detail: payload && payload.detail ? payload.detail : {} as ExprtApprovalRVO,
+        authList: payload && Array.isArray(payload.authList) ? payload.authList : []
+      } as ExprtApprovalDetailRVO;
     }
     catch (e) {
       console.error("ExprtApprovalThunks selectExprtApproval error!!", e);
       return rejectWithValue('ExprtApprovalThunks selectExprtApproval error!!');
+    }
+  }
+)
+
+/**
+ * 대국민포털_전문가업무신청관리 업무시스템 권한 목록 조회
+ */
+export const selectTaskAuthList = createAsyncThunk<ExprtTaskAuthRVO[], ExprtApprovalPVO | undefined, { rejectValue: string }>(
+  '/exprt/approval/auth/list',
+  async (params: ExprtApprovalPVO = {}, { rejectWithValue }) => {
+    try {
+      const res = await https.post(selectTaskAuthListApiPath(), params);
+      const payload = res.data?.data?.authListAll;
+      return payload;
+    }
+    catch (e) {
+      console.error("ExprtApprovalThunks selectTaskAuthList error!!", e);
+      return rejectWithValue('ExprtApprovalThunks selectTaskAuthList error!!');
     }
   }
 )

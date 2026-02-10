@@ -253,58 +253,67 @@ export default function ExpertMyWork() {
                     )}
                   </Box>
                 </Box>
+                
+                {(info?.exprtAprvSttsCode !== 'R' && info?.exprtAprvSttsCode !== 'C') && (
+                  <>
+                    <h3 className="section-title-work">업무 시스템 선택</h3>
+                    <Box className="panel-box">
+                      <ul className="work-system-list">
+                        {taskList.map((item) => {
+                          const code = item.taskAprvSttsCode;
+                          const taskLabel = item.label ?? item.value ?? '업무';
+                          const statusClass = code === 'A' ? 'using' : code === 'W' ? 'waiting' : code === 'R' ? 'rejected' : code === 'C' ? 'canceled' : 'available';
+                          const statusText = code === 'A' ? '사용중' : code === 'W' ? '승인중' : code === 'R' ? '반려중' : code === 'C' ? '회수' : '신청가능';
+                          return (
+                            <li key={item.bzmnTaskMngNo ?? item.value ?? taskLabel} className="item">
+                              <Box className="system-info">
+                                <span className={`tag ${statusClass}`}>{statusText}</span>
+                                <Button variant="text" className="system-name" endIcon={<ChevronRightIcon />}>
+                                  {taskLabel}                    
+                                </Button>
+                                  {code === 'R' && ( 
+                                    <Button
+                                      variant="text"
+                                      className="btn-view-reason"
+                                      endIcon={<ChevronRightIcon />}
+                                      size="small"
+                                      onClick={() => showAlertBackdrop(item?.rjctRsn ?? '반려 사유 없음', '반려 사유')}
+                                      sx={{color: '#666'}}>
+                                      반려사유보기
+                                    </Button>                                                            
+                                  )}                             
+                              </Box>
+                              <Box className="control-action">
+                                {code === 'W' && <span className="status-text">승인 대기 중</span>}
+                                {code === 'C' && (
+                                  <Button variant="outlined03" size="small" className="s-lg" onClick={() => handleConfirmApplyExprtTask(item, taskLabel)}>
+                                    재신청하기
+                                  </Button>
+                                )}                                
+                                {code === 'A' && (
+                                  <Button variant="outlined04" size="small" className="s-lg" onClick={() => handleConfirmWithdrawExprtTask(item.exprtTaskSn ?? '', taskLabel)}>
+                                    신청취소하기
+                                  </Button>
+                                )}
+                                {code === 'R' && (
+                                  <Button variant="outlined03" size="small" className="s-lg" onClick={() => handleConfirmApplyExprtTask(item, taskLabel)}>
+                                    재신청하기
+                                  </Button>
+                                )}
+                                {!code && (
+                                  <Button variant="outlined03" size="small" className="s-lg" onClick={() => handleConfirmApplyExprtTask(item, taskLabel)}>
+                                    신청하기
+                                  </Button>
+                                )}
+                              </Box>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </Box>
+                  </>
+                )}
 
-                <h3 className="section-title-work">업무 시스템 선택</h3>
-                <Box className="panel-box">
-                  <ul className="work-system-list">
-                    {taskList.map((item) => {
-                      const code = item.taskAprvSttsCode;
-                      const taskLabel = item.label ?? item.value ?? '업무';
-                      const statusClass = code === 'A' ? 'using' : code === 'W' ? 'waiting' : code === 'R' ? 'rejected' : code === 'C' ? 'canceled' : 'available';
-                      const statusText = code === 'A' ? '사용중' : code === 'W' ? '승인중' : code === 'R' ? '반려중' : code === 'C' ? '회수' : '신청가능';
-                      return (
-                        <li key={item.bzmnTaskMngNo ?? item.value ?? taskLabel} className="item">
-                          <Box className="system-info">
-                            <span className={`tag ${statusClass}`}>{statusText}</span>
-                            <Button variant="text" className="system-name" endIcon={<ChevronRightIcon />}>
-                              {taskLabel}                    
-                            </Button>
-                              {code === 'R' && ( 
-                                <Button
-                                  variant="text"
-                                  className="btn-view-reason"
-                                  endIcon={<ChevronRightIcon />}
-                                  size="small"
-                                  onClick={() => showAlertBackdrop(item?.rjctRsn ?? '반려 사유 없음', '반려 사유')}
-                                  sx={{color: '#666'}}>
-                                  반려사유보기
-                                </Button>                                                            
-                              )}                             
-                          </Box>
-                          <Box className="control-action">
-                            {code === 'W' && <span className="status-text">승인 대기 중</span>}
-                            {code === 'C' && <span className="status-text">회수됨</span>}
-                            {code === 'A' && (
-                              <Button variant="outlined04" size="small" className="s-lg" onClick={() => handleConfirmWithdrawExprtTask(item.exprtTaskSn ?? '', taskLabel)}>
-                                신청취소하기
-                              </Button>
-                            )}
-                            {code === 'R' && (
-                              <Button variant="outlined03" size="small" className="s-lg" onClick={() => handleConfirmApplyExprtTask(item, taskLabel)}>
-                                재신청하기
-                              </Button>
-                            )}
-                            {!code && (
-                              <Button variant="outlined03" size="small" className="s-lg" onClick={() => handleConfirmApplyExprtTask(item, taskLabel)}>
-                                신청하기
-                              </Button>
-                            )}
-                          </Box>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </Box>
               </Box>
             </Box>
           </Box>

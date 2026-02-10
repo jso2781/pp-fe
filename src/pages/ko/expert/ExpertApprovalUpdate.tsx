@@ -8,18 +8,19 @@ import DepsLocation from '@/components/common/DepsLocation';
 import CollapsibleSideNav from '@/components/navigation/CollapsibleSideNav';
 import { useDialog } from '@/contexts/DialogContext';
 import { downloadAtch } from '@/features/atch/AtchThunks';
-import { selectExprtApproval, updateExprtApproval } from '@/features/exprt/ExprtApprovalThunks';
-import { ExprtApprovalUVO } from '@/features/exprt/ExprtApprovalTypes';
+import { selectExprtApproval, selectTaskAuthList, updateExprtApproval } from '@/features/exprt/ExprtApprovalThunks';
+import { ExprtApprovalUVO, ExprtTaskAuthRVO } from '@/features/exprt/ExprtApprovalTypes';
 import { selectExprtMenus } from '@/features/exprt/ExprtTaskThunks';
 import { getLangFromPathname } from '@/routes/lang';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Box, Button, FormControl, Grid, Link, MenuItem, Select, TextField } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export default function ExpertApprovalUpdate() {
   const dispatch = useAppDispatch();  
   const current = useAppSelector((s) => s.exprtApproval.current);
+  const authList = useAppSelector((s) => s.exprtApproval.authList);
   const lnbStructor = useAppSelector((s) => s.exprtTask.lnbStructor);
   const auth = useAppSelector((s) => s.auth);
   const mbrNo = auth?.userInfo?.mbrNo || '';
@@ -56,14 +57,21 @@ export default function ExpertApprovalUpdate() {
   // 상태관리
   const [exprtAprvSttsCode, setExprtAprvSttsCode] = useState(current?.exprtAprvSttsCode || 'W');
   const [exprtRjctRsn, setExprtRjctRsn] = useState(current?.exprtRjctRsn || '');
-  const [taskAprvSttsCode, setTaskAprvSttsCode] = useState(current?.taskAprvSttsCode || '');
+  const [taskAprvSttsCode, setTaskAprvSttsCode] = useState(current?.taskAprvSttsCode || 'W');
   const [taskRjctRsn, setTaskRjctRsn] = useState(current?.taskRjctRsn || '');
+
+  /** authList + authListAll을 authrtCd 기준 병합한 목록 (기본값: authList) */
+  const [mergedList, setMergedList] = useState<ExprtTaskAuthRVO[]>(authList ?? []);
+
+  useEffect(() => {
+    setMergedList(authList ?? []);
+  }, [authList]);  
 
   // 대국민포털_전문가내업무관리 소속 전문가 회원 승인 상태 업데이트
   const handleUpdateExprtApproval = () => {
     showDialogBackdrop({
       message: '저장하시겠습니까?',
-      title: '승인 상태 변경',
+      title: '처리 정보 수정',
       type: 'confirm',
       confirmText: '확인',
       cancelText: '취소',
@@ -74,28 +82,34 @@ export default function ExpertApprovalUpdate() {
             exprtAprvSttsCode,
             exprtNo: current?.exprtNo,
             mbrId: auth.userInfo?.mbrId || '',
+            mbrNo: current?.mbrNo,
             exprtRjctRsn,
             taskAprvSttsCode,
-            taskRjctRsn
+            taskRjctRsn,
+            taskAuthList: mergedList,
           };
           
           const result = await dispatch(updateExprtApproval(newPVO)).unwrap();
           if (result === 'SUCCESS') {
             showDialogBackdrop({
               message: '저장되었습니다.',
-              title: '승인 상태 변경 완료',
+              title: '처리 정보 수정 완료',
               type: 'alert',
               confirmText: '확인',
               onConfirm: () => {
-                navigate(`/ko/expert/ExpertApproval/${exprtTaskSn}`)
+                if (exprtAprvSttsCode === 'R') {
+                  navigate(`/ko/expert/ExpertApproval`);
+                } else {
+                  navigate(`/ko/expert/ExpertApproval/${exprtTaskSn}`);  
+                }
               },
             })
           }
         } catch (error) {
-          console.error('전문가 승인 상태 변경 실패:', error);
+          console.error('처리 정보 수정 실패:', error);
           showDialogBackdrop({
-            message: '전문가 승인 상태 변경에 실패했습니다. 다시 시도해주세요.',
-            title: '변경 실패',
+            message: '처리 정보 수정에 실패했습니다. 다시 시도해주세요.',
+            title: '수정 실패',
             type: 'alert',
             confirmText: '확인',
           });
@@ -103,6 +117,20 @@ export default function ExpertApprovalUpdate() {
       },
     })
   }  
+
+  /** authrtCd 기준 중복 제거 후 병합 */
+  const mergeAuthList = (listA: ExprtTaskAuthRVO[], listB: ExprtTaskAuthRVO[]): ExprtTaskAuthRVO[] => {
+    const byCd = new Map<string, ExprtTaskAuthRVO>();
+    listA.forEach((a) => { if (a.authrtCd) byCd.set(a.authrtCd, a); });
+    listB.forEach((a) => { if (a.authrtCd) byCd.set(a.authrtCd, a); });
+    return Array.from(byCd.values());
+  };
+
+  // 대국민포털_전문가업무신청관리 업무시스템 권한 목록 조회 (부여 가능 권한 조회 후 병합)
+  const searchTaskAuthList = async () => {
+    const listAll = await dispatch(selectTaskAuthList({ taskSeCd: current?.value })).unwrap();
+    setMergedList(mergeAuthList(authList ?? [], listAll ?? []));
+  };    
 
   return (
     <Box className={`page-layout ${collapsed ? 'is-collapsed' : ''}`}>
@@ -174,7 +202,7 @@ export default function ExpertApprovalUpdate() {
                                           title="첨부파일 다운로드"
                                           onClick={() => handleDownload('999', '1')}                                          
                                         >
-                                          <span className="ico-down" aria-hidden="true"/>
+                                          <span className="ico-down" aria-hidden="true" style={{cursor: 'pointer'}}/>
                                         </Link>
                                       </Box>                                      
                                     </li>
@@ -197,18 +225,23 @@ export default function ExpertApprovalUpdate() {
                                 <Select
                                   labelId="expert-status-label"
                                   value={exprtAprvSttsCode}
-                                  onChange={(e) => setExprtAprvSttsCode(e.target.value)}
+                                  onChange={(e) => {
+                                    setExprtAprvSttsCode(e.target.value);
+                                    setExprtRjctRsn('');
+                                    setTaskAprvSttsCode(current?.taskAprvSttsCode || 'W');
+                                  }}
                                   inputProps={{ 'aria-label': '전문가 회원 신청 상태 선택' }}
+                                  disabled={current?.exprtAprvSttsCode === 'A'}
                                 >
                                   <MenuItem value="W">대기</MenuItem>
                                   <MenuItem value="A">승인</MenuItem>
                                   <MenuItem value="R">반려</MenuItem>
-                                  <MenuItem value="C">회수</MenuItem>
                                 </Select>
                               </FormControl>
                             </dd>
                           </div>
 
+                          {exprtAprvSttsCode === 'R' && (
                           <div className="info-item">
                             <dt>
                               <label htmlFor="expert-reject-reason">반려 사유</label>
@@ -223,25 +256,82 @@ export default function ExpertApprovalUpdate() {
                               />
                             </dd>
                           </div>
+                          )}
 
-                          <div className="info-item">
-                            <dt id="system-status-label">업무 시스템 신청 상태</dt>
-                            <dd>
-                              <FormControl fullWidth size="small">
-                                <Select
-                                  labelId="system-status-label"
-                                  value={taskAprvSttsCode}
-                                  onChange={(e) => setTaskAprvSttsCode(e.target.value)}
-                                  inputProps={{ 'aria-label': '업무 시스템 신청 상태 선택' }}
-                                >
-                                  <MenuItem value="W">대기</MenuItem>
-                                  <MenuItem value="A">승인</MenuItem>
-                                  <MenuItem value="R">반려</MenuItem>
-                                  <MenuItem value="C">회수</MenuItem>
-                                </Select>
-                              </FormControl>
-                            </dd>
-                          </div>
+                          {exprtAprvSttsCode === 'A' && (
+                          <>
+                            <div className="info-item">
+                              <dt>업무시스템</dt>
+                              <dd>{current?.label ?? '-'}</dd>
+                            </div>                                                    
+                            <div className="info-item">
+                              <dt id="system-status-label">업무 시스템 신청 상태</dt>
+                              <dd>
+                                <FormControl fullWidth size="small">
+                                  <Select
+                                    labelId="system-status-label"
+                                    value={taskAprvSttsCode}
+                                    onChange={(e) => {
+                                      setTaskAprvSttsCode(e.target.value);
+                                      setTaskRjctRsn('');
+                                    }}
+                                    inputProps={{ 'aria-label': '업무 시스템 신청 상태 선택' }}
+                                  >
+                                    {current?.taskAprvSttsCode === 'W'
+                                      ? [
+                                          <MenuItem key="W" value="W">대기</MenuItem>,
+                                          <MenuItem key="A" value="A">승인</MenuItem>,
+                                          <MenuItem key="R" value="R">반려</MenuItem>
+                                        ]
+                                      : [
+                                          <MenuItem key="A" value="A">승인</MenuItem>,
+                                          <MenuItem key="C" value="C">회수</MenuItem>
+                                        ]}
+                                  </Select>
+                                </FormControl>
+                              </dd>
+                            </div>
+
+                            {/* 업무시스템 권한 목록 */} 
+                            {taskAprvSttsCode === 'A' && (                
+                              <div className="info-item">
+                                <dt>업무 시스템 권한                              
+                                  <Button
+                                    variant="contained"
+                                    size="xsmall"                                    
+                                    sx={{ marginLeft: '10px'}} 
+                                    onClick={searchTaskAuthList}
+                                  >
+                                    권한 조회
+                                  </Button>                            
+                                </dt>
+                                <dd>
+                                  {mergedList.length > 0 ? (
+                                    mergedList.map((auth) => (
+                                      <Button
+                                        key={`auth_${auth.authrtCd}`}
+                                        variant="outlined02"
+                                        size="small"
+                                        sx={{ marginRight: '10px' }}
+                                        onClick={() => {
+                                          setMergedList((prev) =>
+                                            prev.filter((a) => a.authrtCd !== auth.authrtCd)
+                                          );
+                                        }}
+                                      >
+                                        {auth.authrtNm} X
+                                      </Button>
+                                    ))
+                                  ) : (
+                                    <span>-</span>
+                                  )}
+                                </dd>
+                              </div>  
+                            )}
+                          </>
+                          )}
+
+                          {(exprtAprvSttsCode === 'A' && taskAprvSttsCode === 'R') && (
                           <div className="info-item">
                             <dt>
                               <label htmlFor="system-reject-reason">반려 사유</label>
@@ -256,6 +346,7 @@ export default function ExpertApprovalUpdate() {
                               />
                             </dd>
                           </div>
+                          )}
                         </dl>
                       </Box>
                     </Grid>

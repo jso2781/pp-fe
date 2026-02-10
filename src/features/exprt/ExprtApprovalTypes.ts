@@ -22,6 +22,9 @@ export interface ExprtApprovalPVO {
 
   /** 승인상태코드 */
   aprvSttsCode?: string
+
+  /** 업무구분코드 */
+  taskSeCd?: string
 }
 
 /**
@@ -35,8 +38,11 @@ export interface ExprtApprovalUVO {
   /** 전문가번호 */
   exprtNo?: string
   
-  /** 회원번호 */
+  /** 회원아이디 */
   mbrId?: string
+
+  /** 회원번호 */
+  mbrNo?: string
 
   /** 전문가 승인상태코드 */
   exprtAprvSttsCode?: string
@@ -49,6 +55,9 @@ export interface ExprtApprovalUVO {
 
   /** 업무시스템 반려사유 */
   taskRjctRsn?: string
+
+  /** 전문가 업무시스템 권한 목록 */
+  taskAuthList?: ExprtTaskAuthRVO[]  
 }
 
 /**
@@ -123,10 +132,29 @@ export interface ExprtApprovalRVO {
 }
 
 /**
+ * 대국민포털_전문가업무신청관리 권한 정보 
+ */
+export interface ExprtTaskAuthRVO {
+  /** 권한코드 */
+  authrtCd?: string
+
+  /** 권한명 */
+  authrtNm?: string
+}
+
+/**
  * 대국민포털_전문가업무신청관리 정보 목록 
  */
 export interface ExprtApprovalListRVO {
   list: ExprtApprovalRVO[]
   totalCount: number
   totalPages: number
+}
+
+/**
+ * 대국민포털_전문가업무신청관리 상세 정보
+ */
+export interface ExprtApprovalDetailRVO {
+  detail: ExprtApprovalRVO
+  authList: ExprtTaskAuthRVO[]
 }
