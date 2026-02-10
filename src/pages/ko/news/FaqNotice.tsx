@@ -1,7 +1,7 @@
 /**
  * 화면ID: KIDS-PP-US-NO-05
  * 화면명: FAQ 목록
- * 화면경로: /ko/news/NewsFaqNotice
+ * 화면경로: /ko/news/FaqNotice
  * 화면설명: FAQ 목록(FAQ 게시판 목록 유형)
  */
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -79,7 +79,7 @@ const SearchRow = ({ text, word }: { text: string, word: string }) => {
   )
 }
 
-export default function NewsFaqNotice() {
+export default function FaqNotice() {
   const dispatch = useAppDispatch();
   const [param, setParam] = useState<FaqParam>(() => ({ activeCategory: 'all', searchWord: '', searchType: 'all', page: 1 }));
   const location = useLocation();

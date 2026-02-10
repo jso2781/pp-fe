@@ -16,9 +16,9 @@ const CmsPageKo = lazy(() => import('@/pages/ko/cms/CmsPage'))
 const DurSearchRoomKo = lazy(() => import('@/pages/ko/maintask/dur/DurSearchRoom'))
 const DurNoticeListKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeList'))
 const DurNoticeDetailKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeDetail'))
-const DurProposalKo = lazy(() => import('@/pages/ko/maintask/dur/DurProposal'))
+const ProposalKo = lazy(() => import('@/pages/ko/maintask/dur/Proposal'))
 
-const NewsFaqNoticeKo = lazy(() => import('@/pages/ko/news/NewsFaqNotice'))
+const FaqNoticeKo = lazy(() => import('@/pages/ko/news/FaqNotice'))
 
 const GeneralBoardListKo = lazy(() => import('@/pages/ko/board/GeneralBoardList'))
 const GeneralBoardDetailKo = lazy(() => import('@/pages/ko/board/GeneralBoardDetail'))
@@ -27,9 +27,9 @@ const GalleryBoardDetailKo = lazy(() => import('@/pages/ko/board/GalleryBoardDet
 const VideoBoardListKo = lazy(() => import('@/pages/ko/board/VideoBoardList'))
 const VideoBoardDetailKo = lazy(() => import('@/pages/ko/board/VideoBoardDetail'))
 
-const AboutCleanCenterKo = lazy(() => import('@/pages/ko/about/ethics/AboutCleanCenter'))
-const AboutCleanFormKo = lazy(() => import('@/pages/ko/about/ethics/AboutCleanForm'))
-const AboutCleanDetailKo = lazy(() => import('@/pages/ko/about/ethics/AboutCleanDetail'))
+const CleanCenterKo = lazy(() => import('@/pages/ko/about/ethics/CleanCenter'))
+const CleanFormKo = lazy(() => import('@/pages/ko/about/ethics/CleanForm'))
+const CleanDetailKo = lazy(() => import('@/pages/ko/about/ethics/CleanDetail'))
 
 const SignUpSelKo = lazy(() => import('@/pages/ko/auth/SignUpSel'))
 const SignUpAgrTrmsKo = lazy(() => import('@/pages/ko/auth/SignUpAgrTrms'))
@@ -180,13 +180,13 @@ export default function Router() {
                 <Route path="/:lang/maintask/dur/DurSearchRoom" element={<LangElement byLang={{ ko: <DurSearchRoomKo />, en: <DurSearchRoomKo /> }} />} />
                 <Route path="/:lang/maintask/dur/DurNoticeList/:bbsId" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListKo /> }} />} />
                 <Route path="/:lang/maintask/dur/DurNoticeList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailKo /> }} />} />
-                <Route path="/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalKo /> }} />} />
+                <Route path="/:lang/maintask/dur/Proposal" element={<LangElement byLang={{ ko: <ProposalKo />, en: <ProposalKo /> }} />} />
 
 
                 {/* open(정보공개) */}
 
                 {/* news(기관소식) */}
-                <Route path="/:lang/news/NewsFaqNotice" element={<LangElement byLang={{ ko: <NewsFaqNoticeKo />, en: <NewsFaqNoticeKo /> }} />} />
+                <Route path="/:lang/news/FaqNotice" element={<LangElement byLang={{ ko: <FaqNoticeKo />, en: <FaqNoticeKo /> }} />} />
                                                 
                 {/* 유형별 게시판 (공통) */}
                 <Route path="/:lang/board/general/:bbsId" element={<LangElement byLang={{ ko: <GeneralBoardListKo />, en: <GeneralBoardListKo /> }} />} />
@@ -197,9 +197,9 @@ export default function Router() {
                 <Route path="/:lang/board/video/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <VideoBoardDetailKo />, en: <VideoBoardDetailKo /> }} />} />                       
 
                 {/* about(기관소개) */}
-                <Route path="/:lang/about/ethics/AboutCleanCenter" element={<LangElement byLang={{ ko: <AboutCleanCenterKo />, en: <AboutCleanCenterKo /> }} />} />
-                <Route path="/:lang/about/ethics/AboutCleanForm" element={<LangElement byLang={{ ko: <AboutCleanFormKo />, en: <AboutCleanFormKo /> }} />} />
-                <Route path="/:lang/about/ethics/AboutCleanDetail" element={<LangElement byLang={{ ko: <AboutCleanDetailKo />, en: <AboutCleanDetailKo /> }} />} />
+                <Route path="/:lang/about/ethics/CleanCenter" element={<LangElement byLang={{ ko: <CleanCenterKo />, en: <CleanCenterKo /> }} />} />
+                <Route path="/:lang/about/ethics/CleanForm" element={<LangElement byLang={{ ko: <CleanFormKo />, en: <CleanFormKo /> }} />} />
+                <Route path="/:lang/about/ethics/CleanDetail" element={<LangElement byLang={{ ko: <CleanDetailKo />, en: <CleanDetailKo /> }} />} />
 
                 {/* auth */}
                 <Route path="/:lang/auth/LoginMethod" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />

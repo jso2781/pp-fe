@@ -51,7 +51,7 @@
             { "name": "투여기간주의", "url": "#" },
             { "name": "노인주의", "url": "#" },
             { "name": "DUR 게시판", "url": "/maintask/dur/DurNoticeList" },
-            { "name": "DUR 제안", "url": "/maintask/dur/DurProposal" }
+            { "name": "DUR 제안", "url": "/maintask/dur/Proposal" }
             ]
         },
         {

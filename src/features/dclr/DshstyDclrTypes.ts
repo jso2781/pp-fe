@@ -55,6 +55,10 @@ export interface DshstyDclrPVO {
  * 대국민포털_부정신고 정보 
  */
 export interface DshstyDclrRVO {
+
+  /** 신고일련번호 */
+  dclrSn?: number;
+
   /** 암호화회원성명 */
   encptMbrFlnm?: string;
 

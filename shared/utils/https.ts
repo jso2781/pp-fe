@@ -195,6 +195,10 @@ https.interceptors.response.use(
     else if(error.response.status === 500){
       //TODO 특정 restAPI주소만 화면 전환 지정작업 필요.
       // dispatch(setInternalServerError(true));
+      const API_URL = error.request.responseURL;
+      if(API_URL.includes('dshstyDclr/insertDshstyDclr')){
+        dispatch(setInternalServerError(true));
+      }
     }
 
     return Promise.reject(error);
