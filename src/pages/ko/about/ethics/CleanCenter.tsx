@@ -1,7 +1,7 @@
 /**
  * 화면ID: KIDS-PP-US-IN-17
  * 화면명: 클린신고센터
- * 화면경로: /ko/about/ethics/AboutCleanCenter
+ * 화면경로: /ko/about/ethics/CleanCenter
  * 화면설명: 클린신고센터
  */
 import DepsLocation from '@/components/common/DepsLocation'
@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function AboutCleanCenter() {
+export default function CleanCenter() {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -38,7 +38,7 @@ export default function AboutCleanCenter() {
 
   const handleWriteForm = () => {
     if(true){
-      navigate('/ko/about/ethics/AboutCleanForm');
+      navigate('/ko/about/ethics/CleanForm');
     }
     //TODO Any-Id 인증이 안되있다면 본인인증 페이지로 이동
     // navigate('/');
@@ -133,7 +133,7 @@ export default function AboutCleanCenter() {
                                     <td>
                                       <Link
                                         component={RouterLink}
-                                        to={`/ko/about/ethics/AboutCleanDetail`}
+                                        to={`/ko/about/ethics/CleanDetail`}
                                         color="inherit"
                                         aria-label={`${dshstyDclrRVO.dclrTtlNm} 상세보기`}
                                         underline="hover"

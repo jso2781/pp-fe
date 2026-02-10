@@ -1,7 +1,7 @@
 /**
  * 화면ID: KIDS-PP-US-IN-18
  * 화면명: 클린신고센터 등록
- * 화면경로: /ko/about/ethics/AboutCleanCenter
+ * 화면경로: /ko/about/ethics/CleanForm
  * 화면설명: 클린신고센터 등록
  */
 import DepsLocation from "@/components/common/DepsLocation";
@@ -18,7 +18,7 @@ import RHFTextField from "@/components/rhf/RHFTextField";
 import { useDialog } from '@/contexts/DialogContext';
 import { FieldErrors } from "react-hook-form";
 
-export default function AboutCleanForm () {
+export default function CleanForm () {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -73,7 +73,7 @@ export default function AboutCleanForm () {
     try {
       await dispatch(insertDshstyDclr(valuse as DshstyDclrPVO)).unwrap();
       showAlert('클린신고서 신청서 제출이 완료되었습니다.', '알림', () => {
-        navigate('/ko/about/ethics/AboutCleanCenter');
+        navigate('/ko/about/ethics/CleanCenter');
       });
     } catch(e) {
 
@@ -90,7 +90,7 @@ export default function AboutCleanForm () {
   }
 
   const handleCancle = () => {
-    navigate('/ko/about/ethics/AboutCleanCenter');
+    navigate('/ko/about/ethics/CleanCenter');
   }
 
   return (

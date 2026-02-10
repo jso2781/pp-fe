@@ -172,7 +172,7 @@
                         "children": []
                     },
                     {
-                        "key": "/maintask/dur/DurProposal",
+                        "key": "/maintask/dur/Proposal",
                         "label": "DUR 게시판",
                         "disabled": false,
                         "children": []
@@ -311,7 +311,7 @@
                 "children": []
             },
             {
-                "key": "/news/NewsFaqNotice",
+                "key": "/news/FaqNotice",
                 "label": "FAQ",
                 "disabled": false,
                 "children": []

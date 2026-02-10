@@ -753,7 +753,7 @@ export default function MyFormPage() {
 - `board/BoardWrite.tsx` - 게시판 작성
 - `dur/DurNoticeList.tsx` - DUR 게시판 목록
 - `dur/DurNoticeDetail.tsx` - DUR 게시판 상세
-- `dur/DurProposal.tsx` - DUR 제안
+- `dur/Proposal.tsx` - DUR 제안
 - `Login.tsx` - 로그인
 - `NotFound.tsx` - 404 페이지
 

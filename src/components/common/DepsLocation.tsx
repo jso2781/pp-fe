@@ -139,7 +139,7 @@ export default function DepsLocation() {
       labels: ["login", "idLogin", "findPassword", "passwordChange"] // 로그인 > 아이디 로그인 > 비밀번호 찾기 > 비밀번호 변경
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/news\/NewsFaqNotice(\/)?(\d+)?$/,
+      pattern: /^\/[A-Za-z]{2}\/news\/FaqNotice(\/)?(\d+)?$/,
       labels: ["news", "menuNoticeFaq"] // 기관소식 > FAQ
     },
     {
@@ -171,7 +171,7 @@ export default function DepsLocation() {
       labels: ["menuDur", "menuDurNotice"]    // DUR 정보 > 알림 게시판
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/DurProposal(\/)?(\d+)?$/,
+      pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/Proposal(\/)?(\d+)?$/,
       labels: ["menuDur", "menuDurSuggest"]   // DUR 정보 > 의견 제안
     },
     {

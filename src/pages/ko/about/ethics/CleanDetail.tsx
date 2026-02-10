@@ -1,7 +1,7 @@
 /**
  * 화면ID: KIDS-PP-US-IN-19
  * 화면명: 클린신고센터 상세
- * 화면경로: /ko/about/ethics/AboutCleanCenter
+ * 화면경로: /ko/about/ethics/CleanDetail
  * 화면설명: 클린신고센터 상세
  */
 import DepsLocation from "@/components/common/DepsLocation";
@@ -11,7 +11,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
 
-export default function AboutCleanDetail () {
+export default function CleanDetail () {
   const location = useLocation();
   const navigate = useNavigate()
 
@@ -22,7 +22,7 @@ export default function AboutCleanDetail () {
   const currentUrl = location.pathname;
 
   const handleListClick = () => {
-    navigate('/ko/about/ethics/AboutCleanCenter');
+    navigate('/ko/about/ethics/CleanCenter');
   }
 
   return (
