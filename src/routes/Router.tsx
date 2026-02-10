@@ -197,7 +197,7 @@ export default function Router() {
                 {/* about(기관소개) */}
                 <Route path="/:lang/about/ethics/AboutCleanCenter" element={<LangElement byLang={{ ko: <AboutCleanCenterKo />, en: <AboutCleanCenterKo /> }} />} />
                 <Route path="/:lang/about/ethics/AboutCleanForm" element={<LangElement byLang={{ ko: <AboutCleanFormKo />, en: <AboutCleanFormKo /> }} />} />
-                <Route path="/:lang/about/ethics/AboutCleanDetail/:dclrSn" element={<LangElement byLang={{ ko: <AboutCleanDetailKo />, en: <AboutCleanDetailKo /> }} />} />
+                <Route path="/:lang/about/ethics/AboutCleanDetail" element={<LangElement byLang={{ ko: <AboutCleanDetailKo />, en: <AboutCleanDetailKo /> }} />} />
 
                 {/* auth */}
                 <Route path="/:lang/auth/LoginMethod" element={<LangElement byLang={{ ko: <LoginMethodKo />, en: <LoginMethodKo /> }} />} />
