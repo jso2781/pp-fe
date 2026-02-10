@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
   return {
     base,
     plugins: [react()],
+    // 빌드 시 메모리: 개발계 서버 등에서는 NODE_OPTIONS=--max-old-space-size=4096 또는 npm run build 사용 권장
     build: {
       rollupOptions: {
         output: {
