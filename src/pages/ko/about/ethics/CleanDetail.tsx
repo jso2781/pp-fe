@@ -144,7 +144,7 @@ export default function CleanDetail () {
                     <Box className="form-group-wrap summary-grid">
                       <Box className="summary-item">
                         <Typography component="dt" className="label">제출일시</Typography>
-                        <Typography component="dd" className="view-value">{dshstyDclrRVO.regDt}</Typography>
+                        <Typography component="dd" className="view-value">{dshstyDclrRVO?.regDt?.split('.')[0]}</Typography>
                       </Box>
                       <Box className="summary-item">
                         <Typography component="dt" className="label">진행상태</Typography>

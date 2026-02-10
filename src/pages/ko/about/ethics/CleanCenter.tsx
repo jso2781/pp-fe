@@ -149,7 +149,7 @@ export default function CleanCenter() {
                                       </Link>
                                     </td>
                                     <td>진행상태?</td>
-                                    <td>{dshstyDclrRVO.regDt}</td>
+                                    <td>{dshstyDclrRVO?.regDt?.split('.')[0]}</td>
                                     <td>처리일시?</td>
                                   </tr>
                                 ))}
