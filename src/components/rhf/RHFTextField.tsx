@@ -26,10 +26,11 @@ export default function RHFTextField({ name, ...props }: Props) {
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState }) => (
+      render={({ field: { ref, ...field }, fieldState }) => (
         <TextField
           {...merged}
           {...field}
+          inputRef={merged.inputRef ?? ref}
           value={field.value ?? ''}
           error={!!fieldState.error || merged.error}
           helperText={fieldState.error?.message ?? merged.helperText}

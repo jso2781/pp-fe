@@ -16,6 +16,7 @@ import { ZodFormProvider } from "@/components/rhf/ZodFormProvider";
 import { useZodForm } from "@/components/rhf/useZodForm";
 import RHFTextField from "@/components/rhf/RHFTextField";
 import { useDialog } from '@/contexts/DialogContext';
+import { FieldErrors } from "react-hook-form";
 
 export default function AboutCleanForm () {
   const location = useLocation();
@@ -67,6 +68,7 @@ export default function AboutCleanForm () {
     defaultValues,
   });
 
+
   const onSubmit = async (valuse: FormValues) => {
     try {
       await dispatch(insertDshstyDclr(valuse as DshstyDclrPVO)).unwrap();
@@ -77,6 +79,13 @@ export default function AboutCleanForm () {
 
     } finally {
       form.reset(defaultValues);
+    }
+  }
+
+  const onInvalid = (errors: FieldErrors) => {
+    const firstErrorField = Object.keys(errors)[0];
+    if (firstErrorField) {
+      form.setFocus('encptMbrFlnm');
     }
   }
 
@@ -111,7 +120,7 @@ export default function AboutCleanForm () {
                 <section className="pageCont-cleanCenter">
                   <h3 className="section-title">클린신고서 작성</h3>
                   <ZodFormProvider schema={schema} methods={form}>
-                    <Box component="form" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+                    <Box component="form" onSubmit={form.handleSubmit(onSubmit, onInvalid)} noValidate>
                       <Box className="bordered-box">
                         <Box className="form-group-wrap">
                           {/* 이름 (필수) */}
@@ -261,8 +270,7 @@ export default function AboutCleanForm () {
                       </Box>
                       <Box className="btn-group between">
                         <Button variant="outlined02" size="large" onClick={handleCancle}>취소하기</Button>
-                        {/* <Button variant="contained" size="large" onClick={handleSubmit}>제줄하기</Button> */}
-                        <Button variant="contained" size="large" type="submit">제줄하기</Button>
+                        <Button variant="contained" size="large" type="submit">제출하기</Button>
                       </Box>
                     </Box>
                   </ZodFormProvider>
