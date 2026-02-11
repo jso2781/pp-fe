@@ -4,9 +4,12 @@
  * 화면경로: /board/gallery/:bbsId
  * 화면설명: 갤러리형 게시판 목록
  */
+import ContactArea from '@/components/common/ContactArea';
 import DepsLocation from '@/components/common/DepsLocation';
+import DgstfnExnm from '@/components/common/DgstfnExnm';
 import Lnb from '@/components/common/Lnb';
 import LnbSectionTitle from '@/components/common/LnbSectionTitle';
+import { useAuth } from '@/contexts/AuthContext';
 import { selectPstList } from '@/features/pst/PstThunks';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
@@ -46,6 +49,15 @@ export default function GalleryBoardList() {
 
   // Lnb 랜더링용
   const currentUrl = location.pathname;
+
+  // KOGI, 만족도조사, 메뉴 별 담당자/연락처 정보 세팅
+  const { getMenuInfo } = useAuth();
+  const menuInfo = getMenuInfo(location.pathname);
+  const menuSn = menuInfo?.menuSn ?? 0;
+  const contactDepNm = menuInfo?.menuTkcgDeptNm ?? null;
+  const contactPersonNm = menuInfo?.menuPicFlnm ?? null;
+  const contactPhoneNum = menuInfo?.encptPicTelno ?? null;
+
 
   // 스크롤 상단 이동
   useEffect(() => {
@@ -190,6 +202,14 @@ export default function GalleryBoardList() {
                       />
                     </Stack>
                   </Box>
+                  {/* 만족도 조사 */}
+                  <DgstfnExnm menuSn={menuSn} />
+                  {/* 업무 담당 부서 및 연락처 */}
+                  <ContactArea
+                    contactDepNm={contactDepNm}
+                    contactPersonNm={contactPersonNm}
+                    contactPhoneNum={contactPhoneNum}
+                  />                                    
                 {/* --- 본문 끝 --- */}
                 </Box>
               </Box>

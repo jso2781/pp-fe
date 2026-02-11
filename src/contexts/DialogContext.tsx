@@ -219,7 +219,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
             </DialogTitle>
           )}
           <DialogContent className="modal-content">
-            <Typography variant="body1">{optionsBackdrop.message}</Typography>
+            <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>{optionsBackdrop.message}</Typography>
           </DialogContent>
           <DialogActions className="modal-footer">
             {optionsBackdrop.type === 'confirm' && (

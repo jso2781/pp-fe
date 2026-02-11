@@ -148,9 +148,9 @@ export default function CleanCenter() {
                                         {dshstyDclrRVO.dclrTtlNm}
                                       </Link>
                                     </td>
-                                    <td>진행상태?</td>
+                                    <td>접수완료</td>
                                     <td>{dshstyDclrRVO?.regDt?.split('.')[0]}</td>
-                                    <td>처리일시?</td>
+                                    <td>-</td>
                                   </tr>
                                 ))}
                               </tbody>

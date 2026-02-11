@@ -1062,7 +1062,8 @@
     
     //스크롤바
     &::-webkit-scrollbar {
-      width: 8px; 
+      width: 10px;  // 세로 스크롤바 너비
+      height: 10px; // 가로 스크롤바 높이 
     }
 
     &::-webkit-scrollbar-track {
@@ -1178,14 +1179,24 @@
       border-top: 2px solid #087C80;
     }
 
+
     &.table-type-3 {
-      table-layout: fixed;width:100%;
-      thead th{padding: 7px 17px;border-left:none;border-right:none;}
-      tbody th{padding: 7px 17px;text-align: left;border-left:none;border-right:none;}
-      tbody td{padding: 7px 17px;text-align: left;border-left:none;border-right:none;
-        &:first-of-type {
-          border-left: 1px solid #B9B9B9; 
-        }
+      table-layout: fixed;
+      width: calc(100% + 1px);
+      margin-left: -1px;   
+      border-collapse: collapse;
+      border-top: 2px solid #087C80;
+      border-right: none;
+      border-left: none;
+
+      th, td {
+        border-left: 1px solid #B9B9B9; 
+        border-right: none;
+      }
+
+      tr th:last-child,
+      tr td:last-child {
+        border-right: none;
       }
     }
 
@@ -2663,15 +2674,11 @@
    CMS
    ========================================================================== */
 .shortcut-link{text-align: right;}
-.box-type-1{padding:24px 18px;border-radius: 8px;border: 1px dashed #8A949E;}
-.box-type-2{padding:17px 24px;border-radius: 12px;border: 1px solid #CDD1D5;}
+.box-type-1{padding:20px 24px;border-radius: 8px;border: 1px dashed #8A949E;}
+.box-type-2{padding:20px 24px;border-radius: 8px;border: 1px solid #CDD1D5;}
+.box-type-3{padding:20px 24px;border-radius: 8px;border: 1px solid #4D99A0;}
 
-.section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);
-  @media (max-width: 1200px) { 
-    font-size: var(--fs-16);
-  }
-
-}
+.section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);}
 
 .txt-type-1{font-size: var(--fs-18);font-weight: 500;}
 .txt-type-2{
@@ -3462,6 +3469,810 @@
         &:hover {
           text-decoration: underline;
           color: #087C80;
+        }
+      }
+    }
+  }
+}
+
+// 기관장 인사말
+.pageCont-AboutGreeting {
+  .intro-message {
+    color: #000;
+    font-size: var(--fs-24);
+    padding-bottom: 40px;
+    
+    span {
+      color: var(--color-text-2);
+      font-weight: 700;
+    }
+  }
+
+  .greeting-content-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 70px;
+
+    .ceo-img {
+      flex: 0 0 320px;
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    }
+
+    .greeting-article {
+      flex: 1;
+      word-break: keep-all;
+      font-size: var(--fs-18);
+      .txt1{
+        font-weight: 700;
+      }
+    }
+    .signature{
+      text-align: right;
+      span{
+        font-size: var(--fs-24);
+        font-weight: 700;
+      }
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .intro-message {
+      padding-bottom: 20px;
+    }
+    
+    .greeting-content-box {
+      gap: 40px; 
+
+      .ceo-img {
+        flex: 0 0 280px;
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    .greeting-content-box {
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+
+      .ceo-img {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .greeting-article {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// 역대 기관장
+.pageCont-AboutFormer {
+  .former-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 24px; 
+
+    .box {
+      display: flex;
+      align-items: flex-start;
+      padding: 35px 16px;
+      border-radius: 8px;
+      border: 1px solid #D8D8D8;
+      background-color: #fff;
+
+      .thumbnail {
+        flex: 0 0 162px; 
+        margin-right: 16px;
+        
+        img {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+      }
+
+      .former-info {
+        flex: 1;
+        
+        .former-tit {
+          font-size: var(--fs-18);
+          margin-bottom: 10px;
+
+          strong {
+            font-size: var(--fs-24);
+            font-weight: 700;
+            margin-right: 4px;
+          }
+        }
+
+        ul {
+          li {
+            font-size: var(--fs-16);
+            line-height: 1.6;
+            margin-bottom: 4px;
+            position: relative; 
+            padding-left: 12px;
+            list-style: none; 
+
+            &::before {
+              content: "";
+              position: absolute;
+              left: 0;
+              top: 10px;
+              width: 4px; 
+              height: 4px; 
+              background-color: #1E2124;
+              border-radius: 50%; 
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .former-list {
+      grid-template-columns: 1fr; 
+      
+    }
+  }
+}
+
+//연혁
+.pageCont-AboutHistory {
+  .history-list {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 150px; 
+    padding-bottom: 50px;
+    
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background-color: #D8D8D8;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+
+    .history-item {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 2px; 
+        width: 95px;
+        height: 22px; 
+        z-index: 3;
+      }
+
+      .year {
+        font-size: var(--fs-24);
+        font-weight: 700;
+        color: var(--color-text-2);
+        line-height: 1;
+        margin-bottom: 5px;
+      }
+
+      .history-desc p {
+        font-size: var(--fs-18);
+        line-height: 1.4;
+        word-break: keep-all;
+        span { font-weight: 700; margin-right: 10px; }
+      }
+
+      &.odd {
+        grid-column: 2;
+        padding-left: 92px;
+        text-align: left;
+        &::before {
+          left: -11.5px;
+          background: url('/img/aboutHistory_ico01.png') no-repeat center / contain;
+        }
+      }
+
+      &.even {
+        grid-column: 1;
+        padding-right: 92px;
+        text-align: right;
+        &::before {
+          right: -11.5px;
+          background: url('/img/aboutHistory_ico02.png') no-repeat center / contain;
+        }
+      }
+
+      /* 각 아이템이 무조건 다음 줄(Row)에 쌓이도록 강제 지정 */
+      /* 텍스트가 길어도 시작점은 100px 단위로 좌표가 찍힙니다. */
+      @for $i from 1 through 20 {
+        &:nth-child(#{$i}) {
+          grid-row: #{$i};
+        }
+      }
+    }
+  }
+
+
+  @media (max-width: 768px) {
+    .history-list {
+      display: block; 
+      padding:0px;
+
+      &::after {
+        left: 20px;
+        transform: none;
+      }
+
+      .history-item {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 0 0 40px 0;
+        padding: 0;
+        text-align: left;
+
+        &.odd, &.even {
+          padding-right: 0px;
+          padding-left: 120px;
+          text-align: left;
+          
+          &::before {
+            top: 0px;
+            left: 9px; 
+            right: auto;
+            background: url('/img/aboutHistory_ico01.png') no-repeat center / contain;
+          }
+        }
+
+
+        &:nth-child(n) {
+          grid-row: auto;
+          grid-column: auto;
+        }
+
+        &::before {
+          left: -42px;
+          right: auto;
+          top: 4px;
+          margin: 0;
+        }
+
+
+        .year {
+          display: block;
+          text-align: left;
+          margin: 0 0 10px 0;
+          padding: 0;
+        }
+
+        .history-desc {
+          display: block;
+          text-align: left;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 460px) {
+    .history-item {
+      &:nth-child(n) {
+        &.odd, &.even {
+          padding-left: 80px;
+          
+          &::before {
+            width: 66px;
+            left: 13px; 
+          }
+        }
+      }
+    }
+  }
+}
+
+// 미션과 비전
+.section-mission-vision{
+  .goal-box {
+    display: flex;     
+    align-items: center;
+    gap: 67px;         
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 50px;
+
+    .goal-head {
+      position: relative;
+      width: 133px;
+      height: 152px;
+      flex-shrink: 0; 
+      border-radius: 20px;
+      background: #94CFBB;
+      box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .head-label {
+        width: 119px;   
+        height: 136px;
+        border-radius: 20px;
+        border: 1px solid #FFF;
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 24px;
+        color: #fff;
+        font-weight:700;
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        right: -32px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        border-radius: 18px;
+        background: #94CFBB;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        right: -67px; 
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 1px;
+        background: #94CFBB;
+        z-index: 4;
+      }
+    }
+
+    .goal-body {
+      flex: 1;      
+      border-radius: 20px;
+      border: 4px solid #94CFBB;
+      padding: 20px;
+      background: #fff;
+      height: 152px;    
+      display: flex;
+      align-items: center;
+
+      .goal-content {
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        border: 2px dotted #94CFBB;
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        font-size: 32px;
+        font-weight: 700;
+        white-space: nowrap; 
+
+        .text-highlight {
+          color: #087C80;
+        }
+      }
+    }
+
+    &.type-vision {
+      .goal-head {
+        background: #4D99A0; 
+
+        &::after {
+        background: #4D99A0; 
+        }
+
+        &::before {
+          background: #4D99A0; 
+        }
+        
+      }
+      .goal-body {
+        border-color: #4D99A0;
+        .goal-content {
+          border-color: #4D99A0; 
+          font-size: 24px;
+          .text-highlight {
+            color: #087C80;
+          }
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column; 
+      gap: 50px;     
+
+      .goal-head {
+        width: 100% !important; 
+        flex-shrink: 1;   
+        padding:10px 20px;
+        height:auto;
+        
+        .head-label {
+          width: 100%;   
+          height:auto;
+          padding:10px;
+          
+        }
+
+        &::after {
+          right: 50%;
+          top: auto;
+          bottom: -30px;      
+          transform: translateX(50%);
+        }
+
+        &::before {
+          right: 50%;
+          top: auto;
+          bottom: -50px;    
+          transform: translateX(50%);
+          width: 1px;        
+          height: 36px;
+        }
+      }
+
+      .goal-body {
+        width: 100%;   
+        height: auto;      
+        border-width: 4px;   
+
+        .goal-content {
+          white-space: normal;  
+          flex-direction: column; 
+          padding: 25px 20px;
+          text-align: center;
+          height: auto;
+
+          .text-highlight {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
+.strategic-system {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 60px; 
+  padding: 37px 50px;
+  border-radius: 8px;
+  border: 1px solid #D8D8D8;
+
+  @media (max-width: 1200px) { padding: 30px; gap: 24px; }
+  @media (max-width: 640px) { padding: 20px 15px; }
+
+  .target-title, .task-title {
+    padding: 12px 30px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    font-size: 24px;
+    color: #FFF;
+    font-weight: 700;
+    text-align: center;
+    
+    @media (max-width: 640px) { width: 100%; }
+  }
+
+  .target-title { background: #94CFBB; }
+  .task-title { background: #4D99A0; }
+
+  .target-list, .task-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 40px;
+    list-style: none;
+    padding: 0;
+
+    @media (max-width: 1200px) { grid-template-columns: repeat(2, 1fr); gap: 24px;}
+    @media (max-width: 640px) { grid-template-columns: 1fr; }
+
+    li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      text-align: center;
+      padding: 25px 25px;
+      line-height: 1.4;
+      border-radius: 8px;
+      border: 1px solid #94CFBB;
+      word-break: keep-all;
+      font-size: var(--fs-20);
+    }
+  }
+
+  .target-list li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; 
+    padding-top: 30px; 
+
+    &::before {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 50px; 
+      flex-shrink: 0; 
+      box-sizing: content-box;
+      padding: 0 0 20px 0;
+      background-repeat: no-repeat;
+      background-position: top center; 
+      border-bottom: 1px solid #94CFBB;
+      margin-bottom: 20px; 
+    }
+
+    &:nth-child(1)::before { background-image: url('/img/aboutVision_ico01.png'); }
+    &:nth-child(2)::before { background-image: url('/img/aboutVision_ico02.png'); }
+    &:nth-child(3)::before { background-image: url('/img/aboutVision_ico03.png'); }
+    &:nth-child(4)::before { background-image: url('/img/aboutVision_ico04.png'); }
+  }
+
+  .task-list li {
+    font-size: var(--fs-18);
+    border: 1px solid #4D99A0;
+  }
+}
+
+//조직도
+.org-tree {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .org-top-section {
+    display: flex;
+    align-items: flex-start; 
+    gap: 34px;
+    margin-bottom: 118px;
+    padding-left: 211px; 
+    position: relative;
+
+    @media (max-width: 900px) {
+      flex-direction: column;
+      align-items: center;
+      padding-left: 0;
+      margin-bottom: 40px;
+      gap: 16px;
+      width: 100%; // 상단 섹션 전체 너비 사용
+    }
+
+    .node-boss {
+      width: 202px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: #087C80;
+      color: #fff;
+      font-weight: 700;
+      font-size: 20px;
+      position: relative; 
+
+      @media (max-width: 900px) {
+        width: 100%; // 900 이하에서 너비 100%
+      }
+
+      // [라인] 원장에서 이사회로 가는 가로선
+      &::after {
+        content: "";
+        position: absolute;
+        right: -34px; 
+        top: 50%;
+        width: 34px;
+        height: 1px;
+        background-color: #8A949E;
+        @media (max-width: 900px) { display: none; } // 라인 제거
+      }
+
+      // [라인] 원장에서 아래로 내려가는 세로선 시작
+      &::before {
+        content: "";
+        position: absolute;
+        bottom: -175px; 
+        left: 50%;
+        width: 1px;
+        height: 175px;
+        background-color: #8A949E;
+        @media (max-width: 900px) { display: none; } // 라인 제거
+      }
+    }
+
+    .board-audit-group {
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+      align-items: flex-start;
+      position: relative;
+
+      @media (max-width: 900px) {
+        align-items: center;
+        gap: 16px;
+        width: 100%; // 그룹 전체 너비 100%
+      }
+
+      .node-board {
+        width: 202px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        border: 2px solid #229C91;
+        color: #229C91;
+        font-weight: 700;
+        font-size: 18px;
+        box-sizing: border-box;
+
+        @media (max-width: 900px) {
+          width: 100%; // 900 이하에서 너비 100%
+        }
+      }
+
+      .node-audit {
+        width: 202px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        border: 2px solid #229C91;
+        color: #229C91;
+        font-weight: 700;
+        font-size: 18px;
+        box-sizing: border-box;
+        position: relative;
+
+        @media (max-width: 900px) {
+          width: 100%; 
+        }
+
+        // [라인] 감사팀으로 뻗어 들어가는 짧은 가로선
+        &::before {
+          content: "";
+          position: absolute;
+          left: -135px;
+          top: 50%;
+          width: 135px;
+          height: 1px;
+          background-color: #8A949E;
+          @media (max-width: 900px) { display: none; } // 라인 제거
+        }
+      }
+    }
+  }
+
+  .org-division-row {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    align-items: stretch;
+
+    @media (max-width: 900px) {
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+
+    // [라인] 본부들을 가로로 잇는 긴 수평선
+    &::before {
+      content: "";
+      position: absolute;
+      top: -46px;
+      left: 11.7%; 
+      right: 11.7%; 
+      height: 1px;
+      background-color: #8A949E;
+
+      @media (max-width: 1200px) { left: 11.8%; right: 11.8%; }
+      @media (max-width: 900px) { display: none; } // 라인 제거
+    }
+
+    .division-column {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      @media (max-width: 900px) {
+        width: 100%;
+      }
+
+      // [라인] 수평선에서 각 본부 헤더로 내려오는 짧은 세로선
+      &::before {
+        content: "";
+        position: absolute;
+        top: -46px;
+        left: 50%;
+        width: 1px;
+        height: 46px;
+        background-color: #8A949E;
+        @media (max-width: 900px) { display: none; } // 라인 제거
+      }
+
+      .division-header {
+        padding: 10px;
+        border-radius: 8px;
+        background: #4D99A0;
+        color: #fff;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .team-container {
+        flex: 1;
+        border-radius: 8px;
+        border: 1px solid #D8D8D8;
+        padding: 16px;
+        background: #fff;
+
+        .team-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+
+          .team-item {
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+
+            &::before {
+              content: "";
+              display: inline-block;
+              width: 4px;
+              height: 4px;
+              background-color: #1E2124;
+              border-radius: 50%;
+              margin-right: 8px;
+              flex-shrink: 0;
+            }
+          }
         }
       }
     }

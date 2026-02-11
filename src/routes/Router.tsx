@@ -17,6 +17,7 @@ const DurSearchRoomKo = lazy(() => import('@/pages/ko/maintask/dur/DurSearchRoom
 const DurNoticeListKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeList'))
 const DurNoticeDetailKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeDetail'))
 const ProposalKo = lazy(() => import('@/pages/ko/maintask/dur/Proposal'))
+const MyDrugInfoKo = lazy(() => import('@/pages/ko/maintask/dur/MyDrugInfo'))
 
 const FaqNoticeKo = lazy(() => import('@/pages/ko/news/FaqNotice'))
 
@@ -181,6 +182,7 @@ export default function Router() {
                 <Route path="/:lang/maintask/dur/DurNoticeList/:bbsId" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListKo /> }} />} />
                 <Route path="/:lang/maintask/dur/DurNoticeList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailKo /> }} />} />
                 <Route path="/:lang/maintask/dur/Proposal" element={<LangElement byLang={{ ko: <ProposalKo />, en: <ProposalKo /> }} />} />
+                <Route path="/:lang/maintask/dur/MyDrugInfo" element={<LangElement byLang={{ ko: <MyDrugInfoKo />, en: <MyDrugInfoKo /> }} />} />
 
 
                 {/* open(정보공개) */}

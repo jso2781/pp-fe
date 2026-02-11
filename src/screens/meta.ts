@@ -411,7 +411,38 @@ export const screens: ScreenMeta[] = [
     "title": "경영공시",
     "uiType": "cms"
   },
+  {
+    "id": "KIDS-PP-US-IN-01",
+    "title": "기관장 인사말",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-IN-02",
+    "title": "역대 기관장",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-IN-03",
+    "title": "연혁",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-IN-04",
+    "title": "비전 및 목표",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-IN-05",
+    "title": "조직도",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-IN-06",
+    "title": "설립근거 및 관련법령",
+    "uiType": "cms"
+  },
 
+  
   
   
   //내업무 템플릿

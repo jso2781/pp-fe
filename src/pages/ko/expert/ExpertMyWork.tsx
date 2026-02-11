@@ -142,7 +142,7 @@ export default function ExpertMyWork() {
   // 대국민포털_전문가내업무관리 전문가 회원 업무 신청
   const handleConfirmApplyExprtTask = (exprtTaskPVO : ExprtTaskPVO, label: string) => {
     showDialogBackdrop({
-      message: `${label} 업무를 신청하시겠습니까?`,
+      message: `${label} 사용을 신청하시겠습니까?\n승인이 완료되면 좌측 메뉴에서 해당 업무 시스템을 확인하실 수 있습니다.`,
       title: '업무시스템 사용 신청',
       type: 'confirm',
       confirmText: '확인',

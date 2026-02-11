@@ -148,11 +148,11 @@ export default function CleanDetail () {
                       </Box>
                       <Box className="summary-item">
                         <Typography component="dt" className="label">진행상태</Typography>
-                        <Typography component="dd" className="view-value">진행상태?</Typography>
+                        <Typography component="dd" className="view-value">접수완료</Typography>
                       </Box>
                       <Box className="summary-item">
                         <Typography component="dt" className="label">처리일시</Typography>
-                        <Typography component="dd" className="view-value">처리일시?</Typography>
+                        <Typography component="dd" className="view-value">-</Typography>
                       </Box>
                     </Box>
                   </Box>

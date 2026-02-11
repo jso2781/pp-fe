@@ -319,6 +319,43 @@ export default function PUB() {
                       </table>
                     </Box>
                   </Box>
+
+                  {/* ------------------------------------------------------------------------------------------------ */}
+                  <h3 className="section-title">테이블 type-3</h3>
+                  <Box className="base-table-container">
+                    <Box className="table-responsive">
+                      <table className="base-table table-type-3">
+                        <caption className="sr-only">테이블제목</caption>
+                        <colgroup>
+                          <col style={{ width: '25%' }} />
+                          <col style={{ width: '45%' }} />
+                          <col style={{ width: '30%' }} />
+                        </colgroup>
+                        <thead>
+                          <tr>
+                            <th scope="col" colSpan={2}>정보 유형</th>
+                            <th scope="col">정보 건수</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row" rowSpan={3}>금기성분 고시</th>
+                            <td>병용금기 (2004년~)</td>
+                            <td>1,450</td>
+                          </tr>
+                          <tr>
+                            <td>특정연령대금기 (2004년~)</td>
+                            <td>207</td>
+                          </tr>
+                          <tr>
+                            <td>임부금기 (2008년~)</td>
+                            <td>1,210</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </Box>
+                  </Box>
+
                   {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">테이블 모바일 스크롤 (가로)</h3>
                   <Box className="base-table-container">
@@ -871,7 +908,7 @@ export default function PUB() {
                   <ul className="num-list">
                     <li>
                       <span className="num">1.</span>
-                      <p className="txt">사망을 초래하거나 생명을 위협하는 사례</p>
+                      <p className="txt">사망을 초래하거나 생명을 위협하는 사례 식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의</p>
                     </li>
                     <li>
                       <span className="num">2.</span>
@@ -949,6 +986,7 @@ export default function PUB() {
                   <h3 className="section-title">box</h3>
                   <div className="box-type-1"></div>
                   <div className="box-type-2"></div>
+                  <div className="box-type-3"></div>
                   {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">웹,모바일 이미지</h3>
                   <div className="img-switcher">
