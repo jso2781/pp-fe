@@ -1062,7 +1062,8 @@
     
     //스크롤바
     &::-webkit-scrollbar {
-      width: 8px; 
+      width: 10px;  // 세로 스크롤바 너비
+      height: 10px; // 가로 스크롤바 높이 
     }
 
     &::-webkit-scrollbar-track {
@@ -1178,14 +1179,24 @@
       border-top: 2px solid #087C80;
     }
 
+
     &.table-type-3 {
-      table-layout: fixed;width:100%;
-      thead th{padding: 7px 17px;border-left:none;border-right:none;}
-      tbody th{padding: 7px 17px;text-align: left;border-left:none;border-right:none;}
-      tbody td{padding: 7px 17px;text-align: left;border-left:none;border-right:none;
-        &:first-of-type {
-          border-left: 1px solid #B9B9B9; 
-        }
+      table-layout: fixed;
+      width: calc(100% + 1px);
+      margin-left: -1px;   
+      border-collapse: collapse;
+      border-top: 2px solid #087C80;
+      border-right: none;
+      border-left: none;
+
+      th, td {
+        border-left: 1px solid #B9B9B9; 
+        border-right: none;
+      }
+
+      tr th:last-child,
+      tr td:last-child {
+        border-right: none;
       }
     }
 
@@ -2663,15 +2674,11 @@
    CMS
    ========================================================================== */
 .shortcut-link{text-align: right;}
-.box-type-1{padding:24px 18px;border-radius: 8px;border: 1px dashed #8A949E;}
-.box-type-2{padding:17px 24px;border-radius: 12px;border: 1px solid #CDD1D5;}
+.box-type-1{padding:20px 24px;border-radius: 8px;border: 1px dashed #8A949E;}
+.box-type-2{padding:20px 24px;border-radius: 8px;border: 1px solid #CDD1D5;}
+.box-type-3{padding:20px 24px;border-radius: 8px;border: 1px solid #4D99A0;}
 
-.section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);
-  @media (max-width: 1200px) { 
-    font-size: var(--fs-16);
-  }
-
-}
+.section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);}
 
 .txt-type-1{font-size: var(--fs-18);font-weight: 500;}
 .txt-type-2{
