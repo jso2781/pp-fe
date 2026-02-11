@@ -3467,3 +3467,315 @@
     }
   }
 }
+
+// 기관장 인사말
+.pageCont-AboutGreeting {
+  .intro-message {
+    color: #000;
+    font-size: var(--fs-24);
+    padding-bottom: 40px;
+    
+    span {
+      color: var(--color-text-2);
+      font-weight: 700;
+    }
+  }
+
+  .greeting-content-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 70px;
+
+    .ceo-img {
+      flex: 0 0 320px;
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    }
+
+    .greeting-article {
+      flex: 1;
+      word-break: keep-all;
+      font-size: var(--fs-18);
+      .txt1{
+        font-weight: 700;
+      }
+    }
+    .signature{
+      text-align: right;
+      span{
+        font-size: var(--fs-24);
+        font-weight: 700;
+      }
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .intro-message {
+      padding-bottom: 20px;
+    }
+    
+    .greeting-content-box {
+      gap: 40px; 
+
+      .ceo-img {
+        flex: 0 0 280px;
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    .greeting-content-box {
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+
+      .ceo-img {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .greeting-article {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// 역대 기관장
+.pageCont-AboutFormer {
+  .former-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 24px; 
+
+    .box {
+      display: flex;
+      align-items: flex-start;
+      padding: 35px 16px;
+      border-radius: 8px;
+      border: 1px solid #D8D8D8;
+      background-color: #fff;
+
+      .thumbnail {
+        flex: 0 0 162px; 
+        margin-right: 16px;
+        
+        img {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+      }
+
+      .former-info {
+        flex: 1;
+        
+        .former-tit {
+          font-size: var(--fs-18);
+          margin-bottom: 10px;
+
+          strong {
+            font-size: var(--fs-24);
+            font-weight: 700;
+            margin-right: 4px;
+          }
+        }
+
+        ul {
+          li {
+            font-size: var(--fs-16);
+            line-height: 1.6;
+            margin-bottom: 4px;
+            position: relative; 
+            padding-left: 12px;
+            list-style: none; 
+
+            &::before {
+              content: "";
+              position: absolute;
+              left: 0;
+              top: 10px;
+              width: 4px; 
+              height: 4px; 
+              background-color: #1E2124;
+              border-radius: 50%; 
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .former-list {
+      grid-template-columns: 1fr; 
+      
+    }
+  }
+}
+
+//연혁
+.pageCont-AboutHistory {
+  .history-list {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 150px; 
+    padding-bottom: 50px;
+    
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background-color: #D8D8D8;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+
+    .history-item {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 2px; 
+        width: 95px;
+        height: 22px; 
+        z-index: 3;
+      }
+
+      .year {
+        font-size: var(--fs-24);
+        font-weight: 700;
+        color: var(--color-text-2);
+        line-height: 1;
+        margin-bottom: 5px;
+      }
+
+      .history-desc p {
+        font-size: var(--fs-18);
+        line-height: 1.4;
+        word-break: keep-all;
+        span { font-weight: 700; margin-right: 10px; }
+      }
+
+      &.odd {
+        grid-column: 2;
+        padding-left: 92px;
+        text-align: left;
+        &::before {
+          left: -11.5px;
+          background: url('/img/aboutHistory_ico01.png') no-repeat center / contain;
+        }
+      }
+
+      &.even {
+        grid-column: 1;
+        padding-right: 92px;
+        text-align: right;
+        &::before {
+          right: -11.5px;
+          background: url('/img/aboutHistory_ico02.png') no-repeat center / contain;
+        }
+      }
+
+      /* 각 아이템이 무조건 다음 줄(Row)에 쌓이도록 강제 지정 */
+      /* 텍스트가 길어도 시작점은 100px 단위로 좌표가 찍힙니다. */
+      @for $i from 1 through 20 {
+        &:nth-child(#{$i}) {
+          grid-row: #{$i};
+        }
+      }
+    }
+  }
+
+
+  @media (max-width: 768px) {
+    .history-list {
+      display: block; 
+      padding:0px;
+
+      &::after {
+        left: 20px;
+        transform: none;
+      }
+
+      .history-item {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 0 0 40px 0;
+        padding: 0;
+        text-align: left;
+
+        &.odd, &.even {
+          padding-right: 0px;
+          padding-left: 120px;
+          text-align: left;
+          
+          &::before {
+            top: 0px;
+            left: 9px; 
+            right: auto;
+            background: url('/img/aboutHistory_ico01.png') no-repeat center / contain;
+          }
+        }
+
+
+        &:nth-child(n) {
+          grid-row: auto;
+          grid-column: auto;
+        }
+
+        &::before {
+          left: -42px;
+          right: auto;
+          top: 4px;
+          margin: 0;
+        }
+
+
+        .year {
+          display: block;
+          text-align: left;
+          margin: 0 0 10px 0;
+          padding: 0;
+        }
+
+        .history-desc {
+          display: block;
+          text-align: left;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 460px) {
+    .history-item {
+      &:nth-child(n) {
+        &.odd, &.even {
+          padding-left: 80px;
+          
+          &::before {
+            width: 66px;
+            left: 13px; 
+          }
+        }
+      }
+    }
+  }
+}

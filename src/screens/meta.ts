@@ -411,7 +411,23 @@ export const screens: ScreenMeta[] = [
     "title": "경영공시",
     "uiType": "cms"
   },
+  {
+    "id": "KIDS-PP-US-IN-01",
+    "title": "기관장 인사말",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-IN-02",
+    "title": "역대 기관장",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-IN-03",
+    "title": "연혁",
+    "uiType": "cms"
+  },
 
+  
   
   
   //내업무 템플릿
