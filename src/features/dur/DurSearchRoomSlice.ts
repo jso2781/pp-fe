@@ -32,6 +32,14 @@ const DurSearchRoomSlice = createSlice({
   reducers: {
     clearCurrent: (state) => {
       state.current = null;
+    },
+    /** 다른 메뉴로 나갔다가 돌아올 때 조회 결과 제거용 */
+    resetResults: (state) => {
+      state.list = [];
+      state.totalCount = null;
+      state.totalPages = null;
+      state.current = null;
+      state.error = null;
     }
   },
   extraReducers: (builder) => {
@@ -53,5 +61,5 @@ const DurSearchRoomSlice = createSlice({
   }
 });
 
-export const { clearCurrent } = DurSearchRoomSlice.actions
+export const { clearCurrent, resetResults } = DurSearchRoomSlice.actions
 export default DurSearchRoomSlice.reducer

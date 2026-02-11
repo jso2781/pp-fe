@@ -138,7 +138,7 @@ export interface CpctItem {
     dayMaxAdminCpct: string
 
     /**
-     * 상세정보
+     * 상세정보(비고 대체)
      */
     dtlInfoCn: string
 }
@@ -190,9 +190,9 @@ export interface EftgrpItem {
     effGroupNm: string
 
     /**
-     * 품목명(계열)
+     * 계열(그룹명)
      */
-    itemNm: string
+    groupNm: string
 }
 
 /**
@@ -293,7 +293,7 @@ export const mockDurSearchRoomList: DurSearchRoomRVO[] = [
     cpctList: [],
     dosageList: [],
     eftgrpList: [
-      { igrdNm: 'Aceclofenac', itemNm: '아세클로페낙', prdctNm: '아세클로페낙', effGroupNm: '해열진통소염제' },
+      { igrdNm: 'Aceclofenac', groupNm: 'Group 3', prdctNm: '아세클로페낙', effGroupNm: '해열진통소염제' },
     ],
     snctzList: [],
     nurswList: [],
