@@ -431,6 +431,11 @@ export const screens: ScreenMeta[] = [
     "title": "비전 및 목표",
     "uiType": "cms"
   },
+  {
+    "id": "KIDS-PP-US-IN-05",
+    "title": "조직도",
+    "uiType": "cms"
+  },
 
   
   
