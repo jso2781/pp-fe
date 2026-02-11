@@ -82,12 +82,6 @@ export default function CleanForm () {
     }
   }
 
-  const onInvalid = (errors: FieldErrors) => {
-    const firstErrorField = Object.keys(errors)[0];
-    if (firstErrorField) {
-      form.setFocus('encptMbrFlnm');
-    }
-  }
 
   const handleCancle = () => {
     navigate('/ko/about/ethics/CleanCenter');
@@ -120,7 +114,7 @@ export default function CleanForm () {
                 <section className="pageCont-cleanCenter">
                   <h3 className="section-title">클린신고서 작성</h3>
                   <ZodFormProvider schema={schema} methods={form}>
-                    <Box component="form" onSubmit={form.handleSubmit(onSubmit, onInvalid)} noValidate>
+                    <Box component="form" onSubmit={form.handleSubmit(onSubmit)} noValidate>
                       <Box className="bordered-box">
                         <Box className="form-group-wrap">
                           {/* 이름 (필수) */}
@@ -132,7 +126,8 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-required': 'true', 'aria-describedby': 'encptMbrFlnm-alert' },
                                 formHelperText: { id: 'encptMbrFlnm-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' }
-                            }}/>
+                              }}
+                            />
                           </Box>
 
                           {/* 휴대전화번호 (필수) */}
@@ -144,7 +139,8 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-required': 'true', 'aria-describedby': 'encptMbrTelno-alert' },
                                 formHelperText: { id: 'encptMbrTelno-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
-                            }}/>
+                              }}
+                            />
                           </Box>
 
                           {/* 이메일 (선택) */}
@@ -156,7 +152,8 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-describedby': 'encptMbrEmlNm-alert' },
                                 formHelperText: { id: 'encptMbrEmlNm-alert', className: 'error-alert' },
-                            }}/>
+                              }}
+                            />
                           </Box>
 
                           {/* 신고사항 제목 (필수) */}
@@ -168,7 +165,8 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-required': 'true', 'aria-describedby': 'dclrTtlNm-alert' },
                                 formHelperText: { id: 'dclrTtlNm-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
-                            }}/>
+                              }}
+                            />
                           </Box>
 
                           {/* 부정행위자 이름 (필수) */}
@@ -180,7 +178,8 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-required': 'true', 'aria-describedby': 'dshstyActrFlnm-alert' },
                                 formHelperText: { id: 'dshstyActrFlnm-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
-                            }}/>
+                              }}
+                            />
                           </Box>
 
                           {/* 부정행위 시기 (필수) */}
@@ -192,7 +191,8 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-required': 'true', 'aria-describedby': 'dshstyActPipCn-alert' },
                                 formHelperText: { id: 'dshstyActPipCn-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
-                            }}/>
+                              }}
+                            />
                           </Box>
 
                           {/* 부정행위 장소 (필수) */}
@@ -204,7 +204,8 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-required': 'true', 'aria-describedby': 'dshstyActPlcCn-alert' },
                                 formHelperText: { id: 'dshstyActPlcCn-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
-                            }}/>
+                              }}
+                            />
                           </Box>
 
                           {/* 부정행위 내용 (필수) */}
@@ -216,7 +217,8 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-required': 'true', 'aria-describedby': 'dshstyActCn-alert' },
                                 formHelperText: { id: 'dshstyActCn-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
-                            }}/>
+                              }}
+                            />
                           </Box>
 
                           {/* 신고인 외 알고 있는 사람 (선택) */}
@@ -228,7 +230,8 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-describedby': 'addIdntfIdfrNm-alert' },
                                 formHelperText: { id: 'addIdntfIdfrNm-alert', className: 'error-alert' },
-                            }}/>
+                              }}
+                            />
                           </Box>
 
                           {/* 신고내용을 확인할 수 있는 방법 (선택) */}
@@ -240,7 +243,8 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-describedby': 'dclrCnIdntyMthdCn-alert' },
                                 formHelperText: { id: 'dclrCnIdntyMthdCn-alert', className: 'error-alert' },
-                            }}/>
+                              }}
+                            />
                           </Box>
 
                           {/* 부정행위를 알게 된 계기 (선택) */}
@@ -252,7 +256,8 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-describedby': 'dshstyActIdntfRsnCn-alert' },
                                 formHelperText: { id: 'dshstyActIdntfRsnCn-alert', className: 'error-alert' },
-                            }}/>
+                              }}
+                            />
                           </Box>
 
                           {/* 부정행위의 횟수 및 기간 (선택) */}
@@ -264,13 +269,14 @@ export default function CleanForm () {
                               slotProps={{
                                 htmlInput: { 'aria-describedby': 'dshstyActPrdCn-alert' },
                                 formHelperText: { id: 'dshstyActPrdCn-alert', className: 'error-alert' },
-                            }}/>
+                              }}
+                            />
                           </Box>
                         </Box>
                       </Box>
                       <Box className="btn-group between">
                         <Button variant="outlined02" size="large" onClick={handleCancle}>취소하기</Button>
-                        <Button variant="contained" size="large" type="submit">제출하기</Button>
+                        <Button variant="contained" size="large" type="submit" disabled={!form.formState.isValid}>제출하기</Button>
                       </Box>
                     </Box>
                   </ZodFormProvider>
