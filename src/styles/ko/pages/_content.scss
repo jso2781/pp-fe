@@ -4380,7 +4380,7 @@
         margin-bottom:5px;
         font-size: var(--fs-20);
         font-weight: 700;
-        & ~ .bullet-text {
+        & ~ .text-bullet {
           margin-left: 15px; 
           color: var(--color-text-3);
           &::before {
@@ -4388,7 +4388,7 @@
           }
         }
       }
-      .bullet-text {
+      .text-bullet {
         position: relative;
         padding-left: 15px; 
         line-height: 1.6;
