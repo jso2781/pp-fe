@@ -20,12 +20,12 @@ export default function RHFRadioGroup({ name, label, options, row }: Props) {
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState }) => (
+      render={({ field: { ref, ...field }, fieldState }) => (
         <FormControl error={!!fieldState.error}>
           {label && <FormLabel required={required}>{label}</FormLabel>}
           <RadioGroup row={row} {...field} value={field.value ?? ''} onChange={(e) => field.onChange(e.target.value)}>
             {options.map((opt) => (
-              <FormControlLabel key={opt.value} value={opt.value} control={<Radio />} label={opt.label} />
+              <FormControlLabel key={opt.value} value={opt.value} control={<Radio slotProps={{ input: { ref }}}/>} label={opt.label} />
             ))}
           </RadioGroup>
           {fieldState.error?.message && <FormHelperText>{fieldState.error.message}</FormHelperText>}
