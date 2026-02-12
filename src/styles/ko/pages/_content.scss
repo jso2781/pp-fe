@@ -4348,5 +4348,74 @@
       }
     }
   }
-  
+}
+
+//핵심서비스 이행표준, 고객응대 서비스 이행표준
+.pageCont-ServiceStandard {
+  .standard-list {
+    dt {
+      display:block; 
+      font-size: var(--fs-20);
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 8px 0;
+      padding: 7px 29px;
+      border-radius: 22.5px 0 0 22.5px;
+      background: #4D99A0;
+    }
+
+    dd {
+      font-size: var(--fs-18);
+      margin-left: 20px;
+      padding: 24px 0;
+      border-top: 2px solid #4D99A0;
+
+      & + dd {
+        border-top: none; 
+        padding-top: 0; 
+        margin-top: -10px; 
+      }
+
+      .sub-tit{
+        margin-bottom:5px;
+        font-size: var(--fs-20);
+        font-weight: 700;
+        & ~ .bullet-text {
+          margin-left: 15px; 
+          color: var(--color-text-3);
+          &::before {
+            background-color: var(--color-text-3);
+          }
+        }
+      }
+      .bullet-text {
+        position: relative;
+        padding-left: 15px; 
+        line-height: 1.6;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 11px; 
+          width: 4px;
+          height: 4px;
+          background-color: var(--color-text-1);
+          border-radius: 50%;
+        }
+      }
+      .sub-text-group{
+        padding-left: 30px; 
+        color: var(--color-text-3);
+      }
+    }
+    .other-case{
+        padding-left: 15px; 
+        color: var(--color-text-3);
+      }
+  }
+
 }

@@ -91,6 +91,8 @@ export const screenComponentLoaders = {
   'KIDS-PP-US-IN-05': () => import('../published/KIDS-PP-US-IN-05'),
   'KIDS-PP-US-IN-06': () => import('../published/KIDS-PP-US-IN-06'),
   'KIDS-PP-US-IN-07': () => import('../published/KIDS-PP-US-IN-07'),
+  'KIDS-PP-US-IN-08': () => import('../published/KIDS-PP-US-IN-08'),
+  'KIDS-PP-US-IN-09': () => import('../published/KIDS-PP-US-IN-09'),
 
   // 내업무
   'KIDS-PP-US-MT-01-LAYOUT': () => import('../published/KIDS-PP-US-MT-01-LAYOUT'),
