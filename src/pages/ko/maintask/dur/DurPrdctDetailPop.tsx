@@ -106,7 +106,7 @@ return (
                   rows.length > 0 && rows.map((row) => (
                     <tr key={row.id}>
                       <td>{row.prdctNm}</td>
-                      <td className="tal">
+                      <td>
                         {row.bzentyNm}
                       </td>
                     </tr>
