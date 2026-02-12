@@ -91,113 +91,139 @@ export default function IntegratedSearch() {
                 </Box>
 
                 {Object.keys(categoryNaming).map((category) => (
-                    <Box
-                    key={`panel-type1-${category}`}
-                    role="tabpanel" 
-                    id={`tabpanel-type1-${category}`} // Tab의 aria-controls와 매칭
-                    aria-labelledby={`tab-type1-${category}`} // 이 패널의 이름이 무엇인지 연결
-                    hidden={activeCategory !== category} // 선택되지 않은 패널은 숨김
-                    className="tab-panel-container"
-                    >
+                <Box
+                key={`panel-type1-${category}`}
+                role="tabpanel" 
+                id={`tabpanel-type1-${category}`} // Tab의 aria-controls와 매칭
+                aria-labelledby={`tab-type1-${category}`} // 이 패널의 이름이 무엇인지 연결
+                hidden={activeCategory !== category} // 선택되지 않은 패널은 숨김
+                className="tab-panel-container"
+                >
                     {activeCategory === category && (
-                        <Box className="panel-content">
+                    <Box className="panel-content">
                         <Typography className="sr-only">{categoryNaming[category]} 탭 컨텐츠 </Typography>
                         {/* 테스트용 */}{categoryNaming[category]} 내용이 출력됩니다.{/* 테스트용 */}
 
                         <Box className="search-summary">
                             <Box className="search-meta">
-                            <Box className="board-info board-keyword" aria-label="적용된 검색어">
-                                <Typography className="board-count">
-                                적용된 검색어 ‘<Typography component="span" className="count">DUR</Typography>’
-                                </Typography>
-                            </Box>
-                            <Box className="board-info board-result" aria-label="게시판 검색결과">
-                                <Typography className="board-count">
-                                검색결과 <Typography component="span" className="count">1</Typography>건
-                                </Typography>
-                            </Box>
+                                <Box className="board-info board-keyword" aria-label="적용된 검색어">
+                                    <Typography className="board-count">
+                                    적용된 검색어 ‘<Typography component="span" className="count">DUR</Typography>’
+                                    </Typography>
+                                </Box>
+                                <Box className="board-info board-result" aria-label="게시판 검색결과">
+                                    <Typography className="board-count">
+                                    검색결과 <Typography component="span" className="count">1</Typography>건
+                                    </Typography>
+                                </Box>
                             </Box>
                             <Box className="filter-control">
-                            <Typography className="sort-label">정렬기준</Typography>
-                            <ul className="sort-list">
-                                {sortOptions.map((option) => (
-                                <li key={option.value}>
-                                    <button
-                                    type="button"
-                                    className={`sort-item ${sort === option.value ? "active" : ""}`}
-                                    onClick={() => setSort(option.value)}
-                                    >
-                                    {option.label}
-                                    </button>
-                                </li>
-                                ))}
-                            </ul>
+                                <Typography className="sort-label">정렬기준</Typography>
+                                <ul className="sort-list">
+                                    {sortOptions.map((option) => (
+                                    <li key={option.value}>
+                                        <button
+                                        type="button"
+                                        className={`sort-item ${sort === option.value ? "active" : ""}`}
+                                        onClick={() => setSort(option.value)}
+                                        >
+                                        {option.label}
+                                        </button>
+                                    </li>
+                                    ))}
+                                </ul>
                             </Box>
                         </Box>
 
                         <Box className="search-result-list">
-                            {/* 버튼 타입 */}
+                            {/* 썸네일 있을경우 */}
                             <Box className="item">
-                            <Box className="item-meta">
-                                <span className="badge">의약품 정보</span>
-                                <span className="date">2025.11.01</span>
-                            </Box>
-                            <Box className="item-body">
-                                <dl className="item-txt">
-                                <dt>의약품적정사용 <span className="keyword">(DUR)</span> 특정연령대 금기 정보</dt>
-                                <dd>
-                                    <span className="keyword">DUR</span> 의약품적정사용 정보는 특정연령대 금기 정보에 따라 허가사항(사용상의 주의사항)을 변경지시하였음을 알려드리니 관련 업무에 참고하시기 바랍니다. 두 줄 이상의 내용은 말줄임을 표시하도록 함.
-                                </dd>
-                                </dl>
-                                <Box className="item-thumb">
-                                <img src="/img/img_test.png" alt="썸네일" />
+                                <Box className="item-meta">
+                                    <span className="badge">의약품 정보</span>
+                                    <span className="date">2025.11.01</span>
+                                </Box>
+                                <Box className="item-body">
+                                    <dl className="item-txt">
+                                        <dt>의약품적정사용 <span className="keyword">(DUR)</span> 특정연령대 금기 정보</dt>
+                                        <dd>
+                                            <span className="keyword">DUR</span> 의약품적정사용 정보는 특정연령대 금기 정보에 따라 허가사항(사용상의 주의사항)을 변경지시하였음을 알려드리니 관련 업무에 참고하시기 바랍니다. 두 줄 이상의 내용은 말줄임을 표시하도록 함.
+                                        </dd>
+                                    </dl>
+                                    <Box className="item-thumb"> <img src="/img/img_test.png" alt="썸네일" /></Box>
+                                </Box>
+                                <Box className="item-action"> 
+                                    <Box className="depth-path">
+                                    <span>기관소식</span>
+                                    <Link href="/" className="loc-link">뉴스・소식</Link>
+                                    </Box>
+                                    <Button 
+                                    className="btn-more" 
+                                    endIcon={<EastIcon />}
+                                    size="small"
+                                    >
+                                    자세히보기
+                                    </Button>
                                 </Box>
                             </Box>
-                            <Box className="item-action"> 
-                                <Box className="depth-path">
-                                <span>기관소식</span>
-                                <Link href="/" className="loc-link">뉴스・소식</Link>
-                                </Box>
-                                <Button 
-                                className="btn-more" 
-                                endIcon={<EastIcon />}
-                                size="small"
-                                >
-                                자세히보기
-                                </Button>
-                            </Box>
-                            </Box>
-                            {/* 링크 타입 */}
+                            {/* 썸네일 없을경우 */}
                             <Box className="item">
-                            <Box className="item-meta">
-                                <span className="badge">의약품 정보</span>
+                                <Box className="item-meta">
+                                    <span className="badge">의약품 정보</span>
+                                    <span className="date">2025.11.01</span>
+                                </Box>
+                                <Box className="item-body">
+                                    <dl className="item-txt">
+                                        <dt>의약품적정사용 <span className="keyword">(DUR)</span> 특정연령대 금기 정보</dt>
+                                        <dd>
+                                            <span className="keyword">DUR</span> 의약품적정사용 정보는 특정연령대 금기 정보에 따라 허가사항(사용상의 주의사항)을 변경지시하였음을 알려드리니 관련 업무에 참고하시기 바랍니다. 두 줄 이상의 내용은 말줄임을 표시하도록 함.
+                                        </dd>
+                                    </dl>
+                                </Box>
+                                <Box className="item-action"> 
+                                    <Box className="depth-path">
+                                    <span>기관소식</span>
+                                    <Link href="/" className="loc-link">뉴스・소식</Link>
+                                    </Box>
+                                    <Button 
+                                    className="btn-more" 
+                                    endIcon={<EastIcon />}
+                                    size="small"
+                                    >
+                                    자세히보기
+                                    </Button>
+                                </Box>
                             </Box>
-                            <Box className="item-body">
-                                <dl className="item-txt">
-                                <dt>의약품적정사용 <span className="keyword">(DUR)</span> 특정연령대 금기 정보</dt>
-                                <dd>
-                                    <span className="keyword">DUR</span> 의약품적정사용 정보는 특정연령대 금기 정보에 따라 허가사항(사용상의 주의사항)을 변경지시하였음을 알려드리니 관련 업무에 참고하시기 바랍니다. 두 줄 이상의 내용은 말줄임을 표시하도록 함.
-                                </dd>
-                                </dl>
-                            </Box>
-                            <Box className="item-action"> 
-                                <Link 
-                                href="https://labor.moel.go.kr/cmmt/calRtrmnt.do" 
-                                className="btn-blank-link"
-                                target="_blank" 
-                                rel="noopener" 
-                                underline="hover"
-                                >
-                                https://labor.moel.go.kr/cmmt/calRtrmnt.do
-                                <LaunchIcon className="link-icon" />
-                                </Link>
-                            </Box>
+                            {/* 외부링크 */}
+                            <Box className="item">
+                                <Box className="item-meta">
+                                    <span className="badge">의약품 정보</span>
+                                </Box>
+                                <Box className="item-body">
+                                    <dl className="item-txt">
+                                    <dt>의약품적정사용 <span className="keyword">(DUR)</span> 특정연령대 금기 정보</dt>
+                                    <dd>
+                                        <span className="keyword">DUR</span> 의약품적정사용 정보는 특정연령대 금기 정보에 따라 허가사항(사용상의 주의사항)을 변경지시하였음을 알려드리니 관련 업무에 참고하시기 바랍니다. 두 줄 이상의 내용은 말줄임을 표시하도록 함.
+                                    </dd>
+                                    </dl>
+                                </Box>
+                                <Box className="item-action"> 
+                                    <Link 
+                                    href="https://labor.moel.go.kr/cmmt/calRtrmnt.do" 
+                                    className="btn-blank-link"
+                                    target="_blank" 
+                                    rel="noopener" 
+                                    underline="hover"
+                                    >
+                                    https://labor.moel.go.kr/cmmt/calRtrmnt.do
+                                    <LaunchIcon className="link-icon" />
+                                    </Link>
+                                </Box>
                             </Box>
                         </Box>
-                        </Box>
-                        /* panel-content */
-                    )}
                     </Box>
+                    /* panel-content */
+                    )}
+                </Box>
                 ))}
                 <Stack className="paging-wrap">
                     <Pagination count={totalPages} page={pageIndex} onChange={(_, p) => {
