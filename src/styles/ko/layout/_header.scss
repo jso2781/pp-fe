@@ -178,12 +178,11 @@
     z-index: 10;
   }
 
-  .depth1-list { display: flex; }
+  .depth1-list { display: flex; height: 67px; align-items: center;}
   .depth1-item { text-align: center; }
 
   .depth1-link { 
-    display: block; 
-    line-height: 67px; 
+    display: block;  
     color: #464C53; 
     font-size: 20px; 
     font-weight: 700; 
