@@ -2612,7 +2612,7 @@
         }
         
         .btn-more {
-          font-size: var(--fs-18); display: inline-flex; align-items: center;
+          font-size: var(--fs-18); font-weight:400; display: inline-flex; align-items: center;
           background: none; border: 0; cursor: pointer; padding: 0;
           .MuiButton-endIcon { margin-left: 4px; svg { font-size: 20px; } }
           &:hover { color: #087C80; }

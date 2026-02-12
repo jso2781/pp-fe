@@ -139,7 +139,6 @@ export default function KIDS_PP_US_IS_01() {
                             </Box>
 
                             <Box className="search-result-list">
-                              {/* 버튼 타입 */}
                               <Box className="item">
                                 <Box className="item-meta">
                                   <span className="badge">의약품 정보</span>
@@ -170,7 +169,33 @@ export default function KIDS_PP_US_IS_01() {
                                   </Button>
                                 </Box>
                               </Box>
-                              {/* 링크 타입 */}
+                              <Box className="item">
+                                <Box className="item-meta">
+                                  <span className="badge">의약품 정보</span>
+                                  <span className="date">2025.11.01</span>
+                                </Box>
+                                <Box className="item-body">
+                                  <dl className="item-txt">
+                                    <dt>의약품적정사용 <span className="keyword">(DUR)</span> 특정연령대 금기 정보</dt>
+                                    <dd>
+                                      <span className="keyword">DUR</span> 의약품적정사용 정보는 특정연령대 금기 정보에 따라 허가사항(사용상의 주의사항)을 변경지시하였음을 알려드리니 관련 업무에 참고하시기 바랍니다. 두 줄 이상의 내용은 말줄임을 표시하도록 함.
+                                    </dd>
+                                  </dl>
+                                </Box>
+                                <Box className="item-action"> 
+                                  <Box className="depth-path">
+                                    <span>기관소식</span>
+                                    <Link href="/" className="loc-link">뉴스・소식</Link>
+                                  </Box>
+                                  <Button 
+                                    className="btn-more" 
+                                    endIcon={<EastIcon />}
+                                    size="small"
+                                  >
+                                    자세히보기
+                                  </Button>
+                                </Box>
+                              </Box>
                               <Box className="item">
                                 <Box className="item-meta">
                                   <span className="badge">의약품 정보</span>

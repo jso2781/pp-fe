@@ -1,0 +1,81 @@
+
+
+div.term h3 {margin: 15px 0;color:#333; font-size:18px; font-weight:600}
+div.term h4 {position: relative; padding-bottom:12px; padding-left:11px; color:#087C80; }
+div.term h4:before {content: ''; position: absolute; top: 0px; left: 0px; width: 5px; margin-top: 5px; height: 5px; background: #087C80;}
+div.term ul, div.term p, div.term ol {padding-bottom:20px;line-height:1.5em}
+div.term ul ul {padding-top:5px;padding-left:15px;}
+
+table.intro {width:100%; margin-top: 5px; border-collapse:collapse; border-spacing:0;border-top:2px solid #087C80; border-bottom:2px solid #d7d7d7}
+table.bbs caption.h5 {visibility:visible !important; z-index:1 !important; padding:15px 0 10px 12px; font-size:12px !important; font-weight:900; text-align:left}
+
+table.intro tr:last-child td, 
+table.intro tr.last td {border-bottom:2px solid #ddd}
+table.intro thead th {padding: 16px 10px; border-bottom: 1px solid #d7d7d7; border-left: 1px solid #d7d7d7; background-color: #f6f6f6;font-weight: 600!important;color:#222; white-space:normal; text-align: center;}
+table.intro tbody th {padding: 12px 10px; border: 1px solid #d7d7d7; color:#222; white-space:nowrap; text-align: center; font-weight: 600;}
+table.intro .left {border-left:none}
+table.intro .right {border-right:none}
+table.intro td {padding: 12px 10px; border:1px solid #ddd; color:#000000;text-align:center; vertical-align:middle}
+table.intro td a.download {display:inline-block; height:100%;  cursor:pointer}
+table.intro td cite {font-style:normal}
+table.intro td cite a {color:#5896dc; font-size:0.92em; text-decoration:underline} 
+
+/* 주요 개인정보 처리 표시 labelingTb */
+#labelingTb {
+	width: 100%;
+	margin: 0px 0px 20px 0px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+#labelingTb th, #labelingTb td {
+	padding: 12px;
+	text-align: center;
+	border: 1px solid #dadada;
+}
+
+#labelingTb th {
+	background-color: #f2f3f7;
+}
+
+#labelingTb p {
+	padding: 0px;
+}
+
+.privacyIcon {
+	height: 25px;
+	width: auto;
+	margin-right: 5px;
+	vertical-align: middle;
+}
+	
+.btn-green {
+    width: 180px;
+    height: 25px;
+    font-size: 15px;
+    background: #087C80;
+    padding: 0 10px !important;
+    color: #fff;
+    line-height: 25px !important;
+    white-space: nowrap;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    margin-left: 15px;
+	border:none;
+}
+.btn-blue {
+    margin-left: 90%;
+    width: 90px;
+    height: 40px;
+    font-size: 15px;
+    background: #087C80;
+    padding: 0 10px !important;
+    color: #fff;
+    line-height: 25px !important;
+    white-space: nowrap;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+	border:none;
+}

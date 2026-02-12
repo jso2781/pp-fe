@@ -1,124 +1,523 @@
 @use '../base/mixins';
 
-.header{
+/* ==========================================================================
+   Header PC 영역
+   ========================================================================== */
+.header {
   position: relative;
-}
-.gov_badge {
-  display: flex;
-  align-items: center;
-  height: 32px;
-  background: #EEF2F7;
-  .txt {
-    padding: 0 0 0 30px;
-    background: url(/img/ico_flag_ko.png) no-repeat left center;
-  }
-}
-.header_topbar{
-  .container{
+
+  // 정부 배지 영역
+  .gov-badge {
     display: flex;
     align-items: center;
-    height:45px;
-    .top_links{
-      margin-left: auto;
+    height: 32px;
+    background-color: #eef2f7;
+
+    .txt {
+      padding-left: 30px;
+      color: var(--color-text-1);
+      background: url(/img/ico_flag_ko.png) no-repeat left center;
     }
   }
-}
-.header_menu {
-  display: flex;
-  align-items: center;
-  position: relative;
-  height:82px;
-  border-top: 1px solid #D8D8D8;
-  border-bottom: 1px solid #D8D8D8;
 
-  .container {
+  // PC 상단 바
+  .header-topbar {
     display: flex;
     align-items: center;
+    height: 41px;
+    background-color: #ffffff;
 
-    .logo{
-      margin-right:70px;
+    @media (max-width: 1200px) {
+      display: none; 
     }
 
-    .util_menu {
-      width: 100%;
+    .container {
+      display: flex;
+      align-items: center;
+    }
+
+    .top-link { 
       margin-left: auto;
       display: flex;
       align-items: center;
-
-      .link_list {
-        margin-left: auto;
-        .ant-space{
-          flex-wrap: wrap;
+      
+      button {
+        color: var(--color-text-1);
+        &:last-child {
+          margin-right: 0;
+          padding-right: 0; 
         }
-        button span{
-          font-size: 18px;
-          font-weight: 700;
-          color:#464C53;
-        }
-        .btn_search{padding-left:28px;background: url(/img/ico_search.svg) no-repeat left center;}
-        .btn_signup{padding-left:28px;background: url(/img/ico_signup.svg) no-repeat left center;}
-        .btn_login{padding-left:28px;background: url(/img/ico_login.svg) no-repeat left center;}
-        .btn_user_role{padding-left:28px;background: url(/img/ico_user_role.svg) no-repeat left center;}
       }
     }
 
-    // .integrated_search {
-    //   width: 390px;
-    //   padding: 5px;
-    //   height: 45px;
-    //   border: 3px solid transparent;
-    //   border-radius: 30px;
-    //   background: linear-gradient(45deg, #D3E01C, #00ABBD, #004638);
-    //   background-clip: padding-box;
-
-    //   .ant-input-affix-wrapper {
-    //     border-radius: 30px;
-    //     border: none;
-    //   }
-    // }
+    .timer_box {
+      display: flex;
+      align-items: center;
+      .time_text {
+        font-size: 16px;
+        color: var(--color-text-2);
+        margin: 0 10px 0 0;
+        padding: 0 0 0 20px;
+        background: url('/img/ico_time.svg') no-repeat left center;
+      }
+      .btn_extend {
+        color: var(--color-text-1);
+        font-size: 16px;
+      }
+    }
   }
-}
 
-.nav{
-  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.25);
-  .container{
+  // 로고, PC 유틸메뉴
+  .header_menu {
+    position: relative;
     display: flex;
     align-items: center;
-  }
-  .gnb_list {
-    width:100%;
-    border:none;
-    line-height: 66px;
-    .ant-menu-title-content{
-      font-size: 17px;
-      font-weight: 700;
-      color: #464C53;
+    height: 82px;
+    background-color: #fff;
+    border-top: 1px solid #d8d8d8;
+    border-bottom: 1px solid #d8d8d8;
+
+    @media (max-width: 1200px) {
+      height: auto;
+      padding: 10px 15px;
+      .container { width: 100%; }
+      .logo img { height: 40px; }
     }
-  }
-  .btn_sitemap{
-    margin-left: auto;
-    width:30px;height:30px;
-    background: url(/img/ico_sitemap.svg) no-repeat center center;
-    span{
-      @include mixins.sr-only;
+    @media (max-width: 640px) {
+      .logo img { height: 30px;}
+
     }
-    &:hover {
-      background: url(/img/ico_sitemap.svg) no-repeat center center !important;
+
+    .container {
+      display: flex;
+      align-items: center;
+
+      .util-menu {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+
+        @media (max-width: 1200px) {
+          display: none;
+        }
+      }
     }
   }
 }
 
-/* span 태그 클릭 영역 확장 */
-.gnb-focus-target {
-  display: block;
+/* ==========================================================================
+   유틸 버튼 스타일 (PC/MO 공통 아이콘 )
+   ========================================================================== */
+.header-topbar .top-link,
+.header_menu .util-menu,
+.mo-header-util,
+.mo-drawer-header {
+  .btn-util {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+    color: #1E2124;
+    font-size: 18px; 
+    font-weight: 700;
+    margin:0 0 0 20px; 
+    padding:0;
+
+    &:last-child {
+      margin-right: 0;
+      padding-right: 0; 
+    }
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 20px; 
+      height: 20px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    &:hover { background-color: transparent; }
+
+    /* 공통 아이콘 설정 */
+    &.search::before { background-image: url('/img/ico_search.svg'); }
+    &.signup::before { background-image: url('/img/ico_signup.svg'); }
+    &.edit-profile::before { background-image: url('/img/ico_edit_profile.svg'); }
+    &.user-reg::before { background-image: url('/img/ico_usrSwtReg.svg'); }
+    &.user-adv::before { background-image: url('/img/ico_usrSwtReg.svg'); }
+    &.my-task::before { background-image: url('/img/ico_task.svg'); }
+    &.adv-task::before { background-image: url('/img/ico_task.svg'); }
+    &.login::before { background-image: url('/img/ico_login.svg'); }
+    &.logout::before { background-image: url('/img/ico_login.svg'); }
+  }
+}
+
+/* ==========================================================================
+   Navigation PC
+   ========================================================================== */
+.navigation {
+  position: relative;
+
+  @media (max-width: 1200px) {
+    display: none;
+  }
+
+  .gnb-wrapper { 
+    position: relative; 
+    width: 100%; 
+    border-bottom: 1px solid #d8d8d8; 
+    background: #fff; 
+  }
+
+  .gnb-container { 
+    position: relative; 
+    width: 1200px; 
+    margin: 0 auto; 
+    height: 66px; 
+    z-index: 10;
+  }
+
+  .depth1-list { display: flex; height: 67px; align-items: center;}
+  .depth1-item { text-align: center; }
+
+  .depth1-link { 
+    display: block; 
+    color: #464C53;
+    line-height:140%; 
+    word-break: keep-all; 
+    white-space: nowrap;
+    font-size: 17px;
+    font-weight: 700; 
+    text-decoration: none; 
+    min-width: 105px; 
+    margin-right: 50px; 
+    padding: 0 30px 0 5px; 
+    position: relative; 
+    transition: color 0.2s;
+    outline: none;
+
+    &::after { 
+      content: ''; 
+      position: absolute; 
+      bottom: 0; left: 0; 
+      width: 0; height: 2px; 
+      background-color: #087C80; 
+      transition: width 0.2s ease-in-out; 
+    }
+
+    &::before { 
+      content: ''; 
+      position: absolute; 
+      right: 5px; top: 50%; 
+      transform: translateY(-70%) rotate(45deg); 
+      width: 12px; height: 12px; 
+      border-right: 2px solid #464C53; 
+      border-bottom: 2px solid #464C53; 
+      transition: transform 0.3s ease, border-color 0.3s ease; 
+      transform-origin: center; 
+    }
+
+    &.active, &:hover, &:focus { 
+      color: #087C80 !important; 
+      &::after { width: 100%; }
+      &::before { 
+        border-color: #087C80; 
+        transform: translateY(-30%) rotate(225deg); 
+      }
+    }
+  }
+
+  .sub-menu-container {
+    position: absolute;
+    top: 67px; left: 0; 
+    width: 1200px; 
+    z-index: 1000;
+    display: flex;
+  }
+
+  .depth2-list { 
+    width: 315px; 
+    padding: 15px ; 
+    border-right: 1px solid #eee; 
+    background: transparent;
+    min-height: 250px; 
+  }
+
+  .depth2-link { 
+    display: block; 
+    padding: 12px 20px; 
+    text-align: left; 
+    font-size: 18px; 
+    font-weight: 500; 
+    color: #087C80; 
+    text-decoration: none; 
+    outline: none;
+
+    &.on, &:focus { 
+      color: #04585B; 
+      border-radius: 10px;
+      background: rgba(118, 210, 213, 0.30);
+    }
+  }
+
+  .depth3-list { 
+    position: absolute; 
+    left: 315px; top: 0; 
+    width: 885px; 
+    padding: 20px 40px; 
+    text-align: left;
+    display: flex;
+    flex-wrap: wrap; 
+    align-content: flex-start;
+
+    li {
+      width: 33.333%; 
+      box-sizing: border-box;
+      padding: 5px 10px;
+      position: relative;
+
+      a { 
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 0; 
+        font-size: 18px;
+        color: #464C53;
+        text-decoration: none; 
+        outline: none;
+
+        &:focus{
+          border:1px solid #04585B;
+        }
+
+        &:hover, &:focus { 
+          color: #04585B; 
+          text-decoration: underline; 
+        }
+      }
+    }
+  }
+
+  .gnb-bg {
+    position: absolute;
+    top: 0;
+    left: calc(-50vw + 50%);
+    right: calc(-50vw + 50%);
+    width: 100vw;
+    height: 100%; 
+    background: #ffffff;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    z-index: -1;
+  }
+}
+
+/* ==========================================================================
+   Mobile UI & Drawer 
+   ========================================================================== */
+
+.mo-header-util {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+
+ .btn-util.login,
+ .btn-mo-menu {
+    display: flex !important;
+    flex-direction: column !important; 
+    justify-content: center;
+    align-items: center;
+    height: auto !important;
+    padding: 5px !important;
+    min-width: 60px; 
+    background-color: transparent !important;
+    gap: 0;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 24px; 
+      height: 24px;
+      margin-bottom: 4px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    font-size: 12px !important;
+    font-weight: 500;
+    color: #333;
+    line-height: 1;
+  }
+
+  .btn-util.login::before { background-image: url('/img/ico_login.svg'); }
+  .btn-mo-menu::before { background-image: url('/img/ico_allmenu.svg'); }
+
+  @media (min-width: 1200px) { display: none !important; }
+ 
+}
+
+.mo-drawer-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+  border-bottom: 1px solid #eee;
+  background-color: #fff;
+  flex-shrink: 0; 
+
+  .mo-drawer-top {
+    display: flex;
+    align-items: center;
+
+    .btn-util.search{
+      margin:0 10px;
+    }
+  }
+
+  .mo-drawer-util {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    width: 100%;
+    padding: 10px; 
+    border-top: 1px solid #eee;
+
+    .user-info-area {
+      .user-msg, .user-name { margin: 0; font-weight: 700; font-size: 18px; }
+    }
+  }
+
+  // Drawer 내부 버튼만 별도로 수치 적용 (기존 15px/18px 유지)
+  .btn-util { 
+    font-size: 15px; 
+
+    &::before {
+      width: 18px; height: 18px;
+    }
+  }
+
+  .mobile-drawer-close { position: absolute; right: 10px; top: 0px; }
+}
+
+
+.mobile-gnb-container {
+  display: flex;
+  position: relative;
   width: 100%;
+  height: 100%;
+  background-color: #fff;
+
+  ul, li { list-style: none; padding: 0; margin: 0; }
+
+  .mobile-depth1-area {
+    width: 250px;
+    height: 100%;
+    background-color: #f4f7f9;
+    border-right: 1px solid #eee;
+    overflow-y: auto;
+
+    @media (max-width: 768px) { width: 150px; }
+
+    .depth1-item {
+      position: static; 
+
+      .depth1-btn {
+        display: block;
+        width: 100%;
+        padding: 20px 10px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e2124;
+        box-sizing: border-box;
+
+        &:focus {
+          outline: 2px solid #087c80;
+          outline-offset: -2px;
+          background-color: #fff;
+        }
+      }
+
+      &.active .depth1-btn {
+        background-color: #fff;
+        color: #087c80;
+        position: relative;
+        &::after {
+          content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+          width: 4px; background-color: #087c80;
+        }
+      }
+    }
+  }
+
+  .mobile-sub-area {
+    position: absolute;
+    top: 0; bottom: 0; right: 0;
+    left: 250px;
+    background-color: #fff;
+    overflow-y: auto;
+    z-index: 10;
+    border-left: 1px solid #eee;
+
+    @media (max-width: 768px) { left: 150px; }
+
+    .depth2-item {
+      border-bottom: 1px solid #f8f8f8;
+
+      .depth2-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 15px 10px;
+        text-decoration: none;
+        color: #333;
+        font-weight: 700;
+        box-sizing: border-box;
+
+        &:focus {
+          outline: 2px solid #087c80;
+          outline-offset: -2px;
+          background-color: rgba(8, 124, 128, 0.05);
+        }
+        
+        &.active { color: #087c80; }
+      }
+    }
+
+    .depth3-list {
+      background-color: #f9f9f9;
+      .depth3-btn {
+        display: block;
+        padding: 10px 20px 10px 35px;
+        text-decoration: none;
+        color: #555;
+        font-size: 14px;
+        box-sizing: border-box;
+
+        svg {
+          flex-shrink: 0; // 아이콘 크기 고정
+          opacity: 0.7; // 아이콘은 살짝 연하게 처리 (선택사항)
+        }
+
+        &:focus {
+          outline: 2px solid #087c80;
+          background-color: #f0f0f0;
+        }
+
+        &:focus {
+          outline: 2px solid #087c80;
+          outline-offset: -2px;
+          background-color: #f0f0f0;
+        }
+      }
+    }
+  }
 }
 
-// sample
-@media (max-width: 980px) {
-  .ds-header__main-inner {
-    grid-template-columns: 1fr;
-  }
-  .ds-header__nav { overflow-x: auto; }
-  .ds-header__search { justify-self: stretch; }
-}
+/* ==========================================================================
+   사이트맵
+   ========================================================================== */
+.sitemap-open-btn{position: absolute;right:0;top:12px;}
