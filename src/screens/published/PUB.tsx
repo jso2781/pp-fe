@@ -113,63 +113,6 @@ export default function PUB() {
                 {/* --- 본문 시작 --- */}
 
 
-
-                  <h3 className="section-title">html 컨텐츠 앵커탭</h3>
-                  <div className="category-anchor-tabs" aria-label="카테고리 이동">
-                    <ul className="tabs-list" role="tablist">
-                      <li className="tab-item" role="none">
-                        <a href="#anchor-sec1" id="tab1" className="tab-link active" role="tab" aria-selected="true" aria-controls="anchor-sec1">사전협의</a>
-                      </li>
-                      <li className="tab-item" role="none">
-                        <a href="#anchor-sec2" id="tab2" className="tab-link" role="tab" aria-selected="false" aria-controls="anchor-sec2">활용결과 등록</a>
-                      </li>
-                      <li className="tab-item" role="none">
-                        <a href="#anchor-sec3" id="tab3" className="tab-link" role="tab" aria-selected="false" aria-controls="anchor-sec3">시스템 이용 문의</a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="anchor-contents-area">
-                    <section id="anchor-sec1" className="tab-section" role="tabpanel" tabIndex={0} aria-labelledby="tab1">
-                      <div className="inner-box">
-                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
-                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
-                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
-                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
-                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
-                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
-                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
-                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
-                      </div>
-                    </section>
-                    <section id="anchor-sec2" className="tab-section" role="tabpanel" tabIndex={0} aria-labelledby="tab2">
-                      <div className="inner-box">
-                        <p>활용결과 등록 상세 내용...</p>
-                        <p>활용결과 등록 상세 내용...</p>
-                        <p>활용결과 등록 상세 내용...</p>
-                        <p>활용결과 등록 상세 내용...</p>
-                        <p>활용결과 등록 상세 내용...</p>
-                        <p>활용결과 등록 상세 내용...</p>
-                        <p>활용결과 등록 상세 내용...</p>
-                      </div>
-                    </section>
-                    <section id="anchor-sec3" className="tab-section" role="tabpanel" tabIndex={0} aria-labelledby="tab3">
-                      <div className="inner-box">
-                        <p>시스템 이용 문의 상세 내용...</p>
-                        <p>시스템 이용 문의 상세 내용...</p>
-                        <p>시스템 이용 문의 상세 내용...</p>
-                        <p>시스템 이용 문의 상세 내용...</p>
-                        <p>시스템 이용 문의 상세 내용...</p>
-                        <p>시스템 이용 문의 상세 내용...</p>
-                        <p>시스템 이용 문의 상세 내용...</p>
-                        <p>시스템 이용 문의 상세 내용...</p>
-                        <p>시스템 이용 문의 상세 내용...</p>
-                        <p>시스템 이용 문의 상세 내용...</p>
-                        <p>시스템 이용 문의 상세 내용...</p>
-                        <p>시스템 이용 문의 상세 내용...</p>
-                      </div>
-                    </section>
-                  </div>
-                  {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">탭 라인</h3>
                   <Box className="category-tabs" role="navigation" aria-label="기본 카테고리 선택">
                     <Tabs
@@ -230,6 +173,81 @@ export default function PUB() {
                       )}
                     </Box>
                   ))}
+                  {/* ------------------------------------------------------------------------------------------------ */}
+                  <h3 className="section-title">html 컨텐츠 앵커탭</h3>
+                  <div className="category-anchor-tabs" aria-label="카테고리 이동">
+                    <ul className="tabs-list" role="tablist">
+                      <li className="tab-item" role="none">
+                        <a href="#anchor-sec1" id="tab1" className="tab-link active" role="tab" aria-selected="true" aria-controls="anchor-sec1">사전협의</a>
+                      </li>
+                      <li className="tab-item" role="none">
+                        <a href="#anchor-sec2" id="tab2" className="tab-link" role="tab" aria-selected="false" aria-controls="anchor-sec2">활용결과 등록</a>
+                      </li>
+                      <li className="tab-item" role="none">
+                        <a href="#anchor-sec3" id="tab3" className="tab-link" role="tab" aria-selected="false" aria-controls="anchor-sec3">시스템 이용 문의</a>
+                      </li>
+                      <li className="tab-item" role="none">
+                        <a href="#anchor-sec4" id="tab4" className="tab-link" role="tab" aria-selected="false" aria-controls="anchor-sec4">시스템시스템시스템 이용 문의</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="anchor-contents-area">
+                    <section id="anchor-sec1" className="tab-section" role="tabpanel" tabIndex={0} aria-labelledby="tab1">
+                      <div className="inner-box">
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                        <p>사전협의 상세 내용... (내용 길게 생략)</p>
+                      </div>
+                    </section>
+                    <section id="anchor-sec2" className="tab-section" role="tabpanel" tabIndex={0} aria-labelledby="tab2">
+                      <div className="inner-box">
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                        <p>활용결과 등록 상세 내용...</p>
+                      </div>
+                    </section>
+                    <section id="anchor-sec3" className="tab-section" role="tabpanel" tabIndex={0} aria-labelledby="tab3">
+                      <div className="inner-box">
+                        <p>시스템 이용 문의 상세 내용...</p>
+                        <p>시스템 이용 문의 상세 내용...</p>
+                      </div>
+                    </section>
+                    <section id="anchor-sec4" className="tab-section" role="tabpanel" tabIndex={0} aria-labelledby="tab4">
+                      <div className="inner-box">
+                        <p>시스템 이용 문의 상세 내용...</p>
+                      </div>
+                    </section>
+                  </div>
+                   {/* ------------------------------------------------------------------------------------------------ */}
+                  <h3 className="section-title">html 컨텐츠 링크탭</h3>
+                  <div className="category-link-tabs" aria-label="카테고리 이동">
+                    <ul className="tabs-list" role="tablist">
+                      <li className="tab-item">
+                        <a href="#" className="tab-link active">사전협의</a>
+                      </li>
+                      <li className="tab-item">
+                        <a href="#" className="tab-link">활용결과 등록</a>
+                      </li>
+                      <li className="tab-item">
+                        <a href="#" className="tab-link">시스템 이용 문의</a>
+                      </li>
+                      <li className="tab-item">
+                        <a href="#" className="tab-link">시스템시스템시스템 이용 문의</a>
+                      </li>
+                      <li className="tab-item">
+                        <a href="#" className="tab-link">시스템 이용이용이용이용이용 문의</a>
+                      </li>
+                    </ul>
+                  </div>
                   {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">데이터 로딩</h3>
                   <Box className="loading-progress-box">
