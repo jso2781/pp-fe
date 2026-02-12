@@ -186,7 +186,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
         >
           {optionsNoBackdrop.title && (
             <DialogTitle className="modal-title">
-              <h2>{optionsNoBackdrop.title}</h2>
+              <p className='fw-700 fs-24'>{optionsNoBackdrop.title}</p>
             </DialogTitle>
           )}
           <DialogContent className="modal-content">{optionsNoBackdrop.message}</DialogContent>
@@ -212,7 +212,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
         >
           {optionsBackdrop.title && (
             <DialogTitle component="div" className="modal-title">
-              <h2>{optionsBackdrop.title}</h2>
+              <p className='fw-700 fs-24'>{optionsBackdrop.title}</p>
               <IconButton aria-label={t('close')} onClick={handleCloseBackdrop} className="btn-modal-close">
                 <CloseIcon aria-hidden="true" />
               </IconButton>
