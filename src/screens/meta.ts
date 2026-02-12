@@ -461,6 +461,11 @@ export const screens: ScreenMeta[] = [
     "title": "고객응대 서비스 이행표준",
     "uiType": "cms"
   },
+  {
+    "id": "KIDS-PP-US-IN-12",
+    "title": "CI소개",
+    "uiType": "cms"
+  },
 
   
   
