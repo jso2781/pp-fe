@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
 import { selectDurSearchRoomListApiPath } from '@/api/dur/DurSearchRoomPaths'
-import { mockDurSearchRoomList, DurSearchRoomListPVO, DurSearchRoomRVO, DurSearchRoomListRVO  } from './DurSearchRoomTypes'
+import { mockDurSearchRoomList, DurSearchRoomListPVO, DurSearchRoomRVO, DurSearchRoomListRVO } from './DurSearchRoomTypes'
 
 /**
  * DUR 정보 검색 

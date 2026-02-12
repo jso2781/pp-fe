@@ -21,6 +21,31 @@ export default function DurSearchRoom(){
   const [searchParams, setSearchParams] = useSearchParams();
   
   const { list, totalCount, totalPages, loading } = useAppSelector((s) => s.durSearchRoom);
+  const { lang } = useParams<{ lang: string }>();
+
+  /** 제품검색 클릭 시 DurPrdctDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
+  const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string) => {
+    const base = `${window.location.origin}/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`;
+    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}`;
+    const width = 800;
+    const height = 600;
+    const left = Math.round((window.screen.width - width) / 1.5);
+    const top = Math.round((window.screen.height - height) / 1.5);
+    const features = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes,popup=1`;
+    window.open(url, 'DurPrdctDetailPop', features);
+  };
+
+  /** 중복 상세보기 클릭 시 DurEftgrpDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
+  const openEftgrpDetailPop = (igrdNm: string) => {
+    const base = `${window.location.origin}/${lang ?? 'ko'}/maintask/dur/DurEftgrpDetailPop`;
+    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}`;
+    const width = 800;
+    const height = 600;
+    const left = Math.round((window.screen.width - width) / 2);
+    const top = Math.round((window.screen.height - height) / 2);
+    const features = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes,popup=1`;
+    window.open(url, 'DurEftgrpDetailPop', features);
+  };
 
   const [searchCnd, setSearchCnd] = useState<string>(searchParams.get('searchCnd') || 'igrdNm');
   const [searchWrd, setSearchWrd] = useState<string>(searchParams.get('searchWrd') || '');
@@ -214,31 +239,7 @@ export default function DurSearchRoom(){
     TAB7: '“노인주의 성분” 이란 노인에서 부작용 발생 빈도 증가 등의 우려가 있어 사용 시 주의가 필요한 유효성분을 말합니다.\n\n( 「의약품 병용금기 성분 등의 지정에 관한 규정」 식품의약품안전처 고시 )\n\n다만, 의사의 판단 하에 치료적 유익성과 위험성을 고려하여 처방이 가능합니다.',
     TAB8: '“수유부주의 성분” 이란 수유 중의 소아에게 부작용 발생 등의 우려가 있어 수유부에게 사용 시 주의가 필요한 유효성분을 말합\n니다.\n( 「의약품 병용금기 성분 등의 지정에 관한 규정」 식품의약품안전처 고시 )\n\n다만, 의사의 판단 하에 치료적 유익성과 위험성을 고려하여 처방이 가능합니다.'
   };
-  // 상세 결과 데이터
- /*  const resultData = [
-    {
-      id: 1,
-      targetIngredient: "haloperidol",
-      contraIngredients: [
-        { name: "benserazide hydrochloride (as benserazide) + levodopa", hasDetail: true },
-        { name: "benserazide hydrochloride (as benserazide) + levodopa", hasDetail: false },
-      ],
-      detailInfo: "없음",
-      remarks: "Levodopa의 치료감소",
-    },
-    {
-      id: 2,
-      targetIngredient: "aspirin",
-      contraIngredients: [
-        { name: "warfarin sodium", hasDetail: true }
-      ],
-      detailInfo: "출혈 위험 증가 우려",
-      remarks: "병용 주의 필요",
-    }
-  ]; */
 
-
-  //return <ListTemplate screenId="KIDS-PP-US-DI-02" title="DUR 정보검색" config={config} />
   return (
       <Box className="page-layout">
         <Box className="sub-container">
@@ -511,7 +512,7 @@ export default function DurSearchRoom(){
                                                     searchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
-                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />}>
+                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'conc')}>
                                                         제품검색
                                                       </Button>
                                                       </>
@@ -529,7 +530,7 @@ export default function DurSearchRoom(){
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   <span className="text">{item.prohibitIgrdNm}</span>
-                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />}>
+                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'conc')}>
                                                     제품검색
                                                   </Button>
                                                 </Box>
@@ -628,7 +629,7 @@ export default function DurSearchRoom(){
                                                     searchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
-                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />}>
+                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'age')}>
                                                         제품검색
                                                       </Button>
                                                       </>
@@ -733,7 +734,7 @@ export default function DurSearchRoom(){
                                                     searchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
-                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />}>
+                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'prgnt')}>
                                                         제품검색
                                                       </Button>
                                                       </>
@@ -838,7 +839,7 @@ export default function DurSearchRoom(){
                                                     searchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
-                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />}>
+                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'cpct')}>
                                                         제품검색
                                                       </Button>
                                                       </>
@@ -943,7 +944,7 @@ export default function DurSearchRoom(){
                                                     searchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
-                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />}>
+                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'dosage')}>
                                                         제품검색
                                                       </Button>
                                                       </>
@@ -1048,7 +1049,7 @@ export default function DurSearchRoom(){
                                                     searchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
-                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />}>
+                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'eftgrp')}>
                                                         제품검색
                                                       </Button>
                                                       </>
@@ -1076,7 +1077,7 @@ export default function DurSearchRoom(){
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   <span className="text">{item.groupNm}</span>
-                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />}>
+                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openEftgrpDetailPop(item.igrdNm)}>
                                                     중복 상세보기
                                                   </Button>
                                                 </Box>
@@ -1156,7 +1157,7 @@ export default function DurSearchRoom(){
                                                     searchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
-                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />}>
+                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'snctz')}>
                                                         제품검색
                                                       </Button>
                                                       </>
@@ -1251,7 +1252,7 @@ export default function DurSearchRoom(){
                                                     searchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
-                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />}>
+                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'nursw')}>
                                                         제품검색
                                                       </Button>
                                                       </>

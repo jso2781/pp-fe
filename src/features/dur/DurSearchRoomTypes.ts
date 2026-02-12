@@ -1,14 +1,6 @@
 /**
  * DUR 정보 검색 조회 파라메터 정보
  */
-export interface DurSearchRoomPVO {
-  /** 성분명 */
-  igrdNm?: string
-
-  /** 제품명 */
-  prdctNm?: string
-}
-
 export interface DurSearchRoomListPVO {
   /** 현재 페이지 인덱스 */
   pageNum?: number
@@ -396,4 +388,3 @@ export const mockDurSearchRoomList: DurSearchRoomRVO[] = [
     nurswList: [],
   },
 ]
-

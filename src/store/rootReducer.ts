@@ -13,6 +13,8 @@ import exprtTaskReducer from '@/features/exprt/ExprtTaskSlice'
 import exprtApprovalReducer from '@/features/exprt/ExprtApprovalSlice'
 import DshstyDclrReucer from '@/features/dclr/DshstyDclrSlice'
 import DurSearchRoomReducer from '@/features/dur/DurSearchRoomSlice'
+import DurEftgrpDetailReducer from '@/features/dur/DurEftgrpDetailSlice'
+import DurPrdctDetailReducer from '@/features/dur/DurPrdctDetailSlice'
 
 const rootReducer = combineReducers({
   ui: uiReducer,
@@ -28,7 +30,9 @@ const rootReducer = combineReducers({
   exprtTask: exprtTaskReducer, // 전문가내업무관리
   exprtApproval: exprtApprovalReducer, // 전문가업무신청관리
   dclr: DshstyDclrReucer, // 부정신고,
-  durSearchRoom: DurSearchRoomReducer // DUR 정보 검색
+  durSearchRoom: DurSearchRoomReducer, // DUR 정보 검색
+  durEftgrpDetail: DurEftgrpDetailReducer, // DUR 효능군중복주의 상세 조회 팝업
+  durPrdctDetail: DurPrdctDetailReducer, // DUR 제품 상세 조회 팝업
 })
 
 export default rootReducer

@@ -14,6 +14,8 @@ const InternalServerErrorKo = lazy(() => import('@/pages/ko/InternalServerError'
 const CmsPageKo = lazy(() => import('@/pages/ko/cms/CmsPage'))
 
 const DurSearchRoomKo = lazy(() => import('@/pages/ko/maintask/dur/DurSearchRoom'))
+const DurEftgrpDetailPopKo = lazy(() => import('@/pages/ko/maintask/dur/DurEftgrpDetailPop'))
+const DurPrdctDetailPopKo = lazy(() => import('@/pages/ko/maintask/dur/DurPrdctDetailPop'))
 const DurNoticeListKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeList'))
 const DurNoticeDetailKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeDetail'))
 const ProposalKo = lazy(() => import('@/pages/ko/maintask/dur/Proposal'))
@@ -166,6 +168,12 @@ export default function Router() {
         <BrowserRouter>
           <GlobalErrorHandler>
             <Routes>
+
+              {/* 팝업 전용: Header/Footer 없이 본문만 표시 */}
+              <Route element={<LangGuard><BlankLayout /></LangGuard>}>
+                <Route path="/:lang/maintask/dur/DurEftgrpDetailPop" element={<LangElement byLang={{ ko: <DurEftgrpDetailPopKo />, en: <DurEftgrpDetailPopKo /> }} />} />
+                <Route path="/:lang/maintask/dur/DurPrdctDetailPop" element={<LangElement byLang={{ ko: <DurPrdctDetailPopKo />, en: <DurPrdctDetailPopKo /> }} />} />
+              </Route>
 
               {/* 일반사용자 메뉴에서 사용할 화면 레이아웃 */}
               <Route element={<LangGuard><Layout /></LangGuard>}>
