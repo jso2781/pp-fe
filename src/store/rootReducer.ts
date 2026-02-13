@@ -13,6 +13,7 @@ import exprtTaskReducer from '@/features/exprt/ExprtTaskSlice'
 import exprtApprovalReducer from '@/features/exprt/ExprtApprovalSlice'
 import DshstyDclrReucer from '@/features/dclr/DshstyDclrSlice'
 import DurSearchRoomReducer from '@/features/dur/DurSearchRoomSlice'
+import DurMyDrugInfoReducer from '@/features/dur/DurMyDrugInfoSlice'
 import DurEftgrpDetailReducer from '@/features/dur/DurEftgrpDetailSlice'
 import DurPrdctDetailReducer from '@/features/dur/DurPrdctDetailSlice'
 
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   exprtApproval: exprtApprovalReducer, // 전문가업무신청관리
   dclr: DshstyDclrReucer, // 부정신고,
   durSearchRoom: DurSearchRoomReducer, // DUR 정보 검색
+  durMyDrugInfo: DurMyDrugInfoReducer, // 내가 먹는 약의 DUR 정보
   durEftgrpDetail: DurEftgrpDetailReducer, // DUR 효능군중복주의 상세 조회 팝업
   durPrdctDetail: DurPrdctDetailReducer, // DUR 제품 상세 조회 팝업
 })
