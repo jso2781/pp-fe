@@ -43,7 +43,7 @@ export const mockMbrInfoList = [
     cnstnMbcmtYn: 'Y',
 
     /** 이전암호화비밀번호 */
-    bfrEnpswd: 'XXX',
+    encptBfrEnpswd: 'XXX',
 
     /** 비밀번호변경일시 */
     pswdChgDt: '2026-01-23',
@@ -129,7 +129,7 @@ export interface MbrInfoPVO {
   cnstnMbcmtYn?: string | null
 
   /** 이전암호화비밀번호 */
-  bfrEnpswd?: string | null
+  encptBfrEnpswd?: string | null
 
   /** 비밀번호변경일시 */
   pswdChgDt?: string | null
@@ -199,7 +199,7 @@ export interface MbrInfoRVO {
   cnstnMbcmtYn?: string
 
   /** 이전암호화비밀번호 */
-  bfrEnpswd?: string
+  encptBfrEnpswd?: string
 
   /** 비밀번호변경일시 */
   pswdChgDt?: string
@@ -293,7 +293,7 @@ export interface MbrInfoListPVO {
   cnstnMbcmtYn?: string
 
   /** 이전암호화비밀번호 */
-  bfrEnpswd?: string
+  encptBfrEnpswd?: string
 
   /** 비밀번호변경일시 */
   pswdChgDt?: string
