@@ -410,7 +410,7 @@ export default function SignUpMbrInfo() {
         certTokenVl: null,
         pswdChgDt: null,
         pswdErrNmtm: 0,
-        encptBfrEnpswd: null,
+        encptBfrPswd: null,
         mbrWhdwlRsn: null,
         mbrWhdwlDt: null,
       };

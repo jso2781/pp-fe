@@ -291,7 +291,7 @@ export default function EditProfile() {
         // 비밀번호 변경 모드인 경우에만 비밀번호 업데이트
         ...(isPasswordChangeMode && formData.password ? {
           encptMbrPswd: formData.password,         // 새로운 비밀번호
-          encptBfrEnpswd: userInfo?.encptMbrPswd || '', // 이전 비밀번호 (현재 비밀번호를 이전 비밀번호로 저장)
+          encptBfrPswd: userInfo?.encptMbrPswd || '', // 이전 비밀번호 (현재 비밀번호를 이전 비밀번호로 저장)
           pswdChgDt: now                        // 비밀번호 변경일시
         } : {}),
         // 휴대전화번호 변경이 완료된 경우에만 업데이트

@@ -19,7 +19,7 @@ export const mockEmpList = [
     pswdErrNmtm: -1,
 
     /** 이전암호화비밀번호 */
-    encptBfrEnpswd: 'XXX',
+    encptBfrPswd: 'XXX',
 
     /** 등록자아이디 */
     rgtrId: 'XXX',
@@ -51,7 +51,7 @@ export interface EmpPVO {
   pswdErrNmtm?: number
 
   /** 이전암호화비밀번호 */
-  encptBfrEnpswd?: string
+  encptBfrPswd?: string
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -85,7 +85,7 @@ export interface EmpRVO {
   pswdErrNmtm?: number
 
   /** 이전암호화비밀번호 */
-  encptBfrEnpswd?: string
+  encptBfrPswd?: string
 
   /** 등록자아이디 */
   rgtrId?: string
@@ -116,7 +116,7 @@ export interface EmpListPVO {
   pswdErrNmtm?: number
 
   /** 이전암호화비밀번호 */
-  encptBfrEnpswd?: string
+  encptBfrPswd?: string
 
   /** 등록자아이디 */
   rgtrId?: string
