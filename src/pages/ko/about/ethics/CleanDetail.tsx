@@ -8,6 +8,7 @@ import DepsLocation from "@/components/common/DepsLocation";
 import Lnb from "@/components/common/Lnb";
 import type { DshstyDclrRVO } from "@/features/dclr/DshstyDclrTypes";
 import { Box, Button, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 
@@ -15,7 +16,9 @@ export default function CleanDetail () {
   const location = useLocation();
   const navigate = useNavigate()
 
-  if(!location.state) return <>잘못된 접근</>;
+  if(!location.state) return <>잘못된 접근입니다.</>;
+
+  useEffect(() => {scrollTo(0, 0);}, []);
 
   const dshstyDclrRVO = location.state as DshstyDclrRVO;
   

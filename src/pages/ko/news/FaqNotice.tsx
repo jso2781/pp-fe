@@ -101,6 +101,7 @@ export default function FaqNotice() {
   const { faqList, totalCount } = useAppSelector(s => selectViewFaqList(s, param));
 
   useEffect(() => {
+    scrollTo(0, 0);
     dispatch(selectFaqList({ langSeCd: 'ko' }));
   }, [dispatch]);
 

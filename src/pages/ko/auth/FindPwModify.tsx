@@ -9,12 +9,14 @@ import { Box, Typography, TextField, Button } from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation';
 import { useDialog } from '@/contexts/DialogContext';
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { updateMbrInfoPw } from '@/features/mbr/MbrInfoThunks';
 
 export default function FindPwModify() {
+  
+  useEffect(() => {scrollTo(0, 0);}, []);
 
   // 폼 상태 관리
   const [formData, setFormData] = useState({
@@ -121,7 +123,7 @@ export default function FindPwModify() {
         t('findPwModifyCompleteMessage'),
         t('findPwModifyCompleteTitle'),
         () => navigate('/ko/auth/login'),
-        () => {}
+        () => navigate('/')
       );
     } catch(e) {
       showAlert('비밀번호 변경 실패');

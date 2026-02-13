@@ -893,6 +893,7 @@ export default function PUB() {
                   </a>
                   <br/><br/>
                   <button className="btn_outline_sub xsmall"><span className="ico-down" aria-hidden="true"></span>다운로드</button>
+                  <button className="btn_outline xsmall">다운로드<span className="ico-down-v2" aria-hidden="true"></span></button>
                   <br/><br/>
                   <button className="btn_outline_sub xsmall">바로가기<span className="ico-arr-right" aria-hidden="true"></span></button>
                   <br/><br/>

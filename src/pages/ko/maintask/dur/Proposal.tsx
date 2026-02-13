@@ -4,15 +4,13 @@
  * 화면경로: /maintask/dur/Proposal
  * 화면설명: 의견 제안
  */
-import { useMemo, useState } from 'react';
-import { Box, Button, FormControlLabel, Radio, RadioGroup, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { ZodFormProvider } from '@/components/rhf/ZodFormProvider';
 import * as z from 'zod'
 import { useZodForm } from '@/components/rhf/useZodForm';
 import RHFTextField from '@/components/rhf/RHFTextField';
-import RHFCheckbox from '@/components/rhf/RHFCheckbox';
 import RHFRadioGroup from '@/components/rhf/RHFRadioGroup';
-import RHFFileUploadField from '@/components/rhf/RHFFileUploadField';
 import { validateFiles } from '@/lib/validation/files';
 import { useAppDispatch } from '@/store/hooks';
 import { insertOpnn } from '@/features/opnn/OpnnThunks';
@@ -25,56 +23,17 @@ import KoglLicense from '@/components/common/KoglLicense';
 import DgstfnExnm from '@/components/common/DgstfnExnm';
 import ContactArea from '@/components/common/ContactArea';
 import FileUploadField from '@/components/form/FileUploadField';
+import { useDialog } from '@/contexts/DialogContext';
 
 const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'zip']
 const accept = allowedExtensions.map((e) => `.${e}`).join(',')
-
-const schema = z.object({
-  // 개인정보 수집·이용 동의
-  agreeRequired: z.enum(['Y', 'N'], { required_error: '동의 여부를 선택해 주세요.' }).refine((v) => v === 'Y', {
-    message: '동의가 필요합니다.',
-  }),
-  agreeOptional: z.enum(['Y', 'N']).optional(),
-
-  // 의견 제안 입력
-  role: z.string().trim().min(1, { message: '구분을 선택해 주세요.' }),
-  name: z.string().trim().min(1, { message: '이름을 입력해 주세요.' }),
-  contact: z.string().trim().optional().default(''), // 휴대전화번호(선택)
-  email: z.string().trim().min(1, { message: '이메일을 입력해 주세요.' }).email({ message: '이메일 형식이 올바르지 않습니다.' }),
-  problem: z.string().trim().min(1, { message: '현황 및 문제점을 입력해 주세요.' }),
-  summary: z.string().trim().optional().default(''),
-  detail: z.string().trim().optional().default(''),
-  etc: z.string().trim().optional().default(''),
-  files: z
-    .array(z.instanceof(File))
-    .default([])
-    .superRefine((files, ctx) => {
-      const msg = validateFiles(files, { maxTotalSizeMB: 10, allowedExtensions })
-      if (msg) ctx.addIssue({ code: z.ZodIssueCode.custom, message: msg })
-    }),
-})
-
-type FormValues = z.infer<typeof schema>
-
-const defaultValues: FormValues = {
-  agreeRequired: 'Y',
-  agreeOptional: 'N',
-  name: '',
-  role: '',
-  contact: '',
-  email: '',
-  problem: '',
-  summary: '',
-  detail: '',
-  etc: '',
-  files: [],
-}
 
 export default function Proposal() {
   const { t } = useTranslation();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { getMenuInfo } = useAuth();
+  const { showAlert } = useDialog();
   const menuInfo = getMenuInfo(location.pathname);
   const menuSn = menuInfo?.menuSn ?? 0;
   const menuKoglCprgtTypeCd = menuInfo?.menuKoglCprgtTypeCd ?? '4';
@@ -85,41 +44,83 @@ export default function Proposal() {
   // Lnb 랜더링용
   const currentUrl = location.pathname;
 
-  const procedureItems = useMemo(
-    () => [
-      { title: '홈페이지', description: '의견제안 접수' },
-      { title: '의견정리 및 검토' },
-      { title: '전문가 자문회의' },
-      { title: '검토결과 회신' },
-    ],
-    [],
-  )
-
-  const form = useZodForm<FormValues>(schema, {
-    mode: 'onBlur',
-    defaultValues,
+  const schema = z.object({
+    // 초기엔 미선택(undefined)을 허용하되, 제출/검증 시에는 반드시 'Y'만 통과
+    agreeRequired: z.enum(['Y', 'N']).optional().superRefine((v, ctx) => {
+      if (v == null) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: '동의 여부를 선택해 주세요.' })
+        return
+      }
+      if (v !== 'Y') {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: '동의가 필요합니다.' })
+      }
+    }),
+    agreeOptional: z.enum(['Y', 'N']).optional().superRefine((v, ctx) => v == null && ctx.addIssue({ code: z.ZodIssueCode.custom, message: '동의 여부를 선택해 주세요.' })),
+    role: z.string().trim().min(1, { message: '구분을 선택해주세요.' }),
+    name: z.string().trim().min(1, { message: '이름을 입력해주세요.' }),
+    contact: z.string(),
+    email: z.string().trim().min(1, { message: '이메일을 입력해주세요.' }).email({ message: '이메일 형식이 올바르지 않습니다.' }),
+    problem: z.string().trim().min(1, { message: '현황 및 문제점을 입력해주세요.' }),
+    summary: z.string().trim().optional().default(''),
+    detail: z.string().trim().min(1, { message: '의견 및 요청사항 상세기재를 입력해주세요.' }),
+    etc: z.string().trim().optional().default(''),
+    files: z
+      .array(z.instanceof(File))
+      .default([])
+      .superRefine((files, ctx) => {
+        const msg = validateFiles(files, { maxTotalSizeMB: 10, allowedExtensions })
+        if (msg) ctx.addIssue({ code: z.ZodIssueCode.custom, message: msg })
+      }),
   })
-
-  const onSubmit = (values: FormValues) => {
-    console.log('DUR proposal submit:', values)
-    dispatch(insertOpnn(transfromDataType(values)));
-    window.alert('의견 제안이 등록되었습니다. 담당자가 확인 후 연락드리겠습니다.')
-    form.reset(defaultValues)
+  
+  type FormValues = z.infer<typeof schema>
+  
+  const defaultValues: FormValues = {
+    agreeRequired: undefined,
+    agreeOptional: undefined,
+    name: '',
+    role: '',
+    contact: '',
+    email: '',
+    problem: '',
+    summary: '',
+    detail: '',
+    etc: '',
+    files: [],
   }
 
-  //임시
+  const form = useZodForm<FormValues>(schema, {
+    mode: 'onChange',
+    defaultValues,
+  });
+
+  const onSubmit = async (values: FormValues) => {
+    if (values.contact && values.agreeOptional === 'N') {
+      form.setError('agreeOptional', { type: 'validate', message: '휴대폰번호 수집·동의에 동의가 필요합니다.' }, { shouldFocus: true });
+      return;
+    }
+    try {
+      await dispatch(insertOpnn(transfromDataType(values))).unwrap();
+      showAlert('의견제안 제출이 완료되었습니다.');
+    } catch(e) {
+
+    } finally {
+      form.reset(defaultValues);
+    }
+  }
+
   const transfromDataType = (values: FormValues): FormData => {
     const formData = new FormData();
-    formData.append('encptWrtrFlnm', values.name);      //성명
-    formData.append('encptWrtrTelno', values.contact);  //번호(선택)
-    formData.append('encptMbrEmlNm', values.email);           //이메일
-    formData.append('wrtSeCd', values.role);            //구분코드
-    formData.append('pbptCn', values.problem);          //문제점내용
-    formData.append('dmndMttrCn', values.summary ?? '');       //요청사항(간략)
-    formData.append('dmndMttrDtlCn', values.detail ?? '');     //요청사항(상세)
-    formData.append('refMttrCn', '');                   //참고사항내용
-    formData.append('insdRefMttrCn', values.etc ?? ''); //내부참고사항내용
-    formData.append('atchFileSn', '');                  //첨부파일
+    formData.append('encptWrtrFlnm', values.name);         // 성명
+    formData.append('encptWrtrTelno', values.contact);     // 번호(선택)
+    formData.append('encptMbrEmlNm', values.email);        // 이메일
+    formData.append('wrtSeCd', values.role);               // 구분코드
+    formData.append('pbptCn', values.problem);             // 문제점내용
+    formData.append('dmndMttrCn', values.summary ?? '');   // 요청사항(간략)
+    formData.append('dmndMttrDtlCn', values.detail ?? ''); // 요청사항(상세)
+    formData.append('refMttrCn', values.etc ?? '');        // 참고사항내용
+    formData.append('insdRefMttrCn', '');                  // 내부참고사항내용
+    formData.append('atchFileSn', '');                     // 첨부파일
     values.files?.forEach((file) => {
       formData.append('attachFiles', file)
     })
@@ -262,11 +263,11 @@ export default function Proposal() {
                               name="role"
                               row
                               options={[
-                                { value: 'doctor', label: '의사' },
-                                { value: 'pharmacist', label: '약사' },
-                                { value: 'nurse', label: '간호사' },
-                                { value: 'consumer', label: '소비자' },
-                                { value: 'etc', label: '기타' },
+                                { value: '1', label: '의사' },
+                                { value: '2', label: '약사' },
+                                { value: '3', label: '간호사' },
+                                { value: '4', label: '소비자' },
+                                { value: '5', label: '기타' },
                               ]}
                             />
                           </Box>
@@ -277,7 +278,12 @@ export default function Proposal() {
                             이름
                             <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
-                          <RHFTextField name="name" id="name" placeholder="이름을 입력하세요." size="large" fullWidth />
+                          <RHFTextField name="name" id="name" placeholder="이름을 입력하세요." size="large" fullWidth
+                            slotProps={{
+                              htmlInput: { 'aria-required': 'true', 'aria-describedby': 'name-alert' },
+                              formHelperText: { id: 'name-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' }
+                            }}
+                          />
                         </Box>
 
                         {/* 휴대전화번호 */}
@@ -286,7 +292,12 @@ export default function Proposal() {
                             휴대전화번호
                             <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
                           </Typography>
-                          <RHFTextField name="contact" id="contact" placeholder="010-1234-5678" size="large" fullWidth />
+                          <RHFTextField type="tel" name="contact" id="contact" placeholder="010-1234-5678" size="large" fullWidth
+                            slotProps={{
+                              htmlInput: { 'aria-describedby': 'contact-alert' },
+                              formHelperText: { id: 'contact-alert', className: 'error-alert' },
+                            }}
+                          />
                         </Box>
 
                         {/* 이메일 */}
@@ -295,7 +306,12 @@ export default function Proposal() {
                             이메일
                             <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
-                          <RHFTextField name="email" id="email" placeholder="gidong_hong99@gmail.com" size="large" fullWidth />
+                          <RHFTextField type="email" name="email" id="email" placeholder="gidong_hong99@gmail.com" size="large" fullWidth
+                            slotProps={{
+                              htmlInput: { 'aria-required': 'true', 'aria-describedby': 'email-alert' },
+                              formHelperText: { id: 'email-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite'  },
+                            }}
+                          />
                         </Box>
 
                         {/* 현황 및 문제점 */}
@@ -304,7 +320,12 @@ export default function Proposal() {
                             현황 및 문제점
                             <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
-                          <RHFTextField name="problem" id="problem" placeholder="현황 및 문제점을 100자 이내로 입력해주세요." size="large" fullWidth multiline minRows={3} />
+                          <RHFTextField name="problem" id="problem" placeholder="현황 및 문제점을 100자 이내로 입력해주세요." size="large" fullWidth multiline minRows={3}
+                            slotProps={{
+                              htmlInput: { 'aria-required': 'true', 'aria-describedby': 'problem-alert' },
+                              formHelperText: { id: 'problem-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
+                            }}
+                          />
                         </Box>
 
                         {/* 의견 및 요청사항 간략기재 */}
@@ -313,25 +334,40 @@ export default function Proposal() {
                             의견 및 요청사항 간략기재
                             <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
                           </Typography>
-                          <RHFTextField name="summary" id="summary" placeholder="의견 및 요청사항을 100자 이내로 입력해주세요." size="large" fullWidth multiline minRows={3} />
+                          <RHFTextField name="summary" id="summary" placeholder="의견 및 요청사항을 100자 이내로 입력해주세요." size="large" fullWidth multiline minRows={3}
+                            slotProps={{
+                              htmlInput: { 'aria-describedby': 'summary-alert' },
+                              formHelperText: { id: 'summary-alert', className: 'error-alert' },
+                            }}
+                          />
                         </Box>
 
-                        {/* 상세 내용 */}
+                        {/* 의견 및 요청사항 상세기재 */}
                         <Box className="form-item">
                           <Typography component="label" htmlFor="detail" className="label">
                             의견 및 요청사항 상세기재
-                            <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
+                            <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
-                          <RHFTextField name="detail" id="detail" placeholder="의견 및 요청사항을 1,000자 이내로 입력해주세요." size="large" fullWidth multiline minRows={5} />
+                          <RHFTextField name="detail" id="detail" placeholder="의견 및 요청사항을 1,000자 이내로 입력해주세요." size="large" fullWidth multiline minRows={5}
+                            slotProps={{
+                              htmlInput: { 'aria-required': 'true', 'aria-describedby': 'detail-alert' },
+                              formHelperText: { id: 'detail-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
+                            }}
+                          />
                         </Box>
 
-                        {/* 기타 */}
+                        {/* 참고사항 및 기타 */}
                         <Box className="form-item">
                           <Typography component="label" htmlFor="etc" className="label">
                             참고사항 및 기타
                             <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
                           </Typography>
-                          <RHFTextField name="etc" id="etc" placeholder="참고사항 및 기타 사항을 1,000자 이내로 입력해주세요." size="large" fullWidth multiline minRows={2} />
+                          <RHFTextField name="etc" id="etc" placeholder="참고사항 및 기타 사항을 1,000자 이내로 입력해주세요." size="large" fullWidth multiline minRows={2}
+                            slotProps={{
+                              htmlInput: { 'aria-describedby': 'etc-alert' },
+                              formHelperText: { id: 'etc-alert', className: 'error-alert' },
+                            }}
+                          />
                         </Box>
 
                         {/* 첨부파일 */}
@@ -346,9 +382,9 @@ export default function Proposal() {
                               onChange={handleFilesChange} 
                               accept=".pdf,.png,.jpg,.jpeg"
                               multiple={false}
-                              maxFiles={5}
+                              maxFiles={3}
                               maxFileSizeMB={10}
-                              maxTotalSizeMB={10}
+                              maxTotalSizeMB={30}
                               helperText="허용: pdf, doc, docx, xls, xlsx, ppt, pptx, jpg, jpeg, png, zip · 총 10MB"
                             />
                             
@@ -392,7 +428,12 @@ export default function Proposal() {
                       </Box>
                     </Box>
                     <Box className="btn-group right">
-                      <Button variant="contained" size="large" type="submit">
+                      <Button
+                        variant="contained"
+                        size="large"
+                        type="submit"
+                        disabled={!form.formState.isValid}
+                      >
                         제안등록
                       </Button>
                     </Box>

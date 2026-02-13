@@ -8,16 +8,15 @@ import DepsLocation from "@/components/common/DepsLocation";
 import Lnb from "@/components/common/Lnb";
 import { insertDshstyDclr } from "@/features/dclr/DshstyDclrThunks";
 import { useAppDispatch } from "@/store/hooks";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import type { DshstyDclrPVO } from "@/features/dclr/DshstyDclrTypes";
 import * as z from 'zod';
 import { ZodFormProvider } from "@/components/rhf/ZodFormProvider";
 import { useZodForm } from "@/components/rhf/useZodForm";
 import RHFTextField from "@/components/rhf/RHFTextField";
 import { useDialog } from '@/contexts/DialogContext';
-import { FieldErrors } from "react-hook-form";
 import RHFRadioGroup from "@/components/rhf/RHFRadioGroup";
+import { useEffect } from "react";
 
 export default function CleanForm () {
   const location = useLocation();
@@ -31,6 +30,8 @@ export default function CleanForm () {
     //TODO Any-Id 인증이 안되있다면 본인인증 페이지로 이동
     return <Navigate to="/" replace />;
   }
+
+  useEffect(() => {scrollTo(0, 0);}, []);
 
   const schema = z.object({
     // 초기엔 미선택(undefined)을 허용하되, 제출/검증 시에는 반드시 'Y'만 통과

@@ -542,7 +542,7 @@ body { overflow-x: hidden; }
   min-height: 48px; // 기본 (Medium)
   padding: 2px 20px;
   
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.4;
   text-align: center;
@@ -627,7 +627,7 @@ body { overflow-x: hidden; }
   color: #ffffff;
   background-color: #087C80;
   border: 1px solid #087C80;
-  &:hover { opacity: 0.9; color:#087C80;}
+  &:hover { opacity: 0.9; }
 }
 
 /* [Solid] 서브 버튼 */
@@ -635,7 +635,7 @@ body { overflow-x: hidden; }
   color: #ffffff;
   background-color: #414343;
   border: 1px solid #414343;
-  &:hover { background-color: #363A3A; color:#414343;}
+  &:hover { background-color: #363A3A; }
 }
 
 /* [Outline] 메인 라인 버튼 */
@@ -1243,5 +1243,6 @@ body { overflow-x: hidden; }
 .ico-link{overflow:hidden; position: relative;display: inline-block;width:35px;height:20px;vertical-align: middle;text-indent: -99999px;background:url(/img/ico_link.svg) no-repeat center;}
 .ico-link-blank{overflow:hidden; position: relative;display: inline-block;width:35px;height:20px;vertical-align: middle;text-indent: -99999px;background:url(/img/ico_link_blank.svg) no-repeat center;}
 .ico-down{overflow:hidden; position: relative;display: inline-block;width:25px;height:20px;vertical-align: middle;text-indent: -99999px;background:url(/img/ico_down.svg) no-repeat center;}
+.ico-down-v2{overflow:hidden; position: relative;display: inline-block;width:25px;height:20px;vertical-align: middle;text-indent: -99999px;background:url(/img/ico_down02.svg) no-repeat center;}
 .ico-tel{overflow:hidden; position: relative;display: inline-block;width:25px;height:20px;vertical-align: middle;text-indent: -99999px;background:url(/img/ico_tel.svg) no-repeat center;}
 .ico-arr-right{overflow:hidden; position: relative;display: inline-block;width:25px;height:20px;vertical-align: middle;text-indent: -99999px;background:url(/img/ico_arr_right.svg) no-repeat center;}

@@ -14,11 +14,14 @@ import {
   AccountCircle as AccountIcon,
   Fingerprint as FingerprintIcon,
 } from '@mui/icons-material';
+import { useEffect } from "react";
 
 export default function FindPw() {
   
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  useEffect(() => {scrollTo(0, 0);}, []);
   
   const handleLoginMethod = (type: string) => {
     // mbrNo 2026000007 회원으로 고정

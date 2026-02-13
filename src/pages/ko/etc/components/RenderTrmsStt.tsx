@@ -10,6 +10,8 @@ export default function RenderStt({ trmsSttCd, isList }: { trmsSttCd: string, is
   const { current, loading, error, list } = useAppSelector(s => s.stt);
 
   useEffect(() => {
+    scrollTo(0, 0);
+    
     isList
       ? dispatch(selectTrmsSttList({ trmsSttCd: trmsSttCd }))
       : dispatch(getTrmsSttLatest({ trmsSttCd: trmsSttCd }));
