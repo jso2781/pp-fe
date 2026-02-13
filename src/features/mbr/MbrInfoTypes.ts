@@ -156,6 +156,21 @@ export interface MbrInfoPVO {
 }
 
 /**
+ * 전문가 승인권자의 기관 업무 조회 결과
+ */
+export interface InstTaskItem {
+  /**
+   * 사업자등록번호
+   */
+  brno?: string;
+
+  /**
+   * 사업자업무관리번호
+   */
+  bzmnTaskMngNo?: string;
+}
+
+/**
  * 대국민포털_회원정보기본 정보(회원정보 + 토큰정보)
  */
 export interface MbrInfoRVO {
@@ -250,6 +265,11 @@ export interface MbrInfoRVO {
    * 
    */
   expertYn?: string
+
+  /**
+   * 전문가 승인권자의 기관 업무 목록
+   */
+  apprInstTaskList?: InstTaskItem[]
 }
 
 /**
