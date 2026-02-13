@@ -139,7 +139,7 @@ export const muiTheme = createTheme({
         sizeSmall: { height: 36, fontSize: 14, padding: '0 12px' },
         sizeMedium: { 
           height: 48, 
-          fontSize: 15, 
+          fontSize: 16, 
           padding: '0 20px',
           '@media (max-width: 1024px)': { 
             height: 44, 
