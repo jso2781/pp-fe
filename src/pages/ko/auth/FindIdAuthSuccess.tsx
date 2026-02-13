@@ -11,11 +11,14 @@ import DepsLocation from '@/components/common/DepsLocation';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function FindIdAuthSuccess() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t, i18n: i18nInstance } = useTranslation();
+
+  useEffect(() => {scrollTo(0, 0);}, []);
 
   if(!location.state?.id || !location.state?.name) {
     alert('잘못된 접근입니다.');

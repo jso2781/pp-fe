@@ -30,6 +30,8 @@ export default function CleanCenter() {
   const totalPages = Math.max(1, Math.ceil((totalCount || 1) / 10));
 
   useEffect(() => {
+    scrollTo(0, 0);
+
     if(true) {//TODO Any-Id 인증 여부
       dispatch(selectDshstyDclrList({} as DshstyDclrListPVO));
     }

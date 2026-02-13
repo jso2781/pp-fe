@@ -16,11 +16,14 @@ import {
   AccountCircle as AccountIcon,
   Fingerprint as FingerprintIcon,
 } from '@mui/icons-material';
+import { useEffect } from "react";
 
 export default function FindId() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+
+  useEffect(() => {scrollTo(0, 0);}, []);
 
   const handleLoginMethod = (type: string) => {
     //API dispatch
