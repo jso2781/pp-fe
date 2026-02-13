@@ -10,7 +10,7 @@ export const screens: ScreenMeta[] = [
     "title": "이용약관",
     "uiType": "page"
   },
-  {
+  /* {
     "id": "KIDS-PP-US-CS-03",
     "title": "고객센터 고정형 영상정보처리기기 운영·관리 방침",
     "uiType": "page"
@@ -24,7 +24,7 @@ export const screens: ScreenMeta[] = [
     "id": "KIDS-PP-US-CS-05",
     "title": "고객센터 저작권보호정책",
     "uiType": "page"
-  },
+  }, */
   {
     "id": "KIDS-PP-US-DI-01",
     "title": "DUR 이해",
@@ -35,7 +35,7 @@ export const screens: ScreenMeta[] = [
     "title": "DUR 정보검색",
     "uiType": "list"
   },
-  {
+  /* {
     "id": "KIDS-PP-US-DI-03",
     "title": "DUR 정보검색 병용금기 탭",
     "uiType": "list"
@@ -79,7 +79,7 @@ export const screens: ScreenMeta[] = [
     "id": "KIDS-PP-US-DI-11",
     "title": "DUR 정보검색 분할주의 탭",
     "uiType": "list"
-  },
+  }, */
   {
     "id": "KIDS-PP-US-DI-12",
     "title": "DUR 정보검색 제품 검색 시스템 팝업",
@@ -464,6 +464,11 @@ export const screens: ScreenMeta[] = [
   {
     "id": "KIDS-PP-US-IN-12",
     "title": "CI소개",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-IN-16",
+    "title": "캐릭터소개",
     "uiType": "cms"
   },
 

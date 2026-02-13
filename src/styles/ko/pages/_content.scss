@@ -4469,8 +4469,7 @@
   .section-desc.sec02 {
     .desc-text {
       margin-bottom: 30px;
-      line-height: 1.6;
-      color: #666;
+      font-size: var(--fs-18);
     }
 
     .logo-grid {
@@ -4492,6 +4491,13 @@
       }
     }
   }
+
+  .section-desc.sec03 {
+    .logo-signature{
+      padding:38px 0;
+    }
+  }
+
   .logo-signature {
     display: flex;
     align-items: center;
@@ -4507,6 +4513,15 @@
       max-height: 80%;
       height: auto;
     }
+    
+    .signature-item{
+       text-align: center;
+      .logo-caption{
+        margin:24px 0 0 0;
+        font-size: var(--fs-18);
+        font-weight: 700;
+      }
+    }
   }
 
   .download-area {
@@ -4516,3 +4531,95 @@
     justify-content: flex-start; 
   }
 }
+
+//캐릭터소개
+.pageCont-AboutCharacter {
+  .char-intro{
+    display: flex;
+    flex-direction: column;
+  
+    .char-item {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+  
+      &.reverse {
+        flex-direction: row-reverse;
+      }
+  
+      .char-img {
+        flex:0 0 300px;
+        text-align: center;
+      }
+  
+      .char-content {
+        flex: 1;
+  
+        .char-name {
+          font-size: var(--fs-20);
+          font-weight: 700;
+          color: var(--color-text-2);
+          margin-bottom: 10px;
+          padding-bottom: 10px;
+          border-bottom: 1px solid #087C80;;
+        }
+  
+        .char-slogan {
+          margin-bottom: 25px;
+          font-weight: 700;
+        }
+  
+        .char-text p {
+          word-break: keep-all;
+        }
+  
+        .char-info-box {
+          margin-bottom: 30px;
+          &:last-child { margin-bottom: 0; }
+  
+          .info-title {
+            display: block;
+            font-size: var(--fs-18);
+            font-weight: 700;
+            margin-bottom: 10px;
+          }
+          .info-desc {
+            line-height: 1.6;
+          }
+        }
+      }
+
+      @media (max-width: 1024px) {
+        flex-direction: column !important; 
+        gap: 30px; 
+        text-align: center; 
+
+        &.reverse {
+          flex-direction: column !important; 
+        }
+
+        .char-img {
+          flex: 0 0 auto; 
+          margin: 0 auto;
+        }
+
+        .char-content {
+          .char-name {
+            display: inline-block; 
+            padding: 0 20px 10px;
+          }
+        }
+      }
+    }
+  }
+  .char-intro-sub .char-content .char-name,
+  .char-intro-sub .info-desc span{color: #C794C1 !important;}
+
+  .download-area {
+    display: flex;      
+    gap: 8px;            
+    margin:24px 0;
+    justify-content: flex-start; 
+  }
+}
+

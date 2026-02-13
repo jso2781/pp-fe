@@ -80,10 +80,10 @@ export default function KIDS_PP_US_IN_12() {
                         </div>
                       </div>
                       <div className="download-area">
-                        <a href="/download/.ai" download className="btn_outline xsmall">
+                        <a href="/download/KIDS_AI.zip" download className="btn_outline small">
                           AI 다운로드 <span className="ico-down-v2" aria-hidden="true"></span>
                         </a>
-                        <a href="/download/.png" download className="btn_outline xsmall">
+                        <a href="/download/KIDS_PNG.zip" download className="btn_outline small">
                           PNG 다운로드 <span className="ico-down-v2" aria-hidden="true"></span>
                         </a>
                       </div>
@@ -107,10 +107,10 @@ export default function KIDS_PP_US_IN_12() {
                         </div>
                       </div>
                       <div className="download-area">
-                        <a href="/download/.ai" download className="btn_outline xsmall">
+                        <a href="/download/KIDS_(AI).zip" download className="btn_outline xsmall">
                           AI 다운로드 <span className="ico-down-v2" aria-hidden="true"></span>
                         </a>
-                        <a href="/download/.png" download className="btn_outline xsmall">
+                        <a href="/download/KIDS_(PNG).zip" download className="btn_outline xsmall">
                           PNG 다운로드 <span className="ico-down-v2" aria-hidden="true"></span>
                         </a>
                       </div>
