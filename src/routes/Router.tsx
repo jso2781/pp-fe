@@ -72,6 +72,7 @@ import { normalizeLang, FALLBACK_LANG, detectBrowserLang } from "./lang";
 import { AuthProvider } from '@/contexts/AuthContext';
 import { DialogProvider } from '@/contexts/DialogContext';
 import ExpertLayout from './ExpertLayout';
+import EngLayout from './EngLayout';
 
 type LangElementProps = {
   byLang: Record<string, JSX.Element>;
@@ -180,7 +181,7 @@ export default function Router() {
                 {/* ✅ 루트(/)로 들어오면 브라우저 언어 기반으로 /ko 또는 /en로 보내기 */}
                 <Route path="/" element={<Navigate to={`/${detectBrowserLang()}`} replace />} />
 
-                <Route path="/:lang" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
+                <Route path="/ko" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
 
                 {/* cms 화면 공용 템플릿 경로(콘텐츠 내용 표기) */}
                 <Route path="/:lang/cms/CmsPage/:contsSn" element={<LangElement byLang={{ ko: <CmsPageKo />, en: <CmsPageKo /> }} />} />
@@ -259,6 +260,10 @@ export default function Router() {
                 <Route path="/:lang/expert/ExpertApprovalUpdate/:exprtTaskSn" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute> }} />} />                
               </Route>
 
+              {/* 일반사용자 메뉴에서 사용할 화면 레이아웃 */}
+              <Route element={<LangGuard><EngLayout /></LangGuard>}>
+                <Route path="/en" element={<HomeEn />} />
+              </Route>
             </Routes>
           </GlobalErrorHandler>
         </BrowserRouter>

@@ -1,43 +1,26 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Button, Card, CardActions, CardContent, Link, List, ListItem, ListItemText, Stack, Tab, Tabs, TextField, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid';import { ChevronRight, Search } from '@mui/icons-material'
+import { Box, Button, Card, Grid, CardContent, Link, List, ListItem, Tab, Tabs, Typography, IconButton } from '@mui/material';
+import { OpenInNew, PlayArrow, Pause } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next';
 
-type TabKey = 'youtube' | 'insta' | 'blog';
-type SnsItem = { title: string; url: string };
-type SnsTab = { label: string; items: SnsItem[] };
-type SnsTabs = Record<TabKey, SnsTab>;
+// Swiper
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay, A11y, Grid as SwiperGrid } from 'swiper/modules'; 
+import type { Swiper as SwiperCore } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/grid';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { selectMainContents } from '@/features/main/MainThunks';
+import type { PostVO } from '@/features/main/MainTypes';
+import { Link as RouterLink } from 'react-router-dom';
+
 
 export default function Home() {
-  const navigate = useNavigate()
-  const [tab, setTab] = useState<TabKey>('youtube')
-  const [q, setQ] = useState('')
 
-  const systemCards = useMemo(
-    () => [
-      {
-        title: 'Integrated Narcotics Management System',
-        url: 'https://www.nims.or.kr',
-        desc:
-          'The Korea Institute of Drug Safety & Risk Management has been designated as the Integrated Narcotics Information Management Center in accordance with the Act on the Control of Narcotics.',
-      },
-      {
-        title: 'Integrated Drug Information System',
-        url: 'https://nedrug.mfds.go.kr',
-        desc:
-          'This system is operated under delegation from the Ministry of Food and Drug Safety in accordance with the Pharmaceutical Affairs Act.',
-      },
-      {
-        title: 'Advanced Biopharmaceutical Long-term Follow-up System',
-        url: 'https://ltfu.mfds.go.kr',
-        desc:
-          'This system is operated as the Regulatory Science Center for Advanced Biopharmaceuticals in accordance with the Act on Advanced Regenerative Medicine and Advanced Biopharmaceuticals.',
-      },
-    ],
-    []
-  )
-
-  const serviceShortcuts = useMemo(
+ /*  const serviceShortcuts = useMemo(
     () => [
       { title: 'Domestic Adverse Event Reporting', url: 'https://kaers.drugsafe.or.kr' },
       { title: 'International Adverse Event Reporting', url: 'https://www.drugsafe.or.kr' },
@@ -47,125 +30,92 @@ export default function Home() {
       { title: 'APEC Pharmacovigilance Training Program', url: 'https://kidscoe.drugsafe.or.kr' },
       { title: 'Drug Safety Officer Training', url: 'https://pvtraining.drugsafe.or.kr' },
     ],
-    []
-  )
+    [] */
 
-  const snsTabs = useMemo<SnsTabs>(
-    () => ({
-      youtube: {
-        label: 'YouTube',
-        items: [
-          {
-            title: 'Drug & Quasi-drug Labeling and Services for Persons with Disabilities',
-            url: 'https://youtu.be',
-          },
-          { title: 'Heat Exhaustion vs. Heat Stroke: What’s the Difference?', url: 'https://youtu.be' },
-          { title: 'Grow Your Hair! Take Care of Your Scalp Health!', url: 'https://youtu.be' },
-          { title: 'Hepatitis A, B, and C Explained', url: 'https://youtu.be' },
-        ],
-      },
-      insta: {
-        label: 'Instagram',
-        items: [
-          { title: 'Poster & Cartoon Contest Announcement', url: 'https://www.instagram.com' },
-          { title: 'Heavy Rain Emergency Action Guidelines', url: 'https://www.instagram.com' },
-          { title: 'Heatwave Safety Tips to Prevent Heat-related Illness', url: 'https://www.instagram.com' },
-          { title: 'How to Properly Use Narcotic Appetite Suppressants', url: 'https://www.instagram.com' },
-        ],
-      },
-      blog: {
-        label: 'Blog',
-        items: [
-          { title: 'Touching Stories from the Drug Adverse Reaction Relief Program (Part 2)', url: 'https://blog.naver.com' },
-          { title: 'Domestic Trends in Advanced Biopharmaceuticals', url: 'https://blog.naver.com' },
-          { title: 'How Are Drugs Used in Hospitals Monitored?', url: 'https://blog.naver.com' },
-          { title: 'Criminal Misuse of Veterinary Narcotics', url: 'https://blog.naver.com' },
-        ],
-      },
-    }),
-    []
-  )
+  // ==========================================
+  // 기본서비스
+  // ==========================================
+  const [prevEl2, setPrevEl2] = useState<HTMLButtonElement | null>(null);
+  const [nextEl2, setNextEl2] = useState<HTMLButtonElement | null>(null);
+  const [isPlaying2, setIsPlaying2] = useState(true);
+  const swiperRef2 = useRef<SwiperCore | null>(null);
 
-  const notices = useMemo(
+  const toggleAutoplay2 = () => {
+    if (swiperRef2.current?.autoplay) {
+      if (isPlaying2) swiperRef2.current.autoplay.stop();
+      else swiperRef2.current.autoplay.start();
+      setIsPlaying2(!isPlaying2);
+    }
+  };
+
+  const serviceShortcuts = useMemo(
     () => [
-      { title: '[Bid Notice] Integrated Information System Operation & Maintenance for 2026 (Emergency Bid)', date: '2025-12-03' },
-      { title: 'Notice of Termination: Consultation & Guidance Program for Compassionate Use of Investigational Drugs', date: '2025-12-05' },
-      { title: '[Veterinary Tender] 2026–2027 Integrated Narcotics Information Management Center System Operation Project', date: '2025-12-15' }
+      { title: 'Domestic Adverse Event Reporting', url: 'https://kaers.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
+      { title: '의약품부작용피해구제 민원신청', url: 'https://nedrug.mfds.go.kr/cntnts/230', iconUrl: '/img/shortcut_ico01.png' },
+      { title: '마약류 통합관리 시스템', url: 'https://www.nims.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
+      { title: 'Drug Adverse Reaction Relief Program', url: 'https://nedrug.mfds.go.kr/index', iconUrl: '/img/shortcut_ico01.png' },
+      { title: '첨단바이오의약품 장기추적조사 시스템', url: 'https://ltfu.mfds.go.kr/main.do', iconUrl: '/img/shortcut_ico01.png' },
+      { title: 'Medical Data Analysis Network (MOA)', url: 'https://moa.drugsafe.or.kr/main;jsessionid=BD9ADAD3F45597B4C06571485AB61A8A', iconUrl: '/img/shortcut_ico01.png' },
+      { title: 'rug Safety Officer Training', url: 'https://pvtraining.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
+      { title: 'Safety Information Disclosure', url: 'https://open.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
+      { title: 'APEC Pharmacovigilance Training Program', url: 'https://kidscoe.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
     ],
     []
-  )
-
-  const doSearch = () => {
-    const keyword = q.trim()
-    navigate(`/en/search?q=${encodeURIComponent(keyword)}`)
-  }
+  );
 
   return (
-    <Box className="ds-home">
-      <Box component="section" className="ds-hero ds-fullbleed">
-        <Box className="ds-container ds-hero__inner">
-          <Box className="ds-hero__copy">
-            <Typography variant="h4" sx={{ m: 0 }}>
-              Promoting Public Health Through Drug Safety Management
-            </Typography>
-            <Typography variant="body1" className="ds-hero__subtitle">
-              We are committed to fulfilling our mission and responsibility as a public institution to safeguard public health and safety and to establish an internationally recognized safety management system.
-            </Typography>
+    <Box className="main-container">
 
-            <Stack direction="column" spacing={1} sx={{ width: '100%', mt: 1 }}>
-              <TextField
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Search"
-                size="small"
-                InputProps={{
-                  startAdornment: <Search fontSize="small" />,
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') doSearch()
-                }}
-              />
-              <Stack direction="row" spacing={1} flexWrap="wrap">
-                <Button variant="contained" onClick={() => navigate('/en/notice')}>
-                  Announcement
-                </Button>
-                <Button variant="outlined" onClick={() => navigate('/en/board')}>
-                  Board
-                </Button>
-                <Button variant="text" onClick={doSearch}>
-                  Search
-                </Button>
-              </Stack>
-            </Stack>
+      <Box component="section" className="section main-service-section">
+        <Box className="inner">
+          <h3 className="section-title">Basic <span>Service</span></h3>
+          <Box className="service-area">
+            <Swiper
+              onSwiper={(swiper) => (swiperRef2.current = swiper)}
+              key={prevEl2 && nextEl2 ? 'ready2' : 'not-ready2'}
+              modules={[Navigation, Pagination, A11y, Autoplay]}
+              spaceBetween={24}
+              navigation={{ prevEl: prevEl2, nextEl: nextEl2 }}
+              pagination={{ clickable: true, type: 'bullets', el: '.service-pagination' }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              loop={false}
+              breakpoints={{
+                600: { slidesPerView: 3, slidesPerGroup: 1 }, 
+                900: { slidesPerView: 4, slidesPerGroup: 1 },
+                1200: { slidesPerView: 5, slidesPerGroup: 1 },
+              }}
+              className="service-swiper"
+            >
+              {serviceShortcuts.map((s, index) => (
+                <SwiperSlide key={s.title}>
+                  <a className="shortcut-item" href={s.url} target="_blank" rel="noreferrer">
+                    <Box className="icon-bg" style={{ backgroundImage: `url(${s.iconUrl})` } as React.CSSProperties} aria-hidden="true" />
+                    <span className="shortcut-text">{s.title}</span>
+                    <Box component="span" className="shortcut-link-box">
+                      <span className="shortcut-link-text">바로가기</span>
+                      <OpenInNew className="shortcut-icon" />
+                    </Box>
+                  </a>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            {/* 컨트롤 페이지네이션 , 재생/정지 */}
+            <Box className="pagination-wrapper">
+              <Box className="service-pagination"></Box>
+              <Box className="play-control">
+                <IconButton className={`btn-play-pause ${isPlaying2 ? 'is-playing' : 'is-paused'}`} onClick={toggleAutoplay2} size="small">
+                  {isPlaying2 ? <Pause fontSize="small" /> : <PlayArrow fontSize="small" />}
+                </IconButton>
+              </Box>
+              <Box className="swiper-nav-group"> 
+                <button ref={setPrevEl2} className="swiper-button-prev service-prev" aria-label="이전 슬라이드"></button>
+                <button ref={setNextEl2} className="swiper-button-next service-next" aria-label="다음 슬라이드"></button>
+              </Box>
+            </Box>
           </Box>
         </Box>
       </Box>
-
-      <Box component="section" className="ds-section ds-fullbleed">
-        <Box className="ds-container">
-          <Grid container spacing={2}>
-            {systemCards.map((c) => (
-              <Grid key={c.title} size={{ xs: 12, md: 4 }}>
-                <Card className="ds-card" variant="outlined" sx={{ borderRadius: 2, height: '100%' }}>
-                  <CardContent>
-                    <Typography variant="h6" sx={{ mb: 1 }}>
-                      {c.title}
-                    </Typography>
-                    <Typography variant="body2">{c.desc}</Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Link href={c.url} target="_blank" rel="noreferrer" underline="hover">
-                      View Details <ChevronRight fontSize="small" />
-                    </Link>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      </Box>
-
-      <Box component="section" className="ds-section ds-fullbleed">
+      {/* <Box component="section" className="ds-section ds-fullbleed">
         <Box className="ds-container">
           <Box className="ds-section__head">
             <Typography variant="h6" sx={{ m: 0 }}>
@@ -186,59 +136,7 @@ export default function Home() {
             ))}
           </Grid>
         </Box>
-      </Box>
-
-      <Box component="section" className="ds-section ds-fullbleed">
-        <Box className="ds-container">
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, lg: 7 }}>
-              <Card className="ds-card" variant="outlined" sx={{ borderRadius: 2 }}>
-                <CardContent>
-                  <Typography variant="h6" sx={{ mb: 1 }}>
-                    Korea Institute of Drug Safety & Risk Management (KIDS) #Social Media
-                  </Typography>
-
-                  <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 1 }}>
-                    <Tab value="youtube" label={snsTabs.youtube.label} />
-                    <Tab value="insta" label={snsTabs.insta.label} />
-                    <Tab value="blog" label={snsTabs.blog.label} />
-                  </Tabs>
-
-                  <List dense>
-                    {snsTabs[tab].items.map((it) => (
-                      <ListItem key={it.title} disableGutters>
-                        <Link href={it.url} target="_blank" rel="noreferrer" underline="hover">
-                          {it.title}
-                        </Link>
-                      </ListItem>
-                    ))}
-                  </List>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            <Grid size={{ xs: 12, lg: 5 }}>
-              <Card className="ds-card" variant="outlined" sx={{ borderRadius: 2 }}>
-                <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pb: 1 }}>
-                  <Typography variant="h6">Announcement</Typography>
-                  <Button size="small" variant="text" onClick={() => navigate('/en/notice')}>
-                    View More
-                  </Button>
-                </CardContent>
-                <CardContent sx={{ pt: 0 }}>
-                  <List dense>
-                    {notices.map((n) => (
-                      <ListItem key={n.title} disableGutters>
-                        <ListItemText primary={n.title} secondary={n.date} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
+      </Box> */}
     </Box>
   )
 }
