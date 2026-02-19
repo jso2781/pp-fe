@@ -4623,3 +4623,262 @@
   }
 }
 
+//인권경영선언문
+.pageCont-EthicsAnn {
+  .ann-title {
+    text-align: center;
+    font-size: var(--fs-24);
+    font-weight: 700;
+    color:#fff;
+    padding:10px 0;
+    margin-bottom: 40px;
+    letter-spacing: -1px;
+    border-radius: 8px;
+    background: var(--color-main-action, #087C80);
+  }
+
+  .ann-intro {
+    margin-bottom: 40px;
+    line-height: 1.8;
+    word-break: keep-all;
+
+    .highlight {
+      font-size: var(--fs-20);
+      color: #087C80; 
+    }
+  }
+
+  .ann-list {
+    li {
+      position: relative;
+      margin-bottom: 5px;
+      font-size: var(--fs-18);
+      line-height: 1.6;
+      word-break: keep-all;
+
+      strong {
+        color: #087C80;
+        margin-right: 5px;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .ann-pledge {
+    margin-top: 40px;
+    font-size: var(--fs-18);
+    line-height: 1.8;
+    word-break: keep-all;
+  }
+
+  .ann-signature{
+    margin-top:40px;
+    text-align: right;
+    font-size: var(--fs-18);
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    .ann-title {
+      font-size: var(--fs-20); 
+      margin-bottom: 25px;
+      padding: 12px 10px; 
+    }
+
+    .ann-intro {
+      margin-bottom: 25px;
+
+      .highlight {
+        display: block;
+        margin-bottom: 10px;
+      }
+    }
+    .ann-list {
+      li {
+        line-height: 1.5;
+        margin-bottom: 10px; 
+      }
+    }
+    .ann-pledge {
+      margin-top: 30px;
+      text-align: center; 
+    }
+    .ann-signature {
+      margin-top: 30px;
+      text-align: center;
+    }
+  }
+}
+
+//오시는 길
+.pageCont-AboutMap{
+  .sec01{
+    padding:15px 24px;
+    border-radius: 8px;
+    border: 1px solid #D8D8D8;
+    background: #FFF;
+    .map{
+      text-align: center;
+    }
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: row; 
+    flex-wrap: wrap;  
+    align-items: center;
+    gap: 24px;
+    margin:10px 0 0 0;
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      font-size: var(--fs-16);
+
+      .label {
+        color: var(--color-text-2);
+        font-weight: 700;
+        & + .text {
+          display: flex;
+          align-items: center;
+
+          &::before {
+            content: "";
+            display: inline-block;
+            width: 1px;
+            height: 14px; 
+            background-color: #ccc;
+            margin: 0 15px; 
+          }
+        }
+      }
+      .text {
+        word-break: keep-all;
+        line-height: 1.4;
+      }
+    }
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start; 
+      gap: 12px; 
+
+      .info-item {
+        width: 100%; 
+
+        .label {
+          min-width: 60px;
+
+          & + .text {
+            &::before {
+              display: none; 
+            }
+          }
+        }
+        
+        .text {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+
+  .transport-info {
+    .transport-item {
+      
+      margin-bottom: 24px;
+
+      .type-label {
+        min-width: 80px;
+        font-weight: 700;
+        font-size: var(--fs-18);
+        color: var(--color-text-2);
+      }
+
+      .content {
+        flex: 1;
+
+        .route-main {
+          display: flex;
+          align-items: center;
+          font-size: var(--fs-18);
+          font-weight: 700;
+          margin-bottom: 8px;
+
+          &::before {
+            content: "•";
+            margin-right: 8px;
+          }
+
+          .route-tag {
+            margin-right: 6px;
+          }
+        }
+
+        .bus-list {
+          padding: 0;
+          margin: 0;
+
+          li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 18px; 
+
+            &::before {
+              content: "•";
+              margin-right: 8px;
+            }
+
+            .bus-type {
+              font-size: var(--fs-18);
+              font-weight: 700;
+              margin-right: 8px;
+            }
+          }
+        }
+
+        .description {
+          margin: 0;
+          padding-left: 15px;
+          font-size: 15px;
+        }
+      }
+    }
+  }
+
+  .car-info {
+    .car-route-item {
+      margin-bottom: 30px;
+
+      .route-title {
+        font-size: var(--fs-18);
+        font-weight: 700;
+        color: var(--color-text-2);
+        margin-bottom: 5px;
+      }
+
+      .route-content {
+        p {
+          display: flex;
+          align-items: flex-start; 
+          font-size: var(--fs-18);
+          line-height: 1.6;
+          margin: 0;
+
+          &::before {
+            content: "•";
+            margin-right: 8px;
+            font-weight: normal;
+            flex-shrink: 0; 
+          }
+        }
+      }
+    }
+  }
+}
+
+
+

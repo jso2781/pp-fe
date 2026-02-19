@@ -79,6 +79,7 @@ body { overflow-x: hidden; }
 /* ETC */ 
 .underline{text-decoration: underline; cursor: pointer;}
 .ellipsis{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.maxw100{max-width:100%;}
 
 // 타이틀 
 .section-title-group {

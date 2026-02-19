@@ -471,7 +471,16 @@ export const screens: ScreenMeta[] = [
     "title": "캐릭터소개",
     "uiType": "cms"
   },
-
+  {
+    "id": "KIDS-PP-US-IN-20",
+    "title": "인권경영선언문",
+    "uiType": "cms"
+  },
+  {
+    "id": "KIDS-PP-US-IN-21",
+    "title": "오시는 길",
+    "uiType": "cms"
+  },
   
   
   
@@ -479,7 +488,7 @@ export const screens: ScreenMeta[] = [
   {
     "id": "KIDS-PP-US-MT-01-LAYOUT",
     "title": "내업무 레이아웃",
-    "uiType": "detail"
+    "uiType": "page"
   },
   //전문가 관리
   {
@@ -503,8 +512,6 @@ export const screens: ScreenMeta[] = [
     "uiType": "page"
   },
 
-
-  
 
   /* {
     "id": "KIDS-PP-US-MT-01_List",
