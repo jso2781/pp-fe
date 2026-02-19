@@ -1,6 +1,8 @@
 import i18n from '@/i18n/i18n'
-import { JSX, useEffect, useMemo, lazy } from "react";
+import { JSX, useEffect, useMemo, lazy, useRef } from "react";
 import { Navigate, BrowserRouter, Routes, Route, useLocation, useParams } from 'react-router-dom'
+import { useAppDispatch } from '@/store/hooks'
+import { selectMenuList } from '@/features/auth/MenuThunks'
 import Layout from './Layout'
 import BlankLayout from './BlankLayout'
 import ProtectedRoute from './ProtectedRoute'
@@ -94,6 +96,8 @@ function LangElement({ byLang }: LangElementProps) {
 const LangGuard = ({ children }: { children: JSX.Element }) => {
   const location = useLocation();
   const params = useParams<{ lang?: string }>();
+  const dispatch = useAppDispatch();
+  const prevUrlLangRef = useRef<string | null>(null);
 
   // 1) URL에 lang가 “있는지” (/:lang/* 라우트로 들어온 경우)
   const urlLang = useMemo(() => normalizeLang(params.lang), [params.lang]);
@@ -106,10 +110,16 @@ const LangGuard = ({ children }: { children: JSX.Element }) => {
     const first = segs[1]; // 첫 segment
     const firstAsLang = normalizeLang(first);
 
-    // (A) lang이 아예 없다: "/home" "/settings" "/"
-    if (!first || firstAsLang === null && first === "" /* 루트 */) {
-      const targetLang = detectBrowserLang(); // 브라우저 기반 (또는 fallback)
-      const rest = pathname === "/" ? "" : pathname; // "/"면 뒤에 아무 것도 없음
+    // (A) 루트("/" 또는 "")는 리다이렉트하지 않고 URL 유지
+    const isRoot = pathname === "/" || pathname === "";
+    if (isRoot) {
+      return { needsRedirect: false, redirectTo: "" };
+    }
+
+    // (A') lang이 아예 없다 (루트 제외): "/home" "/settings" 등
+    if (!first || firstAsLang === null) {
+      const targetLang = detectBrowserLang();
+      const rest = pathname.startsWith("/") ? pathname : `/${pathname}`;
       return { needsRedirect: true, redirectTo: `/${targetLang}${rest}` };
     }
 
@@ -126,12 +136,30 @@ const LangGuard = ({ children }: { children: JSX.Element }) => {
     return { needsRedirect: false, redirectTo: "" };
   }, [location.pathname]);
 
-  // 3) URL에 유효한 lang가 있으면 i18n과 동기화
+  // 3) URL에 유효한 lang가 있으면 i18n과 동기화, 언어 변경 시 메뉴 재조회
   useEffect(() => {
-    if (urlLang && i18n.language !== urlLang) {
-      i18n.changeLanguage(urlLang);
+    // pathname에서 직접 언어 추출 (params.lang보다 확실함)
+    const pathnameLang = normalizeLang(location.pathname.split('/')[1]);
+    const currentLang = pathnameLang || urlLang;
+    
+    if (!currentLang) return;
+    
+    const prevLang = prevUrlLangRef.current;
+    
+    // i18n과 동기화
+    if (i18n.language !== currentLang) {
+      i18n.changeLanguage(currentLang);
     }
-  }, [urlLang]);
+    
+    // 이전 언어가 ko 또는 en이고, 언어가 변경되면 메뉴 재조회
+    if (prevLang && (prevLang === 'ko' || prevLang === 'en') && prevLang !== currentLang) {
+      console.log(`LangGuard: 언어 변경 감지 - ${prevLang} → ${currentLang}, 메뉴 재조회`);
+      dispatch(selectMenuList({ langSeCd: currentLang }));
+    }
+    
+    // 현재 언어를 이전 값으로 저장
+    prevUrlLangRef.current = currentLang;
+  }, [urlLang, location.pathname, dispatch]);
 
   if (needsRedirect) {
     // querystring, hash 유지
@@ -178,10 +206,11 @@ export default function Router() {
 
               {/* 일반사용자 메뉴에서 사용할 화면 레이아웃 */}
               <Route element={<LangGuard><Layout /></LangGuard>}>
-                {/* ✅ 루트(/)로 들어오면 브라우저 언어 기반으로 /ko 또는 /en로 보내기 */}
-                <Route path="/" element={<Navigate to={`/${detectBrowserLang()}`} replace />} />
+                {/* 루트(/, '') URL 유지, 한국어 홈 콘텐츠 표시 (자동 리다이렉트 없음) */}
+                <Route path="/" element={<HomeKo />} />
 
                 <Route path="/ko" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
+                <Route path="/ko/" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
 
                 {/* cms 화면 공용 템플릿 경로(콘텐츠 내용 표기) */}
                 <Route path="/:lang/cms/CmsPage/:contsSn" element={<LangElement byLang={{ ko: <CmsPageKo />, en: <CmsPageKo /> }} />} />

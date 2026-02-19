@@ -26,16 +26,7 @@ function resolveInitialLang() {
 }
 
 // ✅ ReactDOM.render 이전에 실행
-const lang = resolveInitialLang();
-
-if(window.location.pathname === '/'){
-  window.history.replaceState(
-    null,
-    '',
-    `/${lang}${window.location.search}${window.location.hash}`
-  )
-}
-
+// 루트(/, '') URL은 그대로 유지하고 /ko로 자동 리다이렉트하지 않음
 ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
     <Provider store={store}>
