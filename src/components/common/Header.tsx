@@ -23,7 +23,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { LOCALE_KEY } from '@/i18n/i18n';
 import { loginExtend } from '@/features/auth/AuthThunks';
 
-import type { MenuRVO } from '@/features/auth/MenuTypes';
+import type { GnbDepth1Item, MenuRVO } from '@/features/auth/MenuTypes';
 import type { LoginExtendRVO } from '@/features/auth/AuthTypes';
 
 /**
@@ -283,16 +283,25 @@ function SitemapItem({ item }: { item: SitemapLinkItem }) {
   const hasChildren = Array.isArray(item.children) && item.children.length > 0
   const internal = item.internal || (typeof item.href === 'string' && item.href.startsWith('/'))
 
+  const isInternal = item.internal || (typeof item.href === 'string' && item.href.startsWith('/'));
+  const isExternal = (item as any).isExternal === true; 
+
   return (
     <Box sx={{ marginBottom: 1 }}>
       <Box sx={{ fontWeight: 500 }}>
         {item.href && item.href !== '#' ? (
-          internal ? (
+          isInternal && !isExternal ? (
             <MuiLink component={NavLink} to={to(item.href)} sx={{ color: 'inherit', textDecoration: 'none' }}>
               {item.label}
             </MuiLink>
           ) : (
-            <MuiLink href={to(item.href)} target="_blank" rel="noopener noreferrer" sx={{ color: 'inherit' }}>
+            <MuiLink 
+              href={item.href}
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="sitemap-link" 
+              sx={{ color: 'inherit' }}
+            >
               {item.label}
             </MuiLink>
           )
@@ -315,6 +324,7 @@ function SitemapItem({ item }: { item: SitemapLinkItem }) {
     </Box>
   )
 }
+
 
 export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const { t, i18n: i18nInstance } = useTranslation()
@@ -1144,7 +1154,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
      
       {/* 사이트맵 Drawer */}
       <Drawer
-        anchor="bottom"
+        anchor="top"
         open={sitemapOpen}
         onClose={() => setSitemapOpen(false)}
         PaperProps={{
@@ -1154,116 +1164,47 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           },
         }}
       >
-        <Box sx={{ p: 3 }}>
-          {/* Drawer 헤더 */}
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              mb: 2,
-            }}
-          >
-            <Stack direction="row" spacing={1.5} alignItems="center">
-              <Typography
-                component={Link}
-                to={to('/')}
-                variant="h6"
-                sx={{ color: 'inherit', textDecoration: 'none', fontWeight: 700 }}
-              >
-                KIDS
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                {t('allSitemap')}
-              </Typography>
-            </Stack>
-
-            <IconButton onClick={() => setSitemapOpen(false)} aria-label="닫기">
-              <Close />
-            </IconButton>
+        <Box className="sitemap-container">
+          <Box className="sitemap-header">
+            <Box className="inner">
+              <Typography className="header-title">전체메뉴</Typography>
+              <IconButton onClick={() => setSitemapOpen(false)}>
+                <Close />
+              </IconButton>
+            </Box>
           </Box>
 
-          <Divider sx={{ mb: 2 }} />
-
-          {/* 로그인/회원가입 버튼 */}
-          {i18nInstance.language === 'ko' && (
-            <Box sx={{ mb: 2 }}>
-              <Stack direction="row" spacing={1} flexWrap="wrap">
-                {!isAuthenticated ? (
-                  <>
-                    <Button variant="contained" component={NavLink} to={to('/auth/LoginMethod')}>
-                      {t('login')}
-                    </Button>
-                    <Button variant="outlined" component={NavLink} to={to('/signup')}>
-                      {t('signup')}
-                    </Button>
-                  </>
-                ) : (
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      // AuthContext의 logout이 Redux 액션을 dispatch하므로 중복 호출 불필요
-                      logoutContext()
-                      // 로그아웃 후 홈으로 이동
-                      navigate(to('/'), { replace: true })
-                    }}
-                  >
-                    {t('logout')}
-                  </Button>
-                )}
-              </Stack>
-            </Box>
-          )}
-
-          <Divider sx={{ mb: 2 }} />
-
-          {/* 사이트맵 본문: 섹션을 여러 컬럼으로 */}
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: {
-                xs: '1fr',
-                sm: 'repeat(2, 1fr)',
-                lg: 'repeat(3, 1fr)',
-              },
-              gap: 2,
-            }}
-          >
+          <Box className="sitemap-body">
             {SITEMAP_SECTIONS.map((section) => (
-              <Box key={section.title}>
-                <Typography variant="h6" sx={{ mb: 1.25, fontWeight: 800 }}>
+              <Box key={section.key} className="section-box">
+                {/* 1Depth 타이틀 */}
+                <Typography className="depth1-title">
                   {section.title}
                 </Typography>
-                <Box>
+
+                {/* 2Depth */}
+                <Box className="grid-wrapper">
                   {section.items.map((item) => (
-                    <SitemapItem key={item.key} item={item} />
+                    <Box key={item.key} className="item-group">
+                      {/* 2Depth 타이틀 */}
+                      <Typography className="depth2-title">
+                        {item.label}
+                      </Typography>
+
+                      {/* 하위 메뉴 리스트 */}
+                      <Box className="sitemap-sub-list">
+                        {item.children?.map((sub) => (
+                          <div key={sub.key} className="sitemap-link-item">
+                            <SitemapItem item={sub} />
+                          </div>
+                        ))}
+                      </Box>
+                    </Box>
                   ))}
                 </Box>
               </Box>
             ))}
           </Box>
-
-          <Divider sx={{ my: 2 }} />
-
-          {/* 외부 링크 */}
-          <Stack direction="row" spacing={1.5} flexWrap="wrap">
-            <MuiLink
-              href="https://www.drugsafe.or.kr/ko/index.do"
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ color: 'primary.main' }}
-            >
-              {t('kidsLink')}
-            </MuiLink>
-            <MuiLink
-              href="https://kaers.drugsafe.or.kr/index.do"
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ color: 'primary.main' }}
-            >
-              {t('reportLink')}
-            </MuiLink>
-          </Stack>
         </Box>
       </Drawer>
 
