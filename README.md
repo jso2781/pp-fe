@@ -38,7 +38,7 @@ cp .env.production.example  .env.production
 **주요 변수:**
 - `VITE_API_BASE_URL` — API 베이스 (없으면 `/api`)
 - `VITE_APP_BASE` — UI base path (예: `/`, `/pp/`)
-- `VITE_APP_ID` — 앱 ID (로그인 등)
+- `VITE_PRGRM_ID` — 앱 ID (로그인 등)
 - `PROXY_TARGET`, `PROXY_PREFIX` — dev 서버 프록시용 (`vite.config.ts`)
 
 ## 데모용 API 응답 형태(예시)

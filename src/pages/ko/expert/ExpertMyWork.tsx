@@ -69,7 +69,7 @@ export default function ExpertMyWork() {
                 // jwt refresh 호출로 전문가 회원 정보 갱신
                 await dispatch(refresh({ 
                   tokenSn: auth.tokenSn ?? 0,
-                  refreshToken: auth.refreshToken ?? '',
+                  updtTokenCn: auth.updtTokenCn ?? '',
                 })).unwrap();
 
                 navigate(to('/'));

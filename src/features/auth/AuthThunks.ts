@@ -22,12 +22,12 @@ export const login = createAsyncThunk<
       // ✅ 여기서 "서버 응답"을 표준 형태로 맞춰서 return
       const userInfo = res.data?.data?.userInfo;
       const tokenSn = res.data?.data?.tokenSn;
-      const accessToken = res.data?.data?.accessToken;
-      const refreshToken = res.data?.data?.refreshToken;
+      const acsTokenCn = res.data?.data?.acsTokenCn;
+      const updtTokenCn = res.data?.data?.updtTokenCn;
       const pswdErrNmtm = res.data?.data?.pswdErrNmtm;
       
       // 서버가 AuthRVO 형식으로 주므로 AuthRVO 형식으로 데이터 구조 재조정 
-      return { userInfo: userInfo as MbrInfoRVO, tokenSn: tokenSn ?? null, accessToken: accessToken ?? null, refreshToken: refreshToken ?? null, pswdErrNmtm: pswdErrNmtm ?? null };
+      return { userInfo: userInfo as MbrInfoRVO, tokenSn: tokenSn ?? null, acsTokenCn: acsTokenCn ?? null, updtTokenCn: updtTokenCn ?? null, pswdErrNmtm: pswdErrNmtm ?? null };
     } catch (error) {
       console.log("AuthThunks login catch error=",error);
       // AxiosError 에러 객체 구조:
@@ -86,8 +86,8 @@ export const refresh = createAsyncThunk<RefreshRVO, RefreshPVO | undefined, { re
 
       return {
         tokenSn: payload.tokenSn ?? null,
-        accessToken: payload.accessToken ?? null,
-        refreshToken: payload.refreshToken ?? null,
+        acsTokenCn: payload.acsTokenCn ?? null,
+        updtTokenCn: payload.updtTokenCn ?? null,
         pswdErrNmtm: payload.pswdErrNmtm ?? null,
         userInfo: (payload.userInfo as MbrInfoRVO) ?? null
       };

@@ -22,17 +22,17 @@ export interface LoginPVO {
   /**
    * 애플리케이션ID
    */
-  appId?: string
+  prgrmId?: string
 
   /**
    * JWT_Refresh_Token
    */
-  refreshToken?: string
+  updtTokenCn?: string
 
   /**
    * JWT_Access_Token
    */
-  accessToken?: string
+  acsTokenCn?: string
 }
 
 export interface LoginRVO {
@@ -49,12 +49,12 @@ export interface LoginRVO {
   /**
    * JWT_Access_Token
    */
-  accessToken: string
+  acsTokenCn: string
 
   /**
    * JWT_Refresh_Token
    */
-  refreshToken: string
+  updtTokenCn: string
 
   /**
    * 비밀번호오류횟수
@@ -71,13 +71,13 @@ export interface RefreshPVO {
   /**
    * JWT_Refresh_Token
    */
-  refreshToken: string
+  updtTokenCn: string
 }
 
 export interface RefreshRVO {
   tokenSn: number
-  accessToken: string
-  refreshToken: string
+  acsTokenCn: string
+  updtTokenCn: string
   pswdErrNmtm: number
   userInfo: MbrInfoRVO
 }

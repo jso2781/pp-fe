@@ -248,17 +248,17 @@ export interface MbrInfoRVO {
   /**
    * 애플리케이션ID
    */
-  appId?: string
+  prgrmId?: string
 
   /**
    * JWT_Refresh_Token
    */
-  refreshToken?: string
+  updtTokenCn?: string
 
   /**
    * JWT_Access_Token
    */
-  accessToken?: string
+  acsTokenCn?: string
 
   /**
    * 전문가 회원 여부(Y: 전문가 회원, N: 일반 회원)

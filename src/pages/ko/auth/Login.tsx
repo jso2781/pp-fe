@@ -42,11 +42,11 @@ export default function Login() {
   const { isAuthenticated } = useAuth(); // login 함수는 사용하지 않음 (Redux가 소스)
   const { showAlert, showConfirmBackdrop, showDialogBackdrop } = useDialog();
   const auth = useAppSelector((s) => s.auth);
-  const { userInfo, tokenSn, accessToken, refreshToken, pswdErrNmtm, loading } = auth || {};
+  const { userInfo, tokenSn, acsTokenCn, updtTokenCn, pswdErrNmtm, loading } = auth || {};
   // console.log("Login auth userInfo=", userInfo);
   // console.log("Login auth tokenSn=", tokenSn);
-  // console.log("Login auth accessToken=", accessToken);
-  // console.log("Login auth refreshToken=", refreshToken);
+  // console.log("Login auth acsTokenCn=", acsTokenCn);
+  // console.log("Login auth updtTokenCn=", updtTokenCn);
   // console.log("Login auth pswdErrNmtm=", pswdErrNmtm);
   // console.log("Login auth loading=",loading);
   
@@ -127,7 +127,7 @@ export default function Login() {
     }
 
     try{
-      const res = await dispatch(loginThunk({ mbrId: values.loginId, encptMbrPswd: values.password, appId: import.meta.env.VITE_APP_ID ?? 'kids-pp-dev' })).unwrap();
+      const res = await dispatch(loginThunk({ mbrId: values.loginId, encptMbrPswd: values.password, prgrmId: import.meta.env.VITE_PRGRM_ID ?? 'kids-pp-dev' })).unwrap();
 
       const userInfo = res.userInfo;
 

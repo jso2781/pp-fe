@@ -9,8 +9,8 @@ import { GnbDepth3Item } from '@/features/auth/MenuTypes'
 interface AuthData {
   userInfo?: any
   tokenSn?: number | null
-  accessToken?: string | null
-  refreshToken?: string | null
+  acsTokenCn?: string | null
+  updtTokenCn?: string | null
   pswdErrNmtm?: number | null
   [key: string]: any
 }
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   /********************************* AuthSlice Redux 상태 구독 및 상태 데이터 추출 시작 ************************************************/
   // AuthSlice Redux 상태 구독
   const auth = useAppSelector((s: RootState) => s.auth) as AuthState
-  const { userInfo, tokenSn, accessToken, refreshToken, pswdErrNmtm } = auth || {}
+  const { userInfo, tokenSn, acsTokenCn, updtTokenCn, pswdErrNmtm } = auth || {}
 
   // Redux 상태에서 직접 계산
   // userInfo가 실제 데이터를 가진 객체인지 확인 (빈 객체가 아닌지)
@@ -44,24 +44,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       typeof userInfo === 'object' && 
       Object.keys(userInfo).length > 0 &&
       userInfo !== null
-    const hasValidToken = accessToken && 
-      typeof accessToken === 'string' && 
-      accessToken.length > 0
+    const hasValidToken = acsTokenCn && 
+      typeof acsTokenCn === 'string' && 
+      acsTokenCn.length > 0
     return !!(hasValidUserInfo && hasValidToken)
-  }, [userInfo, accessToken])
+  }, [userInfo, acsTokenCn])
 
   const user = useMemo<AuthData | null>(() => {
-    if (!userInfo || !accessToken) {
+    if (!userInfo || !acsTokenCn) {
       return null
     }
     return {
       userInfo,
       tokenSn,
-      accessToken,
-      refreshToken,
+      acsTokenCn,
+      updtTokenCn,
       pswdErrNmtm,
     }
-  }, [userInfo, tokenSn, accessToken, refreshToken, pswdErrNmtm])
+  }, [userInfo, tokenSn, acsTokenCn, updtTokenCn, pswdErrNmtm])
 
   const logoutContext = useCallback(() => {
     // Redux logout 액션을 dispatch

@@ -8,8 +8,8 @@ import { MbrInfoRVO } from '../mbr/MbrInfoTypes';
 export interface AuthState {
   userInfo: MbrInfoRVO | null;
   tokenSn: number | null;
-  accessToken: string | null;
-  refreshToken: string | null;
+  acsTokenCn: string | null;
+  updtTokenCn: string | null;
   pswdErrNmtm: number | null;
   loading: boolean;
   error: string | null;
@@ -21,8 +21,8 @@ export interface AuthState {
 const initialState: AuthState = {
   userInfo: null,
   tokenSn: null,
-  accessToken: null,
-  refreshToken: null,
+  acsTokenCn: null,
+  updtTokenCn: null,
   pswdErrNmtm: null,
   loading: false,
   error: null,
@@ -33,29 +33,29 @@ const AuthSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAccessToken(state, action: PayloadAction<MbrInfoRVO | null>) {
+    setAcsTokenCn(state, action: PayloadAction<MbrInfoRVO | null>) {
       state.tokenSn = action.payload?.tokenSn ?? null;
-      state.accessToken = action.payload?.accessToken ?? null;
-      state.refreshToken = action.payload?.refreshToken ?? null;
+      state.acsTokenCn = action.payload?.acsTokenCn ?? null;
+      state.updtTokenCn = action.payload?.updtTokenCn ?? null;
       state.pswdErrNmtm = action.payload?.pswdErrNmtm ?? null;
 
       state.userInfo = action.payload;
 
       // localStorage에 통일된 키로 저장 (AuthContext와 동기화)
-      if(action.payload?.accessToken) {
+      if(action.payload?.acsTokenCn) {
         const authData = {
           tokenSn: action.payload?.tokenSn,
-          accessToken: action.payload?.accessToken,
-          refreshToken: action.payload?.refreshToken,
+          acsTokenCn: action.payload?.acsTokenCn,
+          updtTokenCn: action.payload?.updtTokenCn,
           pswdErrNmtm: action.payload?.pswdErrNmtm,
           userInfo: action.payload
         };
 
         sessionStorage.setItem("auth", JSON.stringify(authData));
 
-        // 하위 호환성을 위해 refreshToken도 별도로 저장
-        if(action.payload?.refreshToken){
-          sessionStorage.setItem("refreshToken", action.payload?.refreshToken);
+        // 하위 호환성을 위해 updtTokenCn도 별도로 저장
+        if(action.payload?.updtTokenCn){
+          sessionStorage.setItem("updtTokenCn", action.payload?.updtTokenCn);
         }
 
       }
@@ -70,13 +70,13 @@ const AuthSlice = createSlice({
           const authData = JSON.parse(authDataStr);
           authData.userInfo = action.payload;
           sessionStorage.setItem("auth", JSON.stringify(authData));
-        } else if (action.payload?.accessToken && state.accessToken) {
-          // sessionStorage에 auth 데이터가 없지만 accessToken이 있는 경우 새로 생성
+        } else if (action.payload?.acsTokenCn && state.acsTokenCn) {
+          // sessionStorage에 auth 데이터가 없지만 acsTokenCn이 있는 경우 새로 생성
           const authData = {
             userInfo: action.payload,
             tokenSn: state.tokenSn,
-            accessToken: state.accessToken,
-            refreshToken: state.refreshToken,
+            acsTokenCn: state.acsTokenCn,
+            updtTokenCn: state.updtTokenCn,
             pswdErrNmtm: state.pswdErrNmtm,
           };
           sessionStorage.setItem("auth", JSON.stringify(authData));
@@ -88,12 +88,12 @@ const AuthSlice = createSlice({
     clearUserInfo: (state) => {
       state.userInfo = null;
       state.tokenSn = null;
-      state.accessToken = null;
-      state.refreshToken = null;
+      state.acsTokenCn = null;
+      state.updtTokenCn = null;
       state.pswdErrNmtm = null;
       // sessionStorage에서 통일된 키 제거
       sessionStorage.removeItem("auth");
-      sessionStorage.removeItem("refreshToken"); // 하위 호환성을 위해 유지
+      sessionStorage.removeItem("updtTokenCn"); // 하위 호환성을 위해 유지
       sessionStorage.removeItem("legalGuardFormData"); // 회원가입 잔여 데이터 제거 (이전 사용자/다른 흐름 노출 방지)
     }
   },
@@ -108,23 +108,23 @@ const AuthSlice = createSlice({
         state.loading = false;
         state.userInfo = action.payload.userInfo;
         state.tokenSn = action.payload.tokenSn;
-        state.accessToken = action.payload.accessToken;
-        state.refreshToken = action.payload.refreshToken;
+        state.acsTokenCn = action.payload.acsTokenCn;
+        state.updtTokenCn = action.payload.updtTokenCn;
         state.pswdErrNmtm = action.payload.pswdErrNmtm;
         
         // sessionStorage에 통일된 키로 저장 (AuthContext와 동기화)
-        if (action.payload.userInfo && action.payload.accessToken) {
+        if (action.payload.userInfo && action.payload.acsTokenCn) {
           const authData = {
             userInfo: action.payload.userInfo,
             tokenSn: action.payload.tokenSn,
-            accessToken: action.payload.accessToken,
-            refreshToken: action.payload.refreshToken,
+            acsTokenCn: action.payload.acsTokenCn,
+            updtTokenCn: action.payload.updtTokenCn,
             pswdErrNmtm: action.payload.pswdErrNmtm,
           };
           sessionStorage.setItem("auth", JSON.stringify(authData));
-          // 하위 호환성을 위해 refreshToken도 별도로 저장
-          if (action.payload.refreshToken) {
-            sessionStorage.setItem("refreshToken", action.payload.refreshToken);
+          // 하위 호환성을 위해 updtTokenCn도 별도로 저장
+          if (action.payload.updtTokenCn) {
+            sessionStorage.setItem("updtTokenCn", action.payload.updtTokenCn);
           }
         }
       })
@@ -137,8 +137,8 @@ const AuthSlice = createSlice({
         state.error = action.payload ?? '로그인에 실패했습니다.';
         state.userInfo = null;
         state.tokenSn = null;
-        state.accessToken = null;
-        state.refreshToken = null;
+        state.acsTokenCn = null;
+        state.updtTokenCn = null;
         state.pswdErrNmtm = null;
       })
       .addCase(refresh.pending, (state) => {
@@ -150,8 +150,8 @@ const AuthSlice = createSlice({
         state.loading = false;
         state.userInfo = action.payload.userInfo;
         state.tokenSn = action.payload.tokenSn;
-        state.accessToken = action.payload.accessToken;
-        state.refreshToken = action.payload.refreshToken;
+        state.acsTokenCn = action.payload.acsTokenCn;
+        state.updtTokenCn = action.payload.updtTokenCn;
         state.pswdErrNmtm = action.payload.pswdErrNmtm;
       })
       .addCase(refresh.rejected, (state, action) => {
@@ -159,8 +159,8 @@ const AuthSlice = createSlice({
         state.error = (action.payload as string) ?? 'JWT Token 갱신에 실패했습니다.';
         state.userInfo = null;
         state.tokenSn = null;
-        state.accessToken = null;
-        state.refreshToken = null;
+        state.acsTokenCn = null;
+        state.updtTokenCn = null;
         state.pswdErrNmtm = null;
       })
       .addCase(logout.pending, (state) => {
@@ -171,12 +171,12 @@ const AuthSlice = createSlice({
         state.loading = false;
         state.userInfo = null;
         state.tokenSn = null;
-        state.accessToken = null;
-        state.refreshToken = null;
+        state.acsTokenCn = null;
+        state.updtTokenCn = null;
         state.pswdErrNmtm = null;
         // sessionStorage에서 통일된 키 제거
         sessionStorage.removeItem("auth");
-        sessionStorage.removeItem("refreshToken");
+        sessionStorage.removeItem("updtTokenCn");
         sessionStorage.removeItem("legalGuardFormData"); // 회원가입 잔여 데이터 제거
       })
       .addCase(logout.rejected, (state, action) => {
@@ -184,8 +184,8 @@ const AuthSlice = createSlice({
         state.error = action.payload ?? '로그아웃에 실패했습니다.';
         state.userInfo = null;
         state.tokenSn = null;
-        state.accessToken = null;
-        state.refreshToken = null;
+        state.acsTokenCn = null;
+        state.updtTokenCn = null;
         state.pswdErrNmtm = null;
         sessionStorage.removeItem("legalGuardFormData"); // 만 14세 미만 회원가입인 경우 법정대리인 동의 step에서 입력한 폼 데이터 제거
       })
@@ -203,5 +203,5 @@ const AuthSlice = createSlice({
     }
   })
 
-export const { setAccessToken, setAuthUserInfo, clearUserInfo } = AuthSlice.actions;
+export const { setAcsTokenCn, setAuthUserInfo, clearUserInfo } = AuthSlice.actions;
 export default AuthSlice.reducer;

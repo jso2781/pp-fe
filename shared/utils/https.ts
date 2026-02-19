@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios'
 import i18n from '@/i18n/i18n'
 import { store } from '@/store/store'
 import type { AppDispatch } from '@/store/store'
-import { setAccessToken } from '@/features/auth/AuthSlice'
+import { setAcsTokenCn } from '@/features/auth/AuthSlice'
 import { logout } from '@/features/auth/AuthThunks'
 import { refreshApiPath } from '@/api/auth/AuthApiPaths'
 import { useNavigate } from 'react-router-dom'
@@ -43,10 +43,10 @@ https.interceptors.request.use((config) => {
   config.headers['Accept-Language'] = lang
   // config.headers['X-Locale'] = lang // 필요하면 둘 다
 
-  const token = store.getState().auth.accessToken;
+  const token = store.getState().auth.acsTokenCn;
   if(token) config.headers['Authorization'] = `Bearer ${token}`;
 
-  config.headers["X-App-Id"] = import.meta.env.VITE_APP_ID ?? 'kids-pp-dev';
+  config.headers["X-App-Id"] = import.meta.env.VITE_PRGRM_ID ?? 'kids-pp-dev';
 
   return config
 })
@@ -75,22 +75,22 @@ https.interceptors.response.use(
       const authData = sessionStorage.getItem("auth");
 
       let tokenSn1: number | null = null;
-      let refreshToken1: string | null = null;
+      let updtTokenCn1: string | null = null;
 
       if (authData) {
         try {
           const parsed = JSON.parse(authData);
           tokenSn1 = parsed.tokenSn || null;
-          refreshToken1 = parsed.refreshToken || null;
+          updtTokenCn1 = parsed.updtTokenCn || null;
         } catch (e) {
           // 파싱 실패 시 별도 키에서 가져오기
-          refreshToken1 = sessionStorage.getItem("refreshToken");
+          updtTokenCn1 = sessionStorage.getItem("updtTokenCn");
         }
       } else {
-        refreshToken1 = sessionStorage.getItem("refreshToken");
+        updtTokenCn1 = sessionStorage.getItem("updtTokenCn");
       }
       
-      if (!refreshToken1) {
+      if (!updtTokenCn1) {
         // tokenSn가 있으면 로그아웃 처리, 없으면 그냥 에러 반환
         if (tokenSn1) {
           dispatch(logout({ tokenSn: tokenSn1 }));
@@ -112,21 +112,21 @@ https.interceptors.response.use(
 
       try {
         // refresh API 호출 (baseURL 포함)
-        const resp = await axios.post(`${apiBaseURL}${refreshApiPath()}`,{ "tokenSn": tokenSn1 , "refreshToken": refreshToken1 });
+        const resp = await axios.post(`${apiBaseURL}${refreshApiPath()}`,{ "tokenSn": tokenSn1 , "updtTokenCn": updtTokenCn1 });
 
         console.log("/auth/refresh rest api response resp.data=", resp.data);
 
         // 서버 응답에서 토큰 정보 추출
         const tokenSn = resp.data?.data?.tokenSn ?? null;
-        const newAccessToken = resp.data?.data?.accessToken ?? null;
-        const newRefreshToken = resp.data?.data?.refreshToken ?? null;
+        const newAcsTokenCn = resp.data?.data?.acsTokenCn ?? null;
+        const newUpdtTokenCn = resp.data?.data?.updtTokenCn ?? null;
         const userInfo = resp.data?.data?.userInfo ?? null;
 
-        // Redux store에 새 토큰 저장 (setAccessToken 액션 사용)
-        dispatch(setAccessToken(userInfo));
+        // Redux store에 새 토큰 저장 (setAcsTokenCn 액션 사용)
+        dispatch(setAcsTokenCn(userInfo));
 
         // sessionStorage에 통일된 키로 저장 (AuthContext와 동기화)
-        if (newRefreshToken) {
+        if (newUpdtTokenCn) {
           // 기존 auth 데이터 가져오기
           const existingAuth = sessionStorage.getItem("auth");
           let authData: Record<string, unknown> = {};
@@ -140,21 +140,21 @@ https.interceptors.response.use(
           
           // 토큰 정보 업데이트
           authData.tokenSn = tokenSn;
-          authData.accessToken = newAccessToken;
-          authData.refreshToken = newRefreshToken;
+          authData.acsTokenCn = newAcsTokenCn;
+          authData.updtTokenCn = newUpdtTokenCn;
           
           // 통일된 키로 저장
           sessionStorage.setItem("auth", JSON.stringify(authData));
-          // 하위 호환성을 위해 refreshToken도 별도로 저장
-          sessionStorage.setItem("refreshToken", newRefreshToken);
+          // 하위 호환성을 위해 updtTokenCn도 별도로 저장
+          sessionStorage.setItem("updtTokenCn", newUpdtTokenCn);
         }
 
         // 대기 중인 요청들에 새 토큰 전달
-        runQueue(newAccessToken);
+        runQueue(newAcsTokenCn);
         
-        // 원래 요청에 새 accessToken 설정 후 재시도
-        if (newAccessToken) {
-          original.headers.Authorization = `Bearer ${newAccessToken}`;
+        // 원래 요청에 새 acsTokenCn 설정 후 재시도
+        if (newAcsTokenCn) {
+          original.headers.Authorization = `Bearer ${newAcsTokenCn}`;
         }
         return https(original);
       }catch (e){
