@@ -20,7 +20,7 @@ export interface LoginPVO {
   encptMbrPswd?: string
 
   /**
-   * 애플리케이션ID
+   * 프로그램아이디
    */
   prgrmId?: string
 
