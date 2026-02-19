@@ -11,6 +11,7 @@ type TKey =
   | 'directions'
   | 'privacyPolicy'
   | 'termsOfUse'
+  | 'cctvPolicy'
   | 'youTube'
   | 'instagram'
   | 'blog'
@@ -24,8 +25,9 @@ const FOOTER_INFO_LINKS: Array<{ key: string; labelKey: TKey; href: string }> = 
 ]
 
 const FOOTER_LEGAL_LINKS: Array<{ key: string; labelKey: TKey; href: string; className?: string }> = [
-  { key: 'privacy', labelKey: 'privacyPolicy', href: 'https://www.drugsafe.or.kr/iwt/ds/ko/member/EgovPrivacyAgreement.do', className: 'point-link'},
-  { key: 'terms', labelKey: 'termsOfUse', href: 'https://www.drugsafe.or.kr/iwt/ds/ko/member/EgovUserAgreement.do' },
+  { key: 'privacy', labelKey: 'privacyPolicy', href: '/ko/etc/PrivacyPolicy', className: 'point-link'},
+  { key: 'terms', labelKey: 'termsOfUse', href: '/ko/etc/Terms' },
+  { key: 'terms', labelKey: 'cctvPolicy', href: '/ko/etc/CctvPolicy' },
 ]
 
 const FOOTER_SNS_LINKS: Array<{ key: string; labelKey: TKey; href: string }> = [
