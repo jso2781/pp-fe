@@ -95,89 +95,94 @@ export default function CleanCenter() {
                   {/* <div className="btn-group center">
                     <button type="button" className="btn_default w260">로그인하기</button>
                   </div> */}
-
-                  <div className="mb40"></div>
-
                   <div className="section-title-group">
-                    <h3 className="section-title">클린신고서 목록</h3>
                     <div className="controller">
                       <button className="btn_outline_sub small" onClick={handleWriteForm}>신고서 작성</button>
                     </div>
                   </div>
-                  {isAuthenticated || true && // (isAuthenticated || Any-Id 인증여부) TODO Any-Id 인증여부 확인 후 추가 필요
-                    <div className="base-table-container">
-                      <div className="table-responsive has-scroll">
-                        <table className="base-table">
-                          <caption className="sr-only">신고서 목록</caption>
-                          <colgroup>
-                            <col style={{ width: '8%' }} />
-                            <col />
-                            <col style={{ width: '10%' }} />
-                            <col style={{ width: '20%' }} />
-                            <col style={{ width: '20%' }} />
-                          </colgroup>
-                          {list.length > 0
-                          ?
-                            <>
-                              <thead>
-                                <tr>
-                                  <th scope="col">번호</th>
-                                  <th scope="col">제목</th>
-                                  <th scope="col">진행상태</th>
-                                  <th scope="col">등록일시</th>
-                                  <th scope="col">처리일시</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {paginaList.map((dshstyDclrRVO: DshstyDclrRVO, i: number) => (
-                                  <tr key={`clean-${i}`}>
-                                    <td>{(list.length - i) - ((page - 1) * 10)}</td>
-                                    <td>
-                                      <Link
-                                        component={RouterLink}
-                                        to={`/ko/about/ethics/CleanDetail`}
-                                        color="inherit"
-                                        aria-label={`${dshstyDclrRVO.dclrTtlNm} 상세보기`}
-                                        underline="hover"
-                                        sx={{ 
-                                          display: 'inline-block',
-                                          width: '100%',
-                                          fontWeight: 500,
-                                          cursor: 'pointer'
-                                        }}
-                                        state={dshstyDclrRVO}
-                                      >
-                                        {dshstyDclrRVO.dclrTtlNm}
-                                      </Link>
-                                    </td>
-                                    <td>접수완료</td>
-                                    <td>{dshstyDclrRVO?.regDt?.split('.')[0]}</td>
-                                    <td>-</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </>
-                          :
-                            <tbody>
-                              <tr>
-                                <td colSpan={5}>
-                                  <div className="no-data">
-                                    <p>등록하신 클린신고서가 없습니다.</p>
-                                  </div>
-                                </td>
-                              </tr>
-                            </tbody>
-                          }
-                        </table>
-                        <Stack className="paging-wrap">
-                          <Pagination
-                            count={totalPages}
-                            page={page}
-                            onChange={(_, page) => setPage(page)}
-                          />
-                        </Stack>
+
+                  <div className="mb40"></div>
+
+                  {/* {(isAuthenticated || true) && // (isAuthenticated || Any-Id 인증여부) TODO Any-Id 인증여부 확인 후 추가 필요 */}
+                  {(isAuthenticated) &&
+                    <>
+                      <div className="section-title-group">
+                        <h3 className="section-title">클린신고서 목록</h3>
                       </div>
-                    </div>
+                      <div className="base-table-container">
+                        <div className="table-responsive has-scroll">
+                          <table className="base-table">
+                            <caption className="sr-only">신고서 목록</caption>
+                            <colgroup>
+                              <col style={{ width: '8%' }} />
+                              <col />
+                              <col style={{ width: '10%' }} />
+                              <col style={{ width: '20%' }} />
+                              <col style={{ width: '20%' }} />
+                            </colgroup>
+                            {list.length > 0
+                            ?
+                              <>
+                                <thead>
+                                  <tr>
+                                    <th scope="col">번호</th>
+                                    <th scope="col">제목</th>
+                                    <th scope="col">진행상태</th>
+                                    <th scope="col">등록일시</th>
+                                    <th scope="col">처리일시</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {paginaList.map((dshstyDclrRVO: DshstyDclrRVO, i: number) => (
+                                    <tr key={`clean-${i}`}>
+                                      <td>{(list.length - i) - ((page - 1) * 10)}</td>
+                                      <td>
+                                        <Link
+                                          component={RouterLink}
+                                          to={`/ko/about/ethics/CleanDetail`}
+                                          color="inherit"
+                                          aria-label={`${dshstyDclrRVO.dclrTtlNm} 상세보기`}
+                                          underline="hover"
+                                          sx={{ 
+                                            display: 'inline-block',
+                                            width: '100%',
+                                            fontWeight: 500,
+                                            cursor: 'pointer'
+                                          }}
+                                          state={dshstyDclrRVO}
+                                        >
+                                          {dshstyDclrRVO.dclrTtlNm}
+                                        </Link>
+                                      </td>
+                                      <td>접수완료</td>
+                                      <td>{dshstyDclrRVO?.regDt?.split('.')[0]}</td>
+                                      <td>-</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </>
+                            :
+                              <tbody>
+                                <tr>
+                                  <td colSpan={5}>
+                                    <div className="no-data">
+                                      <p>등록하신 클린신고서가 없습니다.</p>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            }
+                          </table>
+                          <Stack className="paging-wrap">
+                            <Pagination
+                              count={totalPages}
+                              page={page}
+                              onChange={(_, page) => setPage(page)}
+                            />
+                          </Stack>
+                        </div>
+                      </div>
+                    </>
                   }
                 </section> 
               {/* --- 본문 끝 --- */}
