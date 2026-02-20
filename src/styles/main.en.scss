@@ -15,7 +15,6 @@
   @include meta.load-css('./en/components/grid');
   @include meta.load-css('./en/pages/board');
   @include meta.load-css('./en/pages/home');
-  @include meta.load-css('./en/pages/dur');
   @include meta.load-css('./en/pages/content');
 
   /* 직접 작성하는 스타일 (상단에서 선언한 mixin_tools 사용) */
