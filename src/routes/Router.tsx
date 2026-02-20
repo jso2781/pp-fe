@@ -272,8 +272,8 @@ export default function Router() {
                 <Route path="/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
 
                 {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
-                <Route path="/screens" element={<Screens />} />
-                <Route path="/screens/:screenId" element={<ScreenViewer />} />
+                <Route path="/:lang/screens" element={<Screens />} />
+                <Route path="/:lang/screens/:screenId" element={<ScreenViewer />} />
 
                 {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
                 <Route path="/:lang/InternalServerError" element={<LangElement byLang={{ ko: <InternalServerErrorKo />, en: <InternalServerErrorKo /> }} />} />
