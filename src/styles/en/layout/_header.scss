@@ -6,20 +6,6 @@
 .header {
   position: relative;
 
-  // 정부 배지 영역
-  .gov-badge {
-    display: flex;
-    align-items: center;
-    height: 32px;
-    background-color: #eef2f7;
-
-    .txt {
-      padding-left: 30px;
-      color: var(--color-text-1);
-      background: url(/img/ico_flag_ko.png) no-repeat left center;
-    }
-  }
-
   // PC 상단 바
   .header-topbar {
     display: flex;
@@ -91,16 +77,6 @@
     .container {
       display: flex;
       align-items: center;
-
-      .util-menu {
-        margin-left: auto;
-        display: flex;
-        align-items: center;
-
-        @media (max-width: 1200px) {
-          display: none;
-        }
-      }
     }
   }
 }
@@ -109,7 +85,7 @@
    유틸 버튼 스타일 (PC/MO 공통 아이콘 )
    ========================================================================== */
 .header-topbar .top-link,
-.header_menu .util-menu,
+.header_menu,
 .mo-header-util,
 .mo-drawer-header {
   .btn-util {
@@ -193,6 +169,7 @@
     position: relative; 
     transition: color 0.2s;
     outline: none;
+    white-space: nowrap;
 
     &::after { 
       content: ''; 
