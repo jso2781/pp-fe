@@ -97,7 +97,6 @@ export default function ExpertApproval() {
                           <MenuItem value="W">대기</MenuItem>
                           <MenuItem value="R">반려</MenuItem>
                           <MenuItem value="A">승인</MenuItem>
-                          <MenuItem value="C">회수</MenuItem>
                         </Select>
                       </Box>
                       <Box className="search-input-group">

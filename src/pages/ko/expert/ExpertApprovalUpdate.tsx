@@ -21,6 +21,7 @@ export default function ExpertApprovalUpdate() {
   const dispatch = useAppDispatch();  
   const current = useAppSelector((s) => s.exprtApproval.current);
   const authList = useAppSelector((s) => s.exprtApproval.authList);
+  const defenseYn = useAppSelector((s) => s.exprtApproval.defenseYn);
   const lnbStructor = useAppSelector((s) => s.exprtTask.lnbStructor);
   const auth = useAppSelector((s) => s.auth);
   const mbrNo = auth?.userInfo?.mbrNo || '';
@@ -50,9 +51,25 @@ export default function ExpertApprovalUpdate() {
 
   // 대국민포털_전문가업무신청관리 소속 전문가 회원 상세 조회
   const { exprtTaskSn } = useParams<{ exprtTaskSn: string }>();
+  const apprInstTaskList = auth?.userInfo?.apprInstTaskList?.map(item => item.bzmnTaskMngNo ?? '') ?? [];
   useEffect(() => {
-    dispatch(selectExprtApproval({ exprtTaskSn }));
+    dispatch(selectExprtApproval({ exprtTaskSn, bzmnTaskMngNos: apprInstTaskList ?? [] }));
   }, [dispatch, exprtTaskSn]);  
+
+  // 권한이 없을경우 defense
+  useEffect(() => {
+    if (defenseYn) {
+      showDialogBackdrop({
+        message: '비정상적인 접근입니다.',
+        title: '알림',
+        type: 'alert',
+        confirmText: '확인',
+        onConfirm: () => {
+          navigate(`/ko/expert/ExpertApproval`);
+        },
+      })
+    }
+  }, [defenseYn]); 
 
   // 상태관리
   const [exprtAprvSttsCode, setExprtAprvSttsCode] = useState(current?.exprtAprvSttsCode || 'W');

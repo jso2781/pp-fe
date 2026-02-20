@@ -25,6 +25,9 @@ export interface ExprtApprovalPVO {
 
   /** 업무구분코드 */
   taskSeCd?: string
+
+  /** 사업자업무관리번호 목록 */
+  bzmnTaskMngNos?: string[];
 }
 
 /**
@@ -129,6 +132,9 @@ export interface ExprtApprovalRVO {
 
   /** 전문가 회원 전환 신청일시 */
   exprtInfoRegDt?: string
+
+  /** 사업자업무관리번호 */
+  bzmnTaskMngNo?: string
 }
 
 /**
@@ -157,4 +163,5 @@ export interface ExprtApprovalListRVO {
 export interface ExprtApprovalDetailRVO {
   detail: ExprtApprovalRVO
   authList: ExprtTaskAuthRVO[]
+  defenseYn: false;
 }
