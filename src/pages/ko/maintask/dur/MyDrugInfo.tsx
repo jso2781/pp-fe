@@ -11,8 +11,9 @@ import KoglLicense from '@/components/common/KoglLicense'
 import Lnb from '@/components/common/Lnb'
 import LnbSectionTitle from '@/components/common/LnbSectionTitle'
 import { useAuth } from '@/contexts/AuthContext'
-import { selectDurMyDrugInfoList } from '@/features/dur/DurMyDrugInfoThunks'
+import { selectDurMyDrugInfoList, selectDurMyDrugSearchList } from '@/features/dur/DurMyDrugInfoThunks'
 import { resetResults } from '@/features/dur/DurMyDrugInfoSlice'
+import { DurMyDrugInfoPVO, DurMyDrugSearchRVO } from '@/features/dur/DurMyDrugInfoTypes'
 import { AgeItem, ConcItem, CpctItem, DosageItem, EftgrpItem, NurswItem, PrgntItem, SnctzItem } from '@/features/dur/DurSearchRoomTypes'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { Switch as BaseSwitch } from '@base-ui/react'
@@ -21,8 +22,6 @@ import { Box, Button, Checkbox, FormControl, InputLabel, LinearProgress, MenuIte
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-
-type DrugItem = { id: number; ingredient: string; name: string; company: string }
 
 type TabListMap = Record<string, { totalCount: number; list: any[] }>
 
@@ -34,7 +33,7 @@ export default function MyDrugInfo() {
   const dispatch = useAppDispatch()
   const { lang } = useParams<{ lang: string }>()
 
-  const { list, loading } = useAppSelector((s) => s.durMyDrugInfo)
+  const { searchList, list, searchLoading, resultLoading } = useAppSelector((s) => s.durMyDrugInfo)
 
   const { getMenuInfo } = useAuth()
   const menuInfo = getMenuInfo(location.pathname)
@@ -49,27 +48,7 @@ export default function MyDrugInfo() {
 
   const currentUrl = location.pathname
 
-  const initialDrugData: DrugItem[] = [
-    { id: 1, ingredient: '', name: '글리피지드', company: '환인제약(주)' },
-    { id: 2, ingredient: '', name: '메트포르민', company: '바이엘코리아(주)' },
-    { id: 3, ingredient: '', name: '로베글리타존/메트포르민', company: '한국존슨앤드존슨' },
-    { id: 4, ingredient: '', name: '메트포르민/리나글립틴', company: '한국화이자제약(주)' },
-    { id: 5, ingredient: '', name: '메트포르민/피오글리타존', company: '한국화이자제약(주)' },
-    { id: 6, ingredient: '', name: '둘라글루타이드', company: '한국화이자제약(주)' },
-    { id: 7, ingredient: '', name: '세마글루티드', company: '한국화이자제약(주)' },
-    { id: 8, ingredient: '', name: '리라글루티드', company: '한국화이자제약(주)' },
-    { id: 9, ingredient: 'Chlordiazepoxide', name: '', company: '환인제약(주)' },
-    { id: 10, ingredient: 'Cyclosporin', name: '', company: '바이엘코리아(주)' },
-    { id: 11, ingredient: 'Entacapone', name: '', company: '한국존슨앤드존슨' },
-    { id: 12, ingredient: 'Etoposide', name: '', company: '한국화이자제약(주)' },
-    { id: 13, ingredient: 'Mepolizumab', name: '', company: '한국화이자제약(주)' },
-    { id: 14, ingredient: 'posaconazole', name: '', company: '한국화이자제약(주)' },
-    { id: 15, ingredient: 'Propofol', name: '', company: '한국화이자제약(주)' },
-    { id: 16, ingredient: 'Verteporfin', name: '', company: '한국화이자제약(주)' },    
-  ]
-
-  const [basketList, setBasketList] = useState<DrugItem[]>([])
-  const [drugData, setDrugData] = useState<DrugItem[]>(initialDrugData)
+  const [basketList, setBasketList] = useState<DurMyDrugSearchRVO[]>([])
   const [searchCnd, setSearchCnd] = useState<'igrdNm' | 'prdctNm'>('igrdNm')
   const [searchWrd, setSearchWrd] = useState<string>('')
   const [isCheck, setIsCheck] = useState(false)
@@ -83,46 +62,60 @@ export default function MyDrugInfo() {
     setActiveCategory(newValue)
   }
 
-  const handleToggleDrug = (drug: DrugItem) => {
-    const isExist = basketList.find((item) => item.id === drug.id)
+  const getDrugId = (drug: DurMyDrugSearchRVO, index?: number) => {
+    return drug.itemSeq || drug.ingrCode || drug.stdCd || `${drug.itemName || ''}|${drug.ingrEngName || ''}|${drug.entpName || ''}|${index ?? ''}`
+  }
+
+  const handleToggleDrug = (drug: DurMyDrugSearchRVO, index?: number) => {
+    const targetId = getDrugId(drug, index)
+    const isExist = basketList.find((item) => getDrugId(item) === targetId)
     if (isExist) {
-      setBasketList(basketList.filter((item) => item.id !== drug.id))
+      setBasketList(basketList.filter((item) => getDrugId(item) !== targetId))
       return
     }
     setBasketList([...basketList, drug])
   }
 
-  const handleDelete = (id: number) => {
-    setBasketList(basketList.filter((item) => item.id !== id))
+  const handleDelete = (id: string) => {
+    setBasketList(basketList.filter((item) => getDrugId(item) !== id))
   }
 
-  const handleSearchAdd = () => {
+  const handleSearch = () => {
     const keyword = searchWrd.trim()
     if (!keyword) return
+    runSearch(keyword, searchCnd, isCheck)
+  }
 
-    const isDuplicate = drugData.some((item) =>
-      searchCnd === 'igrdNm' ? item.ingredient === keyword : item.name === keyword
-    )
-    if (isDuplicate) {
-      setSearchWrd('')
-      return
+  const runSearch = (keyword: string, condition: 'igrdNm' | 'prdctNm', checked: boolean) => {
+    dispatch(selectDurMyDrugSearchList({
+      searchType: condition === 'prdctNm' ? 'item' : 'ingr',
+      searchValue: keyword,
+      itemYn: condition === 'igrdNm' ? (checked ? 'Y' : 'N') : 'N',
+    }))
+  }
+
+  const drugData: DurMyDrugSearchRVO[] = useMemo(() => (Array.isArray(searchList) ? searchList : []), [searchList])
+
+  const isItemSearchCase = searchCnd === 'prdctNm'
+  const isIngrItemCase = searchCnd === 'igrdNm' && isCheck
+  const isIngrOnlyCase = searchCnd === 'igrdNm' && !isCheck
+
+  const getBasketLabel = (item: DurMyDrugSearchRVO) => {
+    if (isIngrOnlyCase) {
+      return item.ingrEngName || '-'
     }
-
-    const maxId = drugData.length > 0 ? Math.max(...drugData.map((item) => item.id)) : 0
-    const newItem: DrugItem = {
-      id: maxId + 1,
-      ingredient: searchCnd === 'igrdNm' ? keyword : '',
-      name: searchCnd === 'prdctNm' ? keyword : '',
-      company: '-',
-    }
-
-    setDrugData((prev) => [...prev, newItem])
-    setSearchWrd('')
+    return item.itemName || '-'
   }
 
   useEffect(() => {
     setBasketList([])
-  }, [isCheck])
+  }, [isCheck, searchCnd])
+
+  useEffect(() => {
+    const keyword = searchWrd.trim()
+    if (!keyword) return
+    runSearch(keyword, searchCnd, isCheck)
+  }, [searchCnd, isCheck])
 
   useEffect(() => {
     return () => {
@@ -225,17 +218,21 @@ export default function MyDrugInfo() {
     setTabDetailPageNum({ tab1: 1, tab2: 1, tab3: 1, tab4: 1, tab5: 1, tab6: 1, tab7: 1, tab8: 1 })
     setHasRequestedResult(true)
 
+    let searchParam = basketList.map((item) => ({          
+          prdctCd: item.stdCd || '',
+          igrdCd: item.ingrCode || '',
+        })) as DurMyDrugInfoPVO[]; 
+
+    if (isCheck) {
+        searchParam = basketList.map((item) => ({          
+          prdctCd: item.stdCd || '',
+          igrdCd: '',
+        })) as DurMyDrugInfoPVO[];       
+    }
+
     dispatch(
-      selectDurMyDrugInfoList({
-        pageNum: 1,
-        pageSize: 10,
-        searchType: isCheck ? 'igrdNm' : 'prdctNm',
-        durMyDrugInfoPVOs: basketList.map((item) => ({
-          igrdNm: item.ingredient,
-          prdctNm: item.name,
-        })),
-      })
-    )
+      selectDurMyDrugInfoList(searchParam)
+    );
   }
 
   const renderDetailRows = (category: string, item: any) => {
@@ -245,7 +242,7 @@ export default function MyDrugInfo() {
     ]
 
     if (category === 'TAB1') {
-      return [...baseRows, { label: '병용금기 성분', value: item?.prohibitIgrdNm || '-' }, { label: '상세정보', value: item?.dtlInfoCn || '-' }, { label: '비고', value: item?.rmrkCn || '-' }]
+      return [...baseRows, { label: '병용금기 제품', value: item?.prohibitPrdctNm || '-' }, { label: '병용금기 성분', value: item?.prohibitIgrdNm || '-' }, { label: '상세정보', value: item?.dtlInfoCn || '-' }, { label: '비고', value: item?.rmrkCn || '-' }]
     }
     if (category === 'TAB2') {
       const ageValue = `${item?.rlvtAge ?? ''}${item?.rlvtAgeUnitNm ?? ''} ${item?.agePrcsCndNm ?? ''}`.trim()
@@ -346,7 +343,11 @@ export default function MyDrugInfo() {
                                   size="large"
                                   labelId="search-condition-label"
                                   value={searchCnd}
-                                  onChange={(e) => setSearchCnd(e.target.value as 'igrdNm' | 'prdctNm')}
+                                  onChange={(e) => {
+                                    const next = e.target.value as 'igrdNm' | 'prdctNm'
+                                    setSearchCnd(next)
+                                    if (next === 'prdctNm') setIsCheck(false)
+                                  }}
                                 >
                                   <MenuItem value="igrdNm">성분명(영)</MenuItem>
                                   <MenuItem value="prdctNm">제품명(한)</MenuItem>
@@ -362,7 +363,7 @@ export default function MyDrugInfo() {
                                   onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                       e.preventDefault()
-                                      handleSearchAdd()
+                                      handleSearch()
                                     }
                                   }}
                                 />
@@ -370,8 +371,8 @@ export default function MyDrugInfo() {
                                   variant="contained"
                                   size="large"
                                   className="btn-search"
-                                  onClick={handleSearchAdd}
-                                  disabled={!searchWrd.trim()}
+                                  onClick={handleSearch}
+                                  disabled={!searchWrd.trim() || searchLoading}
                                 >
                                   검색
                                 </Button>
@@ -381,62 +382,100 @@ export default function MyDrugInfo() {
                         </Box>
 
                         <Box className="search-result-content">
+                          {searchLoading && <LinearProgress sx={{ mb: 1 }} />}
                           <Box className="base-table-container">
                             <Box className="base-table-meta">
-                              <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
-                                <Typography className="switch_title">의약품 바구니 담기 선택</Typography>
-                                <BaseSwitch.Root
-                                  id="search-type-switch"
-                                  className="base_switch_root"
-                                  checked={isCheck}
-                                  onCheckedChange={(checked) => setIsCheck(checked)}
-                                  aria-label="의약품 바구니 담기 선택 기준"
-                                >
-                                  <BaseSwitch.Thumb className="base_switch_thumb" />
-                                </BaseSwitch.Root>
-                                <Typography component="label" htmlFor="search-type-switch" className="switch_label" sx={{ cursor: 'pointer' }}>
-                                  {isCheck ? '성분명' : '제품명'}
-                                </Typography>
-                              </Stack>
-                              <p className="helper-text">의약품 바구니 선택 옵션을 변경하시면 의약품 바구니가 초기화됩니다.</p>
+                              {searchCnd === 'igrdNm' && (
+                                <>
+                                  <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
+                                    <Typography className="switch_title">의약품 바구니 담기 선택</Typography>
+                                    <BaseSwitch.Root
+                                      id="search-type-switch"
+                                      className="base_switch_root"
+                                      checked={isCheck}
+                                      onCheckedChange={(checked) => setIsCheck(checked)}
+                                      aria-label="의약품 바구니 담기 선택 기준"
+                                    >
+                                      <BaseSwitch.Thumb className="base_switch_thumb" />
+                                    </BaseSwitch.Root>
+                                    <Typography component="label" htmlFor="search-type-switch" className="switch_label" sx={{ cursor: 'pointer' }}>
+                                      {isCheck ? '제품명' : '성분명'}
+                                    </Typography>
+                                  </Stack>
+                                  <p className="helper-text">의약품 바구니 선택 옵션을 변경하시면 의약품 바구니가 초기화됩니다.</p>
+                                </>
+                              )}
                             </Box>
                             <Box className="table-responsive has-vscroll">
                               <table className="base-table">
                                 <caption className="sr-only">내가 먹는 의약품 목록</caption>
                                 <colgroup>
-                                  <col style={{ width: '25%' }} />
-                                  <col />
-                                  <col style={{ width: '25%' }} />
+                                  {isItemSearchCase && (
+                                    <>
+                                      <col />
+                                      <col style={{ width: '25%' }} />
+                                    </>
+                                  )}
+                                  {isIngrItemCase && (
+                                    <>
+                                      <col style={{ width: '25%' }} />
+                                      <col />
+                                      <col style={{ width: '25%' }} />
+                                    </>
+                                  )}
+                                  {isIngrOnlyCase && <col />}
                                   <col style={{ width: '50px' }} />
                                 </colgroup>
                                 <thead>
                                   <tr>
-                                    <th scope="col">성분명</th>
-                                    <th scope="col">제품명</th>
-                                    <th scope="col">제약회사</th>
+                                    {isItemSearchCase && (
+                                      <>
+                                        <th scope="col">제품명</th>
+                                        <th scope="col">제약회사</th>
+                                      </>
+                                    )}
+                                    {isIngrItemCase && (
+                                      <>
+                                        <th scope="col">성분명</th>
+                                        <th scope="col">제품명</th>
+                                        <th scope="col">제약회사</th>
+                                      </>
+                                    )}
+                                    {isIngrOnlyCase && <th scope="col">성분명</th>}
                                     <th scope="col">선택</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   {drugData.length > 0 ? (
-                                    drugData.map((drug) => (
-                                      <tr key={drug.id}>
-                                        <td>{drug.ingredient}</td>
-                                        <td>{drug.name}</td>
-                                        <td>{drug.company}</td>
+                                    drugData.map((drug, index) => (
+                                      <tr key={getDrugId(drug, index)}>
+                                        {isItemSearchCase && (
+                                          <>
+                                            <td>{drug.itemName || '-'}</td>
+                                            <td>{drug.entpName || '-'}</td>
+                                          </>
+                                        )}
+                                        {isIngrItemCase && (
+                                          <>
+                                            <td>{drug.ingrEngName || '-'}</td>
+                                            <td>{drug.itemName || '-'}</td>
+                                            <td>{drug.entpName || '-'}</td>
+                                          </>
+                                        )}
+                                        {isIngrOnlyCase && <td>{drug.ingrEngName || '-'}</td>}
                                         <td>
                                           <Checkbox
                                             className="chk-select"
-                                            checked={basketList.some((item) => item.id === drug.id)}
-                                            onChange={() => handleToggleDrug(drug)}
-                                            slotProps={{ input: { 'aria-label': `${drug.name} 선택` } }}
+                                            checked={basketList.some((item) => getDrugId(item) === getDrugId(drug, index))}
+                                            onChange={() => handleToggleDrug(drug, index)}
+                                            slotProps={{ input: { 'aria-label': `${drug.itemName || drug.ingrEngName || ''} 선택` } }}
                                           />
                                         </td>
                                       </tr>
                                     ))
                                   ) : (
                                     <tr>
-                                      <td colSpan={4}>
+                                      <td colSpan={isIngrOnlyCase ? 2 : 3 + (isIngrItemCase ? 1 : 0)}>
                                         <Box className="no-data">제공할 정보가 없거나, 허가 취하된 의약품은 검색 되지 않을 수 있습니다.</Box>
                                       </td>
                                     </tr>
@@ -467,30 +506,30 @@ export default function MyDrugInfo() {
                                 <caption className="sr-only">의약품 선택 목록</caption>
                                 <colgroup>
                                   <col style={{ width: '40px' }} />
-                                  <col />
-                                  <col style={{ width: '25%' }} />
+                                  <col style={{ width: isIngrOnlyCase ? 'calc(100% - 90px)' : undefined }} />
+                                  <col style={{ width: '25%', display: isIngrOnlyCase ? 'none' : undefined }} />
                                   <col style={{ width: '50px' }} />
                                 </colgroup>
                                 <thead>
                                   <tr>
                                     <th scope="col">NO</th>
-                                    <th scope="col">제품명</th>
-                                    <th scope="col">제약회사</th>
+                                    <th scope="col">{isIngrOnlyCase ? '성분명' : '제품명'}</th>
+                                    {!isIngrOnlyCase && <th scope="col">제약회사</th>}
                                     <th scope="col">삭제</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   {basketList.length > 0 ? (
                                     basketList.map((item, index) => (
-                                      <tr key={item.id}>
+                                      <tr key={getDrugId(item, index)}>
                                         <td>{index + 1}</td>
-                                        <td className="text-left">{item.name}</td>
-                                        <td>{item.company}</td>
+                                        <td className="text-left">{getBasketLabel(item)}</td>
+                                        {!isIngrOnlyCase && <td>{item.entpName || '-'}</td>}
                                         <td>
                                           <Button
                                             className="btn-delete-circle"
-                                            onClick={() => handleDelete(item.id)}
-                                            aria-label={`${item.name} 삭제`}
+                                            onClick={() => handleDelete(getDrugId(item, index))}
+                                            aria-label={`${item.itemName || item.ingrEngName || ''} 삭제`}
                                             sx={{ textTransform: 'none' }}
                                             title="삭제"
                                           >
@@ -501,7 +540,7 @@ export default function MyDrugInfo() {
                                     ))
                                   ) : (
                                     <tr>
-                                      <td colSpan={4}>
+                                      <td colSpan={isIngrOnlyCase ? 3 : 4}>
                                         <Box className="no-data">
                                           <p>의약품 바구니가 비어져있습니다.</p>
                                           <p>검색한 의약품을 선택해주세요.</p>
@@ -517,7 +556,7 @@ export default function MyDrugInfo() {
                       </Box>
                     </Box>
                     <Box className="btn-group center">
-                      <Button variant="contained" size="large" disabled={basketList.length === 0 || loading} onClick={onClickCheckDur}>
+                      <Button variant="contained" size="large" disabled={basketList.length === 0 || resultLoading} onClick={onClickCheckDur}>
                         DUR 정보 확인하기
                       </Button>
                     </Box>
@@ -529,7 +568,7 @@ export default function MyDrugInfo() {
                         <p className="step-label">3단계<span>DUR 정보결과</span></p>
                       </Box>
 
-                      {loading && <LinearProgress sx={{ mb: 2 }} />}
+                      {resultLoading && <LinearProgress sx={{ mb: 2 }} />}
 
                       <Box className="dur-result-content">
                         <Box className="category-tabs box-variant col-4" role="navigation" aria-label="기본 카테고리 선택">
@@ -588,7 +627,7 @@ export default function MyDrugInfo() {
                                                     <dd>
                                                       <Box className="detail-info-row">
                                                         <span className="text">{row.value}</span>
-                                                        {row.label === '성분' && item?.igrdNm && (
+                                                        {row.label === '성분' && item?.igrdNm && (activeCategory !== 'TAB1') && (
                                                           <Button
                                                             variant="outlined02"
                                                             size="xsmall"

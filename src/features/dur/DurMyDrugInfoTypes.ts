@@ -1,15 +1,27 @@
 import { AgeItem, ConcItem, CpctItem, DosageItem, EftgrpItem, NurswItem, PrgntItem, SnctzItem } from './DurSearchRoomTypes'
 
-export interface DurMyDrugInfoItemPVO {
-  prdctNm?: string
-  igrdNm?: string
+export interface DurMyDrugSearchPVO {
+  searchType?: string
+  searchValue?: string
+  itemYn?: string
+}
+
+export interface DurMyDrugSearchRVO {
+  itemSeq?: string
+  stdCd?: string
+  itemName?: string
+  entpName?: string
+  ingrEngName?: string
+  ingrCode?: string
+}
+
+export interface DurMyDrugSearchListRVO {
+  list: DurMyDrugSearchRVO[]
 }
 
 export interface DurMyDrugInfoPVO {
-  pageNum?: number
-  pageSize?: number
-  searchType?: string
-  durMyDrugInfoPVOs?: DurMyDrugInfoItemPVO[]
+  prdctCd?: string
+  igrdCd?: string
 }
 
 export interface DurMyDrugInfoRVO {

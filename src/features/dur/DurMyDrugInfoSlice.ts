@@ -1,22 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectDurMyDrugInfoList } from './DurMyDrugInfoThunks'
-import { DurMyDrugInfoRVO } from './DurMyDrugInfoTypes'
+import { selectDurMyDrugInfoList, selectDurMyDrugSearchList } from './DurMyDrugInfoThunks'
+import { DurMyDrugInfoRVO, DurMyDrugSearchRVO } from './DurMyDrugInfoTypes'
 
 export interface DurMyDrugInfoState {
+  searchList: DurMyDrugSearchRVO[]
   list: DurMyDrugInfoRVO[]
   totalCount: number | null
   totalPages: number | null
   current: DurMyDrugInfoRVO | null
-  loading: boolean
+  searchLoading: boolean
+  resultLoading: boolean
   error: string | null
 }
 
 const initialState: DurMyDrugInfoState = {
+  searchList: [],
   list: [],
   totalCount: null,
   totalPages: null,
   current: null,
-  loading: false,
+  searchLoading: false,
+  resultLoading: false,
   error: null,
 }
 
@@ -28,27 +32,42 @@ const DurMyDrugInfoSlice = createSlice({
       state.current = null
     },
     resetResults: (state) => {
+      state.searchList = []
       state.list = []
       state.totalCount = null
       state.totalPages = null
       state.current = null
       state.error = null
+      state.searchLoading = false
+      state.resultLoading = false
     },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(selectDurMyDrugSearchList.pending, (state) => {
+        state.searchLoading = true
+        state.error = null
+      })
+      .addCase(selectDurMyDrugSearchList.fulfilled, (state, action) => {
+        state.searchLoading = false
+        state.searchList = action.payload.list
+      })
+      .addCase(selectDurMyDrugSearchList.rejected, (state, action) => {
+        state.searchLoading = false
+        state.error = action.payload || action.error?.message || 'Failed to load dur my drug search list'
+      })
       .addCase(selectDurMyDrugInfoList.pending, (state) => {
-        state.loading = true
+        state.resultLoading = true
         state.error = null
       })
       .addCase(selectDurMyDrugInfoList.fulfilled, (state, action) => {
-        state.loading = false
+        state.resultLoading = false
         state.list = action.payload.list
         state.totalCount = action.payload.totalCount
         state.totalPages = action.payload.totalPages
       })
       .addCase(selectDurMyDrugInfoList.rejected, (state, action) => {
-        state.loading = false
+        state.resultLoading = false
         state.error = action.payload || action.error?.message || 'Failed to load dur my drug info list'
       })
   },

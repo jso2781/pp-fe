@@ -35,6 +35,11 @@ export interface ConcItem {
     prohibitIgrdNm: string
 
     /**
+     * 병용금기 제품명
+     */
+    prohibitPrdctNm?: string
+
+    /**
      * 상세정보
      */
     dtlInfoCn: string
