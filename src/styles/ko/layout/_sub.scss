@@ -116,12 +116,28 @@
 // 4. 로케이션 & 페이지 경로
 .location {
   margin-bottom: 40px;
+  @media (max-width: 1200px) {
+    margin-bottom: 20px;
+  }
 
   .local {
     margin-bottom: 36px;
+    li{
+      margin-left:10px;
+      &:first-child {
+        margin-left: 0;
+        padding-left: 0;
+      }
+      p{
+        font-size:15px;
+      }
+    }
     .home {
       padding-left: 20px;
       background: url('/img/ico_home.svg') no-repeat left center;
+    }
+    @media (max-width: 1200px) {
+      display: none;
     }
   }
 
@@ -136,6 +152,10 @@
       font-size: 40px;
       font-weight: 700;
       line-height: 1;
+
+      @media (max-width: 1200px) {
+        font-size: 32px;
+      }
     }
   }
 }
