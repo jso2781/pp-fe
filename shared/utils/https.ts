@@ -27,7 +27,7 @@ const apiBaseURL = import.meta.env.MODE === 'production'
 
 const https: AxiosInstance = axios.create({
   baseURL: apiBaseURL,
-  timeout: 15000,
+  timeout: 30000,
   headers: { 'Content-Type': 'application/json' },
   // Any-ID 로그인은 서버 세션을 사용하므로(기본 샘플과 동일),
   // 개발 환경처럼 API와 UI 오리진이 다를 때 쿠키 전송을 위해 필요
