@@ -25,6 +25,10 @@ const apiBaseURL = import.meta.env.MODE === 'production'
   ? '/api' 
   : (import.meta.env.VITE_API_BASE_URL ?? '/api')
 
+/** 인증 API 전용 서버 (login, refresh, logout, extend 만 이 도메인으로 호출) */
+const authApiBaseURL = import.meta.env.VITE_AUTH_API_BASE_URL ?? 'http://localhost:8088/api/ca'
+const AUTH_PATHS = ['/auth/login', '/auth/refresh', '/auth/logout', '/auth/extend']
+
 const https: AxiosInstance = axios.create({
   baseURL: apiBaseURL,
   timeout: 30000,
@@ -34,18 +38,19 @@ const https: AxiosInstance = axios.create({
   withCredentials: true
 })
 
-// ✅ 모든 요청에 locale 헤더 자동 주입
+// ✅ 모든 요청에 locale 헤더 자동 주입 + 인증 API는 authApiBaseURL로 전송
 https.interceptors.request.use((config) => {
+  const url = config.url ?? ''
+  if (AUTH_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
+    config.baseURL = authApiBaseURL
+  }
+
   const lang = (i18n.language || 'ko').startsWith('en') ? 'en' : 'ko'
 
   config.headers = config.headers ?? {}
-  // 서버가 요구하는 헤더명에 맞춰 선택:
   config.headers['Accept-Language'] = lang
-  // config.headers['X-Locale'] = lang // 필요하면 둘 다
-
   const token = store.getState().auth.acsTokenCn;
   if(token) config.headers['Authorization'] = `Bearer ${token}`;
-
   config.headers["X-App-Id"] = import.meta.env.VITE_PRGRM_ID ?? 'kids-pp-dev';
 
   return config
@@ -112,7 +117,7 @@ https.interceptors.response.use(
 
       try {
         // refresh API 호출 (baseURL 포함)
-        const resp = await axios.post(`${apiBaseURL}${refreshApiPath()}`,{ "tokenSn": tokenSn1 , "updtTokenCn": updtTokenCn1 });
+        const resp = await axios.post(`${authApiBaseURL}${refreshApiPath()}`, { "tokenSn": tokenSn1 , "updtTokenCn": updtTokenCn1 });
 
         console.log("/auth/refresh rest api response resp.data=", resp.data);
 
