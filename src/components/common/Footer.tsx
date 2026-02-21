@@ -26,8 +26,8 @@ const FOOTER_INFO_LINKS: Array<{ key: string; labelKey: TKey; href: string }> = 
 
 const FOOTER_LEGAL_LINKS: Array<{ key: string; labelKey: TKey; href: string; className?: string }> = [
   { key: 'privacy', labelKey: 'privacyPolicy', href: '/ko/etc/PrivacyPolicy', className: 'point-link'},
-  { key: 'terms', labelKey: 'termsOfUse', href: '/ko/etc/Terms' },
-  { key: 'terms', labelKey: 'cctvPolicy', href: '/ko/etc/CctvPolicy' },
+  { key: 'termsOfUse', labelKey: 'termsOfUse', href: '/ko/etc/Terms' },
+  { key: 'cctvPolicy', labelKey: 'cctvPolicy', href: '/ko/etc/CctvPolicy' },
 ]
 
 const FOOTER_SNS_LINKS: Array<{ key: string; labelKey: TKey; href: string }> = [
