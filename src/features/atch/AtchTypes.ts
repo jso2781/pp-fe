@@ -180,7 +180,4 @@ export interface AtchDVO {
 export interface AtchDownVO {
   /** 첨부파일아이디 */
   atchFileId?: string
-
-  /** 첨부파일그룹아이디 */
-  atchFileGroupId?: string
 }

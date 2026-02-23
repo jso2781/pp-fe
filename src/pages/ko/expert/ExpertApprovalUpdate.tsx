@@ -33,9 +33,9 @@ export default function ExpertApprovalUpdate() {
   const lang = getLangFromPathname(location.pathname) || 'ko'
 
   // 파일 다운로드
-  const handleDownload = (atchFileGroupId: string, atchFileId: string) => {
+  const handleDownload = (atchFileId: string) => {
     dispatch(
-      downloadAtch({atchFileGroupId, atchFileId})
+      downloadAtch({atchFileId})
     );
   };
 
@@ -217,7 +217,7 @@ export default function ExpertApprovalUpdate() {
                                           className="attachment-item"
                                           underline="none"
                                           title="첨부파일 다운로드"
-                                          onClick={() => handleDownload('999', '1')}                                          
+                                          onClick={() => handleDownload('1')}                                          
                                         >
                                           <span className="ico-down" aria-hidden="true" style={{cursor: 'pointer'}}/>
                                         </Link>

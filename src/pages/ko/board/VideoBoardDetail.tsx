@@ -52,9 +52,9 @@ export default function VideoBoardDetail() {
   const isHtml = typeof html === 'string' && /<\/?[a-z][\s\S]*>/i.test(html)
   const atchFiles = data?.atchRVOs || [];
 
-  const handleDownload = (atchFileGroupId: string, atchFileId: string) => {
+  const handleDownload = (atchFileId: string) => {
     dispatch(
-      downloadAtch({atchFileGroupId, atchFileId})
+      downloadAtch({atchFileId})
     );
   };
   
@@ -147,7 +147,7 @@ export default function VideoBoardDetail() {
                               className="attachment-item"
                               underline="none"
                               title="첨부파일 다운로드"
-                              onClick={() => handleDownload(file.atchFileGroupId ?? '', file.atchFileId ?? '')}
+                              onClick={() => handleDownload(file.atchFileId ?? '')}
                             >
                               <Box className="file-info">
                                 <span className="file-label">{atchFiles.length === 1 ? '첨부파일' : `첨부파일${index + 1}`}</span>
