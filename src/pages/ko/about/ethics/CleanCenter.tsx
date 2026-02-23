@@ -95,19 +95,17 @@ export default function CleanCenter() {
                   {/* <div className="btn-group center">
                     <button type="button" className="btn_default w260">로그인하기</button>
                   </div> */}
-                  <div className="section-title-group">
-                    <div className="controller">
-                      <button className="btn_outline_sub small" onClick={handleWriteForm}>신고서 작성</button>
-                    </div>
-                  </div>
 
                   <div className="mb40"></div>
 
                   {/* {(isAuthenticated || true) && // (isAuthenticated || Any-Id 인증여부) TODO Any-Id 인증여부 확인 후 추가 필요 */}
-                  {(isAuthenticated) &&
+                  {(isAuthenticated) ?
                     <>
                       <div className="section-title-group">
                         <h3 className="section-title">클린신고서 목록</h3>
+                        <div className="controller">
+                          <button className="btn_outline_sub small" onClick={handleWriteForm}>신고서 작성</button>
+                        </div>
                       </div>
                       <div className="base-table-container">
                         <div className="table-responsive has-scroll">
@@ -183,6 +181,12 @@ export default function CleanCenter() {
                         </div>
                       </div>
                     </>
+                    :
+                    <div className="section-title-group">
+                      <div className="controller">
+                        <button className="btn_outline_sub small" onClick={handleWriteForm}>신고서 작성</button>
+                      </div>
+                    </div>
                   }
                 </section> 
               {/* --- 본문 끝 --- */}
