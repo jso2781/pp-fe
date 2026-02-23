@@ -276,12 +276,13 @@
 
       a { 
         display: inline-flex;
-        align-items: center;
+        align-items: flex-start;
         padding: 6px 0; 
         font-size: 18px;
         color: #464C53;
         text-decoration: none; 
         outline: none;
+        line-height:120%;
 
         &:focus{
           border:1px solid #04585B;
@@ -290,6 +291,9 @@
         &:hover, &:focus { 
           color: #04585B; 
           text-decoration: underline; 
+        }
+        svg{
+          margin-top:3px;
         }
       }
     }
