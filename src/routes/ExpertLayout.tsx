@@ -16,15 +16,17 @@ export default function ExpertLayout() {
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
-      <Box className="layout-full">
-        <Header onOpenNav={() => setMobileOpen(true)} />
-        {/* <AppNavDrawer mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} drawerWidth={DRAWER_WIDTH} /> */}
-        <Box className="app-main" sx={{ flex: 1 }}>
-          <Suspense fallback={<div style={{ padding: 24, textAlign: 'center' }}>로딩 중...</div>}>
-            <Outlet />
-          </Suspense>
+      <Box className="lang-ko">
+        <Box className="layout-full">
+          <Header onOpenNav={() => setMobileOpen(true)} />
+          {/* <AppNavDrawer mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} drawerWidth={DRAWER_WIDTH} /> */}
+          <Box className="app-main" sx={{ flex: 1 }}>
+            <Suspense fallback={<div style={{ padding: 24, textAlign: 'center' }}>로딩 중...</div>}>
+              <Outlet />
+            </Suspense>
+          </Box>
+          <Footer />
         </Box>
-        <Footer />
       </Box>
     </ThemeProvider>
   )
