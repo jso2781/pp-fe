@@ -116,7 +116,6 @@ export default function KIDS_PP_US_IN_06() {
                           </table>
                         </div>
                       </div>
-
                     </div>
                   </section>
 

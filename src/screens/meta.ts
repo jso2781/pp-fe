@@ -28,7 +28,7 @@ export const screens: ScreenMeta[] = [
   {
     "id": "KIDS-PP-US-DI-01",
     "title": "DUR 이해",
-    "uiType": "page"
+    "uiType": "cms"
   },
   {
     "id": "KIDS-PP-US-DI-02",
@@ -88,18 +88,18 @@ export const screens: ScreenMeta[] = [
   {
     "id": "KIDS-PP-US-DI-13",
     "title": "의약품 적정사용 정보집",
-    "uiType": "page"
+    "uiType": "cms"
   },
   {
     "id": "KIDS-PP-US-DI-14",
     "title": "내가 먹는 약의 DUR 정보",
     "uiType": "page"
   },
-  {
+  /* {
     "id": "KIDS-PP-US-DI-15",
     "title": "의약품 적정사용 정보집",
     "uiType": "page"
-  },
+  }, */
   {
     "id": "KIDS-PP-US-DI-18",
     "title": "의견 제안",
