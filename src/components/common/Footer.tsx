@@ -12,6 +12,7 @@ type TKey =
   | 'privacyPolicy'
   | 'termsOfUse'
   | 'cctvPolicy'
+  | 'koglLicense'
   | 'youTube'
   | 'instagram'
   | 'blog'
@@ -28,6 +29,7 @@ const FOOTER_LEGAL_LINKS: Array<{ key: string; labelKey: TKey; href: string; cla
   { key: 'privacy', labelKey: 'privacyPolicy', href: '/ko/etc/PrivacyPolicy', className: 'point-link'},
   { key: 'termsOfUse', labelKey: 'termsOfUse', href: '/ko/etc/Terms' },
   { key: 'cctvPolicy', labelKey: 'cctvPolicy', href: '/ko/etc/CctvPolicy' },
+  { key: 'koglLicense', labelKey: 'koglLicense', href: 'https://www.kogl.or.kr/info/licenseType1.do' },
 ]
 
 const FOOTER_SNS_LINKS: Array<{ key: string; labelKey: TKey; href: string }> = [
