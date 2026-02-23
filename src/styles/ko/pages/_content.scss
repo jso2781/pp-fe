@@ -2933,7 +2933,7 @@
     padding: 24px 24px 24px 150px;
     border: 1px solid #D8D8D8;
     border-radius: 10px;
-    background: url('/img/adverseIntro_img01.png') no-repeat left 20px top 20px;
+    background: url('/img/cms/adverseIntro_img01.png') no-repeat left 20px top 20px;
 
     .report-step-list {
       li {
@@ -2978,7 +2978,7 @@
 
       .report-step-list {
         padding:0 100px 0 0 ;
-        background: url('/img/adverseIntro_img01.png') no-repeat right top;
+        background: url('/img/cms/adverseIntro_img01.png') no-repeat right top;
         background-size: 80px auto;
         li{
           flex-direction: column;
@@ -3046,15 +3046,15 @@
 
     /* dt별 이미지 분기 */
     dl:nth-child(1) dt::before {
-      background-image: url('/img/taskProgress_ico01.png');
+      background-image: url('/img/cms/taskProgress_ico01.png');
     }
 
     dl:nth-child(2) dt::before {
-      background-image: url('/img/taskProgress_ico02.png');
+      background-image: url('/img/cms/taskProgress_ico02.png');
     }
 
     dl:nth-child(3) dt::before {
-      background-image: url('/img/taskProgress_ico03.png'); 
+      background-image: url('/img/cms/taskProgress_ico03.png'); 
     }
 
     @media (max-width: 1200px) {
@@ -3174,16 +3174,16 @@
     }
 
     &.type-target::before {
-      background: #EDF8F8 url("/img/reliefIntro_ico01.png") no-repeat center center;
+      background: #EDF8F8 url("/img/cms/reliefIntro_ico01.png") no-repeat center center;
     }
     &.type-period::before {
-      background: #EDF8F8 url("/img/reliefIntro_ico02.png") no-repeat center center;
+      background: #EDF8F8 url("/img/cms/reliefIntro_ico02.png") no-repeat center center;
     }
     &.type-post::before {
-      background: #EDF8F8 url("/img/reliefIntro_ico03.png") no-repeat center center;
+      background: #EDF8F8 url("/img/cms/reliefIntro_ico03.png") no-repeat center center;
     }
     &.type-online::before {
-      background: #EDF8F8 url("/img/reliefIntro_ico04.png") no-repeat center center;
+      background: #EDF8F8 url("/img/cms/reliefIntro_ico04.png") no-repeat center center;
     }
   }
  
@@ -3680,7 +3680,7 @@
         text-align: left;
         &::before {
           left: -11.5px;
-          background: url('/img/aboutHistory_ico01.png') no-repeat center / contain;
+          background: url('/img/cms/aboutHistory_ico01.png') no-repeat center / contain;
         }
       }
 
@@ -3690,7 +3690,7 @@
         text-align: right;
         &::before {
           right: -11.5px;
-          background: url('/img/aboutHistory_ico02.png') no-repeat center / contain;
+          background: url('/img/cms/aboutHistory_ico02.png') no-repeat center / contain;
         }
       }
 
@@ -3736,7 +3736,7 @@
             top: 0px;
             left: 9px; 
             right: auto;
-            background: url('/img/aboutHistory_ico01.png') no-repeat center / contain;
+            background: url('/img/cms/aboutHistory_ico01.png') no-repeat center / contain;
           }
         }
 
@@ -4037,10 +4037,10 @@
       margin-bottom: 20px; 
     }
 
-    &:nth-child(1)::before { background-image: url('/img/aboutVision_ico01.png'); }
-    &:nth-child(2)::before { background-image: url('/img/aboutVision_ico02.png'); }
-    &:nth-child(3)::before { background-image: url('/img/aboutVision_ico03.png'); }
-    &:nth-child(4)::before { background-image: url('/img/aboutVision_ico04.png'); }
+    &:nth-child(1)::before { background-image: url('/img/cms/aboutVision_ico01.png'); }
+    &:nth-child(2)::before { background-image: url('/img/cms/aboutVision_ico02.png'); }
+    &:nth-child(3)::before { background-image: url('/img/cms/aboutVision_ico03.png'); }
+    &:nth-child(4)::before { background-image: url('/img/cms/aboutVision_ico04.png'); }
   }
 
   .task-list li {
@@ -4305,10 +4305,10 @@
     }
   }
   .sec01::before {
-    background-image: url("/img/aboutCharter_ico01.png");
+    background-image: url("/img/cms/aboutCharter_ico01.png");
   }
   .sec02::before {
-    background-image: url("/img/aboutCharter_ico02.png");
+    background-image: url("/img/cms/aboutCharter_ico02.png");
   }
   .sec03{
     .txt{
@@ -4330,7 +4330,7 @@
         margin:0 8px 0 0;
         padding:0 0 0 8px;
         color:#fff;
-        background: url("/img/aboutCharter_ico03.png") center center;
+        background: url("/img/cms/aboutCharter_ico03.png") center center;
       }
     }
     li ~ li{margin-top: 16px;}
