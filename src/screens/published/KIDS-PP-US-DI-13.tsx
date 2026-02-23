@@ -66,31 +66,31 @@ export default function KIDS_PP_US_DI_13() {
                       <ul className="book-list">
                         <li>
                           <button type="button" className="btn-book">
-                            <img src="/img/img_dictionary01.png" alt="소아·청소년 정보집" />
+                            <img src="/img/cms/ApprUseBook_img01.png" alt="소아·청소년 정보집" />
                             <p className="book-name">소아·청소년에 대한 의약품 적정사용 정보집(’22)</p>
                           </button>
                         </li>
                         <li>
                           <button type="button" className="btn-book">
-                            <img src="/img/img_dictionary02.png" alt="어르신 정보집" />
+                            <img src="/img/cms/ApprUseBook_img02.png" alt="어르신 정보집" />
                             <p className="book-name">어르신에 대한 의약품 적정사용 정보집(’22)</p>
                           </button>
                         </li>
                         <li>
                           <button type="button" className="btn-book">
-                            <img src="/img/img_dictionary03.png" alt="임산부 정보집" />
+                            <img src="/img/cms/ApprUseBook_img03.png" alt="임산부 정보집" />
                             <p className="book-name">임산부에 대한 의약품 적정사용 정보집(’22)</p>
                           </button>
                         </li>
                         <li>
                           <button type="button" className="btn-book">
-                            <img src="/img/img_dictionary04.png" alt="특정 질환별 정보집" />
+                            <img src="/img/cms/ApprUseBook_img04.png" alt="특정 질환별 정보집" />
                             <p className="book-name">특정 질환별 의약품 적정사용 정보집(’23)</p>
                           </button>
                         </li>
                         <li>
                           <button type="button" className="btn-book">
-                            <img src="/img/img_dictionary05.png" alt="가이드북" />
+                            <img src="/img/cms/ApprUseBook_img05.png" alt="가이드북" />
                             <p className="book-name">의약품 안전사용 가이드북(’24)</p>
                           </button>
                         </li>
