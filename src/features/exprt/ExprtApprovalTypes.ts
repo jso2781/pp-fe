@@ -1,3 +1,5 @@
+import { AtchRVO } from "../atch/AtchTypes"
+
 /**
  * 대국민포털_전문가업무신청관리 조회 파라메터 정보 
  */
@@ -135,6 +137,9 @@ export interface ExprtApprovalRVO {
 
   /** 사업자업무관리번호 */
   bzmnTaskMngNo?: string
+
+  /** 파일객체 */
+  file?: AtchRVO
 }
 
 /**

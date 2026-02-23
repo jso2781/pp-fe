@@ -166,33 +166,33 @@ export default function ExpertApprovalDetail() {
                             <dt>신청일</dt>
                             <dd>{current?.exprtInfoRegDt ?? '-'}</dd>
                           </div>
-                          <div className="info-item">
-                            <dt>증빙 서류</dt>
-                            <dd>
-                                <Box className="board-attachment">
-                                  <ul className="attachment-list">
-                                    <li key='tempkey'>
-                                      <Box className="file-info">
-                                        <span className="file-label">첨부파일</span>
-                                        <span className="file-name">파일명</span>
-                                        <span className="file-meta">
-                                          <span className="file-ext">[pdf]</span>
-                                          <span className="file-size">52050</span>
-                                        </span>
-                                        <Link 
-                                          className="attachment-item"
-                                          underline="none"
-                                          title="첨부파일 다운로드"
-                                          onClick={() => handleDownload('1')}                                          
-                                        >                                          
-                                          <span className="ico-down" aria-hidden="true" style={{cursor: 'pointer'}}/>
-                                        </Link>
-                                      </Box>                                      
-                                    </li>
-                                  </ul>
-                                </Box>   
-                            </dd>
-                          </div>
+                          {current?.file && (<>
+                            <div className="info-item">
+                              <dt>증빙 서류</dt>
+                              <dd>
+                                  <Box className="board-attachment">
+                                    <ul className="attachment-list">
+                                      <li key='tempkey'>
+                                        <Box className="file-info">
+                                          <span className="file-name">{current?.file?.fileNm ?? '-'}</span>
+                                          <span className="file-meta">
+                                            <span className="file-size"> [{current?.file?.fileSz ?? 0} KB]</span>
+                                          </span>
+                                          <Link 
+                                            className="attachment-item"
+                                            underline="none"
+                                            title="첨부파일 다운로드"
+                                            onClick={() => handleDownload(current?.file?.atchFileId ?? '')}                                          
+                                          >                                          
+                                            <span className="ico-down" aria-hidden="true" style={{cursor: 'pointer'}}/>
+                                          </Link>
+                                        </Box>                                      
+                                      </li>
+                                    </ul>
+                                  </Box>   
+                              </dd>
+                            </div>
+                          </>)}
                         </dl>
                       </Box>
                     </Grid>

@@ -163,12 +163,12 @@ export default function ExpertApproval() {
                                         {item.name}
                                       </Link>                                      
                                     </TableCell>
-                                    <TableCell align="center">{item.instEmlNm}</TableCell>
-                                    <TableCell align="center">{item.label}</TableCell>
-                                    <TableCell align="center">PDF (예시)</TableCell>
+                                    <TableCell align="center">{item.instEmlNm ?? "-"}</TableCell>
+                                    <TableCell align="center">{item.label ?? "-"}</TableCell>
+                                    <TableCell align="center">{item.file?.fileExtnNm ?? '-'}</TableCell>
                                     <TableCell align="center">{item.taskApplyRegDt}</TableCell>
                                     <TableCell align="center">{item.taskAprvPrcsDt || '-'}</TableCell>
-                                    <TableCell align="center">{item.taskAprvSttsLabel}</TableCell>
+                                    <TableCell align="center">{item.taskAprvSttsLabel ?? '-'}</TableCell>
                                   </TableRow>
                                 ))
                               ) : (
