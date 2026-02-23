@@ -9,13 +9,14 @@ import { Box, Button, Stack, Typography } from '@mui/material';
 import { ZodFormProvider } from '@/components/rhf/ZodFormProvider';
 import * as z from 'zod'
 import { useZodForm } from '@/components/rhf/useZodForm';
+import type { FieldErrors } from 'react-hook-form';
 import RHFTextField from '@/components/rhf/RHFTextField';
 import RHFRadioGroup from '@/components/rhf/RHFRadioGroup';
 import { validateFiles } from '@/lib/validation/files';
 import { useAppDispatch } from '@/store/hooks';
 import { insertOpnn } from '@/features/opnn/OpnnThunks';
 import DepsLocation from '@/components/common/DepsLocation';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Lnb from '@/components/common/Lnb';
 import { useAuth } from '@/contexts/AuthContext';
@@ -31,6 +32,7 @@ const accept = allowedExtensions.map((e) => `.${e}`).join(',')
 export default function Proposal() {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { getMenuInfo } = useAuth();
   const { showAlert } = useDialog();
@@ -55,7 +57,8 @@ export default function Proposal() {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: '동의가 필요합니다.' })
       }
     }),
-    agreeOptional: z.enum(['Y', 'N']).optional().superRefine((v, ctx) => v == null && ctx.addIssue({ code: z.ZodIssueCode.custom, message: '동의 여부를 선택해 주세요.' })),
+    // (선택) 동의: 미선택(undefined) 허용. 휴대폰 입력 시 동의 필요 여부는 onSubmit에서 검사
+    agreeOptional: z.enum(['Y', 'N']).optional(),
     role: z.string().trim().min(1, { message: '구분을 선택해주세요.' }),
     name: z.string().trim().min(1, { message: '이름을 입력해주세요.' }),
     contact: z.string(),
@@ -94,17 +97,29 @@ export default function Proposal() {
     defaultValues,
   });
 
+  // 제출 시 검증 실패하면 화면 순서대로 첫 번째 오류 필드로 포커스·스크롤
+  const onInvalid = (errors: FieldErrors<FormValues>) => {
+    const order: (keyof FormValues)[] = ['agreeRequired', 'agreeOptional', 'role', 'name', 'contact', 'email', 'problem', 'summary', 'detail', 'etc', 'files'];
+    const first = order.find((name) => errors[name]);
+    if (first) {
+      form.setFocus(first, { shouldSelect: true });
+      const el = document.querySelector(`[name="${first}"], [id="${first}"]`);
+      if (el instanceof HTMLElement) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
   const onSubmit = async (values: FormValues) => {
     if (values.contact && values.agreeOptional === 'N') {
-      form.setError('agreeOptional', { type: 'validate', message: '휴대폰번호 수집·동의에 동의가 필요합니다.' }, { shouldFocus: true });
+      form.setError('agreeOptional', { type: 'validate', message: '휴대전화번호가 입력된 경우 휴대폰번호 수집·동의에 동의가 필요합니다.' }, { shouldFocus: true });
       return;
     }
     try {
       await dispatch(insertOpnn(transfromDataType(values))).unwrap();
-      showAlert('의견제안 제출이 완료되었습니다.');
-    } catch(e) {
-
-    } finally {
+      showAlert('의견제안 제출이 완료되었습니다.', t('success'), () => {
+        navigate('/');
+      });
+    }catch(e){}
+    finally {
       form.reset(defaultValues);
     }
   }
@@ -172,7 +187,7 @@ export default function Proposal() {
                   </Box>
                   <p className="fs-18 fw-700">한국의약품안전관리원은 DUR 의견 제안과 관련하여 아래와 같이 개인정보를 수집·이용하고자 합니다.<br/> 내용을 자세히 읽으신 후 동의 여부를 결정하여 주십시오.</p>
                   <ZodFormProvider schema={schema} methods={form}>
-                    <Box component="form" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+                    <Box component="form" onSubmit={form.handleSubmit(onSubmit, onInvalid)} noValidate>
                       <Box className="privacy-policy-section">
                         {/* --- 개인정보 수집·동의 (필수) --- */}
                         <Box className="privacy-consent-box" role="group" aria-labelledby="consent-title-required">
@@ -250,7 +265,7 @@ export default function Proposal() {
 
                 <h3 className="section-title">의견 제안 입력</h3>
                 <ZodFormProvider schema={schema} methods={form}>
-                  <Box component="form" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+                  <Box component="form" onSubmit={form.handleSubmit(onSubmit, onInvalid)} noValidate>
                     <Box className="bordered-box">
                       <Box className="form-group-wrap">
                         <Box className="form-item-row-vertical">
@@ -379,9 +394,9 @@ export default function Proposal() {
                           <Box className="attach-file-box">
                             <FileUploadField
                               value={uploadedFiles}
-                              onChange={handleFilesChange} 
+                              onChange={handleFilesChange}
                               accept=".pdf,.png,.jpg,.jpeg"
-                              multiple={false}
+                              multiple
                               maxFiles={3}
                               maxFileSizeMB={10}
                               maxTotalSizeMB={30}
@@ -432,7 +447,6 @@ export default function Proposal() {
                         variant="contained"
                         size="large"
                         type="submit"
-                        disabled={!form.formState.isValid}
                       >
                         제안등록
                       </Button>
