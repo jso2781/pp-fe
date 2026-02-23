@@ -61,12 +61,11 @@ export default function Home() {
   const baseUrl = import.meta.env.VITE_ANY_ID_STATIC_URL || '';
   
   // 썸네일 이미지 URL 생성 헬퍼 함수
-  const getThumbnailUrl = (item: { thmbFilePath?: string | null; thmbFileNm?: string | null }) => {
-    if (item.thmbFilePath && item.thmbFileNm) {
+  const getThumbnailUrl = (item: { thmbFileNm?: string | null }) => {
+    if (item.thmbFileNm) {
       // 백슬래시를 슬래시로 변환하고, 경로 끝의 슬래시 정리
-      const normalizedPath = item.thmbFilePath.replace(/\\/g, '/').replace(/\/+$/, '');
       const normalizedFileName = item.thmbFileNm.replace(/^\/+/, '');
-      return `${baseUrl}/api/atch/thumb/${normalizedPath}/${normalizedFileName}`;
+      return `${baseUrl}/api/atch/thumb/${normalizedFileName}`;
     }
     return '/img/img_test.png';
   };
