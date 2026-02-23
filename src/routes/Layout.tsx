@@ -16,14 +16,16 @@ export default function Layout() {
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
-      <Header onOpenNav={() => setMobileOpen(true)} />
-      {/* <AppNavDrawer mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} drawerWidth={DRAWER_WIDTH} /> */}
-      <Box className="app-main" sx={{ flex: 1 }}>
-        <Suspense fallback={<div style={{ padding: 24, textAlign: 'center' }}>로딩 중...</div>}>
-          <Outlet />
-        </Suspense>
-      </Box>
+      <Box className="lang-ko">
+        <Header onOpenNav={() => setMobileOpen(true)} />
+        {/* <AppNavDrawer mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} drawerWidth={DRAWER_WIDTH} /> */}
+        <Box className="app-main" sx={{ flex: 1 }}>
+          <Suspense fallback={<div style={{ padding: 24, textAlign: 'center' }}>로딩 중...</div>}>
+            <Outlet />
+          </Suspense>
+        </Box>
       <Footer />
+      </Box>
     </ThemeProvider>
   )
 }

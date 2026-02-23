@@ -106,14 +106,14 @@ export default function Home() {
   const serviceShortcuts = useMemo(
     () => [
       { title: '국내 이상사례 온라인 보고', url: 'https://kaers.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
-      { title: '의약품부작용피해구제 민원신청', url: 'https://nedrug.mfds.go.kr/cntnts/230', iconUrl: '/img/shortcut_ico01.png' },
-      { title: '마약류 통합관리 시스템', url: 'https://www.nims.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
-      { title: '의약품 통합정보 시스템', url: 'https://nedrug.mfds.go.kr/index', iconUrl: '/img/shortcut_ico01.png' },
-      { title: '첨단바이오의약품 장기추적조사 시스템', url: 'https://ltfu.mfds.go.kr/main.do', iconUrl: '/img/shortcut_ico01.png' },
-      { title: '병원자료 분석네트워크', url: 'https://moa.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
-      { title: '의약품 안전관리책임자 교육', url: 'https://pvtraining.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
-      { title: '안전정보공개', url: 'https://open.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
-      { title: 'APEC 약물감시 전문교육훈련', url: 'https://kidscoe.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
+      { title: '의약품부작용피해구제 민원신청', url: 'https://nedrug.mfds.go.kr/cntnts/230', iconUrl: '/img/shortcut_ico02.png' },
+      { title: '마약류 통합관리 시스템', url: 'https://www.nims.or.kr/', iconUrl: '/img/shortcut_ico03.png' },
+      { title: '의약품 통합정보 시스템', url: 'https://nedrug.mfds.go.kr/index', iconUrl: '/img/shortcut_ico04.png' },
+      { title: '첨단바이오의약품 장기추적조사 시스템', url: 'https://ltfu.mfds.go.kr/main.do', iconUrl: '/img/shortcut_ico05.png' },
+      { title: '병원자료  분석네트워크', url: 'https://moa.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico06.png' },
+      { title: '의약품 안전관리책임자 교육', url: 'https://pvtraining.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico07.png' },
+      { title: '안전정보공개', url: 'https://open.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico08.png' },
+      { title: 'APEC 약물감시 전문교육훈련', url: 'https://kidscoe.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico09.png' },
     ],
     []
   );

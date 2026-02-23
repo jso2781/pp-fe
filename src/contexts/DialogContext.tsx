@@ -177,6 +177,9 @@ export function DialogProvider({ children }: { children: ReactNode }) {
         {/* No-backdrop: independent state, does not affect backdrop modal */}
         <Dialog
           className="common-alert"
+          PaperProps={{
+            className: 'lang-ko',
+          }}
           open={openNoBackdrop}
           onClose={handleCloseNoBackdrop}
           maxWidth="xs"
@@ -204,6 +207,9 @@ export function DialogProvider({ children }: { children: ReactNode }) {
 
         {/* With-backdrop: independent state, does not affect no-backdrop modal */}
         <Dialog
+          PaperProps={{
+            className: 'lang-ko',
+          }}
           open={openBackdrop}
           onClose={handleCloseBackdrop}
           maxWidth="md"

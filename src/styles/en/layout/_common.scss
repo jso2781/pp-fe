@@ -111,15 +111,6 @@ body { overflow-x: hidden; }
 }
 
 .section-title {
-  &::before {
-    content: "";
-    display: block;
-    width: 43px;
-    height: 4px;
-    margin-bottom: 8px;
-    background: linear-gradient(90deg, #35B895 34.1%, #D2DF1C 83.66%);
-    border-radius: 2px;
-  }
 }
 
 .sub-title{

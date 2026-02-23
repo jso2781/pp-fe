@@ -1,20 +1,26 @@
-@use './ko/base/reset';
-@use './ko/base/variables';
-@use './ko/base/mixins';
+/* 최상단: 도구 선언 (@use는 반드시 맨 위에 모아야 합니다) */
+@use "sass:meta";
+@use './ko/base/mixins' as mixin_tools;
+@use './ko/base/variables' as vars;
 
-@use './ko/layout/common';
-@use './ko/layout/header';
-@use './ko/layout/footer';
-@use './ko/layout/sub';
-@use './ko/layout/sub-full';
+.lang-ko {
+  // meta.load-css를 사용하여 모든 파일을 .lang-ko 하위로 불러옵니다.
+  @include meta.load-css('./ko/base/reset');
+  @include meta.load-css('./ko/base/variables');
+  @include meta.load-css('./ko/base/mixins');
 
-@use './ko/components/grid';
-@use './ko/pages/board';
-@use './ko/pages/home';
-@use './ko/pages/dur';
-@use './ko/pages/content';
-@use './ko/pages/egovMember';
+  @include meta.load-css('./ko/layout/common');
+  @include meta.load-css('./ko/layout/header');
+  @include meta.load-css('./ko/layout/footer');
+  @include meta.load-css('./ko/layout/sub');
+  @include meta.load-css('./ko/layout/sub-full');
 
+  @include meta.load-css('./ko/components/grid');
+  @include meta.load-css('./ko/pages/board');
+  @include meta.load-css('./ko/pages/home');
+  @include meta.load-css('./ko/pages/content');
+  @include meta.load-css('./ko/pages/egovMember');
+}
 // .app-main {
 //   @include mixins.container;
 //   padding: 18px 0 28px;
@@ -27,32 +33,3 @@
 // .container-full {
 //   @include mixins.container(var(--container-full));
 // }
-
-.page-title h1 {
-  margin: 0 0 6px;
-  font-size: 24px;
-}
-.page-title p {
-  margin: 0 0 14px;
-  color: var(--muted);
-}
-
-.card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-}
-
-.alert {
-  padding: 10px 12px;
-  border-radius: 10px;
-  margin: 10px 0;
-  background: #fff1f2;
-  border: 1px solid #fecdd3;
-}
-.alert--error { color: var(--danger); }
-
-.ds-container {
-  @include mixins.container;
-}

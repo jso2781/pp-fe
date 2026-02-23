@@ -38,7 +38,8 @@ export const selectExprtApproval = createAsyncThunk<ExprtApprovalDetailRVO, Expr
 
       return {
         detail: payload && payload.detail ? payload.detail : {} as ExprtApprovalRVO,
-        authList: payload && Array.isArray(payload.authList) ? payload.authList : []
+        authList: payload && Array.isArray(payload.authList) ? payload.authList : [],
+        defenseYn: payload && payload.defenseYn ? payload.defenseYn : false
       } as ExprtApprovalDetailRVO;
     }
     catch (e) {

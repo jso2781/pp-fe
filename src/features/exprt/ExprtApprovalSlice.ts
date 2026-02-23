@@ -11,6 +11,7 @@ export interface ExprtApprovalState {
   totalPages: number | null
   current: ExprtApprovalRVO | null
   authList: ExprtTaskAuthRVO[] | null
+  defenseYn: boolean | null
   authListAll: ExprtTaskAuthRVO[] | null
   loading: boolean
   error: string | null
@@ -24,6 +25,7 @@ const initialState: ExprtApprovalState = {
   totalCount: null,
   totalPages: null,
   current: null,
+  defenseYn: null,
   authList: [],
   authListAll: [],
   loading: false,
@@ -63,6 +65,7 @@ const ExprtApprovalSlice = createSlice({
         state.loading = false;
         state.current = action.payload.detail || null;
         state.authList = action.payload.authList || [];
+        state.defenseYn = action.payload.defenseYn || false;
       })
       .addCase(selectExprtApproval.rejected, (state, action) => {
         state.loading = false;

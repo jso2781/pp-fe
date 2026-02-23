@@ -388,6 +388,9 @@ export default function SignUpAgrTrms() {
 
       {/* 약관 상세 팝업 */}
       <Dialog
+        PaperProps={{
+          className: 'lang-ko',
+        }}
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         maxWidth="md"

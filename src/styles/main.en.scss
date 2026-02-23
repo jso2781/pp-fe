@@ -1,56 +1,29 @@
-@use './en/base/reset';
-@use './en/base/variables';
-@use './en/base/mixins';
+@use "sass:meta";
+@use './en/base/mixins' as mixin_tools; 
+@use './en/base/variables' as vars;
 
-@use './en/layout/common';
-@use './en/layout/header';
-@use './en/layout/footer';
-@use './en/layout/sub';
+.lang-en {
+  @include meta.load-css('./en/base/reset');
+  @include meta.load-css('./en/base/variables');
+  @include meta.load-css('./en/base/mixins');
 
-@use './en/components/grid';
-@use './en/pages/board';
-@use './en/pages/home';
-@use './en/pages/dur';
-@use './en/pages/content';
+  @include meta.load-css('./en/layout/common');
+  @include meta.load-css('./en/layout/header');
+  @include meta.load-css('./en/layout/footer');
+  @include meta.load-css('./en/layout/sub');
 
-.app-main {
-  @include mixins.container;
-  padding: 18px 0 28px;
-}
+  @include meta.load-css('./en/components/grid');
+  @include meta.load-css('./en/pages/board');
+  @include meta.load-css('./en/pages/home');
+  @include meta.load-css('./en/pages/content');
 
-.container {
-  @include mixins.container;
-}
+  /* 직접 작성하는 스타일 (상단에서 선언한 mixin_tools 사용) */
+  /* .app-main {
+    @include mixin_tools.container;
+    padding: 18px 0 28px;
+  }
 
-.container-full {
-  @include mixins.container(var(--container-full));
-}
-
-.page-title h1 {
-  margin: 0 0 6px;
-  font-size: 24px;
-}
-.page-title p {
-  margin: 0 0 14px;
-  color: var(--muted);
-}
-
-.card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-}
-
-.alert {
-  padding: 10px 12px;
-  border-radius: 10px;
-  margin: 10px 0;
-  background: #fff1f2;
-  border: 1px solid #fecdd3;
-}
-.alert--error { color: var(--danger); }
-
-.ds-container {
-  @include mixins.container;
+  .container {
+    @include mixin_tools.container;
+  } */
 }

@@ -775,6 +775,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
     setOpenMobileDepth3(openMobileDepth3 === idx ? null : idx);
   };
   
+  
   return (
     <>
       <SkipNavigation />
@@ -992,6 +993,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         anchor="right"
         open={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
+        PaperProps={{ className: 'lang-ko' }}
         sx={{
           '& .MuiDrawer-paper': {
             width: '100%',
@@ -1158,9 +1160,11 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         open={sitemapOpen}
         onClose={() => setSitemapOpen(false)}
         PaperProps={{
+          className: 'lang-ko',
           sx: {
             height: '82vh',
             maxHeight: '82vh',
+            
           },
         }}
       >
@@ -1174,7 +1178,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             </Box>
           </Box>
 
-          <Box className="sitemap-body">
+          <Box className="sitemap-header">
             {SITEMAP_SECTIONS.map((section) => (
               <Box key={section.key} className="section-box">
                 {/* 1Depth 타이틀 */}

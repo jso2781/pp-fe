@@ -780,12 +780,6 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
       <SkipNavigation />
       
       <Box component="header" className="header">
-        {/* 정부 배지 영역 */}
-        <Box className="gov-badge">
-          <Box className="container">
-            <Typography className="txt">{t("shutcutTitle")}</Typography>
-          </Box>
-        </Box>
         {/* 상단 바(로그아웃 타이머, 언어 토글) */}
         <Box className="header-topbar">
           <Box className="container">
@@ -807,77 +801,14 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         <Box className="header_menu">
           <Box className="container">
             <h1 className="logo">
-              <Link to={to('/')}>
+              <Link to={to('/en')}>
                 <img
                   src={i18nInstance.language === 'ko' ? '/img/logo.png' : '/img/logo_eng02.png'}
                   alt={`KIDS ${t('kidsName')}`}
                 />
               </Link>
             </h1>
-            <Box className="util-menu">
-              {i18nInstance.language === 'ko' && (
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Button size="small" onClick={() => navigate(to('/search/IntegratedSearch'))} className="btn-util search">
-                    {t('integratedSearch')} {/* 통합검색 */}
-                  </Button>
-
-                  {isAuthenticated && user && user.userInfo?.expertYn === 'Y' ? (
-                    <Button size="small" onClick={() => navigate(to('/expert/ExpertMyWork'))} className="btn-util user-reg">
-                    {t('expertMyWork')} {/* 내 업무 */}
-                  </Button>
-                  ) : (
-                    <Button size="small" onClick={() => navigate(to('/expert/ExpertMemberApply'))} className="btn-util user-reg">
-                    {t('usrSwtReg')} {/* 전문가 회원 전환 신청 */}
-                  </Button>
-                  )}
-
-                  {user && user.userInfo?.cnstnMbcmtYn === 'Y' ? (
-                    <Button size="small" onClick={() => window.open('https://www.drugsafe.or.kr/expert/main/main.do', '_blank', 'noopener,noreferrer')} className="btn-util adv-task">
-                      {t('advTask')} {/* 자문위원 업무 */}
-                    </Button>
-                  ) : (
-                    <Button size="small" onClick={() => navigate(to('/'))} className="btn-util user-adv">
-                      {t('advAppReg')} {/* 자문위원신청 */}
-                    </Button>
-                  )}
-
-                  {!isAuthenticated ? (
-                    <Button size="small" onClick={() => navigate(to('/auth/SignUpSel'))} className="btn-util signup">
-                      {t('signUp')} {/* 회원가입 */}
-                    </Button>
-                  ) : (
-                    <Button size="small" onClick={() => navigate(to('/auth/PasswordConfirm'))} className="btn-util edit-profile">
-                      {t('editProfile')} {/* 회원정보수정 */}
-                    </Button>
-                  )}
-
-                  {!isAuthenticated ? (
-                    <Button
-                      size="small"
-                      onClick={() => {
-                        const path = to('/auth/LoginMethod')
-                        console.log('Header login button clicked, current lang:', lang, 'navigating to:', path)
-                        navigate(path, { replace: false })
-                      }}
-                      className="btn-util login"
-                    >
-                      {t('login')} {/* 로그인 */}
-                    </Button>
-                  ) : (
-                    <Button
-                      size="small"
-                      onClick={() => {
-                        logoutContext()
-                        navigate(to('/'), { replace: true })
-                      }}
-                      className="btn-util logout"
-                    >
-                      {t('logout')} {/* 로그아웃 */}
-                    </Button>
-                  )}
-                </Stack>
-              )}
-            </Box>
+            
             <Box className="mo-header-util">
               {i18nInstance.language === 'ko' && (
                 <Button
@@ -992,6 +923,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         anchor="right"
         open={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
+        PaperProps={{ className: 'lang-ko' }}
         sx={{
           '& .MuiDrawer-paper': {
             width: '100%',
@@ -1006,62 +938,8 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         <Box className="mo-drawer-header">
           <Box className="mo-drawer-top">
             <Button size="small" onClick={onToggleLang} startIcon={<Language />}>
-                {i18nInstance.language === 'ko' ? 'English' : '한국어'}
-              </Button>
-            <Button size="small" onClick={() => navigate(to('/search/IntegratedSearch'))} className="btn-util search">
-              {t('integratedSearch')} {/* 통합검색 */}
+              {i18nInstance.language === 'ko' ? 'English' : '한국어'}
             </Button>
-          </Box>
-
-          <Box className="mo-drawer-util">
-            {i18nInstance.language === 'ko' && (
-              <Box className="user-info-area">
-                {!isAuthenticated ? (
-                  <p className="user-msg">로그인해주세요.</p>
-                ) : (
-                  <p className="user-name">홍길동님</p>
-                )}
-              </Box>
-            )}
-
-            {i18nInstance.language === 'ko' && (
-              <Stack direction="row" spacing={1} alignItems="center" className="util-buttons">
-                {!isAuthenticated ? (
-                  <Button size="small" onClick={() => navigate(to('/auth/SignUpSel'))} className="btn-util signup">
-                    {t('signUp')} {/* 회원가입 */}
-                  </Button>
-                ) : (
-                  <>
-                  {isAuthenticated && user && user.userInfo?.expertYn === 'Y' ? (
-                    <Button size="small" onClick={() => navigate(to('/expert/ExpertMyWork'))} className="btn-util my-task">
-                      {t('expertMyWork')} {/* 내업무 */}
-                    </Button>
-                  ) : (
-                    <Button size="small" onClick={() => navigate(to('/expert/ExpertMemberApply'))} className="btn-util user-reg">
-                    {t('usrSwtReg')} {/* 전문가 회원 전환 신청 */}
-                  </Button>
-                  )}
-
-                  {isAuthenticated && user && user.userInfo?.cnstnMbcmtYn === 'N' ? (
-                    <Button size="small" onClick={() => window.open('https://www.drugsafe.or.kr/expert/main/main.do', '_blank', 'noopener,noreferrer')} className="btn-util adv-task">
-                      {t('advTask')} {/* 자문위원 업무 */}
-                    </Button>
-                  ) : (
-                    <Button size="small" onClick={() => navigate(to('/'))} className="btn-util user-adv">
-                      {t('advAppReg')} {/* 자문위원신청 */}
-                    </Button>
-                  )}
-
-                  <Button size="small" onClick={() => navigate(to('/auth/PasswordConfirm'))} className="btn-util edit-profile">
-                    {t('editProfile')} {/* 회원정보수정 */}
-                  </Button>
-                  <Button size="small" onClick={() => { logoutContext(); navigate(to('/'), { replace: true }); }} className="btn-util logout">
-                    {t('logout')} {/* 로그아웃 */}
-                  </Button>
-                  </>
-                )}
-              </Stack>
-            )}
           </Box>
           <Box className="mobile-drawer-close">
             <IconButton onClick={() => setMobileMenuOpen(false)}>
@@ -1158,6 +1036,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         open={sitemapOpen}
         onClose={() => setSitemapOpen(false)}
         PaperProps={{
+          className: 'lang-ko',
           sx: {
             height: '82vh',
             maxHeight: '82vh',

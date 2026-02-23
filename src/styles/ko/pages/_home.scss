@@ -466,8 +466,8 @@
     .shortcut-item {
       display: flex;
       flex-direction: column;
-      height: 120px;
-      padding: 20px;
+      height: 152px;
+      padding: 20px 15px;
       background-color: #ffffff;
       border-radius: 8px;
       text-decoration: none;
@@ -490,11 +490,11 @@
         position: absolute;
         left: 20px;
         bottom: 20px;
-        width: 26px;
-        height: 31px;
+        width: 48px;
+        height: 48px;
         background-repeat: no-repeat;
         background-position: center;
-        background-size: 32px;
+        background-size: 48px;
       }
 
       .shortcut-text {
@@ -502,6 +502,7 @@
         font-size: 18px;
         font-weight: 700;
         line-height: normal;
+        word-break: keep-all;
       }
 
       .shortcut-link-box {
@@ -539,16 +540,17 @@
       }
 
       .shortcut-item {
-        height: 100px;
+        height: 130px;
         padding: 15px;
         .shortcut-text {
           font-size: 16px;
         }
         .icon-bg {
-          width: 22px;
-          height: 26px;
+          width: 40px;
+          height: 40px;
           left: 15px;
           bottom: 15px;
+          background-size: 40px;
         }
       }
     }
