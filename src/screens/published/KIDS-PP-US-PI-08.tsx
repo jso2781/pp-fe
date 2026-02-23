@@ -46,8 +46,8 @@ export default function KIDS_PP_US_PI_08() {
                       <div  className="mb24"></div> 
                       <div className="info-summary-box__desc">
                          <div className="img-switcher">
-                          <img src="/img/safetyTerms_img01.png" alt="약물감시 도식화" className="responsive-img pc-only"/>
-                          <img src="/img/safetyTerms_im g01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                          <img src="/img/cms/safetyTerms_img01.png" alt="약물감시 도식화" className="responsive-img pc-only"/>
+                          <img src="/img/cms/safetyTerms_im g01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                         </div>
                         <div  className="mb24"></div> 
                         <p>의약품등의 이상사례 또는 안전성 관련 문제의 탐지·평가·해석·예방에 관한 과학적 활동을 말합니다.</p>

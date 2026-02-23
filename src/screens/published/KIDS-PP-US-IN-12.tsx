@@ -43,7 +43,7 @@ export default function KIDS_PP_US_IN_12() {
                     <h3 className="section-title">CI 컨셉</h3>
                     <div className="section-desc sec01">
                       <div className="logo-signature">
-                        <img src="/img/aboutCi_img01.png" alt="CI 로고" />
+                        <img src="/img/cms/aboutCi_img01.png" alt="CI 로고" />
                       </div>
                       <div className="desc-content">
                         <p className="text-item">
@@ -63,19 +63,19 @@ export default function KIDS_PP_US_IN_12() {
                         <div className="logo-item">
                           <span className="logo-label">영문</span>
                           <div className="logo-signature">
-                            <img src="/img/aboutCi_img02.png" alt="영문 CI 로고" />
+                            <img src="/img/cms/aboutCi_img02.png" alt="영문 CI 로고" />
                           </div>
                         </div>
                         <div className="logo-item">
                           <span className="logo-label">영문+국문</span>
                           <div className="logo-signature">
-                            <img src="/img/aboutCi_img03.png" alt="영문+국문 CI 로고" />
+                            <img src="/img/cms/aboutCi_img03.png" alt="영문+국문 CI 로고" />
                           </div>
                         </div>
                         <div className="logo-item">
                           <span className="logo-label">국문</span>
                           <div className="logo-signature">
-                            <img src="/img/aboutCi_img04.png" alt="국문 CI 로고" />
+                            <img src="/img/cms/aboutCi_img04.png" alt="국문 CI 로고" />
                           </div>
                         </div>
                       </div>
@@ -95,13 +95,13 @@ export default function KIDS_PP_US_IN_12() {
                       <div className="logo-signature">
                         <div className="signature-item">
                           <div className="desc-logo">
-                            <img src="/img/aboutCi_img05.png" alt="단색조합 슬로건" />
+                            <img src="/img/cms/aboutCi_img05.png" alt="단색조합 슬로건" />
                           </div>
                           <span className="logo-caption">[단색조합]</span>
                         </div>
                         <div className="signature-item">
                           <div className="desc-logo">
-                            <img src="/img/aboutCi_img05.png" alt="그라데이션 슬로건" />
+                            <img src="/img/cms/aboutCi_img05.png" alt="그라데이션 슬로건" />
                           </div>
                           <span className="logo-caption">[그라데이션]</span>
                         </div>
@@ -147,7 +147,7 @@ export default function KIDS_PP_US_IN_12() {
                           <li>아래 이외의 서체사용 시는 제작처와 협의하여 사용한다.</li>
                         </ul>
                         <div className="logo-signature">
-                          <img src="/img/aboutCi_img07.png" alt="국문지정서체" />
+                          <img src="/img/cms/aboutCi_img07.png" alt="국문지정서체" />
                         </div>
                       </div>
                     </div>

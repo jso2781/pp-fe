@@ -43,7 +43,7 @@ export default function KIDS_PP_US_IN_02() {
                     <div className="former-list">
                       <div className="box">
                         <div className="thumbnail">
-                          <img src="/img/aboutForme_img01.png" alt="4대 원장 오정완" />
+                          <img src="/img/cms/aboutForme_img01.png" alt="4대 원장 오정완" />
                         </div> 
                         <div className="former-info">
                           <p className="former-tit"><strong>오정완</strong>(4대 원장)</p>
@@ -59,7 +59,7 @@ export default function KIDS_PP_US_IN_02() {
 
                       <div className="box">
                         <div className="thumbnail">
-                          <img src="/img/aboutForme_img02.png" alt="3대 원장 한순영" />
+                          <img src="/img/cms/aboutForme_img02.png" alt="3대 원장 한순영" />
                         </div>
                         <div className="former-info">
                           <p className="former-tit"><strong>한순영</strong>(3대 원장)</p>
@@ -75,7 +75,7 @@ export default function KIDS_PP_US_IN_02() {
 
                       <div className="box">
                         <div className="thumbnail">
-                          <img src="/img/aboutForme_img03.png" alt="2대 원장 구본기" />
+                          <img src="/img/cms/aboutForme_img03.png" alt="2대 원장 구본기" />
                         </div>
                         <div className="former-info">
                           <p className="former-tit"><strong>구본기</strong>(2대 원장)</p>
@@ -91,7 +91,7 @@ export default function KIDS_PP_US_IN_02() {
 
                       <div className="box">
                         <div className="thumbnail">
-                          <img src="/img/aboutForme_img04.png" alt="1대 원장 박병주" />
+                          <img src="/img/cms/aboutForme_img04.png" alt="1대 원장 박병주" />
                         </div>
                         <div className="former-info">
                           <p className="former-tit"><strong>박병주</strong>(1대 원장)</p>

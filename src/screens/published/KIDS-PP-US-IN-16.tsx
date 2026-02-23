@@ -44,7 +44,7 @@ export default function KIDS_PP_US_IN_16() {
                     <div className="section-desc char-intro">
                       <div className="char-item">
                         <div className="char-img">
-                          <img src="/img/aboutCharacter_img01.png" alt="메인 캐릭터 올슨" />
+                          <img src="/img/cms/aboutCharacter_img01.png" alt="메인 캐릭터 올슨" />
                         </div>
                         <div className="char-content">
                           <h4 className="char-name">올슨(Owl Cine)</h4>
@@ -58,7 +58,7 @@ export default function KIDS_PP_US_IN_16() {
                       </div>
                       <div className="char-item reverse">
                         <div className="char-img">
-                          <img src="/img/aboutCharacter_img02.png" alt="캐릭터 컨셉, 디자인 설명" />
+                          <img src="/img/cms/aboutCharacter_img02.png" alt="캐릭터 컨셉, 디자인 설명" />
                         </div>
                         <div className="char-content">
                           <div className="char-info-box">
@@ -77,7 +77,7 @@ export default function KIDS_PP_US_IN_16() {
                     <div className="section-desc  char-intro char-intro-sub">
                       <div className="char-item">
                         <div className="char-img">
-                          <img src="/img/aboutCharacter_img03.png" alt="서브 캐릭터 디디" />
+                          <img src="/img/cms/aboutCharacter_img03.png" alt="서브 캐릭터 디디" />
                         </div>
                         <div className="char-content">
                           <h4 className="char-name">디디(DD)</h4>
@@ -90,7 +90,7 @@ export default function KIDS_PP_US_IN_16() {
                       </div>
                       <div className="char-item reverse">
                         <div className="char-img">
-                          <img src="/img/aboutCharacter_img04.png" alt="캐릭터 컨셉, 디자인 설명" />
+                          <img src="/img/cms/aboutCharacter_img04.png" alt="캐릭터 컨셉, 디자인 설명" />
                         </div>
                         <div className="char-content">
                           <div className="char-info-box">

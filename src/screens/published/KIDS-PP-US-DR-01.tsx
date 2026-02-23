@@ -323,8 +323,8 @@ export default function KIDS_PP_US_DR_01() {
                         <div className="section-desc">
                           <div className="location-map">
                             <div className="img-switcher">
-                              <img src="/img/reliefIntro_img01.png" alt="한국의약품안전관리원 오시는 길 지도" className="responsive-img pc-only"/>
-                              <img src="/img/reliefIntro_img01_m.png" alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                              <img src="/img/cms/reliefIntro_img01.png" alt="한국의약품안전관리원 오시는 길 지도" className="responsive-img pc-only"/>
+                              <img src="/img/cms/reliefIntro_img01_m.png" alt="" aria-hidden="true" className="responsive-img mo-only"/>
                             </div>
                             <div className="location-details">
                               <p className="detail-item">

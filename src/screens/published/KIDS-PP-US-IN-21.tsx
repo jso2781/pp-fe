@@ -43,7 +43,7 @@ export default function KIDS_PP_US_IN_21() {
                     <h3 className="section-title">약도보기</h3>
                     <div className="section-desc sec01">
                       <div className="map">
-                        <img src="/img/aboutMap_img01.png" alt="한국의약품안전관리원 약도" className="maxw100"/>
+                        <img src="/img/cms/aboutMap_img01.png" alt="한국의약품안전관리원 약도" className="maxw100"/>
                       </div>
                       <div className="contact-info">
                         <div className="info-item">

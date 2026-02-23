@@ -50,8 +50,8 @@ export default function KIDS_PP_US_PI_02() {
                     </div> 
 
                     <div className="img-switcher">
-                      <img src="/img/adverseKaers_img01.png" alt="의약품이상사례보고시스템 (PC)" className="responsive-img pc-only"/>
-                      <img src="/img/adverseKaers_img01_m.png"  alt="의약품이상사례보고시스템 (모바일)" className="responsive-img mo-only"/>
+                      <img src="/img/cms/adverseKaers_img01.png" alt="의약품이상사례보고시스템 (PC)" className="responsive-img pc-only"/>
+                      <img src="/img/cms/adverseKaers_img01_m.png"  alt="의약품이상사례보고시스템 (모바일)" className="responsive-img mo-only"/>
                     </div>
                     <div className="sr-only">
                       KAERS 한국의약품안전관리원

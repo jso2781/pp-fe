@@ -169,8 +169,8 @@ export default function KIDS_PP_US_OI_01() {
                         <div className="inner-box">
                           <h3 className="section-title">청구절차</h3>
                           <div className="img-switcher">
-                            <img src="/img/taskProgress_img01.png" alt="청구절차 도식화" className="responsive-img pc-only"/>
-                            <img src="/img/taskProgress_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                            <img src="/img/cms/taskProgress_img01.png" alt="청구절차 도식화" className="responsive-img pc-only"/>
+                            <img src="/img/cms/taskProgress_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                           </div>
                           <div className="sr-only">
                             <p>정보목록검색 - 원문정보조회</p>
