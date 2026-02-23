@@ -154,19 +154,42 @@
       padding-top:84px;
     }
     .slogan-title {
-        font-size: 36px;
-        font-weight: 700;
-        line-height: 1.2;
-        color: #fff;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #fff;
+    }
+
+    .slogan-desc {
+      margin: 10px 0 0 0;
+      font-size: 20px;
+      color: #fff;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      height: auto;
+      min-height: 400px;
+      padding-bottom: 50px;
+
+      .inner {
+        padding-top: 60px;
+        padding-left: 20px;
+        padding-right: 20px;
       }
-  
+
+      .slogan-title {
+        font-size: 28px;
+        word-break: keep-all;
+      }
+
       .slogan-desc {
-        margin: 10px 0 0 0;
-        font-size: 20px;
-        color: #fff;
-        line-height: 1.4;
-        font-weight: 500;
+        font-size: 16px;
+        margin-top: 15px;
+        word-break: keep-all;
       }
+    }
   }
 
   /* ====================
@@ -345,5 +368,4 @@
     }
   }
 
-  
 }

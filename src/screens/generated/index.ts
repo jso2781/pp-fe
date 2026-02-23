@@ -98,8 +98,13 @@ export const screenComponentLoaders = {
   'KIDS-PP-US-IN-20': () => import('../published/KIDS-PP-US-IN-20'),
   'KIDS-PP-US-IN-21': () => import('../published/KIDS-PP-US-IN-21'),
 
+  // 영문
+  'KIDS-PP-US-EN-15': () => import('../published/en/KIDS-PP-US-EN-15'),
+  'KIDS-PP-US-EN-16': () => import('../published/en/KIDS-PP-US-EN-16'),
+
   // 내업무
   'KIDS-PP-US-MT-01-LAYOUT': () => import('../published/KIDS-PP-US-MT-01-LAYOUT'),
+
   // 전문가관리
   'UI-EX-05-02-09': () => import('../published/UI-EX-05-02-09'),
   'UI-EX-05-02-10': () => import('../published/UI-EX-05-02-10'),

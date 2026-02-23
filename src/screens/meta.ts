@@ -481,34 +481,45 @@ export const screens: ScreenMeta[] = [
     "title": "오시는 길",
     "uiType": "cms"
   },
-  
-  
+
+  //영문
+  {
+    "id": "KIDS-PP-US-EN-15",
+    "title": "Introduction of DUR",
+    "uiType": "page"
+  },
+  {
+    "id": "KIDS-PP-US-EN-16",
+    "title": "DUR Criteria",
+    "uiType": "page"
+  },
+
   
   //내업무 템플릿
   {
     "id": "KIDS-PP-US-MT-01-LAYOUT",
-    "title": "내업무 레이아웃",
+    "title": "============ 내업무 : 레이아웃",
     "uiType": "page"
   },
   //전문가 관리
   {
     "id": "UI-EX-05-02-09",
-    "title": "전문가관리 개인정보보호 등 서약서",
+    "title": "============ 전문가관리 : 개인정보보호 등 서약서",
     "uiType": "popup"
   },
   {
     "id": "UI-EX-05-02-10",
-    "title": "전문가관리 이해관계확인서",
+    "title": "============ 전문가관리 : 이해관계확인서",
     "uiType": "popup"
   },
   {
     "id": "UI-EX-05-02-01",
-    "title": "참석 확인서",
+    "title": "============ 전문가관리 : 참석 확인서",
     "uiType": "page"
   },
   {
     "id": "UI-EX-05-02-02",
-    "title": "자문확인서",
+    "title": "============ 전문가관리 : 자문확인서",
     "uiType": "page"
   },
 
