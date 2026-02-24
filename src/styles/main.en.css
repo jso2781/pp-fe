@@ -4487,6 +4487,75 @@
 .lang-en .pageCont-introAdrRelf .list-bullet-2 li {
   margin-bottom: 25px;
 }
+.lang-en .pageCont-introNNHR .drug-classification .class-list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dt.class-title {
+  color: var(--color-text-2);
+  font-size: var(--fs-20);
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dd.class-content {
+  margin-left: 0;
+}
+.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dd.class-content .class-desc {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dd.class-content .sub-list {
+  padding: 0 10px;
+}
+.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dd.class-content .sub-list li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dd.class-content .sub-list li:last-child {
+  margin-bottom: 0;
+}
+.lang-en .pageCont-introNNHR .report-system-content {
+  padding: 40px 20px;
+  border-radius: 8px;
+  border: 3px solid var(--color-text-2);
+}
+.lang-en .pageCont-introNNHR .report-system-content p {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+.lang-en .pageCont-introNNHR .report-system-content p:last-child {
+  margin-bottom: 0;
+}
+.lang-en .pageCont-introNNHR .report-system-content .article-info {
+  font-weight: 700;
+}
+.lang-en .pageCont-introNNHR .report-system-content .practitioner-info .info-label {
+  margin-bottom: 15px;
+}
+.lang-en .pageCont-introNNHR .report-system-content .practitioner-info .info-list {
+  padding-left: 0;
+}
+.lang-en .pageCont-introNNHR .report-system-content .practitioner-info .info-list li {
+  position: relative;
+  padding-left: 15px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.lang-en .pageCont-introNNHR .report-system-content .practitioner-info .info-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 4px;
+  height: 4px;
+  background-color: currentColor;
+  border-radius: 50%;
+}
+.lang-en .pageCont-introNNHR .report-system-content .practitioner-info .info-list li:last-child {
+  margin-bottom: 0;
+}
 .lang-en {
   /* 직접 작성하는 스타일 (상단에서 선언한 mixin_tools 사용) */
   /* .app-main {
