@@ -29,7 +29,8 @@ export function detectBrowserLang(): SupportedLang {
 }
 
 export function getLangFromPathname(pathname: string): SupportedLang {
-  const seg = pathname.split("/")[2]; // '' | 'ko' | 'en' | ...
+  const segs = pathname.split("/");
+  const seg = segs[1] === "pp" ? segs[2] : segs[1]; // /pp/ko/... 또는 /ko/...
   return normalizeLang(seg) ?? FALLBACK_LANG;
 }
 
@@ -59,18 +60,23 @@ export function langPath(input: string, lang: string): string {
     return `${out}${query ? `?${query}` : ""}${hash ? `#${hash}` : ""}`;
   }
 
-  // 첫 세그먼트가 언어면 교체, 아니면 prefix
-  const segs = path.split("/"); // ["", "ko", "notice"]
-  const first = segs[2];
+  // 첫 세그먼트가 언어면 교체, 아니면 prefix (/pp/ko/... 구조도 지원)
+  const segs = path.split("/");
+  const hasPpPrefix = segs[1] === "pp";
+  const langIdx = hasPpPrefix ? 2 : 1;
+  const first = segs[langIdx];
   const firstAsLang = normalizeLang(first);
 
   if (firstAsLang) {
-    segs[1] = lang;
+    segs[langIdx] = lang;
     const out = segs.join("/");
     return `${out}${query ? `?${query}` : ""}${hash ? `#${hash}` : ""}`;
   }
 
-  // 언어 세그먼트가 없으면 앞에 붙임
-  const out = `/${lang}${path}`;
+  // 언어 세그먼트가 없으면 앞에 붙임 (/pp prefix는 유지)
+  const rest = hasPpPrefix ? path.replace(/^\/pp(?=\/|$)/, "") || "/" : path;
+  const out = hasPpPrefix
+    ? `/pp/${lang}${rest === "/" ? "" : rest}`
+    : `/${lang}${rest}`;
   return `${out}${query ? `?${query}` : ""}${hash ? `#${hash}` : ""}`;
 }

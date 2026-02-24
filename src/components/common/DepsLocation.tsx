@@ -233,7 +233,7 @@ export default function DepsLocation() {
   const finalBrowserTitle = useMemo(() => {
 
     // 홈일 때 처리
-    const isHome = pathname === '/' || pathname === '/ko' || pathname === '/ko/' || pathname === '/en' || pathname === '/en/';
+    const isHome = pathname === '/pp' || pathname === '/pp/ko' || pathname === '/pp/ko/' || pathname === '/pp/en' || pathname === '/pp/en/';
     if (isHome) {
       return t('kidsName');
     }

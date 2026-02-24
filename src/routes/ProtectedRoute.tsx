@@ -12,7 +12,7 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
-    return <Navigate to="/ko/auth/Login" replace />
+    return <Navigate to={`/pp/${i18n.language}/auth/Login`} replace />
   }
 
   return <>{children}</>

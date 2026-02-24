@@ -33,7 +33,7 @@ import { gnbListToSitemapSections, SITEMAP_SECTIONS, type SitemapLinkItem, type 
 function SitemapItem({ item }: { item: SitemapLinkItem }) {
   const location = useLocation()
   const curLang = useMemo(() => getLangFromPathname(location.pathname), [location.pathname])
-  const to = useMemo(() => (p: string) => langPath(curLang, p), [curLang])
+  const to = useMemo(() => (p: string) => langPath(p, curLang), [curLang])
 
   const hasChildren = Array.isArray(item.children) && item.children.length > 0
   const internal = item.internal || (typeof item.href === 'string' && item.href.startsWith('/'))
@@ -103,7 +103,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
   const lang = getLangFromPathname(location.pathname) || 'ko'
   const to = (p: string) => {
-    const raw = langPath(lang, p)
+    const raw = langPath(p, lang)
     // Normalize accidental double slashes (e.g. "//") which breaks react-router Link
     return raw.replace(/\/{2,}/g, '/')
   }

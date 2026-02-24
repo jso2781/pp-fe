@@ -4,6 +4,8 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { lnbStyles } from '../../styles/ko/layout/Lnb.styles';
 import { useAppSelector } from '@/store/hooks';
 import { LnbItem } from '@/features/auth/MenuTypes'
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getLangFromPathname, langPath } from '@/routes/lang';
 
 type LnbProps = {
   /** (옵션) 기존처럼 직접 LnbItem[]을 넘기고 싶을 때 사용 */
@@ -19,8 +21,8 @@ const buildLnbItemsFromMenuStructor = (
 ): LnbItem[] => {
   if (!lnbStructor || lnbStructor.length === 0) return [];
 
-  // /ko 접두어 제거
-  const normalize = (url: string) => url.replace(/^\/(ko|en)(\/|$)/, '$2') || '/';
+  // /pp/ko 또는 /ko 접두어 제거
+  const normalize = (url: string) => url.replace(/^\/(?:pp\/)?(ko|en|ja|zh)(\/|$)/, '$2') || '/';
   const target = normalize(currentUrl);
 
   type FindResult = { node: LnbItem; parent: LnbItem | null };
@@ -85,6 +87,9 @@ const buildLnbItemsFromMenuStructor = (
 
 function Lnb({ currentUrl, items }: LnbProps) {
   const { lnbStructor } = useAppSelector((s) => s.menu);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const currentLang = getLangFromPathname(location.pathname);
 
   const [openKeys, setOpenKeys] = useState<Record<string, boolean>>({});
   const toggle = (k: string) => setOpenKeys((s) => ({ ...s, [k]: !s[k] }));
@@ -131,8 +136,8 @@ function Lnb({ currentUrl, items }: LnbProps) {
                   window.open(it.key, '_blank');
                   return;
                 }
-                const dest = it.key.startsWith('/ko/') ? it.key : '/ko' + it.key;
-                window.location.href = dest;
+                const dest = langPath(it.key, currentLang);
+                navigate(dest);
               }}
               sx={lnbStyles.itemButton(depth, isOpen)}
             >
