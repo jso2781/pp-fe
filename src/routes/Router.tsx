@@ -20,7 +20,7 @@ const DurEftgrpDetailPopKo = lazy(() => import('@/pages/ko/maintask/dur/DurEftgr
 const DurPrdctDetailPopKo = lazy(() => import('@/pages/ko/maintask/dur/DurPrdctDetailPop'))
 const DurNoticeListKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeList'))
 const DurNoticeDetailKo = lazy(() => import('@/pages/ko/maintask/dur/DurNoticeDetail'))
-const ProposalKo = lazy(() => import('@/pages/ko/maintask/dur/Proposal'))
+const DurProposalKo = lazy(() => import('@/pages/ko/maintask/dur/DurProposal'))
 const MyDrugInfoKo = lazy(() => import('@/pages/ko/maintask/dur/MyDrugInfo'))
 
 const FaqNoticeKo = lazy(() => import('@/pages/ko/news/FaqNotice'))
@@ -223,7 +223,7 @@ export default function Router() {
                 <Route path="/pp/:lang/maintask/dur/DurSearchRoom" element={<LangElement byLang={{ ko: <DurSearchRoomKo />, en: <DurSearchRoomKo /> }} />} />
                 <Route path="/pp/:lang/maintask/dur/DurNoticeList/:bbsId" element={<LangElement byLang={{ ko: <DurNoticeListKo />, en: <DurNoticeListKo /> }} />} />
                 <Route path="/pp/:lang/maintask/dur/DurNoticeList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailKo /> }} />} />
-                <Route path="/pp/:lang/maintask/dur/Proposal" element={<LangElement byLang={{ ko: <ProposalKo />, en: <ProposalKo /> }} />} />
+                <Route path="/pp/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalKo /> }} />} />
                 <Route path="/pp/:lang/maintask/dur/MyDrugInfo" element={<LangElement byLang={{ ko: <MyDrugInfoKo />, en: <MyDrugInfoKo /> }} />} />
 
 

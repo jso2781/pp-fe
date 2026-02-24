@@ -29,7 +29,7 @@ import { useDialog } from '@/contexts/DialogContext';
 const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'zip']
 const accept = allowedExtensions.map((e) => `.${e}`).join(',')
 
-export default function Proposal() {
+export default function DurProposal() {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
