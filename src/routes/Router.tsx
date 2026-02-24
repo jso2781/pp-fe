@@ -67,8 +67,11 @@ const EmailDenyKo = lazy(() => import('@/pages/ko/etc/EmailDeny'))
 const HomeEn = lazy(() => import('@/pages/en/Home'))
 const LoginEn = lazy(() => import('@/pages/en/auth/Login'))
 
-const Screens = lazy(() => import('@/pages/screens/Screens'))
-const ScreenViewer = lazy(() => import('@/pages/screens/ScreenViewer'))
+const ScreensKo = lazy(() => import('@/pages/screens/ko/Screens'))
+const ScreenViewerKo = lazy(() => import('@/pages/screens/ko/ScreenViewer'))
+
+const ScreensEn = lazy(() => import('@/pages/screens/en/Screens'))
+const ScreenViewerEn = lazy(() => import('@/pages/screens/en/ScreenViewer'))
 
 import { normalizeLang, FALLBACK_LANG, detectBrowserLang } from "./lang";
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -271,10 +274,6 @@ export default function Router() {
                 <Route path="/:lang/etc/CctvPolicy" element={<LangElement byLang={{ ko: <CctvPolicyKo />, en: <CctvPolicyKo /> }} />} />
                 <Route path="/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
 
-                {/* 언어 무관 퍼블리싱 템플릿 화면들 */}
-                <Route path="/:lang/screens" element={<Screens />} />
-                <Route path="/:lang/screens/:screenId" element={<ScreenViewer />} />
-
                 {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
                 <Route path="/:lang/InternalServerError" element={<LangElement byLang={{ ko: <InternalServerErrorKo />, en: <InternalServerErrorKo /> }} />} />
                 <Route path="/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundKo /> }} />} />
@@ -287,6 +286,18 @@ export default function Router() {
                 <Route path="/:lang/expert/ExpertApproval" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalKo /></ProtectedRoute> }} />} />
                 <Route path="/:lang/expert/ExpertApproval/:exprtTaskSn" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalDetailKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalDetailKo /></ProtectedRoute> }} />} />
                 <Route path="/:lang/expert/ExpertApprovalUpdate/:exprtTaskSn" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute> }} />} />                
+              </Route>
+
+              {/* 국문 퍼블리싱 템플릿 화면들 */}
+              <Route element={<LangGuard><Layout /></LangGuard>}>
+                <Route path="/ko/screens" element={<ScreensKo />} />
+                <Route path="/ko/screens/:screenId" element={<ScreenViewerKo />} />
+              </Route>
+
+              {/* 영문 퍼블리싱 템플릿 화면들 */}
+              <Route element={<LangGuard><EngLayout /></LangGuard>}>
+                <Route path="/en/screens" element={<ScreensEn />} />
+                <Route path="/en/screens/:screenId" element={<ScreenViewerEn />} />
               </Route>
 
               {/* 일반사용자 메뉴에서 사용할 화면 레이아웃 */}

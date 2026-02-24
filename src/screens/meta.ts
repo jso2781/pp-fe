@@ -542,3 +542,12 @@ export const screens: ScreenMeta[] = [
     "uiType": "page"
   },
 ]
+
+/** 한국어 Screens 목록 (국문 퍼블리싱 템플릿) */
+export const screensKo: ScreenMeta[] = screens
+
+/** 영문 Screens 목록 (영문 퍼블리싱 템플릿) - generated/en/index.ts 와 맞출 것 */
+export const screensEn: ScreenMeta[] = [
+  { id: 'KIDS-PP-US-EN-15', title: 'Screen EN-15', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-16', title: 'Screen EN-16', uiType: 'page' },
+]
