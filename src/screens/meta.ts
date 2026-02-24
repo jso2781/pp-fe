@@ -532,10 +532,11 @@ export const screensKo: ScreenMeta[] = [
 
 /** 영문 Screens 목록 (영문 퍼블리싱 템플릿) - generated/en/index.ts 와 맞출 것 */
 export const screensEn: ScreenMeta[] = [
-  { id: 'KIDS-PP-US-EN-09', title: 'Screen EN-09', uiType: 'page' },
-  { id: 'KIDS-PP-US-EN-15', title: 'Screen EN-15', uiType: 'page' },
-  { id: 'KIDS-PP-US-EN-16', title: 'Screen EN-16', uiType: 'page' },
-  { id: 'KIDS-PP-US-EN-18', title: 'Screen EN-18', uiType: 'page' },
-  { id: 'KIDS-PP-US-EN-19', title: 'Screen EN-19', uiType: 'page' },
-  { id: 'KIDS-PP-US-EN-20', title: 'Screen EN-20', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-09', title: 'APEC CoE', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-15', title: 'Introduction of DUR', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-16', title: 'DUR Criteria', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-18', title: 'Introduction of ADR Relief System', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-19', title: 'Statistics on ADR Relief System', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-20', title: 'Introduction of NNHR', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-21', title: 'Introduction of NIMS', uiType: 'page' },
 ];

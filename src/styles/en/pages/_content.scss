@@ -234,6 +234,24 @@
     background: var(--color-text-1);
   }
 }
+.txt-type-5{
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 15px;
+  font-size: var(--fs-18);
+  line-height: 1.4;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    width: 4px;
+    height: 4px;
+    background-color: var(--color-text-1);
+    border-radius: 50%;
+  }
+}
 .section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);}
 
 .pageCont-introAdrRelf{
