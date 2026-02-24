@@ -4,7 +4,8 @@ export type ScreenMeta = {
   uiType: string
 }
 
-export const screens: ScreenMeta[] = [
+/** 한국어 Screens 목록 (국문 퍼블리싱 템플릿) */
+export const screensKo: ScreenMeta[] = [
   {
     "id": "KIDS-PP-US-CS-01",
     "title": "이용약관",
@@ -482,19 +483,6 @@ export const screens: ScreenMeta[] = [
     "uiType": "cms"
   },
 
-  //영문
-  {
-    "id": "KIDS-PP-US-EN-15",
-    "title": "Introduction of DUR",
-    "uiType": "page"
-  },
-  {
-    "id": "KIDS-PP-US-EN-16",
-    "title": "DUR Criteria",
-    "uiType": "page"
-  },
-
-  
   //내업무 템플릿
   {
     "id": "KIDS-PP-US-MT-01-LAYOUT",
@@ -523,7 +511,6 @@ export const screens: ScreenMeta[] = [
     "uiType": "page"
   },
 
-
   /* {
     "id": "KIDS-PP-US-MT-01_List",
     "title": "내업무 리스트",
@@ -541,13 +528,10 @@ export const screens: ScreenMeta[] = [
     "title": "PUB",
     "uiType": "page"
   },
-]
-
-/** 한국어 Screens 목록 (국문 퍼블리싱 템플릿) */
-export const screensKo: ScreenMeta[] = screens
+];
 
 /** 영문 Screens 목록 (영문 퍼블리싱 템플릿) - generated/en/index.ts 와 맞출 것 */
 export const screensEn: ScreenMeta[] = [
   { id: 'KIDS-PP-US-EN-15', title: 'Screen EN-15', uiType: 'page' },
   { id: 'KIDS-PP-US-EN-16', title: 'Screen EN-16', uiType: 'page' },
-]
+];
