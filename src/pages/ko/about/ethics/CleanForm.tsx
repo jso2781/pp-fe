@@ -7,6 +7,7 @@
 import DepsLocation from "@/components/common/DepsLocation";
 import Lnb from "@/components/common/Lnb";
 import { insertDshstyDclr } from "@/features/dclr/DshstyDclrThunks";
+import type { DshstyDclrPVO } from "@/features/dclr/DshstyDclrTypes";
 import { useAppDispatch } from "@/store/hooks";
 import { Box, Button, Typography } from "@mui/material";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
@@ -84,13 +85,22 @@ export default function CleanForm () {
   });
 
 
+  const getLinkInfoIdntfId = (): string => {
+    // TODO: 인증/세션 등에서 연계정보식별아이디 반환 (예: useAuth().linkInfoIdntfId)
+    return 'temp';
+  };
+
   const onSubmit = async (values: FormValues) => {
     if (values.encptMbrEmlNm && values.agreeOptional === 'N') {
       form.setError('agreeOptional', { type: 'validate', message: '이메일 수집·동의에 동의가 필요합니다.' }, { shouldFocus: true });
       return;
     }
+    const payload: DshstyDclrPVO = {
+      ...values,
+      linkInfoIdntfId: getLinkInfoIdntfId(),
+    };
     try {
-      await dispatch(insertDshstyDclr(values)).unwrap();
+      await dispatch(insertDshstyDclr(payload)).unwrap();
       showAlert('클린신고서 신청서 제출이 완료되었습니다.', '알림', () => {
         navigate('/ko/about/ethics/CleanCenter');
       });

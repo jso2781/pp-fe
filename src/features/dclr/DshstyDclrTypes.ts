@@ -5,6 +5,9 @@ export interface DshstyDclrPVO {
   /** 암호화회원성명 */
   encptMbrFlnm?: string;
 
+  /** 연계정보식별아이디 */
+  linkInfoIdntfId?: string;
+
   /** 암호화회원전화번호 */
   encptMbrTelno?: string;
 
@@ -58,6 +61,9 @@ export interface DshstyDclrRVO {
 
   /** 신고일련번호 */
   dclrSn?: number;
+
+  /** 연계정보식별아이디 */
+  linkInfoIdntfId?: string;
 
   /** 암호화회원성명 */
   encptMbrFlnm?: string;
@@ -114,6 +120,9 @@ export interface DshstyDclrRVO {
 export interface DshstyDclrListPVO {
   /** 암호화회원성명 */
   encptMbrFlnm?: string;
+
+  /** 연계정보식별아이디 */
+  linkInfoIdntfId?: string;
 
   /** 암호화회원전화번호 */
   encptMbrTelno?: string;
