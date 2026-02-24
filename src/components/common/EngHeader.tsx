@@ -464,7 +464,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
     // 현재 경로에서 lang segment 교체
     const pathSegments = location.pathname.split('/')
-    pathSegments[1] = nextLang
+    pathSegments[2] = nextLang
     const nextPath = pathSegments.join('/')
 
     // Rest API 호출 - 토글할 때마다 메뉴 목록을 무조건 다시 불러오게 캐시 초기화
@@ -549,7 +549,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   <Button size="small" className="btn_extend" onClick={handleResetTimerClick}>시간연장</Button>
                 </Box>
               )}
-              <Button size="small" onClick={() => navigate('/screens')}>Screens</Button>
+              <Button size="small" onClick={() => navigate('/pp/en/screens')}>Screens</Button>
               <Button size="small" onClick={onToggleLang} startIcon={<Language />}>
                 {i18nInstance.language === 'ko' ? 'English' : '한국어'}
               </Button>
