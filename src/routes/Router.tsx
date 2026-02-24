@@ -209,11 +209,12 @@ export default function Router() {
 
               {/* 일반사용자 메뉴에서 사용할 화면 레이아웃 */}
               <Route element={<Layout />}>
+                <Route path="/" element={<HomeKo />} />
                 {/* 루트(/, '') URL 유지, 한국어 홈 콘텐츠 표시 (자동 리다이렉트 없음) */}
                 <Route path="/pp" element={<HomeKo />} />
 
-                <Route path="/pp/ko" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
-                <Route path="/pp/ko/" element={<LangElement byLang={{ ko: <HomeKo />, en: <HomeEn /> }} />} />
+                <Route path="/pp/ko" element={<HomeKo />} />
+                <Route path="/pp/ko/" element={<HomeKo />} />
 
                 {/* cms 화면 공용 템플릿 경로(콘텐츠 내용 표기) */}
                 <Route path="/pp/:lang/cms/CmsPage/:contsSn" element={<LangElement byLang={{ ko: <CmsPageKo />, en: <CmsPageKo /> }} />} />
@@ -291,19 +292,19 @@ export default function Router() {
 
               {/* 국문 퍼블리싱 템플릿 화면들 */}
               <Route element={<Layout />}>
-                <Route path="/pp/:lang/screens" element={<ScreensKo />} />
-                <Route path="/pp/:lang/screens/:screenId" element={<ScreenViewerKo />} />
+                <Route path="/pp/ko/screens" element={<ScreensKo />} />
+                <Route path="/pp/ko/screens/:screenId" element={<ScreenViewerKo />} />
               </Route>
 
               {/* 영문 퍼블리싱 템플릿 화면들 */}
               <Route element={<EngLayout />}>
-                <Route path="/pp/:lang/screens" element={<ScreensEn />} />
-                <Route path="/pp/:lang/screens/:screenId" element={<ScreenViewerEn />} />
+                <Route path="/pp/en/screens" element={<ScreensEn />} />
+                <Route path="/pp/en/screens/:screenId" element={<ScreenViewerEn />} />
               </Route>
 
               {/* 일반사용자 메뉴에서 사용할 화면 레이아웃 */}
               <Route element={<EngLayout />}>
-                <Route path="/pp/:lang" element={<HomeEn />} />
+                <Route path="/pp/en" element={<HomeEn />} />
               </Route>
             </Routes>
           </GlobalErrorHandler>
