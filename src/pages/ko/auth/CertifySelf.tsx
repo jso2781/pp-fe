@@ -6,7 +6,7 @@
  */
 import { useTranslation } from 'react-i18next'
 import React, { useMemo, useState, useRef, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Stepper, Step, StepLabel, Typography, Card, CardContent, Stack, Dialog, DialogTitle, DialogContent, DialogActions, IconButton} from '@mui/material';
 import {
   PhoneAndroid as PhoneIcon,
@@ -63,6 +63,7 @@ function ensureAnyIdAssets() {
 }
 
 export default function CertifySelf() {
+  const { lang } = useParams<{ lang: string }>();
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();

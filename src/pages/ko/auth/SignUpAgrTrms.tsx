@@ -6,7 +6,7 @@
  */
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Stepper, Step, StepLabel, Typography, Checkbox, FormControlLabel, List, ListItem, Dialog, DialogTitle, DialogContent, DialogActions, Divider, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DepsLocation from '@/components/common/DepsLocation'
@@ -62,6 +62,7 @@ export default function SignUpAgrTrms() {
   const { t, i18n: i18nInstance } = useTranslation();
   const screenId = "SignUpAgrTrms"
   const currentStep = 1
+  const { lang } = useParams<{ lang: string }>();
 
   const dispatch = useAppDispatch();
   const { list, totalCount, loading, error } = useAppSelector((state) => state.stt);
@@ -361,7 +362,7 @@ export default function SignUpAgrTrms() {
                     <Box className="btn-group between">
                       <Button 
                         variant="outlined02" 
-                        size="large" 
+                        size="large"
                         onClick={() => navigate('/pp/ko/auth/SignUpSel')}
                       >
                         {t('cancel')}

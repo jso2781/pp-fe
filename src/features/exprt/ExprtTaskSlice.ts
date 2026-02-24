@@ -5,7 +5,7 @@ import { LnbItem, MenuRVO } from '../auth/MenuTypes'
 
 /** 전문가 LNB 첫 번째 고정 메뉴 */
 const EXPERT_LNB_FIRST_ITEM: LnbItem = {
-  key: '/expert/ExpertMyWork',
+  key: `/pp/ko/expert/ExpertMyWork`,
   label: '내 업무',
   disabled: false,
   children: []

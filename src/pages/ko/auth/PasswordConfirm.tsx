@@ -6,7 +6,7 @@
  */
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
@@ -21,6 +21,7 @@ export default function PasswordConfirm() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showDialogBackdrop } = useDialog();
+  const { lang } = useParams<{ lang: string }>();
 
   // Redux auth에서 userInfo.mbrId 가져오기
   const mbrId = useAppSelector((state) => state.auth.userInfo?.mbrId || '');

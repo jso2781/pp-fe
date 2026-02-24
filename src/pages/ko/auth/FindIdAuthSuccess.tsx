@@ -8,7 +8,7 @@
 import { Box, Typography, Button, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -17,6 +17,7 @@ export default function FindIdAuthSuccess() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t, i18n: i18nInstance } = useTranslation();
+  const { lang } = useParams<{ lang: string }>();
 
   useEffect(() => {scrollTo(0, 0);}, []);
 

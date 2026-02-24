@@ -6,7 +6,7 @@
  */
 
 import DepsLocation from "@/components/common/DepsLocation";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { findMbrInfoId } from '@/features/mbr/MbrInfoThunks';
 import { useAppDispatch } from '@/store/hooks';
@@ -22,6 +22,7 @@ export default function FindId() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const { lang } = useParams<{ lang: string }>();
 
   useEffect(() => {scrollTo(0, 0);}, []);
 

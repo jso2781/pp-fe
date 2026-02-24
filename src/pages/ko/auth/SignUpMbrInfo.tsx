@@ -6,7 +6,7 @@
  */
 import { useTranslation } from 'react-i18next'
 import React, { useMemo, useState, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Stepper, Step, StepLabel, Typography, TextField, Stack } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import DepsLocation from '@/components/common/DepsLocation'
@@ -19,6 +19,7 @@ export default function SignUpMbrInfo() {
   const navigate = useNavigate()
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const { lang } = useParams<{ lang: string }>();
 
   // Rest API 호출로 메뉴 가져오기
   const { list } = useAppSelector((s) => s.menu);

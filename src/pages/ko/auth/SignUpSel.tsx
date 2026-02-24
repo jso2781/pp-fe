@@ -5,7 +5,7 @@
  * 화면설명: 회원 유형 선택 화면
  */
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Card, CardContent, Stack, Stepper, Step, StepLabel, Typography } from '@mui/material';
 import { ArrowForward } from '@mui/icons-material'
 import DepsLocation from '@/components/common/DepsLocation'
@@ -14,6 +14,7 @@ export default function SignUpSel() {
   const navigate = useNavigate();
   const { t, i18n: i18nInstance } = useTranslation();
   const currentStep = 0
+  const { lang } = useParams<{ lang: string }>();
 
   const steps = [
     { label: t('step1'), description: t('signUpSelect') },

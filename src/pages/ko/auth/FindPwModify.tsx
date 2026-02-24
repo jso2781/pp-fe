@@ -8,7 +8,7 @@
 import { Box, Typography, TextField, Button } from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation';
 import { useDialog } from '@/contexts/DialogContext';
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -16,6 +16,8 @@ import { updateMbrInfoPw } from '@/features/mbr/MbrInfoThunks';
 
 export default function FindPwModify() {
   
+  const { lang } = useParams<{ lang: string }>();
+
   useEffect(() => {scrollTo(0, 0);}, []);
 
   // 폼 상태 관리

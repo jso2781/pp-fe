@@ -3147,6 +3147,7 @@
   font-weight: 700;
   text-align: center;
   overflow: hidden;
+  line-height: 110%;
 }
 .lang-en .lnb-menu .lnb-tit .btn_toggle {
   margin-left: 10px;
@@ -4252,7 +4253,7 @@
   content: "";
   position: absolute;
   left: 5px;
-  top: 12px;
+  top: 15px;
   width: 5px;
   height: 1px;
   background-color: var(--color-text-1);
@@ -4404,9 +4405,87 @@
      CMS
      ========================================================================== */
 }
+.lang-en .txt-type-1 {
+  font-size: var(--fs-18);
+  font-weight: 500;
+}
+.lang-en .txt-type-2 {
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 20px;
+  font-size: var(--fs-18);
+  font-weight: 700;
+  line-height: 1.4;
+}
+.lang-en .txt-type-2::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  width: 5px;
+  height: 5px;
+  background-color: var(--color-text-1);
+  border-radius: 50%;
+}
+.lang-en .txt-type-3 {
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 20px;
+  font-size: var(--fs-18);
+  font-weight: 700;
+  line-height: 1.4;
+}
+.lang-en .txt-type-3::before {
+  content: "*";
+  position: absolute;
+  left: 3px;
+  top: 0px;
+  width: 5px;
+  height: 5px;
+}
+.lang-en .txt-type-4 {
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 15px;
+  font-size: var(--fs-18);
+  line-height: 1.4;
+}
+.lang-en .txt-type-4::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 12px;
+  width: 6px;
+  height: 1px;
+  background: var(--color-text-1);
+}
 .lang-en .section-desc {
   margin: 0 0 24px 0;
   font-size: var(--fs-18);
+}
+.lang-en .pageCont-introAdrRelf .list-bullet-2 li {
+  position: relative;
+  padding-left: 20px;
+  font-size: var(--fs-18);
+  font-weight: 400;
+  line-height: 1.5;
+  margin-bottom: 2px;
+}
+.lang-en .pageCont-introAdrRelf .list-bullet-2 li::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 12px;
+  width: 4px;
+  height: 4px;
+  background-color: var(--color-text-1);
+  border-radius: 50%;
+}
+.lang-en .pageCont-introAdrRelf .list-bullet-2 li:last-child {
+  margin-bottom: 0;
+}
+.lang-en .pageCont-introAdrRelf .list-bullet-2 li {
+  margin-bottom: 25px;
 }
 .lang-en {
   /* 직접 작성하는 스타일 (상단에서 선언한 mixin_tools 사용) */

@@ -6,7 +6,7 @@
  */
 import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Typography, TextField, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
@@ -25,6 +25,7 @@ import { useDialog } from '@/contexts/DialogContext';
 const toTimestampString = (): string => new Date().toISOString().slice(0, 19).replace('T', ' ');
 
 export default function EditProfile() {
+  const { lang } = useParams<{ lang: string }>();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();

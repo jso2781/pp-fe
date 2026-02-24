@@ -63,7 +63,7 @@ export default function Screens() {
               {rows.map((s) => (
                 <TableRow key={s.id} hover>
                   <TableCell>
-                    <Link to={`/pp/${lang}/screens/${encodeURIComponent(s.id)}`}>{s.id}</Link>
+                    <Link to={`/pp/ko/screens/${encodeURIComponent(s.id)}`}>{s.id}</Link>
                   </TableCell>
                   <TableCell>{s.title}</TableCell>
                   <TableCell>{s.uiType}</TableCell>

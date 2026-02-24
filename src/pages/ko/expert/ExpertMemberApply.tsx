@@ -29,7 +29,7 @@ import {
   Typography
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 
 type StepRefs = {
   step1: HTMLDivElement | null;
@@ -39,7 +39,7 @@ type StepRefs = {
 
 export default function ExpertMemberApply() {
   const dispatch = useAppDispatch();
-
+  const { lang } = useParams<{ lang: string }>();
   const auth = useAppSelector((s) => s.auth);
   const userInfo = auth.userInfo;
 
@@ -668,7 +668,7 @@ export default function ExpertMemberApply() {
                       <Button variant="outlined02" sx={{ minWidth: 120 }}>                      
                         <Link
                           component={RouterLink}           
-                          to={`/`}
+                          to={`/pp`}
                           underline="none"
                           aria-label={`홈 화면으로 이동`}
                         >
@@ -678,7 +678,7 @@ export default function ExpertMemberApply() {
                       <Button variant="contained" sx={{ minWidth: 120 }}>
                         <Link
                           component={RouterLink}           
-                          to={`/expert/ExpertMyWork`}
+                          to={`/pp/${lang}/expert/ExpertMyWork`}
                           underline="none"
                           aria-label={`내 업무 페이지로 이동`}
                           sx={{ color: '#fff' }}

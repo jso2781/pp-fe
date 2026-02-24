@@ -9,10 +9,11 @@ import Lnb from "@/components/common/Lnb";
 import type { DshstyDclrRVO } from "@/features/dclr/DshstyDclrTypes";
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 
 export default function CleanDetail () {
+  const { lang } = useParams<{ lang: string }>();
   const location = useLocation();
   const navigate = useNavigate()
 

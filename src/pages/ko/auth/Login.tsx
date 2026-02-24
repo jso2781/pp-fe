@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useAuth } from '@/contexts/AuthContext'
 import { login as loginThunk } from '@/features/auth/AuthThunks';
 import { Box, Button, Checkbox, Divider, FormControlLabel, Link, Stack, TextField, Typography, List, ListItem } from '@mui/material';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import DepsLocation from '@/components/common/DepsLocation'
 import { useTranslation } from 'react-i18next';
 import { useDialog } from '@/contexts/DialogContext';
@@ -37,6 +37,7 @@ const MAX_FAIL_COUNT = 5
 
 export default function Login() {
   const { t, i18n: i18nInstance } = useTranslation();
+  const { lang } = useParams<{ lang: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isAuthenticated } = useAuth(); // login 함수는 사용하지 않음 (Redux가 소스)

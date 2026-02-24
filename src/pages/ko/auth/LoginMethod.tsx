@@ -16,6 +16,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom'
 import https from '@/api/axiosInstance'
 import DepsLocation from '@/components/common/DepsLocation'
+import i18n from '@/i18n/i18n';
 
 function ensureAnyIdAssets() {
   const ensureLink = (href: string) => {

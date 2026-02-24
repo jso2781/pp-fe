@@ -15,6 +15,7 @@ import { durNoticeListMock, durNoticeDetailMockById } from './durNoticeMock'
 export default function DurNoticeDetail() {
   const navigate = useNavigate()
   const { id } = useParams()
+  const { lang } = useParams<{ lang: string }>();
 
   const sideItems = useMemo(
     () => [

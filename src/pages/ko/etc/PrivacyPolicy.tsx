@@ -42,7 +42,7 @@ export default function PrivacyPolicy() {
               <Box className="page-content">
               {/* --- 본문 시작 --- */}
 
-                <RenderTrmsStt trmsSttCd='STT_PRVC' isList={true} />
+                <RenderTrmsStt trmsSttCd='STT_PRVC_PP' isList={true} />
                 
               {/* --- 본문 끝 --- */}
               </Box>

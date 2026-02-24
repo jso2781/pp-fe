@@ -6,7 +6,7 @@
  */
 
 import DepsLocation from "@/components/common/DepsLocation"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material';
 import {
@@ -20,6 +20,7 @@ export default function FindPw() {
   
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { lang } = useParams<{ lang: string }>();
 
   useEffect(() => {scrollTo(0, 0);}, []);
   

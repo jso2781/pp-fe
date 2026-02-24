@@ -4,8 +4,6 @@ import { Typography } from '@mui/material';
 import { screensEn } from '@/screens/meta'
 import { screenComponentLoaders } from '@/screens/generated/en'
 
-const { Paragraph } = Typography
-
 export default function ScreenViewer() {
   const { screenId } = useParams()
 
@@ -18,7 +16,7 @@ export default function ScreenViewer() {
   if (!loader) {
     return (
       <div style={{ padding: 16 }}>
-        <Paragraph>컴포넌트 로더를 찾을 수 없습니다: {screenId}</Paragraph>
+        <Typography component="p">컴포넌트 로더를 찾을 수 없습니다: {screenId}</Typography>
       </div>
     )
   }

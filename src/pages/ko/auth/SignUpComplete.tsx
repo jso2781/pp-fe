@@ -6,7 +6,7 @@
  */
 import { useTranslation } from 'react-i18next';
 import React, { useMemo } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Stepper, Step, StepLabel, Typography} from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from './signUpSteps';
@@ -16,6 +16,7 @@ export default function SignUpComplete() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const { lang } = useParams<{ lang: string }>();
 
   // 회원 정보 입력 화면에서 전달받은 steps을 사용
   const state = location.state as { 
