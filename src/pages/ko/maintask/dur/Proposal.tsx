@@ -278,11 +278,11 @@ export default function Proposal() {
                               name="role"
                               row
                               options={[
-                                { value: '1', label: '의사' },
-                                { value: '2', label: '약사' },
-                                { value: '3', label: '간호사' },
-                                { value: '4', label: '소비자' },
-                                { value: '5', label: '기타' },
+                                { value: 'DOC', label: '의사' },
+                                { value: 'PHA', label: '약사' },
+                                { value: 'NRS', label: '간호사' },
+                                { value: 'CNS', label: '소비자' },
+                                { value: 'ETC', label: '기타' },
                               ]}
                             />
                           </Box>
