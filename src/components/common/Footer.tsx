@@ -107,6 +107,13 @@ export default function Footer() {
         </Box>
 
         <Box className="quick-item">
+          <button type="button" className="btn-quick chatbot" onClick={() => navigate('#')}>
+            <i className="ico-chatbot" aria-hidden="true" />
+          </button>
+          <span className="quick-txt">챗봇</span>
+        </Box>
+
+        <Box className="quick-item">
           <button 
             type="button" 
             className="btn-quick top" 
