@@ -370,14 +370,14 @@ export default function DurSearchRoom(){
                                     <th scope="row">{searchCnd === 'igrdNm' ? row.igrdNm : row.prdctNm}</th>
                                     <td>
                                       <Box className="dur-icons">
-                                        {row.concList.length > 0 ? <img src="/img/ico_dur_01.png" alt="병용금기 성분 아이콘" /> : ''}
-                                        {row.ageList.length > 0 ? <img src="/img/ico_dur_02.png" alt="특정연령대 금기 성분 아이콘" /> : ''}
-                                        {row.prgntList.length > 0 ? <img src="/img/ico_dur_03.png" alt="임부금기 성분 아이콘" /> : ''}
-                                        {row.cpctList.length > 0 ? <img src="/img/ico_dur_04.png" alt="용량주의 성분 아이콘" /> : ''}
-                                        {row.dosageList.length > 0 ? <img src="/img/ico_dur_05.png" alt="투여기간주의 성분 아이콘" /> : ''}
-                                        {row.eftgrpList.length > 0 ? <img src="/img/ico_dur_06.png" alt="효능군중복주의 성분 아이콘" /> : ''}
-                                        {row.snctzList.length > 0 ? <img src="/img/ico_dur_07.png" alt="노인주의 성분 아이콘" /> : ''}
-                                        {row.nurswList.length > 0 ? <img src="/img/ico_dur_08.png" alt="수유부주의 성분 아이콘" /> : ''}
+                                        {row.concList.length > 0 ? <img src="/img/cms/ico_dur_01.png" alt="병용금기 성분 아이콘" /> : ''}
+                                        {row.ageList.length > 0 ? <img src="/img/cms/ico_dur_02.png" alt="특정연령대 금기 성분 아이콘" /> : ''}
+                                        {row.prgntList.length > 0 ? <img src="/img/cms/ico_dur_03.png" alt="임부금기 성분 아이콘" /> : ''}
+                                        {row.cpctList.length > 0 ? <img src="/img/cms/ico_dur_04.png" alt="용량주의 성분 아이콘" /> : ''}
+                                        {row.dosageList.length > 0 ? <img src="/img/cms/ico_dur_05.png" alt="투여기간주의 성분 아이콘" /> : ''}
+                                        {row.eftgrpList.length > 0 ? <img src="/img/cms/ico_dur_06.png" alt="효능군중복주의 성분 아이콘" /> : ''}
+                                        {row.snctzList.length > 0 ? <img src="/img/cms/ico_dur_07.png" alt="노인주의 성분 아이콘" /> : ''}
+                                        {row.nurswList.length > 0 ? <img src="/img/cms/ico_dur_08.png" alt="수유부주의 성분 아이콘" /> : ''}
                                       </Box>
                                     </td>
                                     <td>
