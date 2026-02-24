@@ -1938,6 +1938,12 @@
   .search-section {
     flex: 0 0 55%;
     min-width: 0;
+    .search-input-group{
+      button{
+        min-width: 86px;
+      }
+      
+    }
     .search-result-content { padding: 15px; }
   }
 
@@ -2027,6 +2033,7 @@
   margin-top: 40px; 
   border: none;
   border-radius: 0;
+
   @media (max-width: 1200px) {
     margin-top: 20px; 
   } 
@@ -2731,6 +2738,24 @@
     width: 6px;
     height: 1px;
     background: var(--color-text-1);
+  }
+}
+.txt-type-5{
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 15px;
+  font-size: var(--fs-18);
+  line-height: 1.4;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    width: 4px;
+    height: 4px;
+    background-color: var(--color-text-1);
+    border-radius: 50%;
   }
 }
 .txt-icon-1 {
