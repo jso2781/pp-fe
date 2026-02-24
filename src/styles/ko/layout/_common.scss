@@ -1189,8 +1189,8 @@ body { overflow-x: hidden; }
 
       i {
         display: block;
-        width: 28px;
-        height: 28px;
+        width: 40px;
+        height: 40px;
         background-repeat: no-repeat;
         background-position: center;
         background-size: contain;
@@ -1199,10 +1199,11 @@ body { overflow-x: hidden; }
       .ico-popup { background-image: url('/img/ico_quick_popup.png'); }
       .ico-faq   { background-image: url('/img/ico_quick_faq.png'); }
       .ico-top   { background-image: url('/img/ico_quick_top.png'); }
+      .ico-chatbot { background-image: url('/img/ico_chatbot.png'); }
 
       &:hover {
-        background-color: #f8faff;
-        transform: scale(1.05);
+        transform: translateY(-3px); 
+        box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
       }
     }
 
