@@ -11,7 +11,8 @@ const selectNormalizedFaqList = createSelector(
   (list): FaqItem[] => [...list]
   .filter((vo): vo is FaqRVO & { faqSeq: number; faqTtl: string; faqAnsCn: string; faqClsfNm: CategoryCode } => (typeGuard(vo)))
   .sort((a, b) => a.faqSeq - b.faqSeq)
-  .map(vo => ({title: vo.faqTtl, content: vo.faqAnsCn, category: vo.faqClsfNm})).concat(dummy)
+  // .map(vo => ({title: vo.faqTtl, content: vo.faqAnsCn, category: vo.faqClsfNm})).concat(dummy)
+  .map(vo => ({title: vo.faqTtl, content: vo.faqAnsCn, category: vo.faqClsfNm}))
 );
 
 export const selectFaqCategoryList = createSelector(
