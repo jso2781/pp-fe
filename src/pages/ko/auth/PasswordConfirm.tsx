@@ -6,7 +6,7 @@
  */
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
@@ -21,6 +21,7 @@ export default function PasswordConfirm() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showDialogBackdrop } = useDialog();
+  const { lang } = useParams<{ lang: string }>();
 
   // Redux auth에서 userInfo.mbrId 가져오기
   const mbrId = useAppSelector((state) => state.auth.userInfo?.mbrId || '');
@@ -54,7 +55,7 @@ export default function PasswordConfirm() {
         type: 'confirm',
         confirmText: t('confirm'),
         cancelText: t('cancel'),
-        onConfirm: () => navigate('/ko/auth/FindPwModify'),
+        onConfirm: () => navigate(`/pp/${lang}/auth/FindPwModify`),
         onCancel: () => {}
       });
       return;
@@ -73,7 +74,7 @@ export default function PasswordConfirm() {
       if (result.existYn === 'Y') {
         // 회원정보수정 화면으로 이동
         // TODO: 실제 회원정보수정 화면 경로에 맞게 수정 필요
-        navigate('/ko/auth/EditProfile', { 
+        navigate(`/pp/${lang}/auth/EditProfile`, { 
           state: { mbrId } 
         });
       } else {
@@ -89,7 +90,7 @@ export default function PasswordConfirm() {
             type: 'confirm',
             confirmText: t('confirm'),
             cancelText: t('cancel'),
-            onConfirm: () => navigate('/ko/auth/FindPwModify'),
+            onConfirm: () => navigate(`/pp/${lang}/auth/FindPwModify`),
             onCancel: () => {}
           });
         } else {
@@ -110,7 +111,7 @@ export default function PasswordConfirm() {
           type: 'confirm',
           confirmText: t('confirm'),
           cancelText: t('cancel'),
-          onConfirm: () => navigate('/ko/auth/FindPwModify'),
+          onConfirm: () => navigate(`/pp/${lang}/auth/FindPwModify`),
           onCancel: () => {}
         });
       }
@@ -126,7 +127,7 @@ export default function PasswordConfirm() {
 
   // 비밀번호 찾기 화면으로 이동
   const handleFindPassword = () => {
-    navigate('/ko/auth/FindPw');
+    navigate(`/pp/${lang}/auth/FindPw`);
   };
 
   return (

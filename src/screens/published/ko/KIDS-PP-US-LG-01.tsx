@@ -7,7 +7,7 @@ import {
   Fingerprint as FingerprintIcon,
   HelpOutline as HelpIcon,
 } from '@mui/icons-material'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams, useParams } from 'react-router-dom'
 import https from '@/api/axiosInstance'
 import DepsLocation from '@/components/common/DepsLocation'
 import ScreenShell from '../../ScreenShell'
@@ -47,6 +47,7 @@ export default function KIDS_PP_US_LG_01() {
   const location = useLocation()
   const [useGovLogin, setUseGovLogin] = useState(false)
   const [anyIdReady, setAnyIdReady] = useState(false)
+  const { lang } = useParams<{ lang: string }>();
 
   const params = useMemo(() => new URLSearchParams(location.search), [location.search])
 
@@ -295,7 +296,7 @@ export default function KIDS_PP_US_LG_01() {
                           <Box className="login-button-group">
                             <Button
                               variant="outlined"
-                              onClick={() => navigate('/ko/login')}
+                              onClick={() => navigate(`/pp/${lang}/login`)}
                               className="login-button"
                             >
                               <Stack spacing={1} alignItems="center" className="login-button-stack">

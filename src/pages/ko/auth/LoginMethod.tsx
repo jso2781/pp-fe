@@ -16,6 +16,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom'
 import https from '@/api/axiosInstance'
 import DepsLocation from '@/components/common/DepsLocation'
+import i18n from '@/i18n/i18n';
 
 function ensureAnyIdAssets() {
   const ensureLink = (href: string) => {
@@ -298,7 +299,7 @@ export default function LoginMethod() {
                           <Box className="login-button-group">
                             <Button
                               variant="outlined"
-                              onClick={() => navigate('/ko/auth/Login')}
+                              onClick={() => navigate(`/pp/${i18n.language}/auth/Login`)}
                               className="login-button"
                             >
                               <Stack spacing={1} alignItems="center" className="login-button-stack">

@@ -10,7 +10,7 @@ import { insertDshstyDclr } from "@/features/dclr/DshstyDclrThunks";
 import type { DshstyDclrPVO } from "@/features/dclr/DshstyDclrTypes";
 import { useAppDispatch } from "@/store/hooks";
 import { Box, Button, Typography } from "@mui/material";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import * as z from 'zod';
 import { ZodFormProvider } from "@/components/rhf/ZodFormProvider";
 import { useZodForm } from "@/components/rhf/useZodForm";
@@ -18,6 +18,7 @@ import RHFTextField from "@/components/rhf/RHFTextField";
 import { useDialog } from '@/contexts/DialogContext';
 import RHFRadioGroup from "@/components/rhf/RHFRadioGroup";
 import { useEffect } from "react";
+import i18n from "@/i18n/i18n";
 
 export default function CleanForm () {
   const location = useLocation();
@@ -25,6 +26,7 @@ export default function CleanForm () {
   const dispatch = useAppDispatch();
   const { showAlert } = useDialog();
 
+  const { lang } = useParams<{ lang: string }>();
   const currentUrl = location.pathname;
 
   if(false) {
@@ -102,7 +104,7 @@ export default function CleanForm () {
     try {
       await dispatch(insertDshstyDclr(payload)).unwrap();
       showAlert('클린신고서 신청서 제출이 완료되었습니다.', '알림', () => {
-        navigate('/ko/about/ethics/CleanCenter');
+        navigate(`/pp/${lang}/about/ethics/CleanCenter`);
       });
     } catch(e) {
 
@@ -113,7 +115,7 @@ export default function CleanForm () {
 
 
   const handleCancle = () => {
-    navigate('/ko/about/ethics/CleanCenter');
+    navigate(`/pp/${lang}/about/ethics/CleanCenter`);
   }
 
   return (

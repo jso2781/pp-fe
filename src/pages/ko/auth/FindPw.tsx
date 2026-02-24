@@ -6,7 +6,7 @@
  */
 
 import DepsLocation from "@/components/common/DepsLocation"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material';
 import {
@@ -20,12 +20,13 @@ export default function FindPw() {
   
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { lang } = useParams<{ lang: string }>();
 
   useEffect(() => {scrollTo(0, 0);}, []);
   
   const handleLoginMethod = (type: string) => {
     // mbrNo 2026000007 회원으로 고정
-    navigate('/ko/auth/FindPwModify', { state:{ mbrNo: '2026000007' }});
+    navigate(`/pp/${lang}/auth/FindPwModify`, { state:{ mbrNo: '2026000007' }});
   }
 
   return (

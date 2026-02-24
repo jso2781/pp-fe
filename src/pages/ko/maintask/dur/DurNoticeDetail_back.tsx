@@ -15,6 +15,7 @@ import { durNoticeListMock, durNoticeDetailMockById } from './durNoticeMock'
 export default function DurNoticeDetail() {
   const navigate = useNavigate()
   const { id } = useParams()
+  const { lang } = useParams<{ lang: string }>();
 
   const sideItems = useMemo(
     () => [
@@ -98,7 +99,7 @@ export default function DurNoticeDetail() {
 
                 <Divider sx={{ my: 2 }} />
                 <Stack direction="row" justifyContent="flex-end">
-                  <Button variant="outlined" onClick={() => navigate('/ko/dur/notice')}>
+                  <Button variant="outlined" onClick={() => navigate(`/pp/${lang}/dur/notice`)}>
                     목록
                   </Button>
                 </Stack>

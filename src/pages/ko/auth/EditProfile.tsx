@@ -6,7 +6,7 @@
  */
 import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Typography, TextField, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
@@ -25,6 +25,7 @@ import { useDialog } from '@/contexts/DialogContext';
 const toTimestampString = (): string => new Date().toISOString().slice(0, 19).replace('T', ' ');
 
 export default function EditProfile() {
+  const { lang } = useParams<{ lang: string }>();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -309,7 +310,7 @@ export default function EditProfile() {
         showAlert(
           t('success') || '성공',
           t('editCompleteReminder'),
-          () => navigate('/ko')
+          () => navigate(`/pp/${lang}`)
         );
       } else {
         showAlert(t('error'), t('editFailedReminder'));
@@ -542,7 +543,7 @@ export default function EditProfile() {
                       variant="text"
                       className="btn-link"
                       endIcon={<ChevronRightIcon />}
-                      onClick={() => navigate('/ko/auth/WithDrawal')}
+                      onClick={() => navigate(`/pp/${lang}/auth/WithDrawal`)}
                     >
                       {t('mbrWithdrawal')}
                     </Button>
@@ -550,7 +551,7 @@ export default function EditProfile() {
 
                   {/* 하단 버튼 영역 */}
                   <Box className="btn-group between">
-                    <Button variant="outlined" size="large" onClick={() => navigate('/ko')}>
+                    <Button variant="outlined" size="large" onClick={() => navigate(`/pp/${lang}`)}>
                       {t('cancel')}
                     </Button>
                     <Button variant="contained" size="large" onClick={handleSave}>

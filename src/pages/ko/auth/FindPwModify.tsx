@@ -8,7 +8,7 @@
 import { Box, Typography, TextField, Button } from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation';
 import { useDialog } from '@/contexts/DialogContext';
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -16,6 +16,8 @@ import { updateMbrInfoPw } from '@/features/mbr/MbrInfoThunks';
 
 export default function FindPwModify() {
   
+  const { lang } = useParams<{ lang: string }>();
+
   useEffect(() => {scrollTo(0, 0);}, []);
 
   // 폼 상태 관리
@@ -122,8 +124,8 @@ export default function FindPwModify() {
       showConfirmBackdrop(
         t('findPwModifyCompleteMessage'),
         t('findPwModifyCompleteTitle'),
-        () => navigate('/ko/auth/login'),
-        () => navigate('/')
+        () => navigate(`/pp/${lang}/auth/login`),
+        () => navigate(`/pp/${lang}`)
       );
     } catch(e) {
       showAlert('비밀번호 변경 실패');
@@ -136,7 +138,7 @@ export default function FindPwModify() {
   }
 
   const handleCancle = () => {
-    navigate('/ko/auth/findPw');
+    navigate(`/pp/${lang}/auth/findPw`);
   }
 
   return (

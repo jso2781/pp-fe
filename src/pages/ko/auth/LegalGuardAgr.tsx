@@ -5,7 +5,7 @@
  * 화면설명: 만14세미만가입 법정대리인동의 화면
  */
 import React, { useMemo, useState, useEffect, useRef } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Box, Button, Stepper, Step, StepLabel, Typography, TextField, Stack, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation'
@@ -69,6 +69,7 @@ export default function LegalGuardAgr() {
   const location = useLocation();
   const { t } = useTranslation();
   const currentStep = 2;
+  const { lang } = useParams<{ lang: string }>();
 
   // sessionStorage에서 저장된 formData 불러오기
   const getStoredFormData = (): LegalGuardFormData | null => {
@@ -365,12 +366,12 @@ export default function LegalGuardAgr() {
     }
 
     // 다음 단계로 이동 (본인인증 페이지)
-    navigate('/ko/auth/CertifySelf', { state: { steps, "legalGuardFormData": formData } });
+    navigate(`/pp/${lang}/auth/CertifySelf`, { state: { steps, "legalGuardFormData": formData } });
   }
 
   // 취소하기 버튼 클릭 핸들러 (만 14세 미만 회원가입 약관동의 페이지로 이동)
   const handleCancel = () => {
-    navigate('/ko/auth/JuniorSignUpAgrTrms', { state: { steps, cancelled: true } });
+    navigate(`/pp/${lang}/auth/JuniorSignUpAgrTrms`, { state: { steps, cancelled: true } });
   }
 
   // 다음단계 버튼 활성화 조건

@@ -6,7 +6,7 @@
  */
 import { useTranslation } from 'react-i18next'
 import React, { useMemo, useState, useRef, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Stepper, Step, StepLabel, Typography, Card, CardContent, Stack, Dialog, DialogTitle, DialogContent, DialogActions, IconButton} from '@mui/material';
 import {
   PhoneAndroid as PhoneIcon,
@@ -63,6 +63,7 @@ function ensureAnyIdAssets() {
 }
 
 export default function CertifySelf() {
+  const { lang } = useParams<{ lang: string }>();
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
@@ -249,7 +250,7 @@ export default function CertifySelf() {
     // 회원정보입력 페이지로 이동
     // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)을 회원 정보 입력 step에 그대로 전달
     // 일반 가입의 경우: legalGuardFormData 없음 (본인인증에서 받은 데이터는 별도 처리)
-    navigate('/ko/auth/SignUpMbrInfo', { 
+    navigate(`/pp/${lang}/auth/SignUpMbrInfo`, { 
       state: { 
         steps, 
         legalGuardFormData: locationState?.legalGuardFormData  // 법정대리인 동의 폼 데이터 전달 (만 14세 미만 가입인 경우)
@@ -265,7 +266,7 @@ export default function CertifySelf() {
     // 본인인증 단계가 3번째(일반 가입)인 경우 약관동의 페이지로 이동
     // 본인인증 단계가 4번째(만 14세 미만 가입)인 경우 법정대리인 동의 페이지로 이동
     if(certifySelfIndex === 2){
-      navigate('/ko/auth/GeneralSignUpAgrTrms', { state: { steps } });
+      navigate(`/pp/${lang}/auth/GeneralSignUpAgrTrms`, { state: { steps } });
     }else{
       // sessionStorage에서 저장된 legalGuardFormData 불러오기
       let legalGuardFormData = null;
@@ -278,7 +279,7 @@ export default function CertifySelf() {
         console.error('Failed to parse stored form data:', error);
       }
       //법정대리인 동의 페이지로 되돌아가기전에 sessionStorage에서 저장된 legalGuardFormData를 전달(이전 입력값 유지)
-      navigate('/ko/auth/LegalGuardAgr', { 
+      navigate(`/pp/${lang}/auth/LegalGuardAgr`, { 
         state: { 
           steps,
           legalGuardFormData: legalGuardFormData  // sessionStorage에서 불러온 legalGuardFormData 전달

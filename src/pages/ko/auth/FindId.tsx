@@ -6,7 +6,7 @@
  */
 
 import DepsLocation from "@/components/common/DepsLocation";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { findMbrInfoId } from '@/features/mbr/MbrInfoThunks';
 import { useAppDispatch } from '@/store/hooks';
@@ -22,6 +22,7 @@ export default function FindId() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const { lang } = useParams<{ lang: string }>();
 
   useEffect(() => {scrollTo(0, 0);}, []);
 
@@ -32,7 +33,7 @@ export default function FindId() {
       dispatch(findMbrInfoId({ mbrNo: '2026000007' })).unwrap()
         .then((res) => {
           console.log(res)
-          navigate('/ko/auth/FindIdAuthSuccess', { state:{ id: res?.mbrId, name: res?.encptMbrFlnm }});
+          navigate(`/pp/${lang}/auth/FindIdAuthSuccess`, { state:{ id: res?.mbrId, name: res?.encptMbrFlnm }});
         });
     } catch(e) {
       alert('아이디찾기 실패')

@@ -6,7 +6,7 @@
  */
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Stepper, Step, StepLabel, Typography, Checkbox, FormControlLabel, List, ListItem, Dialog, DialogTitle, DialogContent, DialogActions, Divider, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DepsLocation from '@/components/common/DepsLocation'
@@ -62,6 +62,7 @@ export default function SignUpAgrTrms() {
   const { t, i18n: i18nInstance } = useTranslation();
   const screenId = "SignUpAgrTrms"
   const currentStep = 1
+  const { lang } = useParams<{ lang: string }>();
 
   const dispatch = useAppDispatch();
   const { list, totalCount, loading, error } = useAppSelector((state) => state.stt);
@@ -167,10 +168,10 @@ export default function SignUpAgrTrms() {
     if (isRequiredAgreed) {
       if (isJunior) {
         // 만 14세 미만 가입: 법정 대리인 동의 단계로 이동 (steps 객체 전달)
-        navigate('/ko/auth/LegalGuardAgr', { state: { steps } });
+        navigate(`/pp/${lang}/auth/LegalGuardAgr`, { state: { steps } });
       } else {
         // 일반 가입: 본인 인증 단계로 이동 (steps 객체 전달)
-        navigate('/ko/auth/CertifySelf', { state: { steps } });
+        navigate(`/pp/${lang}/auth/CertifySelf`, { state: { steps } });
       }
     } else {
       // 필수 약관이 동의되지 않았으면 에러 팝업 표시
@@ -362,7 +363,7 @@ export default function SignUpAgrTrms() {
                       <Button 
                         variant="outlined02" 
                         size="large" 
-                        onClick={() => navigate('/ko/auth/SignUpSel')}
+                        onClick={() => navigate(`/pp/${lang}/auth/SignUpSel`)}
                       >
                         {t('cancel')}
                       </Button>

@@ -32,7 +32,7 @@ export default function WithDrawal() {
   const userInfo = useAppSelector((state) => state.auth.userInfo);
 
   useEffect(() => {
-    if (!userInfo) navigate('/ko');
+    if (!userInfo) navigate('/pp/ko');
   }, [userInfo, navigate]);
 
   if (!userInfo) return null;
@@ -51,7 +51,7 @@ export default function WithDrawal() {
 
       const result : UpdateMbrInfoRVO = await dispatch(updateMbrInfo(mbrInfoPVO)).unwrap();
       if(result?.updateCnt && result.updateCnt > 0){
-        navigate('/ko');
+        navigate('/pp/ko');
         return;
       }else if(result?.updateCnt && result.updateCnt === 0){
         // openDialog(t('error') || '오류', t('mbrWithdrawalFailed') || '회원탈퇴에 실패했습니다.');
