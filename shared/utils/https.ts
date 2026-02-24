@@ -22,7 +22,7 @@ import { setInternalServerError } from '@/features/ui/uiSlice'
  */
 // 빌드 시에는 항상 '/pp/api' 사용 (환경 변수 무시)
 const apiBaseURL = import.meta.env.MODE === 'production' 
-  ? '/pp/api' 
+  ? '/api/pp' 
   : (import.meta.env.VITE_API_BASE_URL ?? '/api')
 
 /** 인증 API 전용 서버 (login, refresh, logout, extend 만 이 도메인으로 호출) */
