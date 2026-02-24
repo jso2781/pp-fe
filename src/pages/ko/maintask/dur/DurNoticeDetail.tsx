@@ -32,6 +32,8 @@ export default function NewsJobNoticeDetail() {
   // Lnb 랜더링용
   const currentUrl = location.pathname;
 
+  const { lang } = useParams<{ lang: string }>();
+
   // 스크롤 상단 이동
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -155,7 +157,7 @@ export default function NewsJobNoticeDetail() {
                         color="dark" 
                         size="large"
                         className="btn-list-go"
-                        onClick={() => navigate(`/ko/maintask/dur/${boardKey}/${bbsId}`)}
+                        onClick={() => navigate(`/pp/${lang}/maintask/dur/${boardKey}/${bbsId}`)}
                       >
                       목록
                     </Button>

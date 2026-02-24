@@ -65,7 +65,7 @@ export default function ExpertApprovalUpdate() {
         type: 'alert',
         confirmText: '확인',
         onConfirm: () => {
-          navigate(`/ko/expert/ExpertApproval`);
+          navigate(`/pp/${lang}/expert/ExpertApproval`);
         },
       })
     }
@@ -115,9 +115,9 @@ export default function ExpertApprovalUpdate() {
               confirmText: '확인',
               onConfirm: () => {
                 if (exprtAprvSttsCode === 'R') {
-                  navigate(`/ko/expert/ExpertApproval`);
+                  navigate(`/pp/${lang}/expert/ExpertApproval`);
                 } else {
-                  navigate(`/ko/expert/ExpertApproval/${exprtTaskSn}`);  
+                  navigate(`/pp/${lang}/expert/ExpertApproval/${exprtTaskSn}`);  
                 }
               },
             })
@@ -371,12 +371,12 @@ export default function ExpertApprovalUpdate() {
 
                   <Box className="btn-group between">
                     <Box className="left-group">
-                      <Button variant="outlined02" size="large" onClick={() => navigate(`/ko/expert/ExpertApproval`)}>
+                      <Button variant="outlined02" size="large" onClick={() => navigate(`/pp/${lang}/expert/ExpertApproval`)}>
                         목록
                       </Button>
                     </Box>
                     <Box className="right-group">
-                      <Button variant="outlined02" size="large" onClick={() => navigate(`/ko/expert/ExpertApproval/${exprtTaskSn}`)}>
+                      <Button variant="outlined02" size="large" onClick={() => navigate(`/pp/${lang}/expert/ExpertApproval/${exprtTaskSn}`)}>
                         취소
                       </Button>
                       <Button variant="contained" size="large" onClick={handleUpdateExprtApproval}>

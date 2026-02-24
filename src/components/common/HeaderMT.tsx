@@ -1109,7 +1109,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   </Button> */}
                   <Button
                     size="small"
-                    onClick={() => navigate(to('/signup'))}
+                    onClick={() => navigate(to(`/pp/${i18nInstance.language}/signup`))}
                     className="btn-util edit-profile" 
                   >
                     {t('editProfile')}

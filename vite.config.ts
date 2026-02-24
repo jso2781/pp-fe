@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
    * (vite dev server에서만 사용됨)
    * - /api/* 요청이 proxyTarget으로 전달됨 → 실제 백엔드 수신 URL: {proxyTarget}/api/...
    */
-  const proxyTarget = env.PROXY_TARGET || 'http://localhost:8080'
+  const proxyTarget = env.PROXY_TARGET || 'http://localhost:8080/pp'
   const proxyPrefix = env.PROXY_PREFIX || '/api'
 
   return {

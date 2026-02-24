@@ -149,7 +149,7 @@ export default function ExpertApproval() {
                                     <TableCell align="center" className="underline">                                      
                                       <Link
                                         component={RouterLink}
-                                        to={`/ko/expert/ExpertApproval/${item.exprtTaskSn}`}
+                                        to={`/pp/${lang}/expert/ExpertApproval/${item.exprtTaskSn}`}
                                         color="inherit"
                                         underline="hover" 
                                         aria-label={`${item.label} 신청 상세보기`}

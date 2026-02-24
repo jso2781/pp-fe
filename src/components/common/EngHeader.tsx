@@ -571,7 +571,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             <Box className="mo-header-util">
               {i18nInstance.language === 'ko' && (
                 <Button
-                  onClick={() => navigate(to('/auth/LoginMethod'))}
+                  onClick={() => navigate(to(`/pp/${i18nInstance.language}/auth/LoginMethod`))}
                   className="btn-util login"
                 >
                   {t('login')}
@@ -891,7 +891,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             onClick={() => {
               logoutContext()
               setShowSessionWarning(false)
-              navigate(to('/'), { replace: true })
+              navigate(to('/pp'), { replace: true })
             }}
           >
             {t('logout')}

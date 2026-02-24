@@ -65,7 +65,7 @@ export default function ExpertApprovalDetail() {
         type: 'alert',
         confirmText: '확인',
         onConfirm: () => {
-          navigate(`/ko/expert/ExpertApproval`);
+          navigate(`/pp/${lang}/expert/ExpertApproval`);
         },
       })
     }
@@ -98,7 +98,7 @@ export default function ExpertApprovalDetail() {
               type: 'alert',
               confirmText: '확인',
               onConfirm: () => {
-                navigate(`/ko/expert/ExpertApproval`);
+                navigate(`/pp/${lang}/expert/ExpertApproval`);
               },
             })
           }
@@ -273,7 +273,7 @@ export default function ExpertApprovalDetail() {
 
                   <Box className="btn-group between">
                     <Box className="left-group">
-                      <Button variant="outlined02" size="large" onClick={() => navigate(`/ko/expert/ExpertApproval`)}>
+                      <Button variant="outlined02" size="large" onClick={() => navigate(`/pp/${lang}/expert/ExpertApproval`)}>
                         목록
                       </Button>
                     </Box>
@@ -283,11 +283,11 @@ export default function ExpertApprovalDetail() {
                         전문가 탈퇴
                       </Button>
                       )}
-                      <Button variant="outlined02" size="large" onClick={() => navigate(`/ko/expert/ExpertApproval`)}>
+                      <Button variant="outlined02" size="large" onClick={() => navigate(`/pp/${lang}/expert/ExpertApproval`)}>
                         취소
                       </Button>
                       {(current?.exprtAprvSttsCode === 'W' || current?.exprtAprvSttsCode === 'A') && (
-                      <Button variant="contained" size="large" onClick={() => navigate(`/ko/expert/ExpertApprovalUpdate/${exprtTaskSn}`)}>
+                      <Button variant="contained" size="large" onClick={() => navigate(`/pp/${lang}/expert/ExpertApprovalUpdate/${exprtTaskSn}`)}>
                         수정
                       </Button>
                       )}

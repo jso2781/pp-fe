@@ -52,6 +52,8 @@ export default function GeneralBoardList() {
   // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
+  const { lang } = useParams<{ lang: string }>();
+
   // Lnb 랜더링용
   const currentUrl = location.pathname;
 
@@ -177,7 +179,7 @@ export default function GeneralBoardList() {
                                 {/* 4. 동작이 발생하는 요소에 명확한 aria-label을 제공합니다. */}
                                 <Link
                                   component={RouterLink}
-                                  to={`/ko/board/general/${bbsId}/${r.id}`}
+                                  to={`/pp/${lang}/board/general/${bbsId}/${r.id}`}
                                   color="inherit"
                                   underline="hover" 
                                   aria-label={`${r.title} 상세보기`}

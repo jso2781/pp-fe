@@ -37,8 +37,6 @@ export default function VideoBoardList() {
 
   const [searchCnd, setSearchCnd] = useState(searchParams.get('searchCnd') || 'title');
   const [searchWrd, setSearchWrd] = useState(searchParams.get('searchWrd') || '');
-
-  const baseUrl = import.meta.env.VITE_ANY_ID_STATIC_URL || '';
   
   // 페이징 관련
   const [pageNum, setPageNum] = useState(1)
@@ -46,6 +44,8 @@ export default function VideoBoardList() {
   
   // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
+
+  const { lang } = useParams<{ lang: string }>();
 
   // Lnb 랜더링용
   const currentUrl = location.pathname;
@@ -75,8 +75,8 @@ export default function VideoBoardList() {
         date: n.regDt ?? '',
         views: n.pstInqCnt ?? 0,
         thmbFileNm: n.thmbFileNm ?? '',
-        thmbFilePath: n.thmbFilePath && n.thmbFileNm
-          ? `${baseUrl}/api/atch/thumb/${n.thmbFilePath}${n.thmbFileNm}`
+        thmbFilePath: n.thmbFileNm
+          ? `/api/atch/thumb/${n.thmbFileNm}`
           : '/img/img_no_thmb.png',          
       };
     });
@@ -159,7 +159,7 @@ export default function VideoBoardList() {
                             <Link
                               component={RouterLink}
                               className='card-item-link'                              
-                              to={`/ko/board/video/${bbsId}/${item.id}`}
+                              to={`/pp/${lang}/board/video/${bbsId}/${item.id}`}
                               underline="none"
                               aria-label={`${item.title} 상세보기`}
                             >

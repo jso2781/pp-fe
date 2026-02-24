@@ -13,7 +13,7 @@ import type { DshstyDclrListPVO, DshstyDclrRVO } from '@/features/dclr/DshstyDcl
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Box, Link, Pagination, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function CleanCenter() {
@@ -26,6 +26,8 @@ export default function CleanCenter() {
   const navigate = useNavigate();
 
   const currentUrl = location.pathname;
+
+  const { lang } = useParams<{ lang: string }>();
 
   const totalPages = Math.max(1, Math.ceil((totalCount || 1) / 10));
 
@@ -137,7 +139,7 @@ export default function CleanCenter() {
                                       <td>
                                         <Link
                                           component={RouterLink}
-                                          to={`/ko/about/ethics/CleanDetail`}
+                                          to={`/pp/${lang}/about/ethics/CleanDetail`}
                                           color="inherit"
                                           aria-label={`${dshstyDclrRVO.dclrTtlNm} 상세보기`}
                                           underline="hover"

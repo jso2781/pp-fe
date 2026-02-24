@@ -126,7 +126,7 @@ export default function AppNavDrawer({ mobileOpen, onCloseMobile, drawerWidth = 
           <ListItemButton
             selected={location.pathname === to('/home')}
             onClick={() => {
-              navigate(to('/home'))
+              navigate(to(`/pp/${lang}/home`))
               onCloseMobile()
             }}
           >

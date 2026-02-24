@@ -466,7 +466,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
     // 현재 경로에서 lang segment 교체
     const pathSegments = location.pathname.split('/')
-    pathSegments[1] = nextLang
+    pathSegments[2] = nextLang
     const nextPath = pathSegments.join('/')
 
     // Rest API 호출 - 토글할 때마다 메뉴 목록을 무조건 다시 불러오게 캐시 초기화
@@ -558,7 +558,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   <Button size="small" className="btn_extend" onClick={handleResetTimerClick}>시간연장</Button>
                 </Box>
               )}
-              <Button size="small" onClick={() => navigate('/screens')}>Screens</Button>
+              <Button size="small" onClick={() => navigate(to(`/pp/ko/screens`))}>Screens</Button>
               <Button size="small" onClick={onToggleLang} startIcon={<Language />}>
                 {i18nInstance.language === 'ko' ? 'English' : '한국어'}
               </Button>
@@ -569,7 +569,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         <Box className="header_menu">
           <Box className="container">
             <h1 className="logo">
-              <Link to={to('/')}>
+              <Link to={to('/pp')}>
                 <img
                   src={i18nInstance.language === 'ko' ? '/img/logo.png' : '/img/logo_eng02.png'}
                   alt={`KIDS ${t('kidsName')}`}
@@ -579,16 +579,16 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             <Box className="util-menu">
               {i18nInstance.language === 'ko' && (
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Button size="small" onClick={() => navigate(to('/search/IntegratedSearch'))} className="btn-util search">
+                  <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/search/IntegratedSearch`))} className="btn-util search">
                     {t('integratedSearch')} {/* 통합검색 */}
                   </Button>
 
                   {isAuthenticated && user && user.userInfo?.expertYn === 'Y' ? (
-                    <Button size="small" onClick={() => navigate(to('/expert/ExpertMyWork'))} className="btn-util user-reg">
+                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/expert/ExpertMyWork`))} className="btn-util user-reg">
                     {t('expertMyWork')} {/* 내 업무 */}
                   </Button>
                   ) : (
-                    <Button size="small" onClick={() => navigate(to('/expert/ExpertMemberApply'))} className="btn-util user-reg">
+                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/expert/ExpertMemberApply`))} className="btn-util user-reg">
                     {t('usrSwtReg')} {/* 전문가 회원 전환 신청 */}
                   </Button>
                   )}
@@ -598,17 +598,17 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                       {t('advTask')} {/* 자문위원 업무 */}
                     </Button>
                   ) : (
-                    <Button size="small" onClick={() => navigate(to('/'))} className="btn-util user-adv">
+                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/expert/ExpertApproval`))} className="btn-util user-adv">
                       {t('advAppReg')} {/* 자문위원신청 */}
                     </Button>
                   )}
 
                   {!isAuthenticated ? (
-                    <Button size="small" onClick={() => navigate(to('/auth/SignUpSel'))} className="btn-util signup">
+                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/auth/SignUpSel`))} className="btn-util signup">
                       {t('signUp')} {/* 회원가입 */}
                     </Button>
                   ) : (
-                    <Button size="small" onClick={() => navigate(to('/auth/PasswordConfirm'))} className="btn-util edit-profile">
+                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/auth/PasswordConfirm`))} className="btn-util edit-profile">
                       {t('editProfile')} {/* 회원정보수정 */}
                     </Button>
                   )}
@@ -617,7 +617,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     <Button
                       size="small"
                       onClick={() => {
-                        const path = to('/auth/LoginMethod')
+                        const path = to(`/pp/${i18nInstance.language}/auth/LoginMethod`)
                         console.log('Header login button clicked, current lang:', lang, 'navigating to:', path)
                         navigate(path, { replace: false })
                       }}
@@ -630,7 +630,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                       size="small"
                       onClick={() => {
                         logoutContext()
-                        navigate(to('/'), { replace: true })
+                        navigate(to('/pp'), { replace: true })
                       }}
                       className="btn-util logout"
                     >
@@ -643,7 +643,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             <Box className="mo-header-util">
               {i18nInstance.language === 'ko' && (
                 <Button
-                  onClick={() => navigate(to('/auth/LoginMethod'))}
+                  onClick={() => navigate(to(`/pp/${i18nInstance.language}/auth/LoginMethod`))}
                   className="btn-util login"
                 >
                   {t('login')}
@@ -771,7 +771,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             <Button size="small" onClick={onToggleLang} startIcon={<Language />}>
                 {i18nInstance.language === 'ko' ? 'English' : '한국어'}
               </Button>
-            <Button size="small" onClick={() => navigate(to('/search/IntegratedSearch'))} className="btn-util search">
+            <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/search/IntegratedSearch`))} className="btn-util search">
               {t('integratedSearch')} {/* 통합검색 */}
             </Button>
           </Box>
@@ -790,17 +790,17 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             {i18nInstance.language === 'ko' && (
               <Stack direction="row" spacing={1} alignItems="center" className="util-buttons">
                 {!isAuthenticated ? (
-                  <Button size="small" onClick={() => navigate(to('/auth/SignUpSel'))} className="btn-util signup">
+                  <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/auth/SignUpSel`))} className="btn-util signup">
                     {t('signUp')} {/* 회원가입 */}
                   </Button>
                 ) : (
                   <>
                   {isAuthenticated && user && user.userInfo?.expertYn === 'Y' ? (
-                    <Button size="small" onClick={() => navigate(to('/expert/ExpertMyWork'))} className="btn-util my-task">
+                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/expert/ExpertMyWork`))} className="btn-util my-task">
                       {t('expertMyWork')} {/* 내업무 */}
                     </Button>
                   ) : (
-                    <Button size="small" onClick={() => navigate(to('/expert/ExpertMemberApply'))} className="btn-util user-reg">
+                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/expert/ExpertMemberApply`))} className="btn-util user-reg">
                     {t('usrSwtReg')} {/* 전문가 회원 전환 신청 */}
                   </Button>
                   )}
@@ -810,15 +810,15 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                       {t('advTask')} {/* 자문위원 업무 */}
                     </Button>
                   ) : (
-                    <Button size="small" onClick={() => navigate(to('/'))} className="btn-util user-adv">
+                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}`))} className="btn-util user-adv">
                       {t('advAppReg')} {/* 자문위원신청 */}
                     </Button>
                   )}
 
-                  <Button size="small" onClick={() => navigate(to('/auth/PasswordConfirm'))} className="btn-util edit-profile">
+                  <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/auth/PasswordConfirm`))} className="btn-util edit-profile">
                     {t('editProfile')} {/* 회원정보수정 */}
                   </Button>
-                  <Button size="small" onClick={() => { logoutContext(); navigate(to('/'), { replace: true }); }} className="btn-util logout">
+                  <Button size="small" onClick={() => { logoutContext(); navigate(to(`/pp/${i18nInstance.language}`), { replace: true }); }} className="btn-util logout">
                     {t('logout')} {/* 로그아웃 */}
                   </Button>
                   </>
@@ -1018,7 +1018,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             onClick={() => {
               logoutContext()
               setShowSessionWarning(false)
-              navigate(to('/'), { replace: true })
+              navigate(to('/pp'), { replace: true })
             }}
           >
             {t('logout')}

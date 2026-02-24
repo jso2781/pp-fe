@@ -27,6 +27,8 @@ export default function VideoBoardDetail() {
   // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
+  const { lang } = useParams<{ lang: string }>();
+
   // Lnb 랜더링용
   const currentUrl = location.pathname;
 
@@ -174,7 +176,7 @@ export default function VideoBoardDetail() {
                         color="dark" 
                         size="large"
                         className="btn-list-go"
-                        onClick={() => navigate(`/ko/board/video/${bbsId}`)}
+                        onClick={() => navigate(`/pp/${lang}/board/video/${bbsId}`)}
                       >
                       목록
                     </Button>

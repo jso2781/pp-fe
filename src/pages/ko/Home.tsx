@@ -5,7 +5,7 @@
  * 화면설명: 메인(홈)
  */
 import { useMemo, useState, useRef, useEffect} from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Card, Grid, CardContent, Link, List, ListItem, Tab, Tabs, Typography, IconButton } from '@mui/material';
 import { OpenInNew, PlayArrow, Pause } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next';
@@ -38,6 +38,8 @@ type SnsTabs = Record<TabKey, SnsTab>;
 
 export default function Home() {
 
+  const { lang } = useParams<{ lang: string }>();
+
   // <title> 홈 페이지에 진입할 때 브라우저 타이틀을 강제로 초기화
   const { t } = useTranslation();
   useEffect(() => {
@@ -65,7 +67,7 @@ export default function Home() {
     if (item.thmbFileNm) {
       // 백슬래시를 슬래시로 변환하고, 경로 끝의 슬래시 정리
       const normalizedFileName = item.thmbFileNm.replace(/^\/+/, '');
-      return `${baseUrl}/api/atch/thumb/${normalizedFileName}`;
+      return `/api/atch/thumb/${normalizedFileName}`;
     }
     return '/img/img_test.png';
   };
@@ -98,6 +100,8 @@ export default function Home() {
     if (swiperRef2.current?.autoplay) {
       if (isPlaying2) swiperRef2.current.autoplay.stop();
       else swiperRef2.current.autoplay.start();
+
+
       setIsPlaying2(!isPlaying2);
     }
   };
@@ -265,7 +269,7 @@ export default function Home() {
     }
   };  const doSearch = () => {
     const keyword = q.trim()
-    navigate(`/ko/search?q=${encodeURIComponent(keyword)}`)
+    navigate(`/pp/${lang}/search?q=${encodeURIComponent(keyword)}`)
   }
 
   // ==========================================
@@ -906,7 +910,7 @@ export default function Home() {
                     }}>
                       <Box
                         component={RouterLink}
-                        to={`/ko/news/NewsCardNewsList/${item.pstSn}`}
+                        to={`/pp/${lang}/news/NewsCardNewsList/${item.pstSn}`}
                         sx={{
                           width: '100%',
                           height: '100%',

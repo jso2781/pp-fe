@@ -5,7 +5,7 @@
  * 화면설명: DUR 정보 > 알림 게시판
  */
 import { useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Card, CardContent, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import AgGridTable from '@/components/grid/AgGridTable'
@@ -26,6 +26,8 @@ export default function DurNoticeList() {
 
     // Lnb 랜더링용
   const currentUrl = location.pathname;
+
+  const { lang } = useParams<{ lang: string }>();
 
   const sampleRows = useMemo(() => durNoticeListMock, [])
 
@@ -52,7 +54,7 @@ export default function DurNoticeList() {
               href="#"
               onClick={(e) => {
                 e.preventDefault()
-                if (p.data?.id) navigate(`/ko/maintask/dur/DurNoticeList/${p.data.id}`)
+                if (p.data?.id) navigate(`/pp/${lang}/maintask/dur/DurNoticeList/${p.data.id}`)
               }}
             >
               {String(v)}

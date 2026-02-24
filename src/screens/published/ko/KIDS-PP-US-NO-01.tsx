@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Box, Stack, FormControl, InputLabel, Select, MenuItem, TextField, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Pagination, Typography } from '@mui/material';
 import ScreenShell from '../../ScreenShell';
 import DepsLocation from '@/components/common/DepsLocation';
@@ -19,6 +19,8 @@ export default function KIDS_PP_US_NO_01() {
   const { list, totalCount, loading } = useAppSelector((s) => s.pst);
   const [searchCnd, setSearchCnd] = useState(searchParams.get('searchCnd') || 'title');
   const [searchWrd, setSearchWrd] = useState(searchParams.get('searchWrd') || '');
+
+  const { lang } = useParams<{ lang: string }>();
 
   const sideItems = useMemo(() => [
     { key: '/notice', label: '공지사항' },
@@ -122,7 +124,7 @@ export default function KIDS_PP_US_NO_01() {
                                 {/* 4. 동작이 발생하는 요소에 명확한 aria-label을 제공합니다. */}
                                 <Link
                                   component={RouterLink}
-                                  to={`/ko/notice/${r.id}`}
+                                  to={`/pp/${lang}/notice/${r.id}`}
                                   color="inherit"
                                   underline="hover" // 평소엔 밑줄 없고 마우스 올릴 때만 생성 (접근성 권장)
                                   aria-label={`${r.title} 상세보기`}

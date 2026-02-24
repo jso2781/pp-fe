@@ -72,7 +72,7 @@ export default function ExpertMyWork() {
                   updtTokenCn: auth.updtTokenCn ?? '',
                 })).unwrap();
 
-                navigate(to('/'));
+                navigate(to(`/pp/${lang}`));
               },
             })
           }
@@ -98,7 +98,7 @@ export default function ExpertMyWork() {
       confirmText: '확인',
       cancelText: '취소',
       onConfirm: () => {
-        navigate(to('/expert/ExpertMemberApply'));
+        navigate(to(`/pp/${lang}/expert/ExpertMemberApply`));
       },
     })
   }

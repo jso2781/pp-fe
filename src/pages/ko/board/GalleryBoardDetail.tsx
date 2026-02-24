@@ -27,6 +27,8 @@ export default function GalleryBoardDetail() {
   // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
+  const { lang } = useParams<{ lang: string }>();
+
   // Lnb 랜더링용
   const currentUrl = location.pathname;
 
@@ -41,8 +43,6 @@ export default function GalleryBoardDetail() {
   useEffect(() => {
     if (bbsId && pstSn) dispatch(getPst({bbsId, pstSn}))
   }, [dispatch, bbsId, pstSn])
-
-  const baseUrl = import.meta.env.VITE_ANY_ID_STATIC_URL || '';
 
   const data: PstRVO = current || {};
   const html = data?.pstCn || '';
@@ -118,10 +118,10 @@ export default function GalleryBoardDetail() {
                           </Typography>
                         )}
                           {/* 이미지 영역 */}
-                          {data.imgFilePath && data.imgFileNm && (
+                          {data.imgFileNm && (
                             <Box
                               component="img"
-                              src={`${baseUrl}/api/atch/thumb/${data.imgFilePath}${data.imgFileNm}`}
+                              src={`/api/atch/thumb/${data.imgFileNm}`}
                               alt="공지사항 본문 테스트용 이미지"
                             />
                           )}
@@ -163,7 +163,7 @@ export default function GalleryBoardDetail() {
                         color="dark" 
                         size="large"
                         className="btn-list-go"
-                        onClick={() => navigate(`/ko/board/gallery/${bbsId}`)}
+                        onClick={() => navigate(`/pp/${lang}/board/gallery/${bbsId}`)}
                       >
                       목록
                     </Button>

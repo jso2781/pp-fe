@@ -27,6 +27,8 @@ export default function GeneralBoardDetail() {
   // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
+  const { lang } = useParams<{ lang: string }>();
+
   // Lnb 랜더링용
   const currentUrl = location.pathname;
 
@@ -153,7 +155,7 @@ export default function GeneralBoardDetail() {
                         color="dark" 
                         size="large"
                         className="btn-list-go"
-                        onClick={() => navigate(`/ko/board/general/${bbsId}`)}
+                        onClick={() => navigate(`/pp/${lang}/board/general/${bbsId}`)}
                       >
                       목록
                     </Button>

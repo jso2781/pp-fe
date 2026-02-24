@@ -368,13 +368,14 @@ export default function MyDrugInfo() {
                                   }}
                                 />
                                 <Button
+                                  type="button"
                                   variant="contained"
                                   size="large"
                                   className="btn-search"
+                                  disabled={(searchWrd ?? '').trim().length < 2  || searchLoading}
                                   onClick={handleSearch}
-                                  disabled={!searchWrd.trim() || searchLoading}
                                 >
-                                  검색
+                                  {t('search')}
                                 </Button>
                               </Box>
                             </Box>

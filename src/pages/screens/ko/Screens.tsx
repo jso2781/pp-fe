@@ -14,11 +14,13 @@ import {
   Typography,
   Paper,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { screensKo, type ScreenMeta } from '@/screens/meta';
 
 export default function Screens() {
   const [q, setQ] = useState('');
+
+  const { lang } = useParams<{ lang: string }>();
 
   const rows = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -61,7 +63,7 @@ export default function Screens() {
               {rows.map((s) => (
                 <TableRow key={s.id} hover>
                   <TableCell>
-                    <Link to={`/ko/screens/${encodeURIComponent(s.id)}`}>{s.id}</Link>
+                    <Link to={`/pp/${lang}/screens/${encodeURIComponent(s.id)}`}>{s.id}</Link>
                   </TableCell>
                   <TableCell>{s.title}</TableCell>
                   <TableCell>{s.uiType}</TableCell>
