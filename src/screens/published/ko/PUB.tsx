@@ -998,6 +998,8 @@ export default function PUB() {
                   <p className="txt-type-1 txt-2">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
                   <p className="txt-type-1 txt-4">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
                   <p className="txt-type-2">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
+                  <p className="txt-type-3">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
+                  <p className="txt-type-4">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
                   {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">텍스트 아이콘타입</h3>
                   <p className="txt-icon-1">이상사례·약물이상반응 중 다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.</p>
@@ -1009,8 +1011,8 @@ export default function PUB() {
                   {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">웹,모바일 이미지</h3>
                   <div className="img-switcher">
-                    <img src="/img/adverseKaers_img01.png" alt="이미지설명" className="responsive-img pc-only"/>
-                    <img src="/img/adverseKaers_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                    <img src="/img/cms/adverseKaers_img01.png" alt="이미지설명" className="responsive-img pc-only"/>
+                    <img src="/img/cms/adverseKaers_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                   </div>
 
                 {/* --- 본문 끝 --- */}

@@ -534,4 +534,7 @@ export const screensKo: ScreenMeta[] = [
 export const screensEn: ScreenMeta[] = [
   { id: 'KIDS-PP-US-EN-15', title: 'Screen EN-15', uiType: 'page' },
   { id: 'KIDS-PP-US-EN-16', title: 'Screen EN-16', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-09', title: 'Screen EN-09', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-18', title: 'Screen EN-18', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-19', title: 'Screen EN-19', uiType: 'page' },
 ];
