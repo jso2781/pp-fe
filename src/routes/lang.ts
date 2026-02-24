@@ -29,7 +29,7 @@ export function detectBrowserLang(): SupportedLang {
 }
 
 export function getLangFromPathname(pathname: string): SupportedLang {
-  const seg = pathname.split("/")[1]; // '' | 'ko' | 'en' | ...
+  const seg = pathname.split("/")[2]; // '' | 'ko' | 'en' | ...
   return normalizeLang(seg) ?? FALLBACK_LANG;
 }
 
@@ -61,7 +61,7 @@ export function langPath(input: string, lang: string): string {
 
   // 첫 세그먼트가 언어면 교체, 아니면 prefix
   const segs = path.split("/"); // ["", "ko", "notice"]
-  const first = segs[1];
+  const first = segs[2];
   const firstAsLang = normalizeLang(first);
 
   if (firstAsLang) {
