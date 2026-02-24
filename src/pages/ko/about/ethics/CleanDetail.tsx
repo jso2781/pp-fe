@@ -25,7 +25,7 @@ export default function CleanDetail () {
   const currentUrl = location.pathname;
 
   const handleListClick = () => {
-    navigate('/ko/about/ethics/CleanCenter');
+    navigate('/pp/ko/about/ethics/CleanCenter');
   }
 
   return (

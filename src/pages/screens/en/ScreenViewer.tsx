@@ -9,10 +9,10 @@ const { Paragraph } = Typography
 export default function ScreenViewer() {
   const { screenId } = useParams()
 
-  if (!screenId) return <Navigate to="/en/screens" replace />
+  if (!screenId) return <Navigate to="/pp/en/screens" replace />
 
   const screen = useMemo(() => screensEn.find((s) => s.id === screenId), [screenId])
-  if (!screen) return <Navigate to="/en/screens" replace />
+  if (!screen) return <Navigate to="/pp/en/screens" replace />
 
   const loader = screenComponentLoaders[screenId as keyof typeof screenComponentLoaders]
   if (!loader) {

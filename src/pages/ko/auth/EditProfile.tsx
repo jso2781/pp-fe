@@ -309,7 +309,7 @@ export default function EditProfile() {
         showAlert(
           t('success') || '성공',
           t('editCompleteReminder'),
-          () => navigate('/ko')
+          () => navigate('/pp/ko')
         );
       } else {
         showAlert(t('error'), t('editFailedReminder'));
@@ -542,7 +542,7 @@ export default function EditProfile() {
                       variant="text"
                       className="btn-link"
                       endIcon={<ChevronRightIcon />}
-                      onClick={() => navigate('/ko/auth/WithDrawal')}
+                      onClick={() => navigate('/pp/ko/auth/WithDrawal')}
                     >
                       {t('mbrWithdrawal')}
                     </Button>
@@ -550,7 +550,7 @@ export default function EditProfile() {
 
                   {/* 하단 버튼 영역 */}
                   <Box className="btn-group between">
-                    <Button variant="outlined" size="large" onClick={() => navigate('/ko')}>
+                    <Button variant="outlined" size="large" onClick={() => navigate('/pp/ko')}>
                       {t('cancel')}
                     </Button>
                     <Button variant="contained" size="large" onClick={handleSave}>

@@ -15,11 +15,11 @@ export default function DurNoticeList() {
 
   const sideItems = useMemo(
     () => [
-      { key: '/en/dur/understand', label: 'Understanding DUR', disabled: true },
-      { key: '/en/dur/search', label: 'DUR Information Search', disabled: true },
-      { key: '/en/dur/use', label: 'Appropriate use information', disabled: true },
-      { key: '/en/dur/notice', label: 'Notification Board' },
-      { key: '/en/dur/proposal', label: 'Suggestions' },
+      { key: '/pp/en/dur/understand', label: 'Understanding DUR', disabled: true },
+      { key: '/pp/en/dur/search', label: 'DUR Information Search', disabled: true },
+      { key: '/pp/en/dur/use', label: 'Appropriate use information', disabled: true },
+      { key: '/pp/en/dur/notice', label: 'Notification Board' },
+      { key: '/pp/en/dur/proposal', label: 'Suggestions' },
     ],
     [],
   )
@@ -80,7 +80,7 @@ export default function DurNoticeList() {
 
         <Grid container spacing={2} sx={{ alignItems: 'flex-start' }}>
           <Grid size={{ xs: 12, md: 3 }}>
-            <SectionSideNav title="DUR Information" items={sideItems} selectedKey="/en/dur/notice" />
+            <SectionSideNav title="DUR Information" items={sideItems} selectedKey="/pp/en/dur/notice" />
           </Grid>
 
           <Grid size={{ xs: 12, md: 9 }}>

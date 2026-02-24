@@ -26,9 +26,9 @@ const FOOTER_INFO_LINKS: Array<{ key: string; labelKey: TKey; href: string }> = 
 ]
 
 const FOOTER_LEGAL_LINKS: Array<{ key: string; labelKey: TKey; href: string; className?: string }> = [
-  { key: 'privacy', labelKey: 'privacyPolicy', href: '/ko/etc/PrivacyPolicy', className: 'point-link'},
-  { key: 'termsOfUse', labelKey: 'termsOfUse', href: '/ko/etc/Terms' },
-  { key: 'cctvPolicy', labelKey: 'cctvPolicy', href: '/ko/etc/CctvPolicy' },
+  { key: 'privacy', labelKey: 'privacyPolicy', href: '/pp/ko/etc/PrivacyPolicy', className: 'point-link'},
+  { key: 'termsOfUse', labelKey: 'termsOfUse', href: '/pp/ko/etc/Terms' },
+  { key: 'cctvPolicy', labelKey: 'cctvPolicy', href: '/pp/ko/etc/CctvPolicy' },
   { key: 'koglLicense', labelKey: 'koglLicense', href: 'https://www.kogl.or.kr/info/licenseType1.do' },
 ]
 
@@ -49,8 +49,8 @@ export default function Footer() {
   const navigate = useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
   
-  // 메인 페이지 판별: '/' 이거나 '/ko' 인 경우 모두 포함
-  const isMainPage = location.pathname === '/' || location.pathname === '/ko'
+  // 메인 페이지 판별: '/' 이거나 '/pp/ko' 인 경우 모두 포함
+  const isMainPage = location.pathname === '/' || location.pathname === '/pp/ko'
 
   const [isVisible, setIsVisible] = useState(false)
   // 타입스크립트 사용 시를 고려한 Ref 설정

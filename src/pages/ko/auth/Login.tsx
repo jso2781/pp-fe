@@ -150,7 +150,7 @@ export default function Login() {
           showConfirmBackdrop(
             t('passwordError5TimesMessage'),
             t('passwordError5Times'),
-            () => navigate('/ko/auth/findPw'),
+            () => navigate('/pp//ko/auth/findPw'),
             () => {}
           );
           return; // 로그인 실패 - 리다이렉트하지 않음
@@ -186,15 +186,15 @@ export default function Login() {
             const nextReminderDate = new Date();
             nextReminderDate.setDate(nextReminderDate.getDate() + PASSWORD_CHANGE_REMINDER_DAYS);
             sessionStorage.setItem(STORAGE_KEY_PASSWORD_CHANGE_REMINDER, nextReminderDate.toISOString());
-            navigate('/ko', { replace: true });
+            navigate('/pp/ko', { replace: true });
           },
           onConfirm: () => {
-            navigate('/screens/KIDS-PP-US-LG-09');
+            navigate('/pp/ko/screens/KIDS-PP-US-LG-09');
           },
         });
       } else {
         setTimeout(() => {
-          navigate('/ko', { replace: true }) // 일반 회원은 메인 페이지로
+          navigate('/pp/ko', { replace: true }) // 일반 회원은 메인 페이지로
         }, 100);
       }
     }catch(error: any){
@@ -224,7 +224,7 @@ export default function Login() {
         showConfirmBackdrop(
           t('passwordError5TimesMessage'),
           t('passwordError5Times'),
-          () => navigate('/ko/auth/findPw'),
+          () => navigate('/pp/ko/auth/findPw'),
           () => {}
         );
         return;
@@ -370,7 +370,7 @@ export default function Login() {
                             <ListItem disablePadding className="account-utils__item">
                               <Link
                                 component="button"
-                                onClick={() => navigate('/ko/auth/SignUpSel')}
+                                onClick={() => navigate('/pp/ko/auth/SignUpSel')}
                                 className="account-utils__link"
                               >
                                 {t('signUp')}
@@ -382,7 +382,7 @@ export default function Login() {
                             <ListItem disablePadding className="account-utils__item">
                               <Link
                                 component="button"
-                                onClick={() => navigate('/ko/auth/FindId')}
+                                onClick={() => navigate('/pp/ko/auth/FindId')}
                                 className="account-utils__link"
                               >
                                 {t('findId')}
@@ -394,7 +394,7 @@ export default function Login() {
                             <ListItem disablePadding className="account-utils__item">
                               <Link
                                 component="button"
-                                onClick={() => navigate('/ko/auth/FindPw')}
+                                onClick={() => navigate('/pp/ko/auth/FindPw')}
                                 className="account-utils__link"
                               >
                                 {t('findPassword')}

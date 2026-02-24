@@ -6,33 +6,6 @@ import { useAppSelector } from '@/store/hooks';
 import { getLnbInfoByPath } from '@/features/auth/MenuUtils';
 import { HeadTitle } from './HeadTitle';
 
-// 1. 경로별 한글 명칭 매핑 (데이터가 많아지면 별도 파일로 분리 추천)
-const pathLabels: Record<string, string[]> = {
-  "/ko/notice": ["알림마당", "공지사항"],
-  "/ko/board": ["커뮤니티", "게시판"],
-  "/ko/board/write": ["커뮤니티", "글쓰기"],
-  "/ko/dur/notice": ["DUR 정보", "알림 게시판"],
-  "/ko/dur/notice/5": ["DUR 정보", "알림 게시판"],
-  "/ko/dur/proposal": ["DUR 정보", "의견 제안"],
-  "/ko/safety/report/online": ["의약품 안전관리", "의약품 이상사례 보고", "이상사례 보고"],
-  "/ko/auth/LoginMethod": ["로그인", "로그인 방식 선택"],
-  "/ko/auth/Login": ["로그인", "아이디 로그인"],
-
-  "/ko/news/NewsNoticeList": ["기관소식", "공지사항"],
-  "/ko/news/NewsJobNoticeList": ["기관소식", "채용 게시판"],
-  "/ko/news/NewsDataRoomList": ["기관소식", "자료실"],
-  "/ko/news/NewsCardNewsList": ["기관소식", "카드뉴스"],
-  "/ko/news/NewsVidioList": ["기관소식", "동영상"],
-
-  "/en/notice": ["알림마당11", "공지사항11"],
-  "/en/board": ["커뮤니티11", "게시판11"],
-  "/en/board/write": ["커뮤니티11", "글쓰기11"],
-  "/en/dur/notice": ["DUR 정보11", "알림 게시판11"],
-  "/en/dur/proposal": ["DUR 정보11", "의견 제안11"],
-  "/en/safety/report/online": ["의약품 안전관리11", "의약품 이상사례 보고11", "이상사례 보고11"]
-
-};
-
 export default function DepsLocation() {
   /**************************** SubMenu 상단 Top-Navigation 설정 시작(한국어/영어 사이트 변환 포함) *********************/
   const { t } = useTranslation();
@@ -75,67 +48,67 @@ export default function DepsLocation() {
     }
     ,
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/LoginMethod(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/LoginMethod(\/)?$/,
       labels: ["login", "loginMethod"]
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/Login(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/Login(\/)?$/,
       labels: ["login", "idLogin"]
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/PasswordConfirm(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/PasswordConfirm(\/)?$/,
       labels: ["editProfile", "passwordConfirm"]
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/EditProfile(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/EditProfile(\/)?$/,
       labels: ["editProfile"]
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/WithDrawal(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/WithDrawal(\/)?$/,
       labels: ["withdrawal"]
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/SignUpSel(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/SignUpSel(\/)?$/,
       labels: ["signUp"]  // 회원가입 선택
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/GeneralSignUpAgrTrms(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/GeneralSignUpAgrTrms(\/)?$/,
       labels: ["signUp"] // 회원가입 - 일반 회원 가입 약관 동의
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/JuniorSignUpAgrTrms(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/JuniorSignUpAgrTrms(\/)?$/,
       labels: ["signUp"] // 회원가입 - 만 14세 미만 회원 가입 약관 동의
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/LegalGuardAgr(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/LegalGuardAgr(\/)?$/,
       labels: ["signUp"] // 회원가입 - 법정대리인 동의
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/CertifySelf(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/CertifySelf(\/)?$/,
       labels: ["signUp"] // 회원가입 - 본인인증
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/SignUpMbrInfo(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/SignUpMbrInfo(\/)?$/,
       labels: ["signUp"] // 회원가입 - 회원 정보 입력
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/SignUpComplete(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/SignUpComplete(\/)?$/,
       labels: ["signUp"] // 회원가입 - 가입 신청 완료
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/FindId(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/FindId(\/)?$/,
       labels: ["login", "idLogin", "findId"] // 로그인 > 아이디 로그인 > 아이디 찾기
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/FindIdAuthSuccess(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/FindIdAuthSuccess(\/)?$/,
       labels: ["login", "idLogin", "findId"] // 로그인 > 아이디 로그인 > 아이디 찾기
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/FindPw(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/FindPw(\/)?$/,
       labels: ["login", "idLogin", "findPassword"] // 로그인 > 아이디 로그인 > 비밀번호 찾기
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/auth\/FindPwModify(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/FindPwModify(\/)?$/,
       labels: ["login", "idLogin", "findPassword", "passwordChange"] // 로그인 > 아이디 로그인 > 비밀번호 찾기 > 비밀번호 변경
     },
     {

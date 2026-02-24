@@ -37,13 +37,13 @@ export default function SignUpSel() {
       id: 'general',
       title: t('signUpGeneral'),
       description: t('signUpGeneralDescription'),
-      route: '/ko/auth/GeneralSignUpAgrTrms',
+      route: '/pp/ko/auth/GeneralSignUpAgrTrms',
     },
     {
       id: 'junior',
       title: t('signUpJunior'),
       description: t('signUpJuniorDescription'),
-      route: '/ko/auth/JuniorSignUpAgrTrms',
+      route: '/pp/ko/auth/JuniorSignUpAgrTrms',
     },
   ]
 

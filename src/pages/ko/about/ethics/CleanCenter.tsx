@@ -42,7 +42,7 @@ export default function CleanCenter() {
 
   const handleWriteForm = () => {
     if(true){
-      navigate('/ko/about/ethics/CleanForm');
+      navigate('/pp/ko/about/ethics/CleanForm');
     }
     //TODO Any-Id 인증이 안되있다면 본인인증 페이지로 이동
     // navigate('/');

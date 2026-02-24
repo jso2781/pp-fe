@@ -129,7 +129,7 @@ export default function ExpertApprovalDetail() {
                 if (key.startsWith('http')) {
                   window.open(key, '_blank');
                 } else {
-                  const dest = key.startsWith('/ko/') ? key : '/ko' + key;
+                  const dest = key.startsWith('/pp/ko/') ? key : '/pp/ko' + key;
                   navigate(dest);
                 }
               }}

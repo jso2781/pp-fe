@@ -25,8 +25,8 @@ export default function KIDS_PP_US_NO_02() {
 
   // LNB 아이템 설정
   const sideItems = useMemo(() => [
-    { key: '/ko/notice', label: '공지사항' },
-    { key: '/ko/jobs', label: '채용게시판' },
+    { key: '/pp/ko/notice', label: '공지사항' },
+    { key: '/pp/ko/jobs', label: '채용게시판' },
     { key: 'centers_group', label: '센터', children: [{ key: '/center/1', label: '센터 소개' }] },
   ], []);
 

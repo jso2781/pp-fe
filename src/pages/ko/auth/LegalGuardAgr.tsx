@@ -365,12 +365,12 @@ export default function LegalGuardAgr() {
     }
 
     // 다음 단계로 이동 (본인인증 페이지)
-    navigate('/ko/auth/CertifySelf', { state: { steps, "legalGuardFormData": formData } });
+    navigate('/pp/ko/auth/CertifySelf', { state: { steps, "legalGuardFormData": formData } });
   }
 
   // 취소하기 버튼 클릭 핸들러 (만 14세 미만 회원가입 약관동의 페이지로 이동)
   const handleCancel = () => {
-    navigate('/ko/auth/JuniorSignUpAgrTrms', { state: { steps, cancelled: true } });
+    navigate('/pp/ko/auth/JuniorSignUpAgrTrms', { state: { steps, cancelled: true } });
   }
 
   // 다음단계 버튼 활성화 조건

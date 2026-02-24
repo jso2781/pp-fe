@@ -22,13 +22,13 @@ export default function KIDS_PP_US_JM_01() {
       id: 'general',
       title: '일반 회원(만 14세 이상 회원)',
       description: '만14세 이상의 회원을 가입합니다.',
-      route: '/ko/signup/general', // 실제 라우트 경로로 변경 필요
+      route: '/pp/ko/signup/general', // 실제 라우트 경로로 변경 필요
     },
     {
       id: 'junior',
       title: '일반 회원(만 14세 미만 회원)',
       description: '만 14세 미만 가입 시 법정대리인의 동의가 필요합니다.',
-      route: '/ko/signup/junior', // 실제 라우트 경로로 변경 필요
+      route: '/pp/ko/signup/junior', // 실제 라우트 경로로 변경 필요
     },
   ]
 

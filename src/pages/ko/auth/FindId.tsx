@@ -32,7 +32,7 @@ export default function FindId() {
       dispatch(findMbrInfoId({ mbrNo: '2026000007' })).unwrap()
         .then((res) => {
           console.log(res)
-          navigate('/ko/auth/FindIdAuthSuccess', { state:{ id: res?.mbrId, name: res?.encptMbrFlnm }});
+          navigate('/pp/ko/auth/FindIdAuthSuccess', { state:{ id: res?.mbrId, name: res?.encptMbrFlnm }});
         });
     } catch(e) {
       alert('아이디찾기 실패')

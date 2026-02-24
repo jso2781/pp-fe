@@ -102,7 +102,7 @@ export default function CleanForm () {
     try {
       await dispatch(insertDshstyDclr(payload)).unwrap();
       showAlert('클린신고서 신청서 제출이 완료되었습니다.', '알림', () => {
-        navigate('/ko/about/ethics/CleanCenter');
+        navigate('/pp/ko/about/ethics/CleanCenter');
       });
     } catch(e) {
 
@@ -113,7 +113,7 @@ export default function CleanForm () {
 
 
   const handleCancle = () => {
-    navigate('/ko/about/ethics/CleanCenter');
+    navigate('/pp/ko/about/ethics/CleanCenter');
   }
 
   return (

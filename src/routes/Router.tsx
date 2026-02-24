@@ -107,7 +107,7 @@ const LangGuard = ({ children }: { children: JSX.Element }) => {
 
   // 2) URL에 lang가 없는 경우를 감지하기 위해 pathname 직접 파싱
   const { needsRedirect, redirectTo } = useMemo(() => {
-    const pathname = location.pathname; // 예: "/home", "/en/home", "/xx/home"
+    const pathname = location.pathname; // 예: "/home", "/pp/en/home", "/xx/home"
     const segs = pathname.split("/");   // ["", "home"] or ["", "en", "home"]
 
     const first = segs[1]; // 첫 segment

@@ -420,7 +420,7 @@ export default function SignUpMbrInfo() {
       // 회원정보 1건이 입력되었는지 확인
       if(result > 0){
         // 다음 단계로 이동 (가입 신청 완료 페이지)
-        navigate('/ko/auth/SignUpComplete', { state: { steps } });
+        navigate('/pp/ko/auth/SignUpComplete', { state: { steps } });
       } else {
         alert(t('insertMbrInfoFailed'));
       }
@@ -447,10 +447,10 @@ export default function SignUpMbrInfo() {
     
     if (certifySelfIndex === 2) {
       // 일반 가입: 본인인증 단계가 3번째(인덱스 2) → 약관동의 페이지로 이동
-      navigate('/ko/auth/GeneralSignUpAgrTrms', { state: { steps } });
+      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps } });
     } else if (certifySelfIndex === 3) {
       // 만 14세 미만 가입: 본인인증 단계가 4번째(인덱스 3) → 본인인증 페이지로 이동 (저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 전달)
-      navigate('/ko/auth/CertifySelf', { 
+      navigate('/pp/ko/auth/CertifySelf', { 
         state: { 
           steps,
           legalGuardFormData: storedLegalGuardFormData  // sessionStorage에서 불러온 legalGuardFormData(법정대리인 동의 폼 데이터들) 전달
@@ -458,7 +458,7 @@ export default function SignUpMbrInfo() {
       });
     } else {
       // 기본값: 약관동의 페이지로 이동
-      navigate('/ko/auth/GeneralSignUpAgrTrms', { state: { steps } });
+      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps } });
     }
   }
 

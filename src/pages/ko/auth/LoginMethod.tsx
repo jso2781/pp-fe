@@ -298,7 +298,7 @@ export default function LoginMethod() {
                           <Box className="login-button-group">
                             <Button
                               variant="outlined"
-                              onClick={() => navigate('/ko/auth/Login')}
+                              onClick={() => navigate('/pp/ko/auth/Login')}
                               className="login-button"
                             >
                               <Stack spacing={1} alignItems="center" className="login-button-stack">

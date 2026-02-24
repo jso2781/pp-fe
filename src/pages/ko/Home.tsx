@@ -217,7 +217,7 @@ export default function Home() {
   const newsData = useMemo(() => ({
     notice: {
       label: '공지사항',
-      path: noticeUrl?.menuUrlAddr ?? '/ko',
+      path: noticeUrl?.menuUrlAddr ?? '/pp/ko',
       items: (current?.notice || []).map((item) => ({
         id: item.pstSn || '',
         title: item.pstTtl || '',
@@ -228,7 +228,7 @@ export default function Home() {
     },
     press: {
       label: '보도자료',
-      path: bodoUrl?.menuUrlAddr ?? '/ko', // FIXME 추후 변경
+      path: bodoUrl?.menuUrlAddr ?? '/pp/ko', // FIXME 추후 변경
       items: (current?.bodo || []).map((item) => ({
         id: item.pstSn || '',
         title: item.pstTtl || '',
@@ -239,7 +239,7 @@ export default function Home() {
     },
     newsletter: {
       label: '뉴스레터',
-      path: letterUrl?.menuUrlAddr ?? '/ko', // FIXME 추후 변경
+      path: letterUrl?.menuUrlAddr ?? '/pp/ko', // FIXME 추후 변경
       items: (current?.news || []).map((item) => ({
         id: item.pstSn || '',
         title: item.pstTtl || '',

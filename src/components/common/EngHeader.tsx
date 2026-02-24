@@ -560,7 +560,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         <Box className="header_menu">
           <Box className="container">
             <h1 className="logo">
-              <Link to={to('/en')}>
+              <Link to={to('/pp/en')}>
                 <img
                   src={i18nInstance.language === 'ko' ? '/img/logo.png' : '/img/logo_eng02.png'}
                   alt={`KIDS ${t('kidsName')}`}

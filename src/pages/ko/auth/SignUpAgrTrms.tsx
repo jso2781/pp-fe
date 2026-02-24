@@ -137,7 +137,7 @@ export default function SignUpAgrTrms() {
   const [checked4, setChecked4] = useState(false);
 
   // 이전 페이지에서 만 14세 미만 회원 가입 화면으로부터 이동했을 때만 "만 14세 미만 아동의 회원가입에 따른 개인정보 수집이용에 관한 법정대리인 동의" 약관 표기
-  const isJunior = location.pathname.includes('/ko/auth/JuniorSignUpAgrTrms');
+  const isJunior = location.pathname.includes('/pp/ko/auth/JuniorSignUpAgrTrms');
 
   // 회원 유형에 따라 steps 배열 구성 (공통 유틸리티 함수 사용)
   const steps = useMemo(() => getSignUpSteps(t, isJunior), [isJunior, t]);
@@ -167,10 +167,10 @@ export default function SignUpAgrTrms() {
     if (isRequiredAgreed) {
       if (isJunior) {
         // 만 14세 미만 가입: 법정 대리인 동의 단계로 이동 (steps 객체 전달)
-        navigate('/ko/auth/LegalGuardAgr', { state: { steps } });
+        navigate('/pp/ko/auth/LegalGuardAgr', { state: { steps } });
       } else {
         // 일반 가입: 본인 인증 단계로 이동 (steps 객체 전달)
-        navigate('/ko/auth/CertifySelf', { state: { steps } });
+        navigate('/pp/ko/auth/CertifySelf', { state: { steps } });
       }
     } else {
       // 필수 약관이 동의되지 않았으면 에러 팝업 표시
@@ -362,7 +362,7 @@ export default function SignUpAgrTrms() {
                       <Button 
                         variant="outlined02" 
                         size="large" 
-                        onClick={() => navigate('/ko/auth/SignUpSel')}
+                        onClick={() => navigate('/pp/ko/auth/SignUpSel')}
                       >
                         {t('cancel')}
                       </Button>

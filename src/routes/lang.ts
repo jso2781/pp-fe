@@ -36,10 +36,10 @@ export function getLangFromPathname(pathname: string): SupportedLang {
 
 /**
  * 내부 라우팅용 경로에 현재 lang prefix를 강제 적용한다.
- * - "/notice"        -> "/ko/notice"
- * - "/ko/notice"     -> "/en/notice"   (현재 lang이 en이면)
- * - "/"              -> "/ko"
- * - "notice"         -> "/ko/notice"
+ * - "/notice"        -> "/pp/ko/notice"
+ * - "/pp/ko/notice"     -> "/pp/en/notice"   (현재 lang이 en이면)
+ * - "/"              -> "/pp/ko"
+ * - "notice"         -> "/pp/ko/notice"
  * - 외부 URL(http...)는 그대로 반환
  * old --> lang: SupportedLang
  */

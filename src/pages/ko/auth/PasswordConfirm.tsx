@@ -54,7 +54,7 @@ export default function PasswordConfirm() {
         type: 'confirm',
         confirmText: t('confirm'),
         cancelText: t('cancel'),
-        onConfirm: () => navigate('/ko/auth/FindPwModify'),
+        onConfirm: () => navigate('/pp/ko/auth/FindPwModify'),
         onCancel: () => {}
       });
       return;
@@ -73,7 +73,7 @@ export default function PasswordConfirm() {
       if (result.existYn === 'Y') {
         // 회원정보수정 화면으로 이동
         // TODO: 실제 회원정보수정 화면 경로에 맞게 수정 필요
-        navigate('/ko/auth/EditProfile', { 
+        navigate('/pp/ko/auth/EditProfile', { 
           state: { mbrId } 
         });
       } else {
@@ -89,7 +89,7 @@ export default function PasswordConfirm() {
             type: 'confirm',
             confirmText: t('confirm'),
             cancelText: t('cancel'),
-            onConfirm: () => navigate('/ko/auth/FindPwModify'),
+            onConfirm: () => navigate('/pp/ko/auth/FindPwModify'),
             onCancel: () => {}
           });
         } else {
@@ -110,7 +110,7 @@ export default function PasswordConfirm() {
           type: 'confirm',
           confirmText: t('confirm'),
           cancelText: t('cancel'),
-          onConfirm: () => navigate('/ko/auth/FindPwModify'),
+          onConfirm: () => navigate('/pp/ko/auth/FindPwModify'),
           onCancel: () => {}
         });
       }
@@ -126,7 +126,7 @@ export default function PasswordConfirm() {
 
   // 비밀번호 찾기 화면으로 이동
   const handleFindPassword = () => {
-    navigate('/ko/auth/FindPw');
+    navigate('/pp/ko/auth/FindPw');
   };
 
   return (

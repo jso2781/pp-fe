@@ -295,7 +295,7 @@ export default function KIDS_PP_US_LG_01() {
                           <Box className="login-button-group">
                             <Button
                               variant="outlined"
-                              onClick={() => navigate('/ko/login')}
+                              onClick={() => navigate('/pp/ko/login')}
                               className="login-button"
                             >
                               <Stack spacing={1} alignItems="center" className="login-button-stack">

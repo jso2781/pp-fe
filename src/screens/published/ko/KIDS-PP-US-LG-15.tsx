@@ -140,7 +140,7 @@ export default function KIDS_PP_US_LG_15() {
         // if (userType === 'expert') {
         //   navigate('/screens/KIDS-PP-US-MT-01')
         // } else {
-        //   navigate('/ko') // 일반 회원은 메인 페이지로
+        //   navigate('/pp/ko') // 일반 회원은 메인 페이지로
         // }
         window.alert('샘플 화면입니다. (로그인 API 미연동)')
       }
@@ -516,7 +516,7 @@ export default function KIDS_PP_US_LG_15() {
               // if (userType === 'expert') {
               //   navigate('/screens/KIDS-PP-US-MT-01')
               // } else {
-              //   navigate('/ko')
+              //   navigate('/pp/ko')
               // }
             }}
           >

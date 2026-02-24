@@ -105,7 +105,7 @@ export default function SignUpComplete() {
 
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group right">
-                      <Button variant="contained" size="large" onClick={() => navigate('/ko')}>{t('homeTo')}</Button>
+                      <Button variant="contained" size="large" onClick={() => navigate('/pp/ko')}>{t('homeTo')}</Button>
                     </Box>
                   </Box>
                   {/* --- 본문 끝 --- */}

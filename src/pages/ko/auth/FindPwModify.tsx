@@ -122,7 +122,7 @@ export default function FindPwModify() {
       showConfirmBackdrop(
         t('findPwModifyCompleteMessage'),
         t('findPwModifyCompleteTitle'),
-        () => navigate('/ko/auth/login'),
+        () => navigate('/pp/ko/auth/login'),
         () => navigate('/')
       );
     } catch(e) {
@@ -136,7 +136,7 @@ export default function FindPwModify() {
   }
 
   const handleCancle = () => {
-    navigate('/ko/auth/findPw');
+    navigate('/pp/ko/auth/findPw');
   }
 
   return (

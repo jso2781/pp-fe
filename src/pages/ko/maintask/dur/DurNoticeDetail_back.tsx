@@ -18,11 +18,11 @@ export default function DurNoticeDetail() {
 
   const sideItems = useMemo(
     () => [
-      { key: '/ko/dur/understand', label: 'DUR 이해', disabled: true },
-      { key: '/ko/dur/search', label: 'DUR 정보검색', disabled: true },
-      { key: '/ko/dur/use', label: '의약품 적정사용정보', disabled: true },
-      { key: '/ko/dur/notice', label: '알림 게시판' },
-      { key: '/ko/dur/proposal', label: '의견 제안' },
+      { key: '/pp/ko/dur/understand', label: 'DUR 이해', disabled: true },
+      { key: '/pp/ko/dur/search', label: 'DUR 정보검색', disabled: true },
+      { key: '/pp/ko/dur/use', label: '의약품 적정사용정보', disabled: true },
+      { key: '/pp/ko/dur/notice', label: '알림 게시판' },
+      { key: '/pp/ko/dur/proposal', label: '의견 제안' },
     ],
     [],
   )
@@ -39,7 +39,7 @@ export default function DurNoticeDetail() {
 
         <Grid container spacing={2} sx={{ alignItems: 'flex-start' }}>
           <Grid size={{ xs: 12, md: 3 }}>
-            <SectionSideNav title="DUR 정보" items={sideItems} selectedKey="/ko/dur/notice" />
+            <SectionSideNav title="DUR 정보" items={sideItems} selectedKey="/pp/ko/dur/notice" />
           </Grid>
 
           <Grid size={{ xs: 12, md: 9 }}>
@@ -98,7 +98,7 @@ export default function DurNoticeDetail() {
 
                 <Divider sx={{ my: 2 }} />
                 <Stack direction="row" justifyContent="flex-end">
-                  <Button variant="outlined" onClick={() => navigate('/ko/dur/notice')}>
+                  <Button variant="outlined" onClick={() => navigate('/pp/ko/dur/notice')}>
                     목록
                   </Button>
                 </Stack>

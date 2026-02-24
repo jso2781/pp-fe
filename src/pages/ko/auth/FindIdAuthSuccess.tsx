@@ -26,11 +26,11 @@ export default function FindIdAuthSuccess() {
   }
 
   const handleFindPwClick = () => {
-    navigate('/ko/auth/FindPw');
+    navigate('/pp/ko/auth/FindPw');
   }
 
   const handleLoginClick = () => {
-    navigate('/ko/auth/login');
+    navigate('/pp/ko/auth/login');
   }
 
   return (

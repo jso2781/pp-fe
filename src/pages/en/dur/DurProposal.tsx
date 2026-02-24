@@ -53,11 +53,11 @@ const defaultValues: FormValues = {
 export default function DurProposal() {
   const sideItems = useMemo(
     () => [
-      { key: '/en/dur/understand', label: 'DUR 이해', disabled: true },
-      { key: '/en/dur/search', label: 'DUR 정보검색', disabled: true },
-      { key: '/en/dur/use', label: '의약품 적정사용정보', disabled: true },
-      { key: '/en/dur/notice', label: '알림 게시판' },
-      { key: '/en/dur/proposal', label: '의견 제안' },
+      { key: '/pp/en/dur/understand', label: 'DUR 이해', disabled: true },
+      { key: '/pp/en/dur/search', label: 'DUR 정보검색', disabled: true },
+      { key: '/pp/en/dur/use', label: '의약품 적정사용정보', disabled: true },
+      { key: '/pp/en/dur/notice', label: '알림 게시판' },
+      { key: '/pp/en/dur/proposal', label: '의견 제안' },
     ],
     [],
   )
@@ -92,7 +92,7 @@ export default function DurProposal() {
 
         <Grid container spacing={2} sx={{ alignItems: 'flex-start' }}>
           <Grid size={{ xs: 12, md: 3 }}>
-            <SectionSideNav title="DUR 정보" items={sideItems} selectedKey="/en/dur/proposal" />
+            <SectionSideNav title="DUR 정보" items={sideItems} selectedKey="/pp/en/dur/proposal" />
           </Grid>
 
           <Grid size={{ xs: 12, md: 9 }}>
