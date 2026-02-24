@@ -180,4 +180,68 @@
 /* ==========================================================================
    CMS
    ========================================================================== */   
+.txt-type-1{font-size: var(--fs-18);font-weight: 500;}
+.txt-type-2{
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 20px;
+  font-size: var(--fs-18);
+  font-weight: 700;
+  line-height: 1.4;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 10px; 
+    width: 5px;
+    height: 5px;
+    background-color: var(--color-text-1);
+    border-radius: 50%;
+  }
+}
+.txt-type-3{
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 20px;
+  font-size: var(--fs-18);
+  font-weight: 700;
+  line-height: 1.4;
+
+  &::before {
+    content: "*";
+    position: absolute;
+    left: 3px;
+    top: 0px; 
+    width: 5px;
+    height: 5px;
+  }
+}
+.txt-type-4{
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 15px;
+  font-size: var(--fs-18);
+  line-height: 1.4;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 12px; 
+    width: 6px;
+    height: 1px;
+    background: var(--color-text-1);
+  }
+}
 .section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);}
+
+.pageCont-introAdrRelf{
+  .list-bullet-2 {
+    @include mixins.list-bullet-2;
+
+    li {
+      margin-bottom: 25px;
+    }
+  }
+}
