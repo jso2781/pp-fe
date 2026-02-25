@@ -1,0 +1,179 @@
+/**
+ * 화면ID: KIDS-PP-US-NO-08
+ * 화면명: 갤러리형 게시판 상세
+ * 화면경로: /board/gallery/:bbsId/:pstSn
+ * 화면설명: 갤러리형 게시판 상세
+ */
+import DepsLocation from '@/components/common/DepsLocation';
+import KoglLicense from '@/components/common/KoglLicense';
+import Lnb from '@/components/common/Lnb';
+import LnbSectionTitle from '@/components/common/LnbSectionTitle';
+import { useAuth } from '@/contexts/AuthContext';
+import { downloadAtch } from '@/features/atch/AtchThunks';
+import { getPst } from '@/features/pst/PstThunks';
+import { PstRVO } from '@/features/pst/PstTypes';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { Box, Button, Link, Typography } from '@mui/material';
+import { useEffect } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+
+export default function StatisticsDetail() {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { getMenuInfo } = useAuth()
+  const menuKoglCprgtTypeCd = getMenuInfo(location.pathname)?.menuKoglCprgtTypeCd ?? '4'
+
+  // 게시판 ID 추출
+  const { bbsId } = useParams<{ bbsId: string }>();
+
+  const { lang } = useParams<{ lang: string }>();
+
+  // Lnb 랜더링용
+  const currentUrl = location.pathname;
+
+  // 스크롤 상단 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);  
+  
+  const { pstSn } = useParams<{ pstSn: string }>();
+  const { current } = useAppSelector((s) => s.pst)
+
+  useEffect(() => {
+    if (bbsId && pstSn) dispatch(getPst({bbsId, pstSn}))
+  }, [dispatch, bbsId, pstSn])
+
+  const data: PstRVO = current || {};
+  const html = data?.pstCn || '';
+  const isHtml = typeof html === 'string' && /<\/?[a-z][\s\S]*>/i.test(html)
+  const atchFiles = data?.atchRVOs || [];
+
+  const handleDownload = (atchFileId: string) => {
+    dispatch(
+      downloadAtch({atchFileId})
+    );
+  };
+  
+  return (
+      <Box className="page-layout">
+        <Box className="sub-container">
+          <Box className="content-wrap">
+
+            {/* Lnb 영역 */}
+            <Box className="lnb-wrap">
+              <Box className="lnb-menu">
+                <Typography component="h2" className="lnb-tit">
+                  <LnbSectionTitle />
+                </Typography>
+                <Box className="lnb-list">
+                  <Lnb currentUrl={currentUrl} />
+                </Box>
+              </Box>
+            </Box>
+
+            {/* 컨텐츠 본문 영역 */}
+            <Box className="sub-content">
+              <DepsLocation />
+              <Box className="content-view" id="content">
+                <Box className="page-content">
+                  
+                  {/* --- 본문 시작 --- */}
+                  <Box component="article" className="board-detail">
+                    {/* (제목 + 정보) */}
+                    <Box className="board-header">
+                      <Typography component="h1" className="board-title">
+                        {data.pstTtl || '-'}
+                      </Typography>
+                      
+                      <Box className="board-info">
+                        <ul className="info-list">
+                          <li>
+                            <span className="info-label">작성자</span>
+                            <span className="info-value">{data.wrtrDeptNm ?? '-'}</span>
+                          </li>
+                          <li>
+                            <span className="info-label">등록일</span>
+                            <span className="info-value">{data.regDt ?? '-'}</span>
+                          </li>
+                          <li>
+                            <span className="info-label">조회수</span>
+                            <span className="info-value">{data.pstInqCnt ?? '-'}</span>
+                          </li>
+                        </ul>
+                      </Box>
+                    </Box>
+
+                    <Box className="board-body-wrap">
+                      {/* 게시글 본문 영역 */}
+                      <Box className="board-content">
+                        {isHtml ? (
+                          <div 
+                            className="content-inner html-render" 
+                            dangerouslySetInnerHTML={{ __html: html }} 
+                          />
+                        ) : (
+                          <Typography className="content-inner text-render">
+                            {String(html || '')}
+                          </Typography>
+                        )}
+                          {/* 이미지 영역 */}
+                          {data.imgFileNm && (
+                            <Box
+                              component="img"
+                              src={`/api/atch/thumb/${data.imgFileNm}`}
+                              alt="공지사항 본문 테스트용 이미지"
+                            />
+                          )}
+                      </Box>
+                      {/* 첨부파일 */}
+                      {atchFiles.length > 0 && (
+                      <Box className="board-attachment">
+                        <ul className="attachment-list">
+                          {atchFiles.map((file, index) => (
+                          <li key={index}>
+                            <Link 
+                              className="attachment-item"
+                              underline="none"
+                              title="첨부파일 다운로드"
+                              onClick={() => handleDownload(file.atchFileId ?? '')}
+                            >
+                              <Box className="file-info">
+                                <span className="file-label">{atchFiles.length === 1 ? '첨부파일' : `첨부파일${index + 1}`}</span>
+                                <span className="file-name">{file.fileNm}</span>
+                                <span className="file-meta">
+                                  <span className="file-ext">[{file.fileExtnNm}]</span>
+                                  <span className="file-size">{file.fileSz}</span> {/** 파일 크기 단위 변환 로직 필요 */}
+                                </span>
+                              </Box>
+                            </Link>
+                          </li>
+                          ))}
+                        </ul>
+                      </Box>
+                      )}
+                    </Box>
+                    {/* 공공(KOGL) 저작물 */}
+                    <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
+                  </Box>
+                  {/* 하단 버튼 영역 */}
+                  <Box className="board-actions">
+                    <Button 
+                        variant="contained" 
+                        color="dark" 
+                        size="large"
+                        className="btn-list-go"
+                        onClick={() => navigate(`/pp/${lang}/board/gallery/${bbsId}`)}
+                      >
+                      목록
+                    </Button>
+                  </Box>
+                  {/* --- 본문 끝 --- */}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+  )
+}

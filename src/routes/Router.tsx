@@ -59,6 +59,10 @@ const ExpertApprovalKo = lazy(() => import('@/pages/ko/expert/ExpertApproval'))
 const ExpertApprovalDetailKo = lazy(() => import('@/pages/ko/expert/ExpertApprovalDetail'))
 const ExpertApprovalUpdateKo = lazy(() => import('@/pages/ko/expert/ExpertApprovalUpdate'))
 
+const MbcmtApplyKo = lazy(() => import('@/pages/ko/advice/MbcmtApply'))
+const StatisticsListKo = lazy(() => import('@/pages/ko/maintask/adverse/statistics/StatisticsList'))
+const StatisticsDetailKo = lazy(() => import('@/pages/ko/maintask/adverse/statistics/StatisticsDetail'))
+
 const PrivacyPolicyKo = lazy(() => import('@/pages/ko/etc/PrivacyPolicy'))
 const TermsKo = lazy(() => import('@/pages/ko/etc/Terms'))
 const CctvPolicyKo = lazy(() => import('@/pages/ko/etc/CctvPolicy'))
@@ -275,6 +279,11 @@ export default function Router() {
                 <Route path="/pp/:lang/etc/PrivacyPolicy" element={<LangElement byLang={{ ko: <PrivacyPolicyKo />, en: <PrivacyPolicyKo /> }} />} />
                 <Route path="/pp/:lang/etc/CctvPolicy" element={<LangElement byLang={{ ko: <CctvPolicyKo />, en: <CctvPolicyKo /> }} />} />
                 <Route path="/pp/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
+
+                {/* 자문위원 관련 화면advice */}
+                <Route path="/pp/:lang/advice/MbcmtApply" element={<LangElement byLang={{ ko: <MbcmtApplyKo />, en: <MbcmtApplyKo /> }} />} />
+                {/* 이상사례통계 관련 화면advice */}
+                <Route path="/pp/:lang/adverse/statistics/StatisticsList" element={<LangElement byLang={{ ko: <StatisticsListKo />, en: <StatisticsListKo /> }} />} />
 
                 {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
                 <Route path="/pp/:lang/InternalServerError" element={<LangElement byLang={{ ko: <InternalServerErrorKo />, en: <InternalServerErrorKo /> }} />} />
