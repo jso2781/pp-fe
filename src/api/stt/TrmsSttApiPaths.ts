@@ -12,3 +12,8 @@ export const selectTrmsSttListApiPath = () => '/stt/selectTrmsSttList'
  * 대국민포털_약관법령기본 최신글 단건 조회
  */
 export const getTrmsSttLatestApiPath = () => '/stt/getTrmsSttLatest'
+
+/**
+ * 대국민포털_약관법령기본 최신글 단건 조회
+ */
+export const getTrmsSttApiPath = () => '/stt/getTrmsStt'

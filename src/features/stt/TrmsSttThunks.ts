@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectTrmsListForSignUpApiPath, selectTrmsSttListApiPath, getTrmsSttLatestApiPath } from '@/api/stt/TrmsSttApiPaths'
+import { selectTrmsListForSignUpApiPath, selectTrmsSttListApiPath, getTrmsSttLatestApiPath, getTrmsSttApiPath } from '@/api/stt/TrmsSttApiPaths'
 import { mockTrmsSttList, TrmsSttPVO, TrmsSttRVO, TrmsSttListPVO, TrmsSttListRVO, TrmsSttDVO, mockTrmsListForSignUp  } from './TrmsSttTypes'
 
 /**
@@ -75,6 +75,25 @@ export const getTrmsSttLatest = createAsyncThunk<TrmsSttRVO, TrmsSttPVO, { rejec
       return payload;
     } catch (e) {
       console.error('!!! TrmsSttThunks > getTrmsSttLatest 에러.');
+      console.error(e);
+      return rejectWithValue('NETWORK_OR_SERVER_ERROR');
+    }
+  }
+)
+
+/**
+ * 대국민포털_약관법령기본 정보 조회 
+ */
+export const getTrmsStt = createAsyncThunk<TrmsSttRVO, TrmsSttPVO, { rejectValue: string }>(
+  '/stt/getTrmsStt',
+  async (params: TrmsSttPVO = {}, { rejectWithValue }) => {
+    try {
+      const res = await https.post(getTrmsSttApiPath(), params);
+      const payload = res.data?.data?.trmsSttRVO;
+      
+      return payload;
+    } catch (e) {
+      console.error('!!! TrmsSttThunks > getTrmsStt 에러.');
       console.error(e);
       return rejectWithValue('NETWORK_OR_SERVER_ERROR');
     }
