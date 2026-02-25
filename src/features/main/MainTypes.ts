@@ -49,6 +49,15 @@ export interface PostVO {
 
   /** 팝업 링크 주소 */
   popupLnkgAddr?: string | null
+
+  /** 업무구분코드 */
+  taskCd?: string | null
+
+  /** 메뉴명 */
+  menuNm?: string | null
+
+  /** 메뉴 URL */
+  menuUrlAddr?: string | null
 }
 
 /**
@@ -64,6 +73,7 @@ export interface MainRVO {
   promotion: PostVO[]
   notice: PostVO[]
   all_sns?: PostVO[]
+  urlInfos?: PostVO[]
   popup?: PostVO[]
   mainImageUrl?: string
 }
