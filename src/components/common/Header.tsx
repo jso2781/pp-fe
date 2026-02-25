@@ -464,10 +464,21 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const onToggleLang = () => {
     const nextLang = i18nInstance.language === 'ko' ? 'en' : 'ko'
 
-    // 현재 경로에서 lang segment 교체
-    const pathSegments = location.pathname.split('/')
-    pathSegments[2] = nextLang
-    const nextPath = pathSegments.join('/')
+    // 홈(/, /pp, /pp/ko) 포함 모든 케이스에서 안전하게 언어 세그먼트 교체/삽입
+    const segments = location.pathname.split('/').filter(Boolean)
+    let nextPath = ''
+    if (segments[0] !== 'pp') {
+      nextPath = `/pp/${nextLang}`
+    } else if (segments.length === 1) {
+      nextPath = `/pp/${nextLang}`
+    } else {
+      if (segments[1] === 'ko' || segments[1] === 'en') {
+        segments[1] = nextLang
+      } else {
+        segments.splice(1, 0, nextLang)
+      }
+      nextPath = `/${segments.join('/')}`
+    }
 
     // Rest API 호출 - 토글할 때마다 메뉴 목록을 무조건 다시 불러오게 캐시 초기화
     dispatch(clearMenuCache())
@@ -476,7 +487,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
     sessionStorage.setItem(LOCALE_KEY, nextLang) // ✅ APP_LOCALE 저장
     i18nInstance.changeLanguage(nextLang) // ✅ UI 즉시 반영
-    navigate(nextPath) // ✅ 경로 이동
+    navigate(`${nextPath}${location.search}${location.hash}`) // ✅ 경로 이동
   }
 
   // =======================================
