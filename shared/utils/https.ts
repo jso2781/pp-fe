@@ -13,14 +13,14 @@ import { setInternalServerError } from '@/features/ui/uiSlice'
  * API base URL
  *
  * - development: '/api' (handled by Vite dev-server proxy)
- *   http://localhost:8080/pp/api
+ *   http://localhost:8080/api/pp
  * 
- * - production : '/pp/api' (handled by infra/nginx)
- *   빌드 시에는 항상 상대 경로 '/pp/api' 사용 (proxy 미사용)
+ * - production : '/api/pp' (handled by infra/nginx)
+ *   빌드 시에는 항상 상대 경로 '/api/pp' 사용 (proxy 미사용)
  * 
  * NEVER put full origin here.
  */
-// 빌드 시에는 항상 '/pp/api' 사용 (환경 변수 무시)
+// 빌드 시에는 항상 '/api/pp/' 사용 (환경 변수 무시)
 const apiBaseURL = import.meta.env.MODE === 'production' 
   ? '/api/pp' 
   : (import.meta.env.VITE_API_BASE_URL ?? '/api')
