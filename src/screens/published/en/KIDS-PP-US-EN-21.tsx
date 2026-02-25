@@ -61,7 +61,7 @@ export default function KIDS_PP_US_EN_21() {
                     </div>
                     <h3 className="section-title">NIMS: Comprehensive Management system for Medical Narcotics</h3>
                     <div className="section-desc">
-                      <ul>
+                      <ul className="list-bullet-2">
                         <li>
                           NIMS manages the entire lifecycle of medical narcotics from production and distribution to dispensing and administration.
                         </li>
@@ -79,6 +79,53 @@ export default function KIDS_PP_US_EN_21() {
                         narcotics and plays a central role in preventing misuse/abuse and supporting
                         related research in collaboration with relevant government agencies.
                       </p>
+                      <div className="mb20"></div>
+                      <div className="img-switcher">
+                        <img src="/img/cms/en/introNIMS_img02.png" alt="" className="responsive-img"/>
+                      </div>
+                    </div>
+                    <h3 className="section-title">Utilization of NIMS Data</h3>
+                    <div className="section-desc">
+                      <div className="img-switcher">
+                        <img src="/img/cms/en/introNIMS_img03.png" alt="" className="responsive-img"/>
+                      </div>
+                      <div className="mb20"></div>
+                      <div className="narcotic-prevention">
+                        <dl className="service-list">
+                          <div className="class-group">
+                            <dt>1) Narcotics Shopping Prevention Program w/ Patient Care Needs</dt>
+                            <dd>
+                              <p className="txt-type-4">Physicians can check a patient’s narcotic prescription history for the past year prior to issuing a new prescription.</p>
+                              <p className="txt-type-4">Patient Care Needs: Risk levels are color-coded using a traffic light signal (red, amber, and green) to help doctors assess the likelihood of narcotics misuse.</p>
+                            </dd>
+                          </div>
+                          <div className="class-group">
+                            <dt>2) My Medication History Check Service</dt>
+                            <dd>
+                              <p className="txt-type-4">Through this service, all individuals may access information on medical narcotics that they have been prescribed or dispensed at medical institutions and pharmacies within the past two years.</p>
+                            </dd>
+                          </div>
+                          <div className="class-group">
+                            <dt>3) Data Access Service for Researchers</dt>
+                            <dd>
+                              <p className="txt-type-4">Researchers can get access to four categorized data sets (Production, Manufacturing, Distribution, Usage) for purposes such as research, surveys, and education related to narcotics misuse.</p>
+                            </dd>
+                          </div>
+                        </dl>
+                      </div>
+                    </div>
+                    <h3 className="section-title">Benefits of NIMS</h3>
+                    <div className="section-desc">
+                      <p className="txt-type-4 mb20">
+                        NIMS contributes to improving appropriate prescribing practices for medical
+                        narcotics in Korea. KIDS operates the system by analyzing large-scale prescribing
+                        data from healthcare professionals to identify prescribing volumes or patterns that
+                        exceed approved indications, and by issuing Safety-Use Advisory Letters aimed at preventing over-prescribing.
+                      </p>
+                      <p className="tac txt-3">&lt;Online Safety-Use Advisory Letters and Statistics/Analysis information&gt;</p>
+                      <div className="img-switcher">
+                        <img src="/img/cms/en/introNIMS_img04.png" alt="" className="responsive-img"/>
+                      </div>
                     </div>
                   </section>
 

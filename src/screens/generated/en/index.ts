@@ -8,4 +8,5 @@ export const screenComponentLoaders = {
   'KIDS-PP-US-EN-19': () => import('../../published/en/KIDS-PP-US-EN-19'),
   'KIDS-PP-US-EN-20': () => import('../../published/en/KIDS-PP-US-EN-20'),
   'KIDS-PP-US-EN-21': () => import('../../published/en/KIDS-PP-US-EN-21'),
+  'KIDS-PP-US-EN-22': () => import('../../published/en/KIDS-PP-US-EN-22'),
 }

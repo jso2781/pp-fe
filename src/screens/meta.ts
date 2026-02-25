@@ -539,4 +539,5 @@ export const screensEn: ScreenMeta[] = [
   { id: 'KIDS-PP-US-EN-19', title: 'Statistics on ADR Relief System', uiType: 'page' },
   { id: 'KIDS-PP-US-EN-20', title: 'Introduction of NNHR', uiType: 'page' },
   { id: 'KIDS-PP-US-EN-21', title: 'Introduction of NIMS', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-22', title: 'Resources', uiType: 'page' },
 ];

@@ -4570,6 +4570,80 @@
 .lang-en .pageCont-introNNHR .report-system-content .practitioner-info .info-list li:last-child {
   margin-bottom: 0;
 }
+.lang-en .pageCont-resources {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 20px;
+}
+.lang-en .pageCont-resources .resource-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #ddd;
+}
+.lang-en .pageCont-resources .resource-item:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.lang-en .pageCont-resources .resource-item .thumbnail {
+  flex-shrink: 0;
+  width: 180px;
+}
+.lang-en .pageCont-resources .resource-item .thumbnail img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.lang-en .pageCont-resources .resource-item .info-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.lang-en .pageCont-resources .resource-item .info-body dl {
+  margin-bottom: 20px;
+}
+.lang-en .pageCont-resources .resource-item .info-body dl dt {
+  font-size: var(--fs-24);
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+.lang-en .pageCont-resources .resource-item .info-body dl dd {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-left: 0;
+}
+@media (max-width: 991px) {
+  .lang-en .pageCont-resources .resource-item {
+    gap: 20px;
+  }
+  .lang-en .pageCont-resources .resource-item .thumbnail {
+    width: 140px;
+  }
+}
+@media (max-width: 640px) {
+  .lang-en .pageCont-resources .resource-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+  .lang-en .pageCont-resources .resource-item .thumbnail {
+    width: 160px;
+  }
+  .lang-en .pageCont-resources .resource-item .info-body {
+    align-items: center;
+  }
+  .lang-en .pageCont-resources .resource-item .info-body dl dt {
+    font-size: 18px;
+  }
+  .lang-en .pageCont-resources .resource-item .info-body dl dd {
+    font-size: 14px;
+  }
+}
 .lang-en {
   /* 직접 작성하는 스타일 (상단에서 선언한 mixin_tools 사용) */
   /* .app-main {
