@@ -682,7 +682,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         anchor="right"
         open={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
-        PaperProps={{ className: 'lang-ko' }}
+        PaperProps={{ className: 'lang-en' }}
         sx={{
           '& .MuiDrawer-paper': {
             width: '100%',
@@ -795,7 +795,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         open={sitemapOpen}
         onClose={() => setSitemapOpen(false)}
         PaperProps={{
-          className: 'lang-ko',
+          className: 'lang-en',
           sx: {
             height: '82vh',
             maxHeight: '82vh',

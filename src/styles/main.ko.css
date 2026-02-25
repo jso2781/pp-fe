@@ -7350,6 +7350,9 @@
   flex: 0 0 55%;
   min-width: 0;
 }
+.lang-ko .drug-dur-process .search-section .search-input-group button, .lang-ko .dur-result-section .search-section .search-input-group button {
+  min-width: 86px;
+}
 .lang-ko .drug-dur-process .search-section .search-result-content, .lang-ko .dur-result-section .search-section .search-result-content {
   padding: 15px;
 }
@@ -8204,6 +8207,23 @@
   width: 6px;
   height: 1px;
   background: var(--color-text-1);
+}
+.lang-ko .txt-type-5 {
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 15px;
+  font-size: var(--fs-18);
+  line-height: 1.4;
+}
+.lang-ko .txt-type-5::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 12px;
+  width: 4px;
+  height: 4px;
+  background-color: var(--color-text-1);
+  border-radius: 50%;
 }
 .lang-ko .txt-icon-1 {
   position: relative;
