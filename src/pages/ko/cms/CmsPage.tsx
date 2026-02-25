@@ -106,54 +106,62 @@ export default function CmsPage() {
     };
   }, []);
 
+  // none,blcok 탭
   useEffect(() => {
-    // 탭 로직을 함수로 분리
-    const initTabFeature = () => {
-      const tabs = document.querySelectorAll('.category-link-tabs .tab-link');
-      const charterSec = document.querySelector('.pageCont-AboutCharter') as HTMLElement;
-      const standardSecs = document.querySelectorAll('.pageCont-ServiceStandard');
-      
-      const sections = [charterSec, standardSecs[0] as HTMLElement, standardSecs[1] as HTMLElement];
+    const injectTabEvents = () => {
+      // 1. 컨텐츠 영역 안에서 탭과 섹션을 찾습니다.
+      const contentArea = document.getElementById('content');
+      if (!contentArea) return;
 
-      // 요소가 하나라도 없으면 중단 (HTML이 아직 안 그려졌을 때 대비)
-      if (tabs.length === 0 || !charterSec) return;
+      const tabs = contentArea.querySelectorAll('.category-link-tabs .tab-link');
+      const sections = contentArea.querySelectorAll('section');
 
-      // 첫 번째 섹션만 표시
+      if (tabs.length === 0 || sections.length === 0) return;
+
+      // 2. 초기 상태 설정 (첫 번째 섹션만 보이게)
       sections.forEach((sec, idx) => {
-        if (sec) sec.style.display = idx === 0 ? 'block' : 'none';
+        if (sec instanceof HTMLElement) {
+          sec.style.display = idx === 0 ? 'block' : 'none';
+        }
       });
 
-      const handleTabClick = (e: Event, index: number) => {
-        e.preventDefault();
-        tabs.forEach(t => t.classList.remove('active'));
-        (e.currentTarget as HTMLElement).classList.add('active');
-        sections.forEach((sec, idx) => {
-          if (sec) sec.style.display = idx === index ? 'block' : 'none';
-        });
-      };
-
-      // 중복 등록 방지를 위해 기존 리스너 제거 후 등록 (익명함수 이슈 해결용)
+      // 3. 각 탭에 클릭 이벤트 부여
       tabs.forEach((tab, index) => {
-        tab.onclick = (e) => handleTabClick(e, index);
+        const tabBtn = tab as HTMLElement;
+        
+        // 중복 방지를 위해 기존 onclick 제거 후 새로 할당
+        tabBtn.onclick = (e) => {
+          e.preventDefault();
+
+          // 모든 탭 active 제거 및 현재 탭 추가
+          tabs.forEach(t => t.classList.remove('active'));
+          tabBtn.classList.add('active');
+
+          // 모든 섹션 숨기고 해당 인덱스 섹션만 표시
+          sections.forEach((sec, idx) => {
+            if (sec instanceof HTMLElement) {
+              sec.style.display = idx === index ? 'block' : 'none';
+            }
+          });
+        };
       });
     };
 
-    // 1. 즉시 한 번 실행
-    initTabFeature();
+    // [실행 1] 페이지 로드 시 즉시 실행
+    injectTabEvents();
 
-    // 2. CMS 데이터 로드 등으로 DOM이 변하는 것을 감지 (MutationObserver)
+    // [실행 2] MutationObserver: #content 내부 HTML이 바뀌는 순간(CMS 로드) 감지
     const observer = new MutationObserver(() => {
-      initTabFeature();
+      injectTabEvents();
     });
 
-    // #content 영역을 관찰하여 내부 HTML이 바뀌면 탭 기능을 다시 활성화
-    const contentNode = document.getElementById('content');
-    if (contentNode) {
-      observer.observe(contentNode, { childList: true, subtree: true });
+    const targetNode = document.getElementById('content');
+    if (targetNode) {
+      observer.observe(targetNode, { childList: true, subtree: true });
     }
 
     return () => observer.disconnect();
-  }, []); // 의존성 배열이 빈 배열이어도 Observer가 변화를 감지합니다.
+  }, []);
 
   return (
     <Box className="page-layout">
