@@ -67,7 +67,7 @@ export default function Home() {
     if (item.thmbFileNm) {
       // 백슬래시를 슬래시로 변환하고, 경로 끝의 슬래시 정리
       const normalizedFileName = item.thmbFileNm.replace(/^\/+/, '');
-      return `/api/atch/thumb/${normalizedFileName}`;
+      return `${import.meta.env.VITE_THUMBNAIL_API_BASE_URL || 'api/pp'}/atch/thumb/${normalizedFileName}`;
     }
     return '/img/img_test.png';
   };
