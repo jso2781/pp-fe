@@ -252,6 +252,161 @@
     border-radius: 50%;
   }
 }
+
+.txt-icon-1 {
+  position: relative;
+  font-size: var(--fs-18);
+  padding-left: 28px; 
+  line-height: 1.4;
+  display: block;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0px;
+    width: 25px; 
+    height: 25px;
+    background: url('/img/ico_exclamation_circle02.svg') no-repeat left top ;
+  }
+}
+
+.num-list {
+  li {
+    display: flex;
+    align-items: flex-start;
+    font-size: var(--fs-18);
+    line-height: 1.6;
+    
+    &:last-child { margin-bottom: 0; }
+
+    .num {
+      flex-shrink: 0;
+      margin-right:5px;
+      
+    }
+
+    .txt {
+      margin: 0;
+      word-break: keep-all;
+    }
+  }
+}
+
+.list-definition {
+  dt {
+    position: relative;
+    margin-bottom: 2px;
+    padding-left: 20px;
+    font-size: var(--fs-18);
+    font-weight: 700;
+    line-height: 1.4;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 10px; 
+      width: 5px;
+      height: 5px;
+      background-color: var(--color-text-1);
+      border-radius: 50%;
+    }
+  }
+  
+  dd + dt {
+    margin-top: 5px; 
+  }
+
+  dd {
+    margin-left: 0; 
+    padding: 0 0 0 20px;
+    font-size: var(--fs-18);
+    color: var(--color-text-3);
+    line-height: 1.6;
+  }
+
+  & + & {
+    margin-top: 5px;
+  }
+}
+.list-definition-plain,
+.list-definition-num,
+.list-definition-paren {
+  counter-reset: dt-counter; 
+
+  dt {
+    position: relative;
+    margin-bottom: 2px;
+    padding-left: 20px; 
+    font-size: var(--fs-18);
+    font-weight: 700;
+    line-height: 1.4;
+
+    &::before {
+      counter-increment: dt-counter;
+      position: absolute;
+      left: 0;
+      top: 0; 
+      font-size: var(--fs-18);
+      font-weight: 700;
+      color: var(--color-text-3);
+    }
+
+    & {
+      margin-top: 0;
+    }
+  }
+
+  dd + dt {
+    margin-top: 20px;
+  }
+
+  dd {
+    margin-left: 0; 
+    padding: 0 0 0 15px;
+    font-size: var(--fs-18);
+    color: var(--color-text-3);
+    line-height: 1.6;
+
+    .list-bullet-2 {
+      li {
+        color: var(--color-text-3);
+        &::before {
+          background-color: var(--color-text-3);
+        }
+      }
+    }
+  }
+}
+
+/* 개별 숫자 스타일 정의 */
+.list-definition-num dt::before {
+  content: counter(dt-counter) "."; // 1. 형태
+}
+
+.list-definition-paren dt::before {
+  content: counter(dt-counter) ")"; // 1) 형태
+}
+
+/* 숫자가 자동으로 붙지 않는 버전 */
+.list-definition-plain {
+  dt {
+    padding-left: 0;
+
+    &::before {
+      display: none;
+    }
+  }
+  
+}
+
+.list-definition-plain + .list-definition-plain,
+.list-definition-num + .list-definition-num,
+.list-definition-paren + .list-definition-paren {
+  margin-top: 20px;
+}
+
 .section-desc {margin: 0 0 24px 0;font-size: var(--fs-18);}
 
 .pageCont-introAdrRelf{
@@ -265,45 +420,6 @@
 }
 
 .pageCont-introNNHR{
-  .drug-classification {
-    .class-list {
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
-
-      .class-group {
-        dt.class-title {
-          color: var(--color-text-2);
-          font-size: var(--fs-20);
-          font-weight: 700;
-          line-height: 1.4;
-          margin-bottom: 12px;
-        }
-
-        dd.class-content {
-          margin-left: 0;
-
-          .class-desc {
-            margin-bottom: 10px;
-            line-height: 1.6;
-          }
-
-          .sub-list {
-            padding:0 10px;
-            li {
-              margin-bottom: 6px;
-              line-height: 1.5;
-              
-              &:last-child {
-                margin-bottom: 0;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
   .report-system-content {
     padding: 40px 20px;
     border-radius: 8px;

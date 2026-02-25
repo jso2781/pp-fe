@@ -3106,6 +3106,9 @@
 }
 .lang-en .lnb-wrap {
   flex: 0 0 246px;
+  width: 246px;
+  max-width: 246px;
+  min-width: 246px;
   transition: flex 0.2s ease;
 }
 @media (max-width: 1200px) {
@@ -3122,28 +3125,18 @@
   border-radius: 10px;
 }
 .lang-en .lnb-menu .lnb-tit {
-  /* display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 105px;
-  background: #087C80 url(/img/bg_lnb_title.png) no-repeat center center;
-  border-radius: 10px 10px 0 0;
-  color: #fff;
-  font-size: 24px;
-  font-weight: 700;
-  overflow: hidden; */
   display: flex;
   align-items: center;
   justify-content: center;
   height: 105px;
   width: 100%;
-  max-width: 249px;
-  padding: 0 20px !important;
+  max-width: 246px;
+  padding: 0 10px !important;
   box-sizing: border-box;
   background: #087C80 url(/img/bg_lnb_title.png) no-repeat center center;
   border-radius: 10px 10px 0 0;
   color: #fff;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   text-align: center;
   overflow: hidden;
@@ -3164,7 +3157,7 @@
 .lang-en .lnb-menu .lnb-list {
   flex: 1;
   margin-top: -10px;
-  padding: 15px;
+  padding: 10px;
   background: #FFF;
   border: 1px solid var(--border-1);
   border-radius: 10px;
@@ -4473,6 +4466,148 @@
   background-color: var(--color-text-1);
   border-radius: 50%;
 }
+.lang-en .txt-icon-1 {
+  position: relative;
+  font-size: var(--fs-18);
+  padding-left: 28px;
+  line-height: 1.4;
+  display: block;
+}
+.lang-en .txt-icon-1::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0px;
+  width: 25px;
+  height: 25px;
+  background: url("/img/ico_exclamation_circle02.svg") no-repeat left top;
+}
+.lang-en .num-list li {
+  display: flex;
+  align-items: flex-start;
+  font-size: var(--fs-18);
+  line-height: 1.6;
+}
+.lang-en .num-list li:last-child {
+  margin-bottom: 0;
+}
+.lang-en .num-list li .num {
+  flex-shrink: 0;
+  margin-right: 5px;
+}
+.lang-en .num-list li .txt {
+  margin: 0;
+  word-break: keep-all;
+}
+.lang-en .list-definition dt {
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 20px;
+  font-size: var(--fs-18);
+  font-weight: 700;
+  line-height: 1.4;
+}
+.lang-en .list-definition dt::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  width: 5px;
+  height: 5px;
+  background-color: var(--color-text-1);
+  border-radius: 50%;
+}
+.lang-en .list-definition dd + dt {
+  margin-top: 5px;
+}
+.lang-en .list-definition dd {
+  margin-left: 0;
+  padding: 0 0 0 20px;
+  font-size: var(--fs-18);
+  color: var(--color-text-3);
+  line-height: 1.6;
+}
+.lang-en .list-definition + .list-definition {
+  margin-top: 5px;
+}
+.lang-en .list-definition-plain,
+.lang-en .list-definition-num,
+.lang-en .list-definition-paren {
+  counter-reset: dt-counter;
+}
+.lang-en .list-definition-plain dt,
+.lang-en .list-definition-num dt,
+.lang-en .list-definition-paren dt {
+  position: relative;
+  margin-bottom: 2px;
+  padding-left: 20px;
+  font-size: var(--fs-18);
+  font-weight: 700;
+  line-height: 1.4;
+}
+.lang-en .list-definition-plain dt::before,
+.lang-en .list-definition-num dt::before,
+.lang-en .list-definition-paren dt::before {
+  counter-increment: dt-counter;
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: var(--fs-18);
+  font-weight: 700;
+  color: var(--color-text-3);
+}
+.lang-en .list-definition-plain dt,
+.lang-en .list-definition-num dt,
+.lang-en .list-definition-paren dt {
+  margin-top: 0;
+}
+.lang-en .list-definition-plain dd + dt,
+.lang-en .list-definition-num dd + dt,
+.lang-en .list-definition-paren dd + dt {
+  margin-top: 20px;
+}
+.lang-en .list-definition-plain dd,
+.lang-en .list-definition-num dd,
+.lang-en .list-definition-paren dd {
+  margin-left: 0;
+  padding: 0 0 0 15px;
+  font-size: var(--fs-18);
+  color: var(--color-text-3);
+  line-height: 1.6;
+}
+.lang-en .list-definition-plain dd .list-bullet-2 li,
+.lang-en .list-definition-num dd .list-bullet-2 li,
+.lang-en .list-definition-paren dd .list-bullet-2 li {
+  color: var(--color-text-3);
+}
+.lang-en .list-definition-plain dd .list-bullet-2 li::before,
+.lang-en .list-definition-num dd .list-bullet-2 li::before,
+.lang-en .list-definition-paren dd .list-bullet-2 li::before {
+  background-color: var(--color-text-3);
+}
+.lang-en {
+  /* 개별 숫자 스타일 정의 */
+}
+.lang-en .list-definition-num dt::before {
+  content: counter(dt-counter) ".";
+}
+.lang-en .list-definition-paren dt::before {
+  content: counter(dt-counter) ")";
+}
+.lang-en {
+  /* 숫자가 자동으로 붙지 않는 버전 */
+}
+.lang-en .list-definition-plain dt {
+  padding-left: 0;
+}
+.lang-en .list-definition-plain dt::before {
+  display: none;
+}
+.lang-en .list-definition-plain + .list-definition-plain,
+.lang-en .list-definition-num + .list-definition-num,
+.lang-en .list-definition-paren + .list-definition-paren {
+  margin-top: 20px;
+}
 .lang-en .section-desc {
   margin: 0 0 24px 0;
   font-size: var(--fs-18);
@@ -4500,35 +4635,6 @@
 }
 .lang-en .pageCont-introAdrRelf .list-bullet-2 li {
   margin-bottom: 25px;
-}
-.lang-en .pageCont-introNNHR .drug-classification .class-list {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dt.class-title {
-  color: var(--color-text-2);
-  font-size: var(--fs-20);
-  font-weight: 700;
-  line-height: 1.4;
-  margin-bottom: 12px;
-}
-.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dd.class-content {
-  margin-left: 0;
-}
-.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dd.class-content .class-desc {
-  margin-bottom: 10px;
-  line-height: 1.6;
-}
-.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dd.class-content .sub-list {
-  padding: 0 10px;
-}
-.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dd.class-content .sub-list li {
-  margin-bottom: 6px;
-  line-height: 1.5;
-}
-.lang-en .pageCont-introNNHR .drug-classification .class-list .class-group dd.class-content .sub-list li:last-child {
-  margin-bottom: 0;
 }
 .lang-en .pageCont-introNNHR .report-system-content {
   padding: 40px 20px;

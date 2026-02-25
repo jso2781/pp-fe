@@ -32,6 +32,9 @@
 // 2. LNB (Left Navigation Bar) 영역
 .lnb-wrap {
   flex: 0 0 246px;
+  width: 246px;  
+  max-width: 246px;
+  min-width: 246px;
   transition: flex 0.2s ease;
 
   @media (max-width: 1200px) {
@@ -51,28 +54,18 @@
 
   // LNB 타이틀 영역
   .lnb-tit {
-    /* display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 105px;
-    background: #087C80 url(/img/bg_lnb_title.png) no-repeat center center;
-    border-radius: 10px 10px 0 0;
-    color: #fff;
-    font-size: 24px;
-    font-weight: 700;
-    overflow: hidden; */
     display: flex;
     align-items: center;
     justify-content: center;
     height: 105px;     
     width: 100%;  
-    max-width: 249px; 
-    padding: 0 20px !important; 
+    max-width: 246px; 
+    padding: 0 10px !important; 
     box-sizing: border-box; 
     background: #087C80 url(/img/bg_lnb_title.png) no-repeat center center;
     border-radius: 10px 10px 0 0;
     color: #fff;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     text-align: center;
     overflow: hidden;
@@ -96,7 +89,7 @@
   .lnb-list {
     flex: 1;
     margin-top: -10px;
-    padding: 15px;
+    padding: 10px;
     background: #FFF;
     border: 1px solid var(--border-1);
     border-radius: 10px;

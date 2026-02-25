@@ -46,49 +46,43 @@ export default function KIDS_PP_US_EN_20() {
                   <section className="pageCont-introNNHR">
                     <h3 className="section-title">Narcotics Control Act In Korea</h3>
                     <div className="section-desc">
-                      <div className="drug-classification">
-                        <dl className="class-list">
-                          <div className="class-group">
-                            <dt className="class-title">1) Narcotic drugs</dt>
-                            <dd className="class-content">
-                              <ul className="sub-list"> 
-                                <li>(a) Poppy, Opium, Coca leaves</li>
-                                <li>(b) All alkaloids extracted from poppy, opium, coca leaves and chemical compounds similar thereto, as determined by Presidential Decree</li>
-                                <li>(c) Other chemical compounds equally likely to be abused or caused harmful effects</li>
-                                <li>(d) A mixture or concoction that contains substances listed above</li>
-                              </ul>
-                            </dd>
-                          </div>
-
-                          <div className="class-group">
-                            <dt className="class-title">2) Psychotropic drugs</dt>
-                            <dd className="class-content">
-                              <p className="class-desc">A drug or a substance that falls under any of the following items</p>
-                              <ul className="sub-list">
-                                <li>(a) High potential for misuse or abuse and currently has no accepted medical use in treatment</li>
-                                <li>(b) High potential for misuse or abuse and has a very limited medical use in treatment</li>
-                                <li>(c) Relatively lower potential for misuse or abuse than those listed in items (a) and (b) and currently has an accepted medical use in medical treatment</li>
-                                <li>(d) Relatively lower potential for misuse or abuse than the drug or substance listed in item (c) and currently has an accepted medical use in treatment</li>
-                                <li>(e) A mixture or concoction that contains drugs or substances listed in items (a) through (d)</li>
-                              </ul>
-                            </dd>
-                          </div>
-
-                          <div className="class-group">
-                            <dt className="class-title">3) Marijuana</dt>
-                            <dd className="class-content">
-                              <p className="class-desc">Any of the following substances excluding the seeds and roots of the hemp plant, the mature stalks of such plant, and the products manufactured using them</p>
-                              <ul className="sub-list">
-                                <li>(a) The hemp plant or its resin</li>
-                                <li>(b) All the products manufactured using the hemp plant or its resin</li>
-                                <li>(c) Chemical compounds or mixture, similar to those specified in item (a) or item (b)</li>
-                                <li>(d) A mixture or concoction that contains substances specified in items (a) through (c)</li>
-                              </ul>
-                              <p className="notice-txt">* Only some of cannabinol derivatives were approved as orphan drugs in Korea</p>
-                            </dd>
-                          </div>
-                        </dl>
-                      </div>
+                      <dl className="list-definition-plain">
+                        <dt className="txt-2">1) Narcotic drugs</dt>
+                        <dd>
+                          <ul>
+                            <li>(a) Poppy, Opium, Coca leaves</li>
+                            <li>(b) All alkaloids extracted from poppy, opium, coca leaves and chemical compounds similar thereto, as determined by Presidential Decree</li>
+                            <li>(c) Other chemical compounds equally likely to be abused or caused harmful effects</li>
+                            <li>(d) A mixture or concoction that contains substances listed above</li>
+                          </ul>
+                        </dd>
+                      </dl>
+                      <dl className="list-definition-plain">
+                        <dt className="txt-2">2) Psychotropic drugs</dt>
+                        <dd>
+                          <p className="class-desc">A drug or a substance that falls under any of the following items</p>
+                          <ul>
+                            <li>(a) High potential for misuse or abuse and currently has no accepted medical use in treatment</li>
+                            <li>(b) High potential for misuse or abuse and has a very limited medical use in treatment</li>
+                            <li>(c) Relatively lower potential for misuse or abuse than those listed in items (a) and (b) and currently has an accepted medical use in medical treatment</li>
+                            <li>(d) Relatively lower potential for misuse or abuse than the drug or substance listed in item (c) and currently has an accepted medical use in treatment</li>
+                            <li>(e) A mixture or concoction that contains drugs or substances listed in items (a) through (d)</li>
+                          </ul>
+                        </dd>
+                      </dl>
+                      <dl className="list-definition-plain">
+                        <dt className="txt-2">3) Marijuana</dt>
+                        <dd>
+                          <p className="class-desc">Any of the following substances excluding the seeds and roots of the hemp plant, the mature stalks of such plant, and the products manufactured using them</p>
+                          <ul>
+                            <li>(a) The hemp plant or its resin</li>
+                            <li>(b) All the products manufactured using the hemp plant or its resin</li>
+                            <li>(c) Chemical compounds or mixture, similar to those specified in item (a) or item (b)</li>
+                            <li>(d) A mixture or concoction that contains substances specified in items (a) through (c)</li>
+                          </ul>
+                          <p className="notice-txt">* Only some of cannabinol derivatives were approved as orphan drugs in Korea</p>
+                        </dd>
+                      </dl>
                     </div>
                     <h3 className="section-title">Narcotics Handling Report System</h3>
                     <div className="section-desc">
