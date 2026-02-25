@@ -2185,7 +2185,7 @@
   height: 20px;
   vertical-align: middle;
   text-indent: -99999px;
-  background: url(/img/ico_link.svg) no-repeat center;
+  background: url(/img/cms/ico_link.svg) no-repeat center;
 }
 .lang-en .ico-link-blank {
   overflow: hidden;
@@ -2195,7 +2195,7 @@
   height: 20px;
   vertical-align: middle;
   text-indent: -99999px;
-  background: url(/img/ico_link_blank.svg) no-repeat center;
+  background: url(/img/cms/ico_link_blank.svg) no-repeat center;
 }
 .lang-en .ico-down {
   overflow: hidden;
@@ -2205,7 +2205,7 @@
   height: 20px;
   vertical-align: middle;
   text-indent: -99999px;
-  background: url(/img/ico_down.svg) no-repeat center;
+  background: url(/img/cms/ico_down.svg) no-repeat center;
 }
 .lang-en .ico-down-v2 {
   overflow: hidden;
@@ -2215,7 +2215,7 @@
   height: 20px;
   vertical-align: middle;
   text-indent: -99999px;
-  background: url(/img/ico_down02.svg) no-repeat center;
+  background: url(/img/cms/ico_down02.svg) no-repeat center;
 }
 .lang-en .ico-tel {
   overflow: hidden;
@@ -2225,7 +2225,7 @@
   height: 20px;
   vertical-align: middle;
   text-indent: -99999px;
-  background: url(/img/ico_tel.svg) no-repeat center;
+  background: url(/img/cms/ico_tel.svg) no-repeat center;
 }
 .lang-en .ico-arr-right {
   overflow: hidden;
@@ -2235,7 +2235,7 @@
   height: 20px;
   vertical-align: middle;
   text-indent: -99999px;
-  background: url(/img/ico_arr_right.svg) no-repeat center;
+  background: url(/img/cms/ico_arr_right.svg) no-repeat center;
 }
 .lang-en {
   /* ==========================================================================
