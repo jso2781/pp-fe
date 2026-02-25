@@ -65,7 +65,7 @@ export default function CmsPage() {
     if (contsSn) dispatch(getCms({contsSn}))
   }, [dispatch, contsSn])
 
-  // 앵커탭
+  // 앵커 탭
   useEffect(() => {
     const handleAnchorScroll = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -105,6 +105,55 @@ export default function CmsPage() {
       document.removeEventListener('click', handleAnchorScroll);
     };
   }, []);
+
+  useEffect(() => {
+    // 탭 로직을 함수로 분리
+    const initTabFeature = () => {
+      const tabs = document.querySelectorAll('.category-link-tabs .tab-link');
+      const charterSec = document.querySelector('.pageCont-AboutCharter') as HTMLElement;
+      const standardSecs = document.querySelectorAll('.pageCont-ServiceStandard');
+      
+      const sections = [charterSec, standardSecs[0] as HTMLElement, standardSecs[1] as HTMLElement];
+
+      // 요소가 하나라도 없으면 중단 (HTML이 아직 안 그려졌을 때 대비)
+      if (tabs.length === 0 || !charterSec) return;
+
+      // 첫 번째 섹션만 표시
+      sections.forEach((sec, idx) => {
+        if (sec) sec.style.display = idx === 0 ? 'block' : 'none';
+      });
+
+      const handleTabClick = (e: Event, index: number) => {
+        e.preventDefault();
+        tabs.forEach(t => t.classList.remove('active'));
+        (e.currentTarget as HTMLElement).classList.add('active');
+        sections.forEach((sec, idx) => {
+          if (sec) sec.style.display = idx === index ? 'block' : 'none';
+        });
+      };
+
+      // 중복 등록 방지를 위해 기존 리스너 제거 후 등록 (익명함수 이슈 해결용)
+      tabs.forEach((tab, index) => {
+        tab.onclick = (e) => handleTabClick(e, index);
+      });
+    };
+
+    // 1. 즉시 한 번 실행
+    initTabFeature();
+
+    // 2. CMS 데이터 로드 등으로 DOM이 변하는 것을 감지 (MutationObserver)
+    const observer = new MutationObserver(() => {
+      initTabFeature();
+    });
+
+    // #content 영역을 관찰하여 내부 HTML이 바뀌면 탭 기능을 다시 활성화
+    const contentNode = document.getElementById('content');
+    if (contentNode) {
+      observer.observe(contentNode, { childList: true, subtree: true });
+    }
+
+    return () => observer.disconnect();
+  }, []); // 의존성 배열이 빈 배열이어도 Observer가 변화를 감지합니다.
 
   return (
     <Box className="page-layout">
