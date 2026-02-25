@@ -29,6 +29,10 @@ const apiBaseURL = import.meta.env.MODE === 'production'
 const authApiBaseURL = import.meta.env.VITE_AUTH_API_BASE_URL ?? 'http://localhost:8088/api/ca'
 const AUTH_PATHS = ['/auth/login', '/auth/refresh', '/auth/logout', '/auth/extend']
 
+/** 자문위원 API 전용 서버(자격여부확인(exprtAplyChk), 신청하기(updateExprtAprvStts)) */
+const adviceApiBaseURL = import.meta.env.VITE_ADVICE_API_BASE_URL ?? 'http://localhost:8088/api/uex'
+const ADVICE_PATHS = ['/exprtAplyChk', '/updateExprtAprvStts']
+
 const https: AxiosInstance = axios.create({
   baseURL: apiBaseURL,
   timeout: 30000,
@@ -38,11 +42,14 @@ const https: AxiosInstance = axios.create({
   withCredentials: true
 })
 
-// ✅ 모든 요청에 locale 헤더 자동 주입 + 인증 API는 authApiBaseURL로 전송
+// ✅ 모든 요청에 locale 헤더 자동 주입 + 인증 API는 authApiBaseURL로 전송 + 자문위원 API는 adviceApiBaseURL로 전송
 https.interceptors.request.use((config) => {
   const url = config.url ?? ''
   if (AUTH_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
     config.baseURL = authApiBaseURL
+  }
+  else if(ADVICE_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
+    config.baseURL = adviceApiBaseURL
   }
 
   const lang = (i18n.language || 'ko').startsWith('en') ? 'en' : 'ko'
