@@ -29,8 +29,9 @@ import { gnbListToSitemapSections, SITEMAP_SECTIONS, type SitemapLinkItem, type 
 
 /**
  * 사이트맵 아이템 컴포넌트
+ * @param onInternalNavigate - 내부 라우팅 링크 클릭 시 호출 (예: 사이트맵 Drawer 닫기)
  */
-function SitemapItem({ item }: { item: SitemapLinkItem }) {
+function SitemapItem({ item, onInternalNavigate }: { item: SitemapLinkItem; onInternalNavigate?: () => void }) {
   const location = useLocation()
   const curLang = useMemo(() => getLangFromPathname(location.pathname), [location.pathname])
   const to = useMemo(() => (p: string) => langPath(p, curLang), [curLang])
@@ -39,14 +40,18 @@ function SitemapItem({ item }: { item: SitemapLinkItem }) {
   const internal = item.internal || (typeof item.href === 'string' && item.href.startsWith('/'))
 
   const isInternal = item.internal || (typeof item.href === 'string' && item.href.startsWith('/'));
-  const isExternal = (item as any).isExternal === true; 
+  const isExternal = (item as any).isExternal === true;
+
+  const handleInternalClick = () => {
+    onInternalNavigate?.()
+  }
 
   return (
     <Box sx={{ marginBottom: 1 }}>
       <Box sx={{ fontWeight: 500 }}>
         {item.href && item.href !== '#' ? (
           isInternal && !isExternal ? (
-            <MuiLink component={NavLink} to={to(item.href)} sx={{ color: 'inherit', textDecoration: 'none' }}>
+            <MuiLink component={NavLink} to={to(item.href)} sx={{ color: 'inherit', textDecoration: 'none' }} onClick={handleInternalClick}>
               {item.label}
             </MuiLink>
           ) : (
@@ -70,7 +75,7 @@ function SitemapItem({ item }: { item: SitemapLinkItem }) {
           <Stack direction="column" spacing={0.5}>
             {item.children?.map((child) => (
               <Box key={child.key} sx={{ lineHeight: 1.4 }}>
-                <SitemapItem item={child} />
+                <SitemapItem item={child} onInternalNavigate={onInternalNavigate} />
               </Box>
             ))}
           </Stack>
@@ -329,108 +334,6 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
   /**
    * 목업 데이터 - 주석처리 (Rest API 사용 시)
-   * menuItems1: menuData.json에서 추출한 메뉴 데이터
-   * 화면에 메뉴로 표기할 때 필요한 속성값만 포함 (menuSn, menuNm, menuUrlAddr, upMenuSn, menuSeq, menuTypeCd, depLevel)
-   */
-  const menuItems1: MenuRVO[] = [
-    { menuSn: 1000, menuNm: '주요 업무', upMenuSn: undefined, menuSeq: 1, menuTypeCd: 'MENU', depLevel: 1 },
-    { menuSn: 1001, menuNm: '의약품 이상사례보고', upMenuSn: 1000, menuSeq: 1, menuTypeCd: 'MENU', depLevel: 2 },
-    { menuSn: 1010, menuNm: '이상사례보고', upMenuSn: 1001, menuSeq: 1, menuTypeCd: 'MENU', depLevel: 3 },
-    { menuSn: 1020, menuNm: '이상사례 보고란?', menuUrlAddr: '/safety/report1', upMenuSn: 1010, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1021, menuNm: 'KAERS란?', menuUrlAddr: '/safety/report2', upMenuSn: 1010, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1011, menuNm: '온라인 보고', upMenuSn: 1001, menuSeq: 2, menuTypeCd: 'MENU', depLevel: 3 },
-    { menuSn: 1030, menuNm: '의약품이상사례', menuUrlAddr: 'https://nedrug.mfds.go.kr/CCCBA03F010/getReport', upMenuSn: 1011, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1031, menuNm: '의약외품(생리대 등)', menuUrlAddr: 'https://nedrug.mfds.go.kr/CCCBA03F010/getReportQuasiDrug', upMenuSn: 1011, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1012, menuNm: '오프라인 보고', menuUrlAddr: '/safety/report5', upMenuSn: 1001, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1013, menuNm: '이상사례보고자료실', menuUrlAddr: '/safety/report6', upMenuSn: 1001, menuSeq: 4, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1014, menuNm: '온라인보고방법 안내', menuUrlAddr: '/safety/report7', upMenuSn: 1001, menuSeq: 5, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1002, menuNm: '의약품 부작용 보고 자료', upMenuSn: 1000, menuSeq: 2, menuTypeCd: 'MENU', depLevel: 2 },
-    { menuSn: 1040, menuNm: '의약품 부작용 보고1', upMenuSn: 1002, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1041, menuNm: '의약품 부작용 보고2', upMenuSn: 1002, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1042, menuNm: '의약품 부작용 보고3', upMenuSn: 1002, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1003, menuNm: '의약품 안전관리', upMenuSn: 1000, menuSeq: 3, menuTypeCd: 'MENU', depLevel: 2 },
-    { menuSn: 1050, menuNm: '약물감시용어', upMenuSn: 1003, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1051, menuNm: '부작용 인과관계규명', upMenuSn: 1003, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1052, menuNm: '유관기관', upMenuSn: 1003, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1004, menuNm: '의약품.의료정보.연계분석', upMenuSn: 1000, menuSeq: 4, menuTypeCd: 'MENU', depLevel: 2 },
-    { menuSn: 1060, menuNm: '의약품.의료정보.연계분석1', upMenuSn: 1004, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1061, menuNm: '의약품.의료정보.연계분석2', upMenuSn: 1004, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1062, menuNm: '의약품.의료정보.연계분석3', upMenuSn: 1004, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1005, menuNm: 'DUR 정보', upMenuSn: 1000, menuSeq: 5, menuTypeCd: 'MENU', depLevel: 2 },
-    { menuSn: 1070, menuNm: 'DUR 이해', upMenuSn: 1005, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1071, menuNm: 'DUR 정보검색방', upMenuSn: 1005, menuSeq: 2, menuTypeCd: 'MENU', depLevel: 3 },
-    { menuSn: 1080, menuNm: 'DUR 통합검색', upMenuSn: 1071, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1081, menuNm: '병용금기', upMenuSn: 1071, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1082, menuNm: '특정연령대금기', upMenuSn: 1071, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1083, menuNm: '임부금기', upMenuSn: 1071, menuSeq: 4, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1084, menuNm: '효능군중복주의', upMenuSn: 1071, menuSeq: 5, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1085, menuNm: '용량주의', upMenuSn: 1071, menuSeq: 6, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1086, menuNm: '투여기간주의', upMenuSn: 1071, menuSeq: 7, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1087, menuNm: '노인주의', upMenuSn: 1071, menuSeq: 8, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1088, menuNm: '수유부주의', upMenuSn: 1071, menuSeq: 9, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1072, menuNm: '의약품 적정사용 정보방', upMenuSn: 1005, menuSeq: 3, menuTypeCd: 'MENU', depLevel: 3 },
-    { menuSn: 1090, menuNm: '노인 적정사용정보집', upMenuSn: 1072, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1091, menuNm: '소아 적정사용정보집', upMenuSn: 1072, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1092, menuNm: '임부 적정사용정보집', upMenuSn: 1072, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1093, menuNm: '간질환 적정사용정보집', upMenuSn: 1072, menuSeq: 4, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1094, menuNm: '신질환 적정사용정보집', upMenuSn: 1072, menuSeq: 5, menuTypeCd: 'PAGE', depLevel: 4 },
-    { menuSn: 1073, menuNm: 'DUR 게시판', menuUrlAddr: '/dur/notice', upMenuSn: 1005, menuSeq: 4, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1074, menuNm: 'DUR 제안', menuUrlAddr: '/dur/proposal', upMenuSn: 1005, menuSeq: 5, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1006, menuNm: '부작용 피해구제', upMenuSn: 1000, menuSeq: 6, menuTypeCd: 'MENU', depLevel: 2 },
-    { menuSn: 1110, menuNm: '제도소개', upMenuSn: 1006, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1111, menuNm: '피해구제 신청', upMenuSn: 1006, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1112, menuNm: '뉴스/소식', upMenuSn: 1006, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1113, menuNm: '자주하는 질문', menuUrlAddr: 'https://nedrug.mfds.go.kr', upMenuSn: 1006, menuSeq: 4, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1007, menuNm: '임상시험안전지원', upMenuSn: 1000, menuSeq: 7, menuTypeCd: 'MENU', depLevel: 2 },
-    { menuSn: 1120, menuNm: '임상시험안전지원기관', upMenuSn: 1007, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1121, menuNm: '협약 안내', upMenuSn: 1007, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1122, menuNm: '중앙IRB신청', upMenuSn: 1007, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1123, menuNm: '임상시험헬프데스크', upMenuSn: 1007, menuSeq: 4, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1124, menuNm: '공지사항', upMenuSn: 1007, menuSeq: 5, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1125, menuNm: '자료실', upMenuSn: 1007, menuSeq: 6, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 1100, menuNm: '정보공개', upMenuSn: undefined, menuSeq: 2, menuTypeCd: 'MENU', depLevel: 1 },
-    { menuSn: 2000, menuNm: '정보공개', upMenuSn: 1100, menuSeq: 1, menuTypeCd: 'MENU', depLevel: 2 },
-    { menuSn: 2010, menuNm: '업무처리절차', upMenuSn: 2000, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 2011, menuNm: '정보공개 청구', menuUrlAddr: 'https://open.go.kr', upMenuSn: 2000, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 2012, menuNm: '임직원국외출장', upMenuSn: 2000, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 2013, menuNm: '원장 업무추진비 집행내역', upMenuSn: 2000, menuSeq: 4, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 2001, menuNm: '공공데이터 개방', upMenuSn: 1100, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 2002, menuNm: '경영공시', upMenuSn: 1100, menuSeq: 3, menuTypeCd: 'MENU', depLevel: 2 },
-    { menuSn: 2020, menuNm: '부패행위 징계현황', upMenuSn: 2002, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 2021, menuNm: '징계기준', upMenuSn: 2002, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 2022, menuNm: '징계현황', upMenuSn: 2002, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 2003, menuNm: '사업실명제', upMenuSn: 1100, menuSeq: 4, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 1200, menuNm: '기관소식', upMenuSn: undefined, menuSeq: 3, menuTypeCd: 'MENU', depLevel: 1 },
-    { menuSn: 3000, menuNm: '공지사항', menuUrlAddr: '/notice', upMenuSn: 1200, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 3001, menuNm: '채용게시판', upMenuSn: 1200, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 3002, menuNm: 'FAQ', upMenuSn: 1200, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 3003, menuNm: '국민신문고', upMenuSn: 1200, menuSeq: 4, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 3004, menuNm: '보도자료', upMenuSn: 1200, menuSeq: 5, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 3005, menuNm: '뉴스레터', upMenuSn: 1200, menuSeq: 6, menuTypeCd: 'MENU', depLevel: 2 },
-    { menuSn: 3010, menuNm: '첨단바이오 포커스', menuUrlAddr: 'https://ltfu.mfds.go.kr', upMenuSn: 3005, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 3011, menuNm: '마약류 안전정보지', upMenuSn: 3005, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 3012, menuNm: '리플릿', upMenuSn: 3005, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 3006, menuNm: '카드뉴스', upMenuSn: 1200, menuSeq: 7, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 3007, menuNm: '동영상', upMenuSn: 1200, menuSeq: 8, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 3008, menuNm: '자료실', upMenuSn: 1200, menuSeq: 9, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 1300, menuNm: '기관소개', upMenuSn: undefined, menuSeq: 4, menuTypeCd: 'MENU', depLevel: 1 },
-    { menuSn: 4000, menuNm: '기관장 인사말', upMenuSn: 1300, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 4001, menuNm: '역대 기관장', upMenuSn: 1300, menuSeq: 2, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 4002, menuNm: '연혁', upMenuSn: 1300, menuSeq: 3, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 4003, menuNm: '비전 및 목표', upMenuSn: 1300, menuSeq: 4, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 4004, menuNm: '조직도', upMenuSn: 1300, menuSeq: 5, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 4005, menuNm: '설립근거 및 관련법령', upMenuSn: 1300, menuSeq: 6, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 4006, menuNm: '고객헌장', upMenuSn: 1300, menuSeq: 7, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 4007, menuNm: '우리원동정', upMenuSn: 1300, menuSeq: 8, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 4008, menuNm: 'CI소개', upMenuSn: 1300, menuSeq: 9, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 4009, menuNm: '윤리경영', upMenuSn: 1300, menuSeq: 10, menuTypeCd: 'MENU', depLevel: 2 },
-    { menuSn: 4012, menuNm: '클린신고센터', upMenuSn: 4009, menuSeq: 1, menuTypeCd: 'PAGE', depLevel: 3 },
-    { menuSn: 4010, menuNm: '캐릭터소개', upMenuSn: 1300, menuSeq: 11, menuTypeCd: 'PAGE', depLevel: 2 },
-    { menuSn: 4011, menuNm: '오시는 길', menuUrlAddr: 'https://www.drugsafe.or.kr/iwt/ds/ko/introduction/EgovLocation.do', upMenuSn: 1300, menuSeq: 12, menuTypeCd: 'PAGE', depLevel: 2 },
-  ];
-
-  /**
-   * 목업 데이터 - 주석처리 (Rest API 사용 시)
    * expertMyWorkMenuItem을 MenuRVO 형식으로 변환
    */
   const expertMyWorkMenuItem: MenuRVO = {
@@ -442,18 +345,6 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
     menuTypeCd: 'PAGE',
     depLevel: 1,
   };
-
-  // 목업 데이터 - 주석처리 (Rest API 사용 시)
-  // 권한별 분기 - 목업 데이터로 사용
-  const menuItems2 = [
-    // 필요하면 "전문가" 상위 그룹을 따로 두고 그 안에 넣어도 되고,
-    // 지금은 최상위에 단일 메뉴로 추가하는 예시
-    expertMyWorkMenuItem,
-
-    ...menuItems1
-  ];
-  
-  // const { rootMenus, byParent } = useMemo(() => buildMenuTree(menuItems1), [menuItems1]);
 
   // Rest API 호출 - 언어 변경 시 메뉴 목록 재조회
   useEffect(() => {
@@ -653,14 +544,25 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             </Box>
             <Box className="mo-header-util">
               {i18nInstance.language === 'ko' && (
-                <Button
-                  onClick={() => navigate(to(`/pp/${i18nInstance.language}/auth/LoginMethod`))}
-                  className="btn-util login"
-                >
-                  {t('login')}
-                </Button>
+                <>
+                {!isAuthenticated ? (
+                  <Button
+                    onClick={() => navigate(to(`/pp/${i18nInstance.language}/auth/LoginMethod`))}
+                    className="btn-util login"
+                  >
+                    {t('login')}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => { logoutContext(); navigate(to(`/pp/${i18nInstance.language}`), { replace: true }); }}
+                    className="btn-util logout"
+                  >
+                    {t('logout')}
+                  </Button>
+                )}
+                </>
               )}
-              
+
               <Button
                 aria-label="모바일메뉴 열기"
                 onClick={() => setMobileMenuOpen(true)}
@@ -776,13 +678,13 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           display: { xs: 'block', lg: 'none' } 
         }}
       >
-        {/* 상단 헤더 */}
+        {/* 상단 헤더 - 링크/버튼 클릭 시 Drawer 닫기 */}
         <Box className="mo-drawer-header">
           <Box className="mo-drawer-top">
-            <Button size="small" onClick={onToggleLang} startIcon={<Language />}>
+            <Button size="small" onClick={() => { onToggleLang(); setMobileMenuOpen(false); }} startIcon={<Language />}>
                 {i18nInstance.language === 'ko' ? 'English' : '한국어'}
               </Button>
-            <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/search/IntegratedSearch`))} className="btn-util search">
+            <Button size="small" onClick={() => { navigate(to(`/pp/${i18nInstance.language}/search/IntegratedSearch`)); setMobileMenuOpen(false); }} className="btn-util search">
               {t('integratedSearch')} {/* 통합검색 */}
             </Button>
           </Box>
@@ -790,50 +692,58 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           <Box className="mo-drawer-util">
             {i18nInstance.language === 'ko' && (
               <Box className="user-info-area">
-                {!isAuthenticated ? (
-                  <p className="user-msg">로그인해주세요.</p>
+                {isAuthenticated && user && user.userInfo ? (
+                  <p className="user-name">{user?.userInfo.encptMbrFlnm}님</p>
                 ) : (
-                  <p className="user-name">홍길동님</p>
+                  <p className="user-msg">로그인해주세요.</p>
                 )}
               </Box>
             )}
 
             {i18nInstance.language === 'ko' && (
               <Stack direction="row" spacing={1} alignItems="center" className="util-buttons">
+
+                <>
+                {isAuthenticated && user && user.userInfo?.expertYn === 'Y' ? (
+                  <Button size="small" onClick={() => { navigate(to(`/pp/${i18nInstance.language}/expert/ExpertMyWork`)); setMobileMenuOpen(false); }} className="btn-util my-task">
+                    {t('expertMyWork')} {/* 내업무 */}
+                  </Button>
+                ) : (
+                  <Button size="small" onClick={() => { navigate(to(`/pp/${i18nInstance.language}/expert/ExpertMemberApply`)); setMobileMenuOpen(false); }} className="btn-util user-reg">
+                  {t('usrSwtReg')} {/* 전문가 회원 전환 신청 */}
+                </Button>
+                )}
+
+                {isAuthenticated && user && user.userInfo?.cnstnMbcmtYn === 'Y' ? (
+                  <Button size="small" onClick={() => { window.open('https://www.drugsafe.or.kr/expert/main/main.do', '_blank', 'noopener,noreferrer'); setMobileMenuOpen(false); }} className="btn-util adv-task">
+                    {t('advTask')} {/* 자문위원 업무 */}
+                  </Button>
+                ) : (
+                  <Button size="small" onClick={() => { navigate(to(`/pp/${i18nInstance.language}/expert/ExpertApproval`)); setMobileMenuOpen(false); }} className="btn-util user-adv">
+                    {t('advAppReg')} {/* 자문위원신청 */}
+                  </Button>
+                )}
+
                 {!isAuthenticated ? (
-                  <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/auth/SignUpSel`))} className="btn-util signup">
+                  <Button size="small" onClick={() => { navigate(to(`/pp/${i18nInstance.language}/auth/SignUpSel`)); setMobileMenuOpen(false); }} className="btn-util signup">
                     {t('signUp')} {/* 회원가입 */}
                   </Button>
                 ) : (
-                  <>
-                  {isAuthenticated && user && user.userInfo?.expertYn === 'Y' ? (
-                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/expert/ExpertMyWork`))} className="btn-util my-task">
-                      {t('expertMyWork')} {/* 내업무 */}
-                    </Button>
-                  ) : (
-                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/expert/ExpertMemberApply`))} className="btn-util user-reg">
-                    {t('usrSwtReg')} {/* 전문가 회원 전환 신청 */}
-                  </Button>
-                  )}
-
-                  {isAuthenticated && user && user.userInfo?.cnstnMbcmtYn === 'N' ? (
-                    <Button size="small" onClick={() => window.open('https://www.drugsafe.or.kr/expert/main/main.do', '_blank', 'noopener,noreferrer')} className="btn-util adv-task">
-                      {t('advTask')} {/* 자문위원 업무 */}
-                    </Button>
-                  ) : (
-                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}`))} className="btn-util user-adv">
-                      {t('advAppReg')} {/* 자문위원신청 */}
-                    </Button>
-                  )}
-
-                  <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/auth/PasswordConfirm`))} className="btn-util edit-profile">
+                  <Button size="small" onClick={() => { navigate(to(`/pp/${i18nInstance.language}/auth/PasswordConfirm`)); setMobileMenuOpen(false); }} className="btn-util edit-profile">
                     {t('editProfile')} {/* 회원정보수정 */}
                   </Button>
-                  <Button size="small" onClick={() => { logoutContext(); navigate(to(`/pp/${i18nInstance.language}`), { replace: true }); }} className="btn-util logout">
+                )}
+
+                {!isAuthenticated ? (
+                  <Button size="small" onClick={() => { navigate(to(`/pp/${i18nInstance.language}/auth/LoginMethod`)); setMobileMenuOpen(false); }} className="btn-util logout">
+                    {t('login')} {/* 로그인 */}
+                  </Button>
+                ) : (
+                  <Button size="small" onClick={() => { logoutContext(); navigate(to(`/pp/${i18nInstance.language}`), { replace: true }); setMobileMenuOpen(false); }} className="btn-util logout">
                     {t('logout')} {/* 로그아웃 */}
                   </Button>
-                  </>
                 )}
+                </>
               </Stack>
             )}
           </Box>
@@ -874,6 +784,9 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                 if (hasDepth3) {
                                   e.preventDefault();
                                   handleDepth2Click(idx2);
+                                } else {
+                                  // 2-depth에 화면 링크만 있을 때: 링크 이동 후 모바일 Drawer 닫기
+                                  setMobileMenuOpen(false);
                                 }
                               }}
                             >
@@ -962,16 +875,38 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                 <Box className="grid-wrapper">
                   {section.items.map((item) => (
                     <Box key={item.key} className="item-group">
-                      {/* 2Depth 타이틀 */}
-                      <Typography className="depth2-title">
-                        {item.label}
-                      </Typography>
+                      {/* 2Depth 타이틀: href 있으면 링크로 렌더 */}
+                      {item.href && item.href !== '#' ? (
+                        (item.internal !== false && !item.href.startsWith('http://') && !item.href.startsWith('https://')) ? (
+                          <MuiLink
+                            component={NavLink}
+                            to={to(item.href)}
+                            className="depth2-title"
+                            sx={{ color: 'inherit', textDecoration: 'none' }}
+                            onClick={() => setSitemapOpen(false)}
+                          >
+                            {item.label}
+                          </MuiLink>
+                        ) : (
+                          <MuiLink
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="depth2-title"
+                            sx={{ color: 'inherit' }}
+                          >
+                            {item.label}
+                          </MuiLink>
+                        )
+                      ) : (
+                        <Typography className="depth2-title">{item.label}</Typography>
+                      )}
 
                       {/* 3, 4 Depth 하위 메뉴 리스트 */}
                       <Box className="sitemap-sub-list">
                         {item.children?.map((sub) => (
                           <div key={sub.key} className="sitemap-link-item">
-                            <SitemapItem item={sub} />
+                            <SitemapItem item={sub} onInternalNavigate={() => setSitemapOpen(false)} />
                           </div>
                         ))}
                       </Box>

@@ -29,8 +29,9 @@ import { gnbListToSitemapSections, SITEMAP_SECTIONS, type SitemapLinkItem, type 
 
 /**
  * 사이트맵 아이템 컴포넌트
+ * @param onInternalNavigate - 내부 라우팅 링크 클릭 시 호출 (예: 사이트맵 Drawer 닫기)
  */
-function SitemapItem({ item }: { item: SitemapLinkItem }) {
+function SitemapItem({ item, onInternalNavigate }: { item: SitemapLinkItem; onInternalNavigate?: () => void }) {
   const location = useLocation()
   const curLang = useMemo(() => getLangFromPathname(location.pathname), [location.pathname])
   const to = useMemo(() => (p: string) => langPath(curLang, p), [curLang])
@@ -39,14 +40,18 @@ function SitemapItem({ item }: { item: SitemapLinkItem }) {
   const internal = item.internal || (typeof item.href === 'string' && item.href.startsWith('/'))
 
   const isInternal = item.internal || (typeof item.href === 'string' && item.href.startsWith('/'));
-  const isExternal = (item as any).isExternal === true; 
+  const isExternal = (item as any).isExternal === true;
+
+  const handleInternalClick = () => {
+    onInternalNavigate?.()
+  }
 
   return (
     <Box sx={{ marginBottom: 1 }}>
       <Box sx={{ fontWeight: 500 }}>
         {item.href && item.href !== '#' ? (
           isInternal && !isExternal ? (
-            <MuiLink component={NavLink} to={to(item.href)} sx={{ color: 'inherit', textDecoration: 'none' }}>
+            <MuiLink component={NavLink} to={to(item.href)} sx={{ color: 'inherit', textDecoration: 'none' }} onClick={handleInternalClick}>
               {item.label}
             </MuiLink>
           ) : (
@@ -70,7 +75,7 @@ function SitemapItem({ item }: { item: SitemapLinkItem }) {
           <Stack direction="column" spacing={0.5}>
             {item.children?.map((child) => (
               <Box key={child.key} sx={{ lineHeight: 1.4 }}>
-                <SitemapItem item={child} />
+                <SitemapItem item={child} onInternalNavigate={onInternalNavigate} />
               </Box>
             ))}
           </Stack>
@@ -704,10 +709,10 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           display: { xs: 'block', lg: 'none' } 
         }}
       >
-        {/* 상단 헤더 */}
+        {/* 상단 헤더 - 링크/버튼 클릭 시 Drawer 닫기 */}
         <Box className="mo-drawer-header">
           <Box className="mo-drawer-top">
-            <Button size="small" onClick={onToggleLang} startIcon={<Language />}>
+            <Button size="small" onClick={() => { onToggleLang(); setMobileMenuOpen(false); }} startIcon={<Language />}>
               {i18nInstance.language === 'ko' ? 'English' : '한국어'}
             </Button>
           </Box>
@@ -748,6 +753,9 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                 if (hasDepth3) {
                                   e.preventDefault();
                                   handleDepth2Click(idx2);
+                                } else {
+                                  // 2-depth에 화면 링크만 있을 때: 링크 이동 후 모바일 Drawer 닫기
+                                  setMobileMenuOpen(false);
                                 }
                               }}
                             >
@@ -835,16 +843,38 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                 <Box className="grid-wrapper">
                   {section.items.map((item) => (
                     <Box key={item.key} className="item-group">
-                      {/* 2Depth 타이틀 */}
-                      <Typography className="depth2-title">
-                        {item.label}
-                      </Typography>
+                      {/* 2Depth 타이틀: href 있으면 링크로 렌더 */}
+                      {item.href && item.href !== '#' ? (
+                        (item.internal !== false && !item.href.startsWith('http://') && !item.href.startsWith('https://')) ? (
+                          <MuiLink
+                            component={NavLink}
+                            to={to(item.href)}
+                            className="depth2-title"
+                            sx={{ color: 'inherit', textDecoration: 'none' }}
+                            onClick={() => setSitemapOpen(false)}
+                          >
+                            {item.label}
+                          </MuiLink>
+                        ) : (
+                          <MuiLink
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="depth2-title"
+                            sx={{ color: 'inherit' }}
+                          >
+                            {item.label}
+                          </MuiLink>
+                        )
+                      ) : (
+                        <Typography className="depth2-title">{item.label}</Typography>
+                      )}
 
                       {/* 하위 메뉴 리스트 */}
                       <Box className="sitemap-sub-list">
                         {item.children?.map((sub) => (
                           <div key={sub.key} className="sitemap-link-item">
-                            <SitemapItem item={sub} />
+                            <SitemapItem item={sub} onInternalNavigate={() => setSitemapOpen(false)} />
                           </div>
                         ))}
                       </Box>

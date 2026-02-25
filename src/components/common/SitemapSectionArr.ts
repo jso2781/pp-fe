@@ -30,10 +30,18 @@ export function gnbListToSitemapSections(gnbList: GnbDepth1Item[]): SitemapSecti
     items: (d1.depth2 ?? []).map((d2, i2) => {
       const itemKey = `item-${i1}-${i2}-${(d2.title ?? '').replace(/\s+/g, '-')}`
       const hasChildren = Array.isArray(d2.depth3) && d2.depth3.length > 0
+      // 2-depth에도 화면 링크 적용: d2.url이 있으면 href 부여 (자식 유무와 무관. 기관소식 > 공지사항, 채용게시판 등)
+      const linkProps = d2.url
+        ? {
+            href: d2.url,
+            internal: !d2.url.startsWith('http://') && !d2.url.startsWith('https://'),
+          }
+        : undefined
       if (hasChildren) {
         return {
           key: itemKey,
           label: d2.title,
+          ...linkProps,
           children: d2.depth3!.map((d3) => ({
             key: `sn-${d3.menuSn}`,
             label: d3.name,
@@ -45,10 +53,7 @@ export function gnbListToSitemapSections(gnbList: GnbDepth1Item[]): SitemapSecti
       return {
         key: itemKey,
         label: d2.title,
-        ...(d2.url && {
-          href: d2.url,
-          internal: !d2.url.startsWith('http://') && !d2.url.startsWith('https://'),
-        }),
+        ...linkProps,
       }
     }),
   }))
