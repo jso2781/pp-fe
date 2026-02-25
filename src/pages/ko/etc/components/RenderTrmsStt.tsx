@@ -3,9 +3,11 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useEffect } from "react";
 import type { TrmsSttRVO } from "@/features/stt/TrmsSttTypes";
 import { Box } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
 
 export default function RenderStt({ trmsSttCd, isList }: { trmsSttCd: string, isList: boolean }) {
   const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { current, loading, error, list } = useAppSelector(s => s.stt);
 
   useEffect(() => {
@@ -22,6 +24,18 @@ export default function RenderStt({ trmsSttCd, isList }: { trmsSttCd: string, is
     }
   }, [dispatch, isList]);
 
+  useEffect(() => {
+    if(isList){
+      const trmsSttAplcnYmd = searchParams.get('d') || list[0]?.trmsSttAplcnYmd;
+      dispatch(getTrmsStt({ trmsSttCd, trmsSttAplcnYmd }));
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        // behavior: "smooth",
+      });
+    }
+  }, [searchParams])
+
   
   if(loading) return <>loading...</>;
 
@@ -30,12 +44,9 @@ export default function RenderStt({ trmsSttCd, isList }: { trmsSttCd: string, is
   if(!current?.trmsSttCn) return <>컨텐츠 없음</>
 
   const handleSetCurrentClick = (trmsSttRVO: TrmsSttRVO) => () => {
-    dispatch(getTrmsStt({ trmsSttCd, trmsSttAplcnYmd: trmsSttRVO.trmsSttAplcnYmd }));
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      // behavior: "smooth",
-    });
+    const trmsSttAplcnYmd = trmsSttRVO.trmsSttAplcnYmd || '';
+    // navigate(`?${trmsSttAplcnYmd}`);
+    setSearchParams({ d: trmsSttAplcnYmd });
   }
   
   return (
