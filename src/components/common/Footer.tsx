@@ -100,7 +100,7 @@ export default function Footer() {
         )}
 
         <Box className="quick-item">
-          <button type="button" className="btn-quick faq" onClick={() => navigate('/news/faq')}>
+          <button type="button" className="btn-quick faq" onClick={() => navigate('/pp/ko/news/FaqNotice')}>
             <i className="ico-faq" aria-hidden="true" />
           </button>
           <span className="quick-txt">자주 묻는<br />질문</span>
