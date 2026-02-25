@@ -65,7 +65,7 @@ export default function CmsPage() {
     if (contsSn) dispatch(getCms({contsSn}))
   }, [dispatch, contsSn])
 
-  // 앵커탭
+  // 앵커 탭
   useEffect(() => {
     const handleAnchorScroll = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -104,6 +104,63 @@ export default function CmsPage() {
     return () => {
       document.removeEventListener('click', handleAnchorScroll);
     };
+  }, []);
+
+  // none,blcok 탭
+  useEffect(() => {
+    const injectTabEvents = () => {
+      // 1. 컨텐츠 영역 안에서 탭과 섹션을 찾습니다.
+      const contentArea = document.getElementById('content');
+      if (!contentArea) return;
+
+      const tabs = contentArea.querySelectorAll('.category-link-tabs .tab-link');
+      const sections = contentArea.querySelectorAll('section');
+
+      if (tabs.length === 0 || sections.length === 0) return;
+
+      // 2. 초기 상태 설정 (첫 번째 섹션만 보이게)
+      sections.forEach((sec, idx) => {
+        if (sec instanceof HTMLElement) {
+          sec.style.display = idx === 0 ? 'block' : 'none';
+        }
+      });
+
+      // 3. 각 탭에 클릭 이벤트 부여
+      tabs.forEach((tab, index) => {
+        const tabBtn = tab as HTMLElement;
+        
+        // 중복 방지를 위해 기존 onclick 제거 후 새로 할당
+        tabBtn.onclick = (e) => {
+          e.preventDefault();
+
+          // 모든 탭 active 제거 및 현재 탭 추가
+          tabs.forEach(t => t.classList.remove('active'));
+          tabBtn.classList.add('active');
+
+          // 모든 섹션 숨기고 해당 인덱스 섹션만 표시
+          sections.forEach((sec, idx) => {
+            if (sec instanceof HTMLElement) {
+              sec.style.display = idx === index ? 'block' : 'none';
+            }
+          });
+        };
+      });
+    };
+
+    // [실행 1] 페이지 로드 시 즉시 실행
+    injectTabEvents();
+
+    // [실행 2] MutationObserver: #content 내부 HTML이 바뀌는 순간(CMS 로드) 감지
+    const observer = new MutationObserver(() => {
+      injectTabEvents();
+    });
+
+    const targetNode = document.getElementById('content');
+    if (targetNode) {
+      observer.observe(targetNode, { childList: true, subtree: true });
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   return (

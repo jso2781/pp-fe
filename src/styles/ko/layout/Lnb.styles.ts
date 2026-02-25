@@ -47,7 +47,8 @@ export const lnbStyles = {
     '& .MuiTypography-root': {
         fontSize: depth === 0 ? '17px' : '17px',
         // ★ 핵심: 1단 메뉴(depth 0)이고 열려있으면(isOpen) 녹색 적용
-        color: (depth === 0 && isOpen) ? 'var(--color-text-2)' : 'var(--color-text-1)',
+        // color: (depth === 0 && isOpen) ? 'var(--color-text-2)' : 'var(--color-text-1)',
+        color: 'var(--color-text-1)',
         fontWeight: depth === 0 ? 700 : 400,
     },
     '&:hover': {
@@ -94,7 +95,8 @@ export const lnbStyles = {
       fontSize: depth === 0 ? '17px' : '17px',
       fontWeight: depth === 0 ? 700 : 400,
       // ★ 중요: 버튼과 동일하게 열림 상태일 때 녹색으로 지정 (이게 없으면 안 바뀜)
-      color: (depth === 0 && isOpen) ? 'var(--color-text-2)' : 'var(--color-text-1)',
+      // color: (depth === 0 && isOpen) ? 'var(--color-text-2)' : 'var(--color-text-1)',
+      color: 'var(--color-text-1)',
       transition: 'none',
       // 서브메뉴일 때 앞에 점 추가
       ...(depth > 0 && {

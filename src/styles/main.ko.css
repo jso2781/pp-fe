@@ -2615,7 +2615,7 @@
   display: flex;
   align-items: center;
 }
-.lang-ko .mo-header-util .btn-util.login,
+.lang-ko .mo-header-util .btn-util,
 .lang-ko .mo-header-util .btn-mo-menu {
   display: flex !important;
   flex-direction: column !important;
@@ -2627,7 +2627,7 @@
   background-color: transparent !important;
   gap: 0;
 }
-.lang-ko .mo-header-util .btn-util.login::before,
+.lang-ko .mo-header-util .btn-util::before,
 .lang-ko .mo-header-util .btn-mo-menu::before {
   content: "";
   display: block;
@@ -2638,7 +2638,7 @@
   background-repeat: no-repeat;
   background-position: center;
 }
-.lang-ko .mo-header-util .btn-util.login,
+.lang-ko .mo-header-util .btn-util,
 .lang-ko .mo-header-util .btn-mo-menu {
   font-size: 12px !important;
   font-weight: 500;

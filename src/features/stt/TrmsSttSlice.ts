@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectTrmsListForSignUp, selectTrmsSttList, getTrmsSttLatest } from './TrmsSttThunks'
+import { selectTrmsListForSignUp, selectTrmsSttList, getTrmsSttLatest, getTrmsStt } from './TrmsSttThunks'
 import { TrmsSttRVO } from './TrmsSttTypes'
 
 /**
@@ -66,14 +66,14 @@ const TrmsSttSlice = createSlice({
         state.loading = false;
         state.list = list;
         if(Array.isArray(list) && list.length > 0) {
-          state.current = list[0];
+          // state.current = list[0];
         }
       })
       .addCase(selectTrmsSttList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? null;
       })
-      //단건
+      //단건 최신글
       .addCase(getTrmsSttLatest.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -85,6 +85,21 @@ const TrmsSttSlice = createSlice({
         state.current = action.payload || null;
       })
       .addCase(getTrmsSttLatest.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? null;
+      })
+
+      //단건
+      .addCase(getTrmsStt.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.current = null;
+      })
+      .addCase(getTrmsStt.fulfilled, (state, action) => {
+        state.loading = false;
+        state.current = action.payload || null;
+      })
+      .addCase(getTrmsStt.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? null;
       })

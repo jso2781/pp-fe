@@ -6,7 +6,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import RelatedSites from './RelatedSites'
 
 type TKey =
-  | 'cctvPolicy'
   | 'rejectUnAuthorizedEmail'
   | 'directions'
   | 'privacyPolicy'
@@ -25,11 +24,11 @@ const FOOTER_INFO_LINKS: Array<{ key: string; labelKey: TKey; href: string }> = 
   { key: 'location', labelKey: 'directions', href: 'https://www.drugsafe.or.kr/iwt/ds/ko/introduction/EgovLocation.do' },
 ]
 
-const FOOTER_LEGAL_LINKS: Array<{ key: string; labelKey: TKey; href: string; className?: string }> = [
-  { key: 'privacy', labelKey: 'privacyPolicy', href: '/pp/ko/etc/PrivacyPolicy', className: 'point-link'},
-  { key: 'termsOfUse', labelKey: 'termsOfUse', href: '/pp/ko/etc/Terms' },
-  { key: 'cctvPolicy', labelKey: 'cctvPolicy', href: '/pp/ko/etc/CctvPolicy' },
-  { key: 'koglLicense', labelKey: 'koglLicense', href: 'https://www.kogl.or.kr/info/licenseType1.do' },
+const FOOTER_LEGAL_LINKS: Array<{ key: string; labelKey: TKey; href: string; target: string, className?: string; rel?: string }> = [
+  { key: 'privacy', labelKey: 'privacyPolicy', href: '/pp/ko/etc/PrivacyPolicy', target: 'TRMS_STT', className: 'point-link' },
+  { key: 'termsOfUse', labelKey: 'termsOfUse', href: '/pp/ko/etc/Terms', target: 'TRMS_STT' },
+  { key: 'cctvPolicy', labelKey: 'cctvPolicy', href: '/pp/ko/etc/CctvPolicy', target: 'TRMS_STT' },
+  { key: 'koglLicense', labelKey: 'koglLicense', href: 'https://www.kogl.or.kr/info/licenseType1.do', target: 'kogl', rel: 'noopener noreferrer' },
 ]
 
 const FOOTER_SNS_LINKS: Array<{ key: string; labelKey: TKey; href: string }> = [
@@ -198,8 +197,8 @@ export default function Footer() {
               <MuiLink
                 key={item.key}
                 href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={item.target || '_blank'}
+                rel={item.rel}
                 className={`meta-item ${item.className || ''}`}
               >
                 {t(item.labelKey)}
