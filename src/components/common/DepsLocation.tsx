@@ -112,51 +112,51 @@ export default function DepsLocation() {
       labels: ["login", "idLogin", "findPassword", "passwordChange"] // 로그인 > 아이디 로그인 > 비밀번호 찾기 > 비밀번호 변경
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/news\/FaqNotice(\/)?(\d+)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/news\/FaqNotice(\/)?(\d+)?$/,
       labels: ["news", "menuNoticeFaq"] // 기관소식 > FAQ
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/expert\/ExpertMemberApply(\/)?(\d+)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertMemberApply(\/)?(\d+)?$/,
       labels: ["usrSwtReg"] // 전문가 회원 전환 신청
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/etc\/Terms(\/)?(\d+)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/etc\/Terms(\/)?(\d+)?$/,
       labels: ["customerCenter", "termsOfUse"] // 고객센터 > 이용약관
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/etc\/PrivacyPolicy(\/)?(\d+)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/etc\/PrivacyPolicy(\/)?(\d+)?$/,
       labels: ["customerCenter", "privacyPolicy"] // 고객센터 > 개인정보처리방침
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/etc\/CctvPolicy(\/)?(\d+)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/etc\/CctvPolicy(\/)?(\d+)?$/,
       labels: ["customerCenter", "cctvPolicy"] // 고객센터 > 고정형 영상정보처리기기 운영관리방침
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/etc\/EmailDeny(\/)?(\d+)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/etc\/EmailDeny(\/)?(\d+)?$/,
       labels: ["customerCenter", "rejectUnAuthorizedEmail"] // 고객센터 > 이메일 무단수집 거부
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/DurUnderstand(\/)?(\d+)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/maintask\/dur\/DurUnderstand(\/)?(\d+)?$/,
       labels: ["menuDur", "menuDurUnderstand"] // DUR 정보 > dur 이해
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/DurNoticeList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/maintask\/dur\/DurNoticeList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
       labels: ["menuDur", "menuDurNotice"]    // DUR 정보 > 알림 게시판
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/maintask\/dur\/Proposal(\/)?(\d+)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/maintask\/dur\/Proposal(\/)?(\d+)?$/,
       labels: ["menuDur", "menuDurSuggest"]   // DUR 정보 > 의견 제안
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/expert\/ExpertMyWork(\/)?$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertMyWork(\/)?$/,
       labels: ["expertMyWork"]   // 내 업무
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/expert\/ExpertApproval(\/\d+)?$/, 
+      pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertApproval(\/\d+)?$/, 
       labels: ["expertMyWork", "expertApproval"]   // 업무 신청 관리
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/expert\/ExpertApprovalUpdate(\/\d+)?$/, 
+      pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertApprovalUpdate(\/\d+)?$/, 
       labels: ["expertMyWork", "expertApproval"]   // 업무 신청 관리
     }        
   ], []);
