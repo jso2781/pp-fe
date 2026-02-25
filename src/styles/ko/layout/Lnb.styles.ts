@@ -27,6 +27,8 @@ export const lnbStyles = {
   // 메인 버튼 스타일 (1차, 2차 공통 로직 포함)
   // ★ isOpen 인자를 추가했습니다.
   itemButton: (depth: number, isOpen?: boolean): SxProps<Theme> => ({
+    display: 'flex',  
+    alignItems: 'flex-start',
     padding: '10px 10px 10px 10px',
     transition: 'none',
     '&.Mui-disabled': {

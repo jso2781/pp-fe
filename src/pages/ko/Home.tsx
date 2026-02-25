@@ -201,23 +201,18 @@ export default function Home() {
   // ==========================================
   // 기관소식
   // ==========================================
-  const [newsTab, setNewsTab] = useState('notice');
+  const [newsTab, setNewsTab] = useState('notice');  
 
-  const { list } = useAppSelector((s) => s.menu)
-  const noticeUrl = list.find(item =>
-    item.menuUrlAddr?.includes('news/NewsNoticeList')
-  ); 
-  const bodoUrl = list.find(item =>
-    item.menuUrlAddr?.includes('menu/3004')
-  );   
-  const letterUrl = list.find(item =>
-    item.menuUrlAddr?.includes('menu/3012')
-  );     
+  // 게시판 url 정보 (공지사항, 보도자료, 뉴스레터, 카드뉴스)
+  const bbsUrl1 = current?.urlInfos?.find((item) => item.taskCd === 'MN_BBS5')?.menuUrlAddr;
+  const bbsUrl2 = current?.urlInfos?.find((item) => item.taskCd === 'MN_BBS6')?.menuUrlAddr;
+  const bbsUrl3 = current?.urlInfos?.find((item) => item.taskCd === 'MN_BBS7')?.menuUrlAddr;
+  const bbsUrl4 = current?.urlInfos?.find((item) => item.taskCd === 'MN_BBS8')?.menuUrlAddr;
 
   const newsData = useMemo(() => ({
     notice: {
       label: '공지사항',
-      path: noticeUrl?.menuUrlAddr ?? '/pp/ko',
+      path: bbsUrl1 ?? '/pp/ko',
       items: (current?.notice || []).map((item) => ({
         id: item.pstSn || '',
         title: item.pstTtl || '',
@@ -228,7 +223,7 @@ export default function Home() {
     },
     press: {
       label: '보도자료',
-      path: bodoUrl?.menuUrlAddr ?? '/pp/ko', // FIXME 추후 변경
+      path: bbsUrl2 ?? '/pp/ko',
       items: (current?.bodo || []).map((item) => ({
         id: item.pstSn || '',
         title: item.pstTtl || '',
@@ -239,7 +234,7 @@ export default function Home() {
     },
     newsletter: {
       label: '뉴스레터',
-      path: letterUrl?.menuUrlAddr ?? '/pp/ko', // FIXME 추후 변경
+      path: bbsUrl3 ?? '/pp/ko', 
       items: (current?.news || []).map((item) => ({
         id: item.pstSn || '',
         title: item.pstTtl || '',
@@ -252,6 +247,10 @@ export default function Home() {
 
   // 현재 탭 데이터 추출
   const currentNews = newsData[newsTab as keyof typeof newsData];
+
+  useEffect(() => {
+    console.log('currentNews changed:', currentNews);
+  }, [currentNews]);
 
   // ==========================================
   // 카드뉴스
@@ -910,7 +909,7 @@ export default function Home() {
                     }}>
                       <Box
                         component={RouterLink}
-                        to={`/pp/${lang}/news/NewsCardNewsList/${item.pstSn}`}
+                        to={bbsUrl4 ? `${bbsUrl4}/${item.pstSn}` : '/pp/ko'}                        
                         sx={{
                           width: '100%',
                           height: '100%',
