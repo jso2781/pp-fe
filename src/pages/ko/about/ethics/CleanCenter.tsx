@@ -6,6 +6,7 @@
  */
 import DepsLocation from '@/components/common/DepsLocation'
 import Lnb from '@/components/common/Lnb'
+import LnbSectionTitle from '@/components/common/LnbSectionTitle'
 import { useAuth } from '@/contexts/AuthContext';
 import { paginationDshstyDclrList } from '@/features/dclr/DshstyDclrSelector';
 import { selectDshstyDclrList } from '@/features/dclr/DshstyDclrThunks';
@@ -57,7 +58,7 @@ export default function CleanCenter() {
           <Box className="lnb-wrap">
             <Box className="lnb-menu">
               <Typography component="h2" className="lnb-tit">
-                <span>윤리경영</span>
+                <LnbSectionTitle />
               </Typography>
               <Box className="lnb-list">
                 <Lnb currentUrl={currentUrl} />

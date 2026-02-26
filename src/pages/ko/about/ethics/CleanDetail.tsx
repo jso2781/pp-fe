@@ -6,6 +6,7 @@
  */
 import DepsLocation from "@/components/common/DepsLocation";
 import Lnb from "@/components/common/Lnb";
+import LnbSectionTitle from '@/components/common/LnbSectionTitle'
 import type { DshstyDclrRVO } from "@/features/dclr/DshstyDclrTypes";
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect } from "react";
@@ -38,7 +39,7 @@ export default function CleanDetail () {
           <Box className="lnb-wrap">
             <Box className="lnb-menu">
               <Typography component="h2" className="lnb-tit">
-                <span>윤리경영</span>
+                <LnbSectionTitle />
               </Typography>
               <Box className="lnb-list">
                 <Lnb currentUrl={currentUrl} />

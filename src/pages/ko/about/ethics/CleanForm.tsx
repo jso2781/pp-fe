@@ -6,6 +6,7 @@
  */
 import DepsLocation from "@/components/common/DepsLocation";
 import Lnb from "@/components/common/Lnb";
+import LnbSectionTitle from '@/components/common/LnbSectionTitle'
 import { insertDshstyDclr } from "@/features/dclr/DshstyDclrThunks";
 import type { DshstyDclrPVO } from "@/features/dclr/DshstyDclrTypes";
 import { useAppDispatch } from "@/store/hooks";
@@ -127,7 +128,7 @@ export default function CleanForm () {
           <Box className="lnb-wrap">
             <Box className="lnb-menu">
               <Typography component="h2" className="lnb-tit">
-                <span>윤리경영</span>
+                <LnbSectionTitle />
               </Typography>
               <Box className="lnb-list">
                 <Lnb currentUrl={currentUrl} />

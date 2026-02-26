@@ -117,7 +117,6 @@ export default function CmsPage() {
           <Box className="lnb-wrap">
             <Box className="lnb-menu">
               <Typography component="h2" className="lnb-tit">
-                {/* <span>{t('menuDur')}</span> */}
                 <LnbSectionTitle />
               </Typography>
               <Box className="lnb-list">
