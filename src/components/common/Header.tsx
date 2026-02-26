@@ -117,6 +117,19 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const [anchorEls, setAnchorEls] = useState<{ [key: string]: HTMLElement | null }>({})
   // 사이트맵 Drawer 상태 관리
   const [sitemapOpen, setSitemapOpen] = useState(false)
+  
+  // Footer에서 'open-sitemap'이라는 신호를 보내면 실행됨
+  useEffect(() => {
+    const handleOpenSitemap = () => {
+      setSitemapOpen(true); 
+    };
+
+    window.addEventListener('open-sitemap', handleOpenSitemap);
+    return () => {
+      window.removeEventListener('open-sitemap', handleOpenSitemap);
+    };
+  }, [])
+
   // 서브메뉴 닫기 타임아웃 관리
   const closeTimeoutsRef = useRef<{ [key: string]: NodeJS.Timeout }>({})
   
