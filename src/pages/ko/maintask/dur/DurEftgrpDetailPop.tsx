@@ -34,7 +34,7 @@ function DurEftgrpDetailPopInner() {
 
   /** 제품검색 클릭 시 DurPrdctDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
   const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string) => {
-    const base = `${window.location.origin}/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`;
+    const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`;
     const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}`;
     const width = 800;
     const height = 600;

@@ -191,7 +191,7 @@ export default function MyDrugInfo() {
   }
 
   const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string) => {
-    const base = `${window.location.origin}/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`
+    const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`
     const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}`
     const width = 800
     const height = 600
@@ -202,7 +202,7 @@ export default function MyDrugInfo() {
   }
 
   const openEftgrpDetailPop = (igrdNm: string) => {
-    const base = `${window.location.origin}/${lang ?? 'ko'}/maintask/dur/DurEftgrpDetailPop`
+    const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurEftgrpDetailPop`
     const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}`
     const width = 800
     const height = 600
