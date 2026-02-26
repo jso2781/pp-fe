@@ -1,8 +1,8 @@
 /**
- * 화면ID: 모든 국문 CMS 화면 보기용 템플릿 화면
- * 화면명: 모든 국문 CMS 화면 보기용 템플릿 화면
- * 화면경로: /pp/ko/cms/CmsPage
- * 화면설명: 모든 국문 CMS 화면 보기용 템플릿 화면
+ * 화면ID: 모든 영문 CMS 화면 보기용 템플릿 화면
+ * 화면명: 모든 영문 CMS 화면 보기용 템플릿 화면
+ * 화면경로: /pp/en/cms/CmsPage
+ * 화면설명: 모든 영문 CMS 화면 보기용 템플릿 화면
  */
 import DOMPurify from 'dompurify';
 import React, { useEffect, useMemo } from 'react';

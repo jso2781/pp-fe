@@ -14,6 +14,7 @@ const NotFoundKo = lazy(() => import('@/pages/ko/NotFound'))
 const InternalServerErrorKo = lazy(() => import('@/pages/ko/InternalServerError'))
 
 const CmsPageKo = lazy(() => import('@/pages/ko/cms/CmsPage'))
+const CmsPageEn = lazy(() => import('@/pages/en/cms/CmsPage'))
 
 const DurSearchRoomKo = lazy(() => import('@/pages/ko/maintask/dur/DurSearchRoom'))
 const DurEftgrpDetailPopKo = lazy(() => import('@/pages/ko/maintask/dur/DurEftgrpDetailPop'))
@@ -211,7 +212,7 @@ export default function Router() {
                 <Route path="/pp/:lang/maintask/dur/DurPrdctDetailPop" element={<LangElement byLang={{ ko: <DurPrdctDetailPopKo />, en: <DurPrdctDetailPopKo /> }} />} />
               </Route>
 
-              {/* 일반사용자 메뉴에서 사용할 화면 레이아웃 */}
+              {/* 국문 사용자 메뉴에서 사용할 화면 레이아웃 */}
               <Route element={<Layout />}>
                 <Route path="/" element={<HomeKo />} />
                 {/* 루트(/, '') URL 유지, 한국어 홈 콘텐츠 표시 (자동 리다이렉트 없음) */}
@@ -220,8 +221,8 @@ export default function Router() {
                 <Route path="/pp/ko" element={<HomeKo />} />
                 <Route path="/pp/ko/" element={<HomeKo />} />
 
-                {/* cms 화면 공용 템플릿 경로(콘텐츠 내용 표기) */}
-                <Route path="/pp/:lang/cms/CmsPage/:contsSn" element={<LangElement byLang={{ ko: <CmsPageKo />, en: <CmsPageKo /> }} />} />
+                {/* 국문 cms 화면 공용 템플릿 경로(콘텐츠 내용 표기) */}
+                <Route path="/pp/ko/cms/CmsPage/:contsSn" element={<CmsPageKo />} />
 
                 {/* maintask(주요업무) */}
                 <Route path="/pp/:lang/maintask/dur/DurSearchRoom" element={<LangElement byLang={{ ko: <DurSearchRoomKo />, en: <DurSearchRoomKo /> }} />} />
@@ -229,7 +230,6 @@ export default function Router() {
                 <Route path="/pp/:lang/maintask/dur/DurNoticeList/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <DurNoticeDetailKo />, en: <DurNoticeDetailKo /> }} />} />
                 <Route path="/pp/:lang/maintask/dur/DurProposal" element={<LangElement byLang={{ ko: <DurProposalKo />, en: <DurProposalKo /> }} />} />
                 <Route path="/pp/:lang/maintask/dur/MyDrugInfo" element={<LangElement byLang={{ ko: <MyDrugInfoKo />, en: <MyDrugInfoKo /> }} />} />
-
 
                 {/* open(정보공개) */}
 
@@ -305,16 +305,18 @@ export default function Router() {
                 <Route path="/pp/ko/screens/:screenId" element={<ScreenViewerKo />} />
               </Route>
 
-              {/* 영문 퍼블리싱 템플릿 화면들 */}
+              {/* 영문 사용자 메뉴에서 사용할 화면 레이아웃 */}
               <Route element={<EngLayout />}>
+                {/* 영문 퍼블리싱 템플릿 화면들 */}
                 <Route path="/pp/en/screens" element={<ScreensEn />} />
                 <Route path="/pp/en/screens/:screenId" element={<ScreenViewerEn />} />
-              </Route>
 
-              {/* 일반사용자 메뉴에서 사용할 화면 레이아웃 */}
-              <Route element={<EngLayout />}>
+                {/* 영문 cms 화면 공용 템플릿 경로(콘텐츠 내용 표기) */}
+                <Route path="/pp/en/cms/CmsPage/:contsSn" element={<CmsPageEn />} />
+
                 <Route path="/pp/en" element={<HomeEn />} />
               </Route>
+
             </Routes>
           </GlobalErrorHandler>
         </BrowserRouter>
