@@ -2669,21 +2669,33 @@
   display: flex;
   align-items: center;
 }
+.lang-ko .mo-drawer-header .mo-drawer-top button {
+  margin: 0;
+  padding: 0;
+}
 .lang-ko .mo-drawer-header .mo-drawer-top .btn-util.search {
   margin: 0 10px;
 }
 .lang-ko .mo-drawer-header .mo-drawer-util {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   width: 100%;
-  padding: 10px;
+  padding: 10px 0;
   border-top: 1px solid #eee;
 }
 .lang-ko .mo-drawer-header .mo-drawer-util .user-info-area .user-msg, .lang-ko .mo-drawer-header .mo-drawer-util .user-info-area .user-name {
   margin: 0;
   font-weight: 700;
   font-size: 18px;
+}
+.lang-ko .mo-drawer-header .mo-drawer-util .util-buttons button:first-of-type {
+  margin-left: 0;
+}
+@media (max-width: 640px) {
+  .lang-ko .mo-drawer-header .mo-drawer-util .util-buttons button {
+    margin: 2px;
+    font-size: 13px;
+  }
 }
 .lang-ko .mo-drawer-header .btn-util {
   font-size: 15px;
@@ -2694,7 +2706,7 @@
 }
 .lang-ko .mo-drawer-header .mobile-drawer-close {
   position: absolute;
-  right: 10px;
+  right: 5px;
   top: 0px;
 }
 .lang-ko .mobile-gnb-container {
@@ -3357,7 +3369,7 @@
 }
 @media (max-width: 1200px) {
   .lang-ko .location .page_path .tit {
-    font-size: 32px;
+    font-size: var(--fs-32);
   }
 }
 .lang-ko .layout-full {

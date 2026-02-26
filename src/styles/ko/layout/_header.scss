@@ -371,6 +371,7 @@
     display: flex;
     align-items: center;
 
+    button{margin:0;padding:0;}
     .btn-util.search{
       margin:0 10px;
     }
@@ -378,14 +379,23 @@
 
   .mo-drawer-util {
     display: flex;
-    align-items: center;
-    justify-content: space-between; 
+    // align-items: center;
+    // justify-content: space-between; 
+    flex-direction: column;
     width: 100%;
-    padding: 10px; 
+    padding: 10px 0; 
     border-top: 1px solid #eee;
 
     .user-info-area {
       .user-msg, .user-name { margin: 0; font-weight: 700; font-size: 18px; }
+    }
+    .util-buttons{
+      & button {
+        &:first-of-type {
+          margin-left: 0;
+        }
+        @media (max-width: 640px) {margin:2px; font-size:13px; }
+      }
     }
   }
 
@@ -398,7 +408,7 @@
     }
   }
 
-  .mobile-drawer-close { position: absolute; right: 10px; top: 0px; }
+  .mobile-drawer-close { position: absolute; right: 5px; top: 0px; }
 }
 
 

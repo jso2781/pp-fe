@@ -153,9 +153,7 @@
       font-weight: 700;
       line-height: 1;
 
-      @media (max-width: 1200px) {
-        font-size: 32px;
-      }
+      @media (max-width: 1200px) {font-size: var(--fs-32);}
     }
   }
 }
