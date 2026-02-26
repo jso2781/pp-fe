@@ -29,7 +29,7 @@ export const lnbStyles = {
   itemButton: (depth: number, isOpen?: boolean): SxProps<Theme> => ({
     display: 'flex',  
     alignItems: 'flex-start',
-    padding: '10px 10px 10px 10px',
+    padding: '10px 0px 10px 5px',
     transition: 'none',
     '&.Mui-disabled': {
       opacity: 1, // 흐릿해지는 것 방지
