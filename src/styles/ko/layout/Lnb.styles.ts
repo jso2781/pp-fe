@@ -59,6 +59,7 @@ export const lnbStyles = {
     },
     '&.Mui-selected': {
       backgroundColor: depth === 0 ? 'transparent' : '#DCF3F4',
+      borderRadius: '6px',
       '& .MuiTypography-root': {
         color: 'var(--color-text-2)',
         fontWeight: 700,
@@ -75,7 +76,7 @@ export const lnbStyles = {
     },
     // 서브메뉴 아이템일 때 추가 스타일
     ...(depth > 0 && {
-        padding: '6px 10px 6px 15px',
+        padding: '6px 10px 6px 25px',
         '&:hover': {
         backgroundColor: '#DCF3F4',
         cursor: 'pointer',
@@ -92,6 +93,7 @@ export const lnbStyles = {
     '& .MuiTypography-root': {
       display: 'flex',
       alignItems: 'center',
+      position: 'relative',
       fontSize: depth === 0 ? '17px' : '17px',
       fontWeight: depth === 0 ? 700 : 400,
       // ★ 중요: 버튼과 동일하게 열림 상태일 때 녹색으로 지정 (이게 없으면 안 바뀜)
@@ -102,12 +104,14 @@ export const lnbStyles = {
       ...(depth > 0 && {
         '&::before': {
           content: '""',
+          position: 'absolute',
+          left:'-10px', 
+          top: '10px',
           display: 'inline-block',
           width: '4px',
           height: '4px',
           borderRadius: '50%',
           backgroundColor: '#33363D',
-          marginRight: '10px',
         },
       }),
     },
