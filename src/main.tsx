@@ -8,7 +8,8 @@ import { persistor, store } from '@/store/store'
 import { FALLBACK_LANG, normalizeLang } from './routes/lang'
 import MenuGate from "@/components/gate/MenuGate";
 import App from './App'
-// import '@/styles/main.scss'
+import '@/styles/main.ko.scss'
+import '@/styles/main.en.scss'
 
 const rootEl = document.getElementById('root')
 
