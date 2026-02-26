@@ -140,7 +140,7 @@ export default function CleanCenter() {
                                       <td>
                                         <Link
                                           component={RouterLink}
-                                          to={`/pp/${lang}/about/ethics/CleanDetail`}
+                                          to={`/pp/${lang}/about/ethics/CleanCenter/detail`}
                                           color="inherit"
                                           aria-label={`${dshstyDclrRVO.dclrTtlNm} 상세보기`}
                                           underline="hover"
