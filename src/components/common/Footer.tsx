@@ -19,9 +19,14 @@ type TKey =
   | 'facebook'
   | 'sitemap'
  
-const FOOTER_INFO_LINKS: Array<{ key: string; labelKey: TKey; href: string }> = [
-  { key: 'sitemap', labelKey: 'sitemap', href: '#' },
-  { key: 'location', labelKey: 'directions', href: 'https://www.drugsafe.or.kr/iwt/ds/ko/introduction/EgovLocation.do' },
+const FOOTER_INFO_LINKS: Array<{ key: string; labelKey: TKey; href: string; onClick?: () => void }> = [
+  { 
+    key: 'sitemap', 
+    labelKey: 'sitemap', 
+    href: '#', 
+    onClick: () => window.dispatchEvent(new Event('open-sitemap'))
+  },
+  { key: 'location', labelKey: 'directions', href: '/pp/ko/cms/CmsPage/cms0028' },
 ]
 
 const FOOTER_LEGAL_LINKS: Array<{ key: string; labelKey: TKey; href: string; target: string, className?: string; rel?: string }> = [
@@ -185,9 +190,15 @@ export default function Footer() {
                   <MuiLink
                     key={item.key}
                     href={item.href}
-                    target="_blank"
+                    //target="_blank"
                     rel="noopener noreferrer"
                     underline="hover"
+                    onClick={(e) => {
+                      if (item.key === 'sitemap') { 
+                        e.preventDefault();
+                        window.dispatchEvent(new Event('open-sitemap'));
+                      }
+                    }}
                   >
                     {t(item.labelKey)}
                     <ChevronRightIcon className="link-icon" />
