@@ -274,6 +274,7 @@ export default function Home() {
   const [nextElPopup, setNextElPopup] = useState<HTMLButtonElement | null>(null);
   const swiperRefPopup = useRef<SwiperCore | null>(null);
   const [isPopupClosed, setIsPopupClosed] = useState(false);
+  const [isPopupForceOpened, setIsPopupForceOpened] = useState(false);
   
   // 오늘 하루 열지 않기 기능 (로컬 스토리지) - 모든 팝업에 적용
   const POPUP_HIDE_TODAY_KEY = 'popup_hide_today_all';
@@ -288,21 +289,35 @@ export default function Home() {
     // 모든 팝업을 오늘 하루 숨기기
     const today = new Date().toDateString();
     localStorage.setItem(POPUP_HIDE_TODAY_KEY, today);
+    setIsPopupForceOpened(false);
     setIsPopupClosed(true);
   };
 
   const handleCloseAll = () => {
     // localStorage 건드리지 않고 팝업만 닫기
+    setIsPopupForceOpened(false);
     setIsPopupClosed(true);
   };
 
+  useEffect(() => {
+    const handleOpenPopupOnce = () => {
+      setIsPopupClosed(false);
+      setIsPopupForceOpened(true);
+    };
+
+    window.addEventListener('open-home-popup-once', handleOpenPopupOnce);
+    return () => {
+      window.removeEventListener('open-home-popup-once', handleOpenPopupOnce);
+    };
+  }, []);
+
   // 표시할 팝업 목록 (오늘 숨김 처리된 것 제외)
   const visiblePopups = useMemo(() => {
-    if (isPopupClosed || isPopupHiddenToday()) {
+    if (isPopupClosed || (!isPopupForceOpened && isPopupHiddenToday())) {
       return [];
     }
     return (current?.popup || []).filter((popup) => popup.thmbFileNm);
-  }, [current?.popup, isPopupClosed]);
+  }, [current?.popup, isPopupClosed, isPopupForceOpened]);
 
   const handlePopupClick = (popup: PostVO) => {
     const url = popup.popupLnkgAddr || '';

@@ -48,8 +48,12 @@ export default function Footer() {
   const navigate = useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
   
-  // 메인 페이지 판별: '/' 이거나 '/pp/ko' 인 경우 모두 포함
-  const isMainPage = location.pathname === '/' || location.pathname === '/pp/ko'
+  // 메인 페이지 판별: '/', '/pp', '/pp/ko' 인 경우 포함
+  const isMainPage =
+    location.pathname === '/' ||
+    location.pathname === '/pp' ||
+    location.pathname === '/pp/ko' ||
+    location.pathname === '/pp/ko/'
 
   const [isVisible, setIsVisible] = useState(false)
   // 타입스크립트 사용 시를 고려한 Ref 설정
@@ -91,7 +95,11 @@ export default function Footer() {
       >
         {isMainPage && (
           <Box className="quick-item">
-            <button type="button" className="btn-quick open-popup">
+            <button
+              type="button"
+              className="btn-quick open-popup"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-home-popup-once'))}
+            >
               <i className="ico-popup" aria-hidden="true" />
             </button>
             <span className="quick-txt">닫힌 팝업<br />다시 열기</span>
