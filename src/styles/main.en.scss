@@ -27,3 +27,100 @@
     @include mixin_tools.container;
   } */
 }
+
+/* ==========================================================================
+   모달
+   ========================================================================== */
+.common-alert {
+  .MuiDialog-container {
+    align-items: flex-start;
+  }
+
+  .MuiPaper-root {
+    margin-top: 50px !important;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15) !important;
+    background-image: none;
+    border: 1px solid #B1B8BE;
+    background:  #FFF;
+    .modal-title{
+      h2{
+        padding:0;
+        border:none;
+      }
+    }
+  }
+  .modal-content{
+    font-size:18px;
+  }
+}
+
+/* 모달 사이즈 */
+.modal-small {
+  width: 600px !important;
+}
+.modal-md {
+  width: 760px !important;
+}
+.modal-lg {
+  width: 900px !important;
+}
+
+// 모달 타이틀
+.modal-title{
+  h2{
+    font-size: 24px;
+    font-weight: 700;
+    padding:0 0 10px 0;
+    border-bottom:1px solid #303336;
+  }
+  /* 모달닫기 버튼 */
+  .btn-modal-close {
+    position: absolute !important;
+    right: 12px;
+    top: 12px;
+    // transform: translateY(-50%); /* 세로 중앙 정렬 원할 경우 */
+    color: #1E2124;
+    padding: 8px;
+    transition: background-color 0.2s;
+  }
+  /* 아이콘 크기 제어 */
+  .btn-modal-close svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+// 모달 컨텐츠
+.modal-content {
+  .modal-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;    
+      margin-bottom: 20px;
+      .label {
+        font-size: var(--fs-18);
+        font-weight: 700;
+        line-height: 150%;
+    }
+    .time {
+      font-size: var(--fs-18);
+      font-weight: 700;
+      color: var(--color-text-2);
+    }
+  }
+  .modal-desc {
+    > p {
+      font-size: var(--fs-20);
+      line-height: 140%;
+      margin:0;
+    }
+  }
+}
+.modal-footer{
+  padding:20px 24px !important;
+  Button {
+    min-width: 100px;
+    height: 48px;
+    font-size: 18px;
+  }
+}

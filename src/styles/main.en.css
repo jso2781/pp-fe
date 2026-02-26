@@ -910,48 +910,6 @@
 .lang-en .maxw100 {
   max-width: 100%;
 }
-.lang-en .section-title-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-.lang-en .section-title-group .section-title {
-  margin: 0;
-}
-.lang-en .section-title-group .controller {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-}
-.lang-en .section-title,
-.lang-en .form-section-title {
-  font-size: var(--fs-24);
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: var(--color-text-1);
-}
-.lang-en .section-title ~ .section-title, .lang-en .section-title ~ .form-section-title,
-.lang-en .form-section-title ~ .section-title,
-.lang-en .form-section-title ~ .form-section-title {
-  margin-top: 40px;
-}
-.lang-en .section-title::before {
-  content: "";
-  display: block;
-  width: 43px;
-  height: 4px;
-  margin-bottom: 8px;
-  background: linear-gradient(90deg, #35B895 34.1%, #D2DF1C 83.66%);
-  border-radius: 2px;
-}
-.lang-en .sub-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 24px 0 20px 0;
-}
-.lang-en .sub-title:first-of-type {
-  margin-top: 0;
-}
 .lang-en {
   /* 로딩바 */
 }
@@ -1026,92 +984,6 @@
   font-size: 20px !important;
   line-height: 1;
   display: block;
-}
-.lang-en {
-  /* ==========================================================================
-     모달
-     ========================================================================== */
-}
-.lang-en .common-alert .MuiDialog-container {
-  align-items: flex-start;
-}
-.lang-en .common-alert .MuiPaper-root {
-  margin-top: 50px !important;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15) !important;
-  background-image: none;
-  border: 1px solid #B1B8BE;
-  background: #FFF;
-}
-.lang-en .common-alert .MuiPaper-root .modal-title h2 {
-  padding: 0;
-  border: none;
-}
-.lang-en .common-alert .modal-content {
-  font-size: 18px;
-}
-.lang-en {
-  /* 모달 사이즈 */
-}
-.lang-en .modal-small {
-  width: 600px !important;
-}
-.lang-en .modal-md {
-  width: 760px !important;
-}
-.lang-en .modal-lg {
-  width: 900px !important;
-}
-.lang-en .modal-title h2 {
-  font-size: 24px;
-  font-weight: 700;
-  padding: 0 0 10px 0;
-  border-bottom: 1px solid #303336;
-}
-.lang-en .modal-title {
-  /* 모달닫기 버튼 */
-}
-.lang-en .modal-title .btn-modal-close {
-  position: absolute !important;
-  right: 12px;
-  top: 12px;
-  color: #1E2124;
-  padding: 8px;
-  transition: background-color 0.2s;
-}
-.lang-en .modal-title {
-  /* 아이콘 크기 제어 */
-}
-.lang-en .modal-title .btn-modal-close svg {
-  width: 24px;
-  height: 24px;
-}
-.lang-en .modal-content .modal-status {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 20px;
-}
-.lang-en .modal-content .modal-status .label {
-  font-size: var(--fs-18);
-  font-weight: 700;
-  line-height: 150%;
-}
-.lang-en .modal-content .modal-status .time {
-  font-size: var(--fs-18);
-  font-weight: 700;
-  color: var(--color-text-2);
-}
-.lang-en .modal-content .modal-desc > p {
-  font-size: var(--fs-20);
-  line-height: 140%;
-}
-.lang-en .modal-footer {
-  padding: 20px 24px !important;
-}
-.lang-en .modal-footer Button {
-  min-width: 100px;
-  height: 48px;
-  font-size: 18px;
 }
 .lang-en {
   /* ==========================================================================
@@ -1229,31 +1101,6 @@
 }
 .lang-en .form-item .MuiFormHelperText-root.Mui-error.MuiFormHelperText-contained {
   margin-left: 0;
-}
-.lang-en {
-  /* .list-bullet {
-    @include list-bullet;
-  }
-  .list-bullet-2 {
-    @include list-bullet-2;
-  }
-  .list-bullet-3 {
-    @include list-bullet-3;
-  } */
-}
-.lang-en .desc-text {
-  margin-top: 20px;
-  font-size: 16px;
-  line-height: 1.6;
-  word-break: keep-all;
-  display: flex;
-  align-items: flex-start;
-}
-.lang-en .desc-text::before {
-  content: "*";
-  display: inline-block;
-  margin-right: 4px;
-  flex-shrink: 0;
 }
 .lang-en .bordered-box {
   padding: 40px 32px;
@@ -3958,7 +3805,17 @@
   z-index: 1;
 }
 .lang-en .main-container .section-title::before {
-  content: normal;
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -5px;
+  width: 60px;
+  height: 60px;
+  background-color: #76D2D5;
+  background-image: none !important;
+  opacity: 0.3;
+  border-radius: 50%;
+  z-index: -1;
 }
 @media (max-width: 1024px) {
   .lang-en .main-container .section-title {
@@ -4042,6 +3899,13 @@
 }
 .lang-en .main-container .main-service-section {
   position: relative;
+  margin: 80px 0;
+  background: #EDF8F8;
+}
+@media (max-width: 1024px) {
+  .lang-en .main-container .main-service-section {
+    margin: 0px 0;
+  }
 }
 .lang-en .main-container .main-service-section .service-area {
   position: relative;
@@ -4119,15 +3983,39 @@
   transition: transform 0.2s ease-in-out;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   position: relative;
+  z-index: 1;
+}
+.lang-en .main-container .main-service-section .shortcut-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 8px;
+  padding: 2px;
+  background: linear-gradient(0deg, #023133 8.17%, #0F6775 44.71%, #94CFBB 80.77%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
 }
 .lang-en .main-container .main-service-section .shortcut-item:focus-visible {
   background-color: #f0fbfc;
-  outline: 2px solid #087c80;
-  outline-offset: 4px;
+  outline: none;
   transform: translateY(-5px);
+}
+.lang-en .main-container .main-service-section .shortcut-item:focus-visible::before {
+  opacity: 1;
 }
 .lang-en .main-container .main-service-section .shortcut-item:hover {
   transform: translateY(-5px);
+}
+.lang-en .main-container .main-service-section .shortcut-item:hover::before {
+  opacity: 1;
 }
 .lang-en .main-container .main-service-section .shortcut-item .icon-bg {
   position: absolute;
@@ -4166,7 +4054,7 @@
 }
 @media (max-width: 1023px) {
   .lang-en .main-container .main-service-section .service-area {
-    padding: 0 15px;
+    padding: 0px;
   }
   .lang-en .main-container .main-service-section .pagination-wrapper {
     margin-top: 20px;
@@ -4190,6 +4078,12 @@
     bottom: 15px;
     background-size: 40px;
   }
+}
+.lang-en .main-container .service-swiper.swiper-button-lock {
+  display: none;
+}
+.lang-en .main-container .service-area:has(.swiper-button-lock) .pagination-wrapper {
+  display: none;
 }
 .lang-en .list-bullet li {
   position: relative;
@@ -4250,6 +4144,62 @@
 }
 .lang-en .list-bullet-3 li:last-child {
   margin-bottom: 0;
+}
+.lang-en .section-title-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.lang-en .section-title-group .section-title {
+  margin: 0;
+}
+.lang-en .section-title-group .controller {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+.lang-en .section-title,
+.lang-en .form-section-title {
+  font-size: var(--fs-24);
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--color-text-1);
+}
+.lang-en .section-title ~ .section-title, .lang-en .section-title ~ .form-section-title,
+.lang-en .form-section-title ~ .section-title,
+.lang-en .form-section-title ~ .form-section-title {
+  margin-top: 40px;
+}
+.lang-en .section-title::before {
+  content: "";
+  display: block;
+  width: 43px;
+  height: 4px;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, #35B895 34.1%, #D2DF1C 83.66%);
+  border-radius: 2px;
+}
+.lang-en .sub-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 24px 0 20px 0;
+}
+.lang-en .sub-title:first-of-type {
+  margin-top: 0;
+}
+.lang-en .desc-text {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.6;
+  word-break: keep-all;
+  display: flex;
+  align-items: flex-start;
+}
+.lang-en .desc-text::before {
+  content: "*";
+  display: inline-block;
+  margin-right: 4px;
+  flex-shrink: 0;
 }
 .lang-en .base-table-container {
   margin: 20px 0;
@@ -4760,4 +4710,94 @@
   .container {
     @include mixin_tools.container;
   } */
+}
+
+/* ==========================================================================
+   모달
+   ========================================================================== */
+.common-alert .MuiDialog-container {
+  align-items: flex-start;
+}
+.common-alert .MuiPaper-root {
+  margin-top: 50px !important;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15) !important;
+  background-image: none;
+  border: 1px solid #B1B8BE;
+  background: #FFF;
+}
+.common-alert .MuiPaper-root .modal-title h2 {
+  padding: 0;
+  border: none;
+}
+.common-alert .modal-content {
+  font-size: 18px;
+}
+
+/* 모달 사이즈 */
+.modal-small {
+  width: 600px !important;
+}
+
+.modal-md {
+  width: 760px !important;
+}
+
+.modal-lg {
+  width: 900px !important;
+}
+
+.modal-title h2 {
+  font-size: 24px;
+  font-weight: 700;
+  padding: 0 0 10px 0;
+  border-bottom: 1px solid #303336;
+}
+.modal-title {
+  /* 모달닫기 버튼 */
+}
+.modal-title .btn-modal-close {
+  position: absolute !important;
+  right: 12px;
+  top: 12px;
+  color: #1E2124;
+  padding: 8px;
+  transition: background-color 0.2s;
+}
+.modal-title {
+  /* 아이콘 크기 제어 */
+}
+.modal-title .btn-modal-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+.modal-content .modal-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+.modal-content .modal-status .label {
+  font-size: var(--fs-18);
+  font-weight: 700;
+  line-height: 150%;
+}
+.modal-content .modal-status .time {
+  font-size: var(--fs-18);
+  font-weight: 700;
+  color: var(--color-text-2);
+}
+.modal-content .modal-desc > p {
+  font-size: var(--fs-20);
+  line-height: 140%;
+  margin: 0;
+}
+
+.modal-footer {
+  padding: 20px 24px !important;
+}
+.modal-footer Button {
+  min-width: 100px;
+  height: 48px;
+  font-size: 18px;
 }/*# sourceMappingURL=main.en.css.map */

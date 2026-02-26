@@ -11,6 +11,74 @@
   @include mixins.list-bullet-3;
 }
 
+
+// 타이틀 
+.section-title-group {
+  display: flex;
+  align-items: center; 
+  margin-bottom: 10px;
+
+  .section-title {
+    margin: 0; 
+  }
+  .controller {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.section-title, 
+.form-section-title {
+  font-size: var(--fs-24);
+  font-weight: 700;
+  margin-bottom: 10px;
+  color:var(--color-text-1);
+
+  & ~ .section-title,
+  & ~ .form-section-title {
+    margin-top: 40px;
+  }
+}
+
+.section-title {
+  &::before {
+    content: "";
+    display: block;
+    width: 43px;
+    height: 4px;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, #35B895 34.1%, #D2DF1C 83.66%);
+    border-radius: 2px;
+  }
+}
+
+.sub-title{
+  font-size: 18px;
+  font-weight: 700;
+  margin:24px 0 20px 0;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
+.desc-text{
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.6;
+  word-break: keep-all;
+  display: flex; 
+  align-items: flex-start;
+
+  &::before {
+    content: "*";
+    display: inline-block;
+    margin-right: 4px; 
+    flex-shrink: 0; 
+  }
+}
+
 /* 폼 필드 */
 .form-section-title {
   .required {
