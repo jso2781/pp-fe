@@ -18,6 +18,7 @@ export default function Home() {
   const [prevEl2, setPrevEl2] = useState<HTMLButtonElement | null>(null);
   const [nextEl2, setNextEl2] = useState<HTMLButtonElement | null>(null);
   const [isPlaying2, setIsPlaying2] = useState(true);
+  const [isLocked2, setIsLocked2] = useState(false);
   const swiperRef2 = useRef<SwiperCore | null>(null);
 
   const toggleAutoplay2 = () => {
@@ -30,15 +31,10 @@ export default function Home() {
 
   const serviceShortcuts = useMemo(
     () => [
-      { title: 'Domestic Adverse Event Reporting', url: 'https://kaers.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
-      { title: '의약품부작용피해구제 민원신청', url: 'https://nedrug.mfds.go.kr/cntnts/230', iconUrl: '/img/shortcut_ico02.png' },
-      { title: '마약류 통합관리 시스템', url: 'https://www.nims.or.kr/', iconUrl: '/img/shortcut_ico03.png' },
-      { title: 'Drug Adverse Reaction Relief Program', url: 'https://nedrug.mfds.go.kr/index', iconUrl: '/img/shortcut_ico04.png' },
-      { title: '첨단바이오의약품 장기추적조사 시스템', url: 'https://ltfu.mfds.go.kr/main.do', iconUrl: '/img/shortcut_ico05.png' },
-      { title: 'Medical Data Analysis Network (MOA)', url: 'https://moa.drugsafe.or.kr/main;jsessionid=BD9ADAD3F45597B4C06571485AB61A8A', iconUrl: '/img/shortcut_ico06.png' },
-      { title: 'rug Safety Officer Training', url: 'https://pvtraining.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico07.png' },
-      { title: 'Safety Information Disclosure', url: 'https://open.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico08.png' },
-      { title: 'APEC Pharmacovigilance Training Program', url: 'https://kidscoe.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico09.png' },
+      { title: 'Pharmacovigilance', url: 'https://www.drugsafe.or.kr/iwt/ds/en/report/WhatIsKAERS.do', iconUrl: '/img/en/shortcut_ico01.png' },
+      { title: 'Drug Utilization Review', url: 'https://www.drugsafe.or.kr/iwt/ds/en/useinfo/EgovIntroductionDur.do', iconUrl: '/img/en/shortcut_ico02.png' },
+      { title: 'Pharmacoepidemiology', url: 'https://www.drugsafe.or.kr/iwt/ds/en/pe/EgovIntroductionPe.do', iconUrl: '/img/en/shortcut_ico03.png' },
+      { title: 'Korea DUR System', url: 'https://www.drugsafe.or.kr/iwt/ds/en/useinfo/EgovIntroductionDur.do', iconUrl: '/img/en/shortcut_ico04.png' },
     ],
     []
   );
@@ -63,6 +59,8 @@ export default function Home() {
           <Box className="service-area">
             <Swiper
               onSwiper={(swiper) => (swiperRef2.current = swiper)}
+              onUpdate={(swiper) => setIsLocked2(swiper.isLocked)} 
+              onBreakpoint={(swiper) => setIsLocked2(swiper.isLocked)}
               key={prevEl2 && nextEl2 ? 'ready2' : 'not-ready2'}
               modules={[Navigation, Pagination, A11y, Autoplay]}
               spaceBetween={24}
@@ -71,9 +69,9 @@ export default function Home() {
               autoplay={{ delay: 5000, disableOnInteraction: false }}
               loop={false}
               breakpoints={{
-                600: { slidesPerView: 3, slidesPerGroup: 1 }, 
+                600: { slidesPerView: 2, slidesPerGroup: 1 }, 
                 900: { slidesPerView: 4, slidesPerGroup: 1 },
-                1200: { slidesPerView: 5, slidesPerGroup: 1 },
+                1200: { slidesPerView: 4, slidesPerGroup: 1 },
               }}
               className="service-swiper"
             >
@@ -91,6 +89,7 @@ export default function Home() {
               ))}
             </Swiper>
             {/* 컨트롤 페이지네이션 , 재생/정지 */}
+            {!isLocked2 && (
             <Box className="pagination-wrapper">
               <Box className="service-pagination"></Box>
               <Box className="play-control">
@@ -103,6 +102,7 @@ export default function Home() {
                 <button ref={setNextEl2} className="swiper-button-next service-next" aria-label="다음 슬라이드"></button>
               </Box>
             </Box>
+            )}
           </Box>
         </Box>
       </Box>
