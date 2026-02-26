@@ -248,10 +248,6 @@ export default function Home() {
   // 현재 탭 데이터 추출
   const currentNews = newsData[newsTab as keyof typeof newsData];
 
-  useEffect(() => {
-    console.log('currentNews changed:', currentNews);
-  }, [currentNews]);
-
   // ==========================================
   // 카드뉴스
   // ==========================================
