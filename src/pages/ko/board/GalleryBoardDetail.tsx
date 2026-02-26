@@ -154,7 +154,7 @@ export default function GalleryBoardDetail() {
                       )}
                     </Box>
                     {/* 공공(KOGL) 저작물 */}
-                    <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
+                    <KoglLicense menuKoglCprgtTypeCd={current?.pstKoglCprgtTypeCd ?? menuKoglCprgtTypeCd} />
                   </Box>
                   {/* 하단 버튼 영역 */}
                   <Box className="board-actions">

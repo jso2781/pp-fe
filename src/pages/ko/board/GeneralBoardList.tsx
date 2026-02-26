@@ -161,11 +161,10 @@ export default function GeneralBoardList() {
                         <TableHead>
                           <TableRow>
                             {/* 2. component="th"와 scope="col"을 통해 제목 열임을 명시합니다. */}
-                            <TableCell component="th" scope="col" align="center" sx={{ width: '10%' }}>No</TableCell>
-                            <TableCell component="th" scope="col" align="center" sx={{ width: '40%' }}>제목</TableCell>
-                            <TableCell component="th" scope="col" align="center" sx={{ width: '20%' }}>작성자</TableCell>
-                            <TableCell component="th" scope="col" align="center" sx={{ width: '20%' }}>등록일</TableCell>
-                            <TableCell component="th" scope="col" align="center" sx={{ width: '10%' }}>조회수</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '15%' }}>No</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '45%' }}>제목</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '25%' }}>등록일</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '15%' }}>조회수</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -193,7 +192,6 @@ export default function GeneralBoardList() {
                                   {r.title}
                                 </Link>
                               </TableCell>
-                              <TableCell align="center">{r.writer}</TableCell>
                               <TableCell align="center">{r.date}</TableCell>
                               <TableCell align="center">{r.views}</TableCell>
                             </TableRow>

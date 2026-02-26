@@ -173,9 +173,11 @@ export default function GalleryBoardList() {
                                   {item.title}
                                 </Typography>
                                 <Box className="meta-group">
-                                  <span className="writer-name">
-                                    <span className="sr-only">작성자</span>{item.writer}
-                                  </span>
+                                  {item.writer && (
+                                    <span className="writer-name">
+                                      <span className="sr-only">부서명</span>{item.writer}
+                                    </span>
+                                  )}
                                   <span className="reg-date">
                                     <span className="sr-only">등록일</span>{item.date}
                                   </span>
