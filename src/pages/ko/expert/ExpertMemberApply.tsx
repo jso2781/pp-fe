@@ -515,6 +515,7 @@ export default function ExpertMemberApply() {
                             variant="outlined"
                             onClick={handleCheckEmailDuplicate}
                             size="large"
+                            className="btn-form-util"
                           >
                             중복확인
                           </Button>
