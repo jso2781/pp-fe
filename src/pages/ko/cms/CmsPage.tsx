@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { getCms } from '@/features/cms/CmsThunks';
 import CleanHtml from '@/components/common/CleanHtml';
+import LnbSectionTitle from '@/components/common/LnbSectionTitle';
 
 export default function CmsPage() {
   const { t } = useTranslation();
@@ -116,7 +117,8 @@ export default function CmsPage() {
           <Box className="lnb-wrap">
             <Box className="lnb-menu">
               <Typography component="h2" className="lnb-tit">
-                <span>{t('menuDur')}</span>
+                {/* <span>{t('menuDur')}</span> */}
+                <LnbSectionTitle />
               </Typography>
               <Box className="lnb-list">
                 <Lnb currentUrl={currentUrl}/>
