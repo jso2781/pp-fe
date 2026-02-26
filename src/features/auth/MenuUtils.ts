@@ -45,13 +45,8 @@ export function getLnbInfoByPath(lnbStructor: LnbItem[] | null | undefined, path
   const { node, ancestors }: SearchResult = best;
   const breadcrumb: { label: string; key: string }[] = ancestors.map((a) => ({ label: a.label, key: a.key }));
 
-  // LNB 리스트에 보이는 건 '현재 노드의 부모의 자식들'이므로, 중메뉴 제목은 부모 섹션 라벨
-  const sectionTitle =
-    ancestors.length >= 2
-      ? ancestors[ancestors.length - 2].label
-      : ancestors.length === 1
-        ? ancestors[0].label
-        : node.label;
+  // LNB는 항상 GNB 대메뉴(1뎁스) 기준으로 구성하므로 섹션 제목도 1뎁스 라벨 사용
+  const sectionTitle = ancestors.length > 0 ? ancestors[0].label : node.label;
 
   return {
     breadcrumb,

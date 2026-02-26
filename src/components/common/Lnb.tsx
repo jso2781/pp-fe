@@ -25,18 +25,18 @@ const buildLnbItemsFromMenuStructor = (
   const normalize = (url: string) => url.replace(/^\/(?:pp\/)?(ko|en|ja|zh)(\/|$)/, '$2') || '/';
   const target = normalize(currentUrl);
 
-  type FindResult = { node: LnbItem; parent: LnbItem | null };
+  type FindResult = { node: LnbItem; ancestors: LnbItem[] };
 
-  const dfs = (items: LnbItem[], parent: LnbItem | null): FindResult | null => {
+  const dfs = (items: LnbItem[], ancestors: LnbItem[]): FindResult | null => {
     for (const it of items) {
       const keyNorm = normalize(it.key);
 
       if (keyNorm === target || target.startsWith(keyNorm + '/')) {
-        return { node: it, parent };
+        return { node: it, ancestors };
       }
 
       if (it.children && it.children.length > 0) {
-        const found = dfs(it.children, it);
+        const found = dfs(it.children, [...ancestors, it]);
         if (found) return found;
       }
     }
@@ -70,15 +70,17 @@ const buildLnbItemsFromMenuStructor = (
     return cloned;
   };
 
-  const found = dfs(lnbStructor, null);
+  const found = dfs(lnbStructor, []);
   if (!found) {
     // 못 찾으면 전체 구조를 그대로 복사하여 반환
     return lnbStructor.map(cloneWithDisabled);
   }
 
-  // 부모가 있으면 같은 레벨의 형제들을 LNB 루트로 사용
-  if (found.parent && found.parent.children) {
-    return found.parent.children.map(cloneWithDisabled);
+  // 항상 GNB 대메뉴(1뎁스) 기준으로 LNB를 구성:
+  // 매칭 노드가 속한 1뎁스(=첫 조상)의 children(2뎁스 목록)을 루트로 사용
+  const topDepth1 = found.ancestors[0] ?? found.node;
+  if (topDepth1.children && topDepth1.children.length > 0) {
+    return topDepth1.children.map(cloneWithDisabled);
   }
 
   // 루트에서 바로 찾은 경우 해당 노드만 루트로 사용
