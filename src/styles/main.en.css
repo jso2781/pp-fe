@@ -3145,6 +3145,7 @@
 }
 .lang-en .board-list-area .bbs-list tbody th,
 .lang-en .board-list-area .bbs-list tbody td {
+  font-size: 16px;
   border: none;
   border-bottom: 1px solid #D8D8D8;
 }
