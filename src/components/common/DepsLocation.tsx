@@ -48,117 +48,145 @@ export default function DepsLocation() {
     }
     ,
     {
+      // 로그인 > 로그인 방법 선택
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/LoginMethod(\/)?$/,
       labels: ["login", "loginMethod"]
     },
     {
+      // 로그인 > 아이디 로그인
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/Login(\/)?$/,
       labels: ["login", "idLogin"]
     },
     {
+      // 회원정보수정 > 비밀번호 확인
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/PasswordConfirm(\/)?$/,
       labels: ["editProfile", "passwordConfirm"]
     },
     {
+      // 회원정보수정 > > 비밀번호 확인 > 회원정보수정
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/EditProfile(\/)?$/,
       labels: ["editProfile"]
     },
     {
+      // 회원탈퇴
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/WithDrawal(\/)?$/,
       labels: ["withdrawal"]
     },
     {
+      // 회원가입 > 회원가입 선택
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/SignUpSel(\/)?$/,
-      labels: ["signUp"]  // 회원가입 선택
+      labels: ["signUp"]
     },
     {
+      // 회원가입 > 일반 회원 가입 약관 동의
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/GeneralSignUpAgrTrms(\/)?$/,
-      labels: ["signUp"] // 회원가입 - 일반 회원 가입 약관 동의
+      labels: ["signUp"]
     },
     {
+      // 회원가입 > 만 14세 미만 회원 가입 약관 동의
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/JuniorSignUpAgrTrms(\/)?$/,
-      labels: ["signUp"] // 회원가입 - 만 14세 미만 회원 가입 약관 동의
+      labels: ["signUp"]
     },
     {
+      // 회원가입 > 만 14세 미만 회원 가입 약관 동의 > 법정대리인 동의
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/LegalGuardAgr(\/)?$/,
-      labels: ["signUp"] // 회원가입 - 법정대리인 동의
+      labels: ["signUp"]
     },
     {
+      // 회원가입 > 본인인증
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/CertifySelf(\/)?$/,
-      labels: ["signUp"] // 회원가입 - 본인인증
+      labels: ["signUp"]
     },
     {
+      // 회원가입 > 회원 정보 입력
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/SignUpMbrInfo(\/)?$/,
-      labels: ["signUp"] // 회원가입 - 회원 정보 입력
+      labels: ["signUp"]
     },
     {
+      // 회원가입 > 가입 신청 완료
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/SignUpComplete(\/)?$/,
-      labels: ["signUp"] // 회원가입 - 가입 신청 완료
+      labels: ["signUp"]
     },
     {
+      // 로그인 > 아이디 로그인 > 아이디 찾기
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/FindId(\/)?$/,
-      labels: ["login", "idLogin", "findId"] // 로그인 > 아이디 로그인 > 아이디 찾기
+      labels: ["login", "idLogin", "findId"]
     },
     {
+      // 로그인 > 아이디 로그인 > 아이디 찾기 > 아이디 찾기 결과
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/FindIdAuthSuccess(\/)?$/,
-      labels: ["login", "idLogin", "findId"] // 로그인 > 아이디 로그인 > 아이디 찾기
+      labels: ["login", "idLogin", "findId"]
     },
     {
+      // 로그인 > 아이디 로그인 > 비밀번호 찾기
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/FindPw(\/)?$/,
-      labels: ["login", "idLogin", "findPassword"] // 로그인 > 아이디 로그인 > 비밀번호 찾기
+      labels: ["login", "idLogin", "findPassword"]
     },
     {
+      // 로그인 > 아이디 로그인 > 비밀번호 찾기 > 비밀번호 변경
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/FindPwModify(\/)?$/,
-      labels: ["login", "idLogin", "findPassword", "passwordChange"] // 로그인 > 아이디 로그인 > 비밀번호 찾기 > 비밀번호 변경
+      labels: ["login", "idLogin", "findPassword", "passwordChange"]
     },
     {
+      // 기관소식 > FAQ
       pattern: /^\/pp\/[A-Za-z]{2}\/news\/FaqNotice(\/)?(\d+)?$/,
-      labels: ["news", "menuNoticeFaq"] // 기관소식 > FAQ
+      labels: ["news", "menuNoticeFaq"]
     },
     {
+      // 전문가 회원 전환 신청
       pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertMemberApply(\/)?(\d+)?$/,
-      labels: ["usrSwtReg"] // 전문가 회원 전환 신청
+      labels: ["usrSwtReg"]
     },
     {
+      // 고객센터 > 이용약관
       pattern: /^\/pp\/[A-Za-z]{2}\/etc\/Terms(\/)?(\d+)?$/,
-      labels: ["customerCenter", "termsOfUse"] // 고객센터 > 이용약관
+      labels: ["customerCenter", "termsOfUse"]
     },
     {
+      // 고객센터 > 개인정보처리방침
       pattern: /^\/pp\/[A-Za-z]{2}\/etc\/PrivacyPolicy(\/)?(\d+)?$/,
-      labels: ["customerCenter", "privacyPolicy"] // 고객센터 > 개인정보처리방침
+      labels: ["customerCenter", "privacyPolicy"]
     },
     {
+      // 고객센터 > 고정형 영상정보처리기기 운영관리방침
       pattern: /^\/pp\/[A-Za-z]{2}\/etc\/CctvPolicy(\/)?(\d+)?$/,
-      labels: ["customerCenter", "cctvPolicy"] // 고객센터 > 고정형 영상정보처리기기 운영관리방침
+      labels: ["customerCenter", "cctvPolicy"]
     },
     {
+      // 고객센터 > 이메일 무단수집 거부
       pattern: /^\/pp\/[A-Za-z]{2}\/etc\/EmailDeny(\/)?(\d+)?$/,
-      labels: ["customerCenter", "rejectUnAuthorizedEmail"] // 고객센터 > 이메일 무단수집 거부
+      labels: ["customerCenter", "rejectUnAuthorizedEmail"]
     },
     {
+      // DUR 정보 > dur 이해
       pattern: /^\/pp\/[A-Za-z]{2}\/maintask\/dur\/DurUnderstand(\/)?(\d+)?$/,
-      labels: ["menuDur", "menuDurUnderstand"] // DUR 정보 > dur 이해
+      labels: ["menuDur", "menuDurUnderstand"]
     },
     {
+      // DUR 정보 > 알림 게시판
       pattern: /^\/pp\/[A-Za-z]{2}\/maintask\/dur\/DurNoticeList(\/[A-Za-z0-9_]+(\/\d+)?)?\/?$/,
-      labels: ["menuDur", "menuDurNotice"]    // DUR 정보 > 알림 게시판
+      labels: ["menuDur", "menuDurNotice"]
     },
     {
+      // DUR 정보 > 의견 제안
       pattern: /^\/pp\/[A-Za-z]{2}\/maintask\/dur\/Proposal(\/)?(\d+)?$/,
-      labels: ["menuDur", "menuDurSuggest"]   // DUR 정보 > 의견 제안
+      labels: ["menuDur", "menuDurSuggest"]
     },
     {
+      // 내 업무
       pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertMyWork(\/)?$/,
-      labels: ["expertMyWork"]   // 내 업무
+      labels: ["expertMyWork"]
     },
     {
+      // 업무 신청 관리
       pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertApproval(\/\d+)?$/, 
-      labels: ["expertMyWork", "expertApproval"]   // 업무 신청 관리
+      labels: ["expertMyWork", "expertApproval"]
     },
     {
+      // 업무 신청 관리 > 업무 신청 수정
       pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertApprovalUpdate(\/\d+)?$/, 
-      labels: ["expertMyWork", "expertApproval"]   // 업무 신청 관리
-    }        
+      labels: ["expertMyWork", "expertApproval"]
+    }
   ], []);
 
   // 1. 사용자 링크 의한 React Router상 내부 경로 가져오기
