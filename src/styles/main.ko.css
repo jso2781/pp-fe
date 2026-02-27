@@ -6581,6 +6581,7 @@ body {
   width: 60px;
   height: 60px;
   background-color: #76d2d5;
+  background-image: none !important;
   opacity: 0.3;
   border-radius: 50%;
   z-index: -1;
