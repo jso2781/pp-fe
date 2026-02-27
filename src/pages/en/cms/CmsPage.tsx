@@ -7,8 +7,6 @@
 import DOMPurify from 'dompurify';
 import React, { useEffect, useMemo } from 'react';
 import { Box, Typography, Link, Button} from '@mui/material';
-import DepsLocation from '@/components/common/DepsLocation';
-import Lnb from '@/components/common/Lnb';
 import KoglLicense from '@/components/common/KoglLicense';
 import { useParams } from 'react-router-dom';
 import ContactArea from '@/components/common/ContactArea';
@@ -18,7 +16,9 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { getCms } from '@/features/cms/CmsThunks';
 import CleanHtml from '@/components/common/CleanHtml';
-import LnbSectionTitle from '@/components/common/LnbSectionTitle';
+import EngDepsLocation from '@/components/common/EngDepsLocation';
+import EngLnbSectionTitle from '@/components/common/EngLnbSectionTitle';
+import EngLnb from '@/components/common/EngLnb';
 
 export default function CmsPage() {
   const { t } = useTranslation();
@@ -117,17 +117,17 @@ export default function CmsPage() {
           <Box className="lnb-wrap">
             <Box className="lnb-menu">
               <Typography component="h2" className="lnb-tit">
-                <LnbSectionTitle />
+                <EngLnbSectionTitle />
               </Typography>
               <Box className="lnb-list">
-                <Lnb currentUrl={currentUrl}/>
+                <EngLnb currentUrl={currentUrl}/>
               </Box>
             </Box>
           </Box>
 
           {/* 컨텐츠 본문 영역 */}
           <Box className="sub-content">
-            <DepsLocation />
+            <EngDepsLocation />
             <Box className="content-view" id="content">
               <Box className="page-content">
                 {/* --- 본문 시작 --- */}
