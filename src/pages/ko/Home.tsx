@@ -544,13 +544,14 @@ export default function Home() {
                   <SwiperSlide key={item.pstSn || index}>
                     <Box 
                       className="slide-item">
-                      <img src={`${getThumbnailUrl(item)}`} alt="프로모션 배너 1" />
-                      {/* sx={{ 
-                        backgroundImage: `url("${getThumbnailUrl(item)}")`
-                          // backgroundImage: item.thmbFilePath && item.thmbFileNm
-                          // ? `url("${getThumbnailUrl(item)}")`
-                          // : 'url("/img/img_test_banner01.jpg")'
-                      }}  */}
+                      <img 
+                        src={`${getThumbnailUrl(item)}`} 
+                        alt="프로모션 배너 1" 
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                        }} 
+                      />
                     </Box>
                   </SwiperSlide>
                 ))
@@ -932,9 +933,8 @@ export default function Home() {
                         <img
                           src={getThumbnailUrl(item)}
                           style={{
-                            maxWidth: '100%',
-                            maxHeight: '100%',
-                            objectFit: 'contain',
+                            width: '100%',
+                            height: '100%',
                           }}
                         />
                         <span className="sr-only">{item.pstTtl || `카드뉴스 ${index + 1} 상세보러가기`}</span>

@@ -213,8 +213,6 @@
         }
 
         .slide-item img {
-          //width: 100%;
-          height: 100%;
           display: block;
         }
       }
@@ -1204,9 +1202,8 @@
 
           .card-news-content {
             width: 100%;
-            height: 300px;
-            // height: auto;
-            aspect-ratio: 1 / 0.8; // 태블릿에서 보기 좋은 비율
+            max-width:378px;
+            margin:0 auto
           }
         }
       }

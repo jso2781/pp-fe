@@ -6670,7 +6670,6 @@ body {
   justify-content: center;
 }
 .lang-ko .main-container .main-promotion-section .promotion-area .promotion-swiper .slide-item img {
-  height: 100%;
   display: block;
 }
 .lang-ko .main-container .main-promotion-section .promotion-area .pagination-wrapper {
@@ -7537,8 +7536,8 @@ body {
   }
   .lang-ko .main-container .main-board-section .inner .card-news-area .card-news-content {
     width: 100%;
-    height: 300px;
-    aspect-ratio: 1/0.8;
+    max-width: 378px;
+    margin: 0 auto;
   }
 }
 .lang-ko .list-bullet li {
