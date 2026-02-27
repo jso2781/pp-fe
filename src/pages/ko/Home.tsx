@@ -732,7 +732,7 @@ export default function Home() {
                             ) : (
                               <Link href={it.url} target="_blank" rel="noreferrer" title="새창 열림" className="sns-link">
                                 <Box className="thumb-area">
-                                  <img src={it.thumbnail || '/img/img_test.png'} alt="" />
+                                  <img src={it.thumbnail || '/img/img_test.png'} alt="" style={{objectFit: 'unset'}}/>
                                 </Box>
                                 <Box className="info-area">
                                   <Typography className="sns-title">{it.title}</Typography>
@@ -801,7 +801,7 @@ export default function Home() {
                         ) : (
                           <Link href={it.url} target="_blank" rel="noreferrer" title="새창 열림" className="sns-link">
                             <Box className="thumb-area">
-                              <img src={it.thumbnail || '/img/img_test.png'} alt="" />
+                              <img src={it.thumbnail || '/img/img_test.png'} alt="" style={{objectFit: 'unset'}}/>                              
                             </Box>
                             <Box className="info-area">
                               <Typography className="sns-title">{it.title}</Typography>

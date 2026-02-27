@@ -165,7 +165,7 @@ export default function GalleryBoardList() {
                             >
                               <Box className="thumb-area">
                                 <Box className="thumb-box">
-                                  <img src={item.thmbFilePath} alt={`썸네일 이미지 ${index+1}`} aria-hidden="true" />
+                                  <img src={item.thmbFilePath} alt={`썸네일 이미지 ${index+1}`} aria-hidden="true" style={{width: '100%', height: '100%', objectFit: 'unset'}}/>
                                 </Box>      
                               </Box>
                               <Box className="info-area">
