@@ -49,7 +49,7 @@ export default function KIDS_PP_US_EN_21() {
                       <p>To evaluate the causality between a drug and an adverse event, we monitor and observe the case and control groups of a study and we use research designs like cohort (all users of a drug are identified and followed up to determine what events or ADRs occur) and case-control study (all cases of the disease are identified and the use of the drug of interest is compared with controls without the disease).</p>
                     </div>
                     <div className="base-table-container">
-                      <div className="table-responsive">
+                      <div className="table-responsive has-scroll">
                         <table className="base-table">
                           <caption className="sr-only">Study design</caption>
                           <colgroup>
@@ -79,16 +79,13 @@ export default function KIDS_PP_US_EN_21() {
                             </tr>
                             <tr>
                               <td>Cross-sectional study</td>
-                              <td></td>
                             </tr>
                             <tr>
                               <td>Case-control study</td>
                               <td rowSpan={3}>Analytic study<br/>(Causation)</td>
-                              <td></td>
                             </tr>
                             <tr>
                               <td>Cohort study</td>
-                              <td></td>
                             </tr>
                             <tr>
                               <th scope="row">Experimental study</th>
@@ -101,11 +98,44 @@ export default function KIDS_PP_US_EN_21() {
                     </div>
                     <h3 className="section-title">Data collection</h3>
                     <div className="section-desc">
-                      <p>To conduct a pharmacoepidemiologic study, we collect data directly or analyze databases such as health insurance claims database, hospital EMR database, and national statistics mortality data.</p>
+                      <p className="mb40">To conduct a pharmacoepidemiologic study, we collect data directly or analyze databases such as health insurance claims database, hospital EMR database, and national statistics mortality data.</p>
                       <dl className="list-definition-plain">
-                        <dt className="txt-2">1) Narcotic drugs</dt>
-                        <dd></dd>
+                        <dt className="txt-2">1) Collection of data</dt>
+                        <dd>
+                          <ul className="list-bullet-3">
+                            <li>We conduct in-depth studies on drug exposure, adverse events, confounding factors, and etc.</li>
+                            <li>
+                              We directly collect data on about adverse events if necessary. Such cases include over-the-counter
+                              drugs, drugs  not covered under national health insurance, and adverse events without diagnostic codes</li>
+                            <li>
+                               We also use drug registry data, which contain information on the drug users and adverse events, for 
+                              causality  assessments.
+                            </li>
+                          </ul>
+                        </dd>
                       </dl>
+                      <dl className="list-definition-plain">
+                        <dt className="txt-2">2) Analysis using other databases</dt>
+                        <dd>
+                          <ul className="list-bullet-3">
+                            <li>
+                              Advantages of using other databases include their representativeness of a large population, high validity, and efficiency.
+                            </li>
+                            <li>
+                              We can analyze associations among drug use, cancer risk and death by linking different databases.
+                            </li>
+                            <li>
+                              Recently, we conducted pharmacoepidemiological studies using the Common Data Model(CDM). CDM is  
+                              based on hospital data, and includes laboratory test results and drugs not covered by national health  
+                              insurance.
+                            </li>
+                          </ul>
+                        </dd>
+                      </dl>
+                    </div>
+                    <h3 className="section-title">Evaluation and Conclusion</h3>
+                    <div className="section-desc">
+                      <p>We analyze the data to determine whether the suspected causal drugs actually had an effect on the outcome and generate drug safety information.</p>
                     </div>
                   </section>
 

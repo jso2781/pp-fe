@@ -532,6 +532,8 @@ export const screensKo: ScreenMeta[] = [
 
 /** 영문 Screens 목록 (영문 퍼블리싱 템플릿) - generated/en/index.ts 와 맞출 것 */
 export const screensEn: ScreenMeta[] = [
+  { id: 'KIDS-PP-US-EN-07', title: 'Introduction of KAERS', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-08', title: 'No. of Reported ICSRs by year', uiType: 'page' },
   { id: 'KIDS-PP-US-EN-09', title: 'APEC CoE', uiType: 'page' },
   { id: 'KIDS-PP-US-EN-13', title: 'Introduction of PE (Pharmacoepidemiology)', uiType: 'page' },
   { id: 'KIDS-PP-US-EN-14', title: 'PE Study Design', uiType: 'page' },

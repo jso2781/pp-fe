@@ -206,7 +206,6 @@
       font-size: var(--fs-16);
       font-weight: 400;
       &.th2{
-        font-size: var(--fs-18);
         font-weight: 700;
       }
     }
@@ -609,7 +608,6 @@
     .resource-item {
       flex-direction: column;
       align-items: center;
-      text-align: center;
       gap: 20px;
 
       .thumbnail {
@@ -617,8 +615,6 @@
       }
 
       .info-body {
-        align-items: center;
-        
         dl {
           dt {
             font-size: 18px;
