@@ -1,4 +1,8 @@
 {
+  // 들여쓰기: Tab 키 입력 시 공백 2칸
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+
   // 파일을 클릭할 때 미리보기 모드가 아닌 새 탭으로 열기
   "workbench.editor.enablePreview": false,
   

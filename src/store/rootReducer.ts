@@ -16,6 +16,7 @@ import DurSearchRoomReducer from '@/features/dur/DurSearchRoomSlice'
 import DurMyDrugInfoReducer from '@/features/dur/DurMyDrugInfoSlice'
 import DurEftgrpDetailReducer from '@/features/dur/DurEftgrpDetailSlice'
 import DurPrdctDetailReducer from '@/features/dur/DurPrdctDetailSlice'
+import IntegratedSearchReducer from '@/features/search/IntegratedSearchSlice'
 
 const rootReducer = combineReducers({
   ui: uiReducer,
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   durMyDrugInfo: DurMyDrugInfoReducer, // 내가 먹는 약의 DUR 정보
   durEftgrpDetail: DurEftgrpDetailReducer, // DUR 효능군중복주의 상세 조회 팝업
   durPrdctDetail: DurPrdctDetailReducer, // DUR 제품 상세 조회 팝업
+  integratedSearch: IntegratedSearchReducer, // 통합검색
 })
 
 export default rootReducer

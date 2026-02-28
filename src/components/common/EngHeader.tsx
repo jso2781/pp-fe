@@ -632,7 +632,8 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                               <Link
                                 to={menu2.url || "#"}
                                 className={`depth2-link ${activeDepth2 === idx2 ? 'on' : ''}`}
-                                onFocus={() => setActiveDepth2(idx2)} 
+                                onFocus={() => setActiveDepth2(idx2)}
+                                onClick={menu2.url ? closeAll : undefined}
                               >
                                 {menu2.title}
                               </Link>
@@ -648,7 +649,8 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                       <li key={idx3}>
                                         <Link
                                           to={isObj ? menu3.url : "#"}
-                                          onFocus={() => setActiveDepth2(idx2)} 
+                                          onFocus={() => setActiveDepth2(idx2)}
+                                          onClick={closeAll}
                                           target={isNewWindow ? "_blank" : "_self"}
                                           rel={isNewWindow ? "noopener noreferrer" : undefined}
                                           className={isNewWindow ? "ico-new" : ""}

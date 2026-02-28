@@ -19,12 +19,12 @@ export default function DepsLocation() {
 
     // 맨 위에 홈 경로 패턴 추가 (ko, en 모두 대응)
     {
-      pattern: /^\/([A-Za-z]{2})?(\/)?$/, 
+      pattern: /^\/pp\/([A-Za-z]{2})?(\/)?$/, 
       labels: ["home"] // i18n에 등록된 'home' 키 사용
     },
     {
       // 통합검색
-      pattern: /^\/[A-Za-z]{2}\/search\/IntegratedSearch(\/\d+)?$/, 
+      pattern: /^\/pp\/[A-Za-z]{2}\/search\/IntegratedSearch(\/\d+)?$/, 
       labels: ["integratedSearch"]
     },
     {
@@ -43,7 +43,7 @@ export default function DepsLocation() {
       labels: ["community", "board"]
     },
     {
-      pattern: /^\/[A-Za-z]{2}\/safety\/report\/online$/,
+      pattern: /^\/pp\/[A-Za-z]{2}\/safety\/report\/online$/,
       labels: ["drugSafetyMgmt", "drugSafetyReport", "drugSafetyReportOnline"]
     }
     ,
