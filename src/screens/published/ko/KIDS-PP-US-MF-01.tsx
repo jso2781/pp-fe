@@ -27,7 +27,9 @@ export default function KIDS_PP_US_MF_01() {
                 {/* --- 본문 시작 --- */}
 
                 
-                  <p>published/ko/screens/ KIDS-PP-US-MF-01.html 파일 확인</p>
+                  <p>published/ko/screens/ KIDS-PP-US-MF-01.html - 전문가회원 신청 결과 안내</p>
+                  <p>published/ko/screens/ KIDS-PP-US-MF-02.html - 클린신고 접수 안내</p>
+                  <p>published/ko/screens/ KIDS-PP-US-MF-03.html - 비밀번호 발급 메일</p>
 
 
                 {/* --- 본문 끝 --- */}
