@@ -28,8 +28,11 @@ export default function KIDS_PP_US_MF_01() {
 
                 
                   <p>published/ko/screens/ KIDS-PP-US-MF-01.html - 전문가회원 신청 결과 안내</p>
-                  <p>published/ko/screens/ KIDS-PP-US-MF-02.html - 클린신고 접수 안내</p>
-                  <p>published/ko/screens/ KIDS-PP-US-MF-03.html - 비밀번호 발급 메일</p>
+                  <p>published/ko/screens/ KIDS-PP-US-MF-02.html - 전문가회원 신청 결과 안내문</p>
+                  <p>published/ko/screens/ KIDS-PP-US-MF-03.html - DUR 정보 의견 제안 등록 안내문</p>
+
+                  <p>published/ko/screens/ KIDS-PP-US-MF-04.html - 클린신고 접수 안내</p>
+                  <p>published/ko/screens/ KIDS-PP-US-MF-05.html - 비밀번호 발급 메일</p>
 
 
                 {/* --- 본문 끝 --- */}
