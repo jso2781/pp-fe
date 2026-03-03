@@ -534,7 +534,10 @@ export const screensKo: ScreenMeta[] = [
 export const screensEn: ScreenMeta[] = [
   { id: 'KIDS-PP-US-EN-07', title: 'Introduction of KAERS', uiType: 'page' },
   { id: 'KIDS-PP-US-EN-08', title: 'No. of Reported ICSRs by year', uiType: 'page' },
-  { id: 'KIDS-PP-US-EN-09', title: 'APEC CoE', uiType: 'page' },
+  { id: 'KIDS-PP-US-EN-09', title: 'APEC CoE', uiType: 'page' }, 
+  { id: 'KIDS-PP-US-EN-10', title: 'Introduction of RPVC', uiType: 'page' }, 
+  { id: 'KIDS-PP-US-EN-11', title: 'History of RPVC', uiType: 'page' }, 
+  { id: 'KIDS-PP-US-EN-12', title: 'Current activities of RPVC', uiType: 'page' }, 
   { id: 'KIDS-PP-US-EN-13', title: 'Introduction of PE (Pharmacoepidemiology)', uiType: 'page' },
   { id: 'KIDS-PP-US-EN-14', title: 'PE Study Design', uiType: 'page' },
   { id: 'KIDS-PP-US-EN-15', title: 'Introduction of DUR', uiType: 'page' },
