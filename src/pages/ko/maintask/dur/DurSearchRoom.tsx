@@ -50,6 +50,9 @@ export default function DurSearchRoom(){
   const [searchCnd, setSearchCnd] = useState<string>(searchParams.get('searchCnd') || 'igrdNm');
   const [searchWrd, setSearchWrd] = useState<string>(searchParams.get('searchWrd') || '');
 
+  /** 결과 목록/상세에 사용할 조회조건. 검색 실행 시에만 갱신되어, 조회조건 변경만으로는 칼럼이 바뀌지 않음 */
+  const [resultSearchCnd, setResultSearchCnd] = useState<string>(searchParams.get('searchCnd') || 'igrdNm');
+
   // 페이징
   const [pageNum, setPageNum] = useState(1);
   const [pageSize, setPageSize] = useState(10) // 화면에 페이지 사이즈 설정이 필요시 setPageSize 활용
@@ -116,6 +119,7 @@ export default function DurSearchRoom(){
 
   useEffect(() => {
     if((searchWrd ?? '').trim().length < 2)return;
+    setResultSearchCnd(searchCnd);
     dispatch(selectDurSearchRoomList({ pageNum, pageSize, igrdNm: searchCnd === 'igrdNm' ? searchWrd : undefined, prdctNm: searchCnd === 'prdctNm' ? searchWrd : undefined }));
   }, [dispatch, pageNum]);
 
@@ -128,6 +132,7 @@ export default function DurSearchRoom(){
     if((searchWrd ?? '').trim().length < 2)return;
     setPageNum(1);
     setSelectedRowIndex(null); // 조회가 완료(loading=true)되기 전까진 "DUR 정보 검색 결과" 영역과 "DUR 정보 검색 결과 상세보기" 영역을 숨김.
+    setResultSearchCnd(searchCnd);
     dispatch(selectDurSearchRoomList({ pageNum: 1, pageSize, igrdNm: searchCnd === 'igrdNm' ? searchWrd : undefined, prdctNm: searchCnd === 'prdctNm' ? searchWrd : undefined }));
   };
 
@@ -357,7 +362,7 @@ export default function DurSearchRoom(){
                           </colgroup>
                           <thead>
                             <tr>
-                              <th scope="col">{searchCnd === 'igrdNm' ? '성분명(영)' : '제품명(한)'}</th>
+                              <th scope="col">{(list.length > 0 ? resultSearchCnd : searchCnd) === 'igrdNm' ? '성분명(영)' : '제품명(한)'}</th>
                               <th scope="col">DUR 유형</th>
                               <th scope="col">상세보기</th>
                             </tr>
@@ -367,7 +372,7 @@ export default function DurSearchRoom(){
                               rows.length > 0 ? (
                                 rows.map((row) => (
                                   <tr key={row.id}>
-                                    <th scope="row">{searchCnd === 'igrdNm' ? row.igrdNm : row.prdctNm}</th>
+                                    <th scope="row">{(list.length > 0 ? resultSearchCnd : searchCnd) === 'igrdNm' ? row.igrdNm : row.prdctNm}</th>
                                     <td>
                                       <Box className="dur-icons">
                                         {row.concList.length > 0 ? <img src="/img/cms/ico_dur_01.png" alt="병용금기 성분 아이콘" /> : ''}
@@ -491,7 +496,7 @@ export default function DurSearchRoom(){
                                           <Box className="detail-card">
                                             {/* 검색한 제품명 */}
                                             {
-                                              searchCnd === 'prdctNm' && (
+                                              resultSearchCnd === 'prdctNm' && (
                                                 <dl className="detail-item">
                                                   <dt>검색한 제품</dt>
                                                   <dd>
@@ -505,11 +510,11 @@ export default function DurSearchRoom(){
   
                                             {/* 검색한 제품의 성분명 */}
                                             <dl className="detail-item">
-                                              <dt>{searchCnd === 'igrdNm' ? '검색한 성분' : '검색한 제품의 성분'}</dt>
+                                              <dt>{resultSearchCnd === 'igrdNm' ? '검색한 성분' : '검색한 제품의 성분'}</dt>
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   {
-                                                    searchCnd === 'igrdNm' ? (
+                                                    resultSearchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
                                                       <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'conc')}>
@@ -608,7 +613,7 @@ export default function DurSearchRoom(){
                                           <Box className="detail-card">
                                             {/* 검색한 제품명 */}
                                             {
-                                              searchCnd === 'prdctNm' && (
+                                              resultSearchCnd === 'prdctNm' && (
                                                 <dl className="detail-item">
                                                   <dt>검색한 제품</dt>
                                                   <dd>
@@ -622,11 +627,11 @@ export default function DurSearchRoom(){
   
                                             {/* 검색한 성분(성분) */}
                                             <dl className="detail-item">
-                                              <dt>{searchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
+                                              <dt>{resultSearchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   {
-                                                    searchCnd === 'igrdNm' ? (
+                                                    resultSearchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
                                                       <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'age')}>
@@ -713,7 +718,7 @@ export default function DurSearchRoom(){
                                           <Box className="detail-card">
                                             {/* 검색한 제품명 */}
                                             {
-                                              searchCnd === 'prdctNm' && (
+                                              resultSearchCnd === 'prdctNm' && (
                                                 <dl className="detail-item">
                                                   <dt>검색한 제품</dt>
                                                   <dd>
@@ -727,11 +732,11 @@ export default function DurSearchRoom(){
   
                                             {/* 검색한 성분(성분) */}
                                             <dl className="detail-item">
-                                              <dt>{searchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
+                                              <dt>{resultSearchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   {
-                                                    searchCnd === 'igrdNm' ? (
+                                                    resultSearchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
                                                       <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'prgnt')}>
@@ -818,7 +823,7 @@ export default function DurSearchRoom(){
                                           <Box className="detail-card">
                                             {/* 검색한 제품명 */}
                                             {
-                                              searchCnd === 'prdctNm' && (
+                                              resultSearchCnd === 'prdctNm' && (
                                                 <dl className="detail-item">
                                                   <dt>검색한 제품</dt>
                                                   <dd>
@@ -832,11 +837,11 @@ export default function DurSearchRoom(){
   
                                             {/* 검색한 성분(성분) */}
                                             <dl className="detail-item">
-                                              <dt>{searchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
+                                              <dt>{resultSearchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   {
-                                                    searchCnd === 'igrdNm' ? (
+                                                    resultSearchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
                                                       <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'cpct')}>
@@ -923,7 +928,7 @@ export default function DurSearchRoom(){
                                           <Box className="detail-card">
                                             {/* 검색한 제품명 */}
                                             {
-                                              searchCnd === 'prdctNm' && (
+                                              resultSearchCnd === 'prdctNm' && (
                                                 <dl className="detail-item">
                                                   <dt>검색한 제품</dt>
                                                   <dd>
@@ -937,11 +942,11 @@ export default function DurSearchRoom(){
   
                                             {/* 검색한 성분(성분) */}
                                             <dl className="detail-item">
-                                              <dt>{searchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
+                                              <dt>{resultSearchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   {
-                                                    searchCnd === 'igrdNm' ? (
+                                                    resultSearchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
                                                       <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'dosage')}>
@@ -1028,7 +1033,7 @@ export default function DurSearchRoom(){
                                           <Box className="detail-card">
                                             {/* 검색한 제품명 */}
                                             {
-                                              searchCnd === 'prdctNm' && (
+                                              resultSearchCnd === 'prdctNm' && (
                                                 <dl className="detail-item">
                                                   <dt>검색한 제품</dt>
                                                   <dd>
@@ -1042,11 +1047,11 @@ export default function DurSearchRoom(){
   
                                             {/* 검색한 성분(성분) */}
                                             <dl className="detail-item">
-                                              <dt>{searchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
+                                              <dt>{resultSearchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   {
-                                                    searchCnd === 'igrdNm' ? (
+                                                    resultSearchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
                                                       <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'eftgrp')}>
@@ -1136,7 +1141,7 @@ export default function DurSearchRoom(){
                                           <Box className="detail-card">
                                             {/* 검색한 제품명 */}
                                             {
-                                              searchCnd === 'prdctNm' && (
+                                              resultSearchCnd === 'prdctNm' && (
                                                 <dl className="detail-item">
                                                   <dt>검색한 제품</dt>
                                                   <dd>
@@ -1150,11 +1155,11 @@ export default function DurSearchRoom(){
   
                                             {/* 검색한 성분(성분) */}
                                             <dl className="detail-item">
-                                              <dt>{searchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
+                                              <dt>{resultSearchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   {
-                                                    searchCnd === 'igrdNm' ? (
+                                                    resultSearchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
                                                       <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'snctz')}>
@@ -1231,7 +1236,7 @@ export default function DurSearchRoom(){
                                           <Box className="detail-card">
                                             {/* 검색한 제품명 */}
                                             {
-                                              searchCnd === 'prdctNm' && (
+                                              resultSearchCnd === 'prdctNm' && (
                                                 <dl className="detail-item">
                                                   <dt>검색한 제품</dt>
                                                   <dd>
@@ -1245,11 +1250,11 @@ export default function DurSearchRoom(){
   
                                             {/* 검색한 성분(성분) */}
                                             <dl className="detail-item">
-                                              <dt>{searchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
+                                              <dt>{resultSearchCnd === 'igrdNm' ? '검색한 성분' : '성분'}</dt>
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   {
-                                                    searchCnd === 'igrdNm' ? (
+                                                    resultSearchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
                                                       <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'nursw')}>
