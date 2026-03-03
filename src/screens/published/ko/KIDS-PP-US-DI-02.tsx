@@ -116,7 +116,6 @@ export default function KIDS_PP_US_DI_02() {
                       <li>DUR이 적용되고 있는 성분 및 품목을 기준으로 검색이 가능합니다.</li>
                       <li>식품의약품안전처 공시·공고로 지정된 금기 및 주의 성분은 <strong>“DUR 정보 다운로드”</strong> 버튼을 클릭하여 다운로드 받은 엑셀 파일로 확인하세요.</li>
                     </ul>
-
                     <ul className="guide-list--sub">
                       {/* <li>본 DUR 정보는 비상업적 연구 또는 교육에만 사용할 수 있으며, 상업적 목적으로 활용하는 경우 한국의약품안전관리원의 사전 승인을 받아야만 합니다.</li>
                       <li>Provided for non-commercial research and education use only. Used with permission from KIDS for any commercial purposes.</li> */}
