@@ -148,7 +148,7 @@ export default function KIDS_PP_US_PI_11() {
                       <p className="txt-4 mb10">※ 보다 자세한 사항은 <span className="fw-700">최신 버전의 이용지침서</span>를 확인하여 주시기 바랍니다.</p>
                       <div className="shortcut-link">
                         <a 
-                          href="#" 
+                          href="https://nedrug.mfds.go.kr/bbs/148" 
                           className="btn-link-blank-html"
                           target="_blank" 
                           rel="noopener noreferrer"

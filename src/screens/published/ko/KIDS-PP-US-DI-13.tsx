@@ -65,34 +65,49 @@ export default function KIDS_PP_US_DI_13() {
                       <p className="guide-txt">아래의 그림을 클릭하면 최신의 해당 정보집을 내려 받을 수 있습니다.</p>
                       <ul className="book-list">
                         <li>
-                          <button type="button" className="btn-book">
-                            <img src="/img/cms/ApprUseBook_img01.png" alt="소아·청소년 정보집" />
-                            <p className="book-name">소아·청소년에 대한 의약품 적정사용 정보집(’22)</p>
-                          </button>
+                          <a href="/download/소아·청소년에 대한 의약품 적정사용 정보집_2022년 개정판.pdf" download className="btn-book" role="button">
+                            <img src="/img/cms/ApprUseBook_img01.png" alt="" aria-hidden="true" />
+                            <p className="book-name">
+                              소아·청소년에 대한 의약품 적정사용 정보집(’22)
+                              <span className="sr-only">(파일 다운로드)</span>
+                            </p>
+                          </a>
                         </li>
                         <li>
-                          <button type="button" className="btn-book">
-                            <img src="/img/cms/ApprUseBook_img02.png" alt="어르신 정보집" />
-                            <p className="book-name">어르신에 대한 의약품 적정사용 정보집(’22)</p>
-                          </button>
+                          <a href="/download/임부에 대한 의약품 적정사용 정보집(2025)(전문가용).pdf" download className="btn-book" role="button">
+                            <img src="/img/cms/ApprUseBook_img02.png" alt="" aria-hidden="true" />
+                            <p className="book-name">
+                              임부에 대한 의약품 적정사용 정보집(’25)
+                              <span className="sr-only">(파일 다운로드)</span>
+                            </p>
+                          </a>
                         </li>
                         <li>
-                          <button type="button" className="btn-book">
-                            <img src="/img/cms/ApprUseBook_img03.png" alt="임산부 정보집" />
-                            <p className="book-name">임산부에 대한 의약품 적정사용 정보집(’22)</p>
-                          </button>
+                          <a href="/download/노인에대한의약품적정사용정보집-웹용.pdf" download className="btn-book" role="button">
+                            <img src="/img/cms/ApprUseBook_img03.png" alt="" aria-hidden="true" />
+                            <p className="book-name">
+                              노인에 대한 의약품 적정사용 정보집(’15)
+                              <span className="sr-only">(파일 다운로드)</span>
+                            </p>
+                          </a>
                         </li>
                         <li>
-                          <button type="button" className="btn-book">
-                            <img src="/img/cms/ApprUseBook_img04.png" alt="특정 질환별 정보집" />
-                            <p className="book-name">특정 질환별 의약품 적정사용 정보집(’23)</p>
-                          </button>
+                          <a href="/download/1218_간질환정보집_최종본.pdf" download className="btn-book" role="button">
+                            <img src="/img/cms/ApprUseBook_img04.png" alt="" aria-hidden="true" />
+                            <p className="book-name">
+                              간질환 환자에 대한 의약품 적정사용 정보집(’17)
+                              <span className="sr-only">(파일 다운로드)</span>
+                            </p>
+                          </a>
                         </li>
                         <li>
-                          <button type="button" className="btn-book">
-                            <img src="/img/cms/ApprUseBook_img05.png" alt="가이드북" />
-                            <p className="book-name">의약품 안전사용 가이드북(’24)</p>
-                          </button>
+                          <a href="/download/1218_신질환정보집_최종본.pdf" download className="btn-book" role="button">
+                            <img src="/img/cms/ApprUseBook_img05.png" alt="" aria-hidden="true" />
+                            <p className="book-name">
+                              신질환 환자에 대한 의약품적정사용 정보집(’17)
+                              <span className="sr-only">(파일 다운로드)</span>
+                            </p>
+                          </a>
                         </li>
                       </ul>
                     </Box>
