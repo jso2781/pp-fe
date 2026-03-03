@@ -215,11 +215,14 @@ export default function GeneralBoardList() {
                   {/* 만족도 조사 */}
                   <DgstfnExnm menuSn={menuSn} />
                   {/* 업무 담당 부서 및 연락처 */}
-                  <ContactArea
-                    contactDepNm={contactDepNm}
-                    contactPersonNm={contactPersonNm}
-                    contactPhoneNum={contactPhoneNum}
-                  />                  
+                  {contactDepNm && contactPersonNm && contactPhoneNum && (
+                    <ContactArea
+                      contactDepNm={contactDepNm}
+                      contactPersonNm={contactPersonNm}
+                      contactPhoneNum={contactPhoneNum}
+                    />
+                   )
+                  }     
                 {/* --- 본문 끝 --- */}
                 </Box>
               </Box>
