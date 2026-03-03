@@ -97,7 +97,7 @@ export default function KIDS_PP_US_DI_01() {
                         <div className="definition-list__text">
                           <span className="definition-list__title">1. 병용금기 성분</span>
                           <span className="definition-list__desc">
-                            <strong>두 가지 이상의 의약품</strong>을 함께 사용하는 경우, 치료 효과의 변화 또는 심각한 부작용 발생 등의 우려가 있어 동시에 사용하지 않아야 하는 유효성분의 조합
+                            <strong>두 가지 이상의 의약품</strong>을 함께 사용하는 경우, 치료 효과의 변화 또는 심각한 부작용 발생 등의 우려가 있어 동시에 <br/>사용하지 않아야 하는 유효성분의 조합
                           </span>
                         </div>
                       </li>
@@ -110,7 +110,7 @@ export default function KIDS_PP_US_DI_01() {
                         <div className="definition-list__text">
                           <span className="definition-list__title">2. 특정연령대 금기 성분</span>
                           <span className="definition-list__desc">
-                            소아, 노인 등 특정연령대의 환자가 사용함에 있어 안전성이 확보되지 않았거나 심각한 부작용 발생 등의 우려가 있어 사용하지 않아야 하는 유효성분
+                             <strong>소아, 노인 등 특정연령대</strong>의 환자가 사용함에 있어 안전성이 확보되지 않았거나 심각한 부작용 발생 등의 우려가 있어 <br/>사용하지 않아야 하는 유효성분
                           </span>
                         </div>
                       </li>
@@ -123,7 +123,7 @@ export default function KIDS_PP_US_DI_01() {
                         <div className="definition-list__text">
                           <span className="definition-list__title">3. 임부금기 성분</span>
                           <span className="definition-list__desc">
-                            태아에게 매우 심각한 위해성(태아기형 또는 태아독성 등)을 유발하거나 유발할 가능성이 높아 임부에게 사용하는 것이 권장되지 않는 유효성분
+                            <strong>태아</strong>에게 매우 심각한 위해성(태아기형 또는 태아독성 등)을 유발하거나 유발할 가능성이 높아 임부에게 사용하는 것이 <br/>권장되지 않는 유효성분
                           </span>
                         </div>
                       </li>
@@ -136,7 +136,7 @@ export default function KIDS_PP_US_DI_01() {
                         <div className="definition-list__text">
                           <span className="definition-list__title">4. 용량주의 성분</span>
                           <span className="definition-list__desc">
-                            성인에게 특정 용량 초과 시 효과의 증가는 기대하기 어렵고 용량의존적 부작용 발생 가능성이 높아져 1일 최대용량에 대한 주의가 필요한 유효성분
+                            성인에게 특정 용량 초과 시 효과의 증가는 기대하기 어렵고 용량의존적 부작용 발생 가능성이 높아져 <strong>1일 최대용량</strong>에 대한 <br/>주의가 필요한 유효성분
                           </span>
                         </div>
                       </li>
@@ -149,7 +149,7 @@ export default function KIDS_PP_US_DI_01() {
                         <div className="definition-list__text">
                           <span className="definition-list__title">5. 투여기간주의 성분</span>
                           <span className="definition-list__desc">
-                            특정 투여기간 초과 시 효과의 증가는 기대하기 어렵고 부작용 발생 가능성이 높아져 1회 최대 투여기간에 대한 주의가 필요한 유효성분
+                            특정 투여기간 초과 시 효과의 증가는 기대하기 어렵고 부작용 발생 가능성이 높아져 <strong>1회 최대 투여기간</strong>에 대한 <br/>주의가 필요한 유효성분
                           </span>
                         </div>
                       </li>
@@ -162,7 +162,7 @@ export default function KIDS_PP_US_DI_01() {
                         <div className="definition-list__text">
                           <span className="definition-list__title">6. 효능군중복주의 성분</span>
                           <span className="definition-list__desc">
-                            약리기전이 동일하거나 유사한 효능군 내에서 중복 투여할 때 추가적인 효과의 증가는 기대하기 어렵고 부작용 발생 가능성이 높아져 주의가 필요한 유효성분
+                            <strong>약리기전이 동일하거나 유사한 효능군</strong> 내에서 중복 투여할 때 추가적인 효과의 증가는 기대하기 어렵고 부작용 발생 <br/>가능성이 높아져 주의가 필요한 유효성분
                           </span>
                         </div>
                       </li>
@@ -175,7 +175,7 @@ export default function KIDS_PP_US_DI_01() {
                         <div className="definition-list__text">
                           <span className="definition-list__title">7. 노인주의 성분</span>
                           <span className="definition-list__desc">
-                            노인에서 부작용 발생 빈도 증가 등의 우려가 있어 주의가 필요한 유효성분
+                             <strong>노인</strong>에서 부작용 발생 빈도 증가 등의 우려가 있어 주의가 필요한 유효성분
                           </span>
                         </div>
                       </li>
@@ -188,7 +188,7 @@ export default function KIDS_PP_US_DI_01() {
                         <div className="definition-list__text">
                           <span className="definition-list__title">8. 수유부주의 성분</span>
                           <span className="definition-list__desc">
-                            수유 중의 소아에게 부작용 발생 등의 우려가 있어 수유부에게 사용 시 주의가 필요한 유효성분
+                            <strong>수유 중의 소아</strong>에게 부작용 발생 등의 우려가 있어 수유부에게 사용 시 주의가 필요한 유효성분
                           </span>
                         </div>
                       </li>
@@ -230,41 +230,41 @@ export default function KIDS_PP_US_DI_01() {
                           <tbody>
                             <tr>
                               <th scope="row" rowSpan={3}>금기성분 고시</th>
-                              <td>병용금기 (2004년~)</td>
+                              <td>병용금기(2004년~)</td>
                               <td>1,450</td>
                             </tr>
                             <tr>
-                              <td>특정연령대금기 (2004년~)</td>
+                              <td>특정연령대금기(2004년~)</td>
                               <td>207</td>
                             </tr>
                             <tr>
-                              <td>임부금기 (2008년~)</td>
+                              <td>임부금기(2008년~)</td>
                               <td>1,210</td>
                             </tr>
 
                             <tr>
                               <th scope="row" rowSpan={6}>주의성분 공고</th>
-                              <td>효능군중복주의 (2013년~)</td>
+                              <td>효능군중복주의(2013년~)</td>
                               <td>392</td>
                             </tr>
                             <tr>
-                              <td>용량주의 (2014년~)</td>
+                              <td>용량주의(2014년~)</td>
                               <td>331</td>
                             </tr>
                             <tr>
-                              <td>투여기간주의 (2014년~)</td>
+                              <td>투여기간주의(2014년~)</td>
                               <td>60</td>
                             </tr>
                             <tr>
-                              <td>노인주의 (2015년~)</td>
+                              <td>노인주의(2015년~)</td>
                               <td>108</td>
                             </tr>
                             <tr>
-                              <td>수유부주의 (2024년~)</td>
+                              <td>수유부주의(2024년~)</td>
                               <td>180</td>
                             </tr>
                             <tr>
-                              <td>분할주의 (2015년~)</td>
+                              <td>분할주의(2015년~)</td>
                               <td>2,262(품목기준)</td>
                             </tr>
                           </tbody>
@@ -284,7 +284,13 @@ export default function KIDS_PP_US_DI_01() {
                           </p>
                         </div>
                         <div className="info-action__btn">
-                          <button type="button" className="btn-link-html">바로가기</button>
+                          <a 
+                            href="/pp/ko/cms/CmsPage/cms0010" 
+                            className="btn-link-html" 
+                            aria-label="의약품 적정사용 정보집 바로가기"
+                          >
+                            바로가기
+                          </a>
                         </div>
                       </div>
 

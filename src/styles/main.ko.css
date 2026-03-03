@@ -8555,6 +8555,15 @@ body {
   font-size: var(--fs-18);
   text-align: center;
 }
+.lang-ko .pageCont-dur-intro .info-summary-box {
+  word-break: keep-all;
+}
+.lang-ko .pageCont-dur-intro .info-summary-box .info-summary-box__title {
+  text-align: left;
+}
+.lang-ko .pageCont-dur-intro .info-summary-box .info-summary-box__desc {
+  text-align: left;
+}
 .lang-ko .definition-list {
   display: flex;
   flex-direction: column;
@@ -8595,6 +8604,11 @@ body {
 }
 .lang-ko .definition-list .definition-list__item .definition-list__desc strong {
   font-weight: 600;
+}
+@media (max-width: 1200px) {
+  .lang-ko .definition-list .definition-list__item .definition-list__desc br {
+    display: none;
+  }
 }
 @media (max-width: 640px) {
   .lang-ko .definition-list .definition-list__item {

@@ -118,10 +118,10 @@ export default function KIDS_PP_US_DI_02() {
                     </ul>
 
                     <ul className="guide-list--sub">
-                      <li>본 DUR 정보는 비상업적 연구 또는 교육에만 사용할 수 있으며, 상업적 목적으로 활용하는 경우 한국의약품안전관리원의 사전 승인을 받아야만 합니다.</li>
-                      <li>Provided for non-commercial research and education use only. Used with permission from KIDS for any commercial purposes.</li>
+                      {/* <li>본 DUR 정보는 비상업적 연구 또는 교육에만 사용할 수 있으며, 상업적 목적으로 활용하는 경우 한국의약품안전관리원의 사전 승인을 받아야만 합니다.</li>
+                      <li>Provided for non-commercial research and education use only. Used with permission from KIDS for any commercial purposes.</li> */}
                       <li>의약품을 아래 검색창에 입력하면, 병용시 주의, 어린이∙어르신∙임신부∙수유부에서 주의 정보 등을 확인할 수 있습니다.</li>
-                      <li>참고자료원 : 식품의약품안전처 “의약품 병용금기 성분 등의 지정에 관한 규정” 고시, “의약품 적정사용을 위한 주의 정보” 공고 및 건강보험심사평가원 “DUR 대상 의약품”</li>
+                      <li>참고자료원 : 식품의약품안전처 “의약품 병용금기 성분 등의 지정에 관한 규정” 고시, “의약품 적정사용을 위한 주의 정보” 공고 <br/>및 건강보험심사평가원 “DUR 대상 의약품”</li>
                     </ul>
                   </Box>
 
