@@ -29,6 +29,10 @@ const apiBaseURL = import.meta.env.MODE === 'production'
 const authApiBaseURL = import.meta.env.VITE_AUTH_API_BASE_URL ?? 'http://localhost:8088/api/ca'
 const AUTH_PATHS = ['/auth/login', '/auth/refresh', '/auth/logout', '/auth/extend']
 
+/** CA API 서버(mail,..) */
+const caApiBaseURL = import.meta.env.VITE_CA_API_BASE_URL ?? 'http://localhost:8089/api/ca'
+const CA_PATHS = ['/mail/send', '/mail/list']
+
 /** 자문위원 API 전용 서버(자격여부확인(exprtAplyChk), 신청하기(updateExprtAprvStts)) */
 const adviceApiBaseURL = import.meta.env.VITE_ADVICE_API_BASE_URL ?? 'http://localhost:8088/api/uex'
 const ADVICE_PATHS = ['/exprtAplyChk', '/updateExprtAprvStts']
@@ -47,6 +51,9 @@ https.interceptors.request.use((config) => {
   const url = config.url ?? ''
   if (AUTH_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
     config.baseURL = authApiBaseURL
+  }
+  else if(CA_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
+    config.baseURL = caApiBaseURL
   }
   else if(ADVICE_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
     config.baseURL = adviceApiBaseURL
