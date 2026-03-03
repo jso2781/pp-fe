@@ -362,7 +362,7 @@ export default function DurSearchRoom(){
                           </colgroup>
                           <thead>
                             <tr>
-                              <th scope="col">{(list.length > 0 ? resultSearchCnd : searchCnd) === 'igrdNm' ? '성분명(영)' : '제품명(한)'}</th>
+                              <th scope="col">{resultSearchCnd === 'igrdNm' ? '성분명(영)' : '제품명(한)'}</th>
                               <th scope="col">DUR 유형</th>
                               <th scope="col">상세보기</th>
                             </tr>
@@ -372,7 +372,7 @@ export default function DurSearchRoom(){
                               rows.length > 0 ? (
                                 rows.map((row) => (
                                   <tr key={row.id}>
-                                    <th scope="row">{(list.length > 0 ? resultSearchCnd : searchCnd) === 'igrdNm' ? row.igrdNm : row.prdctNm}</th>
+                                    <th scope="row">{resultSearchCnd === 'igrdNm' ? row.igrdNm : row.prdctNm}</th>
                                     <td>
                                       <Box className="dur-icons">
                                         {row.concList.length > 0 ? <img src="/img/cms/ico_dur_01.png" alt="병용금기 성분 아이콘" /> : ''}
