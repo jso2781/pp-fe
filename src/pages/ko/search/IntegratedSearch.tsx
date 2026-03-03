@@ -260,7 +260,14 @@ export default function IntegratedSearch() {
                                       </Box>
                                       <Box className="item-action">
                                         <Box className="depth-path">
-                                          <span>{item.pathNm ?? ''}</span>
+                                          <span>
+                                            {(item.pathNm ?? '')
+                                              .split('>')
+                                              .map((s) => s.trim())
+                                              .filter(Boolean)
+                                              .slice(0, -1)
+                                              .join(' > ')}
+                                          </span>
                                           <Link href={item.menuUrlAddr ?? '#'} className="loc-link">
                                             {item.menuNm ?? ''}
                                           </Link>
