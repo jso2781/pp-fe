@@ -279,10 +279,26 @@ export default function KIDS_PP_US_DR_01() {
                                     <tr>
                                       <th scope="row" className="fw-700 tal">의약품 부작용 피해구제에 관한 규정 시행규칙 제 8조3항의 서류</th>
                                       <td>
-                                         <button className="btn_outline_sub xsmall"><span className="ico-down"></span>다운로드</button>
+                                         <a 
+                                            href="/download/[서식]피해구제급여 신청서.hwp" 
+                                            download="[서식]피해구제급여 신청서.hwp" 
+                                            className="btn_outline_sub xsmall"
+                                            role="button"
+                                          >
+                                            <span className="ico-down" aria-hidden="true"></span>
+                                            다운로드
+                                          </a>
                                       </td>
                                       <td>
-                                        <button type="button" className="btn_outline_sub xsmall">견본</button>
+                                        <a 
+                                            href="/download/[견본]피해구제급여 신청서.hwp" 
+                                            download="[견본]피해구제급여 신청서.hwp" 
+                                            className="btn_outline_sub xsmall"
+                                            role="button"
+                                          >
+                                            <span className="ico-down" aria-hidden="true"></span>
+                                            견본
+                                          </a>
                                       </td>
                                     </tr>
                                   </tbody>
@@ -313,10 +329,29 @@ export default function KIDS_PP_US_DR_01() {
                             </dl>
                           </div>
                           <div className="btn-group-control right">
-                            <button type="button" className="btn_default xsmall">회원가입</button>
-                            <button type="button" className="btn_outline_sub xsmall"><span className="ico-down" aria-hidden="true"></span>민원신청 매뉴얼 다운로드</button>
-                            <button type="button" className="btn_outline_sub xsmall">피해구제 민원신청 바로가기<span className="ico-arr-right" aria-hidden="true"></span></button>
-                          </div> 
+                            <a href="#" className="btn_default xsmall" role="button">회원가입</a>
+                            <a 
+                              href="/download/피해구제급여신청 사용자 매뉴얼.pdf" 
+                              download="피해구제급여신청 사용자 매뉴얼.pdf" 
+                              className="btn_outline_sub xsmall" 
+                              role="button"
+                            >
+                              <span className="ico-down" aria-hidden="true"></span>
+                              민원신청 매뉴얼 다운로드
+                            </a>
+                            <a 
+                              href="https://nedrug.mfds.go.kr/CCAAC02F010/getCiiDocInfo?sort=&sortOrder=&searchList=00&searchYn=true&searchGbn=&searchName=%ED%94%BC%ED%95%B4%EA%B5%AC%EC%A0%9C&btnSearch=" 
+                              className="btn_outline_sub xsmall" 
+                              role="button"
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              title="새 창 열림" 
+                            >
+                              피해구제 민원신청 바로가기
+                              <span className="ico-arr-right" aria-hidden="true"></span>
+                              <span className="sr-only">(새 창 열림)</span>
+                            </a>
+                          </div>
                         </div>
                         <div className="mb40"></div>
                         <h3 className="section-title">오시는길</h3> 

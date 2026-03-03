@@ -2889,7 +2889,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #B1B8BE;
 }
 .lang-en .footer .footer-meta-info .meta-links {
@@ -4694,6 +4694,107 @@
   }
   .lang-en .pageCont-resources .resource-item .info-body dl dd {
     font-size: 14px;
+  }
+}
+.lang-en .pageCont-historyRPVC .locationStatus {
+  position: relative;
+  min-height: 945px;
+  background: url(/img/cms/en/historyRPVC_img02.png) no-repeat center center;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group {
+  position: absolute;
+  width: 259px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #087C80;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group .region-name {
+  font-size: var(--fs-18);
+  font-weight: 700;
+  color: #087C80;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.type02 {
+  border: 2px solid #94CFBB;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.type03 {
+  border: 2px solid #FFB114;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.type03 .region-name {
+  color: #FFB114;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group ul li {
+  position: relative;
+  padding-left: 12px;
+  line-height: 1.8;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 3px;
+  height: 3px;
+  background-color: #1E2124;
+  border-radius: 50%;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.seoul {
+  left: 0;
+  top: 0;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.gyeonggi-incheon {
+  left: 0;
+  top: 350px;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.daejeon-chungcheong {
+  left: 0;
+  bottom: 0px;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.pharmacy {
+  left: 350px;
+  top: 0px;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.gwangju-jeolla-jeju {
+  left: 350px;
+  bottom: 0px;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.public-medical {
+  right: 0px;
+  top: 0px;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.oriental-medicine {
+  right: 0px;
+  top: 138px;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.gangwon {
+  right: 0px;
+  top: 320px;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.daegu-gyeongbuk {
+  right: 0px;
+  top: 480px;
+}
+.lang-en .pageCont-historyRPVC .locationStatus .region-group.busan-ulsan-gyeongnam {
+  right: 0px;
+  bottom: 0px;
+}
+@media screen and (max-width: 1024px) {
+  .lang-en .pageCont-historyRPVC .locationStatus {
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+    background-position: top center;
+    background-size: auto 300px;
+    padding-top: 300px;
+  }
+  .lang-en .pageCont-historyRPVC .locationStatus .region-group {
+    position: static;
+    width: 100%;
+    margin-bottom: 15px;
+    left: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    right: auto !important;
+    transform: none !important;
   }
 }
 .lang-en {

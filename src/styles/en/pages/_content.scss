@@ -627,3 +627,85 @@
     }
   }
 }
+
+.pageCont-historyRPVC{
+  .locationStatus{
+    position: relative;
+    min-height:945px;
+    background: url(/img/cms/en/historyRPVC_img02.png) no-repeat center center;
+  
+    .region-group {
+      position: absolute;
+      width: 259px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 2px solid #087C80;
+  
+      .region-name{
+        font-size: var(--fs-18);
+        font-weight: 700;
+        color: #087C80;
+      }
+  
+      &.type02{
+        border: 2px solid #94CFBB;
+      }
+      &.type03{
+        border: 2px solid #FFB114;
+        .region-name{color: #FFB114;}
+      }
+
+      ul {
+        li {
+          position: relative;
+          padding-left: 12px; 
+          line-height: 1.8;
+
+          &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 3px;
+            height: 3px;
+            background-color: #1E2124;
+            border-radius: 50%;
+          }
+        }
+      }
+
+      &.seoul{left:0;top:0;}
+      &.gyeonggi-incheon{left:0;top:350px;}
+      &.daejeon-chungcheong{left:0;bottom:0px;}
+      &.pharmacy{left:350px;top:0px;}
+      &.gwangju-jeolla-jeju{left:350px;bottom:0px;}
+      &.public-medical{right:0px;top:0px;}
+      &.oriental-medicine{right:0px;top:138px;}
+      &.gangwon{right:0px;top:320px;}
+      &.daegu-gyeongbuk{right:0px;top:480px;}
+      &.busan-ulsan-gyeongnam{right:0px;bottom:0px;}
+    }
+  }
+  @media screen and (max-width: 1024px) {
+  
+    .locationStatus {
+      display: flex;
+      flex-direction: column; 
+      min-height: auto; 
+      background-position: top center; 
+      background-size: auto 300px;
+      padding-top: 300px;
+
+      .region-group {
+        position: static;
+        width: 100%; 
+        margin-bottom: 15px;
+        left: auto !important;
+        top: auto !important;
+        bottom: auto !important;
+        right: auto !important;
+        transform: none !important;
+      }
+    }
+  }
+}
