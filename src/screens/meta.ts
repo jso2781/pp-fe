@@ -482,6 +482,11 @@ export const screensKo: ScreenMeta[] = [
     "title": "오시는 길",
     "uiType": "cms"
   },
+  {
+    "id": "KIDS-PP-US-MF-01",
+    "title": "메일폼",
+    "uiType": "page"
+  },
 
   //내업무 템플릿
   {
