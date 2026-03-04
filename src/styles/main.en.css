@@ -2541,7 +2541,7 @@
 }
 @media (max-width: 768px) {
   .lang-en .mobile-gnb-container .mobile-depth1-area {
-    width: 150px;
+    width: 200px;
   }
 }
 .lang-en .mobile-gnb-container .mobile-depth1-area .depth1-item {
@@ -2590,7 +2590,7 @@
 }
 @media (max-width: 768px) {
   .lang-en .mobile-gnb-container .mobile-sub-area {
-    left: 150px;
+    left: 200px;
   }
 }
 .lang-en .mobile-gnb-container .mobile-sub-area .depth2-item {

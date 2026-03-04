@@ -397,7 +397,7 @@
     border-right: 1px solid #eee;
     overflow-y: auto;
 
-    @media (max-width: 768px) { width: 150px; }
+    @media (max-width: 768px) { width: 200px; }
 
     .depth1-item {
       position: static; 
@@ -441,7 +441,7 @@
     z-index: 10;
     border-left: 1px solid #eee;
 
-    @media (max-width: 768px) { left: 150px; }
+    @media (max-width: 768px) { left: 200px; }
 
     .depth2-item {
       border-bottom: 1px solid #f8f8f8;
