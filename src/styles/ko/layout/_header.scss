@@ -178,8 +178,13 @@
     z-index: 10;
   }
 
-  .depth1-list { display: flex; height: 67px; align-items: center;}
-  .depth1-item { text-align: center; }
+  .depth1-list { display: flex;width:100%;height: 67px; align-items: center; padding-right:30px;}
+  .depth1-item { 
+    text-align: center; 
+    &:last-child .depth1-link{
+      margin-right:0;
+    }
+  }
 
   .depth1-link { 
     display: flex;
