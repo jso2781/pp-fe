@@ -1785,6 +1785,10 @@
 .ingredient-popup-wrapper {
   padding: 30px;
 
+  .base-table-container .table-responsive.has-vscroll {
+    max-height: 370px;
+  }
+
   .detail-info-row{
     .text{margin:0 0 5px 0;}
   }
@@ -2667,11 +2671,10 @@
         gap: 30px; 
         align-items: flex-start;
         margin-bottom: 24px;
-
-        dl {
+        .item-txt {
           flex: 1; min-width: 0; margin-bottom: 0; 
-          dt { font-size: var(--fs-20); font-weight: 700; margin-bottom: 12px; line-height: 1.4; }
-          dd {
+          .item-tit { font-size: var(--fs-20); font-weight: 700; margin-bottom: 12px; line-height: 1.4;}
+          .item-desc {
             font-size: var(--fs-18); line-height: 1.6;
             display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
             overflow: hidden; text-overflow: ellipsis;

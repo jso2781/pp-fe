@@ -280,8 +280,10 @@ export default function IntegratedSearch() {
                                       </Box>
                                       <Box className="item-body">
                                         <dl className="item-txt">
-                                          <dt>{item.docTtl ?? ''}</dt>
-                                          <dd dangerouslySetInnerHTML={{ __html: highlightKeywordInHtml(item.docCn ?? '', searchText) }}></dd>
+                                          <dt className="item-tit">{item.docTtl ?? ''}</dt>
+                                          <dd className="item-desc">
+                                            <div dangerouslySetInnerHTML={{ __html: highlightKeywordInHtml(item.docCn ?? '', searchText) }} />
+                                          </dd>
                                         </dl>
                                       </Box>
                                       <Box className="item-action">
