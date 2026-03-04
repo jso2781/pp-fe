@@ -22,6 +22,32 @@ import { IntegratedSearchPVO, SearchItem } from '@/features/search/IntegratedSea
 const TAB_LIST_KEYS = ['all', 'mainTask', 'infoOpen', 'instNews', 'instIntro'] as const;
 const PAGE_SIZE = 10;
 
+/**
+ * HTML 문자열에서 태그 내부가 아닌 텍스트만 검색 키워드와 매칭하여
+ * <span class="keyword">매칭문자열</span> 로 감싼 HTML 반환.
+ * 검색어는 공백 기준 여러 개 지원, 대소문자 무시.
+ */
+function highlightKeywordInHtml(html: string, searchText: string): string {
+  const raw = html ?? '';
+  const keywords = (searchText ?? '').trim().split(/\s+/).filter(Boolean);
+  if (keywords.length === 0) return raw;
+
+  const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const segments = raw.split(/(<[^>]*>)/g);
+
+  const highlighted = segments.map((seg) => {
+    if (seg.startsWith('<') && seg.endsWith('>')) return seg;
+    let text = seg;
+    for (const kw of keywords) {
+      const re = new RegExp(`(${escapeRegex(kw)})`, 'gi');
+      text = text.replace(re, '<span class="keyword">$1</span>');
+    }
+    return text;
+  });
+
+  return highlighted.join('');
+}
+
 function getListForCategory(current: { totalList: SearchItem[]; mainTaskList: SearchItem[]; infoOpenList: SearchItem[]; instNewsList: SearchItem[]; instIntroList: SearchItem[] } | null, category: string): SearchItem[] {
   if (!current) return [];
   switch (category) {
@@ -255,7 +281,7 @@ export default function IntegratedSearch() {
                                       <Box className="item-body">
                                         <dl className="item-txt">
                                           <dt>{item.docTtl ?? ''}</dt>
-                                          <dd dangerouslySetInnerHTML={{ __html: item.docCn ?? '' }}></dd>
+                                          <dd dangerouslySetInnerHTML={{ __html: highlightKeywordInHtml(item.docCn ?? '', searchText) }}></dd>
                                         </dl>
                                       </Box>
                                       <Box className="item-action">
