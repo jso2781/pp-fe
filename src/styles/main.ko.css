@@ -4483,7 +4483,9 @@ body {
   text-align: center;
 }
 .lang-ko .navigation .depth1-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  height: 67px;
   color: #464C53;
   font-size: 20px;
   font-weight: 700;

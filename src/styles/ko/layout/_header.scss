@@ -182,7 +182,9 @@
   .depth1-item { text-align: center; }
 
   .depth1-link { 
-    display: block;  
+    display: flex;
+    align-items: center;
+    height:67px;
     color: #464C53; 
     font-size: 20px; 
     font-weight: 700; 
@@ -193,6 +195,7 @@
     position: relative; 
     transition: color 0.2s;
     outline: none;
+    
 
     &::after { 
       content: ''; 
