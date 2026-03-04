@@ -28,6 +28,8 @@ const FaqNoticeKo = lazy(() => import('@/pages/ko/news/FaqNotice'))
 
 const GeneralBoardListKo = lazy(() => import('@/pages/ko/board/GeneralBoardList'))
 const GeneralBoardDetailKo = lazy(() => import('@/pages/ko/board/GeneralBoardDetail'))
+const GeneralBoardListEn = lazy(() => import('@/pages/en/board/GeneralBoardList'))
+const GeneralBoardDetailEn = lazy(() => import('@/pages/en/board/GeneralBoardDetail'))
 const GalleryBoardListKo = lazy(() => import('@/pages/ko/board/GalleryBoardList'))
 const GalleryBoardDetailKo = lazy(() => import('@/pages/ko/board/GalleryBoardDetail'))
 const VideoBoardListKo = lazy(() => import('@/pages/ko/board/VideoBoardList'))
@@ -237,9 +239,8 @@ export default function Router() {
                 <Route path="/pp/:lang/news/FaqNotice" element={<LangElement byLang={{ ko: <FaqNoticeKo />, en: <FaqNoticeKo /> }} />} />
                                                 
                 {/* 유형별 게시판 (공통) */}
-                <Route path="/pp/:lang/board/general/:bbsId" element={<LangElement byLang={{ ko: <GeneralBoardListKo />, en: <GeneralBoardListKo /> }} />} />
-                <Route path="/pp/:lang/board/general/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <GeneralBoardDetailKo />, en: <GeneralBoardDetailKo /> }} />} />                                                        
-
+                <Route path="/pp/:lang/board/general/:bbsId" element={<LangElement byLang={{ ko: <GeneralBoardListKo />, en: <GeneralBoardListEn /> }} />} />
+                <Route path="/pp/:lang/board/general/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <GeneralBoardDetailKo />, en: <GeneralBoardDetailEn /> }} />} />                                                        
                 <Route path="/pp/:lang/board/gallery/:bbsId" element={<LangElement byLang={{ ko: <GalleryBoardListKo />, en: <GalleryBoardListKo /> }} />} />
                 <Route path="/pp/:lang/board/gallery/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <GalleryBoardDetailKo />, en: <GalleryBoardDetailKo /> }} />} />       
                 <Route path="/pp/:lang/board/video/:bbsId" element={<LangElement byLang={{ ko: <VideoBoardListKo />, en: <VideoBoardListKo /> }} />} />
