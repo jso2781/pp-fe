@@ -170,14 +170,12 @@
     font-weight: 700; 
     text-decoration: none; 
     line-height: 105%;
-    /* min-width: 105px;  */
-    padding: 0 30px 0 0px; 
+    padding: 0 15px 0 15px; 
     position: relative; 
     transition: color 0.2s;
     outline: none;
-    /* white-space: nowrap; */
 
-    /* &::after { 
+    &::after { 
       content: ''; 
       position: absolute; 
       bottom: 0; left: 0; 
@@ -185,7 +183,7 @@
       background-color: #087C80; 
       transition: width 0.2s ease-in-out; 
     }
-
+    /* 
     &::before { 
       content: ''; 
       position: absolute; 
@@ -196,7 +194,8 @@
       border-bottom: 2px solid #464C53; 
       transition: transform 0.3s ease, border-color 0.3s ease; 
       transform-origin: center; 
-    }  */
+    }  
+    */
 
     &.active, &:hover, &:focus { 
       color: #087C80 !important; 
