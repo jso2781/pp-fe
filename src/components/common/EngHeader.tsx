@@ -468,11 +468,12 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
     const nextLang = i18nInstance.language === 'ko' ? 'en' : 'ko';
     const homePath = `/pp/${nextLang}`;
 
+    // Rest API 호출 - 언어 변경 시 메뉴 목록 재조회
     dispatch(clearMenuCache());
 
-    sessionStorage.setItem(LOCALE_KEY, nextLang);
-    i18nInstance.changeLanguage(nextLang);
-    navigate(homePath);
+    sessionStorage.setItem(LOCALE_KEY, nextLang); // ✅ APP_LOCALE 저장
+    i18nInstance.changeLanguage(nextLang);        // ✅ UI 즉시 반영
+    navigate(homePath);                           // ✅ 홈으로 이동
   }
 
   // =======================================
