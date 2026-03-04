@@ -4483,7 +4483,9 @@ body {
   text-align: center;
 }
 .lang-ko .navigation .depth1-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  height: 67px;
   color: #464C53;
   font-size: 20px;
   font-weight: 700;
@@ -9210,6 +9212,9 @@ body {
 .lang-ko .ingredient-popup-wrapper {
   padding: 30px;
 }
+.lang-ko .ingredient-popup-wrapper .base-table-container .table-responsive.has-vscroll {
+  max-height: 370px;
+}
 .lang-ko .ingredient-popup-wrapper .detail-info-row .text {
   margin: 0 0 5px 0;
 }
@@ -10055,18 +10060,18 @@ body {
   align-items: flex-start;
   margin-bottom: 24px;
 }
-.lang-ko .pageCont-integrated-search .search-result-list .item .item-body dl {
+.lang-ko .pageCont-integrated-search .search-result-list .item .item-body .item-txt {
   flex: 1;
   min-width: 0;
   margin-bottom: 0;
 }
-.lang-ko .pageCont-integrated-search .search-result-list .item .item-body dl dt {
+.lang-ko .pageCont-integrated-search .search-result-list .item .item-body .item-txt .item-tit {
   font-size: var(--fs-20);
   font-weight: 700;
   margin-bottom: 12px;
   line-height: 1.4;
 }
-.lang-ko .pageCont-integrated-search .search-result-list .item .item-body dl dd {
+.lang-ko .pageCont-integrated-search .search-result-list .item .item-body .item-txt .item-desc {
   font-size: var(--fs-18);
   line-height: 1.6;
   display: -webkit-box;
@@ -10130,10 +10135,13 @@ body {
 .lang-ko .pageCont-integrated-search .search-result-list .item .item-action .depth-path .loc-link:hover {
   color: #087C80;
 }
-.lang-ko .pageCont-integrated-search .search-result-list .item .item-action .depth-path span:not(:last-child)::after {
+.lang-ko .pageCont-integrated-search .search-result-list .item .item-action .depth-path {
+  /* path-text는 경로 전체를 한 span에 넣어 구분자 포함하므로 ::after 제외(검정색 '>' 미표시) */
+}
+.lang-ko .pageCont-integrated-search .search-result-list .item .item-action .depth-path span:not(:last-child):not(.path-text)::after {
   content: ">";
   margin-left: 12px;
-  color: #ccc;
+  color: #000000;
 }
 .lang-ko .pageCont-integrated-search .search-result-list .item .item-action .btn-more {
   font-size: var(--fs-18);
