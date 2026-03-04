@@ -57,6 +57,7 @@ export default function Login() {
   const [localFailCount, setLocalFailCount] = useState(0)
   const hasCheckedAuth = useRef(false);
   const [isRehydrated, setIsRehydrated] = useState(false) // Redux Persist rehydrate 완료 여부
+  const [checkPasswordChangeReminder, setIsCheckPasswordChangeReminder] = useState(false) // 비밀번호 변경창 팝업 오픈대상 여부
 
   // 아이디 저장 기능: 페이지 로드 시 저장된 아이디 불러오기
   useEffect(() => {
@@ -69,35 +70,30 @@ export default function Login() {
   // isAuthenticated 변경 시에만 로그 출력 (StrictMode로 인한 중복 호출 방지)
   useEffect(() => {
     console.log('========================= Login isAuthenticated', isAuthenticated);
+
+    // 비밀번호 변경 안내 팝업 표시 여부 확인 (로그인 성공 후에만 체크)
+    const dateStr = userInfo?.pswdChgDt;
+    if (!dateStr) return;
+    const targetDate = new Date(dateStr.replace(' ', 'T'));
+    const now = new Date();
+    const diffDays = (Number(now) - Number(targetDate)) / (1000 * 60 * 60 * 24);
+
+    if (diffDays >= 80) {
+      showDialogBackdrop({
+        message: `${t('passwordChangeReminderMessage')}\n\n${t('passwordChangeReminderMessage2')}`,
+        title: t('passwordChangeTitle'),
+        type: 'confirm',
+        cancelText: t('laterChange'),
+        confirmText: t('nowChange'),
+        onCancel: () => {
+          navigate('/pp/ko', { replace: true });
+        },
+        onConfirm: () => {
+          navigate('/pp/ko/auth/PasswordConfirm');
+        },
+      });      
+    } 
   }, [isAuthenticated]);
-
-  // 비밀번호 변경 안내 팝업 표시 여부 확인
-  // Description: 회원가입 또는 비밀번호 변경 후 80일 전부터 메시지 노출
-  const checkPasswordChangeReminder = () => {
-    const reminderDate = sessionStorage.getItem(STORAGE_KEY_PASSWORD_CHANGE_REMINDER)
-    if (reminderDate) {
-      const reminder = new Date(reminderDate)
-      const now = new Date()
-      // 아직 알림 날짜가 지나지 않았으면 표시하지 않음
-      if (now < reminder) {
-        return false
-      }
-    }
-
-    // TODO: 실제 로그인 성공 후 서버에서 비밀번호 변경 필요 여부 확인
-    // 비밀번호 변경 정책: 비밀번호는 90일마다 변경 필요
-    // 80일 전부터 알림 시작 (즉, 변경 후 10일 후부터 알림)
-    // const passwordLastChanged = response.data.passwordLastChanged // 서버에서 받아온 마지막 변경일 (회원가입일 또는 마지막 변경일)
-    // const now = new Date()
-    // const daysSinceChange = Math.floor((now.getTime() - new Date(passwordLastChanged).getTime()) / (1000 * 60 * 60 * 24))
-    // const daysUntilExpiry = 90 - daysSinceChange
-    // if (daysUntilExpiry <= PASSWORD_CHANGE_REMINDER_DAYS && daysUntilExpiry > 0) {
-    //   return true // 80일 전부터 알림 시작
-    // }
-
-    // 샘플: 테스트를 위해 false 반환 (실제로는 위의 로직 사용)
-    return false // 실제 구현 시 위의 주석 처리된 로직 사용
-  }
 
   const validate = (v: LoginValues) => {
     const next: Partial<Record<keyof LoginValues, string>> = {}
@@ -175,29 +171,9 @@ export default function Login() {
         return; // 로그인 실패 - 리다이렉트하지 않음
       }
       
-      // 비밀번호 변경 안내 팝업 표시 여부 확인 (showDialogBackdrop)
-      if (checkPasswordChangeReminder()) {
-        showDialogBackdrop({
-          message: `${t('passwordChangeReminderMessage')}\n\n${t('passwordChangeReminderMessage2')}`,
-          title: t('passwordChangeTitle'),
-          type: 'confirm',
-          cancelText: t('laterChange'),
-          confirmText: t('nowChange'),
-          onCancel: () => {
-            const nextReminderDate = new Date();
-            nextReminderDate.setDate(nextReminderDate.getDate() + PASSWORD_CHANGE_REMINDER_DAYS);
-            sessionStorage.setItem(STORAGE_KEY_PASSWORD_CHANGE_REMINDER, nextReminderDate.toISOString());
-            navigate('/pp/ko', { replace: true });
-          },
-          onConfirm: () => {
-            navigate('/pp/ko/screens/KIDS-PP-US-LG-09');
-          },
-        });
-      } else {
-        setTimeout(() => {
-          navigate('/pp/ko', { replace: true }) // 일반 회원은 메인 페이지로
-        }, 100);
-      }
+      setTimeout(() => {
+        navigate('/pp/ko', { replace: true })
+      }, 100);
     }catch(error: any){
       console.log("login await dispatch(loginThunk~~ error=",error);
 
