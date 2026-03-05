@@ -12,6 +12,8 @@ import { useTranslation } from 'react-i18next';
 import { updateMbrInfo } from '@/features/mbr/MbrInfoThunks';
 import { MbrInfoPVO, UpdateMbrInfoRVO } from '@/features/mbr/MbrInfoTypes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useAuth } from '@/contexts/AuthContext';
+import { useDialog } from '@/contexts/DialogContext';
 
 /**
  * PostgreSQL timestamp without time zone 컬럼에 맞는 형식으로 반환.
@@ -28,6 +30,8 @@ export default function WithDrawal() {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReason(event.target.value);
   };
+  const { logoutContext } = useAuth();
+  const { showDialogBackdrop, showAlertBackdrop } = useDialog();
 
   const userInfo = useAppSelector((state) => state.auth.userInfo);
 
@@ -50,8 +54,17 @@ export default function WithDrawal() {
       };
 
       const result : UpdateMbrInfoRVO = await dispatch(updateMbrInfo(mbrInfoPVO)).unwrap();
-      if(result?.updateCnt && result.updateCnt > 0){
-        navigate('/pp/ko');
+      if(result?.updateCnt && result.updateCnt > 0){       
+        navigate(`/pp/ko`);     
+        showDialogBackdrop({
+          message: '회원탈퇴가 완료되었습니다.',
+          title: '회원탈퇴 완료',
+          type: 'alert',
+          confirmText: '확인',
+          onConfirm: () => {
+            logoutContext();  
+          },
+        });        
         return;
       }else if(result?.updateCnt && result.updateCnt === 0){
         // openDialog(t('error') || '오류', t('mbrWithdrawalFailed') || '회원탈퇴에 실패했습니다.');
