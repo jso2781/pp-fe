@@ -44,43 +44,6 @@ export default function KIDS_PP_US_EN_09() {
                 {/* --- 본문 시작 --- */}
 
                   <section className="pageCont-APECCoE">
-                    <div className="video-area">
-                      <div className="video-box">
-                        {/* 제목 제공 (aria-label) */}
-                        <video 
-                          id="myVideo" 
-                          width="886" 
-                          height="502" 
-                          controls
-                          preload="metadata"
-                          aria-label="KIDS-APEC PV Training Website Link Banner" 
-                          poster="/img/APECCoE_video_thumbnail.png" // 미리보기 이미지 제공
-                        >
-                          <source src="/video/.mp4" type="video/mp4" />
-                          {/* 자막 파일 제공 */}
-                          <track 
-                            kind="captions" 
-                            src="#" 
-                            srcLang="en" 
-                            label="영어 자막" 
-                            default 
-                          />
-                          {/* 비디오 미지원 브라우저용 대체 텍스트 */}
-                          <div className="v-fallback">
-                            <p>사용 중인 브라우저에서 비디오를 재생할 수 없습니다.</p>
-                            <a href="/video/20161220marketing.mp4" download>영상 파일 다운로드</a>
-                          </div>
-                        </video>
-                      </div>
-
-                      {/* 비디오 스크립트 제공 */}
-                      <div className="video-transcript">
-                        <div className="sr-only">
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mb40"></div>
-
                     <h3 className="section-title">What is the APEC Pharmacovigilance Center of Excellence (CoE)?</h3>
                     <div className="section-desc">
                       <p>The APEC Pharmacovigilance Center of Excellence (CoE) is a capacity-building program established

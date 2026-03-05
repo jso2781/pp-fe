@@ -43,7 +43,7 @@ export default function KIDS_PP_US_EN_21() {
                 <Box className="page-content">
                 {/* --- 본문 시작 --- */}
 
-                  <section className="pageCont-introPE">
+                  <section className="pageCont-PEStudydesign">
                     <h3 className="section-title">Study design</h3>
                     <div className="section-desc">
                       <p>To evaluate the causality between a drug and an adverse event, we monitor and observe the case and control groups of a study and we use research designs like cohort (all users of a drug are identified and followed up to determine what events or ADRs occur) and case-control study (all cases of the disease are identified and the use of the drug of interest is compared with controls without the disease).</p>
