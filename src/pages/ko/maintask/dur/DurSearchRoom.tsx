@@ -14,6 +14,7 @@ import ContactArea from '@/components/common/ContactArea';
 import { selectDurSearchRoomList } from '@/features/dur/DurSearchRoomThunks';
 import { resetResults } from '@/features/dur/DurSearchRoomSlice';
 import { AgeItem, ConcItem, CpctItem, DosageItem, DurSearchRoomRVO, EftgrpItem, NurswItem, PrgntItem, SnctzItem } from '@/features/dur/DurSearchRoomTypes';
+import LnbSectionTitle from '@/components/common/LnbSectionTitle';
 
 export default function DurSearchRoom(){
   const { t } = useTranslation();
@@ -254,7 +255,7 @@ export default function DurSearchRoom(){
             <Box className="lnb-wrap">
               <Box className="lnb-menu">
                 <Typography component="h2" className="lnb-tit">
-                  <span>{t('durInfo')}</span>
+                  <LnbSectionTitle />
                 </Typography>
                 <Box className="lnb-list">
                   <Lnb currentUrl={currentUrl} />

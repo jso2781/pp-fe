@@ -25,6 +25,7 @@ import DgstfnExnm from '@/components/common/DgstfnExnm';
 import ContactArea from '@/components/common/ContactArea';
 import FileUploadField from '@/components/form/FileUploadField';
 import { useDialog } from '@/contexts/DialogContext';
+import LnbSectionTitle from '@/components/common/LnbSectionTitle';
 
 const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'zip']
 const accept = allowedExtensions.map((e) => `.${e}`).join(',')
@@ -162,7 +163,7 @@ export default function DurProposal() {
           <Box className="lnb-wrap">
             <Box className="lnb-menu">
               <Typography component="h2" className="lnb-tit">
-                <span>{t('menuDur')}</span>
+                <LnbSectionTitle />
               </Typography>
               <Box className="lnb-list">
                 <Lnb currentUrl={currentUrl} />
