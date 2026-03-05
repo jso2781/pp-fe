@@ -2,6 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
 import { getCmsApiPath } from '@/api/cms/CmsApiPaths'
 import { mockCmsList, CmsPVO, CmsRVO } from './CmsTypes'
+import { AxiosError } from 'axios'
+import { getLangFromPathname } from '@/routes/lang'
 
 
 /**
@@ -19,6 +21,14 @@ export const getCms = createAsyncThunk<CmsRVO, CmsPVO, { rejectValue: string }>(
     }
     // 서버가 없거나 에러 나면 강제로 mock 데이터 사용 
     catch (e) {
+      const axiosError = e as AxiosError
+      const status = axiosError.response?.status
+      if (status === 404) {
+        const lang = getLangFromPathname(window.location.pathname)
+        window.location.replace(`/pp/${lang}/NotFound`)
+        return rejectWithValue('NOT_FOUND')
+      }
+            
       // 개발/데모 환경용 fallback (백엔드 연동 시 제거 가능)
       console.log("CmsThunks getCms mockCmsList=", mockCmsList);
 

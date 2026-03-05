@@ -1,7 +1,9 @@
 import https from '@/api/axiosInstance'
 import { getPstDetailPath, getPstListPath } from '@/api/pst/PstApiPaths'
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import { AxiosError } from 'axios'
 import { PstListPVO, PstListRVO, PstPVO, PstRVO } from './PstTypes'
+import { getLangFromPathname } from '@/routes/lang'
 
 /**
  * 대국민포털_게시물기본 정보 목록 조회 
@@ -20,7 +22,14 @@ export const selectPstList = createAsyncThunk<PstListRVO, PstListPVO | undefined
       } as PstListRVO;
     }
     catch (e) {
-      console.log("PstThunks selectPstList error!!");
+      const axiosError = e as AxiosError
+      const status = axiosError.response?.status
+      if (status === 404) {
+        const lang = getLangFromPathname(window.location.pathname)
+        window.location.replace(`/pp/${lang}/NotFound`)
+        return rejectWithValue('NOT_FOUND')
+      }
+      console.error("PstThunks selectPstList error!!");
       return rejectWithValue('PstThunks selectPstList error!!');
     }    
   }
@@ -38,7 +47,14 @@ export const getPst = createAsyncThunk<PstRVO, PstPVO | undefined, { rejectValue
       return payload;
     }
     catch (e) {
-      console.log("PstThunks getPst error!!");
+      const axiosError = e as AxiosError
+      const status = axiosError.response?.status
+      if (status === 404) {
+        const lang = getLangFromPathname(window.location.pathname)
+        window.location.replace(`/pp/${lang}/NotFound`)
+        return rejectWithValue('NOT_FOUND')
+      }
+      console.error("PstThunks getPst error!!");
       return rejectWithValue('PstThunks getPst error!!');
     }    
   }

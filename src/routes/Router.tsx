@@ -293,6 +293,7 @@ export default function Router() {
                 {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
                 <Route path="/pp/:lang/InternalServerError" element={<LangElement byLang={{ ko: <InternalServerErrorKo />, en: <InternalServerErrorKo /> }} />} />
                 <Route path="/pp/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundKo /> }} />} />
+                <Route path="/pp/:lang/NotFound" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundKo /> }} />} />
               </Route>
 
               {/* 전문가 메뉴에서 사용할 화면 레이아웃 */}

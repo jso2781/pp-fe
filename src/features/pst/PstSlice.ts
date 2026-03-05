@@ -48,7 +48,7 @@ const PstSlice = createSlice({
       })
       .addCase(selectPstList.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message || 'Failed to load notice list';
+        state.error = (action.payload as string) || action.error?.message || 'Failed to load notice list';
       })
       .addCase(getPst.pending, (state) => {
         state.loading = true;
