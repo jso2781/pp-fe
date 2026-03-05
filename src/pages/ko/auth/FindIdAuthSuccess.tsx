@@ -31,7 +31,7 @@ export default function FindIdAuthSuccess() {
   }
 
   const handleLoginClick = () => {
-    navigate('/pp/ko/auth/login');
+    navigate('/pp/ko/auth/Login');
   }
 
   return (

@@ -147,7 +147,7 @@ export default function Login() {
           showConfirmBackdrop(
             t('passwordError5TimesMessage'),
             t('passwordError5Times'),
-            () => navigate('/pp//ko/auth/findPw'),
+            () => navigate('/pp//ko/auth/FindPw'),
             () => {}
           );
           return; // 로그인 실패 - 리다이렉트하지 않음
@@ -201,7 +201,7 @@ export default function Login() {
         showConfirmBackdrop(
           t('passwordError5TimesMessage'),
           t('passwordError5Times'),
-          () => navigate('/pp/ko/auth/findPw'),
+          () => navigate('/pp/ko/auth/FindPw'),
           () => {}
         );
         return;

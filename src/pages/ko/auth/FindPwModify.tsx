@@ -124,8 +124,8 @@ export default function FindPwModify() {
       showConfirmBackdrop(
         t('findPwModifyCompleteMessage'),
         t('findPwModifyCompleteTitle'),
-        () => navigate('/pp/ko/auth/login'),
-        () => navigate('/')
+        () => navigate('/pp/ko/auth/Login'),
+        () => navigate('/pp/ko')
       );
     } catch(e) {
       showAlert('비밀번호 변경 실패');
@@ -138,7 +138,7 @@ export default function FindPwModify() {
   }
 
   const handleCancle = () => {
-    navigate('/pp/ko/auth/findPw');
+    navigate('/pp/ko/auth/FindPw');
   }
 
   return (
