@@ -2145,15 +2145,16 @@
     height: auto;
     min-height: 80px; 
     display: flex;
-    /* flex-direction: column; */
-    /* justify-content: center; */
-    justify-content: space-between;
+    flex-direction:row;
     padding: 20px 15px;
     border-bottom:none;
     box-sizing: border-box;
 
+    @media (max-width: 460px) {
+      flex-direction:column;
+    }
 
-    .step-label {
+    .step-label { 
       margin: 0;
       font-size: var(--fs-20);
       font-weight: 700;
@@ -2163,7 +2164,10 @@
     }
 
     .board-info{
-      display: block; margin:0; margin-left:auto;
+      display: flex;
+      margin:0; 
+      margin-left:auto;
+      margin-top: auto;
     }
   }
 }

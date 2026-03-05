@@ -9545,12 +9545,15 @@ body {
   height: auto;
   min-height: 80px;
   display: flex;
-  /* flex-direction: column; */
-  /* justify-content: center; */
-  justify-content: space-between;
+  flex-direction: row;
   padding: 20px 15px;
   border-bottom: none;
   box-sizing: border-box;
+}
+@media (max-width: 460px) {
+  .lang-ko .dur-result-section .step-title-group {
+    flex-direction: column;
+  }
 }
 .lang-ko .dur-result-section .step-title-group .step-label {
   margin: 0;
@@ -9563,9 +9566,10 @@ body {
   display: block;
 }
 .lang-ko .dur-result-section .step-title-group .board-info {
-  display: block;
+  display: flex;
   margin: 0;
   margin-left: auto;
+  margin-top: auto;
 }
 .lang-ko .appr-use-book-download {
   margin: 40px 0;
