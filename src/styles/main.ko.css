@@ -9395,7 +9395,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 30px 15px;
+  padding: 30px 15px 20px 15px;
   border-bottom: 1px solid #D8D8D8;
   box-sizing: border-box;
 }
@@ -9460,9 +9460,24 @@ body {
   min-width: 0;
   position: relative;
 }
+.lang-ko .drug-dur-process .basket-section .board-info, .lang-ko .dur-result-section .basket-section .board-info {
+  justify-content: end;
+  margin: 0;
+}
+.lang-ko .drug-dur-process .basket-section .board-info .board-count, .lang-ko .dur-result-section .basket-section .board-info .board-count {
+  font-weight: 700 !important;
+}
 .lang-ko .drug-dur-process .basket-section .basket-content, .lang-ko .dur-result-section .basket-section .basket-content {
   position: relative;
   padding: 15px;
+}
+.lang-ko .drug-dur-process .basket-section .basket-content .empty-box, .lang-ko .dur-result-section .basket-section .basket-content .empty-box {
+  height: 68px;
+}
+@media (max-width: 1200px) {
+  .lang-ko .drug-dur-process .basket-section .basket-content .empty-box, .lang-ko .dur-result-section .basket-section .basket-content .empty-box {
+    height: 0px;
+  }
 }
 .lang-ko .drug-dur-process .btn-group, .lang-ko .dur-result-section .btn-group {
   margin: 40px 0;
@@ -9509,7 +9524,7 @@ body {
     border-bottom: 1px solid #eee;
   }
   .lang-ko .drug-dur-process .step-title-group .step-label, .lang-ko .dur-result-section .step-title-group .step-label {
-    margin: 0;
+    margin: 10px 0;
   }
   .lang-ko .drug-dur-process .base-table-container .base-table-meta, .lang-ko .dur-result-section .base-table-container .base-table-meta {
     height: auto;
@@ -9533,8 +9548,9 @@ body {
   height: auto;
   min-height: 80px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  /* flex-direction: column; */
+  /* justify-content: center; */
+  justify-content: space-between;
   padding: 20px 15px;
   border-bottom: none;
   box-sizing: border-box;
@@ -9548,6 +9564,11 @@ body {
 }
 .lang-ko .dur-result-section .step-title-group .step-label span {
   display: block;
+}
+.lang-ko .dur-result-section .step-title-group .board-info {
+  display: block;
+  margin: 0;
+  margin-left: auto;
 }
 .lang-ko .appr-use-book-download {
   margin: 40px 0;
@@ -12527,6 +12548,7 @@ body {
 .modal-title h2 {
   font-size: 24px;
   font-weight: 700;
+  margin: 0;
   padding: 0 0 10px 0;
   border-bottom: 1px solid #303336;
 }

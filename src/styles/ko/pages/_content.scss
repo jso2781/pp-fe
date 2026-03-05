@@ -2148,11 +2148,13 @@
     height: auto;
     min-height: 80px; 
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    justify-content: space-between;
     padding: 20px 15px;
     border-bottom:none;
     box-sizing: border-box;
+
 
     .step-label {
       margin: 0;
@@ -2162,6 +2164,8 @@
       background: url('/img/ico_drug_sresult.png') no-repeat left center; 
       span { display: block; }
     }
+
+    .board-info{display: block; margin:0; margin-left:auto;}
   }
 }
 
