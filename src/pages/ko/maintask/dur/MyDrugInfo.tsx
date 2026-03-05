@@ -491,17 +491,17 @@ export default function MyDrugInfo() {
                       <Box className="basket-section">
                         <Box className="step-title-group">
                           <p className="step-label">2단계<span>의약품 바구니</span></p>
+                          <Box className="base-table-meta">
+                            <Box className="board-info">
+                              <Typography className="board-count">
+                                총 <Typography component="span" className="count">{basketList.length}</Typography> 개 선택
+                              </Typography>
+                            </Box>
+                          </Box>
                         </Box>
                         <Box className="basket-content">
                           <Box className="base-table-container">
-                            <Box className="base-table-meta">
-                              <Box className="board-info">
-                                <Typography className="board-count">
-                                  총 <Typography component="span" className="count">{basketList.length}</Typography> 개 선택
-                                </Typography>
-                              </Box>
-                            </Box>
-
+                            <Box className="empty-box"></Box>
                             <Box className="table-responsive has-vscroll">
                               <table className="base-table">
                                 <caption className="sr-only">의약품 선택 목록</caption>

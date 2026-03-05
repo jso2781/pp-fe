@@ -286,16 +286,22 @@ export default function KIDS_PP_US_DI_14() {
                       <Box className="basket-section">
                         <Box className="step-title-group">
                           <p className="step-label">2단계<span>의약품 바구니</span></p>
+                          <Box className="board-info">
+                            <Typography className="board-count">
+                              총 <Typography component="span" className="count">{basketList.length}</Typography> 개 선택
+                            </Typography>
+                          </Box>
                         </Box>
                         <Box className="basket-content">
                           <Box className="base-table-container">
-                            <Box className="base-table-meta">
+                            {/* <Box className="base-table-meta">
                               <Box className="board-info">
                                 <Typography className="board-count">
                                   총 <Typography component="span" className="count">{basketList.length}</Typography> 개 선택
                                 </Typography>
                               </Box>
-                            </Box>
+                            </Box> */}
+                            <Box className="empty-box"></Box>
 
                             {/* ========================
                               선택한 의약품 목록

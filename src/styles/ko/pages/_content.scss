@@ -1977,7 +1977,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 30px 15px;
+    padding: 30px 15px 20px 15px;
     border-bottom: 1px solid #D8D8D8;
     box-sizing: border-box;
 
@@ -2044,9 +2044,23 @@
     flex: 0 0 45%;
     min-width: 0;
     position: relative;
+
+    .board-info{
+      justify-content: end;
+      margin:0;
+      .board-count{
+        font-weight: 700 !important;
+      }
+    }
+
     .basket-content {
       position: relative;
       padding: 15px;
+
+      .empty-box{height:68px;}
+      @media (max-width: 1200px) {
+        .empty-box{height:0px;}
+      }
     }
   }
 
@@ -2101,8 +2115,8 @@
       height: auto;
       padding: 10px;
       border-bottom: 1px solid #eee;
-      .step-label{
-        margin:0;
+      .step-label{ 
+        margin:10px 0;
       }
     }
 
