@@ -188,8 +188,8 @@ export function DialogProvider({ children }: { children: ReactNode }) {
           disableEscapeKeyDown={optionsNoBackdrop.type === 'alert'}
         >
           {optionsNoBackdrop.title && (
-            <DialogTitle className="modal-title">
-              <p className='fw-700 fs-24'>{optionsNoBackdrop.title}</p>
+            <DialogTitle component="div" className="modal-title">
+              <h2>{optionsNoBackdrop.title}</h2>
             </DialogTitle>
           )}
           <DialogContent className="modal-content">{optionsNoBackdrop.message}</DialogContent>
@@ -218,7 +218,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
         >
           {optionsBackdrop.title && (
             <DialogTitle component="div" className="modal-title">
-              <p className='fw-700 fs-24'>{optionsBackdrop.title}</p>
+              <h2>{optionsBackdrop.title}</h2>
               <IconButton aria-label={t('close')} onClick={handleCloseBackdrop} className="btn-modal-close">
                 <CloseIcon aria-hidden="true" />
               </IconButton>
