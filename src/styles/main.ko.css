@@ -9464,9 +9464,6 @@ body {
   justify-content: end;
   margin: 0;
 }
-.lang-ko .drug-dur-process .basket-section .board-info .board-count, .lang-ko .dur-result-section .basket-section .board-info .board-count {
-  font-weight: 700 !important;
-}
 .lang-ko .drug-dur-process .basket-section .basket-content, .lang-ko .dur-result-section .basket-section .basket-content {
   position: relative;
   padding: 15px;
@@ -9569,9 +9566,6 @@ body {
   display: block;
   margin: 0;
   margin-left: auto;
-}
-.lang-ko .dur-result-section .step-title-group .board-info .board-count {
-  font-weight: 700 !important;
 }
 .lang-ko .appr-use-book-download {
   margin: 40px 0;
