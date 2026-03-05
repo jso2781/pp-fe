@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Box, List, ListItem, ListItemButton, ListItemText, Collapse } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { lnbStyles } from '../../styles/ko/layout/Lnb.styles';
@@ -104,6 +104,45 @@ function Lnb({ currentUrl, items }: LnbProps) {
     return buildLnbItemsFromMenuStructor(lnbStructor || [], currentUrl || '');
   }, [lnbStructor, currentUrl, items]);
 
+  useEffect(() => { 
+    const buildDefaultOpenKeys = (arr: LnbItem[], pathname: string) => {
+      const dfs = (items: LnbItem[], ancestors: LnbItem[]): LnbItem[] | null => {
+        for (const it of items) {
+          const active = pathname === it.key || pathname.startsWith(it.key + '/');
+          const nextAncestors = [...ancestors, it];
+  
+          if (active) return nextAncestors;
+          if (it.children && it.children.length > 0) {
+            const found = dfs(it.children, nextAncestors);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
+  
+      const activePath = dfs(arr, []);
+      if (!activePath) return {};
+  
+      const next: Record<string, boolean> = {};
+      activePath.forEach((node, idx) => {
+        const isLeaf = idx === activePath.length - 1;
+        if (!isLeaf && node.children && node.children.length > 0) {
+          next[node.key] = true;
+        }
+      });
+      return next;
+    };
+  
+    const defaults = buildDefaultOpenKeys(resolvedItems, location.pathname);
+  
+    setOpenKeys((prev) => {
+      return {
+        ...prev,
+        ...defaults 
+      };
+    });
+  }, [resolvedItems, location.pathname]);
+
   const renderItems = (arr: LnbItem[], depth = 0) => (
     <List 
       component="ul" 
@@ -117,7 +156,6 @@ function Lnb({ currentUrl, items }: LnbProps) {
 
         // 현재 메뉴의 열림 상태를 변수
         const isOpen = !!openKeys[it.key];
-
         return (
           <ListItem 
             key={it.key} 
