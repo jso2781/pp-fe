@@ -4804,6 +4804,305 @@
     transform: none !important;
   }
 }
+.lang-en .pageCont-greetings .intro-message {
+  font-weight: 700;
+  font-size: var(--fs-24);
+  padding-bottom: 40px;
+}
+.lang-en .pageCont-greetings .intro-message span {
+  color: var(--color-text-2);
+}
+.lang-en .pageCont-greetings .greeting-content-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 70px;
+}
+.lang-en .pageCont-greetings .greeting-content-box .ceo-img {
+  flex: 0 0 320px;
+}
+.lang-en .pageCont-greetings .greeting-content-box .ceo-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.lang-en .pageCont-greetings .greeting-content-box .greeting-article {
+  flex: 1;
+  word-break: keep-all;
+  font-size: var(--fs-18);
+  line-height: 133%;
+}
+.lang-en .pageCont-greetings .greeting-content-box .greeting-article .txt1 {
+  font-weight: 700;
+}
+@media (max-width: 1200px) {
+  .lang-en .pageCont-greetings .intro-message {
+    padding-bottom: 20px;
+  }
+  .lang-en .pageCont-greetings .greeting-content-box {
+    gap: 40px;
+  }
+  .lang-en .pageCont-greetings .greeting-content-box .ceo-img {
+    flex: 0 0 280px;
+  }
+}
+@media (max-width: 768px) {
+  .lang-en .pageCont-greetings .greeting-content-box {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+  .lang-en .pageCont-greetings .greeting-content-box .ceo-img {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 300px;
+  }
+  .lang-en .pageCont-greetings .greeting-content-box .greeting-article {
+    width: 100%;
+  }
+}
+.lang-en .pageCont-BriefHistory .history-list {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-bottom: 50px;
+  flex-direction: column;
+}
+.lang-en .pageCont-BriefHistory .history-list::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background-color: #D8D8D8;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  width: 95px;
+  height: 22px;
+  z-index: 3;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item .year {
+  font-size: var(--fs-24);
+  font-weight: 700;
+  color: var(--color-text-2);
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item .history-desc p {
+  margin: 0 0 10px 0;
+  font-size: var(--fs-18);
+  line-height: 1.4;
+  word-break: keep-all;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item .history-desc p span {
+  display: block;
+  font-weight: 700;
+  margin-right: 10px;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item.odd {
+  grid-column: 2;
+  padding-left: 92px;
+  text-align: left;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item.odd::before {
+  left: -11.5px;
+  background: url("/img/cms/aboutHistory_ico01.png") no-repeat center/contain;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item.even {
+  grid-column: 1;
+  padding-right: 92px;
+  text-align: right;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item.even::before {
+  right: -11.5px;
+  background: url("/img/cms/aboutHistory_ico02.png") no-repeat center/contain;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item.even .history-desc p {
+  text-align: left;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(1) {
+  grid-row: 1;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(2) {
+  grid-row: 2;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(3) {
+  grid-row: 3;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(4) {
+  grid-row: 4;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(5) {
+  grid-row: 5;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(6) {
+  grid-row: 6;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(7) {
+  grid-row: 7;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(8) {
+  grid-row: 8;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(9) {
+  grid-row: 9;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(10) {
+  grid-row: 10;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(11) {
+  grid-row: 11;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(12) {
+  grid-row: 12;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(13) {
+  grid-row: 13;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(14) {
+  grid-row: 14;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(15) {
+  grid-row: 15;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(16) {
+  grid-row: 16;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(17) {
+  grid-row: 17;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(18) {
+  grid-row: 18;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(19) {
+  grid-row: 19;
+}
+.lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(20) {
+  grid-row: 20;
+}
+@media (max-width: 768px) {
+  .lang-en .pageCont-BriefHistory .history-list {
+    display: block;
+    padding: 0px;
+  }
+  .lang-en .pageCont-BriefHistory .history-list::after {
+    left: 20px;
+    transform: none;
+  }
+  .lang-en .pageCont-BriefHistory .history-list .history-item {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin: 0 0 40px 0;
+    padding: 0;
+    text-align: left;
+  }
+  .lang-en .pageCont-BriefHistory .history-list .history-item.odd, .lang-en .pageCont-BriefHistory .history-list .history-item.even {
+    padding-right: 0px;
+    padding-left: 120px;
+    text-align: left;
+  }
+  .lang-en .pageCont-BriefHistory .history-list .history-item.odd::before, .lang-en .pageCont-BriefHistory .history-list .history-item.even::before {
+    top: 0px;
+    left: 9px;
+    right: auto;
+    background: url("/img/cms/aboutHistory_ico01.png") no-repeat center/contain;
+  }
+  .lang-en .pageCont-BriefHistory .history-list .history-item:nth-child(n) {
+    grid-row: auto;
+    grid-column: auto;
+  }
+  .lang-en .pageCont-BriefHistory .history-list .history-item::before {
+    left: -42px;
+    right: auto;
+    top: 4px;
+    margin: 0;
+  }
+  .lang-en .pageCont-BriefHistory .history-list .history-item .year {
+    display: block;
+    text-align: left;
+    margin: 0 0 10px 0;
+    padding: 0;
+  }
+  .lang-en .pageCont-BriefHistory .history-list .history-item .history-desc {
+    display: block;
+    text-align: left;
+    width: 100%;
+  }
+}
+@media (max-width: 460px) {
+  .lang-en .pageCont-BriefHistory .history-item:nth-child(n).odd, .lang-en .pageCont-BriefHistory .history-item:nth-child(n).even {
+    padding-left: 80px;
+  }
+  .lang-en .pageCont-BriefHistory .history-item:nth-child(n).odd::before, .lang-en .pageCont-BriefHistory .history-item:nth-child(n).even::before {
+    width: 66px;
+    left: 13px;
+  }
+}
+.lang-en .location-contact-list {
+  margin-top: 24px;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #087C80;
+  background: #FFF;
+}
+.lang-en .location-contact-list .contact-item {
+  display: block;
+  line-height: 1.6;
+  font-size: 18px;
+  font-style: normal;
+}
+.lang-en .location-contact-list .contact-item .item-label {
+  font-weight: 700;
+  color: #087C80;
+  margin-right: 8px;
+}
+.lang-en .location-contact-list .contact-item .item-label::after {
+  content: ":";
+}
+.lang-en .location-contact-list .contact-item .item-value {
+  display: inline;
+  font-weight: 400;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+@media (max-width: 1200px) {
+  .lang-en .location-contact-list {
+    padding: 12px;
+  }
+  .lang-en .location-contact-list .contact-item {
+    margin-bottom: 16px;
+  }
+  .lang-en .location-contact-list .contact-item:last-child {
+    margin-bottom: 0;
+  }
+  .lang-en .location-contact-list .contact-item .item-label {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 2px;
+    font-size: 16px;
+  }
+  .lang-en .location-contact-list .contact-item .item-value {
+    display: block;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+}
 .lang-en {
   /* 직접 작성하는 스타일 (상단에서 선언한 mixin_tools 사용) */
   /* .app-main {

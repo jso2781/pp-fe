@@ -217,14 +217,14 @@
   // 최하단 정책 및 카피라이트
   .footer-meta-info {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     padding-top: 20px;
     border-top: 1px solid #B1B8BE;
 
     .meta-links {
       display: flex;
       gap: 0;
+      margin:0 0 10px 0;
       .meta-item {
         font-size: 15px;
         color: #1E2124;

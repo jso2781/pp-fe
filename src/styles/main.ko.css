@@ -4416,7 +4416,7 @@ body {
 .lang-ko .header_menu .util-menu .btn-util.user-reg::before,
 .lang-ko .mo-header-util .btn-util.user-reg::before,
 .lang-ko .mo-drawer-header .btn-util.user-reg::before {
-  background-image: url("/img/ico_usrSwtReg.svg");
+  background-image: url("/img/ico_usrtReg.svg");
 }
 .lang-ko .header-topbar .top-link .btn-util.user-adv::before,
 .lang-ko .header_menu .util-menu .btn-util.user-adv::before,
@@ -4434,7 +4434,7 @@ body {
 .lang-ko .header_menu .util-menu .btn-util.adv-task::before,
 .lang-ko .mo-header-util .btn-util.adv-task::before,
 .lang-ko .mo-drawer-header .btn-util.adv-task::before {
-  background-image: url("/img/ico_task.svg");
+  background-image: url("/img/ico_advTask.svg");
 }
 .lang-ko .header-topbar .top-link .btn-util.login::before,
 .lang-ko .header_menu .util-menu .btn-util.login::before,
@@ -5189,14 +5189,14 @@ body {
 }
 .lang-ko .footer .footer-meta-info {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   padding-top: 20px;
   border-top: 1px solid #B1B8BE;
 }
 .lang-ko .footer .footer-meta-info .meta-links {
   display: flex;
   gap: 0;
+  margin: 0 0 10px 0;
 }
 .lang-ko .footer .footer-meta-info .meta-links .meta-item {
   font-size: 15px;
