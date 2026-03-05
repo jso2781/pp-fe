@@ -275,6 +275,9 @@ export default function MyDrugInfo() {
     return 'nursw'
   }
 
+  const activeTabKey = `tab${Number(activeCategory.replace('TAB', ''))}`
+  const activeTotalCount = mergedTabs[activeTabKey]?.totalCount ?? 0
+
   return (
     <Box className="page-layout">
       <Box className="sub-container">
@@ -566,7 +569,17 @@ export default function MyDrugInfo() {
                   {hasRequestedResult && (
                     <Box className="dur-result-section">
                       <Box className="step-title-group">
+
+                        {/* ========================================================================= */}
                         <p className="step-label">3단계<span>DUR 정보결과</span></p>
+
+                        <Box className="board-info" aria-label="검색결과">
+                          <Typography className="board-count">
+                            정보결과 총 <Typography component="span" className="count">{activeTotalCount}</Typography> 개
+                          </Typography>
+                        </Box>                       
+                        {/* ========================================================================= */}
+
                       </Box>
 
                       {resultLoading && <LinearProgress sx={{ mb: 2 }} />}
@@ -608,12 +621,6 @@ export default function MyDrugInfo() {
                                 <Box className="panel-content">
                                   <Typography className="sr-only">{categoryNaming[category]} 탭 컨텐츠 </Typography>
                                   <Box className="panel-inner">
-                                    <Box className="board-info" aria-label="검색결과">
-                                      <Typography className="board-count">
-                                        검색결과 <Typography component="span" className="count">{totalCount}</Typography> 건
-                                      </Typography>
-                                    </Box>
-
                                     {pagedList.length === 0 ? (
                                       <Box className="no-data">조회된 DUR 정보가 없습니다.</Box>
                                     ) : (
