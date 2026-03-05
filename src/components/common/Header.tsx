@@ -305,7 +305,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           // 자동 로그아웃 처리
           logoutContext();
           const currentLang = getLangFromPathname(location.pathname) || 'ko';
-          navigate(`/${currentLang}`, { replace: true });
+          navigate(`/pp/${currentLang}`, { replace: true });
           return 0;
         }
         
@@ -321,7 +321,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           // 자동 로그아웃 처리, 한글 홈(/ko)으로 이동
           logoutContext();
           const currentLang = getLangFromPathname(location.pathname) || 'ko';
-          navigate(`/${currentLang}`, { replace: true });
+          navigate(`/pp/${currentLang}`, { replace: true });
           return 0;
         }
         
