@@ -535,7 +535,7 @@ export default function DurSearchRoom(){
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   <span className="text">{item.prohibitIgrdNm}</span>
-                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'conc')}>
+                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.prohibitIgrdNm, 'conc')}>
                                                     제품검색
                                                   </Button>
                                                 </Box>
