@@ -1,6 +1,11 @@
 // Auto-generated screen loaders by screenId
 export const screenComponentLoaders = {
   // 영문
+  'KIDS-PP-US-EN-01': () => import('../../published/en/KIDS-PP-US-EN-01'),
+  'KIDS-PP-US-EN-02': () => import('../../published/en/KIDS-PP-US-EN-02'),
+  'KIDS-PP-US-EN-03': () => import('../../published/en/KIDS-PP-US-EN-03'),
+  'KIDS-PP-US-EN-05': () => import('../../published/en/KIDS-PP-US-EN-05'),
+  'KIDS-PP-US-EN-06': () => import('../../published/en/KIDS-PP-US-EN-06'),
   'KIDS-PP-US-EN-07': () => import('../../published/en/KIDS-PP-US-EN-07'),
   'KIDS-PP-US-EN-08': () => import('../../published/en/KIDS-PP-US-EN-08'),
   'KIDS-PP-US-EN-09': () => import('../../published/en/KIDS-PP-US-EN-09'),
