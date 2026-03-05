@@ -379,6 +379,11 @@ export default function KIDS_PP_US_DI_14() {
                   <Box className="dur-result-section">
                     <Box className="step-title-group">
                       <p className="step-label">3단계<span>DUR 정보결과</span></p>
+                      <Box className="board-info" aria-label="검색결과">
+                        <Typography className="board-count">
+                          검색결과 <Typography component="span" className="count">1</Typography> 건
+                        </Typography>
+                      </Box>
                     </Box>
                     <Box className="dur-result-content">
                       <Box className="category-tabs box-variant col-4" role="navigation" aria-label="기본 카테고리 선택">
@@ -419,11 +424,11 @@ export default function KIDS_PP_US_DI_14() {
                           <Box className="panel-content">
                             <Typography className="sr-only">{categoryNaming[category]} 탭 컨텐츠 </Typography>
                             <Box className="panel-inner">
-                              <Box className="board-info" aria-label="검색결과">
+                              {/* <Box className="board-info" aria-label="검색결과">
                                 <Typography className="board-count">
                                   검색결과 <Typography component="span" className="count">1</Typography> 건
                                 </Typography>
-                              </Box>
+                              </Box> */}
                               <Box className="result-detail-area">
                                 <ul className="result-detail-list">
                                   <li className="result-set-item">
