@@ -9570,6 +9570,9 @@ body {
   margin: 0;
   margin-left: auto;
 }
+.lang-ko .dur-result-section .step-title-group .board-info .board-count {
+  font-weight: 700 !important;
+}
 .lang-ko .appr-use-book-download {
   margin: 40px 0;
   padding: 26px 10px;
