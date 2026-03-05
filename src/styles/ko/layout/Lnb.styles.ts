@@ -76,7 +76,7 @@ export const lnbStyles = {
     },
     // 서브메뉴 아이템일 때 추가 스타일
     ...(depth > 0 && {
-        padding: '6px 10px 6px 25px',
+        padding: '6px 0px 6px 25px',
         '&:hover': {
         backgroundColor: '#DCF3F4',
         cursor: 'pointer',
