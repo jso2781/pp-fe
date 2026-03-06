@@ -5,9 +5,11 @@
  * 화면설명: 모든 국문 CMS 화면 보기용 템플릿 화면
  */
 import DOMPurify from 'dompurify';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
 import { Box, Typography, Link, Button} from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation';
+import KakaoRoughMap from '@/components/common/KakaoRoughMap';
 import Lnb from '@/components/common/Lnb';
 import KoglLicense from '@/components/common/KoglLicense';
 import { useParams } from 'react-router-dom';
@@ -53,6 +55,11 @@ export default function CmsPage() {
   const contactDepNm = menuInfo?.menuTkcgDeptNm ?? null;
   const contactPersonNm = menuInfo?.menuPicFlnm ?? null;
   const contactPhoneNum = menuInfo?.encptPicTelno ?? null;
+
+  /** CMS 본문 컨테이너 ref - dangerouslySetInnerHTML 렌더 후 .map div에 KakaoRoughMap 마운트용 */
+  const contentRef = useRef<HTMLDivElement>(null);
+  /** KakaoRoughMap createRoot 인스턴스 - cleanup 시 unmount용 */
+  const mapRootRef = useRef<ReturnType<typeof createRoot> | null>(null);
 
   // CMS 식별키(콘텐츠일련번호, contsSn) 추출 (예: /cms/CmsPage/cms001)
   const match = location.pathname.match(/\/cms\/CmsPage\/([^/]+)/);
@@ -107,6 +114,31 @@ export default function CmsPage() {
     };
   }, []);
 
+  /** HTML 본문에 <div class="map">가 있으면 그 안에 KakaoRoughMap 마운트 (오시는 길 등) */
+  useEffect(() => {
+    if (!current?.contsCn) return;
+
+    const timer = setTimeout(() => {
+      const container = contentRef.current;
+      if (!container) return;
+
+      // .map 또는 class에 "map" 포함한 div (map-wrap 등 변형 대응)
+      const mapEl = container.querySelector('.map') ?? container.querySelector('div[class*="map"]');
+      if (!mapEl) return;
+
+      const el = mapEl as HTMLElement;
+      el.innerHTML = '';
+      const root = createRoot(el);
+      root.render(<KakaoRoughMap />);
+      mapRootRef.current = root;
+    }, 0);
+
+    return () => {
+      clearTimeout(timer);
+      mapRootRef.current?.unmount();
+      mapRootRef.current = null;
+    };
+  }, [current?.contsCn]);
 
   return (
     <Box className="page-layout">
@@ -133,7 +165,7 @@ export default function CmsPage() {
                 {/* --- 본문 시작 --- */}
 
                 {/* <CleanHtml html={current?.contsCn} loading={false} /> */}
-                {<div dangerouslySetInnerHTML={{ __html: current?.contsCn ?? '' }}></div>  }
+                <div ref={contentRef} dangerouslySetInnerHTML={{ __html: current?.contsCn ?? '' }} />
 
                 {/* 공공(KOGL) 저작물 */}
                 {menuKoglCprgtTypeCd && (
