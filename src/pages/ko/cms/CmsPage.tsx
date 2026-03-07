@@ -55,7 +55,7 @@ export default function CmsPage() {
   const contactPersonNm = menuInfo?.menuPicFlnm ?? null;
   const contactPhoneNum = menuInfo?.encptPicTelno ?? null;
 
-  /** CMS 본문 컨테이너 ref - dangerouslySetInnerHTML 렌더 후 .map div에 KakaoRoughMap 마운트용 */
+  /** CMS 본문 컨테이너 ref - dangerouslySetInnerHTML 렌더링후 만약 .kakao-map-placeholder div가 있으면 카카오맵을 사용하기 위해 iframe 으로 kakao-roughmap.html을 삽입 */
   const contentRef = useRef<HTMLDivElement>(null);
 
   // CMS 식별키(콘텐츠일련번호, contsSn) 추출 (예: /pp/ko/cms/CmsPage/cms001 에서 cms001)
@@ -109,7 +109,7 @@ export default function CmsPage() {
     };
   }, []);
 
-  /** HTML 본문에 <div class="map">가 있으면 그 안에 KakaoRoughMap 마운트 (오시는 길 등) */
+  /** HTML 본문에 <div class="kakao-map-placeholder">가 있으면 카카오맵(roughmap)을 사용하기 위해 kakao-roughmap.html 을 iframe 으로 삽입함. */
   useEffect(() => {
     if (!current?.contsCn) return;
 
@@ -117,7 +117,7 @@ export default function CmsPage() {
       const container = contentRef.current;
       if (!container) return;
 
-      // class에 "kakao-map-placeholder" 이 있는 div 에 별도 React Root 를 생성하고 여기에 KakaoRoughMap 마운트
+      // class에 "kakao-map-placeholder" 이 있는 div 에 iframe 으로 kakao-roughmap.html 을 삽입
       const mapEl = container.querySelector('.kakao-map-placeholder');
       if (!mapEl) return;
 
