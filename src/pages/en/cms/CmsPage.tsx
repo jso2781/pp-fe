@@ -8,7 +8,7 @@ import DOMPurify from 'dompurify';
 import React, { useEffect, useMemo } from 'react';
 import { Box, Typography, Link, Button} from '@mui/material';
 import KoglLicense from '@/components/common/KoglLicense';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import ContactArea from '@/components/common/ContactArea';
 import { useAuth } from '@/contexts/AuthContext';
 import DgstfnExnm from '@/components/common/DgstfnExnm';
@@ -23,7 +23,8 @@ import EngLnb from '@/components/common/EngLnb';
 export default function CmsPage() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  
+  const location = useLocation();
+
   const { current } = useAppSelector((s) => s.cms)
   // const cleanHtml = DOMPurify.sanitize(current?.contsCn ?? '');
   // console.log('CmsPage cms cleanHtml=', cleanHtml);
@@ -54,9 +55,7 @@ export default function CmsPage() {
   const contactPersonNm = menuInfo?.menuPicFlnm ?? null;
   const contactPhoneNum = menuInfo?.encptPicTelno ?? null;
 
-  // CMS 식별키(콘텐츠일련번호, contsSn) 추출 (예: /cms/CmsPage/cms001)
-  const match = location.pathname.match(/\/cms\/CmsPage\/([^/]+)/);
-  const contsSN1 = match?.[1] as string;
+  // CMS 식별키(콘텐츠일련번호, contsSn) 추출 (예: /pp/en/cms/CmsPage/cms001 에서 cms001)
   const { contsSn } = useParams<{ contsSn: string }>();
 
   // Lnb 랜더링용

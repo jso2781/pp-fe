@@ -7,29 +7,20 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { padding: 0; font-family: inherit; }
-    .conT314 { width: 100%; }
-    .conT314_box { width: 100%; }
-    .conT314_inner { width: 100%; }
     .root_daum_roughmap { width: 100% !important; max-width: 640px; }
     .conT314_addr { display: block; margin-top: 12px; font-size: 14px; line-height: 1.6; }
   </style>
 </head>
 <body>
-  <div class="conT314">
-    <div class="conT314_box">
-      <div class="conT314_inner">
-        <div id="daumRoughmapContainer1736314736004" class="root_daum_roughmap root_daum_roughmap_landing" style="width: 100%; height: 360px;"></div>
-        <script charset="UTF-8" class="daum_roughmap_loader_script" src="https://ssl.daumcdn.net/dmaps/map_js_init/roughmapLoader.js"></script>
-        <script charset="UTF-8">
-          new daum.roughmap.Lander({
-            "timestamp": "1736314736004",
-            "key": "2mq5a",
-            "mapWidth": "100%",
-            "mapHeight": "360"
-          }).render();
-        </script>
-      </div>
-    </div>
-  </div>
+  <div id="daumRoughmapContainer1736314736004" class="root_daum_roughmap root_daum_roughmap_landing" style="width: 100%; height: 360px;"></div>
+  <script charset="UTF-8" class="daum_roughmap_loader_script" src="https://ssl.daumcdn.net/dmaps/map_js_init/roughmapLoader.js"></script>
+  <script charset="UTF-8">
+    new daum.roughmap.Lander({
+      "timestamp": "1736314736004",
+      "key": "2mq5a",
+      "mapWidth": "100%",
+      "mapHeight": "360"
+    }).render();
+  </script>
 </body>
 </html>

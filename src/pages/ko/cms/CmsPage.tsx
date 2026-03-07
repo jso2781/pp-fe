@@ -6,13 +6,12 @@
  */
 import DOMPurify from 'dompurify';
 import React, { useEffect, useRef } from 'react';
-import { createRoot } from 'react-dom/client';
 import { Box, Typography, Link, Button} from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation';
 import KakaoRoughMap from '@/components/common/KakaoRoughMap';
 import Lnb from '@/components/common/Lnb';
 import KoglLicense from '@/components/common/KoglLicense';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import ContactArea from '@/components/common/ContactArea';
 import { useAuth } from '@/contexts/AuthContext';
 import DgstfnExnm from '@/components/common/DgstfnExnm';
@@ -25,7 +24,7 @@ import LnbSectionTitle from '@/components/common/LnbSectionTitle';
 export default function CmsPage() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  
+  const location = useLocation();
   const { current } = useAppSelector((s) => s.cms)
   // const cleanHtml = DOMPurify.sanitize(current?.contsCn ?? '');
   // console.log('CmsPage cms cleanHtml=', cleanHtml);
@@ -58,12 +57,8 @@ export default function CmsPage() {
 
   /** CMS 본문 컨테이너 ref - dangerouslySetInnerHTML 렌더 후 .map div에 KakaoRoughMap 마운트용 */
   const contentRef = useRef<HTMLDivElement>(null);
-  /** KakaoRoughMap createRoot 인스턴스 - cleanup 시 unmount용 */
-  const mapRootRef = useRef<ReturnType<typeof createRoot> | null>(null);
 
-  // CMS 식별키(콘텐츠일련번호, contsSn) 추출 (예: /cms/CmsPage/cms001)
-  const match = location.pathname.match(/\/cms\/CmsPage\/([^/]+)/);
-  const contsSN1 = match?.[1] as string;
+  // CMS 식별키(콘텐츠일련번호, contsSn) 추출 (예: /pp/ko/cms/CmsPage/cms001 에서 cms001)
   const { contsSn } = useParams<{ contsSn: string }>();
 
   // Lnb 랜더링용
@@ -122,21 +117,27 @@ export default function CmsPage() {
       const container = contentRef.current;
       if (!container) return;
 
-      // .map 또는 class에 "map" 포함한 div (map-wrap 등 변형 대응)
-      const mapEl = container.querySelector('.map') ?? container.querySelector('div[class*="map"]');
+      // class에 "kakao-map-placeholder" 이 있는 div 에 별도 React Root 를 생성하고 여기에 KakaoRoughMap 마운트
+      const mapEl = container.querySelector('.kakao-map-placeholder');
       if (!mapEl) return;
 
       const el = mapEl as HTMLElement;
       el.innerHTML = '';
-      const root = createRoot(el);
-      root.render(<KakaoRoughMap />);
-      mapRootRef.current = root;
+
+      const iframe = document.createElement('iframe');
+      iframe.src = `${import.meta.env.BASE_URL}kakao-roughmap.html`;
+      iframe.title = '오시는 길 지도';
+      iframe.style.width = '100%';
+      iframe.style.maxWidth = '640px';
+      iframe.style.height = '360px';
+      iframe.style.border = '0';
+      iframe.loading = 'lazy';
+  
+      el.appendChild(iframe);
     }, 0);
 
     return () => {
       clearTimeout(timer);
-      mapRootRef.current?.unmount();
-      mapRootRef.current = null;
     };
   }, [current?.contsCn]);
 
