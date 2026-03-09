@@ -1308,7 +1308,7 @@ export default function DurSearchRoom(){
                   )}
 
                   {/* 공공(KOGL) 저작물 */}
-                  {menuKoglCprgtTypeCd && (
+                  {menuKoglCprgtTypeCd && menuKoglCprgtTypeCd.trim() !== '' && (
                     <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
                   )}
 

@@ -690,7 +690,7 @@ export default function MyDrugInfo() {
                   )}
                 </section>
 
-                {menuKoglCprgtTypeCd && <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />}
+                {menuKoglCprgtTypeCd && menuKoglCprgtTypeCd.trim() !== '' && <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />}
                 {dgstfnExmnYn && <DgstfnExnm menuSn={menuSn} />}
                 {deptInfoExpsrYn && (
                   <ContactArea
