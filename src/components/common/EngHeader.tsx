@@ -809,7 +809,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         <Box className="sitemap-container">
           <Box className="sitemap-header">
             <Box className="inner">
-              <Typography className="header-title">전체메뉴</Typography>
+              <Typography className="header-title">SITEMAP</Typography>
               <IconButton onClick={() => setSitemapOpen(false)}>
                 <Close />
               </IconButton>
