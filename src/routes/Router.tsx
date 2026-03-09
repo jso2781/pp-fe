@@ -108,7 +108,9 @@ function LangElement({ byLang }: LangElementProps) {
  * 브라우져 주소창에 표시된 URL pathname이 바뀔 때마다 i18n 언어를 동기화한다. 
  * 
  * BrowserRouter 내부에 배치해야 브라우져 주소창에 표시된 URL pathname이 바뀔 때마다 
- * i18n 언어를 동기화할 수 있다.
+ * i18n 언어를 동기화할 수 있다. 동기화하지 않으면 브라우져 이전, 다음 버튼 클릭할 때마다 언어가 변경되지 않는다.
+ * 그래서, 영문 메뉴 화면인데 한국어로 표기되는 문제가 발생함.
+ * 
  */
 function LangSync() {
   const location = useLocation();
