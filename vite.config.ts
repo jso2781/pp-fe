@@ -91,6 +91,7 @@ export default defineConfig(({ mode }) => {
     server: {
       // 브라우저 자동 열기 비활성화 (외부 브라우저 사용)
       open: false,
+      // host: true,
       proxy: {
         /**
          * Frontend always calls: /api/*
