@@ -3,6 +3,7 @@ import { JSX, useEffect, useMemo, lazy, useRef } from "react";
 import { Navigate, BrowserRouter, Routes, Route, useLocation, useParams } from 'react-router-dom'
 import { useAppDispatch } from '@/store/hooks'
 import { selectMenuList } from '@/features/auth/MenuThunks'
+import { getLangFromPathname } from './lang'
 import Layout from './Layout'
 import BlankLayout from './BlankLayout'
 import ProtectedRoute from './ProtectedRoute'
@@ -101,6 +102,20 @@ function LangElement({ byLang }: LangElementProps) {
   }
   
   return byLang[normalized] ?? byLang[FALLBACK_LANG];
+}
+
+/** URL pathname이 바뀔 때마다 i18n 언어를 동기화한다. BrowserRouter 내부에 배치. */
+function LangSync() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const lang = getLangFromPathname(location.pathname);
+    if (i18n.language !== lang) {
+      i18n.changeLanguage(lang);
+    }
+  }, [location.pathname]);
+
+  return null;
 }
 
 const LangGuard = ({ children }: { children: JSX.Element }) => {
@@ -206,6 +221,7 @@ export default function Router() {
       <DialogProvider>
         <BrowserRouter>
           <GlobalErrorHandler>
+            <LangSync />
             <Routes>
 
               {/* 팝업 전용: Header/Footer 없이 본문만 표시 */}

@@ -169,7 +169,7 @@ export default function CmsPage() {
                 <div ref={contentRef} dangerouslySetInnerHTML={{ __html: current?.contsCn ?? '' }} />
 
                 {/* 공공(KOGL) 저작물 */}
-                {menuKoglCprgtTypeCd && (
+                {menuKoglCprgtTypeCd && menuKoglCprgtTypeCd?.trim() !== '' && (
                   <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
                 )}
 

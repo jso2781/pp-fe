@@ -90,7 +90,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * @example useAuth().getMenuInfo('/maintask/dur/DurUnderstand')
    */
   const getMenuInfo = useCallback((menuUrlAddr: string) => {
-    const key = menuUrlAddr.replace(/\/(ko|en)\//, '/')
+    // const key = menuUrlAddr.replace(/\/(ko|en)\//, '/')
+    // 현재는 언어코드 포함 전체 pathname을 key로 사용. 향후 언어코드 제거한 형태로도 검색 필요시 위 정규식 활용하여 key 생성
+    const key = menuUrlAddr;
     const ref = menuInfoCacheRef.current
 
     // gnbList가 변경될 때마다 menuInfoCacheRef 캐시 초기화

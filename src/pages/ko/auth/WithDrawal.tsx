@@ -47,6 +47,7 @@ export default function WithDrawal() {
     try {
       const now = toTimestampString();
       const mbrInfoPVO: MbrInfoPVO = {
+        mbrNo: userInfo.mbrNo,
         mbrId: userInfo.mbrId,
         mbrJoinSttsCd: 'W',
         mbrWhdwlDt: now,
