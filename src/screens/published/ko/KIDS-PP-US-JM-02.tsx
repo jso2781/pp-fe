@@ -6,9 +6,52 @@ import DepsLocation from '@/components/common/DepsLocation'
 import ScreenShell from '../../ScreenShell'
 
 // --- 약관 상세 컨텐츠 (모달 내부에 들어갈 내용) ---
-const TermsDetail01 = () => <Box>sdfsdf이용약관 상세 내용입니다.<br/>내용이 길어지면 자동으로 스크롤이 생성됩니다.</Box>;
-const TermsDetail02 = () => <Box>개인정보 수집 및 이용동의 상세 내용입니다.</Box>;
-const TermsDetail03 = () => <Box>개인정보 수집 및 이용동의(선택) 상세 내용입니다.</Box>;
+const TermsDetail01 = () => 
+<div>		
+  이용약관
+</div>;
+const TermsDetail02 = () => 
+  <div className="privacy-policy-box">
+    <div className="policy-content">
+      <dl>
+        <dt>1. 개인정보의 수집∙이용 목적</dt>
+        <dd>회원관리, 만족도 조사, 교육 사이트 접속</dd>
+
+        <dt>2. 수집하는 개인정보의 항목</dt>
+        <dd>수집항목 : 이름, 휴대전화번호, 연계정보(CI), 아이디, 비밀번호</dd>
+
+        <dt>3. 개인정보의 보유 및 이용기간</dt>
+        <dd><span className="highlight">회원 탈퇴 시 까지</span></dd>
+
+        <dt>4. 동의거부권리 안내</dt>
+        <dd>
+          <p>개인정보 수집 ∙ 이용에 대한 동의를 거부할 권리가 있습니다.</p>
+          <p>그러나, 동의 거부 시 회원으로 가입할 수 없음을 알려 드립니다.</p>
+        </dd>
+      </dl> 
+    </div>
+  </div>;
+const TermsDetail03 = () => 
+  <div className="privacy-policy-box">
+    <div className="policy-content">
+      <dl>
+        <dt>1. 개인정보의 수집∙이용 목적</dt>
+        <dd>회원관리, 만족도 조사, 교육 사이트 접속</dd>
+
+        <dt>2. 수집하는 개인정보의 항목</dt>
+        <dd>수집항목 : 이메일</dd>
+
+        <dt>3. 개인정보의 보유 및 이용기간</dt>
+        <dd><span className="highlight">회원 탈퇴 시 까지</span></dd>
+
+        <dt>4. 동의거부권리 안내</dt>
+        <dd>
+          <p>개인정보 수집 ∙ 이용에 대한 동의 거부 시 회원가입에는 제한이 없습니다.</p>
+          <p>단, 서비스 내역 통지 등을 이메일로 수신 받을 수 없습니다.</p>
+        </dd>
+      </dl>
+    </div>
+  </div>;
 const TermsDetail04 = () => <Box>저작권보호정책 및 정보공유 동의 상세 내용입니다.</Box>;
 
 export default function KIDS_PP_US_JM_02() {

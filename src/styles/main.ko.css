@@ -12511,6 +12511,31 @@ body {
   text-decoration: none;
   border: none;
 }
+.lang-ko .privacy-policy-box {
+  text-align: left;
+}
+.lang-ko .privacy-policy-box .policy-content dl dt {
+  position: relative;
+  padding-bottom: 8px;
+  padding-left: 12px;
+  color: var(--color-text-2);
+  font-size: 16px;
+}
+.lang-ko .privacy-policy-box .policy-content dl dt:not(:first-of-type) {
+  margin-top: 20px;
+}
+.lang-ko .privacy-policy-box .policy-content dl dd {
+  margin: 0;
+  padding-left: 12px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.lang-ko .privacy-policy-box .policy-content dl dd .highlight {
+  font-size: var(--fs-18);
+  color: var(--color-text-1);
+  font-weight: 700;
+  text-decoration: underline;
+}
 
 /* ==========================================================================
    모달
