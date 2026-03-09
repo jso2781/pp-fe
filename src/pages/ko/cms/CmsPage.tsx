@@ -8,7 +8,6 @@ import DOMPurify from 'dompurify';
 import React, { useEffect, useRef } from 'react';
 import { Box, Typography, Link, Button} from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation';
-import KakaoRoughMap from '@/components/common/KakaoRoughMap';
 import Lnb from '@/components/common/Lnb';
 import KoglLicense from '@/components/common/KoglLicense';
 import { useParams, useLocation } from 'react-router-dom';

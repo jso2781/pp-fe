@@ -104,7 +104,12 @@ function LangElement({ byLang }: LangElementProps) {
   return byLang[normalized] ?? byLang[FALLBACK_LANG];
 }
 
-/** URL pathname이 바뀔 때마다 i18n 언어를 동기화한다. BrowserRouter 내부에 배치. */
+/**
+ * 브라우져 주소창에 표시된 URL pathname이 바뀔 때마다 i18n 언어를 동기화한다. 
+ * 
+ * BrowserRouter 내부에 배치해야 브라우져 주소창에 표시된 URL pathname이 바뀔 때마다 
+ * i18n 언어를 동기화할 수 있다.
+ */
 function LangSync() {
   const location = useLocation();
 
