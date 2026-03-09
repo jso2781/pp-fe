@@ -100,7 +100,7 @@ export default function SignUpAgrTrms() {
       'UTZTN': '이용약관 상세 내용입니다.<br/>내용이 길어지면 자동으로 스크롤이 생성됩니다.',
       'CLCT': '개인정보 수집 및 이용동의 상세 내용입니다.',
       'STTY_AGT': '만 14세 미만 아동에 관한 개인정보 수집〮이용 동의_법정대리인 상세 내용입니다.',
-      'STT_PRVC': '개인정보취급방침 상세 내용입니다.',
+      'STT_PRVC_PP': '개인정보취급방침 상세 내용입니다.',
     };
     return defaultContents[popupId] || '약관 내용이 없습니다.';
   };
@@ -216,7 +216,7 @@ export default function SignUpAgrTrms() {
     },
     { 
       id: 4, 
-      popupId: 'STT_PRVC', 
+      popupId: 'STT_PRVC_PP', 
       label: t('privacyPolicy'), 
       required: false, 
       checked: checked4, 

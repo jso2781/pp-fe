@@ -236,7 +236,7 @@ export const mockTrmsListForSignUp = [
   },
   {
     /** 약관법령코드 */
-    trmsSttCd: 'STT_PRVC',
+    trmsSttCd: 'STT_PRVC_PP',
 
       /** 상위업무코드(TB_PP_M_TASK_CD.up_task_cd) */
     upTaskCd: 'STT',
