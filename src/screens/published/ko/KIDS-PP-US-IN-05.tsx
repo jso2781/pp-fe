@@ -77,8 +77,9 @@ export default function KIDS_PP_US_IN_05() {
                     {/* 최상단: 원장 및 이사회/감사팀 */}
                     <div className="org-top-section">
                       <div className="node-boss">
-                        <a href="javascript:void(0);" className="node-link">원장</a>
+                        <a href="javascript:void(0);" className="node-link" onClick={() => {/* 부서정보 핸들러 */}}>원장</a>
                       </div>
+                      
                       <div className="board-audit-group">
                         <div className="node-board">
                           <a href="javascript:void(0);" className="node-link">이사회</a>
@@ -156,28 +157,41 @@ export default function KIDS_PP_US_IN_05() {
                   {/* 부서 정보가 뿌려질 영역 */}
                   <div className="org-info-display">
                     <h3 className="info-title">부서 정보</h3>
-                    <div className="profile-grid">
-                      {teamData.map((member, index) => (
-                        <div className="profile-card" key={`member-${index}`}>
-                          <div className="card-top">
-                            <span className="rank-text">{member.rank}</span>
-                            <div className="name-area">
-                              <strong className="name">{member.name}</strong>
-                              <span className="tel-text">{member.tel}</span>
-                            </div>
-                          </div>
-                          <div className="card-bottom">
-                            <p className="job-desc">
-                              {member.job || '-'}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    <Box className="base-table-container">
+                      <Box className="table-responsive">
+                        <table className="base-table table-type-2">
+                          <caption className="sr-only">조직 및 업무 안내</caption>
+                            <colgroup>
+                              <col style={{ width: '10%' }} />
+                              <col style={{ width: '10%' }} />
+                              <col style={{ width: '20%' }} />
+                              <col style={{ width: 'auto' }} />
+                            </colgroup>
+                            <thead>
+                              <tr>
+                                <th scope="col">직책</th>
+                                <th scope="col">성명</th>
+                                <th scope="col">전화번호</th>
+                                <th scope="col">주요업무</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            {teamData.map((member, index) => (
+                              <tr key={`member-${index}`}>
+                                <td>{member.rank}</td>
+                                <td>{member.name}</td>
+                                <td>{member.tel}</td>
+                                <td className="tal">
+                                  {member.job || '-'}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </Box>
+                    </Box>
                   </div>
                 </section>
-
-
                 {/* --- 본문 끝 --- */}
                 </Box>
               </Box>
