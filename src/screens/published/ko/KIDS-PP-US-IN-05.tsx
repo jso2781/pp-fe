@@ -168,7 +168,7 @@ export default function KIDS_PP_US_IN_05() {
                           </div>
                           <div className="card-bottom">
                             <p className="job-desc">
-                              {member.job || ''}
+                              {member.job || '-'}
                             </p>
                           </div>
                         </div>
