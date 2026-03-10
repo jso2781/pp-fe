@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react';
 import { useState, useEffect} from "react";
 import { Box, Button, Typography, TextField, Stack, LinearProgress, Tabs, Tab, FormControlLabel, Checkbox, Radio, RadioGroup, Pagination } from '@mui/material';
 import { useAppSelector } from '@/store/hooks';
@@ -8,9 +8,21 @@ import { Download as DownloadIcon} from '@mui/icons-material';
 import FileUploadField from '@/components/form/FileUploadField';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ScreenShell from '../../ScreenShell';
+import Lnb from '@/components/common/Lnb';
 
 export default function PUB() {
-  
+
+  // --- lnb ---
+  const sideItems = useMemo(() => [
+    { 
+      key: '#', 
+      label: 'LNB',
+      children: [
+        { key: '#', label: 'LNB' }
+      ] 
+    }
+  ], []);
+
   //스위치
   const [isCheck, setIsCheck] = useState(false);
 
@@ -94,16 +106,16 @@ export default function PUB() {
           <Box className="content-wrap">
 
             {/* Lnb 영역 */}
-            {/* <Box className="lnb-wrap">
+            <Box className="lnb-wrap">
               <Box className="lnb-menu">
                 <Typography component="h2" className="lnb-tit">
-                  <span>알림마당</span>
+                  <span>LNB 타이틀</span>
                 </Typography>
                 <Box className="lnb-list">
                   <Lnb items={sideItems} />
                 </Box>
               </Box>
-            </Box> */}
+            </Box>
 
             {/* 컨텐츠 본문 영역 */}
             <Box className="sub-content">
@@ -228,7 +240,7 @@ export default function PUB() {
                     </section>
                   </div>
                    {/* ------------------------------------------------------------------------------------------------ */}
-                  <h3 className="section-title">html 컨텐츠 링크탭</h3>
+                  {/* <h3 className="section-title">html 컨텐츠 링크탭</h3>
                   <div className="category-link-tabs" aria-label="카테고리 이동">
                     <ul className="tabs-list" role="tablist">
                       <li className="tab-item">
@@ -247,7 +259,7 @@ export default function PUB() {
                         <a href="#" className="tab-link">시스템 이용이용이용이용이용 문의</a>
                       </li>
                     </ul>
-                  </div>
+                  </div> */}
                   {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">데이터 로딩</h3>
                   <Box className="loading-progress-box">
