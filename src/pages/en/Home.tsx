@@ -31,10 +31,10 @@ export default function Home() {
 
   const serviceShortcuts = useMemo(
     () => [
-      { title: 'Pharmacovigilance', url: 'https://www.drugsafe.or.kr/iwt/ds/en/report/WhatIsKAERS.do', iconUrl: '/img/en/shortcut_ico01.png' },
-      { title: 'Drug Utilization Review', url: 'https://www.drugsafe.or.kr/iwt/ds/en/useinfo/EgovIntroductionDur.do', iconUrl: '/img/en/shortcut_ico02.png' },
-      { title: 'Pharmacoepidemiology', url: 'https://www.drugsafe.or.kr/iwt/ds/en/pe/EgovIntroductionPe.do', iconUrl: '/img/en/shortcut_ico03.png' },
-      { title: 'Korea DUR System', url: 'https://www.drugsafe.or.kr/iwt/ds/en/useinfo/EgovIntroductionDur.do', iconUrl: '/img/en/shortcut_ico04.png' },
+      { title: 'Pharmacovigilance', url: '/pp/en/cms/CmsPage/cms0035', iconUrl: '/img/en/shortcut_ico01.png' },
+      { title: 'Drug Utilization Review', url: '/pp/en/cms/CmsPage/cms0043', iconUrl: '/img/en/shortcut_ico02.png' },
+      { title: 'Pharmacoepidemiology', url: '/pp/en/cms/CmsPage/cms0041', iconUrl: '/img/en/shortcut_ico03.png' },
+      { title: 'Korea DUR System', url: '/pp/en/cms/CmsPage/cms0043', iconUrl: '/img/en/shortcut_ico04.png' },
     ],
     []
   );
@@ -77,7 +77,7 @@ export default function Home() {
             >
               {serviceShortcuts.map((s, index) => (
                 <SwiperSlide key={s.title}>
-                  <a className="shortcut-item" href={s.url} target="_blank" rel="noreferrer">
+                  <a className="shortcut-item" href={s.url} rel="noreferrer">
                     <Box className="icon-bg" style={{ backgroundImage: `url(${s.iconUrl})` } as React.CSSProperties} aria-hidden="true" />
                     <span className="shortcut-text">{s.title}</span>
                     <Box component="span" className="shortcut-link-box">
