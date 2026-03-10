@@ -3,6 +3,7 @@ import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { insertDgstfnExmn } from "@/features/dgstfn/DgstfnExmnThunks";
+import { useDialog } from '@/contexts/DialogContext';
 
 const EVAL_OPTIONS = [
   { id: 'v-good' as const, score: 5 },
@@ -19,13 +20,36 @@ export type DgstfnExnmProps = {
 export default function DgstfnExnm({ menuSn }: DgstfnExnmProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { showAlert } = useDialog();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const option = EVAL_OPTIONS.find((o) => o.id === selectedId);
     if(option == null || menuSn == null) return;
-    dispatch(insertDgstfnExmn({menuSn, dgstfnScr: option.score ?? 0 }));
+
+    try{
+      // 제출 버튼 (처리중...) 상태 표시
+      // setIsLoading(true);
+
+      // 만족도 조사 제출 처리 API 호출
+      const insertCnt = await dispatch(insertDgstfnExmn({menuSn, dgstfnScr: option.score ?? 0 })).unwrap();
+
+      if(insertCnt > 0){
+        showAlert(t('dgstfnExnmSuccessMessage'), t('success'));
+      }else{
+        showAlert(t('dgstfnExnmFailedMessage'), t('error'));
+      }
+
+    }catch(error){
+      // API 호출 실패 시 오류 처리
+      console.error('Password confirmation failed:', error);
+    }finally{
+      // 제출 버튼 (처리중...) 상태 해제
+      // setIsLoading(false);
+    }
+
   };
 
   return (
@@ -54,8 +78,13 @@ export default function DgstfnExnm({ menuSn }: DgstfnExnmProps) {
               </label>
             </div>
           ))}
-          <Button type="submit" variant="contained" className="evaluation-btn">
-            {t("submit")}
+          <Button
+            type="submit"
+            variant="contained"
+            className="evaluation-btn"
+            disabled={isLoading}
+          >
+            {isLoading ? t('processing') : t('submit')}
           </Button>
         </Box>
       </fieldset>

@@ -73,7 +73,7 @@ export const insertDgstfnExmn = createAsyncThunk<number, DgstfnExmnPVO>(
     try {
       const res = await https.post(insertDgstfnExmnApiPath(), params);
 
-      const insertCnt = res.data;
+      const insertCnt = res.data?.data.insertCnt ?? 0;
 
       // 입력된 건수 반환함. 
       return insertCnt;
