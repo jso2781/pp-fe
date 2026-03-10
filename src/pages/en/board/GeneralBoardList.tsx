@@ -6,7 +6,7 @@
  */
 import ContactArea from '@/components/common/ContactArea';
 import DepsLocation from '@/components/common/DepsLocation';
-import DgstfnExnm from '@/components/common/DgstfnExnm';
+import EngDgstfnExnm from '@/components/common/EngDgstfnExnm';
 import Lnb from '@/components/common/Lnb';
 import LnbSectionTitle from '@/components/common/LnbSectionTitle';
 import { useAuth } from '@/contexts/AuthContext';
@@ -212,7 +212,7 @@ export default function GeneralBoardList() {
                     </Stack>
                   </Box>                  
                   {/* 만족도 조사 */}
-                  <DgstfnExnm menuSn={menuSn} />
+                  <EngDgstfnExnm menuSn={menuSn} />
                   {/* 업무 담당 부서 및 연락처 */}
                   {contactDepNm && contactPersonNm && contactPhoneNum && (
                     <ContactArea
