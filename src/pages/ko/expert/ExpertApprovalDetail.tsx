@@ -51,9 +51,8 @@ export default function ExpertApprovalDetail() {
 
   // 대국민포털_전문가업무신청관리 소속 전문가 회원 상세 조회
   const { exprtTaskSn } = useParams<{ exprtTaskSn: string }>();
-  const apprInstTaskList = auth?.userInfo?.apprInstTaskList?.map(item => item.bzmnTaskMngNo ?? '') ?? [];
   useEffect(() => {
-    dispatch(selectExprtApproval({ exprtTaskSn, bzmnTaskMngNos: apprInstTaskList ?? [] }));
+    dispatch(selectExprtApproval({ exprtTaskSn, mbrNo }));
   }, [dispatch, exprtTaskSn]);  
 
   // 권한이 없을경우 defense
