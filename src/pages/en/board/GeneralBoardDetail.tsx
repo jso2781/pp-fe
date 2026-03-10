@@ -15,19 +15,17 @@ import { Box, Button, Link, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import KoglLicense from '@/components/common/KoglLicense';
-import { useAuth } from '@/contexts/AuthContext';
+import { getLangFromPathname } from '@/routes/lang';
 
 export default function GeneralBoardDetail() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { getMenuInfo } = useAuth()
-  const menuKoglCprgtTypeCd = getMenuInfo(location.pathname)?.menuKoglCprgtTypeCd ?? '4'
 
   // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
-  const { lang } = useParams<{ lang: string }>();
+  const lang = getLangFromPathname(location.pathname) || 'ko'
 
   // Lnb 랜더링용
   const currentUrl = location.pathname;

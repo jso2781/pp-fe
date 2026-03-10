@@ -16,18 +16,17 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Box, Button, Link, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { getLangFromPathname } from '@/routes/lang';
 
 export default function GalleryBoardDetail() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { getMenuInfo } = useAuth()
-  const menuKoglCprgtTypeCd = getMenuInfo(location.pathname)?.menuKoglCprgtTypeCd ?? '4'
 
   // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
-  const { lang } = useParams<{ lang: string }>();
+  const lang = getLangFromPathname(location.pathname) || 'ko'
 
   // Lnb 랜더링용
   const currentUrl = location.pathname;

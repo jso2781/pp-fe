@@ -12,6 +12,7 @@ import LnbSectionTitle from '@/components/common/LnbSectionTitle';
 import { useAuth } from '@/contexts/AuthContext';
 import { selectPstList } from '@/features/pst/PstThunks';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { getLangFromPathname } from '@/routes/lang';
 import {
   Box,
   Button,
@@ -33,14 +34,14 @@ import {
   Typography
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
-import { Link as RouterLink, useParams, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useParams, useSearchParams } from 'react-router-dom';
 
 export default function GeneralBoardList() {
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
 
   const { list, totalCount, totalPages, loading } = useAppSelector((s) => s.pst);
-  const { lnbStructor } = useAppSelector((s) => s.menu);
 
   const [searchCnd, setSearchCnd] = useState(searchParams.get('searchCnd') || 'title');
   const [searchWrd, setSearchWrd] = useState(searchParams.get('searchWrd') || '');
@@ -52,7 +53,7 @@ export default function GeneralBoardList() {
   // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
-  const { lang } = useParams<{ lang: string }>();
+  const lang = getLangFromPathname(location.pathname) || 'ko'
 
   // Lnb 랜더링용
   const currentUrl = location.pathname;

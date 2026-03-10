@@ -73,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   /********************************* MenuSlice Redux 상태 구독 및 상태 데이터 추출 시작 ************************************************/
   // MenuSlice Redux 상태 구독
   const menu = useAppSelector((s: RootState) => s.menu) as MenuState
-  const { gnbList, lnbStructor } = menu || {}
+  const { list, gnbList, lnbStructor } = menu || {}
 
   // pathname별 getMenuInfo 결과 캐시 (동일 pathname 중복 검색 방지)
   const menuInfoCacheRef = useRef<{ gnbList: unknown; cache: Map<string, GnbDepth3Item | null> }>({
@@ -109,6 +109,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (gnbList && gnbList.length > 0) {
       for (const d1 of gnbList) {
         for (const d2 of d1.depth2) {
+          if (d2.url && d2.url === key) {
+            const matchedMenu = list?.find((lm) => lm.menuUrlAddr === d2.url);
+            result = {
+              menuSn: matchedMenu?.menuSn ?? 0,
+              name: matchedMenu?.menuNm ?? d2.title,
+              url: d2.url 
+            }
+            break
+          }
+
           const found = d2.depth3.find(
             (item) => item.url && item.url === key
           )
