@@ -244,7 +244,7 @@ export default function ExpertMyWork() {
                             신청취소하기
                           </Button>
                         )}
-                        {info.exprtAprvSttsCode === 'R' && (
+                        {(info.exprtAprvSttsCode === 'R' || info.exprtAprvSttsCode === 'C') && (
                           <Button variant="outlined03" size="small" className="s-lg" onClick={handleConfirmReApplyExprt}>
                             재신청하기
                           </Button>
