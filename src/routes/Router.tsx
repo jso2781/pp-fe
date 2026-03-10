@@ -31,10 +31,15 @@ const GeneralBoardListKo = lazy(() => import('@/pages/ko/board/GeneralBoardList'
 const GeneralBoardDetailKo = lazy(() => import('@/pages/ko/board/GeneralBoardDetail'))
 const GeneralBoardListEn = lazy(() => import('@/pages/en/board/GeneralBoardList'))
 const GeneralBoardDetailEn = lazy(() => import('@/pages/en/board/GeneralBoardDetail'))
+
 const GalleryBoardListKo = lazy(() => import('@/pages/ko/board/GalleryBoardList'))
+const GalleryBoardListEn = lazy(() => import('@/pages/ko/board/GalleryBoardList'))
 const GalleryBoardDetailKo = lazy(() => import('@/pages/ko/board/GalleryBoardDetail'))
+const GalleryBoardDetailEn = lazy(() => import('@/pages/ko/board/GalleryBoardDetail'))
 const VideoBoardListKo = lazy(() => import('@/pages/ko/board/VideoBoardList'))
+const VideoBoardListEn = lazy(() => import('@/pages/ko/board/VideoBoardList'))
 const VideoBoardDetailKo = lazy(() => import('@/pages/ko/board/VideoBoardDetail'))
+const VideoBoardDetailEn = lazy(() => import('@/pages/ko/board/VideoBoardDetail'))
 
 const CleanCenterKo = lazy(() => import('@/pages/ko/about/ethics/CleanCenter'))
 const CleanFormKo = lazy(() => import('@/pages/ko/about/ethics/CleanForm'))
@@ -262,12 +267,12 @@ export default function Router() {
                 <Route path="/pp/:lang/news/FaqNotice" element={<LangElement byLang={{ ko: <FaqNoticeKo />, en: <FaqNoticeKo /> }} />} />
                                                 
                 {/* 유형별 게시판 (공통) */}
-                <Route path="/pp/:lang/board/general/:bbsId" element={<LangElement byLang={{ ko: <GeneralBoardListKo />, en: <GeneralBoardListEn /> }} />} />
-                <Route path="/pp/:lang/board/general/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <GeneralBoardDetailKo />, en: <GeneralBoardDetailEn /> }} />} />                                                        
-                <Route path="/pp/:lang/board/gallery/:bbsId" element={<LangElement byLang={{ ko: <GalleryBoardListKo />, en: <GalleryBoardListKo /> }} />} />
-                <Route path="/pp/:lang/board/gallery/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <GalleryBoardDetailKo />, en: <GalleryBoardDetailKo /> }} />} />       
-                <Route path="/pp/:lang/board/video/:bbsId" element={<LangElement byLang={{ ko: <VideoBoardListKo />, en: <VideoBoardListKo /> }} />} />
-                <Route path="/pp/:lang/board/video/:bbsId/:pstSn" element={<LangElement byLang={{ ko: <VideoBoardDetailKo />, en: <VideoBoardDetailKo /> }} />} />                       
+                <Route path="/pp/ko/board/general/:bbsId" element={<GeneralBoardListKo /> } />
+                <Route path="/pp/ko/board/general/:bbsId/:pstSn" element={<GeneralBoardDetailKo /> } />                                                        
+                <Route path="/pp/ko/board/gallery/:bbsId" element={<GalleryBoardListKo /> } />
+                <Route path="/pp/ko/board/gallery/:bbsId/:pstSn" element={<GalleryBoardDetailKo /> } />       
+                <Route path="/pp/ko/board/video/:bbsId" element={<VideoBoardListKo /> } />
+                <Route path="/pp/ko/board/video/:bbsId/:pstSn" element={<VideoBoardDetailKo /> } />                       
 
                 {/* about(기관소개) */}
                 <Route path="/pp/:lang/about/ethics/CleanCenter" element={<LangElement byLang={{ ko: <CleanCenterKo />, en: <CleanCenterKo /> }} />} />
@@ -333,6 +338,14 @@ export default function Router() {
                 {/* 영문 퍼블리싱 템플릿 화면들 */}
                 <Route path="/pp/en/screens" element={<ScreensEn />} />
                 <Route path="/pp/en/screens/:screenId" element={<ScreenViewerEn />} />
+
+                {/* 유형별 게시판 (공통) */}
+                <Route path="/pp/en/board/general/:bbsId" element={<GeneralBoardListEn />} />
+                <Route path="/pp/en/board/general/:bbsId/:pstSn" element={<GeneralBoardDetailEn /> } />                                                        
+                <Route path="/pp/en/board/gallery/:bbsId" element={<GalleryBoardListEn /> } />
+                <Route path="/pp/en/board/gallery/:bbsId/:pstSn" element={<GalleryBoardDetailEn /> } />       
+                <Route path="/pp/en/board/video/:bbsId" element={<VideoBoardListEn /> } />
+                <Route path="/pp/en/board/video/:bbsId/:pstSn" element={<VideoBoardDetailEn /> } />
 
                 {/* 영문 cms 화면 공용 템플릿 경로(콘텐츠 내용 표기) */}
                 <Route path="/pp/en/cms/CmsPage/:contsSn" element={<CmsPageEn />} />
