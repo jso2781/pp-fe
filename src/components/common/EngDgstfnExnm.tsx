@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Box, Button } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useAppDispatch } from "@/store/hooks";
 import { insertDgstfnExmn } from "@/features/dgstfn/DgstfnExmnThunks";
 import { useDialog } from '@/contexts/DialogContext';
@@ -23,6 +24,12 @@ export default function DgstfnExnm({ menuSn }: DgstfnExnmProps) {
   const { showAlert } = useDialog();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
+
+  // 다른 메뉴(화면)로 이동 시 라디오 선택을 초기 상태로 리셋
+  useEffect(() => {
+    setSelectedId(null);
+  }, [location.pathname]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +45,7 @@ export default function DgstfnExnm({ menuSn }: DgstfnExnmProps) {
 
       if(insertCnt > 0){
         showAlert(t('dgstfnExnmSuccessMessage'), t('success'));
+        setSelectedId(null); // 제출 성공 시 라디오 선택 초기화
       }else{
         showAlert(t('dgstfnExnmFailedMessage'), t('error'));
       }
