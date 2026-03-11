@@ -18,10 +18,13 @@ import { useZodForm } from "@/components/rhf/useZodForm";
 import RHFTextField from "@/components/rhf/RHFTextField";
 import { useDialog } from '@/contexts/DialogContext';
 import RHFRadioGroup from "@/components/rhf/RHFRadioGroup";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import i18n from "@/i18n/i18n";
+import { getTrmsSttLatest } from "@/features/stt/TrmsSttThunks";
 
 export default function CleanForm () {
+  const [agreeEs, setAgreeEs] = useState<string | null>(null);
+  const [agreeCh, setAgreeCh] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -36,6 +39,16 @@ export default function CleanForm () {
   }
 
   useEffect(() => {scrollTo(0, 0);}, []);
+
+  useEffect(() => {
+    Promise.all([
+      dispatch(getTrmsSttLatest({ trmsSttCd: 'CLCT_AGRE_ES_2' })).unwrap(),
+      dispatch(getTrmsSttLatest({ trmsSttCd: 'CLCT_AGRE_CH_2' })).unwrap(),
+    ]).then(([es, ch]) => {
+      setAgreeEs(es.trmsSttCn || null);
+      setAgreeCh(ch.trmsSttCn || null);
+    });
+  }, []);
 
   const schema = z.object({
     // 초기엔 미선택(undefined)을 허용하되, 제출/검증 시에는 반드시 'Y'만 통과
@@ -154,13 +167,7 @@ export default function CleanForm () {
                             <Box component="span" className="required" aria-label="필수 입력">(필수)</Box>
                           </Typography>
 
-                          {/* 접근성: 스크롤 영역에 tabIndex와 role 추가 */}
-                          <Box className="privacy-consent-box__viewer" tabIndex={0} role="region" aria-label="개인정보 수집 이용 동의 필수항목 상세내용">
-                            <p>1. 수집항목: 성명, 휴대전화번호</p>
-                            <p>2. 수집·이용 목적: 클린신고센터 신고 접수 및 처리</p>
-                            <p>3. 보유기간: <span className="fw-700">3년</span></p>
-                            <p>4. 동의 거부권리 안내: 개인정보 수집·이용에 대한 동의를 거부할 권리가 있습니다. 그러나 동의를 거부할 경우 클린신고서 작성 이용이 제한됩니다.</p>
-                          </Box>
+                          <div dangerouslySetInnerHTML={{ __html: agreeEs || '' }} />
 
                           <Box className="privacy-consent-box__action">
                             <Typography id="consent-question-required" className="question-text">
@@ -185,13 +192,7 @@ export default function CleanForm () {
                             <Box component="span" className="optional" aria-label="선택 입력">(선택)</Box>
                           </Typography>
 
-                          <Box className="privacy-consent-box__viewer" tabIndex={0} role="region" aria-label="개인정보 수집 이용 동의 선택항목 상세내용">
-                            <p>1. 수집항목: 이메일</p>
-                            <p>2. 수집·이용 목적 : 클린신고센터 신고 접수 및 처리</p>
-                            <p>3. 보유기간: <span className="fw-700">3년</span></p>
-                            <p>4. 동의 거부권리 안내: 개인정보 수집 ∙ 이용에 대한 동의 거부 시 클린신고서 제출에는 제한이 없습니다.
-                            그러나, 동의 거부 시 제출한 클린신고서 작성내용 추가확인 및 처리결과 통보를 이메일로 연락받는 서비스 이용에는 제한됨을 알려 드립니다.</p>
-                          </Box>
+                          <div dangerouslySetInnerHTML={{ __html: agreeCh || '' }} />
 
                           <Box className="privacy-consent-box__action">
                             <Typography id="consent-question-optional" className="question-text">
