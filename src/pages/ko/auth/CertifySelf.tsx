@@ -31,8 +31,10 @@ declare global {
 }
 
 // Any-ID 자원 로드 함수
-// UI 프로젝트의 public 폴더에서 직접 로드
+// UI 프로젝트의 public 폴더에서 직접 로드 (Vite base path 반영)
 function ensureAnyIdAssets() {
+  const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
+
   const ensureLink = (href: string) => {
     if (document.querySelector(`link[href="${href}"]`)) return
     const l = document.createElement('link')
@@ -52,14 +54,11 @@ function ensureAnyIdAssets() {
       document.body.appendChild(s)
     });
 
-  // public 폴더 기준 상대 경로 사용
-  // public/anyid/css/app.css -> /anyid/css/app.css
-  ensureLink('/anyid/css/app.css');
-  
-  // manifest -> vendor -> app 순서 권장
-  return loadScript('/anyid/js/manifest.js')
-    .then(() => loadScript('/anyid/js/vendor.js'))
-    .then(() => loadScript('/anyid/js/app.js'));
+  ensureLink(`${baseNorm}anyid/css/app.css`);
+
+  return loadScript(`${baseNorm}anyid/js/manifest.js`)
+    .then(() => loadScript(`${baseNorm}anyid/js/vendor.js`))
+    .then(() => loadScript(`${baseNorm}anyid/js/app.js`));
 }
 
 export default function CertifySelf() {

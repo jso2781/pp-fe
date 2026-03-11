@@ -19,6 +19,9 @@ import DepsLocation from '@/components/common/DepsLocation'
 import i18n from '@/i18n/i18n';
 
 function ensureAnyIdAssets() {
+  // Vite base path (dev: '/', prod: '/' 또는 '/pp/') 반영해 public 자원 경로 생성
+  const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
+
   const ensureLink = (href: string) => {
     if (document.querySelector(`link[href="${href}"]`)) return
     const l = document.createElement('link')
@@ -38,14 +41,13 @@ function ensureAnyIdAssets() {
       document.body.appendChild(s)
     })
 
-  // public 폴더 기준 상대 경로 사용
-  // public/anyid/css/app.css -> /anyid/css/app.css
-  ensureLink('/anyid/css/app.css')
+  // public 폴더 기준: base 반영 (public/anyid/... -> {base}anyid/...)
+  ensureLink(`${baseNorm}anyid/css/app.css`)
 
   // manifest -> vendor -> app 순서 권장
-  return loadScript('/anyid/js/manifest.js')
-    .then(() => loadScript('/anyid/js/vendor.js'))
-    .then(() => loadScript('/anyid/js/app.js'))
+  return loadScript(`${baseNorm}anyid/js/manifest.js`)
+    .then(() => loadScript(`${baseNorm}anyid/js/vendor.js`))
+    .then(() => loadScript(`${baseNorm}anyid/js/app.js`))
 }
 
 export default function LoginMethod() {
