@@ -26,12 +26,12 @@ function ensureAnyIdAssets() {
     })
 
   // public 폴더 기준: base 반영 (public/anyid/... -> {base}anyid/...)
-  ensureLink(`${baseNorm}anyid/css/app.css`)
+  ensureLink(`${baseNorm}/css/app.css`)
 
   // manifest -> vendor -> app 순서 권장
-  return loadScript(`${baseNorm}anyid/js/manifest.js`)
-    .then(() => loadScript(`${baseNorm}anyid/js/vendor.js`))
-    .then(() => loadScript(`${baseNorm}anyid/js/app.js`))
+  return loadScript(`${baseNorm}/js/manifest.js`)
+    .then(() => loadScript(`${baseNorm}/js/vendor.js`))
+    .then(() => loadScript(`${baseNorm}/js/app.js`))
 }
 
 export default function Login() {
@@ -83,7 +83,7 @@ export default function Login() {
 
         // public 폴더 기준 상대 경로 사용
         // public/anyid/config/config.anyidc.json -> /anyid/config/config.anyidc.json
-        const configAnyidcJsonUrl = '/anyid/config/config.anyidc.json';
+        const configAnyidcJsonUrl = '/config/config.anyidc.json';
         console.log("configAnyidcJsonUrl="+configAnyidcJsonUrl);
         if(!window.AnyidC){
             setError('Any-ID module window.AnyidC is not loaded.')
