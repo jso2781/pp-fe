@@ -17,6 +17,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import https from '@/api/axiosInstance'
 import DepsLocation from '@/components/common/DepsLocation'
 import i18n from '@/i18n/i18n';
+import { v4 as uuidv4 } from 'uuid';
 
 function ensureAnyIdAssets() {
   // Vite base path (dev: '/', prod: '/' 또는 '/pp/') 반영해 public 자원 경로 생성
@@ -60,7 +61,7 @@ export default function LoginMethod() {
 
   const tx = useMemo(() => {
     // SSO를 쓰는 구조라면 SSO 모듈이 txId를 내려줌(가이드). 없으면 로컬에서 생성.
-    return params.get('tx');
+    return params.get('tx') || uuidv4();
   }, [params])
 
   const acrValues = useMemo(() => {
@@ -71,7 +72,7 @@ export default function LoginMethod() {
 
   const redirectUri = useMemo(() => params.get('redirect_uri') || '/', [params])
 
-  // Any-ID SDK 초기화
+  // 화면 로딩과 함께 Any-ID 자원 로드 및 SDK 초기화 (마운트 시 1회 자동 실행)
   useEffect(() => {
     let cancelled = false
 
