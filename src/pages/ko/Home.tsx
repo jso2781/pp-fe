@@ -330,44 +330,86 @@ export default function Home() {
   // ==========================================
   // 팝업 레이어 웹접근성 포커스이동
   // ==========================================
-  // 1. 필요한 Ref 선언 
+  // 1. 필요한 Ref 선언
   const popupLayerRef = useRef<HTMLDivElement>(null);
+  const isKeyboardUser = useRef(false);
 
-  // 2. 포커스 이동 함수 (스킵 네비게이션의 'a' 태그로 변경)
-  const moveToSkipNav = useCallback(() => {
-    // id가 skip-navigation인 요소 내부의 첫 번째 링크(a)를 찾습니다.
-    const skipLink = document.querySelector('#skip-navigation a') as HTMLElement;
-    
-    if (skipLink) {
-      // a 태그는 기본적으로 포커스를 받을 수 있으므로 바로 focus() 실행
-      skipLink.focus();
+  // 2. 입력 수단 감지 (마우스 vs 키보드)
+  useEffect(() => {
+    const handleKeyDownType = () => (isKeyboardUser.current = true);
+    const handleMouseDownType = () => (isKeyboardUser.current = false);
+    window.addEventListener('keydown', handleKeyDownType);
+    window.addEventListener('mousedown', handleMouseDownType);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDownType);
+      window.removeEventListener('mousedown', handleMouseDownType);
+    };
+  }, []);
+
+  // 3. 팝업 종료 후 포커스 처리 함수
+  const handleFocusAfterClose = useCallback(() => {
+    if (isKeyboardUser.current) {
+      // [키보드로 닫을 때] 스킵 네비게이션으로 이동
+      const skipLink = document.querySelector('#skip-navigation a') as HTMLElement;
+      skipLink?.focus();
     } else {
-      // 만약 스킵네비를 못 찾으면 body나 최상단으로 폴백
-      window.scrollTo(0, 0);
+      // [마우스로 닫을 때] 
+      // 1. 포커스를 완전히 해제하여 다음 Tab 시 처음부터 시작하게 함
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+      // 2. 또는 명시적으로 ex)헤더 로고(첫 번째 포커스 요소)로 보냄
+      const logoLink = document.querySelector('.top-link button') as HTMLElement;
+      if (logoLink) {
+        // 마우스 사용자에게 테두리가 보이지 않도록 포커스만 옮김
+        logoLink.focus({ preventScroll: true });
+      } else {
+        window.scrollTo(0, 0);
+      }
     }
   }, []);
 
-  // 3. 팝업 노출 상태에 따른 포커스 제어
+  // 4. 팝업 상태 감시 및 제어
   useEffect(() => {
     if (visiblePopups.length > 0) {
-      // [팝업 열림] 레이어 자체로 포커스 이동
       const focusTimer = setTimeout(() => {
         popupLayerRef.current?.focus();
       }, 100);
       return () => clearTimeout(focusTimer);
-    } else {
-      // [팝업 닫힘] 스킵 네비게이션으로 포커스 이동
-      // 사용자가 직접 닫았을 때(isPopupClosed)만 동작하게 하여 초기 로드 시 튕김 방지
-      if (isPopupClosed) {
-        moveToSkipNav();
-      }
+    } else if (isPopupClosed) {
+      handleFocusAfterClose();
     }
-  }, [visiblePopups.length, isPopupClosed, moveToSkipNav]);
+  }, [visiblePopups.length, isPopupClosed, handleFocusAfterClose]);
 
-  // 4. 키보드 이벤트 핸들러
+  // 5. 키보드 이벤트 핸들러 (포커스 트랩 유지)
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
+      isKeyboardUser.current = true;
       handleCloseAll();
+      return;
+    }
+
+    if (e.key === 'Tab') {
+      if (!popupLayerRef.current) return;
+      const focusableElements = popupLayerRef.current.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey) { // Shift + Tab
+        if (document.activeElement === firstElement || document.activeElement === popupLayerRef.current) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else { // Tab
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
     }
   };
 
