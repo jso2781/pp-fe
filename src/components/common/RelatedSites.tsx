@@ -41,6 +41,7 @@ const RelatedSites = () => {
                 value=""
                 displayEmpty
                 onChange={handleSelect}
+                inputProps={{ 'aria-label': t('goToRelGov') }}
                 renderValue={(selected) => {
                   if (selected === "") {
                     return <span className="placeholder-text">{t('goToRelGov')}</span>;
@@ -67,6 +68,7 @@ const RelatedSites = () => {
                 value=""
                 displayEmpty
                 onChange={handleSelect}
+                inputProps={{ 'aria-label': t('goToRelOrg') }}
                 renderValue={(selected) => {
                   if (selected === "") {
                     return <span className="placeholder-text">{t('goToRelOrg')}</span>;
