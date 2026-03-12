@@ -22,6 +22,9 @@ export interface ExprtApplyPVO {
 
   /** 업무시스템 코드목록 */
   taskSystemCodes?: string[]
+
+  /** 메뉴순번 */
+  menuSn?: string
 }
 
 /**

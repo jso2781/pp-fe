@@ -128,7 +128,7 @@ export default function DurProposal() {
       return;
     }
     try {
-      await dispatch(insertOpnn(transfromDataType(values))).unwrap();
+      await dispatch(insertOpnn(transfromDataType(values, menuSn))).unwrap();
       showAlert('의견제안 제출이 완료되었습니다.', t('success'), () => {
         navigate('/');
       });
@@ -138,8 +138,9 @@ export default function DurProposal() {
     }
   }
 
-  const transfromDataType = (values: FormValues): FormData => {
+  const transfromDataType = (values: FormValues, menuSn: number): FormData => {
     const formData = new FormData();
+    formData.append('menuSn', String(menuSn))              // 메뉴순번
     formData.append('encptWrtrFlnm', values.name);         // 성명
     formData.append('encptWrtrTelno', values.contact);     // 번호(선택)
     formData.append('encptMbrEmlNm', values.email);        // 이메일

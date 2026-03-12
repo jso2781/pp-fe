@@ -6,6 +6,7 @@
  */
 import DepsLocation from '@/components/common/DepsLocation';
 import FileUploadField from '@/components/form/FileUploadField';
+import { useAuth } from '@/contexts/AuthContext';
 import { useDialog } from '@/contexts/DialogContext';
 import { refresh } from '@/features/auth/AuthThunks';
 import { existbyEmail, existsInstByBrno, expertApply } from '@/features/exprt/ExprtApplyThunks';
@@ -29,7 +30,7 @@ import {
   Typography
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useParams } from 'react-router-dom';
 
 type StepRefs = {
   step1: HTMLDivElement | null;
@@ -42,6 +43,8 @@ export default function ExpertMemberApply() {
   const { lang } = useParams<{ lang: string }>();
   const auth = useAppSelector((s) => s.auth);
   const userInfo = auth.userInfo;
+  const location = useLocation();
+  const menuSn = location.pathname;
 
   const { showDialogBackdrop, showAlertBackdrop } = useDialog();
 
@@ -63,6 +66,7 @@ export default function ExpertMemberApply() {
     brno: '',
     email: '',
     exprtHdofYn: 'Y',
+    menuSn: menuSn,
     taskSystemCodes: [],    
   });
 
