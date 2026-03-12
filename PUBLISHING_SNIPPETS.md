@@ -32,8 +32,8 @@ publishing-snippets/
 
 
 ## 컨텐츠페이지.tsx 구조
+**콘텐츠 페이지에서 사용하는 기본 레이아웃 구조입니다.**
 ```tsx
-**Header**
 <Box className="page-layout">
   <Box className="sub-container">
     <Box className="content-wrap">
@@ -64,10 +64,10 @@ publishing-snippets/
     </Box>
   </Box>
 </Box>
-**Footer**
 ```
 
 ## 탭 라인
+**카테고리 전환을 위한 기본 라인형 탭 UI입니다.**
 ```tsx
 <Box className="category-tabs" role="navigation" aria-label="기본 카테고리 선택">
   <Tabs
@@ -91,6 +91,8 @@ publishing-snippets/
 ```
 
 ## 탭 박스
+**탭 선택에 따라 콘텐츠 패널이 변경되는 박스형 탭 UI입니다.**
+**사용 위치 : 홈>주요 업무>DUR 정보>내가 먹는 약의 DUR 정보**
 ```tsx
 <Box className="category-tabs box-variant" role="navigation" aria-label="기본 카테고리 선택">
   <Tabs
@@ -132,6 +134,8 @@ publishing-snippets/
 ```
 
 ## html 컨텐츠 앵커탭
+**페이지 내부 섹션으로 이동하는 HTML 앵커 기반 탭 UI입니다.**
+**사용 위치 : CMS 콘텐츠 페이지**
 ```tsx
 <div className="category-anchor-tabs" aria-label="카테고리 이동">
   <ul className="tabs-list" role="tablist">
@@ -188,6 +192,7 @@ publishing-snippets/
 ```
 
 ## 데이터 로딩
+**데이터 로딩 시 표시되는 로딩 상태 UI입니다.**
 ```tsx
 <Box className="loading-progress-box">
   <Typography className="loading-msg-top">
@@ -201,6 +206,8 @@ publishing-snippets/
 ```
 
 ## 기본 테이블
+**데이터 정보를 표시하는 기본 테이블 컴포넌트입니다.**
+**기본 표형식 사용**
 ```tsx
 <Box className="base-table-container">
   <Box className="base-table-meta">
@@ -246,6 +253,7 @@ publishing-snippets/
 ```
 
 ## 테이블 type-2
+**테이블 상단 라인이 강조된 스타일입니다**
 ```tsx
 <Box className="base-table-container">
   <Box className="table-responsive">
@@ -283,6 +291,7 @@ publishing-snippets/
 ```
 
 ## 테이블 type-3
+**테이블상단라인추가+양옆라인제거**
 ```tsx
 <Box className="base-table-container">
   <Box className="table-responsive">
@@ -320,6 +329,7 @@ publishing-snippets/
 ```
 
 ## 테이블 모바일 스크롤 (가로)
+**모바일에서 가로 스크롤이 필요한 테이블입니다.**
 ```tsx
 <Box className="base-table-container">
   <Box className="table-responsive has-scroll">
@@ -357,6 +367,7 @@ publishing-snippets/
 ```
 
 ## 테이블 모바일 스크롤 (세로)
+**데이터가 많은 경우 세로 스크롤을 적용하는 테이블입니다.**
 ```tsx
 <Box className="base-table-container">
   <Box className="table-responsive has-vscroll">
@@ -404,6 +415,7 @@ publishing-snippets/
 ```
 
 ## 데이터없을경우
+**데이터가 없는 경우 표시하는 UI입니다.**
 ```tsx
 <Box className="no-data">
   <p>게시물이없습니다.</p>
@@ -411,14 +423,242 @@ publishing-snippets/
 ```
 
 ## 페이징
+**페이지 목록을 이동하기 위한 페이징 컴포넌트입니다.**
 ```tsx
-Stack className="paging-wrap">
+<Stack className="paging-wrap">
   <Pagination count={totalPages} page={pageIndex} onChange={(_, p) => {
     const next = new URLSearchParams(searchParams);
     next.set('page', String(p));
     setSearchParams(next);
   }} />
 </Stack>
+```
+
+## 폼태그
+**기본 입력 폼 구성입니다.**
+**회원가입, 문의 폼, 검색 폼 등 다양한 입력 UI에서 사용합니다**
+```tsx
+<Box className="bordered-box">
+  <Box component="form" noValidate>
+    <Box className="form-group-wrap">
+      <Box className="form-item">
+        <Typography component="label" htmlFor="password" className="label">
+          새 비밀번호 
+          <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
+        </Typography>
+        <TextField
+          id="password"
+          type="password"
+          placeholder="숫자+영문+특수문자 조합 10자리 이상"
+          size="large"
+          fullWidth
+          error={true}
+          helperText="사용할수없는 비밀번호입니다."
+          slotProps={{
+            htmlInput: {
+              'aria-required': 'true',
+              //'aria-describedby': errors.password ? 'password-alert' : undefined,
+              
+            },
+            formHelperText: {
+              id: 'password-alert',
+              className: 'error-alert',
+              //role: errors.password ? 'alert' : undefined,
+              //'aria-live': errors.password ? 'polite' : undefined,
+            },
+          }}
+        />
+      </Box>
+      <Box className="form-item">
+        <Typography component="label" htmlFor="loginId" className="label">
+          아이디
+          <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
+        </Typography>
+        <Stack direction="row" spacing={1} className="input-with-btn">
+          <TextField
+            id="loginId"
+            placeholder="아이디를 입력하세요."
+            size="large"
+            fullWidth
+            error={true}
+            helperText="사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요."
+            slotProps={{
+              htmlInput: {
+                'aria-required': 'true',
+                //'aria-describedby': errors.loginId ? 'loginId-alert' : undefined,
+                
+              },
+              formHelperText: {
+                id: 'loginId-alert',
+                className: 'error-alert',
+                //role: errors.loginId ? 'alert' : undefined,
+                //'aria-live': errors.loginId ? 'polite' : undefined,
+              },
+            }}
+          />
+          <Button variant="outlined" size="large" aria-label="아이디 중복확인" className="btn-form-util">중복확인</Button>
+        </Stack>
+      </Box>
+
+      <Box className="flex-container flex-half">
+        {/* 이름 (필수) */}
+        <Box className="form-item">
+          <Typography component="label" htmlFor="userName" className="label">
+            이름
+            <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
+          </Typography>
+          <TextField
+            id="userName"
+            placeholder="이름을 입력하세요."
+            size="large"
+            slotProps={{
+              htmlInput: {
+                'aria-required': 'true',
+              },
+            }}
+            fullWidth
+          />
+        </Box>
+        {/* 휴대폰번호 (필수) */}
+        <Box className="form-item">
+          <Typography component="label" htmlFor="phone" className="label">
+            휴대폰번호
+            <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
+          </Typography>
+          <TextField
+            id="phone"
+            placeholder="숫자만 입력하세요."
+            size="large"
+            slotProps={{
+              htmlInput: {
+                'aria-required': 'true',
+              },
+            }}
+            fullWidth
+          />
+        </Box>
+      </Box>
+      <Box className="form-item">
+        <Typography component="label" htmlFor="reportMotive" className="label">
+          부정행위를 알게 된 계기 <Box component="span" className="optional">(선택)</Box>
+        </Typography>
+        {/* 플레이스홀더 대신 가이드 텍스트 */}
+        <Typography variant="caption" sx={{ color: '#8A949E', display: 'block', mb: 1, lineHeight: 1.4 }}>
+          * 알게 된 계기, 일시, 장소 등을 최대한 상세히 작성해 주시면 처리에 도움이 됩니다.
+        </Typography>
+        <TextField
+          id="reportMotive"
+          placeholder="내용을 입력하세요."
+          multiline
+          rows={4}
+          fullWidth
+        />
+      </Box>
+    </Box>
+  </Box>
+</Box>
+```
+
+## 체크박스
+```tsx
+<Box className="form-item-row">
+  <Typography className="label">
+    체크박스 가로형
+    <Box component="span" className="required">(필수)</Box>
+  </Typography>
+  <Box className="group-container">
+    <Box className="form-item">
+      <FormControlLabel
+        className="chk-field"
+        control={<Checkbox id="chk-r1" />}
+        label={<Typography component="label" htmlFor="chk-r1">체크1</Typography>}
+      />
+    </Box>
+    <Box className="form-item">
+      <FormControlLabel
+        className="chk-field"
+        control={<Checkbox id="chk-r2" />}
+        label={<Typography component="label" htmlFor="chk-r2">체크2</Typography>}
+      />
+    </Box>
+  </Box>
+</Box>
+{/* 체크박스 세로형 */}
+<Box className="form-item-row-vertical">
+  <Typography className="label">
+    체크박스 세로형
+    <Box component="span" className="required">(필수)</Box>
+  </Typography>
+  <Box className="group-container">
+    <Box className="form-item">
+      <FormControlLabel
+        className="chk-field"
+        control={<Checkbox id="chk-v1" />}
+        label={<Typography component="label" htmlFor="chk-v1">항목1</Typography>}
+      />
+    </Box>
+    <Box className="form-item">
+      <FormControlLabel
+        className="chk-field"
+        control={<Checkbox id="chk-v2" />}
+        label={<Typography component="label" htmlFor="chk-v2">항목2</Typography>}
+      />
+    </Box>
+  </Box>
+</Box>
+```
+
+## 라디오
+```tsx
+<Box className="form-item-row">
+  <Typography className="label">
+    라디오 가로형
+    <Box component="span" className="required">(필수)</Box>
+  </Typography>
+  <RadioGroup row className="radio-group-container">
+    <Box className="form-item">
+      <FormControlLabel
+        className="rdo-field"
+        value="1"
+        control={<Radio id="rdo-r1" />}
+        label={<Typography component="label" htmlFor="rdo-r1">선택1</Typography>}
+      />
+    </Box>
+    <Box className="form-item">
+      <FormControlLabel
+        className="rdo-field"
+        value="2"
+        control={<Radio id="rdo-r2" />}
+        label={<Typography component="label" htmlFor="rdo-r2">선택2</Typography>}
+      />
+    </Box>
+  </RadioGroup>
+</Box>
+{/* 라디오 세로형 */}
+<Box className="form-item-row-vertical">
+  <Typography className="label">
+    라디오 세로형
+    <Box component="span" className="required">(필수)</Box>
+  </Typography>
+  <RadioGroup className="radio-group-container">
+    <Box className="form-item">
+      <FormControlLabel
+        className="rdo-field"
+        value="1"
+        control={<Radio id="rdo-v1" />}
+        label={<Typography component="label" htmlFor="rdo-v1">선택1</Typography>}
+      />
+    </Box>
+    <Box className="form-item">
+      <FormControlLabel
+        className="rdo-field"
+        value="2"
+        control={<Radio id="rdo-v2" />}
+        label={<Typography component="label" htmlFor="rdo-v2">선택2</Typography>}
+      />
+    </Box>
+  </RadioGroup>
+</Box>
 ```
 
 ## 스위치
@@ -437,29 +677,160 @@ Stack className="paging-wrap">
 </Stack>
 ```
 
-## 체크박스
-```tsx
-
-```
-
-## 라디오
-```tsx
-
-```
-
-## 폼태그
-```tsx
-
-```
-
-## 버튼
-```tsx
-
-```
-
 ## 파일첨부
 ```tsx
+<Box className="attach-file-box">
+  <FileUploadField
+    value={uploadedFiles}
+    onChange={setUploadedFiles} 
+    accept=".pdf,.png,.jpg,.jpeg"
+    multiple={false}
+    maxFiles={5}
+    maxFileSizeMB={10}
+    maxTotalSizeMB={10}
+    helperText="PDF, PNG, JPG 형식의 10MB 이하의 파일을 업로드해주세요."
+  />
+  
+  {uploadedFiles.length > 0 && (
+    <Box className="file-viewer">
+      <Stack direction="row" className="uploader-info">
+        <Typography component="p" className="file-count">
+          <Box component="span">{uploadedFiles.length}개</Box>
+        </Typography>
+        <Button
+          size="xsmall"
+          variant="outlined02"
+          onClick={handleDeleteAllFiles}
+          sx={{ textTransform: 'none' }}
+        >
+          전체 파일 삭제
+        </Button>
+      </Stack>
+      <Box className="file-list">
+        {uploadedFiles.map((file, index) => (
+          <Box key={index} className="file-item">
+            <Typography>
+              {file.name} [
+              {file.name.split('.').pop()?.toLowerCase()}, {formatFileSize(file.size)}]
+            </Typography>
+            <Button 
+              className="btn-delete-circle" 
+              size="small"
+              onClick={() => handleDeleteFile(index)}
+              title="삭제" 
+            >
+              <span aria-hidden="true">×</span>
+            </Button>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  )}
+</Box>
+```
 
+
+## 버튼
+**서비스 전반에서 사용하는 기본 버튼 컴포넌트입니다.**
+```tsx
+<Button variant="contained">기본버튼 contained</Button>
+<Button variant="contained02">기본버튼 contained02</Button>
+
+<Button variant="outlined">라인버튼 outlined</Button>
+<Button variant="outlined02">라인버튼 outlined02</Button>
+<Button variant="outlined03">라인버튼 outlined03</Button>
+<Button variant="outlined04">라인버튼 outlined04</Button>
+```
+
+**버튼 크기를 조절하는 사이즈 옵션입니다.**
+```tsx
+<Button variant="contained" size="xsmall">xsmall</Button>
+<Button variant="contained" size="small">small</Button>
+<Button variant="contained" size="medium">medium</Button>
+<Button variant="contained" size="large">large</Button>
+```
+
+**아이콘 및 기능에 따라 사용하는 버튼 유형입니다.**
+```tsx
+<Button 
+  variant="text" 
+  className="btn-link" 
+  endIcon={<ChevronRightIcon />}
+  size="small"
+>
+  링크버튼
+</Button>
+<Button 
+  variant="outlined" 
+  className="btn-detail" 
+  endIcon={<ChevronRightIcon />}
+  size="small"
+>
+  상세보기
+</Button>
+<Button 
+  variant="text" 
+  className="btn-download"
+  startIcon={<DownloadIcon />}
+  size="small"
+>
+  다운로드
+</Button>
+```
+
+**게시판 하단버튼(오른쪽,가운데,양쪽,좌/우 그룹정렬)**
+**게시판 하단 버튼 정렬 클래스**
+- btn-group : 기본 정렬
+- btn-group right : 오른쪽 정렬
+- btn-group center : 가운데 정렬
+- btn-group between : 좌우 정렬
+- left-group : 왼쪽 버튼 그룹
+- right-group : 오른쪽 버튼 그룹
+```tsx
+<Box className="btn-group">
+  <Button variant="contained02" size="large">
+    목록
+  </Button>
+</Box>
+
+<Box className="btn-group right">
+  <Button variant="outlined02" size="large">
+    취소하기
+  </Button>
+  <Button variant="contained" size="large">
+    확인
+  </Button>
+</Box>
+
+<Box className="btn-group center">
+  <Button variant="outlined02" size="large">
+    취소하기
+  </Button>
+  <Button variant="contained" size="large">
+    확인
+  </Button>
+</Box>
+
+<Box className="btn-group between">
+  <Button variant="outlined02" size="large">취소하기</Button>
+  <Button variant="contained" size="large">수정</Button>
+</Box>
+
+<Box className="btn-group between">
+  <Box className="left-group">
+    <Button variant="contained02" size="large">
+      목록
+    </Button>
+  </Box>
+  <Box className="right-group">
+    <Button variant="outlined02" size="large">
+      취소
+    </Button>
+    <Button variant="contained" size="large">
+      수정
+    </Button>
+  </Box>
+</Box>
 ```
 
 ## 버튼 CMS html 사이즈

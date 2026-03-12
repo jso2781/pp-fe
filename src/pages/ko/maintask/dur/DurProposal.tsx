@@ -4,7 +4,7 @@
  * 화면경로: /maintask/dur/Proposal
  * 화면설명: 의견 제안
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { ZodFormProvider } from '@/components/rhf/ZodFormProvider';
 import * as z from 'zod'
@@ -26,11 +26,14 @@ import ContactArea from '@/components/common/ContactArea';
 import FileUploadField from '@/components/form/FileUploadField';
 import { useDialog } from '@/contexts/DialogContext';
 import LnbSectionTitle from '@/components/common/LnbSectionTitle';
+import { getTrmsSttLatest } from '@/features/stt/TrmsSttThunks';
 
 const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'zip']
 const accept = allowedExtensions.map((e) => `.${e}`).join(',')
 
 export default function DurProposal() {
+  const [agreeEs, setAgreeEs] = useState<string | null>(null);
+  const [agreeCh, setAgreeCh] = useState<string | null>(null);
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -46,6 +49,16 @@ export default function DurProposal() {
 
   // Lnb 랜더링용
   const currentUrl = location.pathname;
+
+  useEffect(() => {
+    Promise.all([
+      dispatch(getTrmsSttLatest({ trmsSttCd: 'CLCT_AGRE_ES_1' })).unwrap(),
+      dispatch(getTrmsSttLatest({ trmsSttCd: 'CLCT_AGRE_CH_1' })).unwrap(),
+    ]).then(([es, ch]) => {
+      setAgreeEs(es.trmsSttCn || null);
+      setAgreeCh(ch.trmsSttCn || null);
+    });
+  }, []);
 
   const schema = z.object({
     // 초기엔 미선택(undefined)을 허용하되, 제출/검증 시에는 반드시 'Y'만 통과
@@ -196,14 +209,8 @@ export default function DurProposal() {
                             개인정보 수집·이용 동의
                             <Box component="span" className="required" aria-label="필수 입력">(필수)</Box>
                           </Typography>
-
-                          {/* 접근성: 스크롤 영역에 tabIndex와 role 추가 */}
-                          <Box className="privacy-consent-box__viewer" tabIndex={0} role="region" aria-label="개인정보 수집 이용 동의 필수항목 상세내용">
-                            <p>1. 수집항목: 성명, 구분(직업), 이메일</p>
-                            <p>2. 수집·이용 목적: DUR 정보의 추가 또는 변경 의견 수집</p>
-                            <p>3. 보유기간: <span className="fw-700">10년</span></p>
-                            <p>4. 동의 거부권리 안내: 개인정보 수집·이용에 대한 동의를 거부할 권리가 있습니다. 그러나 동의를 거부할 경우 DUR 의견 제안 이용이 제한됩니다.</p>
-                          </Box>
+                          
+                          <div dangerouslySetInnerHTML={{ __html: agreeEs || '' }} />
 
                           <Box className="privacy-consent-box__action">
                             <Typography id="consent-question-required" className="question-text">
@@ -228,13 +235,7 @@ export default function DurProposal() {
                             <Box component="span" className="optional" aria-label="선택 입력">(선택)</Box>
                           </Typography>
 
-                          <Box className="privacy-consent-box__viewer" tabIndex={0} role="region" aria-label="개인정보 수집 이용 동의 선택항목 상세내용">
-                            <p>1. 수집항목: 휴대폰번호</p>
-                            <p>2. 수집·이용 목적: DUR 정보의 추가 또는 변경 의견 수집</p>
-                            <p>3. 보유기간: <span className="fw-700">10년</span></p>
-                            <p>4. 동의 거부권리 안내: 개인정보 수집 ∙ 이용에 대한 동의 거부 시 DUR의견제안 제출에는 제한이 없습니다.
-                            그러나, 동의 거부 시 제출한 DUR의견에 대한 통보를 휴대폰으로 연락받는 서비스 이용에는 제한됨을 알려 드립니다.</p>
-                          </Box>
+                          <div dangerouslySetInnerHTML={{ __html: agreeCh || '' }} />
 
                           <Box className="privacy-consent-box__action">
                             <Typography id="consent-question-optional" className="question-text">
