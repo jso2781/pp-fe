@@ -162,7 +162,7 @@ export default function ExpertApprovalUpdate() {
                 if (key.startsWith('http')) {
                   window.open(key, '_blank');
                 } else {
-                  const dest = key.startsWith('/pp/ko/') ? key : '/pp/ko' + key;
+                  const dest = key.startsWith('/') ? key : `/${key}`;
                   navigate(dest);
                 }
               }}

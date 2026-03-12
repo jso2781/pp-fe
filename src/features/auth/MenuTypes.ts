@@ -88,6 +88,9 @@ export interface MenuPVO {
   /** 업무구분코드 */
   taskSeCd?: string
 
+  /** 업무구분명 */
+  taskSeNm?: string
+
   /** 메뉴유형코드 */
   menuTypeCd?: string
 
@@ -135,6 +138,9 @@ export interface MenuRVO {
 
   /** 업무구분코드 */
   taskSeCd?: string
+
+  /** 업무구분명 */
+  taskSeNm?: string  
 
   /** 언어구분코드 */
   langSeCd?: string

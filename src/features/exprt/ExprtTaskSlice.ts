@@ -3,20 +3,12 @@ import { selectExprtInfo, withdrawExprt, withdrawExprtTask, applyExprtTask, sele
 import { ExprtTaskFullVO } from './ExprtTaskTypes'
 import { LnbItem, MenuRVO } from '../auth/MenuTypes'
 
-/** 전문가 LNB 첫 번째 고정 메뉴 */
-const EXPERT_LNB_FIRST_ITEM: LnbItem = {
-  key: `/pp/ko/expert/ExpertMyWork`,
-  label: '내 업무',
-  disabled: false,
-  children: []
-};
-
 /**
  * LNB용 LnbItem [] 구조체 변환
  */
 function createLnbStructor(menuList: MenuRVO[]): LnbItem[] {
   if (!Array.isArray(menuList) || menuList.length === 0) {
-    return [EXPERT_LNB_FIRST_ITEM];
+    return [];
   }
 
   // menuSn을 키로 하는 맵 생성
@@ -140,7 +132,30 @@ function createLnbStructor(menuList: MenuRVO[]): LnbItem[] {
       });
   };
 
-  return [EXPERT_LNB_FIRST_ITEM, ...sortByPath(rootItems)];
+  const sortedRootItems = sortByPath(rootItems);
+  const groupedItems: LnbItem[] = [];
+  let previousTaskKey = '';
+
+  sortedRootItems.forEach((item, index) => {
+    const menuSn = lnbItemToMenuSnMap.get(item);
+    const menu = menuSn !== undefined ? menuSnToMenuMap.get(menuSn) : undefined;
+    const taskKey = menu?.taskSeCd ?? '';
+    const taskLabel = menu?.taskSeNm ?? '';
+
+    if (taskKey && taskLabel && previousTaskKey !== taskKey) {
+      groupedItems.push({
+        key: `__task_group__${taskKey}_${index}`,
+        label: taskLabel,
+        disabled: true,
+        children: []
+      });
+      previousTaskKey = taskKey;
+    }
+
+    groupedItems.push(item);
+  });
+
+  return groupedItems;
 }
 
 /**

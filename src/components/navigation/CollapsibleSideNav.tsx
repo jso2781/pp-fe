@@ -125,9 +125,38 @@ export default function CollapsibleSideNav({
       </Box>
       <List dense disablePadding>
         {resolvedItems.map((it) => {
+          const isGroupHeader = (it.originalKey ?? it.key).includes('__task_group__')
           const hasChildren = !!(it.children && it.children.length > 0)
           const isOpen = openKeys[it.key] || false
           
+          if (isGroupHeader) {
+            return (
+              <Box
+                key={it.key}
+                sx={{
+                  display: collapsed ? 'none' : 'block',
+                  px: 2,
+                  py: 2.25,
+                  background: '#0A6C70',
+                  borderTop: '1px solid #8A949E',
+                  borderBottom: '1px solid #8A949E',
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: 22,
+                    fontWeight: 800,
+                    lineHeight: 1.2,
+                    color: '#fff',
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {it.label}
+                </Typography>
+              </Box>
+            )
+          }
+
           return (
             <Box 
               key={it.key}
@@ -158,6 +187,11 @@ export default function CollapsibleSideNav({
                 sx={{ 
                   py: '15px',
                   pr: '15px',
+                  '&.Mui-disabled': {
+                    opacity: 1,
+                    color: 'inherit',
+                    WebkitTextFillColor: 'inherit',
+                  },
                   // 접혔을 때 클릭 이벤트 차단
                   pointerEvents: collapsed ? 'none' : 'auto',
                 }}
