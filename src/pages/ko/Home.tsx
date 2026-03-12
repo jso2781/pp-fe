@@ -4,7 +4,7 @@
  * 화면경로: /
  * 화면설명: 메인(홈)
  */
-import { useMemo, useState, useRef, useEffect} from 'react'
+import { useMemo, useState, useRef, useEffect, useCallback} from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Card, Grid, CardContent, Link, List, ListItem, Tab, Tabs, Typography, IconButton } from '@mui/material';
 import { OpenInNew, PlayArrow, Pause } from '@mui/icons-material'
@@ -325,6 +325,51 @@ export default function Home() {
       window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
+  
+
+  // ==========================================
+  // 팝업 레이어 웹접근성 포커스이동
+  // ==========================================
+  // 1. 필요한 Ref 선언 
+  const popupLayerRef = useRef<HTMLDivElement>(null);
+
+  // 2. 포커스 이동 함수 (스킵 네비게이션의 'a' 태그로 변경)
+  const moveToSkipNav = useCallback(() => {
+    // id가 skip-navigation인 요소 내부의 첫 번째 링크(a)를 찾습니다.
+    const skipLink = document.querySelector('#skip-navigation a') as HTMLElement;
+    
+    if (skipLink) {
+      // a 태그는 기본적으로 포커스를 받을 수 있으므로 바로 focus() 실행
+      skipLink.focus();
+    } else {
+      // 만약 스킵네비를 못 찾으면 body나 최상단으로 폴백
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
+  // 3. 팝업 노출 상태에 따른 포커스 제어
+  useEffect(() => {
+    if (visiblePopups.length > 0) {
+      // [팝업 열림] 레이어 자체로 포커스 이동
+      const focusTimer = setTimeout(() => {
+        popupLayerRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(focusTimer);
+    } else {
+      // [팝업 닫힘] 스킵 네비게이션으로 포커스 이동
+      // 사용자가 직접 닫았을 때(isPopupClosed)만 동작하게 하여 초기 로드 시 튕김 방지
+      if (isPopupClosed) {
+        moveToSkipNav();
+      }
+    }
+  }, [visiblePopups.length, isPopupClosed, moveToSkipNav]);
+
+  // 4. 키보드 이벤트 핸들러
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      handleCloseAll();
+    }
+  };
 
   return (
     <Box className="main-container">
@@ -332,6 +377,12 @@ export default function Home() {
       {visiblePopups.length > 0 && (
         <Box 
           className="popup-layer"
+          ref={popupLayerRef}       // 1. Ref 연결
+          tabIndex={-1}              // 2. 포커스 가능하게 설정
+          role="dialog"              // 3. 대화 상자 역할
+          aria-modal="true"          // 4. 모달 처리
+          aria-label="공지사항 팝업"  // 5. 스크린 리더 안내
+          onKeyDown={handleKeyDown}  // 6. ESC 키 이벤트
           sx={{
             position: 'fixed',
             top: 0,
