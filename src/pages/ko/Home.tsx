@@ -507,6 +507,7 @@ export default function Home() {
 
       {/* 메인비쥬얼 */}
       <Box 
+        id="content"
         component="section" 
         className="section main-promotion-section" 
         sx={{
