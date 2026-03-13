@@ -44,6 +44,8 @@ const VideoBoardDetailEn = lazy(() => import('@/pages/ko/board/VideoBoardDetail'
 const CleanCenterKo = lazy(() => import('@/pages/ko/about/ethics/CleanCenter'))
 const CleanFormKo = lazy(() => import('@/pages/ko/about/ethics/CleanForm'))
 const CleanDetailKo = lazy(() => import('@/pages/ko/about/ethics/CleanDetail'))
+const AboutOrgKo = lazy(() => import('@/pages/ko/about/AboutOrg'))
+const AboutOrgEn = lazy(() => import('@/pages/en/about/AboutOrg'))
 
 const SignUpSelKo = lazy(() => import('@/pages/ko/auth/SignUpSel'))
 const SignUpAgrTrmsKo = lazy(() => import('@/pages/ko/auth/SignUpAgrTrms'))
@@ -275,6 +277,7 @@ export default function Router() {
                 <Route path="/pp/ko/board/video/:bbsId/:pstSn" element={<VideoBoardDetailKo /> } />                       
 
                 {/* about(기관소개) */}
+                <Route path="/pp/:lang/about/AboutOrg" element={<LangElement byLang={{ ko: <AboutOrgKo />, en: <AboutOrgEn /> }} />} />
                 <Route path="/pp/:lang/about/ethics/CleanCenter" element={<LangElement byLang={{ ko: <CleanCenterKo />, en: <CleanCenterKo /> }} />} />
                 <Route path="/pp/:lang/about/ethics/CleanForm" element={<LangElement byLang={{ ko: <CleanFormKo />, en: <CleanFormKo /> }} />} />
                 <Route path="/pp/:lang/about/ethics/CleanCenter/:dclrSn" element={<LangElement byLang={{ ko: <CleanDetailKo />, en: <CleanDetailKo /> }} />} />
