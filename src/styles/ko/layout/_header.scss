@@ -83,6 +83,9 @@
       .container { width: 100%; }
       .logo img { height: 40px; }
     }
+    @media (max-width: 380px) {
+      .logo img { height: 33px; }
+    }
     .container {
       display: flex;
       align-items: center;
@@ -333,9 +336,10 @@
     align-items: center;
     height: auto !important;
     padding: 5px !important;
-    min-width: 60px; 
+    min-width: 55px;
     background-color: transparent !important;
     gap: 0;
+     
 
     &::before {
       content: '';
@@ -352,12 +356,14 @@
     font-weight: 500;
     color: #333;
     line-height: 1;
+
   }
 
   .btn-util.login::before { background-image: url('/img/ico_login.svg'); }
   .btn-mo-menu::before { background-image: url('/img/ico_allmenu.svg'); }
 
   @media (min-width: 1200px) { display: none !important; }
+ 
  
 }
 
