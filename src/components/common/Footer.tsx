@@ -164,7 +164,9 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Typography component="span" className="sr-only">{t(item.labelKey)}</Typography>
+                    <Typography component="span" className="sr-only">
+                      {t(item.labelKey)} {t('새창열림')}
+                    </Typography>
                   </MuiLink>
                 ))}
               </Stack>
@@ -221,6 +223,7 @@ export default function Footer() {
                 className={`meta-item ${item.className || ''}`}
               >
                 {t(item.labelKey)}
+                <Typography component="span" className="sr-only">({t('새창열림')})</Typography>
               </MuiLink>
             ))}
           </Box>
