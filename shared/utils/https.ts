@@ -37,6 +37,10 @@ const CA_PATHS = ['/mail/send', '/mail/list']
 const adviceApiBaseURL = import.meta.env.VITE_ADVICE_API_BASE_URL ?? 'http://localhost:8088/api/uex'
 const ADVICE_PATHS = ['/exprtAplyChk', '/updateExprtAprvStts']
 
+/** CMO API 전용 서버(CMO_DOWN) */
+const cmoApiBaseURL = import.meta.env.VITE_CMO_API_BASE_URL ?? 'http://localhost:8088/api/cmo'
+const CMO_PATHS = ['/CMO_DOWN']
+
 const https: AxiosInstance = axios.create({
   baseURL: apiBaseURL,
   timeout: 30000,
@@ -56,6 +60,9 @@ https.interceptors.request.use((config) => {
     config.baseURL = caApiBaseURL
   }
   else if(ADVICE_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
+    config.baseURL = adviceApiBaseURL
+  }
+  else if(CMO_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
     config.baseURL = adviceApiBaseURL
   }
 

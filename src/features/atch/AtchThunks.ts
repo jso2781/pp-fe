@@ -205,7 +205,8 @@ export const downloadFromTaskCd = createAsyncThunk<void, AtchDownFromTaskCdVO>(
   async (params: AtchDownFromTaskCdVO) => {
     try {
       const res = await https.get(
-        downloadFromTaskCdApiPath() + '?taskCd=' + params.taskCd
+        downloadFromTaskCdApiPath() + '?taskCd=' + params.taskCd,
+        { responseType: 'blob' }
       );
 
       const blob = new Blob([res.data]);
