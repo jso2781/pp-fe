@@ -237,7 +237,7 @@ export default function AboutOrg() {
                       {employeeGroups.length > 0 ? (
                         employeeGroups.map((group) => (
                           <Box key={group.deptNo} sx={{ mt: 3 }}>
-                            {employeeGroups.length > 1 && (
+                            {employeeGroups.length > 1 && selectedDept?.deptNm != group.deptNm && (
                               <Typography component="h4" sx={{ fontSize: '20px', fontWeight: 700, mb: 1.5 }}>
                                 {group.deptNm}
                               </Typography>                              
@@ -292,7 +292,7 @@ export default function AboutOrg() {
                     </div>
                   )}
                 </section>
-                {menuKoglCprgtTypeCd && <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />}
+                {menuKoglCprgtTypeCd.trim() !== '' && <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />}
                 <DgstfnExnm menuSn={menuSn} />
                 {contactDepNm && contactPersonNm && contactPhoneNum && (
                   <ContactArea

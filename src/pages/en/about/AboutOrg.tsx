@@ -132,7 +132,7 @@ export default function AboutOrg() {
                     </div>
                   </div>
                 </section>
-                {menuKoglCprgtTypeCd && <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />}
+                {menuKoglCprgtTypeCd.trim() !== '' && <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />}
                 <DgstfnExnm menuSn={menuSn} />
                 {contactDepNm && contactPersonNm && contactPhoneNum && (
                   <ContactArea
