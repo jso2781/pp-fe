@@ -1026,6 +1026,7 @@ export default function Home() {
                       >
                         <img
                           src={getThumbnailUrl(item)}
+                          alt={item.pstTtl || `카드뉴스 이미지 ${index + 1}`}
                           style={{
                             width: '100%',
                             height: '100%',
