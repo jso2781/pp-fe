@@ -42,6 +42,10 @@ const RelatedSites = () => {
                 displayEmpty
                 onChange={handleSelect}
                 inputProps={{ 'aria-label': t('goToRelGov') }}
+                MenuProps={{
+                  disableAutoFocusItem: true, // 첫 번째 아이템에 포커스 가는 것 방지
+                  marginThreshold: 0,
+                }}
                 renderValue={(selected) => {
                   if (selected === "") {
                     return <span className="placeholder-text">{t('goToRelGov')}</span>;
@@ -69,6 +73,10 @@ const RelatedSites = () => {
                 displayEmpty
                 onChange={handleSelect}
                 inputProps={{ 'aria-label': t('goToRelOrg') }}
+                MenuProps={{
+                  disableAutoFocusItem: true, // 첫 번째 아이템에 포커스 가는 것 방지
+                  marginThreshold: 0,
+                }}
                 renderValue={(selected) => {
                   if (selected === "") {
                     return <span className="placeholder-text">{t('goToRelOrg')}</span>;

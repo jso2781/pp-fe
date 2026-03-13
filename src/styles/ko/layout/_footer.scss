@@ -61,7 +61,7 @@
         border: none !important; 
       }
 
-      .MuiOutlinedInput-root {
+      .MuiOutlinedInput-root { 
         border-radius: 0 !important;
         height: 50px;
         background-color: #fff;
@@ -223,6 +223,7 @@
 
     .meta-links {
       display: flex;
+      flex-wrap: wrap;
       gap: 0;
       margin:0 0 10px 0;
       .meta-item {

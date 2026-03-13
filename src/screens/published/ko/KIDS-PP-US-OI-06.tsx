@@ -146,6 +146,7 @@ export default function KIDS_PP_US_OI_06() {
                             id="public-opinion" 
                             className="suggestion-input" 
                             placeholder="공공데이터에 대한 의견이나 제안사항을 입력해 주세요."
+                            aria-label="의견 제안 내용"
                           ></textarea>
                           <button type="submit" className="btn_default">제출</button>
                         </div>

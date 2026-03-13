@@ -1,6 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import menuReducer from '@/features/auth/MenuSlice'
 import authReducer from '@/features/auth/AuthSlice'
+import orgchtReducer from '@/features/dep/OrgchtSlice'
 import pstReducer from '@/features/pst/PstSlice'
 import uiReducer from '@/features/ui/uiSlice'
 import faqReducer from '@/features/faq/FaqSlice'
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   ui: uiReducer,
   menu: menuReducer,
   auth: authReducer,
+  orgcht: orgchtReducer, // 조직도
   stt: sttReducer, // 약관법령
   pst: pstReducer, // 게시판
   faq: faqReducer, // FAQ

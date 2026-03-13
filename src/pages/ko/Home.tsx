@@ -771,10 +771,10 @@ export default function Home() {
                     key={prevElSns && nextElSns ? 'readySns' : 'not-readySns'}
                     modules={[Navigation, Pagination, A11y, Autoplay, SwiperGrid]} 
                     spaceBetween={20}
-                    slidesPerView={2}
-                    slidesPerGroup={2}
+                    slidesPerView={4}
+                    slidesPerGroup={4}
                     grid={{
-                      rows: 2,
+                      rows: 1,
                       fill: 'row'
                     }}
                     breakpoints={{
@@ -783,10 +783,15 @@ export default function Home() {
                         slidesPerGroup: 1,
                         grid: { rows: 1 } 
                       },
-                      640: {
+                      768: {
                         slidesPerView: 2,
                         slidesPerGroup: 2,
-                        grid: { rows: 2 }
+                        grid: { rows: 1 }
+                      },
+                      1200: {
+                        slidesPerView: 4,
+                        slidesPerGroup: 4,
+                        grid: { rows: 1 }
                       }
                     }}
                     navigation={{ prevEl: prevElSns, nextEl: nextElSns }}
@@ -814,27 +819,31 @@ export default function Home() {
                                   />
                                 </Box>
                                 <Box className="info-area">
+                                  <Typography className={`sns-label ${it.type}`}>
+                                    {it.type === 'youtube' ? '유튜브' : it.type === 'insta' ? '인스타그램' : '블로그'}
+                                  </Typography>
                                   <Typography className="sns-title">{it.title}</Typography>
                                   <Typography className="sns-desc">
                                     {it.desc || ''}
-                                  </Typography>
-                                  <Typography className={`sns-label ${it.type}`}>
-                                    {it.type === 'youtube' ? '유튜브' : it.type === 'insta' ? '인스타그램' : '블로그'}
                                   </Typography>
                                 </Box>
                               </Box>
                             ) : (
                               <Link href={it.url} target="_blank" rel="noreferrer" title="새창 열림" className="sns-link">
                                 <Box className="thumb-area">
-                                  <img src={it.thumbnail || '/img/img_test.png'} alt="" style={{objectFit: 'unset'}}/>
+                                  <img 
+                                    src={it.thumbnail || '/img/img_test.png'} 
+                                    alt={`${it.title} 썸네일 이미지`}
+                                    style={{objectFit: 'unset'}}
+                                  />
                                 </Box>
                                 <Box className="info-area">
+                                  <Typography className={`sns-label ${it.type}`}>
+                                    {it.type === 'youtube' ? '유튜브' : it.type === 'insta' ? '인스타그램' : '블로그'}
+                                  </Typography>
                                   <Typography className="sns-title">{it.title}</Typography>
                                   <Typography className="sns-desc">
                                     {it.desc || ''}
-                                  </Typography>
-                                  <Typography className={`sns-label ${it.type}`}>
-                                    {it.type === 'youtube' ? '유튜브' : it.type === 'insta' ? '인스타그램' : '블로그'}
                                   </Typography>
                                 </Box>
                                 <Box component="span" className="sr-only"> (새창 열림)</Box>
@@ -895,7 +904,11 @@ export default function Home() {
                         ) : (
                           <Link href={it.url} target="_blank" rel="noreferrer" title="새창 열림" className="sns-link">
                             <Box className="thumb-area">
-                              <img src={it.thumbnail || '/img/img_test.png'} alt="" style={{objectFit: 'unset'}}/>                              
+                              <img 
+                                src={it.thumbnail || '/img/img_test.png'} 
+                                alt={`${it.title} 썸네일 이미지`}
+                                style={{objectFit: 'unset'}}
+                              />                              
                             </Box>
                             <Box className="info-area">
                               <Typography className="sns-title">{it.title}</Typography>
@@ -1026,6 +1039,7 @@ export default function Home() {
                       >
                         <img
                           src={getThumbnailUrl(item)}
+                          alt={item.pstTtl || `카드뉴스 이미지 ${index + 1}`}
                           style={{
                             width: '100%',
                             height: '100%',

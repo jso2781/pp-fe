@@ -1,140 +1,59 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectOrgchtList, getOrgcht, insertOrgcht, updateOrgcht, saveOrgcht, deleteOrgcht } from './OrgchtThunks'
-import { mockOrgchtList, OrgchtPVO, OrgchtRVO, OrgchtListPVO, OrgchtListRVO, OrgchtDVO  } from './OrgchtTypes'
+import { OrgchtDeptRVO, OrgchtEmpRVO } from './OrgchtTypes'
+import { selectOrgchtEmployees, selectOrgchtTree } from './OrgchtThunks'
 
-/**
- * 대국민포털_KIDS조직도기본 정보 목록 조회(Redux 저장 구조) 
- */
 export interface OrgchtState {
-  list: OrgchtRVO[]
-  totalCount: number | null
-  current: OrgchtRVO | null
-  loading: boolean
+  tree: OrgchtDeptRVO[]
+  employees: OrgchtEmpRVO[]
+  treeLoading: boolean
+  employeeLoading: boolean
   error: string | null
 }
 
-/**
- * 대국민포털_KIDS조직도기본 정보 목록 조회(Redux 저장 구조 초기상태) 
- */
 const initialState: OrgchtState = {
-  list: [],
-  totalCount: null,
-  current: null,
-  loading: false,
-  error: null
+  tree: [],
+  employees: [],
+  treeLoading: false,
+  employeeLoading: false,
+  error: null,
 }
 
 const OrgchtSlice = createSlice({
   name: 'orgcht',
   initialState,
   reducers: {
-    clearCurrent: (state) => {
-      state.current = null;
-    }
+    clearOrgchtEmployees: (state) => {
+      state.employees = []
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(selectOrgchtList.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+      .addCase(selectOrgchtTree.pending, (state) => {
+        state.treeLoading = true
+        state.error = null
       })
-      .addCase(selectOrgchtList.fulfilled, (state, action) => {
-        state.loading = false;
-        state.list = action.payload.list;
-        state.totalCount = action.payload.totalCount;
+      .addCase(selectOrgchtTree.fulfilled, (state, action) => {
+        state.treeLoading = false
+        state.tree = action.payload.deptList
       })
-      .addCase(selectOrgchtList.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error?.message || 'Failed to load notice list';
+      .addCase(selectOrgchtTree.rejected, (state, action) => {
+        state.treeLoading = false
+        state.error = action.payload || action.error.message || '조직도 조회에 실패했습니다.'
       })
-      .addCase(getOrgcht.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.current = null;
+      .addCase(selectOrgchtEmployees.pending, (state) => {
+        state.employeeLoading = true
+        state.error = null
       })
-      .addCase(getOrgcht.fulfilled, (state, action) => {
-        state.loading = false;
-        state.current = action.payload || null;
+      .addCase(selectOrgchtEmployees.fulfilled, (state, action) => {
+        state.employeeLoading = false
+        state.employees = action.payload.empList
       })
-      .addCase(getOrgcht.rejected, (state, action) => {
-        state.loading = false;
-        state.error = (action.payload as string) || action.error?.message || 'Failed to load notice';
+      .addCase(selectOrgchtEmployees.rejected, (state, action) => {
+        state.employeeLoading = false
+        state.error = action.payload || action.error.message || '직원 정보 조회에 실패했습니다.'
       })
-      .addCase(insertOrgcht.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(insertOrgcht.fulfilled, (state, action) => {
-        state.loading = false;
-        //const created = action.payload;
-        //state.current = created || null;
-        //if(created) {
-        //  state.list = [created, ...state.list];
-        //  state.totalCount = (state.totalCount ?? state.list.length) + 1;
-        //}
-      })
-      .addCase(insertOrgcht.rejected, (state, action) => {
-        state.loading = false;
-        state.error = (action.payload as string) || action.error?.message || 'Failed to insert Orgcht';
-      })
-      .addCase(updateOrgcht.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateOrgcht.fulfilled, (state, action) => {
-        state.loading = false;
-        const updated = action.payload;
-        //state.current = updated || null;
-        //if(updated?.id !== undefined) {
-        //  const idx = state.list.findIndex((n) => String(n.id) === String(updated.id));
-        //  if(idx >= 0)state.list[idx] = { ...state.list[idx], ...updated };
-        //}
-      })
-      .addCase(updateOrgcht.rejected, (state, action) => {
-        state.loading = false;
-        state.error = (action.payload as string) || action.error?.message || 'Failed to update Orgcht';
-      })
-      .addCase(saveOrgcht.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(saveOrgcht.fulfilled, (state, action) => {
-        state.loading = false;
-        //const saved = action.payload;
-        //state.current = saved || null;
-        //if(saved?.id !== undefined) {
-        //  const idx = state.list.findIndex((n) => String(n.id) === String(saved.id));
-        //  if(idx >= 0){
-        //    state.list[idx] = { ...state.list[idx], ...saved };
-        //  }else if(saved) {
-        //    state.list = [saved, ...state.list];
-        //    state.totalCount = (state.totalCount ?? state.list.length) + 1;
-        //  }
-        //}
-      })
-      .addCase(saveOrgcht.rejected, (state, action) => {
-        state.loading = false;
-        state.error = (action.payload as string) || action.error?.message || 'Failed to save Orgcht';
-      })
-      .addCase(deleteOrgcht.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(deleteOrgcht.fulfilled, (state, action) => {
-        state.loading = false;
-        //const deletedId = action.payload;
-        //state.list = state.list.filter((n) => String(n.id) !== String(deletedId))
-        //if (state.current && String(state.current.id) === String(deletedId)) {
-        //  state.current = null;
-        //}
-        //if(typeof state.totalCount === 'number')state.totalCount = Math.max(0, state.totalCount - 1);
-      })
-      .addCase(deleteOrgcht.rejected, (state, action) => {
-        state.loading = false;
-        state.error = (action.payload as string) || action.error?.message || 'Failed to delete Orgcht';
-      })
-  }
-});
+  },
+})
 
-export const { clearCurrent } = OrgchtSlice.actions
+export const { clearOrgchtEmployees } = OrgchtSlice.actions
 export default OrgchtSlice.reducer
