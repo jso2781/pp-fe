@@ -325,6 +325,9 @@ export default function DurSearchRoom(){
                               onSearch();
                             }
                           }}
+                          slotProps={{
+                            htmlInput: { 'aria-label': t('searchKeywordInput') }
+                          }}
                           sx={{ flexGrow: 1 }}
                         />
                         <Button

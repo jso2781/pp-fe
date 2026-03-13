@@ -135,6 +135,9 @@ export default function GeneralBoardList() {
                       <TextField 
                         size="large" 
                         placeholder="검색어 입력" 
+                        slotProps={{
+                          htmlInput: { 'aria-label': '검색어 입력' }
+                        }}
                         value={searchWrd} 
                         onChange={(e) => setSearchWrd(e.target.value)} 
                         onKeyDown={(e) => {
@@ -175,7 +178,7 @@ export default function GeneralBoardList() {
                               <TableCell component="th" scope="row" align="center" sx={{fontWeight: r.fixYn === 'Y' ? 'bold' : 'normal',}}>                                
                                 {r.fixYn === 'Y' ? '[공지]' : (totalCount ?? 0) - ((Number(pageNum) - 1) * 10 + idx)}
                               </TableCell>
-                              <TableCell align="center">
+                              <TableCell align="left">
                                 {/* 4. 동작이 발생하는 요소에 명확한 aria-label을 제공합니다. */}
                                 <Link
                                   component={RouterLink}

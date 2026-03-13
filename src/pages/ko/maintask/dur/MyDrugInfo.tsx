@@ -369,6 +369,9 @@ export default function MyDrugInfo() {
                                       handleSearch()
                                     }
                                   }}
+                                  slotProps={{
+                                    htmlInput: { 'aria-label': '검색어 입력' }
+                                  }}
                                 />
                                 <Button
                                   type="button"

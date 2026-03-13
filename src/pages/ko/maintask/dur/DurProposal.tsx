@@ -334,13 +334,13 @@ export default function DurProposal() {
 
                         {/* 현황 및 문제점 */}
                         <Box className="form-item">
-                          <Typography component="label" htmlFor="problem" className="label">
+                          <Typography component="label" htmlFor="problem" id="problem-label" className="label">
                             현황 및 문제점
                             <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
                           <RHFTextField name="problem" id="problem" placeholder="현황 및 문제점을 100자 이내로 입력해주세요." size="large" fullWidth multiline minRows={3}
                             slotProps={{
-                              htmlInput: { 'aria-required': 'true', 'aria-describedby': 'problem-alert' },
+                              htmlInput: { 'aria-required': 'true', 'aria-describedby': 'problem-alert', 'aria-labelledby': 'problem-label' },
                               formHelperText: { id: 'problem-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
                             }}
                           />
@@ -348,13 +348,13 @@ export default function DurProposal() {
 
                         {/* 의견 및 요청사항 간략기재 */}
                         <Box className="form-item">
-                          <Typography component="label" htmlFor="summary" className="label">
+                          <Typography component="label" htmlFor="summary" id="summary-label" className="label">
                             의견 및 요청사항 간략기재
                             <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
                           </Typography>
                           <RHFTextField name="summary" id="summary" placeholder="의견 및 요청사항을 100자 이내로 입력해주세요." size="large" fullWidth multiline minRows={3}
                             slotProps={{
-                              htmlInput: { 'aria-describedby': 'summary-alert' },
+                              htmlInput: { 'aria-describedby': 'summary-alert', 'aria-labelledby': 'summary-label' },
                               formHelperText: { id: 'summary-alert', className: 'error-alert' },
                             }}
                           />
@@ -362,13 +362,13 @@ export default function DurProposal() {
 
                         {/* 의견 및 요청사항 상세기재 */}
                         <Box className="form-item">
-                          <Typography component="label" htmlFor="detail" className="label">
+                          <Typography component="label" htmlFor="detail" id="detail-label" className="label">
                             의견 및 요청사항 상세기재
                             <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
                           <RHFTextField name="detail" id="detail" placeholder="의견 및 요청사항을 1,000자 이내로 입력해주세요." size="large" fullWidth multiline minRows={5}
                             slotProps={{
-                              htmlInput: { 'aria-required': 'true', 'aria-describedby': 'detail-alert' },
+                              htmlInput: { 'aria-required': 'true', 'aria-describedby': 'detail-alert', 'aria-labelledby': 'detail-label' },
                               formHelperText: { id: 'detail-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
                             }}
                           />
@@ -376,13 +376,13 @@ export default function DurProposal() {
 
                         {/* 참고사항 및 기타 */}
                         <Box className="form-item">
-                          <Typography component="label" htmlFor="etc" className="label">
+                          <Typography component="label" htmlFor="etc" id="etc-label" className="label">
                             참고사항 및 기타
                             <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
                           </Typography>
                           <RHFTextField name="etc" id="etc" placeholder="참고사항 및 기타 사항을 1,000자 이내로 입력해주세요." size="large" fullWidth multiline minRows={2}
                             slotProps={{
-                              htmlInput: { 'aria-describedby': 'etc-alert' },
+                              htmlInput: { 'aria-describedby': 'etc-alert', 'aria-labelledby': 'etc-label' },
                               formHelperText: { id: 'etc-alert', className: 'error-alert' },
                             }}
                           />

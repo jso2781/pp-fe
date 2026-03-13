@@ -223,15 +223,14 @@ export default function LoginMethod() {
                               </Stack>
 
                               <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
-                                {/* Base UI 스위치 */}
                                 <BaseSwitch.Root
                                   className="base_switch_root"
                                   checked={useGovLogin}
                                   onCheckedChange={(checked) => setUseGovLogin(checked)}
+                                  aria-label="정부 로그인 사용 여부 설정"
                                 >
                                   <BaseSwitch.Thumb className="base_switch_thumb" />
                                 </BaseSwitch.Root>
-                                {/* 텍스트 라벨 */}
                                 <Typography component="p" className="switch_label">
                                   {useGovLogin ? '사용 중' : '미사용'}
                                 </Typography>
