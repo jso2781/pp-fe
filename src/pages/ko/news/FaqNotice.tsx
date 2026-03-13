@@ -152,7 +152,6 @@ export default function FaqNotice() {
               {/* --- 본문 시작 --- */}
                 
                 <Box component="form" className="board-search">
-                  <InputLabel id="search-condition-label" className="sr-only">검색조건</InputLabel>
                   <FormControl size="large" className="search-condition">
                     <InputLabel id="search-condition-label" className="sr-only">검색조건</InputLabel>
                     <Select 
@@ -170,8 +169,10 @@ export default function FaqNotice() {
                     <TextField
                       inputRef={searchInputValue}
                       size="large" 
-                      fullWidth
                       placeholder="궁금하신 내용을 입력해주세요."
+                      slotProps={{
+                        htmlInput: { 'aria-label': '검색어 입력' }
+                      }}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           e.preventDefault();
@@ -187,6 +188,7 @@ export default function FaqNotice() {
                     <Button
                       size="large" 
                       variant="contained"
+                      className="btn-search"
                       onClick={() => handleUI({
                         ...param,
                         page: 1,

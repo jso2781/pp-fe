@@ -135,6 +135,9 @@ export default function GeneralBoardList() {
                       <TextField 
                         size="large" 
                         placeholder="검색어 입력" 
+                        slotProps={{
+                          htmlInput: { 'aria-label': '검색어 입력' }
+                        }}
                         value={searchWrd} 
                         onChange={(e) => setSearchWrd(e.target.value)} 
                         onKeyDown={(e) => {
