@@ -181,3 +181,12 @@ export interface AtchDownVO {
   /** 첨부파일아이디 */
   atchFileId?: string
 }
+
+/**
+ * 업무코드
+ * (업무별 업로드된 파일을 다운로드(GET)하기 위한 파라메터)
+ */
+export interface AtchDownFromTaskCdVO {
+  /** 업무코드 */
+  taskCd: string
+}

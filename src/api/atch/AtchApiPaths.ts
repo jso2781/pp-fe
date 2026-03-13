@@ -33,3 +33,8 @@ export const deleteAtchApiPath = () => '/atch/deleteAtch'
  * 공통_첨부파일기본 다운로드
  */
 export const downloadAtchApiPath = () => '/atch/download'
+
+/**
+ * 업무코드로부터 업무별 업로드된 파일을 다운로드(GET)
+ */
+export const downloadFromTaskCdApiPath = () => '/atch/downloadFromTaskCd'

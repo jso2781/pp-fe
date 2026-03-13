@@ -15,7 +15,7 @@ import { selectDurSearchRoomList } from '@/features/dur/DurSearchRoomThunks';
 import { resetResults } from '@/features/dur/DurSearchRoomSlice';
 import { AgeItem, ConcItem, CpctItem, DosageItem, DurSearchRoomRVO, EftgrpItem, NurswItem, PrgntItem, SnctzItem } from '@/features/dur/DurSearchRoomTypes';
 import LnbSectionTitle from '@/components/common/LnbSectionTitle';
-import { downloadAtch } from '@/features/atch/AtchThunks';
+import { downloadFromTaskCd } from '@/features/atch/AtchThunks';
 
 export default function DurSearchRoom(){
   const { t } = useTranslation();
@@ -247,10 +247,8 @@ export default function DurSearchRoom(){
     TAB8: '“수유부주의 성분” 이란 수유 중의 소아에게 부작용 발생 등의 우려가 있어 수유부에게 사용 시 주의가 필요한 유효성분을 말합\n니다.\n( 「의약품 병용금기 성분 등의 지정에 관한 규정」 식품의약품안전처 고시 )\n\n다만, 의사의 판단 하에 치료적 유익성과 위험성을 고려하여 처방이 가능합니다.'
   };
 
-  const handleDownload = (atchFileId: string) => {
-    dispatch(
-      downloadAtch({atchFileId})
-    );
+  const handleDownloadFromTaskCd = (taskCd: string) => {
+    dispatch(downloadFromTaskCd({taskCd: taskCd}));
   };
 
   return (
@@ -298,7 +296,7 @@ export default function DurSearchRoom(){
                         variant="outlined02" 
                         endIcon={<DownloadIcon />}
                         size="xsmall"
-                        onClick={() => handleDownload('1062')}
+                        onClick={() => handleDownloadFromTaskCd('DUR_DOWN')}
                       > 
                         {t('durInfoDownload')}
                       </Button>

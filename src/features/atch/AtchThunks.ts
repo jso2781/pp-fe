@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectAtchListApiPath, getAtchApiPath, insertAtchApiPath, updateAtchApiPath, saveAtchApiPath, deleteAtchApiPath, downloadAtchApiPath } from '@/api/atch/AtchApiPaths'
-import { mockAtchList, AtchPVO, AtchRVO, AtchListPVO, AtchListRVO, AtchDVO, AtchDownVO  } from './AtchTypes'
+import { selectAtchListApiPath, getAtchApiPath, insertAtchApiPath, updateAtchApiPath, saveAtchApiPath, deleteAtchApiPath, downloadAtchApiPath, downloadFromTaskCdApiPath } from '@/api/atch/AtchApiPaths'
+import { mockAtchList, AtchPVO, AtchRVO, AtchListPVO, AtchListRVO, AtchDVO, AtchDownVO, AtchDownFromTaskCdVO  } from './AtchTypes'
 
 /**
  * 공통_첨부파일기본 정보 목록 조회 
@@ -192,7 +192,55 @@ export const downloadAtch = createAsyncThunk<void, AtchDownVO>(
       link.remove();
       window.URL.revokeObjectURL(url);
     } catch (e) {
-      console.error('AtchThunks downloadAtch error!!', e);      
+      console.error('AtchThunks downloadAtch error!!', e);
+    }
+  }
+);
+
+/**
+ * 업무코드로부터 업무별 업로드된 파일을 다운로드(GET)
+ */
+export const downloadFromTaskCd = createAsyncThunk<void, AtchDownFromTaskCdVO>(
+  '/atch/downloadFromTaskCd',
+  async (params: AtchDownFromTaskCdVO) => {
+    try {
+      const res = await https.get(
+        downloadFromTaskCdApiPath() + '?taskCd=' + params.taskCd
+      );
+
+      const blob = new Blob([res.data]);
+
+      let fileName = 'download.file';
+      const disposition = res.headers['content-disposition'];
+
+      if (disposition) {
+        // filename*=UTF-8''xxx
+        const utf8Match = disposition.match(/filename\*\=UTF-8''(.+)/);
+
+        if (utf8Match) {
+          fileName = decodeURIComponent(utf8Match[1]);
+        } else {
+          // filename="xxx"
+          const asciiMatch = disposition.match(/filename="?([^"]+)"?/);
+
+          if (asciiMatch) {
+            fileName = asciiMatch[1];
+          }        
+        }
+      }
+
+      // 브라우저 다운로드 처리
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('AtchThunks downloadAtch error!!', e);
     }
   }
 );
