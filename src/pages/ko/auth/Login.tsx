@@ -243,7 +243,7 @@ export default function Login() {
                           <input type="password" name="password" autoComplete="current-password" tabIndex={-1} />
                         </div>
                         <Box className="form-item">
-                          <Typography component="label" htmlFor="loginId" className="label">
+                          <Typography component="label" htmlFor="loginId" id="loginId-label" className="label">
                             {t('login')}
                           </Typography>
                           <TextField
@@ -261,7 +261,13 @@ export default function Login() {
                             error={!!errors.loginId}
                             helperText={errors.loginId}
                             fullWidth
-                            inputProps={{ maxLength: MAX_LENGTH, autoComplete: 'username', inputMode: 'text' }}
+                            inputProps={{ 
+                              maxLength: MAX_LENGTH, 
+                              autoComplete: 'username', 
+                              inputMode: 'text', 
+                              'aria-labelledby': 'loginId-label', 
+                              'aria-describedby': errors.loginId ? 'loginId-alert' : undefined
+                            }}
                             slotProps={{
                               htmlInput: { 'aria-describedby': errors.loginId ? 'loginId-alert' : undefined },
                               formHelperText: {
@@ -275,7 +281,7 @@ export default function Login() {
                         </Box>
 
                         <Box className="form-item">
-                          <Typography component="label" htmlFor="password-input" className="label">
+                          <Typography component="label" htmlFor="password-input" id="password-label" className="label">
                             {t('password')}
                           </Typography>
                           <TextField
@@ -297,7 +303,12 @@ export default function Login() {
                             error={!!errors.password || !!loginFail}
                             helperText={errors.password || (loginFail ? `${loginFail.reason} (${loginFail.failedCount}/${MAX_FAIL_COUNT})` : '')}
                             fullWidth
-                            inputProps={{ maxLength: MAX_LENGTH, autoComplete: 'new-password' }}
+                            inputProps={{ 
+                              maxLength: MAX_LENGTH, 
+                              autoComplete: 'new-password',
+                              'aria-labelledby': 'password-label',
+                              'aria-describedby': (errors.password || loginFail) ? 'password-input-alert' : undefined
+                            }}
                             slotProps={{
                               htmlInput: { 'aria-describedby': (errors.password || loginFail) ? 'password-input-alert' : undefined },
                               formHelperText: {
@@ -315,7 +326,7 @@ export default function Login() {
                             <Checkbox
                               // 1. 보조 기기에서 체크박스의 상태 변화를 더 잘 인지하도록 속성 추가
                               inputProps={{ 
-                                'aria-label': '아이디 저장 여부 선택',
+                                'aria-label': t('rememberId'),
                                 'role': 'checkbox'
                               }}
                               checked={values.rememberId}
