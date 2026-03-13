@@ -69,11 +69,6 @@
       .container { width: 100%; }
       .logo img { height: 40px; }
     }
-    @media (max-width: 640px) {
-      .logo img { height: 30px;}
-
-    }
-
     .container {
       display: flex;
       align-items: center;
