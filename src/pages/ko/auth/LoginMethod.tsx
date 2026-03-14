@@ -23,7 +23,7 @@ import {
 } from '@mui/icons-material'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { getAnyIdInit } from '@/features/auth/AnyIdThunks'
+import { getAnyIdInit, postAnyIdLogin } from '@/features/auth/AnyIdThunks'
 import https from '@/api/axiosInstance'
 import DepsLocation from '@/components/common/DepsLocation'
 
@@ -101,29 +101,24 @@ export default function LoginMethod() {
         const adaptor = {
           sso: ssoInfo ?? undefined,
           success: async (data: any) => {
-            try {
-              console.log('[AnyID] success callback data:', data)
-              console.log('[AnyID] tag(tx):', tx)
+            try{
+              console.log('[AnyID] success callback data:', data);
+              console.log('[AnyID] tag(tx):', tx);
 
-              const res = await https.post('/auth/anyid/login', {
-                ssob: data?.ssob,
-                tag: tx,
-              })
+              const payload = await dispatch(postAnyIdLogin({ ssob: data?.ssob, tag: tx, ci: data?.res?.ci })).unwrap() as AnyIdLoginRVO;
 
-              console.log('[AnyID] login response:', res.data)
+              console.log('[AnyID] login payload:', payload);
 
               // 실패 시 alert
-              const result = res.data?.data?.result
-              if (result?.status === 'fail' || res.data?.code !== 0) {
-                console.error('[AnyID] login failed:', res.data)
-                alert('인증에 실패했습니다. 다시 시도해주세요.')
-                return
+              if(payload === 'LoggedIn'){
+                navigate('/pp/ko');
               }
-
-              navigate(redirectUri, { replace: true })
-            } catch (e) {
-              console.error('[AnyID] login error:', e)
-              alert('로그인 처리 중 오류가 발생했습니다.')
+              else if(payload === 'SignUpSel'){
+                navigate('/pp/ko/auth/SignUpSel')
+              }
+            }catch (e){
+              console.error('[AnyID] login error:', e);
+              alert('인증에 실패했습니다. 다시 시도해주세요.')
             }
           },
         }

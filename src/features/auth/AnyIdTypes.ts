@@ -23,6 +23,13 @@ export interface SsoInfoRVO {
   agencyContextPath?: string  /* Any-ID 기관 컨텍스트 경로 (기본값: "") */
 }
 
+/** Any-ID 로그인 요청 파라미터 (POST /auth/anyid/login) */
+export interface AnyIdLoginPVO {
+  ssob?: string
+  tag?: string
+  ci?: string
+}
+
 /** Any-ID 사용자 정보 조회 결과 */
 export interface AnyIdUserInfoRVO {
   anyid?: Map<String, Object>         /* Any-ID 세션 정보 */

@@ -9,6 +9,11 @@ export const ssoInfoApiPath = () => '/auth/anyid/ssoInfo';
 export const anyIdInitApiPath = () => '/auth/anyid/init';
 
 /**
+ * ANY-ID 로그인 (ssob/tag/ci 전송, 세션 생성)
+ */
+export const anyIdLoginApiPath = () => '/auth/anyid/login';
+
+/**
  * ANY-ID 사용자 정보 조회
  * (SSO 사용자 정보와 Any-ID 세션 정보를 조회)
  */

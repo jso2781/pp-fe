@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getSsoInfo, getAnyIdInit, getAnyIdUserInfo } from './AnyIdThunks'
+import { getSsoInfo, getAnyIdInit, postAnyIdLogin, getAnyIdUserInfo } from './AnyIdThunks'
 import { SsoInfoRVO, AnyIdInitRVO, AnyIdUserInfoRVO } from './AnyIdTypes'
 
 /**
  * SSO, ANY-ID 정보(Redux 저장 구조)
- * persist:root 내 anyId 슬라이스에 ssoInfo / anyidInit / anyIdUserInfo 로 저장됨
+ * persist:root 내 anyId 슬라이스에 ssoInfo / anyidInit / anyIdLoginResult / anyIdUserInfo 로 저장됨
  */
 export interface AnyIdState {
   /** getSsoInfo 결과 (persist 시 'ssoInfo' 키로 저장) */
   ssoInfo: SsoInfoRVO | null
   /** getAnyIdInit 결과 (persist 시 'anyidInit' 키로 저장) */
   anyidInit: AnyIdInitRVO | null
+  /** postAnyIdLogin 결과 (persist 시 'anyIdLoginResult' 키로 저장, string) */
+  anyIdLoginResult: string | null
   /** getAnyIdUserInfo 결과 (persist 시 'anyIdUserInfo' 키로 저장) */
   anyIdUserInfo: AnyIdUserInfoRVO | null
   loading: boolean
@@ -20,6 +22,7 @@ export interface AnyIdState {
 const initialState: AnyIdState = {
   ssoInfo: null,
   anyidInit: null,
+  anyIdLoginResult: null,
   anyIdUserInfo: null,
   loading: false,
   error: null
@@ -32,12 +35,14 @@ const AnyIdSlice = createSlice({
     clearCurrent: (state) => {
       state.ssoInfo = null;
       state.anyidInit = null;
+      state.anyIdLoginResult = null;
       state.anyIdUserInfo = null;
     },
     /** 다른 메뉴로 나갔다가 돌아올 때 조회 결과 제거용 */
     resetResults: (state) => {
       state.ssoInfo = null;
       state.anyidInit = null;
+      state.anyIdLoginResult = null;
       state.anyIdUserInfo = null;
       state.error = null;
     }
@@ -65,6 +70,18 @@ const AnyIdSlice = createSlice({
         state.anyidInit = action.payload ?? null;
       })
       .addCase(getAnyIdInit.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message || 'Failed to load notice list';
+      })
+      .addCase(postAnyIdLogin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(postAnyIdLogin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.anyIdLoginResult = action.payload ?? null;
+      })
+      .addCase(postAnyIdLogin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error?.message || 'Failed to load notice list';
       })

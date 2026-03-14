@@ -2,8 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
 import { getIntegratedSearchJsonApiPath } from '@/api/search/IntegratedSearchPaths'
 import { IntegratedSearchPVO, IntegratedSearchRVO } from '@/features/search/IntegratedSearchTypes'
-import { AnyIdInitPVO, AnyIdInitRVO, AnyIdUserInfoRVO, SsoInfoPVO, SsoInfoRVO } from './AnyIdTypes'
-import { anyIdInitApiPath, anyIdUserInfoApiPath, ssoInfoApiPath } from '@/api/auth/AnyIdApiPaths'
+import { AnyIdInitPVO, AnyIdInitRVO, AnyIdLoginPVO, AnyIdUserInfoRVO, SsoInfoPVO, SsoInfoRVO } from './AnyIdTypes'
+import { anyIdInitApiPath, anyIdLoginApiPath, anyIdUserInfoApiPath, ssoInfoApiPath } from '@/api/auth/AnyIdApiPaths'
 
 /**
  * SSO 기본 정보 조회
@@ -46,6 +46,23 @@ export const getAnyIdInit = createAsyncThunk<AnyIdInitRVO, AnyIdInitPVO | undefi
     }
   }
 )
+
+/**
+ * ANY-ID 로그인 조회 (POST /auth/anyid/login, 응답 res.data?.data?.result 는 string으로 'LoggedIn', 'SignUpSel' 반환)
+ */
+export const postAnyIdLogin = createAsyncThunk<string, AnyIdLoginPVO, { rejectValue: string }>(
+  '/auth/anyid/login',
+  async (params: AnyIdLoginPVO, { rejectWithValue }) => {
+    try {
+      const res = await https.post(anyIdLoginApiPath(), params ?? {});
+      const payload = res.data?.data?.result;
+      return (payload != null ? String(payload) : '') as string;
+    } catch (e) {
+      console.log('AnyIdThunks postAnyIdLogin error!!', e);
+      return rejectWithValue('AnyIdThunks postAnyIdLogin error!!');
+    }
+  }
+);
 
 /**
  * ANY-ID 사용자 정보 조회
