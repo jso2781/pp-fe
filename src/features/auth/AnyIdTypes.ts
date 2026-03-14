@@ -23,7 +23,9 @@ export interface SsoInfoRVO {
   agencyContextPath?: string  /* Any-ID 기관 컨텍스트 경로 (기본값: "") */
 }
 
-export interface AnyIdUserinfoRVO {
-  anyidSession?: Map<String, Object>
-  userInfo?: Map<String, Object>
+/** Any-ID 사용자 정보 조회 결과 */
+export interface AnyIdUserInfoRVO {
+  anyid?: Map<String, Object>         /* Any-ID 세션 정보 */
+  sso?: Map<String, Object>           /* SSO 사용자 정보 */
+  anyIdUserinfo?: Map<String, Object> /* SSO 사용자 정보와 Any-ID 세션 정보를 모두 가지고 있는 데이터맵 */
 }

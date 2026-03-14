@@ -458,10 +458,9 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   
   // const { rootMenus, byParent } = useMemo(() => buildMenuTree(menuItems1), [menuItems1]);
 
-  // Rest API 호출 - 언어 변경 시 메뉴 목록 재조회
+  // Rest API 호출 - 언어 변경 시 메뉴 목록 재조회 (getSsoInfo는 Router LangGuard에서만 1회 호출)
   useEffect(() => {
-    // 언어가 바뀔 때마다 해당 언어 메뉴 재조회
-    dispatch(selectMenuList({ langSeCd: i18nInstance.language }))
+    dispatch(selectMenuList({ langSeCd: i18nInstance.language }));
   }, [dispatch, i18nInstance.language])
 
   const onToggleLang = () => {

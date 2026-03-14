@@ -1,8 +1,10 @@
 import i18n from '@/i18n/i18n'
 import { JSX, useEffect, useMemo, lazy, useRef } from "react";
 import { Navigate, BrowserRouter, Routes, Route, useLocation, useParams } from 'react-router-dom'
-import { useAppDispatch } from '@/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectMenuList } from '@/features/auth/MenuThunks'
+import { getSsoInfo } from '@/features/auth/AnyIdThunks'
+import { redirectToSsoLoginPage } from '@/features/auth/ssoLoginPage'
 import { getLangFromPathname } from './lang'
 import Layout from './Layout'
 import BlankLayout from './BlankLayout'
@@ -132,10 +134,28 @@ function LangSync() {
   return null;
 }
 
+/** pathname이 /pp/ko 또는 /pp/en 일 때 getSsoInfo 1회 호출 (LangGuard는 라우트에 미사용이므로 여기서 처리) */
+function SsoInfoSync() {
+  const location = useLocation();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const first = location.pathname.split('/')[1];
+    const lang = normalizeLang(first);
+    if (lang === 'ko' || lang === 'en') {
+      dispatch(getSsoInfo());
+    }
+  }, [location.pathname, dispatch]);
+  return null;
+}
+
+/** 이 경로로 진입 시 SSO 로그인 페이지로 리다이렉트 */
+const SSO_REDIRECT_AUTH_PATHS = ['/auth/LoginMethod', '/auth/CertifySelf', '/auth/FindId', '/auth/FindPw', '/advice/MbcmtApply'];
+
 const LangGuard = ({ children }: { children: JSX.Element }) => {
   const location = useLocation();
   const params = useParams<{ lang?: string }>();
   const dispatch = useAppDispatch();
+  const ssoInfo = useAppSelector((s) => s.anyId.ssoInfo);
   const prevUrlLangRef = useRef<string | null>(null);
 
   // 1) URL에 lang가 “있는지” (/:lang/* 라우트로 들어온 경우)
@@ -190,6 +210,10 @@ const LangGuard = ({ children }: { children: JSX.Element }) => {
       i18n.changeLanguage(currentLang);
     }
     
+    // 첫 main 진입 또는 한국어/English 전환 시 SSO 정보 조회 (reducer에서 sessionStorage 'sso' 저장)
+    if (currentLang === 'ko' || currentLang === 'en') {
+      dispatch(getSsoInfo());
+    }
     // 이전 언어가 ko 또는 en이고, 언어가 변경되면 메뉴 재조회
     if (prevLang && (prevLang === 'ko' || prevLang === 'en') && prevLang !== currentLang) {
       console.log(`LangGuard: 언어 변경 감지 - ${prevLang} → ${currentLang}, 메뉴 재조회`);
@@ -199,6 +223,16 @@ const LangGuard = ({ children }: { children: JSX.Element }) => {
     // 현재 언어를 이전 값으로 저장
     prevUrlLangRef.current = currentLang;
   }, [urlLang, location.pathname, dispatch]);
+
+  // /pp/:lang/auth/LoginMethod, CertifySelf, FindId, FindPw 진입 시 SSO 로그인 페이지로 리다이렉트
+  useEffect(() => {
+    const pathname = location.pathname;
+    const shouldRedirect = SSO_REDIRECT_AUTH_PATHS.some((p) => pathname.includes(p));
+    if (shouldRedirect) {
+      const agencyContextPath = ssoInfo?.agencyContextPath ?? '';
+      redirectToSsoLoginPage(agencyContextPath);
+    }
+  }, [location.pathname, ssoInfo?.agencyContextPath]);
 
   if (needsRedirect) {
     // querystring, hash 유지
@@ -236,6 +270,7 @@ export default function Router() {
         <BrowserRouter>
           <GlobalErrorHandler>
             <LangSync />
+            <SsoInfoSync />
             <Routes>
 
               {/* 팝업 전용: Header/Footer 없이 본문만 표시 */}

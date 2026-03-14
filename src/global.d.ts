@@ -23,6 +23,7 @@ declare global {
     }
 
     anyidAdaptor?: {
+      sso?: Record<string, unknown>
       success: (data: { ssob?: string } | null | undefined) => void | Promise<void>
     }
     

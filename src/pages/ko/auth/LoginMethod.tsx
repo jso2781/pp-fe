@@ -4,7 +4,7 @@
  * 화면경로: /ko/auth/LoginMethod
  * 화면설명: 로그인 방식 선택 화면
  */
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { Box, Button, Card, CardContent, Link, Stack, Switch, Typography, IconButton, Tooltip } from '@mui/material'
 import { Switch as BaseSwitch } from '@base-ui/react';
 import {
@@ -14,6 +14,8 @@ import {
   HelpOutline as HelpIcon,
 } from '@mui/icons-material'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { getAnyIdInit } from '@/features/auth/AnyIdThunks'
 import https from '@/api/axiosInstance'
 import DepsLocation from '@/components/common/DepsLocation'
 import i18n from '@/i18n/i18n';
@@ -43,17 +45,20 @@ function ensureAnyIdAssets() {
     })
 
   // public 폴더 기준: base 반영 (public/anyid/... -> {base}anyid/...)
-  ensureLink(`${baseNorm}anyid/css/app.css`)
+  ensureLink(`${baseNorm}css/app.css`)
 
   // manifest -> vendor -> app 순서 권장
-  return loadScript(`${baseNorm}anyid/js/manifest.js`)
-    .then(() => loadScript(`${baseNorm}anyid/js/vendor.js`))
-    .then(() => loadScript(`${baseNorm}anyid/js/app.js`))
+  return loadScript(`${baseNorm}js/manifest.js`)
+    .then(() => loadScript(`${baseNorm}js/vendor.js`))
+    .then(() => loadScript(`${baseNorm}js/app.js`))
 }
 
 export default function LoginMethod() {
   const navigate = useNavigate()
   const location = useLocation()
+  const dispatch = useAppDispatch()
+  const ssoInfo = useAppSelector((s) => s.anyId.ssoInfo)
+  const anyidInit = useAppSelector((s) => s.anyId.anyidInit)
   const [useGovLogin, setUseGovLogin] = useState(false)
   const [anyIdReady, setAnyIdReady] = useState(false)
 
@@ -81,11 +86,23 @@ export default function LoginMethod() {
         await ensureAnyIdAssets()
         if (cancelled) return
 
-        // Any-ID SDK의 success 콜백에서 호출될 어댑터 객체를 전역으로 노출
-        window.anyidAdaptor = {
+        // Vue Login.vue 참조: anyidAdaptor(target.sso).success(data) 구조
+        // LOAD_MODULE의 success에서 호출될 어댑터(sso + success)를 전역 노출
+        const adaptor = {
+          sso: ssoInfo ?? undefined,
           success: async (data: any) => {
             try {
-              // Any-ID 샘플(orgLogin.jsp)과 동일하게 ssob/tag(tx) 전송
+
+              console.log("anyidAdaptor.success tx="+tx);
+              console.log("anyidAdaptor.success ssob=", data?.ssob);
+
+              /*
+               * Any-ID(정부24 통합인증) 인증이 끝난 뒤, 우리 서버에 인증 결과를 넘겨서 “우리 포털 로그인(세션 생성)”을 하는 API
+               * 콜백에서 받은 ssob(암호화된 인증 결과)와 tag(tx 등)를 서버로 보냅니다.
+               * ssob를 검증/복호화해서 사용자 정보(CI, 이름 등)를 꺼냅니다.
+               * 그 정보로 Spring Security 세션을 만들고, 응답에 JSESSIONID 쿠키를 담아 내려줍니다.
+               * navigate(redirectUri) 로 이동하고, 이후 요청부터 JSESSIONID로 로그인된 상태로 서버를 사용합니다.
+               */
               await https.post('/auth/anyid/login', {
                 ssob: data?.ssob,
                 tag: tx,
@@ -96,13 +113,19 @@ export default function LoginMethod() {
             }
           },
         }
+        window.anyidAdaptor = adaptor as typeof window.anyidAdaptor
 
-        // AnyidC 전역 객체가 로드될 때까지 대기
-        const checkAnyIdC = () => {
+        // AnyidC 전역 객체가 로드될 때까지 대기 후 apiInit 이관 (서버에서 tx 기준 초기화 설정 조회)
+        const checkAnyIdC = async () => {
           if (window.AnyidC?.LOAD_MODULE) {
-            setAnyIdReady(true)
+            try {
+              await dispatch(getAnyIdInit({ tx })).unwrap()
+            } catch (e) {
+              console.error('getAnyIdInit (apiInit) error', e)
+            }
+            if (!cancelled) setAnyIdReady(true)
           } else {
-            setTimeout(checkAnyIdC, 100)
+            setTimeout(() => checkAnyIdC(), 100)
           }
         }
         checkAnyIdC()
@@ -114,7 +137,35 @@ export default function LoginMethod() {
     return () => {
       cancelled = true
     }
-  }, [navigate, redirectUri, tx])
+  }, [navigate, redirectUri, tx, dispatch, ssoInfo])
+
+  // 화면 로딩 시 #anyidc에 Any-ID SDK 렌더링 (Vue처럼 LOAD_MODULE 1회 호출)
+  const loadModuleCalledRef = useRef(false)
+  useEffect(() => {
+    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE || loadModuleCalledRef.current) return
+    loadModuleCalledRef.current = true
+    const successCb = (data: any) => window.anyidAdaptor?.success?.(data)
+    const failCb = (err: any) => console.error(err)
+    const logCb = (data: any) => console.log(data)
+    window.AnyidC.LOAD_MODULE(Object.assign(
+      {
+        contextRoot: location.pathname,
+        success: successCb,
+        fail: failCb,
+        log: logCb,
+        redirect_uri: redirectUri,
+        cfg: anyidInit?.cfg ?? '/anyid/config/config.anyidc.json',
+        txId: anyidInit?.txId ?? tx,
+        tag: anyidInit?.tag ?? tx,
+        lvl: anyidInit?.lvl ?? acrValues,
+        bypass: anyidInit?.bypass ?? 1,
+        toggle: anyidInit?.toggle ?? true,
+        theme: anyidInit?.theme ?? '4.1.0',
+      },
+      anyidInit || {},
+      { success: successCb, fail: failCb, log: logCb }
+    ))
+  }, [anyIdReady, location.pathname, redirectUri, tx, acrValues, anyidInit])
 
   const handleUserReg = () => {
     const width = 800
@@ -142,37 +193,12 @@ export default function LoginMethod() {
 
   const handleLoginMethod = async (method: string) => {
     if (method === 'simple') {
-      // 간편인증: 정부24와 동일하게 Any-ID SDK 다이얼로그 띄우기
+      // Any-ID SDK는 화면 로딩 시 이미 #anyidc에 렌더링됨. 준비 안 됐을 때만 안내.
       if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
         console.error('Any-ID 모듈이 준비되지 않았습니다.')
         return
       }
-
-      // public 폴더 기준 상대 경로 사용
-      // public/anyid/config/config.anyidc.json -> /anyid/config/config.anyidc.json
-      const configAnyidcJsonUrl = '/anyid/config/config.anyidc.json'
-
-      // 정부24와 동일한 방식으로 간편인증 다이얼로그 표시
-      window.AnyidC.LOAD_MODULE({
-        cfg: configAnyidcJsonUrl,
-        txId: tx,
-        tag: tx,
-        lvl: acrValues,
-        // SSO 연동이 없는 "이용기관 자체 로그인" 흐름: bypass=1
-        bypass: 1,
-        toggle: true,
-        theme: '4.1.0',
-        redirect_uri: redirectUri,
-        success: function (data) {
-          window.anyidAdaptor?.success?.(data)
-        },
-        fail: function (err) {
-          console.error(err)
-        },
-        log: function (data) {
-          console.log(data)
-        },
-      })
+      // 이미 LOAD_MODULE로 렌더링된 #anyidc 영역으로 스크롤 등 필요 시 처리
     } else if (method === 'sms') {
       // 휴대폰 SMS 인증 처리
       console.log('휴대폰 SMS 인증:', method)
