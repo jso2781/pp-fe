@@ -3,9 +3,17 @@
  * 화면명: 로그인 방식 선택
  * 화면경로: /ko/auth/LoginMethod
  * 화면설명: 로그인 방식 선택 화면
+ *
+ * [인증 흐름]
+ * 1. tx 파라미터 없이 진입 시 → /oidc/auth 로 리다이렉트 (KMS tx 발급)
+ * 2. SSO 완료 → /loginPage?tx=KMS발급값 → 이 페이지로 돌아옴
+ * 3. tx 있으면 → /api/pp/auth/anyid/init 호출 (bypass=0 응답)
+ * 4. AnyidC.LOAD_MODULE({ bypass: 0, txId: KMS발급tx })
+ * 5. extractInfo → success 콜백 (ssob 포함)
+ * 6. /api/pp/auth/anyid/login (ssob + tx) → 세션 생성 → 이동
  */
 import React, { useState, useEffect, useMemo, useRef } from 'react'
-import { Box, Button, Card, CardContent, Link, Stack, Switch, Typography, IconButton, Tooltip } from '@mui/material'
+import { Box, Button, Card, CardContent, Link, Stack, Typography, IconButton, Tooltip } from '@mui/material'
 import { Switch as BaseSwitch } from '@base-ui/react';
 import {
   PhoneAndroid as PhoneIcon,
@@ -18,11 +26,8 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { getAnyIdInit } from '@/features/auth/AnyIdThunks'
 import https from '@/api/axiosInstance'
 import DepsLocation from '@/components/common/DepsLocation'
-import i18n from '@/i18n/i18n';
-import { v4 as uuidv4 } from 'uuid';
 
 function ensureAnyIdAssets() {
-  // Vite base path (dev: '/', prod: '/' 또는 '/pp/') 반영해 public 자원 경로 생성
   const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
 
   const ensureLink = (href: string) => {
@@ -44,10 +49,8 @@ function ensureAnyIdAssets() {
       document.body.appendChild(s)
     })
 
-  // public 폴더 기준: base 반영 (public/anyid/... -> {base}anyid/...)
   ensureLink(`${baseNorm}css/app.css`)
 
-  // manifest -> vendor -> app 순서 권장
   return loadScript(`${baseNorm}js/manifest.js`)
     .then(() => loadScript(`${baseNorm}js/vendor.js`))
     .then(() => loadScript(`${baseNorm}js/app.js`))
@@ -64,10 +67,9 @@ export default function LoginMethod() {
 
   const params = useMemo(() => new URLSearchParams(location.search), [location.search])
 
-  const tx = useMemo(() => {
-    // SSO를 쓰는 구조라면 SSO 모듈이 txId를 내려줌(가이드). 없으면 로컬에서 생성.
-    return params.get('tx') || uuidv4();
-  }, [params])
+  // tx는 반드시 /oidc/auth → KMS에서 발급된 값이어야 함
+  // uuidv4() 자동생성 제거 → 없으면 null
+  const tx = useMemo(() => params.get('tx') || null, [params])
 
   const acrValues = useMemo(() => {
     const v = params.get('acrValues')
@@ -75,10 +77,18 @@ export default function LoginMethod() {
     return Number.isFinite(n) ? n : 3
   }, [params])
 
-  const redirectUri = useMemo(() => params.get('redirect_uri') || '/', [params])
+  const redirectUri = useMemo(() => params.get('redirect_uri') || '/pp/ko', [params])
 
-  // 화면 로딩과 함께 Any-ID 자원 로드 및 SDK 초기화 (마운트 시 1회 자동 실행)
   useEffect(() => {
+    // tx 없으면 /oidc/auth 로 이동하여 KMS tx 발급
+    if (!tx) {
+      const currentPath = location.pathname + (location.search || '')
+      const endPoint = encodeURIComponent(currentPath.replace(/^\/pp/, '') || '/ko/auth/LoginMethod')
+      console.log('[AnyID] tx 없음 → /oidc/auth 이동, end_point:', endPoint)
+      window.location.href = `/oidc/auth?end_point=${endPoint}`
+      return
+    }
+
     let cancelled = false
 
     ;(async () => {
@@ -86,42 +96,43 @@ export default function LoginMethod() {
         await ensureAnyIdAssets()
         if (cancelled) return
 
-        // Vue Login.vue 참조: anyidAdaptor(target.sso).success(data) 구조
-        // LOAD_MODULE의 success에서 호출될 어댑터(sso + success)를 전역 노출
         const adaptor = {
           sso: ssoInfo ?? undefined,
           success: async (data: any) => {
             try {
+              console.log('[AnyID] success callback data:', data)
+              console.log('[AnyID] tag(tx):', tx)
 
-              console.log("anyidAdaptor.success tx="+tx);
-              console.log("anyidAdaptor.success ssob=", data?.ssob);
-
-              /*
-               * Any-ID(정부24 통합인증) 인증이 끝난 뒤, 우리 서버에 인증 결과를 넘겨서 “우리 포털 로그인(세션 생성)”을 하는 API
-               * 콜백에서 받은 ssob(암호화된 인증 결과)와 tag(tx 등)를 서버로 보냅니다.
-               * ssob를 검증/복호화해서 사용자 정보(CI, 이름 등)를 꺼냅니다.
-               * 그 정보로 Spring Security 세션을 만들고, 응답에 JSESSIONID 쿠키를 담아 내려줍니다.
-               * navigate(redirectUri) 로 이동하고, 이후 요청부터 JSESSIONID로 로그인된 상태로 서버를 사용합니다.
-               */
-              await https.post('/auth/anyid/login', {
+              const res = await https.post('/auth/anyid/login', {
                 ssob: data?.ssob,
                 tag: tx,
               })
+
+              console.log('[AnyID] login response:', res.data)
+
+              // 실패 시 alert
+              const result = res.data?.data?.result
+              if (result?.status === 'fail' || res.data?.code !== 0) {
+                console.error('[AnyID] login failed:', res.data)
+                alert('인증에 실패했습니다. 다시 시도해주세요.')
+                return
+              }
+
               navigate(redirectUri, { replace: true })
             } catch (e) {
-              console.error(e)
+              console.error('[AnyID] login error:', e)
+              alert('로그인 처리 중 오류가 발생했습니다.')
             }
           },
         }
         window.anyidAdaptor = adaptor as typeof window.anyidAdaptor
 
-        // AnyidC 전역 객체가 로드될 때까지 대기 후 apiInit 이관 (서버에서 tx 기준 초기화 설정 조회)
         const checkAnyIdC = async () => {
           if (window.AnyidC?.LOAD_MODULE) {
             try {
               await dispatch(getAnyIdInit({ tx })).unwrap()
             } catch (e) {
-              console.error('getAnyIdInit (apiInit) error', e)
+              console.error('[AnyID] getAnyIdInit error', e)
             }
             if (!cancelled) setAnyIdReady(true)
           } else {
@@ -130,23 +141,29 @@ export default function LoginMethod() {
         }
         checkAnyIdC()
       } catch (e) {
-        console.error(e)
+        console.error('[AnyID] SDK load error:', e)
       }
     })()
 
     return () => {
       cancelled = true
     }
-  }, [navigate, redirectUri, tx, dispatch, ssoInfo])
+  }, [navigate, redirectUri, tx, dispatch, ssoInfo, location])
 
-  // 화면 로딩 시 #anyidc에 Any-ID SDK 렌더링 (Vue처럼 LOAD_MODULE 1회 호출)
+  // LOAD_MODULE 1회 호출 (bypass=0, KMS tx 사용)
   const loadModuleCalledRef = useRef(false)
   useEffect(() => {
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE || loadModuleCalledRef.current) return
+    if (!tx) return  // tx 없으면 호출하지 않음
+
     loadModuleCalledRef.current = true
+
     const successCb = (data: any) => window.anyidAdaptor?.success?.(data)
-    const failCb = (err: any) => console.error(err)
-    const logCb = (data: any) => console.log(data)
+    const failCb = (err: any) => console.error('[AnyID] fail:', err)
+    const logCb = (data: any) => console.log('[AnyID] log:', data)
+
+    console.log('[AnyID] LOAD_MODULE 호출, txId:', anyidInit?.txId ?? tx, 'bypass:', anyidInit?.bypass ?? 0)
+
     window.AnyidC.LOAD_MODULE(Object.assign(
       {
         contextRoot: location.pathname,
@@ -158,9 +175,9 @@ export default function LoginMethod() {
         txId: anyidInit?.txId ?? tx,
         tag: anyidInit?.tag ?? tx,
         lvl: anyidInit?.lvl ?? acrValues,
-        bypass: anyidInit?.bypass ?? 1,
+        bypass: anyidInit?.bypass ?? 0,   // 기본값 0 (SSO 모드, 1→0 수정)
         toggle: anyidInit?.toggle ?? true,
-        theme: anyidInit?.theme ?? '4.1.0',
+        theme: anyidInit?.theme ?? '4.2.2',
       },
       anyidInit || {},
       { success: successCb, fail: failCb, log: logCb }
@@ -193,20 +210,14 @@ export default function LoginMethod() {
 
   const handleLoginMethod = async (method: string) => {
     if (method === 'simple') {
-      // Any-ID SDK는 화면 로딩 시 이미 #anyidc에 렌더링됨. 준비 안 됐을 때만 안내.
       if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
-        console.error('Any-ID 모듈이 준비되지 않았습니다.')
+        console.error('[AnyID] 모듈이 준비되지 않았습니다.')
         return
       }
-      // 이미 LOAD_MODULE로 렌더링된 #anyidc 영역으로 스크롤 등 필요 시 처리
     } else if (method === 'sms') {
-      // 휴대폰 SMS 인증 처리
       console.log('휴대폰 SMS 인증:', method)
-      // TODO: 실제 SMS 인증 처리 로직 구현
     } else if (method === 'mobileId') {
-      // 모바일 신분증 인증 처리
       console.log('모바일 신분증 인증:', method)
-      // TODO: 실제 모바일 신분증 인증 처리 로직 구현
     }
   }
 
@@ -223,7 +234,7 @@ export default function LoginMethod() {
                 {/* --- 본문 시작 --- */}
 
                 <Box className="page-content__anyid">
-                  {/* Any-ID SDK가 렌더링될 영역 (정부24와 동일) */}
+                  {/* Any-ID SDK가 렌더링될 영역 */}
                   <div id="anyidc" className="anyidc" />
 
                   <Typography variant="h3" className="login-title">
@@ -281,7 +292,6 @@ export default function LoginMethod() {
                         </CardContent>
                       </Card>
 
-
                       {/* 로그인 방식 선택 */}
                       <Card className="login-method-card">
                         <CardContent className="login-method-card-content">
@@ -295,7 +305,7 @@ export default function LoginMethod() {
                                 </Typography>
                               </Stack>
                             </Button>
-                            
+
                             {/* <Button variant="outlined" onClick={() => handleLoginMethod('sms')} className="login-button">
                               <Stack spacing={1} alignItems="center" className="login-button-stack">
                                 <PhoneIcon className="login-icon" />
@@ -344,8 +354,8 @@ export default function LoginMethod() {
                     </Box>
                   </Box>
                 </Box>
-      
-              {/* --- 본문 끝 --- */}
+
+                {/* --- 본문 끝 --- */}
               </Box>
             </Box>
           </Box>
