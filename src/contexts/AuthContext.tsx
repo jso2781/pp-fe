@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo, useCallback, useRef, ReactNode } from 'react'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { logout } from '@/features/auth/AuthThunks'
-import { redirectToSsoLogout } from '@/features/auth/ssoLoginPage'
+import { redirectToSsoLogout } from '@/features/auth/SsoLoginPage'
 import { RootState } from '@/store/store'
 import { AuthState } from '@/features/auth/AuthSlice'
 import { MenuState } from '@/features/auth/MenuSlice'
