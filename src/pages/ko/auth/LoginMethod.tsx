@@ -81,9 +81,11 @@ export default function LoginMethod() {
 
   useEffect(() => {
     // tx 없으면 /oidc/auth 로 이동하여 KMS tx 발급
+    // end_point: SSO 완료 후 loginPage → AnyIdLoginPageController → 이 페이지로 돌아올 경로
+    // /pp prefix 제거하지 않고 그대로 사용 (ex: /pp/ko/auth/LoginMethod)
     if (!tx) {
-      const currentPath = location.pathname + (location.search || '')
-      const endPoint = encodeURIComponent(currentPath.replace(/^\/pp/, '') || '/ko/auth/LoginMethod')
+      const currentPath = location.pathname || '/pp/ko/auth/LoginMethod'
+      const endPoint = encodeURIComponent(currentPath)
       console.log('[AnyID] tx 없음 → /oidc/auth 이동, end_point:', endPoint)
       window.location.href = `/oidc/auth?end_point=${endPoint}`
       return
