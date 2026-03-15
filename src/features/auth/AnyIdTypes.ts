@@ -30,6 +30,12 @@ export interface AnyIdLoginPVO {
   ci?: string
 }
 
+/** Any-ID 로그인 응답 결과 (POST /auth/anyid/login) */
+export interface AnyIdLoginRVO {
+  status?: string
+  ci?: string
+}
+
 /** Any-ID 사용자 정보 조회 결과 */
 export interface AnyIdUserInfoRVO {
   anyid?: Map<String, Object>         /* Any-ID 세션 정보 */

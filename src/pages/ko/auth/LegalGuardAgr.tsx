@@ -70,6 +70,13 @@ export default function LegalGuardAgr() {
   const currentStep = 2;
   const { lang } = useParams<{ lang: string }>();
 
+  /*
+   * 로그인 Any-ID 본인인증 응답 결과로 법정대리인 동의 화면에 이동된 경우 전달받은 ci 파라미터 가져옴.
+   * (=Any-ID 본인인증은 통과되었으나, 회원정보가 없는 경우 가입절차가 진행됨.)
+   */
+  const ci = location.state?.ci as string;
+  console.log('LegalGuardAgr ci=', ci);
+  
   // sessionStorage에서 저장된 formData 불러오기
   const getStoredFormData = (): LegalGuardFormData | null => {
     try {
@@ -365,12 +372,12 @@ export default function LegalGuardAgr() {
     }
 
     // 다음 단계로 이동 (본인인증 페이지)
-    navigate('/pp/ko/auth/CertifySelf', { state: { steps, "legalGuardFormData": formData } });
+    navigate('/pp/ko/auth/CertifySelf', { state: { steps, "legalGuardFormData": formData, ci } });
   }
 
   // 취소하기 버튼 클릭 핸들러 (만 14세 미만 회원가입 약관동의 페이지로 이동)
   const handleCancel = () => {
-    navigate('/pp/ko/auth/JuniorSignUpAgrTrms', { state: { steps, cancelled: true } });
+    navigate('/pp/ko/auth/JuniorSignUpAgrTrms', { state: { steps, cancelled: true, ci } });
   }
 
   // 다음단계 버튼 활성화 조건

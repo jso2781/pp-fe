@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectTrmsListForSignUp } from '@/features/stt/TrmsSttThunks'
 import type { TrmsSttRVO } from '@/features/stt/TrmsSttTypes'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
-
+ 
 // --- 약관 상세 컨텐츠 (모달 내부에 들어갈 내용) ---
 interface TermsDetailProps {
   list: TrmsSttRVO[];
@@ -67,6 +67,14 @@ export default function SignUpAgrTrms() {
   const dispatch = useAppDispatch();
   const { list, totalCount, loading, error } = useAppSelector((state) => state.stt);
   const hasFetchedRef = useRef(false); // 한 번만 호출되도록 보장하는 ref
+
+  /*
+   * 로그인 Any-ID 본인인증 응답 결과로 약관 동의 화면에 이동된 경우 전달받은 ci 파라미터 가져옴.
+   * (=Any-ID 본인인증은 통과되었으나, 회원정보가 없는 경우 가입절차가 진행됨.)
+   */
+  const ci = location.state?.ci as string;
+  console.log('SignUpAgrTrms ci=', ci);
+ 
 
   useEffect(() => {
     // 화면 진입 시 한 번만 조회
@@ -168,10 +176,10 @@ export default function SignUpAgrTrms() {
     if (isRequiredAgreed) {
       if (isJunior) {
         // 만 14세 미만 가입: 법정 대리인 동의 단계로 이동 (steps 객체 전달)
-        navigate('/pp/ko/auth/LegalGuardAgr', { state: { steps } });
+        navigate('/pp/ko/auth/LegalGuardAgr', { state: { steps, ci } });
       } else {
         // 일반 가입: 본인 인증 단계로 이동 (steps 객체 전달)
-        navigate('/pp/ko/auth/CertifySelf', { state: { steps } });
+        navigate('/pp/ko/auth/CertifySelf', { state: { steps, ci } });
       }
     } else {
       // 필수 약관이 동의되지 않았으면 에러 팝업 표시
@@ -363,7 +371,7 @@ export default function SignUpAgrTrms() {
                       <Button 
                         variant="outlined02" 
                         size="large"
-                        onClick={() => navigate('/pp/ko/auth/SignUpSel')}
+                        onClick={() => navigate('/pp/ko/auth/SignUpSel', { state: { ci } })}
                       >
                         {t('cancel')}
                       </Button>

@@ -114,11 +114,18 @@ export default function LoginMethod() {
           const adaptor = {
             sso: ssoInfo ?? undefined,
             success: async (data: any) => {
-              try {
+              try{
                 const payload = await dispatch(postAnyIdLogin({ ssob: data?.ssob, tag: tx, ci: data?.res?.ci })).unwrap()
-                if (payload === 'LoggedIn') navigate('/pp/ko')
-                else if (payload === 'SignUpSel') navigate('/pp/ko/auth/SignUpSel')
-              } catch (e) {
+                if(payload.status === 'LoggedIn'){
+                  navigate('/pp/ko')
+                  return
+                }
+                // 회원가입 선택 페이지로 이동(ci 파라미터 전달)
+                else if(payload.status === 'SignUpSel'){
+                  navigate('/pp/ko/auth/SignUpSel', { state: { ci: payload.ci ?? '' } });
+                  return
+                }
+              }catch (e){
                 console.error('[AnyID] login error:', e)
                 alert('인증에 실패했습니다. 다시 시도해주세요.')
               }
