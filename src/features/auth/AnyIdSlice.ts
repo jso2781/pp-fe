@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { getSsoInfo, getAnyIdInit, postAnyIdLogin, getAnyIdUserInfo } from './AnyIdThunks'
-import { SsoInfoRVO, AnyIdInitRVO, AnyIdUserInfoRVO } from './AnyIdTypes'
+import { SsoInfoRVO, AnyIdInitRVO, AnyIdLoginRVO, AnyIdUserInfoRVO } from './AnyIdTypes'
 
 /**
  * SSO, ANY-ID 정보(Redux 저장 구조)
@@ -11,8 +11,8 @@ export interface AnyIdState {
   ssoInfo: SsoInfoRVO | null
   /** getAnyIdInit 결과 (persist 시 'anyidInit' 키로 저장) */
   anyidInit: AnyIdInitRVO | null
-  /** postAnyIdLogin 결과 (persist 시 'anyIdLoginResult' 키로 저장, string) */
-  anyIdLoginResult: string | null
+  /** postAnyIdLogin 결과 (persist 시 'anyIdLoginResult' 키로 저장) */
+  anyIdLoginResult: AnyIdLoginRVO | null
   /** getAnyIdUserInfo 결과 (persist 시 'anyIdUserInfo' 키로 저장) */
   anyIdUserInfo: AnyIdUserInfoRVO | null
   loading: boolean

@@ -122,7 +122,7 @@ export default function LoginMethod() {
                 }
                 // 회원가입 선택 페이지로 이동(ci 파라미터 전달)
                 else if(payload.status === 'SignUpSel'){
-                  navigate('/pp/ko/auth/SignUpSel', { state: { ci: payload.ci ?? '' } });
+                  navigate('/pp/ko/auth/SignUpSel', { state: { ci: payload?.ci ?? '' } });
                   return
                 }
               }catch (e){
