@@ -11,21 +11,20 @@
  * 4. AnyidC.LOAD_MODULE({ bypass: 0, txId: KMS발급tx })
  * 5. extractInfo → success 콜백 (ssob 포함)
  * 6. /api/pp/auth/anyid/login (ssob + tx) → 세션 생성 → 이동
+ *
+ * [로딩 개선]
+ * - tx 없음: 최소 UI("이동 중...")만 표시 후 리다이렉트
+ * - tx 있음: 스켈레톤 먼저 표시, 스크립트·init 병렬 수행 후 위젯 표시
  */
 import React, { useState, useEffect, useMemo, useRef } from 'react'
-import { Box, Button, Card, CardContent, Link, Stack, Typography, IconButton, Tooltip } from '@mui/material'
-import { Switch as BaseSwitch } from '@base-ui/react';
-import {
-  PhoneAndroid as PhoneIcon,
-  AccountCircle as AccountIcon,
-  Fingerprint as FingerprintIcon,
-  HelpOutline as HelpIcon,
-} from '@mui/icons-material'
+import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material'
+import { AccountCircle as AccountIcon } from '@mui/icons-material'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { getAnyIdInit, postAnyIdLogin } from '@/features/auth/AnyIdThunks'
-import https from '@/api/axiosInstance'
 import DepsLocation from '@/components/common/DepsLocation'
+
+type LoginPhase = 'redirecting' | 'preparing' | 'ready' | 'error'
 
 function ensureAnyIdAssets() {
   const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
@@ -62,13 +61,15 @@ export default function LoginMethod() {
   const dispatch = useAppDispatch()
   const ssoInfo = useAppSelector((s) => s.anyId.ssoInfo)
   const anyidInit = useAppSelector((s) => s.anyId.anyidInit)
-  const [useGovLogin, setUseGovLogin] = useState(false)
   const [anyIdReady, setAnyIdReady] = useState(false)
+  const [phase, setPhase] = useState<LoginPhase>(() => {
+    const p = new URLSearchParams(location.search)
+    return p.get('tx') ? 'preparing' : 'redirecting'
+  })
 
   const params = useMemo(() => new URLSearchParams(location.search), [location.search])
 
   // tx는 반드시 /oidc/auth → KMS에서 발급된 값이어야 함
-  // uuidv4() 자동생성 제거 → 없으면 null
   const tx = useMemo(() => params.get('tx') || null, [params])
 
   const acrValues = useMemo(() => {
@@ -79,73 +80,78 @@ export default function LoginMethod() {
 
   const redirectUri = useMemo(() => params.get('redirect_uri') || '/pp/ko', [params])
 
+  // tx 없음 → 최소 UI만 보여주고 즉시 리다이렉트 (전체 레이아웃 스킵)
   useEffect(() => {
-    // tx 없으면 /oidc/auth 로 이동하여 KMS tx 발급
-    // end_point: SSO 완료 후 loginPage → AnyIdLoginPageController → 이 페이지로 돌아올 경로
-    // /pp prefix 제거하지 않고 그대로 사용 (ex: /pp/ko/auth/LoginMethod)
     if (!tx) {
+      setPhase('redirecting')
       const currentPath = location.pathname || '/pp/ko/auth/LoginMethod'
       const endPoint = encodeURIComponent(currentPath)
-      console.log('[AnyID] tx 없음 → /oidc/auth 이동, end_point:', endPoint)
       window.location.href = `/oidc/auth?end_point=${endPoint}`
       return
     }
+  }, [tx, location.pathname])
+
+  // tx 있음 → 첫 페인트 후 스크립트·init 병렬 수행
+  useEffect(() => {
+    if (!tx) return
 
     let cancelled = false
 
-    ;(async () => {
-      try {
-        await ensureAnyIdAssets()
-        if (cancelled) return
-
-        const adaptor = {
-          sso: ssoInfo ?? undefined,
-          success: async (data: any) => {
-            try{
-              console.log('[AnyID] success callback data:', data);
-              console.log('[AnyID] tag(tx):', tx);
-
-              const payload = await dispatch(postAnyIdLogin({ ssob: data?.ssob, tag: tx, ci: data?.res?.ci })).unwrap() as AnyIdLoginRVO;
-
-              console.log('[AnyID] login payload:', payload);
-
-              // 실패 시 alert
-              if(payload === 'LoggedIn'){
-                navigate('/pp/ko');
-              }
-              else if(payload === 'SignUpSel'){
-                navigate('/pp/ko/auth/SignUpSel')
-              }
-            }catch (e){
-              console.error('[AnyID] login error:', e);
-              alert('인증에 실패했습니다. 다시 시도해주세요.')
-            }
-          },
-        }
-        window.anyidAdaptor = adaptor as typeof window.anyidAdaptor
-
-        const checkAnyIdC = async () => {
-          if (window.AnyidC?.LOAD_MODULE) {
-            try {
-              await dispatch(getAnyIdInit({ tx })).unwrap()
-            } catch (e) {
+    const run = () => {
+      ;(async () => {
+        try {
+          setPhase('preparing')
+          // 스크립트 로드와 init API 병렬로 처리해 대기 시간 단축
+          const [, initResult] = await Promise.all([
+            ensureAnyIdAssets(),
+            dispatch(getAnyIdInit({ tx })).unwrap().catch((e) => {
               console.error('[AnyID] getAnyIdInit error', e)
-            }
-            if (!cancelled) setAnyIdReady(true)
-          } else {
-            setTimeout(() => checkAnyIdC(), 100)
+              return null
+            }),
+          ])
+          if (cancelled) return
+
+          const adaptor = {
+            sso: ssoInfo ?? undefined,
+            success: async (data: any) => {
+              try {
+                const payload = await dispatch(postAnyIdLogin({ ssob: data?.ssob, tag: tx, ci: data?.res?.ci })).unwrap()
+                if (payload === 'LoggedIn') navigate('/pp/ko')
+                else if (payload === 'SignUpSel') navigate('/pp/ko/auth/SignUpSel')
+              } catch (e) {
+                console.error('[AnyID] login error:', e)
+                alert('인증에 실패했습니다. 다시 시도해주세요.')
+              }
+            },
           }
+          window.anyidAdaptor = adaptor as typeof window.anyidAdaptor
+
+          const checkAnyIdC = () => {
+            if (window.AnyidC?.LOAD_MODULE) {
+              if (!cancelled) {
+                setAnyIdReady(true)
+                setPhase('ready')
+              }
+            } else {
+              setTimeout(checkAnyIdC, 100)
+            }
+          }
+          checkAnyIdC()
+        } catch (e) {
+          console.error('[AnyID] SDK load error:', e)
+          if (!cancelled) setPhase('error')
         }
-        checkAnyIdC()
-      } catch (e) {
-        console.error('[AnyID] SDK load error:', e)
-      }
-    })()
+      })()
+    }
+
+    // 첫 페인트(스켈레톤) 후 작업 시작 → 체감 로딩 개선
+    const id = requestAnimationFrame(() => run())
 
     return () => {
       cancelled = true
+      cancelAnimationFrame(id)
     }
-  }, [navigate, redirectUri, tx, dispatch, ssoInfo, location])
+  }, [tx, navigate, dispatch, ssoInfo])
 
   // LOAD_MODULE 1회 호출 (bypass=0, KMS tx 사용)
   const loadModuleCalledRef = useRef(false)
@@ -181,151 +187,60 @@ export default function LoginMethod() {
     ))
   }, [anyIdReady, location.pathname, redirectUri, tx, acrValues, anyidInit])
 
-  const handleUserReg = () => {
-    const width = 800
-    const height = 900
-    const left = (window.screen.width - width) / 2
-    const top = (window.screen.height - height) / 2
-    window.open(
-      'https://ptl.anyid.go.kr/anyid/user/idv/itg/trms?srvcNo=5000000079&userSeCd=01',
-      'anyidUserReg',
-      `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,noopener,noreferrer`
+  // tx 없음: 리다이렉트 중에는 최소 UI만 표시 (전체 레이아웃·리소스 절약)
+  if (phase === 'redirecting') {
+    return (
+      <Box className="page-layout" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
+        <Typography variant="body1" color="text.secondary">
+          인증 페이지로 이동 중…
+        </Typography>
+      </Box>
     )
-  }
-
-  const handleUserMgmt = () => {
-    const width = 800
-    const height = 900
-    const left = (window.screen.width - width) / 2
-    const top = (window.screen.height - height) / 2
-    window.open(
-      'https://ptl.anyid.go.kr/anyid/user/idv/main',
-      'anyidUserMgmt',
-      `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,noopener,noreferrer`
-    )
-  }
-
-  const handleLoginMethod = async (method: string) => {
-    if (method === 'simple') {
-      if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
-        console.error('[AnyID] 모듈이 준비되지 않았습니다.')
-        return
-      }
-    } else if (method === 'sms') {
-      console.log('휴대폰 SMS 인증:', method)
-    } else if (method === 'mobileId') {
-      console.log('모바일 신분증 인증:', method)
-    }
   }
 
   return (
     <Box className="page-layout">
       <Box className="sub-container">
         <Box className="content-wrap">
-          {/* 서브 콘텐츠 영역 */}
           <Box className="sub-content">
-            {/* 상단 현재 위치 정보 */}
             <DepsLocation />
             <Box className="content-view" id="content">
               <Box className="page-content">
+
                 {/* --- 본문 시작 --- */}
-
                 <Box className="page-content__anyid">
-                  {/* Any-ID SDK가 렌더링될 영역 */}
-                  <div id="anyidc" className="anyidc" />
-
-                  <Typography variant="h3" className="login-title">
-                    로그인 방식을 선택해주세요.
-                  </Typography>
-
                   <Box className="login-card-area">
+
                     <Box className="login-card-area__left">
-                      <Card className="gov-login-card">
-                        <CardContent className="gov-login-card-content">
-                          <Stack spacing={2}>
-                            <Stack direction="row" spacing={0} alignItems="center">
-                              <Stack direction="row" spacing={0} alignItems="center">
-                                <Typography className="gov-login-label"> 정부 통합로그인 사용</Typography>
-                                <Tooltip
-                                  title="도글 ON 시 정부 통합 인증을 적용, 도글 OFF 시 정보 통합 인증을 미적용하고 1회성으로 본인인증 처리"
-                                  arrow
-                                >
-                                  <IconButton size="small" className="help-icon-button">
-                                    <HelpIcon className="help-icon" />
-                                  </IconButton>
-                                </Tooltip>
-                              </Stack>
-
-                              <Stack direction="row" alignItems="center" spacing={2} className="switch_group">
-                                <BaseSwitch.Root
-                                  className="base_switch_root"
-                                  checked={useGovLogin}
-                                  onCheckedChange={(checked) => setUseGovLogin(checked)}
-                                  aria-label="정부 로그인 사용 여부 설정"
-                                >
-                                  <BaseSwitch.Thumb className="base_switch_thumb" />
-                                </BaseSwitch.Root>
-                                <Typography component="p" className="switch_label">
-                                  {useGovLogin ? '사용 중' : '미사용'}
-                                </Typography>
-                              </Stack>
-                            </Stack>
-
-                            <Stack spacing={1}>
-                              <Typography variant="body2" className="user-reg-text">
-                                아직 정부 통합인증(Any-ID) 사용자가 아니신가요?{' '}
-                                <Link component="button" variant="body2" onClick={handleUserReg} className="link">
-                                  사용자 등록 &gt;
-                                </Link>
-                              </Typography>
-                              <Typography variant="body2" className="user-mgmt-text">
-                                정부 통합인증(Any-ID){' '}
-                                <Link component="button" variant="body2" onClick={handleUserMgmt} className="link">
-                                  사용자 관리 &gt;
-                                </Link>
-                              </Typography>
-                            </Stack>
-                          </Stack>
-                        </CardContent>
-                      </Card>
-
-                      {/* 로그인 방식 선택 */}
-                      <Card className="login-method-card">
-                        <CardContent className="login-method-card-content">
-                          <Box className="login-button-group">
-                            <Button variant="outlined" onClick={() => handleLoginMethod('simple')} className="login-button">
-                              <Stack spacing={1} alignItems="center" className="login-button-stack">
-                                <AccountIcon className="login-icon" />
-                                <Typography variant="body1" className="login-label">간편 인증</Typography>
-                                <Typography variant="caption" className="login-desc">
-                                  네이버, 카카오, 금융기관 등의 전자서명으로 로그인
-                                </Typography>
-                              </Stack>
-                            </Button>
-
-                            {/* <Button variant="outlined" onClick={() => handleLoginMethod('sms')} className="login-button">
-                              <Stack spacing={1} alignItems="center" className="login-button-stack">
-                                <PhoneIcon className="login-icon" />
-                                <Typography variant="body1" className="login-label">휴대폰 SMS 인증</Typography>
-                                <Typography variant="caption" className="login-desc">
-                                  본인 명의로 가입된 휴대폰 인증으로 로그인
-                                </Typography>
-                              </Stack>
-                            </Button> */}
-
-                            <Button variant="outlined" onClick={() => handleLoginMethod('mobileId')} className="login-button">
-                              <Stack spacing={1} alignItems="center" className="login-button-stack">
-                                <FingerprintIcon className="login-icon" />
-                                <Typography variant="body1" className="login-label">모바일 신분증 인증</Typography>
-                                <Typography variant="caption" className="login-desc">
-                                  스마트폰의 모바일 신분증 인증으로 로그인
-                                </Typography>
-                              </Stack>
-                            </Button>
-                          </Box>
-                        </CardContent>
-                      </Card>
+                      {phase === 'preparing' && (
+                        <Box
+                          id="anyidc"
+                          className="anyidc"
+                          sx={{
+                            minHeight: 280,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 1,
+                            p: 2,
+                          }}
+                        >
+                          <Box sx={{ height: 24, bgcolor: 'action.hover', borderRadius: 1, width: '60%' }} />
+                          <Box sx={{ height: 40, bgcolor: 'action.hover', borderRadius: 1 }} />
+                          <Box sx={{ height: 40, bgcolor: 'action.hover', borderRadius: 1 }} />
+                          <Box sx={{ height: 40, bgcolor: 'action.hover', borderRadius: 1 }} />
+                          <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
+                            로그인 준비 중…
+                          </Typography>
+                        </Box>
+                      )}
+                      {phase === 'ready' && <div id="anyidc" className="anyidc" />}
+                      {phase === 'error' && (
+                        <Box id="anyidc" className="anyidc" sx={{ minHeight: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <Typography color="error">로그인 도구를 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.</Typography>
+                        </Box>
+                      )}
                     </Box>
+
                     <Box className="login-card-area__right">
                       {/* KIDS 로그인 */}
                       <Card className="kids-login-card">
@@ -349,6 +264,7 @@ export default function LoginMethod() {
                         </CardContent>
                       </Card>
                     </Box>
+
                   </Box>
                 </Box>
 
