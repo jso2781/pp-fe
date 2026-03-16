@@ -129,7 +129,7 @@ export default function ExpertApprovalDetail() {
                   window.open(key, '_blank');
                 } else {
                   const dest = key.startsWith('/') ? key : `/${key}`;
-                  navigate(dest);
+                  window.location.assign(dest);
                 }
               }}
             />
