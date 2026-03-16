@@ -358,7 +358,6 @@ export default function Router() {
 
                 {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
                 <Route path="/pp/:lang/InternalServerError" element={<LangElement byLang={{ ko: <InternalServerErrorKo />, en: <InternalServerErrorKo /> }} />} />
-                <Route path="/pp/:lang/*" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundKo /> }} />} />
                 <Route path="/pp/:lang/NotFound" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundKo /> }} />} />
               </Route>
 
@@ -391,6 +390,7 @@ export default function Router() {
                 <Route path="/pp/en" element={<HomeEn />} />
               </Route>
 
+              <Route path="*" element={<Navigate to={`/pp/${detectBrowserLang()}/NotFound`} replace />} />
             </Routes>
           </GlobalErrorHandler>
         </BrowserRouter>
