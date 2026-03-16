@@ -18,6 +18,12 @@
 			}
 		}
 	],
+	"calloutBox": {
+		"urls": {
+			"userMng": "https://www.anyid.dev:1451/anyid/user/mngclsf"
+			, "userReg": "https://www.anyid.dev:1451/anyid/user/regclsf"
+		}
+	},
 	"organization": {
 		"srvcNo": "1000001067"
 	}

@@ -3,11 +3,11 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 // MUI 컴포넌트
-import { 
-  Box, Button, IconButton, Stack, Typography, Divider, 
-  Drawer, Link as MuiLink, Dialog, DialogActions, DialogContent, 
+import {
+  Box, Button, IconButton, Stack, Typography, Divider,
+  Drawer, Link as MuiLink, Dialog, DialogActions, DialogContent,
   DialogTitle,
-  useTheme, useMediaQuery 
+  useTheme, useMediaQuery
 } from '@mui/material';
 
 // MUI 아이콘
@@ -55,11 +55,11 @@ function SitemapItem({ item, onInternalNavigate }: { item: SitemapLinkItem; onIn
               {item.label}
             </MuiLink>
           ) : (
-            <MuiLink 
+            <MuiLink
               href={item.href}
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="sitemap-link" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sitemap-link"
               sx={{ color: 'inherit' }}
             >
               {item.label}
@@ -117,11 +117,11 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const [anchorEls, setAnchorEls] = useState<{ [key: string]: HTMLElement | null }>({})
   // 사이트맵 Drawer 상태 관리
   const [sitemapOpen, setSitemapOpen] = useState(false)
-  
+
   // Footer에서 'open-sitemap'이라는 신호를 보내면 실행됨
   useEffect(() => {
     const handleOpenSitemap = () => {
-      setSitemapOpen(true); 
+      setSitemapOpen(true);
     };
 
     window.addEventListener('open-sitemap', handleOpenSitemap);
@@ -132,7 +132,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
   // 서브메뉴 닫기 타임아웃 관리
   const closeTimeoutsRef = useRef<{ [key: string]: NodeJS.Timeout }>({})
-  
+
   // 세션 타이머 관리 (초 단위, 30분 = 1800초)
   const [sessionTime, setSessionTime] = useState<number>(1800);         // 타이머 초기값 30:00
   const [showSessionWarning, setShowSessionWarning] = useState(false);  // 세션 경고 팝업 상태 관리
@@ -140,14 +140,14 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const lastActivityRef = useRef<number>(Date.now());                   // 마지막 사용자 활동 시간(milliseconds)
   const isLoginExtendingRef = useRef<boolean>(false);                   // loginExtend 요청 진행 중 플래그
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);        // 디바운스 타이머
-  
+
   // 시간 포맷팅 함수 (초를 MM:SS로 변환)
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60)
     const secs = seconds % 60
     return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
-  
+
   // 타이머 리셋 함수
   const resetTimer = () => {
     // 로그인 연장 요청
@@ -196,17 +196,17 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
     if (e) {
       e.stopPropagation();
     }
-    
+
     // 디바운스 타이머가 있으면 취소 (handleUserActivity에서 설정된 타이머 취소, dispatch(loginExtend()) 요청 2번 실행 방지 )
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
       debounceTimerRef.current = null;
     }
-    
+
     // 즉시 resetTimer 실행
     resetTimer();
   }
-  
+
   // 사용자 활동 감지 함수 (디바운싱 적용)
   const handleUserActivity = () => {
     // 로그인 상태에서 활동 감지(event listener)되면, 활동 감지 시간을 지정함.(마지막 활동 시간 업데이트)
@@ -215,7 +215,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current);
       }
-      
+
       // 500ms 후에 resetTimer 호출 (디바운싱)
       // 짧은 시간 내 여러 이벤트가 발생해도 마지막 이벤트만 처리
       debounceTimerRef.current = setTimeout(() => {
@@ -225,7 +225,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
       }, 500);
     }
   }
-  
+
   // 로그인 상태가 변경될 때 타이머 초기화
   useEffect(() => {
     if (isAuthenticated) {
@@ -247,25 +247,25 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
       lastActivityRef.current = Date.now()
     }
   }, [isAuthenticated])
-  
+
   // 사용자 활동 이벤트 리스너 등록 (idle 상태 감지)
   useEffect(() => {
     if (!isAuthenticated) {
       return
     }
-    
+
     // 사용자 활동 이벤트 리스너(mousemove, scroll event는 제외외)
     const events = ['mousedown', 'keypress', 'touchstart', 'click']
-    
+
     const activityHandler = () => {
       handleUserActivity()
     }
-    
+
     // 이벤트 리스너 등록
     events.forEach((event) => {
       document.addEventListener(event, activityHandler, true)
     })
-    
+
     // 컴포넌트 언마운트 시 이벤트 리스너 제거 및 디바운스 타이머 정리
     return () => {
       events.forEach((event) => {
@@ -278,23 +278,23 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
       }
     }
   }, [isAuthenticated])
-  
+
   // 타이머 실행 (로그인 상태일 때만, idle 상태 감지)
   useEffect(() => {
     if (!isAuthenticated) {
       return
     }
-    
+
     // 기존 타이머 정리
     if (timerIntervalRef.current) {
       clearInterval(timerIntervalRef.current)
     }
-    
+
     // 1초마다 타이머 감소 및 idle 상태 체크
     timerIntervalRef.current = setInterval(() => {
       const now = Date.now();
       const idleTime = Math.floor((now - lastActivityRef.current) / 1000); // 초 단위 idle 시간
-      
+
       setSessionTime((prev) => {
         // idle 시간이 30분(1800초) 이상이면 자동 로그아웃
         if (idleTime >= 1800) {
@@ -308,10 +308,10 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           navigate(`/pp/${currentLang}`, { replace: true });
           return 0;
         }
-        
+
         // idle 시간을 타이머에 반영 (마지막 활동 후 경과 시간)
         const newTime = 1800 - idleTime;
-        
+
         // 0초 이하가 되면 자동 로그아웃
         if (newTime <= 0) {
           if (timerIntervalRef.current) {
@@ -324,11 +324,11 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           navigate(`/pp/${currentLang}`, { replace: true });
           return 0;
         }
-        
+
         return newTime;
       })
     }, 1000)
-    
+
     // 컴포넌트 언마운트 시 타이머 정리
     return () => {
       if (timerIntervalRef.current) {
@@ -337,7 +337,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
       }
     }
   }, [isAuthenticated, navigate, logoutContext, location.pathname])
-  
+
   // 5분(300초) 남았을 때 경고 팝업 표시 (한 번만)
   useEffect(() => {
     if (isAuthenticated && sessionTime === 300 && !showSessionWarning) {
@@ -405,7 +405,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   };
 
   // =======================================
-  // 모바일 GNB 
+  // 모바일 GNB
   // =======================================
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openMobileSub, setOpenMobileSub] = useState<number | null>(0);
@@ -432,12 +432,12 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
   const handleDepth2Click = (idx: number) => {
     setOpenMobileDepth3(openMobileDepth3 === idx ? null : idx);
   };
-  
-  
+
+
   return (
     <>
       <SkipNavigation />
-      
+
       <Box component="header" className="header">
         {/* 정부 배지 영역 */}
         <Box className="gov-badge">
@@ -495,7 +495,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                       {t('advTask')} {/* 자문위원 업무 */}
                     </Button>
                   ) : (
-                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/expert/ExpertApproval`))} className="btn-util user-adv">
+                    <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/advice/MbcmtApply`))} className="btn-util user-adv">
                       {t('advAppReg')} {/* 자문위원신청 */}
                     </Button>
                   )}
@@ -561,7 +561,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
               <Button
                 aria-label="모바일메뉴 열기"
                 onClick={() => setMobileMenuOpen(true)}
-                className="btn-mo-menu" 
+                className="btn-mo-menu"
               >
                 전체메뉴
               </Button>
@@ -571,9 +571,9 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
         {/* 웹 상단 메뉴(GNB) */}
         <Box className="navigation" aria-label="주요 메뉴">
-          <nav 
-            className="gnb-wrapper" 
-            onMouseLeave={closeAll} 
+          <nav
+            className="gnb-wrapper"
+            onMouseLeave={closeAll}
             onBlur={handleBlur} // 키보드 포커스가 메뉴를 완전히 벗어나면 닫힘
           >
             <div className="gnb-container">
@@ -608,7 +608,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                   {menu2.depth3.map((menu3: any, idx3: number) => {
                                     const isObj = typeof menu3 === 'object' && menu3 !== null;
                                     const isNewWindow = isObj && menu3.isNewWindow;
-                                    
+
                                     return (
                                       <li key={idx3}>
                                         <Link
@@ -645,7 +645,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     )}
                   </li>
                 ))}
-              </ul> 
+              </ul>
               {/* 사이트맵열기버튼 */}
               <Box className="sitemap-open-btn">
                 <IconButton aria-label="사이트맵 열기" onClick={() => setSitemapOpen(true)} edge="end" sx={{ ml: 1 }}>
@@ -672,7 +672,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             backgroundColor: '#fff',
             boxSizing: 'border-box',
           },
-          display: { xs: 'block', lg: 'none' } 
+          display: { xs: 'block', lg: 'none' }
         }}
       >
         {/* 상단 헤더 - 링크/버튼 클릭 시 Drawer 닫기 */}
@@ -716,7 +716,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     {t('advTask')} {/* 자문위원 업무 */}
                   </Button>
                 ) : (
-                  <Button size="small" onClick={() => { navigate(to(`/pp/${i18nInstance.language}/expert/ExpertApproval`)); setMobileMenuOpen(false); }} className="btn-util user-adv">
+                  <Button size="small" onClick={() => { navigate(to(`/pp/${i18nInstance.language}/advice/MbcmtApply`)); setMobileMenuOpen(false); }} className="btn-util user-adv">
                     {t('advAppReg')} {/* 자문위원신청 */}
                   </Button>
                 )}
@@ -756,11 +756,11 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           <ul className="mobile-depth1-area">
             {gnbList.map((menu1, idx1) => (
               <li key={idx1} className={`depth1-item ${openMobileSub === idx1 ? 'active' : ''}`}>
-                <Link 
+                <Link
                   to="#"
                   className="depth1-btn"
                   onClick={(e) => {
-                    e.preventDefault(); 
+                    e.preventDefault();
                     handleMobileMenuClick(idx1);
                   }}
                 >
@@ -774,8 +774,8 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                         const hasDepth3 = menu2.depth3 && menu2.depth3.length > 0;
                         return (
                           <li key={idx2} className="depth2-item">
-                            <Link 
-                              to={hasDepth3 ? "#" : (menu2.url || "/")} 
+                            <Link
+                              to={hasDepth3 ? "#" : (menu2.url || "/")}
                               className={`depth2-btn ${openMobileDepth3 === idx2 ? 'active' : ''}`}
                               onClick={(e) => {
                                 if (hasDepth3) {
@@ -796,26 +796,26 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                 {menu2.depth3.map((menu3: any, idx3: number) => {
                                   const isObj = typeof menu3 === 'object' && menu3 !== null;
                                   const isNewWindow = isObj && menu3.isNewWindow; // 새창 여부 확인
-                                  
+
                                   return (
                                     <li key={idx3} className="depth3-item">
-                                      <Link 
-                                        to={isObj ? menu3.url : "#"} 
+                                      <Link
+                                        to={isObj ? menu3.url : "#"}
                                         className={`depth3-btn ${isNewWindow ? "ico-new" : ""}`}
                                         target={isNewWindow ? "_blank" : "_self"}
                                         rel={isNewWindow ? "noopener noreferrer" : undefined}
-                                        onClick={() => !isNewWindow && setMobileMenuOpen(false)} 
+                                        onClick={() => !isNewWindow && setMobileMenuOpen(false)}
                                       >
                                         {isObj ? menu3.name : menu3}
                                         {/* 새창 열기 아이콘 */}
                                         {isNewWindow && (
-                                          <OpenInNew 
-                                            sx={{ 
-                                              fontSize: '16px', 
+                                          <OpenInNew
+                                            sx={{
+                                              fontSize: '16px',
                                               marginLeft: '4px',
                                               verticalAlign: 'middle',
-                                              color: 'inherit' 
-                                            }} 
+                                              color: 'inherit'
+                                            }}
                                           />
                                         )}
                                       </Link>
@@ -835,7 +835,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           </ul>
         </div>
       </Drawer>
-     
+
       {/* 사이트맵 Drawer */}
       <Drawer
         anchor="top"
@@ -846,7 +846,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           sx: {
             height: '82vh',
             maxHeight: '82vh',
-            
+
           },
         }}
       >
@@ -956,8 +956,8 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         </DialogContent>
 
         <DialogActions className="modal-footer">
-          <Button 
-            variant="outlined" 
+          <Button
+            variant="outlined"
             onClick={() => {
               logoutContext()
               setShowSessionWarning(false)
@@ -966,8 +966,8 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           >
             {t('logout')}
           </Button>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             onClick={(e) => {
               handleResetTimerClick(e)
               setShowSessionWarning(false)

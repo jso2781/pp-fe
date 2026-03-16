@@ -1,570 +1,209 @@
 /**
- * 화면ID: KIDS-PP-US-JM-09
- * 화면명: 회원정보 수정
- * 화면경로: /ko/auth/EditProfile
- * 화면설명: 회원정보 수정 화면 (KIDS-PP-US-JM-09.pdf 반영)
+ * 화면ID: -
+ * 화면명: 자문위원 전환신청
+ * 화면경로: /ko/advice/MbcmtApply
+ * 화면설명: 자문위원 전환신청 화면 (자격여부 확인 후 신청)
  */
-import { useTranslation } from 'react-i18next';
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Typography, TextField, Stack } from '@mui/material';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import DepsLocation from '@/components/common/DepsLocation';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { existMbrInfo, updateMbrInfo } from '@/features/mbr/MbrInfoThunks';
-import { MbrInfoPVO, MbrInfoRVO, UpdateMbrInfoRVO } from '@/features/mbr/MbrInfoTypes';
-import { setAuthUserInfo } from '@/features/auth/AuthSlice';
-import { useDialog } from '@/contexts/DialogContext';
-
-
-/**
- * PostgreSQL timestamp without time zone 컬럼에 맞는 형식으로 반환.
- * - toISOString()('2026-01-19T14:28:43.646Z')은 DB에서 varchar로 인식되어 타입 오류 유발.
- * - 'yyyy-MM-dd HH:mm:ss' 형식은 timestamp로 암시 변환 가능.
- */
-const toTimestampString = (): string => new Date().toISOString().slice(0, 19).replace('T', ' ');
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Box, Typography, TextField, CircularProgress, Backdrop } from '@mui/material'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
+import DepsLocation from '@/components/common/DepsLocation'
+import { useDialog } from '@/contexts/DialogContext'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { exprtAplyChk, updateExprtAprvStts } from '@/features/advice/MbcmtApplyThunks'
+import { resetMbcmtApply } from '@/features/advice/MbcmtApplySlice'
 
 export default function MbcmtApply() {
-  const { lang } = useParams<{ lang: string }>();
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { showAlert } = useDialog();
-  // Redux에서 사용자 정보 가져오기
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const { showAlertBackdrop } = useDialog()
+  const { loading } = useAppSelector((state) => state.mbcmtApply)
+
+  const [qualified, setQualified] = useState<boolean | null>(null)
+  const [isApplying, setIsApplying] = useState(false)
+
   const userInfo = useAppSelector((state) => state.auth.userInfo);
 
-  // 폼 상태 관리
-  const [formData, setFormData] = useState({
-    mbrId: userInfo?.mbrId || '',
-    userName: userInfo?.encptMbrFlnm || '', // 암호화된 이름 (평문으로 표시 불가, 실제로는 복호화 필요)
-    phone: userInfo?.encptMbrTelno || '', // 암호화된 전화번호 (평문으로 표시 불가, 실제로는 복호화 필요)
-    email: userInfo?.encptMbrEmlNm || '', // 암호화된 이메일 (평문으로 표시 불가, 실제로는 복호화 필요)
-    password: '',
-    confirmPassword: '',
-  });
+  const name = userInfo?.encptMbrFlnm;
+  const phone = userInfo?.encptMbrTelno?.replace(/-/g, '');
+  const mbrNo = userInfo?.mbrNo;
 
-  // 상태 관리
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [successMessages, setSuccessMessages] = useState<Record<string, string>>({});
-  const [isEmailChecked, setIsEmailChecked] = useState(false);
-  const [emailAvailable, setEmailAvailable] = useState(false);
-  const [isPasswordChangeMode, setIsPasswordChangeMode] = useState(false);
-  const [isPhoneCertified, setIsPhoneCertified] = useState(false);
-  const [anyIdReady, setAnyIdReady] = useState(false);
-  const hasFetchedRef = useRef(false);  // Any-ID 스크립트 로드 확인
-  useEffect(() => {
-    const checkAnyIdReady = () => {
-      if (window.AnyidC?.LOAD_MODULE) {
-        setAnyIdReady(true);
-      } else {
-        setTimeout(checkAnyIdReady, 100);
-      }
-    };
-    checkAnyIdReady();
-  }, []);
-
-  // userInfo가 변경되면 formData 업데이트
-  useEffect(() => {
-    if (userInfo) {
-      setFormData(prev => ({
-        ...prev,
-        mbrId: userInfo.mbrId || '',
-        userName: userInfo.encptMbrFlnm || '',
-        phone: userInfo.encptMbrTelno || '',
-        email: userInfo.encptMbrEmlNm || '',
-      }));
-    }
-  }, [userInfo]);
-
-  // 이메일 유효성 검사
-  const validateEmail = (email: string): string => {
-    if (!email || email.trim().length === 0) {
-      return ''; // 선택 항목이므로 빈 값은 오류 아님
-    }
-    const trimmed = email.trim();
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(trimmed)) {
-      return t('emailFormatError') || '올바른 이메일 형식이 아닙니다.';
-    }
-    return '';
-  };
-
-  // 비밀번호 유효성 검사 (숫자, 영문, 특수문자 조합 10-20자리)
-  const validatePassword = (password: string): string => {
-    if (!password || password.trim().length === 0) {
-      return t('newPasswordPlaceholder') || '새 비밀번호를 입력해주세요.';
-    }
-    const trimmed = password.trim();
-    if (trimmed.length < 10 || trimmed.length > 20) {
-      return t('passwordLengthError') || '비밀번호는 10자 이상 20자 이하여야 합니다.';
-    }
-    // 숫자, 영문, 특수문자 조합 확인
-    const hasNumber = /[0-9]/.test(trimmed);
-    const hasLetter = /[a-zA-Z]/.test(trimmed);
-    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(trimmed);
-    
-    if (!hasNumber || !hasLetter || !hasSpecial) {
-      return t('passwordSpecialError') || '비밀번호는 숫자, 영문, 특수문자를 포함해야 합니다.';
-    }
-    return '';
-  };
-
-  // 비밀번호 확인 일치 검증
-  const validateConfirmPassword = (confirmPassword: string, password: string): string => {
-    if (!confirmPassword || confirmPassword.trim().length === 0) {
-      return t('passwordConfirmPlaceholder') || '비밀번호 확인을 입력해주세요.';
-    }
-    if (confirmPassword !== password) {
-      return t('passwordConfirmMismatchReminder') || '비밀번호가 일치하지 않습니다.';
-    }
-    return '';
-  };
-
-  // 입력 필드 변경 핸들러
-  const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
-    // 중복확인 상태 초기화 (값이 변경되면 중복확인 무효화)
-    if (field === 'email') {
-      setIsEmailChecked(false);
-      setEmailAvailable(false);
-      setSuccessMessages(prev => ({ ...prev, email: '' }));
-    }
-
-    // 실시간 유효성 검사
-    let error = '';
-    if (field === 'email') {
-      error = validateEmail(value);
-    } else if (field === 'password') {
-      error = validatePassword(value);
-      // 비밀번호 변경 시 비밀번호 확인도 재검증
-      if (formData.confirmPassword) {
-        const confirmError = validateConfirmPassword(formData.confirmPassword, value);
-        setErrors(prev => ({ ...prev, confirmPassword: confirmError }));
-      }
-    } else if (field === 'confirmPassword') {
-      error = validateConfirmPassword(value, formData.password);
-    }
-
-    setErrors(prev => ({ ...prev, [field]: error }));
-  };
-
-  // 이메일 중복확인
-  const handleCheckEmailDuplicate = async () => {
-    // 이메일이 입력되지 않은 경우 (선택 항목)
-    if (!formData.email || formData.email.trim().length === 0) {
-      return;
-    }
-
-    const emailError = validateEmail(formData.email);
-    if (emailError) {
-      setErrors(prev => ({ ...prev, email: emailError }));
-      setIsEmailChecked(false);
-      setEmailAvailable(false);
-      return;
-    }
-
+  /** 자격여부 확인 */
+  const handleCheckQualification = async () => {
     try {
-      const result = await dispatch(existMbrInfo({ encptMbrEmlNm: formData.email })).unwrap();
-      if (result.existYn === 'Y') {
-        setEmailAvailable(false);
-        setIsEmailChecked(true);
-        setErrors(prev => ({ ...prev, email: t('emailError') || '중복된 이메일입니다. 다른 이메일로 입력해주세요.' }));
-        return;
+      const result = await dispatch(exprtAplyChk({
+        exprtFlnm: name,
+        encptCnstnMbcmtTelno: phone,
+        mbrNo: mbrNo,
+      })).unwrap()
+
+      if (result.resCd === '1') {
+        setQualified(true)
+      } else if (result.resMsg?.includes('완료')) {
+        setQualified(null)
       } else {
-        setEmailAvailable(true);
-        setIsEmailChecked(true);
-        setSuccessMessages(prev => ({ ...prev, email: t('available') || '사용 가능한 이메일입니다.' }));
-        setErrors(prev => ({ ...prev, email: '' }));
+        setQualified(false)
       }
+      showAlertBackdrop(result.resMsg, '알림')
     } catch (error) {
-      console.error(t('emailDuplicateCheckFailed'), error);
-      setEmailAvailable(false);
-      setIsEmailChecked(true);
-      setErrors(prev => ({ ...prev, email: t('emailError') || '이메일 중복확인 중 오류가 발생했습니다.' }));
+      showAlertBackdrop('자격여부 확인 중 오류가 발생했습니다.', '알림')
     }
-  };
+  }
 
-  // 휴대전화번호 변경 (Any-ID 본인인증)
-  const handlePhoneChange = () => {
-    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
-      showAlert(t('certifySelfModuleNotReady'), t('error'));
-      return;
+  /** 신청하기 */
+  const handleApply = async () => {
+    if (qualified === null) {
+      showAlertBackdrop('자격여부확인을 먼저 진행해주세요.', '알림')
+      return
     }
 
-    // public 폴더 기준 상대 경로 사용
-    const configAnyidcJsonUrl = '/anyid/config/config.anyidc.json';
-    const txId = `phone-change-${Date.now()}`;
-
-    // Any-ID 본인인증 랩업 호출
-    window.AnyidC.LOAD_MODULE({
-      cfg: configAnyidcJsonUrl,
-      txId: txId,
-      tag: txId,
-      lvl: 2, // 휴대폰 SMS 인증 레벨
-      bypass: 1,
-      toggle: true,
-      theme: '4.1.0',
-      redirect_uri: window.location.href,
-      success: function (data: any) {
-        // 본인인증 성공
-        setIsPhoneCertified(true);
-        // 본인인증 완료된 휴대전화번호로 변경
-        // TODO: data에서 전화번호 추출하여 formData.phone 업데이트
-        // 예: setFormData(prev => ({ ...prev, phone: data.phone }));
-        window.anyidAdaptor?.success?.(data);
-      },
-      fail: function (err: any) {
-        console.error(t('certifySelfFailed'), err);
-        setIsPhoneCertified(false);
-        showAlert(t('certifySelfFailedReminder'),t('error') || '오류');
-      },
-      log: function (data: any) {
-        console.log('============================ ' + t('anyIdLog') + ' ============================', data);
-      },
-    });
-  };
-
-  // 비밀번호 변경 모드 토글
-  const handlePasswordChange = () => {
-    setIsPasswordChangeMode(true);
-    setFormData(prev => ({ ...prev, password: '', confirmPassword: '' }));
-    setErrors(prev => ({ ...prev, password: '', confirmPassword: '' }));
-  };
-
-  // 전체 폼 유효성 검사
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    // 이메일 (선택): 비어 있으면 검증 제외. 기존 값과 동일하면 중복확인 제외.
-    const emailTrimmed = formData.email?.trim() ?? '';
-    const originalEmail = (userInfo?.encptMbrEmlNm ?? '').trim();
-    const emailUnchanged = emailTrimmed === originalEmail;
-
-    if (emailTrimmed.length > 0) {
-      const emailError = validateEmail(formData.email);
-      if (emailError) {
-        newErrors.email = emailError;
-      } else if (!emailUnchanged) {
-        // 이메일을 새로 입력했을 때만 중복확인 필수
-        if (!isEmailChecked || !emailAvailable) {
-          newErrors.email = t('emailDuplicateCheckCompleteReminder');
-        }
-      }
-    }
-
-    // 비밀번호 변경 모드인 경우에만 비밀번호 검증
-    if (isPasswordChangeMode) {
-      const passwordError = validatePassword(formData.password);
-      if (passwordError) newErrors.password = passwordError;
-
-      const confirmPasswordError = validateConfirmPassword(formData.confirmPassword, formData.password);
-      if (confirmPasswordError) newErrors.confirmPassword = confirmPasswordError;
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  // 저장 버튼 클릭 핸들러
-  const handleSave = async () => {
-    if (!validateForm()) {
-      return;
-    }
-
-    // 이메일 (선택): 비어 있거나 기존과 동일하면 중복확인 제외. 새로 입력한 경우에만 체크.
-    const emailTrimmed = formData.email?.trim() ?? '';
-    const originalEmail = (userInfo?.encptMbrEmlNm ?? '').trim();
-    if (emailTrimmed.length > 0 && emailTrimmed !== originalEmail) {
-      if (!isEmailChecked || !emailAvailable) {
-        showAlert(t('emailDuplicateCheckCompleteReminder'), t('error'));
-        return;
-      }
-    }
-
+    setIsApplying(true)
     try {
-      const now = toTimestampString();
+      await dispatch(updateExprtAprvStts({
+        exprtFlnm: name,
+        encptCnstnMbcmtTelno: phone,
+        mbrNo: mbrNo,
+      })).unwrap()
 
-      // MbrInfoPVO 형식으로 변환
-      const mbrInfoPVO: MbrInfoPVO = {
-        mbrId: formData.mbrId,
-        encptMbrEmlNm: formData.email || undefined,
-        // 비밀번호 변경 모드인 경우에만 비밀번호 업데이트
-        ...(isPasswordChangeMode && formData.password ? {
-          encptMbrPswd: formData.password,         // 새로운 비밀번호
-          encptBfrPswd: userInfo?.encptMbrPswd || '', // 이전 비밀번호 (현재 비밀번호를 이전 비밀번호로 저장)
-          pswdChgDt: now                        // 비밀번호 변경일시
-        } : {}),
-        // 휴대전화번호 변경이 완료된 경우에만 업데이트
-        ...(isPhoneCertified && formData.phone ? { encptMbrTelno: formData.phone } : {}),
-      };
-
-      const result: UpdateMbrInfoRVO = await dispatch(updateMbrInfo(mbrInfoPVO)).unwrap();
-      if(result?.updateCnt && result.updateCnt > 0){
-
-        const userInfo: MbrInfoRVO = result.userInfo;
-
-        // 회원정보 수정 성공 시 redux AuthReducer의 auth.userInfo 업데이트
-        dispatch(setAuthUserInfo(userInfo));
-
-        showAlert(
-          t('success') || '성공',
-          t('editCompleteReminder'),
-          () => navigate('/pp/ko')
-        );
-      } else {
-        showAlert(t('error'), t('editFailedReminder'));
-      }
+      showAlertBackdrop('자문위원 전환신청이 완료되었습니다.', '알림', () => {
+        navigate('/pp/ko')
+      })
     } catch (error) {
-      console.error(t('editingFailedReminder'), error);
-      showAlert(t('editingFailedReminder'), t('error'));
+      showAlertBackdrop('신청 처리 중 오류가 발생했습니다.', '알림')
+    } finally {
+      setIsApplying(false)
     }
-  };
+  }
 
   return (
     <Box className="page-layout">
+      <style>{`
+        .advisor-info-box .info-check-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .advisor-info-box .info-check-item {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .advisor-reg-form {
+          display: flex;
+          align-items: flex-end;
+          gap: 20px;
+          flex-wrap: wrap;
+        }
+        .advisor-reg-form .form-item {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .MuiDialog-root:not(.common-alert) .MuiDialog-paper {
+          max-width: 480px;
+        }
+      `}</style>
       <Box className="sub-container">
         <Box className="content-wrap">
-          {/* 서브 콘텐츠 영역 */}
           <Box className="sub-content">
-            {/* 상단 현재 위치 정보 */}
             <DepsLocation />
             <Box className="content-view" id="content">
               <Box className="page-content">
-                {/* --- 본문 시작 --- */}
-                <Box className="pageCont-memberEdit member-page">
-                  <Box className="bordered-box">
-                    <Box component="form" noValidate>
-                      <Box className="form-group-wrap">
-                        {/* 1.1 아이디 (필수) - 비활성화 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="mbrId" className="label">
-                            {t('mbrId')}
-                            <Box component="span" className="required" aria-label={t('requiredInput')}>({t('required')})</Box>
-                          </Typography>
-                          <TextField
-                            id="mbrId"
-                            value={formData.mbrId}
-                            placeholder={t('mbrIdPlaceholder')}
-                            size="large"
-                            fullWidth
-                            disabled
-                            slotProps={{
-                              htmlInput: {
-                                'aria-required': 'true',
-                              },
-                            }}
-                          />
-                        </Box>
 
-                        {/* 1.2 이름 (필수) - 비활성화 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="userName" className="label">
-                            {t('name')}
-                            <Box component="span" className="required" aria-label={t('requiredInput')}>({t('required')})</Box>
-                          </Typography>
-                          <TextField
-                            id="userName"
-                            value={formData.userName}
-                            placeholder={t('namePlaceholder')}
-                            size="large"
-                            fullWidth
-                            disabled
-                            slotProps={{
-                              htmlInput: {
-                                'aria-required': 'true',
-                              },
-                            }}
-                          />
-                        </Box>
-
-                        {/* 1.3 휴대전화번호 (필수) - 비활성화, 1.4 번호변경 버튼 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="phone" className="label">
-                            {t('phone')}
-                            <Box component="span" className="required" aria-label={t('requiredInput')}>({t('required')})</Box>
-                          </Typography>
-                          <Stack direction="row" spacing={1} className="input-with-btn">
-                            <TextField
-                              id="phone"
-                              value={formData.phone}
-                              placeholder={t('phonePlaceholder')}
-                              size="large"
-                              fullWidth
-                              disabled
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                },
-                              }}
-                            />
-                            <Button
-                              variant="outlined"
-                              size="large"
-                              onClick={handlePhoneChange}
-                              aria-label={t('phoneCertify')}
-                              className="btn-form-util"
-                            >
-                              {t('phoneChange')}
-                            </Button>
-                          </Stack>
-                        </Box>
-
-                        {/* 1.5 이메일 (선택) - 활성화, 1.6 중복확인 버튼 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="email" className="label">
-                            {t('email')}
-                            <Box component="span" className="optional" aria-label={t('optionalInput')}>({t('optional')})</Box>
-                          </Typography>
-                          <Stack direction="row" spacing={1} className="input-with-btn">
-                            <TextField
-                              id="email"
-                              value={formData.email}
-                              onChange={(e) => handleChange('email', e.target.value)}
-                              placeholder={t('emailPlaceholder')}
-                              size="large"
-                              fullWidth
-                              error={!!errors.email}
-                              helperText={errors.email || successMessages.email || ''}
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-describedby': errors.email || successMessages.email ? 'email-alert' : undefined,
-                                  autoComplete: 'email',
-                                },
-                                formHelperText: {
-                                  id: 'email-alert',
-                                  className: errors.email ? 'error-alert' : successMessages.email ? 'success-message' : '',
-                                  role: (errors.email || successMessages.email) ? 'alert' : undefined,
-                                  'aria-live': (errors.email || successMessages.email) ? 'polite' : undefined,
-                                },
-                              }}
-                            />
-                            <Button
-                              variant="outlined"
-                              size="large"
-                              onClick={handleCheckEmailDuplicate}
-                              onMouseDown={(e) => e.preventDefault()}
-                              aria-label={t('emailDuplicateCheck')}
-                              className="btn-form-util"
-                              disabled={!formData.email || formData.email.trim().length === 0}
-                            >
-                              {t('duplicateCheck')}
-                            </Button>
-                          </Stack>
-                        </Box>
-
-                        {/* 1.7 비밀번호 - 변경 버튼 클릭 시 활성화 */}
-                        <Box className="form-item">
-                          <Typography component="label" htmlFor="password" className="label">
-                            {t('password')}
-                            <Box component="span" className="required" aria-label={t('requiredInput')}>({t('required')})</Box>
-                          </Typography>
-                          <Stack direction="row" spacing={1} className="input-with-btn">
-                            <TextField
-                              id="password"
-                              type="password"
-                              value={formData.password}
-                              onChange={(e) => handleChange('password', e.target.value)}
-                              placeholder={isPasswordChangeMode ? t('passwordCombination') : t('passwordPlaceholder')}
-                              size="large"
-                              fullWidth
-                              disabled={!isPasswordChangeMode}
-                              error={!!errors.password}
-                              helperText={errors.password || ''}
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                  'aria-describedby': errors.password ? 'password-alert' : undefined,
-                                  autoComplete: 'new-password',
-                                },
-                                formHelperText: {
-                                  id: 'password-alert',
-                                  className: errors.password ? 'error-alert' : '',
-                                  role: errors.password ? 'alert' : undefined,
-                                  'aria-live': errors.password ? 'polite' : undefined,
-                                },
-                              }}
-                            />
-                            <Button
-                              variant="outlined"
-                              size="large"
-                              onClick={handlePasswordChange}
-                              aria-label={t('passwordChange')}
-                              className="btn-form-util"
-                              disabled={isPasswordChangeMode}
-                            >
-                              {t('change')}
-                            </Button>
-                          </Stack>
-                        </Box>
-
-                        {/* 1.8 비밀번호 확인 - 비밀번호 변경 모드일 때만 표시 */}
-                        {isPasswordChangeMode && (
-                          <Box className="form-item">
-                            <Typography component="label" htmlFor="confirmPassword" className="label">
-                              {t('passwordConfirm')}
-                              <Box component="span" className="required" aria-label={t('requiredInput')}>({t('required')})</Box>
-                            </Typography>
-                            <TextField
-                              id="confirmPassword"
-                              type="password"
-                              value={formData.confirmPassword}
-                              onChange={(e) => handleChange('confirmPassword', e.target.value)}
-                              placeholder={t('passwordConfirmPlaceholder')}
-                              size="large"
-                              fullWidth
-                              error={!!errors.confirmPassword}
-                              helperText={errors.confirmPassword || ''}
-                              slotProps={{
-                                htmlInput: {
-                                  'aria-required': 'true',
-                                  'aria-describedby': errors.confirmPassword ? 'confirmPassword-alert' : undefined,
-                                  autoComplete: 'new-password',
-                                },
-                                formHelperText: {
-                                  id: 'confirmPassword-alert',
-                                  className: errors.confirmPassword ? 'error-alert' : '',
-                                  role: errors.confirmPassword ? 'alert' : undefined,
-                                  'aria-live': errors.confirmPassword ? 'polite' : undefined,
-                                },
-                              }}
-                            />
-                          </Box>
-                        )}
-                      </Box>
+                {/* --- 안내 영역 --- */}
+                <Box className="bordered-box advisor-info-box mb40" sx={{ backgroundColor: '#f8f9fa' }}>
+                  <Box className="df fs-20 fw-700 mb20" sx={{ alignItems: 'center', gap: '8px' }}>
+                    <DescriptionOutlinedIcon sx={{ fontSize: 24, color: '#555' }} />
+                    자문위원 전환신청 시작하기 전에
+                  </Box>
+                  <Box className="fs-15 txt-3 mb20" sx={{ lineHeight: 1.8, wordBreak: 'keep-all' }}>
+                    한국의약품안전관리원의 일반회원이 자문위원으로 활동 시에 전환신청이 가능합니다.<br />
+                    자문위원 의약품에 대한 의약품 전문가, 제약회사 근무자 또는 병원에서 근무하시는 의사, 교수,
+                    약제팀 등 의약품에 대한 전문적인 지식과 관련된 업무를 이용하시는 분들만 신청 자격 여부 확인
+                    후 가입하실 수 있습니다.
+                  </Box>
+                  <Box className="info-check-list">
+                    <Box className="info-check-item fs-15 txt-3">
+                      <CheckCircleOutlineIcon sx={{ fontSize: 20, color: '#087C80' }} />
+                      회원가입 후 로그인 필요
+                    </Box>
+                    <Box className="info-check-item fs-15 txt-3">
+                      <CheckCircleOutlineIcon sx={{ fontSize: 20, color: '#087C80' }} />
+                      자문위원 신청자격여부 체크
                     </Box>
                   </Box>
-
-                  <Stack direction="row" className="form-helper-group">
-                    <Typography className="txt">
-                      {t('mbrWithdrawalReminder')}
-                    </Typography>
-                    <Button
-                      variant="text"
-                      className="btn-link"
-                      endIcon={<ChevronRightIcon />}
-                      onClick={() => navigate('/pp/ko/auth/WithDrawal')}
-                    >
-                      {t('mbrWithdrawal')}
-                    </Button>
-                  </Stack>
-
-                  {/* 하단 버튼 영역 */}
-                  <Box className="btn-group between">
-                    <Button variant="outlined" size="large" onClick={() => navigate('/pp/ko')}>
-                      {t('cancel')}
-                    </Button>
-                    <Button variant="contained" size="large" onClick={handleSave}>
-                      {t('editComplete')}
-                    </Button>
-                  </Box>
                 </Box>
-                {/* --- 본문 끝 --- */}
+
+                {/* --- 자문위원 등록요청 --- */}
+                <Box className="mb30">
+                  <Box className="fs-18 fw-700 mb20 pb10" sx={{ borderBottom: '2px solid var(--color-text-1)' }}>
+                    자문위원 등록요청
+                  </Box>
+                  <Box className="advisor-reg-form">
+                    <Box className="form-item" sx={{ minWidth: 200 }}>
+                      <span className="fs-14 fw-600">
+                        이름 <span className="txt-4 fs-13 ml5">(필수)</span>
+                      </span>
+                      <TextField
+                        size="small"
+                        placeholder="이름을 입력해주세요"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        variant="outlined"
+                        disabled
+                      />
+                    </Box>
+                    <Box className="form-item" sx={{ minWidth: 220 }}>
+                      <span className="fs-14 fw-600">
+                        휴대전화번호 <span className="txt-4 fs-13 ml5">(필수)</span>
+                      </span>
+                      <TextField
+                        size="small"
+                        placeholder="010-0000-0000"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        variant="outlined"
+                        disabled
+                      />
+                    </Box>
+                    <button
+                      type="button"
+                      className="btn_outline"
+                      onClick={handleCheckQualification}
+                      disabled={loading}
+                      style={{ whiteSpace: 'nowrap' }}
+                    >
+                      {loading ? '조회중...' : '자격여부확인'}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn_default"
+                      onClick={handleApply}
+                      disabled={qualified !== true || isApplying}
+                    >
+                      신청하기
+                    </button>
+                  </Box>
+                  {qualified !== null && (
+                    <Typography className={`mt10 fs-14 ${qualified ? 'txt-2' : 'txt-4'}`}>
+                      {qualified ? '자격이 확인되었습니다. 신청하기를 진행해주세요.' : '자격 요건을 충족하지 않습니다.'}
+                    </Typography>
+                  )}
+                </Box>
               </Box>
             </Box>
           </Box>
         </Box>
       </Box>
+      {/* 로딩 오버레이 */}
+      <Backdrop open={loading || isApplying} sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+          <CircularProgress color="inherit" />
+          <Typography color="inherit">{isApplying ? '신청 처리중입니다...' : '조회중입니다...'}</Typography>
+        </Box>
+      </Backdrop>
     </Box>
-  );
+  )
 }

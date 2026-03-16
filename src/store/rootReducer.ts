@@ -19,6 +19,7 @@ import DurEftgrpDetailReducer from '@/features/dur/DurEftgrpDetailSlice'
 import DurPrdctDetailReducer from '@/features/dur/DurPrdctDetailSlice'
 import IntegratedSearchReducer from '@/features/search/IntegratedSearchSlice'
 import AnyIdReducer from '@/features/auth/AnyIdSlice'
+import mbcmtApplyReducer from '@/features/advice/MbcmtApplySlice'
 
 const rootReducer = combineReducers({
   ui: uiReducer,
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
   durPrdctDetail: DurPrdctDetailReducer, // DUR 제품 상세 조회 팝업
   integratedSearch: IntegratedSearchReducer, // 통합검색
   anyId: AnyIdReducer, // SSO, ANY-ID 정보
+  mbcmtApply: mbcmtApplyReducer, // 자문위원 전환신청
 })
 
 export default rootReducer
