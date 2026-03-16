@@ -12,24 +12,24 @@ export default function DepsLocation() {
 
   /**
    * 1. 경로 매핑 설정
-   * - pattern: 정규표현식. 
+   * - pattern: 정규표현식.
    * (\/.*)? 또는 (\/\d+)? 를 붙여서 뒤에 숫자가 오든 안 오든 매칭되게 설정합니다.
    */
   const pathConfig = useMemo(() => [
 
     // 맨 위에 홈 경로 패턴 추가 (ko, en 모두 대응)
     {
-      pattern: /^\/pp\/([A-Za-z]{2})?(\/)?$/, 
+      pattern: /^\/pp\/([A-Za-z]{2})?(\/)?$/,
       labels: ["home"] // i18n에 등록된 'home' 키 사용
     },
     {
       // 통합검색
-      pattern: /^\/pp\/[A-Za-z]{2}\/search\/IntegratedSearch(\/\d+)?$/, 
+      pattern: /^\/pp\/[A-Za-z]{2}\/search\/IntegratedSearch(\/\d+)?$/,
       labels: ["integratedSearch"]
     },
     {
       // /notice 혹은 /notice/123 모두 매칭
-      pattern: /^\/[A-Za-z]{2}\/notice(\/\d+)?$/, 
+      pattern: /^\/[A-Za-z]{2}\/notice(\/\d+)?$/,
       labels: ["announcement", "noticeList"]
     },
     {
@@ -138,6 +138,11 @@ export default function DepsLocation() {
       labels: ["usrSwtReg"]
     },
     {
+      // 자문위원 전환신청
+      pattern: /^\/pp\/[A-Za-z]{2}\/advice\/MbcmtApply(\/)?$/,
+      labels: ["advAppReg"]
+    },
+    {
       // 고객센터 > 이용약관
       pattern: /^\/pp\/[A-Za-z]{2}\/etc\/Terms(\/)?(\d+)?$/,
       labels: ["customerCenter", "termsOfUse"]
@@ -179,12 +184,12 @@ export default function DepsLocation() {
     },
     {
       // 업무 신청 관리
-      pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertApproval(\/\d+)?$/, 
+      pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertApproval(\/\d+)?$/,
       labels: ["expertMyWork", "expertApproval"]
     },
     {
       // 업무 신청 관리 > 업무 신청 수정
-      pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertApprovalUpdate(\/\d+)?$/, 
+      pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertApprovalUpdate(\/\d+)?$/,
       labels: ["expertMyWork", "expertApproval"]
     }
   ], []);
@@ -217,9 +222,9 @@ export default function DepsLocation() {
   // 5. Breadcrumb 아이템 생성
   const breadcrumbItems = [
     // { label: t("home"), href: '/', className: 'home' },
-    { 
-      label: <span className="home">{t("home")}</span>, 
-      href: '/' 
+    {
+      label: <span className="home">{t("home")}</span>,
+      href: '/'
     },
     ...currentLabels.map((label, index) => ({
       label: label,
@@ -228,7 +233,7 @@ export default function DepsLocation() {
   ];
 
   /* =========================================================
-   웹 접근성을 위한 <title> 경로 생성 로직 
+   웹 접근성을 위한 <title> 경로 생성 로직
   ========================================================= */
   const hasMatch = lnbResult.breadcrumb.length > 0 || !!matched;
   const finalBrowserTitle = useMemo(() => {
@@ -242,10 +247,10 @@ export default function DepsLocation() {
     if (!hasMatch) {
       return t('kidsName');
     }
-    
-    // 외부 변수 currentLabels 대신 여기서 직접 최신 라벨을 생성하거나 
+
+    // 외부 변수 currentLabels 대신 여기서 직접 최신 라벨을 생성하거나
     // 의존성 배열에 currentLabels를 확실히 넣어야 합니다.
-    let titleLabels = [...currentLabels]; 
+    let titleLabels = [...currentLabels];
     const pathParts = pathname.split('/').filter(Boolean);
     const lastPart = pathParts[pathParts.length - 1];
     const isDetail = /^\d+$/.test(lastPart);
@@ -260,7 +265,7 @@ export default function DepsLocation() {
     }
 
     const accessibilityPath = [...titleLabels].reverse();
-    accessibilityPath.push(t("home")); 
+    accessibilityPath.push(t("home"));
 
     const titleStr = `${accessibilityPath.join(' < ')} | ${t('siteName', 'KIDS')}`;
 
@@ -271,7 +276,7 @@ export default function DepsLocation() {
   useEffect(() => {
     document.title = finalBrowserTitle;
   }, [finalBrowserTitle]);
-  
+
   /**************************** SubMenu 상단 Top-Navigation 설정 시작(한국어/영어 사이트 변환 포함) *********************/
 
   return (

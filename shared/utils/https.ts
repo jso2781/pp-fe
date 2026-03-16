@@ -14,15 +14,15 @@ import { setInternalServerError } from '@/features/ui/uiSlice'
  *
  * - development: '/api' (handled by Vite dev-server proxy)
  *   http://localhost:8080/api/pp
- * 
+ *
  * - production : '/api/pp' (handled by infra/nginx)
  *   빌드 시에는 항상 상대 경로 '/api/pp' 사용 (proxy 미사용)
- * 
+ *
  * NEVER put full origin here.
  */
 // 빌드 시에는 항상 '/api/pp/' 사용 (환경 변수 무시)
-const apiBaseURL = import.meta.env.MODE === 'production' 
-  ? '/api/pp' 
+const apiBaseURL = import.meta.env.MODE === 'production'
+  ? '/api/pp'
   : (import.meta.env.VITE_API_BASE_URL ?? '/api')
 
 /** 인증 API 전용 서버 (login, refresh, logout, extend 만 이 도메인으로 호출) */
@@ -35,11 +35,11 @@ const CA_PATHS = ['/mail/send', '/mail/list']
 
 /** 자문위원 API 전용 서버(자격여부확인(exprtAplyChk), 신청하기(updateExprtAprvStts)) */
 const adviceApiBaseURL = import.meta.env.VITE_ADVICE_API_BASE_URL ?? 'http://localhost:8088/api/uex'
-const ADVICE_PATHS = ['/exprtAplyChk', '/updateExprtAprvStts']
+const ADVICE_PATHS = ['/exprt/exprtAplyChk', '/exprt/updateExprtAprvStts']
 
-/** CMO API 전용 서버(CMO_DOWN) */
-const cmoApiBaseURL = import.meta.env.VITE_CMO_API_BASE_URL ?? 'http://localhost:8088/api/cmo'
-const CMO_PATHS = ['/CMO_DOWN']
+/** CDM API 서버 */
+const cdmApiBaseURL = import.meta.env.VITE_CDM_URL ?? 'http://localhost:8090/api/cm'
+const CDM_PATHS = ['/community']
 
 const https: AxiosInstance = axios.create({
   baseURL: apiBaseURL,
@@ -50,7 +50,13 @@ const https: AxiosInstance = axios.create({
   withCredentials: true
 })
 
-// ✅ 모든 요청에 locale 헤더 자동 주입 + 인증 API는 authApiBaseURL로 전송 + 자문위원 API는 adviceApiBaseURL로 전송
+/*
+ * ✅ 모든 요청에 locale 헤더 자동 주입
+ * 1. 인증 API는 authApiBaseURL로 전송
+ * 2. 자문위원 API는 adviceApiBaseURL로 전송
+ * 3. CDM API는 cdmApiBaseURL로 전송
+ * 4. 그 이외 API는 기본적으로 포탈 사용자 API(pp-be) 전송송
+ */
 https.interceptors.request.use((config) => {
   const url = config.url ?? ''
   if (AUTH_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
@@ -62,8 +68,8 @@ https.interceptors.request.use((config) => {
   else if(ADVICE_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
     config.baseURL = adviceApiBaseURL
   }
-  else if(CMO_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
-    config.baseURL = adviceApiBaseURL
+  else if(CDM_PATHS.some((p) => url.includes(p) || url.startsWith(p + '?'))) {
+    config.baseURL = cdmApiBaseURL
   }
 
   const lang = (i18n.language || 'ko').startsWith('en') ? 'en' : 'ko'
@@ -115,7 +121,7 @@ https.interceptors.response.use(
       } else {
         updtTokenCn1 = sessionStorage.getItem("updtTokenCn");
       }
-      
+
       if (!updtTokenCn1) {
         // tokenSn가 있으면 로그아웃 처리, 없으면 그냥 에러 반환
         if (tokenSn1) {
@@ -163,12 +169,12 @@ https.interceptors.response.use(
               // 파싱 실패 시 빈 객체 사용
             }
           }
-          
+
           // 토큰 정보 업데이트
           authData.tokenSn = tokenSn;
           authData.acsTokenCn = newAcsTokenCn;
           authData.updtTokenCn = newUpdtTokenCn;
-          
+
           // 통일된 키로 저장
           sessionStorage.setItem("auth", JSON.stringify(authData));
           // 하위 호환성을 위해 updtTokenCn도 별도로 저장
@@ -177,7 +183,7 @@ https.interceptors.response.use(
 
         // 대기 중인 요청들에 새 토큰 전달
         runQueue(newAcsTokenCn);
-        
+
         // 원래 요청에 새 acsTokenCn 설정 후 재시도
         if (newAcsTokenCn) {
           original.headers.Authorization = `Bearer ${newAcsTokenCn}`;
@@ -222,7 +228,7 @@ https.interceptors.response.use(
       //TODO 특정 restAPI주소만 500에러화면 전환 지정작업 필요.
       const API_URL = error.request.responseURL;
       const criAPIs = ['/dshstyDclr/insertDshstyDclr', '/opnn/insertOpnn'];
-      
+
       if(criAPIs.some(api => API_URL.includes(api))){
         dispatch(setInternalServerError(true));
       }

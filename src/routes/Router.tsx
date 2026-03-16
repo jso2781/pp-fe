@@ -90,6 +90,16 @@ const ScreenViewerKo = lazy(() => import('@/pages/screens/ko/ScreenViewer'))
 const ScreensEn = lazy(() => import('@/pages/screens/en/Screens'))
 const ScreenViewerEn = lazy(() => import('@/pages/screens/en/ScreenViewer'))
 
+const BoardListKo = lazy(() => import('@/pages/ko/cdm/board/BoardList'))
+const BoardDetailKo = lazy(() => import('@/pages/ko/cdm/board/BoardDetail'))
+const CdmFaqListKo = lazy(() => import('@/pages/ko/cdm/faq/FaqList'))
+const CdmQnaListKo = lazy(() => import('@/pages/ko/cdm/qna/QnaList'))
+const CdmQnaDetailKo = lazy(() => import('@/pages/ko/cdm/qna/QnaDetail'))
+const CdmQnaWriteKo = lazy(() => import('@/pages/ko/cdm/qna/QnaWrite'))
+const CdmTaskproposalListKo = lazy(() => import('@/pages/ko/cdm/taskproposal/TaskproposalList'))
+const CdmTaskproposalDetailKo = lazy(() => import('@/pages/ko/cdm/taskproposal/TaskproposalDetail'))
+const CdmTaskproposalWriteKo = lazy(() => import('@/pages/ko/cdm/taskproposal/TaskproposalWrite'))
+
 import { normalizeLang, FALLBACK_LANG, detectBrowserLang } from "./lang";
 import { AuthProvider } from '@/contexts/AuthContext';
 import { DialogProvider } from '@/contexts/DialogContext';
@@ -105,22 +115,22 @@ function LangElement({ byLang }: LangElementProps) {
   const { lang } = useParams<{ lang: string }>();
   const location = useLocation();
   const normalized = normalizeLang(lang) ?? FALLBACK_LANG;
-  
+
   // 디버깅: 어떤 컴포넌트가 렌더링되는지 확인
   if (location.pathname.includes('/auth/Login')) {
     console.log('LangElement - pathname:', location.pathname, 'lang:', normalized, 'byLang keys:', Object.keys(byLang));
   }
-  
+
   return byLang[normalized] ?? byLang[FALLBACK_LANG];
 }
 
 /**
- * 브라우져 주소창에 표시된 URL pathname이 바뀔 때마다 i18n 언어를 동기화한다. 
- * 
- * BrowserRouter 내부에 배치해야 브라우져 주소창에 표시된 URL pathname이 바뀔 때마다 
+ * 브라우져 주소창에 표시된 URL pathname이 바뀔 때마다 i18n 언어를 동기화한다.
+ *
+ * BrowserRouter 내부에 배치해야 브라우져 주소창에 표시된 URL pathname이 바뀔 때마다
  * i18n 언어를 동기화할 수 있다. 동기화하지 않으면 브라우져 이전, 다음 버튼 클릭할 때마다 언어가 변경되지 않는다.
  * 그래서, 영문 메뉴 화면인데 한국어로 표기되는 문제가 발생함.
- * 
+ *
  */
 function LangSync() {
   const location = useLocation();
@@ -201,16 +211,16 @@ const LangGuard = ({ children }: { children: JSX.Element }) => {
     // pathname에서 직접 언어 추출 (params.lang보다 확실함)
     const pathnameLang = normalizeLang(location.pathname.split('/')[1]);
     const currentLang = pathnameLang || urlLang;
-    
+
     if (!currentLang) return;
-    
+
     const prevLang = prevUrlLangRef.current;
-    
+
     // i18n과 동기화
     if (i18n.language !== currentLang) {
       i18n.changeLanguage(currentLang);
     }
-    
+
     // 첫 main 진입 또는 한국어/English 전환 시 SSO 정보 조회 (reducer에서 sessionStorage 'sso' 저장)
     if (currentLang === 'ko' || currentLang === 'en') {
       dispatch(getSsoInfo());
@@ -220,7 +230,7 @@ const LangGuard = ({ children }: { children: JSX.Element }) => {
       console.log(`LangGuard: 언어 변경 감지 - ${prevLang} → ${currentLang}, 메뉴 재조회`);
       dispatch(selectMenuList({ langSeCd: currentLang }));
     }
-    
+
     // 현재 언어를 이전 값으로 저장
     prevUrlLangRef.current = currentLang;
   }, [urlLang, location.pathname, dispatch]);
@@ -303,14 +313,14 @@ export default function Router() {
 
                 {/* news(기관소식) */}
                 <Route path="/pp/:lang/news/FaqNotice" element={<LangElement byLang={{ ko: <FaqNoticeKo />, en: <FaqNoticeKo /> }} />} />
-                                                
+
                 {/* 유형별 게시판 (공통) */}
                 <Route path="/pp/ko/board/general/:bbsId" element={<GeneralBoardListKo /> } />
-                <Route path="/pp/ko/board/general/:bbsId/:pstSn" element={<GeneralBoardDetailKo /> } />                                                        
+                <Route path="/pp/ko/board/general/:bbsId/:pstSn" element={<GeneralBoardDetailKo /> } />
                 <Route path="/pp/ko/board/gallery/:bbsId" element={<GalleryBoardListKo /> } />
-                <Route path="/pp/ko/board/gallery/:bbsId/:pstSn" element={<GalleryBoardDetailKo /> } />       
+                <Route path="/pp/ko/board/gallery/:bbsId/:pstSn" element={<GalleryBoardDetailKo /> } />
                 <Route path="/pp/ko/board/video/:bbsId" element={<VideoBoardListKo /> } />
-                <Route path="/pp/ko/board/video/:bbsId/:pstSn" element={<VideoBoardDetailKo /> } />                       
+                <Route path="/pp/ko/board/video/:bbsId/:pstSn" element={<VideoBoardDetailKo /> } />
 
                 {/* about(기관소개) */}
                 <Route path="/pp/:lang/about/AboutOrg" element={<LangElement byLang={{ ko: <AboutOrgKo />, en: <AboutOrgEn /> }} />} />
@@ -340,7 +350,7 @@ export default function Router() {
                 <Route path="/pp/:lang/search/IntegratedSearch" element={<LangElement byLang={{ ko: <IntegratedSearchKo />, en: <IntegratedSearchKo /> }} />} />
 
                 {/* expert */}
-                <Route path="/pp/:lang/expert/ExpertMemberApply" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertMemberApplyKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertMemberApplyKo /></ProtectedRoute> }} />} />                                  
+                <Route path="/pp/:lang/expert/ExpertMemberApply" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertMemberApplyKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertMemberApplyKo /></ProtectedRoute> }} />} />
 
                 {/* etc */}
                 <Route path="/pp/:lang/etc/Terms" element={<LangElement byLang={{ ko: <TermsKo />, en: <TermsKo /> }} />} />
@@ -349,7 +359,7 @@ export default function Router() {
                 <Route path="/pp/:lang/etc/EmailDeny" element={<LangElement byLang={{ ko: <EmailDenyKo />, en: <EmailDenyKo /> }} />} />
 
                 {/* 자문위원 관련 화면advice */}
-                <Route path="/pp/:lang/advice/MbcmtApply" element={<LangElement byLang={{ ko: <MbcmtApplyKo />, en: <MbcmtApplyKo /> }} />} />
+                <Route path="/pp/:lang/advice/MbcmtApply" element={<LangElement byLang={{ ko: <ProtectedRoute><MbcmtApplyKo /></ProtectedRoute>, en: <ProtectedRoute><MbcmtApplyKo /></ProtectedRoute> }} />} />
                 {/* 이상사례통계 관련 화면advice */}
                 <Route path="/pp/:lang/adverse/statistics/StatisticsList" element={<LangElement byLang={{ ko: <StatisticsListKo />, en: <StatisticsListKo /> }} />} />
 
@@ -360,6 +370,20 @@ export default function Router() {
                 {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
                 <Route path="/pp/:lang/InternalServerError" element={<LangElement byLang={{ ko: <InternalServerErrorKo />, en: <InternalServerErrorKo /> }} />} />
                 <Route path="/pp/:lang/NotFound" element={<LangElement byLang={{ ko: <NotFoundKo />, en: <NotFoundKo /> }} />} />
+                
+                {/* cdm(CDM 정보) */}
+                <Route path="/pp/:lang/cdm/board/:boardType" element={<LangElement byLang={{ ko: <BoardListKo />, en: <BoardListKo /> }} />} />
+                <Route path="/pp/:lang/cdm/board/:boardType/detail/:pstSn" element={<LangElement byLang={{ ko: <BoardDetailKo />, en: <BoardDetailKo /> }} />} />
+                <Route path="/pp/:lang/cdm/faq" element={<LangElement byLang={{ ko: <CdmFaqListKo />, en: <CdmFaqListKo /> }} />} />
+                <Route path="/pp/:lang/cdm/qna" element={<LangElement byLang={{ ko: <CdmQnaListKo />, en: <CdmQnaListKo /> }} />} />
+                <Route path="/pp/:lang/cdm/qna/member/qnaDetail/:qstnSn" element={<LangElement byLang={{ ko: <CdmQnaDetailKo />, en: <CdmQnaDetailKo /> }} />} />
+                <Route path="/pp/:lang/cdm/qna/member/qnaWrite" element={<LangElement byLang={{ ko: <CdmQnaWriteKo />, en: <CdmQnaWriteKo /> }} />} />
+                <Route path="/pp/:lang/cdm/qna/member/qnaWrite/:qstnSn" element={<LangElement byLang={{ ko: <CdmQnaWriteKo />, en: <CdmQnaWriteKo /> }} />} />
+                <Route path="/pp/:lang/cdm/taskproposal" element={<LangElement byLang={{ ko: <CdmTaskproposalListKo />, en: <CdmTaskproposalListKo /> }} />} />
+                <Route path="/pp/:lang/cdm/taskproposal/member/taskproposalDetail/:asmtPrpSn" element={<LangElement byLang={{ ko: <CdmTaskproposalDetailKo />, en: <CdmTaskproposalDetailKo /> }} />} />
+                <Route path="/pp/:lang/cdm/taskproposal/member/taskproposalWrite" element={<LangElement byLang={{ ko: <CdmTaskproposalWriteKo />, en: <CdmTaskproposalWriteKo /> }} />} />
+                <Route path="/pp/:lang/cdm/taskproposal/member/taskproposalWrite/:asmtPrpSn" element={<LangElement byLang={{ ko: <CdmTaskproposalWriteKo />, en: <CdmTaskproposalWriteKo /> }} />} />
+
               </Route>
 
               {/* 전문가 메뉴에서 사용할 화면 레이아웃 */}
@@ -368,7 +392,7 @@ export default function Router() {
                 <Route path="/pp/:lang/expert/ExpertMyWork" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertMyWorkKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertMyWorkKo /></ProtectedRoute> }} />} />
                 <Route path="/pp/:lang/expert/ExpertApproval" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalKo /></ProtectedRoute> }} />} />
                 <Route path="/pp/:lang/expert/ExpertApproval/:exprtTaskSn" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalDetailKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalDetailKo /></ProtectedRoute> }} />} />
-                <Route path="/pp/:lang/expert/ExpertApprovalUpdate/:exprtTaskSn" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute> }} />} />                
+                <Route path="/pp/:lang/expert/ExpertApprovalUpdate/:exprtTaskSn" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute> }} />} />
               </Route>
 
               {/* 영문 사용자 메뉴에서 사용할 화면 레이아웃 */}
@@ -379,9 +403,9 @@ export default function Router() {
 
                 {/* 유형별 게시판 (공통) */}
                 <Route path="/pp/en/board/general/:bbsId" element={<GeneralBoardListEn />} />
-                <Route path="/pp/en/board/general/:bbsId/:pstSn" element={<GeneralBoardDetailEn /> } />                                                        
+                <Route path="/pp/en/board/general/:bbsId/:pstSn" element={<GeneralBoardDetailEn /> } />
                 <Route path="/pp/en/board/gallery/:bbsId" element={<GalleryBoardListEn /> } />
-                <Route path="/pp/en/board/gallery/:bbsId/:pstSn" element={<GalleryBoardDetailEn /> } />       
+                <Route path="/pp/en/board/gallery/:bbsId/:pstSn" element={<GalleryBoardDetailEn /> } />
                 <Route path="/pp/en/board/video/:bbsId" element={<VideoBoardListEn /> } />
                 <Route path="/pp/en/board/video/:bbsId/:pstSn" element={<VideoBoardDetailEn /> } />
 
