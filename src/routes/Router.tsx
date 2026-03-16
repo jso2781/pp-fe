@@ -95,6 +95,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { DialogProvider } from '@/contexts/DialogContext';
 import ExpertLayout from './ExpertLayout';
 import EngLayout from './EngLayout';
+import FallbackRoute from './FallbackRoute';
 
 type LangElementProps = {
   byLang: Record<string, JSX.Element>;
@@ -390,7 +391,7 @@ export default function Router() {
                 <Route path="/pp/en" element={<HomeEn />} />
               </Route>
 
-              <Route path="*" element={<Navigate to={`/pp/${detectBrowserLang()}/NotFound`} replace />} />
+              <Route path="*" element={<FallbackRoute />} />
             </Routes>
           </GlobalErrorHandler>
         </BrowserRouter>
