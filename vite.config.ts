@@ -114,7 +114,7 @@ export default defineConfig(({ mode }) => {
         '/oidc': {
           target: proxyTarget,
           changeOrigin: true,
-          secure: false,
+          secure: false
         }
       }
     },

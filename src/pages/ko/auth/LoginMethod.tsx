@@ -187,7 +187,7 @@ export default function LoginMethod() {
         lvl: anyidInit?.lvl ?? acrValues,
         bypass: anyidInit?.bypass ?? 0,   // 기본값 0 (SSO 모드, 1→0 수정)
         toggle: anyidInit?.toggle ?? true,
-        theme: anyidInit?.theme ?? '4.2.2',
+        theme: anyidInit?.theme ?? '4.1.0',
       },
       anyidInit || {},
       { success: successCb, fail: failCb, log: logCb }

@@ -37,6 +37,8 @@ export default function SignUpMbrInfo() {
       relationship?: string;      // 신청인과의 관계 (만 14세 미만)
       parentPhone?: string;       // 법정대리인 휴대전화번호 (만 14세 미만)
     };
+    // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터
+    ci?: string;
   } | null;
 
   // formData 타입 정의
@@ -80,6 +82,11 @@ export default function SignUpMbrInfo() {
     }
     return getSignUpSteps(t, false); // 일반 가입 (14세 이상)
   }, [state?.steps, t]);
+
+  // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터(이전 화면에서 전달받은 ci 파라미터)
+  const ci = useMemo(() => {
+    return location.state?.ci as string;
+  }, [location.state?.ci]);
 
   // currentStep을 steps 배열에서 'inputMbrInfo' 단계를 찾아서 동적으로 계산
   const currentStep = useMemo(() => {
@@ -407,7 +414,7 @@ export default function SignUpMbrInfo() {
         mdfrId: formData.mbrId,
         mdfcnDt: null,
 
-        linkInfoIdntfId: null,
+        linkInfoIdntfId: ci,
         certTokenVl: null,
         pswdChgDt: null,
         pswdErrNmtm: 0,
@@ -421,7 +428,7 @@ export default function SignUpMbrInfo() {
       // 회원정보 1건이 입력되었는지 확인
       if(result > 0){
         // 다음 단계로 이동 (가입 신청 완료 페이지)
-        navigate('/pp/ko/auth/SignUpComplete', { state: { steps } });
+        navigate('/pp/ko/auth/SignUpComplete', { state: { steps, ci } });
       } else {
         alert(t('insertMbrInfoFailed'));
       }
@@ -445,21 +452,36 @@ export default function SignUpMbrInfo() {
     
     // 본인인증 단계 인덱스 찾기
     const certifySelfIndex = steps.findIndex(step => step.description === t('certifySelf'));
-    
-    if (certifySelfIndex === 2) {
+
+    // 일반 가입인 경우
+    if(certifySelfIndex === 2){
       // 일반 가입: 본인인증 단계가 3번째(인덱스 2) → 약관동의 페이지로 이동
-      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps } });
-    } else if (certifySelfIndex === 3) {
-      // 만 14세 미만 가입: 본인인증 단계가 4번째(인덱스 3) → 본인인증 페이지로 이동 (저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 전달)
-      navigate('/pp/ko/auth/CertifySelf', { 
-        state: { 
-          steps,
-          legalGuardFormData: storedLegalGuardFormData  // sessionStorage에서 불러온 legalGuardFormData(법정대리인 동의 폼 데이터들) 전달
-        } 
-      });
-    } else {
+      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, ci } });
+    }
+    // 만 14세 미만 가입인 경우
+    else if(certifySelfIndex === 3){
+      if(ci){
+        // ci가 있으면 법정대리인 동의 단계로 이동
+        navigate('/pp/ko/auth/LegalGuardAgr', { state: { steps, ci } });
+      }
+      else {
+        /* 
+         * ci가 없으면 본인인증 단계로 이동
+         * 만 14세 미만 가입: 본인인증 단계가 4번째(인덱스 3) → 본인인증 페이지로 이동 (저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 전달)
+         * 
+         */
+        navigate('/pp/ko/auth/CertifySelf', {
+          state: { 
+            steps,
+            legalGuardFormData: storedLegalGuardFormData,  // sessionStorage에서 불러온 legalGuardFormData(법정대리인 동의 폼 데이터들) 전달
+            ci                                             // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터 전달
+          } 
+        });
+      }
+    }
+    else{
       // 기본값: 약관동의 페이지로 이동
-      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps } });
+      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, ci } });
     }
   }
 

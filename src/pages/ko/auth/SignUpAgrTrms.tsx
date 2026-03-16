@@ -178,8 +178,13 @@ export default function SignUpAgrTrms() {
         // 만 14세 미만 가입: 법정 대리인 동의 단계로 이동 (steps 객체 전달)
         navigate('/pp/ko/auth/LegalGuardAgr', { state: { steps, ci } });
       } else {
-        // 일반 가입: 본인 인증 단계로 이동 (steps 객체 전달)
-        navigate('/pp/ko/auth/CertifySelf', { state: { steps, ci } });
+        // ci가 있으면 회원정보입력 단계로 이동(로그인 Any-ID 본인인증을 완료한 경우이지만, 포탈 사용자의 회원정보는 없는 경우임.)
+        // ci가 없으면 본인인증 단계로 이동
+        if(ci){
+          navigate('/pp/ko/auth/SignUpMbrInfo', { state: { steps, ci } });
+        } else {
+          navigate('/pp/ko/auth/CertifySelf', { state: { steps, ci } });
+        }
       }
     } else {
       // 필수 약관이 동의되지 않았으면 에러 팝업 표시

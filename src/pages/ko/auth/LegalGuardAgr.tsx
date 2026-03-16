@@ -371,8 +371,15 @@ export default function LegalGuardAgr() {
       console.error('Failed to save form data to storage:', error);
     }
 
-    // 다음 단계로 이동 (본인인증 페이지)
-    navigate('/pp/ko/auth/CertifySelf', { state: { steps, "legalGuardFormData": formData, ci } });
+    // ci가 있으면 회원정보입력 단계로 이동(로그인 Any-ID 본인인증을 완료한 경우이지만, 포탈 사용자의 회원정보는 없는 경우임.)
+    if(ci){
+      navigate('/pp/ko/auth/SignUpMbrInfo', { state: { steps, ci } });
+    }
+    // ci가 없으면 본인인증 단계로 이동
+    else{
+      // 다음 단계로 이동 (본인인증 페이지)
+      navigate('/pp/ko/auth/CertifySelf', { state: { steps, "legalGuardFormData": formData, ci } });
+    }
   }
 
   // 취소하기 버튼 클릭 핸들러 (만 14세 미만 회원가입 약관동의 페이지로 이동)

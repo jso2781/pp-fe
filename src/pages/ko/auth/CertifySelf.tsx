@@ -81,6 +81,14 @@ export default function CertifySelf() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
+  // URL로 직접 진입 시 location.state.ci 가 있으면 이전 페이지로 자동 이동
+  useEffect(() => {
+    const state = location.state as { ci?: string, steps?: ReturnType<typeof getSignUpSteps> } | null
+    if(state?.ci){
+      navigate('/pp/ko/auth/SignUpMbrInfo', { state: { steps: state?.steps, ci: state.ci } });
+    }
+  }, [location.state?.steps, location.state?.ci, navigate])
+
   // URL 파라미터에서 tx, acrValues, redirectUri 추출
   const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
 
