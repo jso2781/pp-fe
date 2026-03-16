@@ -22,58 +22,13 @@ import { AccountCircle as AccountIcon } from '@mui/icons-material'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { getAnyIdInit, postAnyIdLogin } from '@/features/auth/AnyIdThunks'
+import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
 import DepsLocation from '@/components/common/DepsLocation'
 
 type LoginPhase = 'redirecting' | 'preparing' | 'ready' | 'error'
 
-// Any-ID 스크립트 로더를 전역 Promise로 1회만 실행
-let anyIdAssetsPromise: Promise<void> | null = null
-
 // tx별 getAnyIdInit 결과 캐시 (중복 호출 방지)
 const anyIdInitPromiseCache = new Map<string, Promise<unknown>>()
-
-function ensureAnyIdAssets() {
-  const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
-
-  const ensureLink = (href: string) => {
-    if (document.querySelector(`link[href="${href}"]`)) return
-    const l = document.createElement('link')
-    l.rel = 'stylesheet'
-    l.href = href
-    document.head.appendChild(l)
-  }
-
-  const loadScript = (src: string) =>
-    new Promise<void>((resolve, reject) => {
-      const existing = document.querySelector(`script[src="${src}"]`) as HTMLScriptElement | null
-      if (existing) {
-        // 이미 로드된 경우
-        if ((existing as any)._anyidLoaded) return resolve()
-        // 아직 로드 중이면 onload/onerror만 추가
-        existing.addEventListener('load', () => resolve(), { once: true })
-        existing.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true })
-        return
-      }
-      const s = document.createElement('script')
-      s.src = src
-      s.async = true
-      s.onload = () => {
-        ;(s as any)._anyidLoaded = true
-        resolve()
-      }
-      s.onerror = () => reject(new Error(`Failed to load ${src}`))
-      document.body.appendChild(s)
-    })
-
-  if (!anyIdAssetsPromise) {
-    ensureLink(`${baseNorm}css/app.css`)
-    anyIdAssetsPromise = loadScript(`${baseNorm}js/manifest.js`)
-      .then(() => loadScript(`${baseNorm}js/vendor.js`))
-      .then(() => loadScript(`${baseNorm}js/app.js`))
-  }
-
-  return anyIdAssetsPromise
-}
 
 export default function LoginMethod() {
   const navigate = useNavigate()
@@ -116,6 +71,7 @@ export default function LoginMethod() {
     if (!tx) return
 
     let cancelled = false
+    let cancelWait: (() => void) | null = null
 
     ;(async () => {
       try {
@@ -165,28 +121,20 @@ export default function LoginMethod() {
         }
         window.anyidAdaptor = adaptor as typeof window.anyidAdaptor
 
-        // AnyidC 준비 즉시 확인 + 짧은 간격(50ms) 재시도, 최대 2초
-        let retries = 0
-        const maxRetries = 40
-
-        const waitForAnyidC = () => {
-          if (cancelled) return
-          if (window.AnyidC?.LOAD_MODULE) {
-            setAnyIdReady(true)
-            setPhase('ready')
-            return
+        cancelWait = waitForAnyidC(
+          () => {
+            if (!cancelled) {
+              setAnyIdReady(true)
+              setPhase('ready')
+            }
+          },
+          () => {
+            if (!cancelled) {
+              console.error('[AnyID] window.AnyidC.LOAD_MODULE not ready (timeout)')
+              setPhase('error')
+            }
           }
-          if (retries >= maxRetries) {
-            console.error('[AnyID] window.AnyidC.LOAD_MODULE not ready (timeout)')
-            setPhase('error')
-            return
-          }
-          retries += 1
-          setTimeout(waitForAnyidC, 50)
-        }
-
-        // 즉시 1회 확인 후 필요 시 짧은 간격 대기
-        waitForAnyidC()
+        )
       } catch (e) {
         console.error('[AnyID] SDK load error:', e)
         if (!cancelled) setPhase('error')
@@ -195,6 +143,7 @@ export default function LoginMethod() {
 
     return () => {
       cancelled = true
+      cancelWait?.()
     }
   }, [tx, navigate, dispatch, ssoInfo])
 

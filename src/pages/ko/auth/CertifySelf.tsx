@@ -30,36 +30,7 @@ declare global {
   }
 }
 
-// Any-ID 자원 로드 함수
-// UI 프로젝트의 public 폴더에서 직접 로드 (Vite base path 반영)
-function ensureAnyIdAssets() {
-  const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
-
-  const ensureLink = (href: string) => {
-    if (document.querySelector(`link[href="${href}"]`)) return
-    const l = document.createElement('link')
-    l.rel = 'stylesheet'
-    l.href = href
-    document.head.appendChild(l)
-  }
-
-  const loadScript = (src: string) =>
-    new Promise<void>((resolve, reject) => {
-      if (document.querySelector(`script[src="${src}"]`)) return resolve()
-      const s = document.createElement('script')
-      s.src = src
-      s.async = true
-      s.onload = () => resolve()
-      s.onerror = () => reject(new Error(`Failed to load ${src}`))
-      document.body.appendChild(s)
-    });
-
-  ensureLink(`${baseNorm}anyid/css/app.css`);
-
-  return loadScript(`${baseNorm}anyid/js/manifest.js`)
-    .then(() => loadScript(`${baseNorm}anyid/js/vendor.js`))
-    .then(() => loadScript(`${baseNorm}anyid/js/app.js`));
-}
+import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
 
 export default function CertifySelf() {
   const { lang } = useParams<{ lang: string }>();
@@ -136,33 +107,30 @@ export default function CertifySelf() {
     return steps.findIndex(step => step.description === t('certifySelf'));
   }, [steps, t]);
 
-  // Any-ID 자원 로드
+  // Any-ID 자원 로드 (전역 1회 캐시) + AnyidC 준비 즉시 확인 + 짧은 간격 대기
   useEffect(() => {
-    if (hasLoadedAnyIdRef.current) return;
-    hasLoadedAnyIdRef.current = true;
+    if (hasLoadedAnyIdRef.current) return
+    hasLoadedAnyIdRef.current = true
+
+    let cancelWait: (() => void) | null = null
 
     ensureAnyIdAssets()
       .then(() => {
-        // Any-ID 모듈이 로드될 때까지 대기
-        const checkInterval = setInterval(() => {
-          if (window.AnyidC?.LOAD_MODULE) {
-            setAnyIdReady(true);
-            clearInterval(checkInterval);
-          }
-        }, 100);
-
-        // 최대 5초 대기
-        setTimeout(() => {
-          clearInterval(checkInterval);
-          if (window.AnyidC?.LOAD_MODULE) {
-            setAnyIdReady(true);
-          }
-        }, 5000);
+        cancelWait = waitForAnyidC(
+          () => setAnyIdReady(true),
+          () => console.warn('[CertifySelf] AnyidC.LOAD_MODULE not ready (timeout)'),
+          50,
+          40
+        )
       })
       .catch((err) => {
-        console.error(t('anyIdAssetsLoadFailed'), err);
-      });
-  }, []);
+        console.error(t('anyIdAssetsLoadFailed'), err)
+      })
+
+    return () => {
+      cancelWait?.()
+    }
+  }, [t])
 
   // 모달 열기 함수
   const openModal = (message: string) => {
@@ -176,67 +144,56 @@ export default function CertifySelf() {
     setModalMessage('');
   };
 
-  // Any-ID 인증 방식 호출 함수
-  const handleLoginMethod = async (method: string) => {
-    setIsCertified(true);
-    setSelectedMethod(method);
-    /*
+  const handleLoginMethod = (method: string) => {
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
-      openModal(t('certifySelfModuleNotReady'));
-      return;
+      openModal(t('certifySelfModuleNotReady'))
+      return
     }
+    setSelectedMethod(method)
+  }
 
-    // public 폴더 기준 상대 경로 사용
-    // public/anyid/config/config.anyidc.json -> /anyid/config/config.anyidc.json
-    const configAnyidcJsonUrl = '/anyid/config/config.anyidc.json';
-    const txId = `certify-${method}-${Date.now()}`;
+  // selectedMethod 설정 후 #anyidc가 DOM에 마운트된 뒤 LOAD_MODULE 호출 (bypass: 1, toggle: false, theme: '4.1.0')
+  const loadModuleCalledRef = useRef<string | null>(null)
+  useEffect(() => {
+    if (!selectedMethod || !anyIdReady || !window.AnyidC?.LOAD_MODULE) return
+    if (loadModuleCalledRef.current === selectedMethod) return
+    loadModuleCalledRef.current = selectedMethod
 
-    // 인증 방식에 따른 설정
-    let lvl = acrValues;
-    if (method === 'sms') {
-      // 휴대폰 SMS 인증 레벨
-      lvl = 2;
-    } else if (method === 'mobileId') {
-      // 모바일 신분증 인증 레벨
-      lvl = 3;
-    }
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}anyid/config/config.anyidc.json`
+    const txId = tx ?? `certify-${selectedMethod}-${Date.now()}`
 
-    // Any-ID 본인인증 랩업장 호출
+    let lvl = acrValues
+    if (selectedMethod === 'sms') lvl = 2
+    else if (selectedMethod === 'mobileId') lvl = 3
+
+    window.anyidAdaptor = {
+      success: (data: any) => {
+        setIsCertified(true)
+      },
+    } as typeof window.anyidAdaptor
+
     window.AnyidC.LOAD_MODULE({
       cfg: configAnyidcJsonUrl,
-      txId: txId,
+      txId,
       tag: txId,
-      lvl: lvl,
-      // SSO 연동이 없는 "이용기관 자체 로그인" 흐름: bypass=1
+      lvl,
       bypass: 1,
-      toggle: true,
+      toggle: false,
       theme: '4.1.0',
       redirect_uri: redirectUri,
-      success: function (data: any) {
-        // 본인인증 성공
-        setIsCertified(true);
-        setSelectedMethod(method);
-        window.anyidAdaptor?.success?.(data);
+      success: (data: any) => {
+        setIsCertified(true)
+        window.anyidAdaptor?.success?.(data)
       },
-      fail: function (err: any) {
-        console.error(t('certifySelfFailed'), err);
-        // setIsCertified(false);
-        // setSelectedMethod(null);
-        // openModal(t('certifySelfFailedReminder'));
-
-        setIsCertified(true);
-        setSelectedMethod(method);
-        // window.anyidAdaptor?.success?.(data);
+      fail: (err: any) => {
+        console.error(t('certifySelfFailed'), err)
+        openModal(t('certifySelfFailedReminder'))
       },
-      log: function (data: any) {
-        console.log('============================ '+ t('anyIdLog') + ' ============================', data);
-
-        setIsCertified(true);
-        setSelectedMethod(method);
+      log: (data: any) => {
+        console.log(t('anyIdLog'), data)
       },
-    });
-    */
-  }
+    })
+  }, [selectedMethod, anyIdReady, tx, acrValues, redirectUri, t])
 
   // 다음단계 버튼 클릭 핸들러
   const handleNextStep = () => {
@@ -389,6 +346,11 @@ export default function CertifySelf() {
                             </Stack>
                           </Button>
                         </Box>
+                        {selectedMethod && (
+                          <Box sx={{ mt: 2 }}>
+                            <div id="anyidc" className="anyidc" />
+                          </Box>
+                        )}
                       </CardContent>
                     </Card>
 
