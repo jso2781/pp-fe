@@ -997,6 +997,15 @@
         text-align: center;
         flex-grow: 1; // 설명이 늘어나도 아이콘은 고정
       }
+
+      @media (max-width: 768px) {
+        .login-button-stack {
+          align-items: center;
+        }
+        .login-label {
+          font-size: 14px;
+        }
+      }
     }
   }
 }

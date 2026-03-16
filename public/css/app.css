@@ -1,29 +1,4 @@
 @charset "utf-8";
-/*! Fontface */@font-face {
-	font-family:Pretendard GOV Variable;
-	font-weight:45 920;
-	font-style:normal;
-	font-display:swap;
-	src:url(/anyid/fonts/PretendardGOVVariable.woff2) format("woff2-variations")
-}
-@font-face {
-	font-family:Pretendard GOV;
-	font-weight:400;
-	font-style:normal;
-	src:local("Pretendard GOV Regular"),url(/anyid/fonts/PretendardGOV-Regular.woff) format("woff")
-}
-// Medium @font-face {
-	font-weight:500;
-	src:local("Pretendard GOV Medium"),url(/anyid/fonts/PretendardGOV-Medium.woff) format("woff")
-}
-// Bold @font-face,// Medium @font-face {
-	font-family:Pretendard GOV;
-	font-style:normal
-}
-// Bold @font-face {
-	font-weight:700;
-	src:local("Pretendard GOV Bold"),url(/anyid/fonts/PretendardGOV-Bold.woff) format("woff")
-}
 #anyidc,#anyidinfo,#callout {
 	margin:0;
 	padding:0;
@@ -3053,12 +3028,12 @@
 		flex:1;
 		padding:0;
 		text-align:center;
-		font-size:12px;
+		font-size:14px;
 		white-space:nowrap
 	}
 	#anyidc.certify-sel-wrap.type-arrow.thema_04 .certify-type>li {
 		max-width:unset;
-		width:calc(50% - 10.66667px);
+		width:calc(33.33% - 10.66667px);
 		max-height:100px
 	}
 }
