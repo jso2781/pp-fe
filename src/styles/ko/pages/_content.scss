@@ -855,6 +855,7 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-end; 
+        padding:0 0 0 16px;
       }
     }
   }
@@ -865,6 +866,18 @@
 
      &__left {
       border-right:none;
+    }
+
+    &__right {
+      .kids-login-card {
+         .kids-login-title {
+          margin:0 0 10px 0;
+          padding:0;
+        }
+        .kids-login-card-content {
+          padding:0;
+        }
+      }
     }
   }
 }
@@ -925,10 +938,10 @@
   .login-button-group {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-    gap: 16px;
+    gap: 0px;
 
     .login-button {
-      height: 180px;
+      height: 137px;
       border-radius: 12px;
       background-color: #f8f8f8;
       border: 1px solid #e4e4e4;
@@ -938,7 +951,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start; 
-      padding: 16px;
+      padding: 28px 18px;
       text-align: center;
       font-family: 'Noto Sans', sans-serif;
       transition: all 0.2s ease-in-out;
@@ -957,27 +970,28 @@
         width: 100%;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: flex-start; // 상단 고정
+        align-items: flex-start;
+        // justify-content: flex-start;
         gap: 8px;
         height: 100%;
         position: relative;
       }
 
       .login-icon {
-        color: var(--color-text-2);
+        color: var(--color-text-1);
         font-size: 36px;
-        margin-bottom: 8px;
         flex-shrink: 0; // 아이콘 크기 고정
         transition: all 0.2s ease-in-out;
       }
 
       .login-label {
+        color: var(--color-text-1);
         font-weight: 700;
-        font-size: 16px;
+        font-size: 20px;
       }
 
       .login-desc {
+        color: var(--color-text-1);
         font-size: 14px;
         line-height: 1.4;
         text-align: center;

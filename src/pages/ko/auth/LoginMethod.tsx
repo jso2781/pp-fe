@@ -260,8 +260,10 @@ export default function LoginMethod() {
                               className="login-button"
                             >
                               <Stack spacing={1} alignItems="center" className="login-button-stack">
-                                <AccountIcon className="login-icon" />
-                                <Typography variant="body1" className="login-label">아이디 로그인</Typography>
+                                <Stack direction="row" spacing={1} alignItems="center">
+                                  <AccountIcon className="login-icon" />
+                                  <Typography variant="body1" className="login-label">아이디 로그인</Typography>
+                                </Stack>
                                 <Typography variant="caption" className="login-desc">
                                   한국의약품안전관리원 가입 시 등록한 아이디를 이용하여 로그인
                                 </Typography>
