@@ -26,6 +26,12 @@ import DepsLocation from '@/components/common/DepsLocation'
 
 type LoginPhase = 'redirecting' | 'preparing' | 'ready' | 'error'
 
+// Any-ID 스크립트 로더를 전역 Promise로 1회만 실행
+let anyIdAssetsPromise: Promise<void> | null = null
+
+// tx별 getAnyIdInit 결과 캐시 (중복 호출 방지)
+const anyIdInitPromiseCache = new Map<string, Promise<unknown>>()
+
 function ensureAnyIdAssets() {
   const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
 
@@ -39,20 +45,34 @@ function ensureAnyIdAssets() {
 
   const loadScript = (src: string) =>
     new Promise<void>((resolve, reject) => {
-      if (document.querySelector(`script[src="${src}"]`)) return resolve()
+      const existing = document.querySelector(`script[src="${src}"]`) as HTMLScriptElement | null
+      if (existing) {
+        // 이미 로드된 경우
+        if ((existing as any)._anyidLoaded) return resolve()
+        // 아직 로드 중이면 onload/onerror만 추가
+        existing.addEventListener('load', () => resolve(), { once: true })
+        existing.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true })
+        return
+      }
       const s = document.createElement('script')
       s.src = src
       s.async = true
-      s.onload = () => resolve()
+      s.onload = () => {
+        ;(s as any)._anyidLoaded = true
+        resolve()
+      }
       s.onerror = () => reject(new Error(`Failed to load ${src}`))
       document.body.appendChild(s)
     })
 
-  ensureLink(`${baseNorm}css/app.css`)
+  if (!anyIdAssetsPromise) {
+    ensureLink(`${baseNorm}css/app.css`)
+    anyIdAssetsPromise = loadScript(`${baseNorm}js/manifest.js`)
+      .then(() => loadScript(`${baseNorm}js/vendor.js`))
+      .then(() => loadScript(`${baseNorm}js/app.js`))
+  }
 
-  return loadScript(`${baseNorm}js/manifest.js`)
-    .then(() => loadScript(`${baseNorm}js/vendor.js`))
-    .then(() => loadScript(`${baseNorm}js/app.js`))
+  return anyIdAssetsPromise
 }
 
 export default function LoginMethod() {
@@ -97,66 +117,84 @@ export default function LoginMethod() {
 
     let cancelled = false
 
-    const run = () => {
-      ;(async () => {
-        try {
-          setPhase('preparing')
-          // 스크립트 로드와 init API 병렬로 처리해 대기 시간 단축
-          const [, initResult] = await Promise.all([
-            ensureAnyIdAssets(),
-            dispatch(getAnyIdInit({ tx })).unwrap().catch((e) => {
-              console.error('[AnyID] getAnyIdInit error', e)
-              return null
-            }),
-          ])
-          if (cancelled) return
+    ;(async () => {
+      try {
+        setPhase('preparing')
 
-          const adaptor = {
-            sso: ssoInfo ?? undefined,
-            success: async (data: any) => {
-              try{
-                const payload = await dispatch(postAnyIdLogin({ ssob: data?.ssob, tag: tx, ci: data?.res?.ci })).unwrap()
-                if(payload.status === 'LoggedIn'){
-                  navigate('/pp/ko')
-                  return
-                }
-                // 회원가입 선택 페이지로 이동(ci 파라미터 전달)
-                else if(payload.status === 'SignUpSel'){
-                  navigate('/pp/ko/auth/SignUpSel', { state: { ci: payload?.ci ?? '' } });
-                  return
-                }
-              }catch (e){
-                console.error('[AnyID] login error:', e)
-                alert('인증에 실패했습니다. 다시 시도해주세요.')
-              }
-            },
-          }
-          window.anyidAdaptor = adaptor as typeof window.anyidAdaptor
+        // tx별 init 결과 캐시: 동일 tx에 대해 getAnyIdInit 중복 호출 방지
+        const initPromise =
+          anyidInit?.txId === tx
+            ? Promise.resolve(anyidInit)
+            : (() => {
+                const cached = anyIdInitPromiseCache.get(tx)
+                if (cached) return cached
+                const p = dispatch(getAnyIdInit({ tx }))
+                  .unwrap()
+                  .catch((e) => {
+                    console.error('[AnyID] getAnyIdInit error', e)
+                    anyIdInitPromiseCache.delete(tx)
+                    return null
+                  })
+                anyIdInitPromiseCache.set(tx, p)
+                return p
+              })()
 
-          const checkAnyIdC = () => {
-            if (window.AnyidC?.LOAD_MODULE) {
-              if (!cancelled) {
-                setAnyIdReady(true)
-                setPhase('ready')
+        // 스크립트 로드와 init API 병렬 처리
+        await Promise.all([ensureAnyIdAssets(), initPromise])
+        if (cancelled) return
+
+        const adaptor = {
+          sso: ssoInfo ?? undefined,
+          success: async (data: any) => {
+            try {
+              const payload = await dispatch(postAnyIdLogin({ ssob: data?.ssob, tag: tx, ci: data?.res?.ci })).unwrap()
+              if (payload.status === 'LoggedIn') {
+                navigate('/pp/ko')
+                return
               }
-            } else {
-              setTimeout(checkAnyIdC, 100)
+              // 회원가입 선택 페이지로 이동(ci 파라미터 전달)
+              if (payload.status === 'SignUpSel') {
+                navigate('/pp/ko/auth/SignUpSel', { state: { ci: payload?.ci ?? '' } })
+                return
+              }
+            } catch (e) {
+              console.error('[AnyID] login error:', e)
+              alert('인증에 실패했습니다. 다시 시도해주세요.')
             }
-          }
-          checkAnyIdC()
-        } catch (e) {
-          console.error('[AnyID] SDK load error:', e)
-          if (!cancelled) setPhase('error')
+          },
         }
-      })()
-    }
+        window.anyidAdaptor = adaptor as typeof window.anyidAdaptor
 
-    // 첫 페인트(스켈레톤) 후 작업 시작 → 체감 로딩 개선
-    const id = requestAnimationFrame(() => run())
+        // AnyidC 준비 즉시 확인 + 짧은 간격(50ms) 재시도, 최대 2초
+        let retries = 0
+        const maxRetries = 40
+
+        const waitForAnyidC = () => {
+          if (cancelled) return
+          if (window.AnyidC?.LOAD_MODULE) {
+            setAnyIdReady(true)
+            setPhase('ready')
+            return
+          }
+          if (retries >= maxRetries) {
+            console.error('[AnyID] window.AnyidC.LOAD_MODULE not ready (timeout)')
+            setPhase('error')
+            return
+          }
+          retries += 1
+          setTimeout(waitForAnyidC, 50)
+        }
+
+        // 즉시 1회 확인 후 필요 시 짧은 간격 대기
+        waitForAnyidC()
+      } catch (e) {
+        console.error('[AnyID] SDK load error:', e)
+        if (!cancelled) setPhase('error')
+      }
+    })()
 
     return () => {
       cancelled = true
-      cancelAnimationFrame(id)
     }
   }, [tx, navigate, dispatch, ssoInfo])
 
