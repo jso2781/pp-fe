@@ -787,20 +787,20 @@ export default function PUB() {
                   </Box>
 
                   <Box className="btn-group between">
-                      <Box className="left-group">
-                        <Button variant="contained02" size="large">
-                          목록
-                        </Button>
-                      </Box>
-                      <Box className="right-group">
-                        <Button variant="outlined02" size="large">
-                          취소
-                        </Button>
-                        <Button variant="contained" size="large">
-                          수정
-                        </Button>
-                      </Box>
+                    <Box className="left-group">
+                      <Button variant="contained02" size="large">
+                        목록
+                      </Button>
                     </Box>
+                    <Box className="right-group">
+                      <Button variant="outlined02" size="large">
+                        취소
+                      </Button>
+                      <Button variant="contained" size="large">
+                        수정
+                      </Button>
+                    </Box>
+                  </Box>
                   
                   <h3 className="section-title">파일첨부</h3>
                   <Box className="attach-file-box">
@@ -936,7 +936,7 @@ export default function PUB() {
                       <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
                   </ul>
                   {/* ------------------------------------------------------------------------------------------------ */}
-                  <h3 className="section-title">리스트 넘버</h3>
+                  <h3 className="section-title">숫자형 리스트</h3>
                   <ul className="num-list">
                     <li>
                       <span className="num">1.</span>
@@ -985,7 +985,7 @@ export default function PUB() {
                     </dd>
                   </dl>
                   {/* ------------------------------------------------------------------------------------------------ */}
-                  <h3 className="section-title">dl 넘버리스트</h3>
+                  <h3 className="section-title">dl 리스트 숫자형</h3>
                   <dl className="list-definition-num">
                     <dt>직접 자료수집</dt>
                     <dd>

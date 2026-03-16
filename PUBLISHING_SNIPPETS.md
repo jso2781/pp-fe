@@ -19,8 +19,8 @@ publishing-snippets/
 │  ├ checkbox-radio.tsx (체크박스 및 라디오)
 │  ├ switch.tsx (스위치 토글)
 │  ├ file-upload.tsx (파일 첨부)
-│  ├ button-base.tsx (기본 버튼 세트)
-│  └ button-cms.tsx (CMS용 사이즈/정렬 컨트롤)
+│  ├ button-base.tsx (MUI 컴포넌트용)
+│  └ button-cms.tsx (CMS 내 HTML 직접 입력용)
 ├ UI Elements
 │  ├ loading-progress.tsx (선형 로딩바 & 메시지)
 │  └ pagination.tsx (페이징 처구)
@@ -729,13 +729,11 @@ publishing-snippets/
 </Box>
 ```
 
-
 ## 버튼
 **서비스 전반에서 사용하는 기본 버튼 컴포넌트입니다.**
 ```tsx
 <Button variant="contained">기본버튼 contained</Button>
 <Button variant="contained02">기본버튼 contained02</Button>
-
 <Button variant="outlined">라인버튼 outlined</Button>
 <Button variant="outlined02">라인버튼 outlined02</Button>
 <Button variant="outlined03">라인버튼 outlined03</Button>
@@ -834,97 +832,208 @@ publishing-snippets/
 ```
 
 ## 버튼 CMS html 사이즈
+**기본형**
 ```tsx
-
+<button className="btn_default xsmall">기본버튼 xsmall</button>
+<button className="btn_default small">기본버튼 small</button>
+<button className="btn_default large">기본버튼 large</button>
+```
+**서브형**
+```tsx
+<button className="btn_default_sub">서브버튼</button>
+<button className="btn_default_sub xsmall">서브버튼 xsmall</button>
+<button className="btn_default_sub small">서브버튼 small</button>
+<button className="btn_default_sub large">서브버튼 large</button>
+```
+**라인형**
+```tsx
+<button className="btn_outline xsmall">라인버튼 xsmall</button>
+<button className="btn_outline small">라인버튼 small</button>
+<button className="btn_outline large">라인버튼 large</button>
+```
+**라인 보조형**
+```tsx
+<button className="btn_outline_sub xsmall">라인서브버튼 xsmall</button>
+<button className="btn_outline_sub small">라인서브버튼 small</button>
+<button className="btn_outline_sub large">라인서브버튼 large</button>
 ```
 
 ## 버튼 CMS html 컨트롤 (클래스 - center, right)
 ```tsx
-
+<div className="btn-group-control right">
+  <button type="button" className="btn_default xsmall">회원가입</button>
+  <button type="button" className="btn_outline_sub xsmall"><span className="ico-down" aria-hidden="true"></span>민원신청 매뉴얼 다운로드</button>
+  <button type="button" className="btn_outline_sub xsmall">피해구제 민원신청 바로가기<span className="ico-arr-right" aria-hidden="true"></span></button>
+</div>
 ```
 
 ## 버튼 CMS html
 ```tsx
-
+<button type="button" className="btn-link-html">버튼 내부링크 바로가기</button>
+<a href="#" className="btn-link-html" target="_blank">a 내부링크 바로가기</a>
+<a href="#" className="btn-link-blank-html" target="_blank"  rel="noopener noreferrer" title="바로가기(새 창 열림)">
+  텍스트타입 외부 바로가기
+  <span className="ico-link-blank" aria-hidden="true"></span>
+  <span className="sr-only">(새 창 열림)</span>
+</a>
+<a 
+  href="#" 
+  className="btn_default" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  title="바로가기(새 창 열림)"
+>
+    버튼타입 외부 바로가기
+  <span className="ico-link" aria-hidden="true"></span>
+  <span className="sr-only">(새 창 열림)</span>
+</a>
+<button className="btn_outline_sub xsmall"><span className="ico-down" aria-hidden="true"></span>다운로드</button>
+<button className="btn_outline xsmall">다운로드<span className="ico-down-v2" aria-hidden="true"></span></button>
+<button className="btn_outline_sub xsmall">바로가기<span className="ico-arr-right" aria-hidden="true"></span></button>             
 ```
 
 ## 타이틀아래 텍스트 구성
 ```tsx
-
+<h3 className="section-title">타이틀</h3>
+<div className="section-desc">
+  <p>의약품은 시판 전 동물시험에 의한 전임상시험과 사람에 대한 임상시험을 거쳐 시판 허가를 받게 됩니다.</p>
+  <p>이런한 임상시험은 관찰기간이 제한되고, 한정된 연구대상자를 대상으로 하기 때문에 모든 약물이상반응을 파악하는 것은 불가능합니다.</p>
+  <p>따라서 시판 후 약물감시는 대단히 중요하며, 의약품 사용시 나타나는 각종 이상사례를 수집·평가하여 안전대책을 강구함으로써 국민의 안전한 의약품 사용을 도모할 수 있습니다.</p>
+</div>
 ```
 
 ## 리스트 블릿
+**큰 도트형**
 ```tsx
-
+<ul className="list-bullet">
+  <li>개인정보 보호를 위해 비밀번호 5회 이상 오류 시, 비밀번호 재설정이 필요합니다.</li>
+  <li>비밀번호는 주기적(3개월)으로 변경하시고, 서비스 이용 후 반드시 로그아웃 하시기 바랍니다.</li>
+  <li>로그인 후 60분 동안 미동작 시 자동으로 로그아웃 됩니다.</li>
+</ul>
+```
+**작은 도트형**
+```tsx
+<ul className="list-bullet-2">
+    <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
+    <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
+</ul>
+```
+**대시형**
+```tsx
+<ul className="list-bullet-3">
+    <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
+    <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
+</ul>
 ```
 
-## 리스트 넘버
+## 숫자형 리스트
 ```tsx
-
+<ul className="num-list">
+  <li>
+    <span className="num">1.</span>
+    <p className="txt">사망을 초래하거나 생명을 위협하는 사례 식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의</p>
+  </li>
+  <li>
+    <span className="num">2.</span>
+    <p className="txt">사망을 초래하거나 생명을 위협하는 사례</p>
+  </li>
+  <li>
+    <span className="num">3.</span>
+    <p className="txt">사망을 초래하거나 생명을 위협하는 사례</p>
+  </li>
+</ul>
 ```
 
 ## dl 리스트
+**기본 정의형**
 ```tsx
-
+<dl className="list-definition">
+  <dt>제조·수입업체</dt>
+  <dd>
+    <p>1) 자료 요청서 작성 및 제출</p>
+    <p>2) 순차적으로 검토 및 접수</p>
+    <p>3) 자료 추출 및 제공</p>
+  </dd>
+  <dt>제조·수입업체</dt>
+  <dd>
+    <p>1) 자료 요청서 작성 및 제출</p>
+    <p>2) 순차적으로 검토 및 접수</p>
+    <p>3) 자료 추출 및 제공</p>
+  </dd>
+</dl>
+<dl className="list-definition">
+  <dt>규정 및 신청방법 문의</dt>
+  <dd>
+    <ul className="list-bullet-3">
+        <li>이메일 : kids_kd@drugsafe.or.kr</li>
+        <li>전화 : 02-2172-6700(-1-3)</li>
+    </ul>
+  </dd>
+  <dt>규정 및 신청방법 문의</dt>
+  <dd>
+    <ul className="list-bullet-3">
+        <li>이메일 : kids_kd@drugsafe.or.kr</li>
+        <li>전화 : 02-2172-6700(-1-3)</li>
+    </ul>
+  </dd>
+</dl>
 ```
 
-## dl 넘버리스트
+## dl 리스트 숫자형
+**숫자 정의형**
 ```tsx
-
+<dl className="list-definition-num">
+  <dt>직접 자료수집</dt>
+  <dd>
+    <ul className="list-bullet-3">
+        <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
+        <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
+    </ul>
+  </dd>
+</dl>
+```
+**괄호 정의형**
+```tsx
+<dl className="list-definition-paren">
+  <dt>직접 자료수집</dt>
+  <dd>
+    <ul className="list-bullet-3">
+        <li>식품의약품안전처와 한국의약품안전관리원에서는 전문가를 위한 의약품 적정사용 정보집을 발간하고 의약품 처방‧조제 시 참고자료로 활용하도록 하고 있습니다.</li>
+        <li>2009년에는 노인에 대한 의약품 적정사용 정보집, 2010년에는 임부에 대한 의약품 적정사용 정보집, 2011년에는 소아, 신질환 환자에 대한 의약품 적정사용 정보집, 2012년에는 간질환 환자에 대한 의약품 적정사용 정보집을 개발‧제공 하였습니다.</li>
+    </ul>
+  </dd>
+</dl>
 ```
 
 ## 텍스트타입
 ```tsx
-
+<p className="txt-type-1">기본 텍스트 (.txt-type-1): 가장 표준이 되는 본문 스타일입니다. (txt-2, txt-4 등을 조합)</p>
+<p className="txt-type-1 txt-2">기본 텍스트</p>
+<p className="txt-type-1 txt-4">기본 텍스트</p>
+<p className="txt-type-2">큰 원형 불릿 Bold(700)</p>
+<p className="txt-type-3">별표 불릿</p>
+<p className="txt-type-4">가로선(Dash)</p>
+<p className="txt-type-5">작은 점 Regular(400)</p>
 ```
 
 ## 텍스트 아이콘타입
 ```tsx
-
+<p className="txt-icon-1">느낌표 원형 아이콘 주의 사항이나 안내 문구</p>
 ```
 
 ## 웹,모바일 이미지
+**기기 해상도에 따라 PC용과 모바일용 이미지를 선택적으로 노출합니다.**
 ```tsx
-
+<div className="img-switcher">
+  <img src="/img/cms/이미지.png" alt="이미지설명" className="responsive-img pc-only"/>
+  <img src="/img/cms/이미지_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+</div>
 ```
 
 ## 
 ```tsx
 
 ```
-
-## 
-```tsx
-
-```
-
-## 
-```tsx
-
-```
-
-## 
-```tsx
-
-```
-
-## 
-```tsx
-
-```
-
-## 
-```tsx
-
-```
-
-
-
-
-
-
-
-
 
 **문서 작성일**: 2026년
 **프로젝트**: pp-fe
