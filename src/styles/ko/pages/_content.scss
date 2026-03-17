@@ -959,6 +959,7 @@
       position: relative;
 
       &:hover {     
+        border-width: 2px;
         border-color: var(--color-text-2);  ;  
       }
 
@@ -991,7 +992,7 @@
       }
 
       .login-desc {
-        color: var(--color-text-1);
+        color: #555;
         font-size: 14px;
         line-height: 1.4;
         text-align: center;

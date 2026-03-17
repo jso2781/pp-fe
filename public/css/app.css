@@ -3062,7 +3062,7 @@
 	}
 	#anyidc.certify-sel-wrap.type-arrow.thema_04 .certify-type>li {
 		max-width: unset;
-		width: calc(33.33% - 10.66667px);
+		width: calc(50% - 10.66667px);
 		max-height: 100px
 	}
 }
