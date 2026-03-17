@@ -159,7 +159,7 @@ export default function CertifySelf() {
     if (loadModuleCalledRef.current === selectedMethod) return
     loadModuleCalledRef.current = selectedMethod
 
-    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}/config/config.anyidc.json`
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
     const txId = tx ?? `certify-${selectedMethod}-${Date.now()}`
 
     let lvl = acrValues
