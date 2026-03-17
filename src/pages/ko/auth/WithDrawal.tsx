@@ -145,7 +145,7 @@ export default function WithDrawal() {
 
                     <Box className="btn-group between">
                       <Button variant="outlined02" size="large" onClick={() => navigate(-1)}>{t('cancel')}</Button>
-                      <Button variant="contained" size="large" onClick={handleWithdrawal}>{t('mbrWithdrawalSubmit')}</Button>
+                      <Button variant="contained"  size="large" onClick={handleWithdrawal} disabled={reason === ''}>{t('mbrWithdrawalSubmit')}</Button>
                     </Box>
                   </Box>
                 </Box>
