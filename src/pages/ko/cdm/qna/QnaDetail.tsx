@@ -3,7 +3,7 @@
  */
 import { useEffect, useState } from 'react';
 
-const CDM_BASE_URL = import.meta.env.VITE_CDM_URL ?? 'http://localhost:8081';
+const CDM_BASE_URL = import.meta.env.VITE_CDM_API_BASE_URL ?? 'http://localhost:8081';
 import { Box, Button, Link, Typography } from '@mui/material';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import DepsLocation from '@/components/common/DepsLocation';

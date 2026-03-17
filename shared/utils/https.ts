@@ -38,7 +38,7 @@ const adviceApiBaseURL = import.meta.env.VITE_ADVICE_API_BASE_URL ?? 'http://loc
 const ADVICE_PATHS = ['/exprt/exprtAplyChk', '/exprt/updateExprtAprvStts']
 
 /** CDM API 서버 */
-const cdmApiBaseURL = import.meta.env.VITE_CDM_URL ?? 'http://localhost:8090/api/cm'
+const cdmApiBaseURL = import.meta.env.VITE_CDM_API_BASE_URL ?? 'http://localhost:8090/api/cm'
 const CDM_PATHS = ['/community']
 
 const https: AxiosInstance = axios.create({
