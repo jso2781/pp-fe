@@ -159,7 +159,7 @@ export default function CertifySelf() {
     if (loadModuleCalledRef.current === selectedMethod) return
     loadModuleCalledRef.current = selectedMethod
 
-    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}anyid/config/config.anyidc.json`
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}/config/config.anyidc.json`
     const txId = tx ?? `certify-${selectedMethod}-${Date.now()}`
 
     let lvl = acrValues
@@ -312,7 +312,13 @@ export default function CertifySelf() {
                         </span>
                       </Typography>
                     </Box>
-                    
+
+                    {selectedMethod && (
+                      <Box sx={{ mt: 2 }}>
+                        <div id="anyidc" className="anyidc" />
+                      </Box>
+                    )}
+
                     <Card className="login-method-card">
                       <CardContent className="login-method-card-content">
                         <Box className="login-button-group">
@@ -346,11 +352,8 @@ export default function CertifySelf() {
                             </Stack>
                           </Button>
                         </Box>
-                        {selectedMethod && (
-                          <Box sx={{ mt: 2 }}>
-                            <div id="anyidc" className="anyidc" />
-                          </Box>
-                        )}
+
+
                       </CardContent>
                     </Card>
 

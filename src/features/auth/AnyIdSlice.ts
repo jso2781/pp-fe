@@ -67,7 +67,7 @@ const AnyIdSlice = createSlice({
       })
       .addCase(getAnyIdInit.fulfilled, (state, action) => {
         state.loading = false;
-        state.anyidInit = action.payload ?? null;
+        state.anyidInit = action.payload as AnyIdInitRVO ?? null;
       })
       .addCase(getAnyIdInit.rejected, (state, action) => {
         state.loading = false;
@@ -79,7 +79,7 @@ const AnyIdSlice = createSlice({
       })
       .addCase(postAnyIdLogin.fulfilled, (state, action) => {
         state.loading = false;
-        state.anyIdLoginResult = action.payload ?? null;
+        state.anyIdLoginResult = action.payload as AnyIdLoginRVO ?? null;
       })
       .addCase(postAnyIdLogin.rejected, (state, action) => {
         state.loading = false;
@@ -91,7 +91,7 @@ const AnyIdSlice = createSlice({
       })
       .addCase(getAnyIdUserInfo.fulfilled, (state, action) => {
         state.loading = false;
-        state.anyIdUserInfo = action.payload ?? null;
+        state.anyIdUserInfo = action.payload as AnyIdUserInfoRVO ?? null;
       })
       .addCase(getAnyIdUserInfo.rejected, (state, action) => {
         state.loading = false;

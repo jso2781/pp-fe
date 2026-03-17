@@ -55,7 +55,7 @@ export const postAnyIdLogin = createAsyncThunk<AnyIdLoginRVO, AnyIdLoginPVO, { r
   async (params: AnyIdLoginPVO, { rejectWithValue }) => {
     try {
       const res = await https.post(anyIdLoginApiPath(), params ?? {});
-      const payload = res.data?.data as AnyIdLoginRVO;
+      const payload = res.data?.data;
       return payload as AnyIdLoginRVO;
     } catch (e) {
       console.log('AnyIdThunks postAnyIdLogin error!!', e);

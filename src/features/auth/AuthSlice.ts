@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { login, refresh, logout, loginExtend} from './AuthThunks';
+import { login, refresh, logout, loginExtend } from './AuthThunks';
+import { postAnyIdLogin } from './AnyIdThunks';
 import { MbrInfoRVO } from '../mbr/MbrInfoTypes';
 
 /**
@@ -140,6 +141,28 @@ const AuthSlice = createSlice({
         state.acsTokenCn = null;
         state.updtTokenCn = null;
         state.pswdErrNmtm = null;
+      })
+      // Any-ID 로그인 성공 시 auth 상태 동기화 (AnyIdLoginRVO는 LoginRVO와 동일한 토큰/회원정보 필드 구조)
+      .addCase(postAnyIdLogin.fulfilled, (state, action) => {
+        const payload = action.payload;
+        state.userInfo = payload?.userInfo ?? null;
+        state.tokenSn = payload?.tokenSn ?? null;
+        state.acsTokenCn = payload?.acsTokenCn ?? null;
+        state.updtTokenCn = payload?.updtTokenCn ?? null;
+        state.pswdErrNmtm = payload?.pswdErrNmtm ?? null;
+        if (payload?.acsTokenCn && payload?.userInfo) {
+          const authData = {
+            userInfo: payload.userInfo,
+            tokenSn: payload.tokenSn,
+            acsTokenCn: payload.acsTokenCn,
+            updtTokenCn: payload.updtTokenCn,
+            pswdErrNmtm: payload.pswdErrNmtm,
+          };
+          sessionStorage.setItem('auth', JSON.stringify(authData));
+          if (payload.updtTokenCn) {
+            sessionStorage.setItem('updtTokenCn', payload.updtTokenCn);
+          }
+        }
       })
       .addCase(refresh.pending, (state) => {
         state.loading = true;

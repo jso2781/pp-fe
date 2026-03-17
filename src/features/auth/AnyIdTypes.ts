@@ -1,3 +1,5 @@
+import { MbrInfoRVO } from "@/features/mbr/MbrInfoTypes"
+
 export interface AnyIdInitPVO {
   tx?: string
 }
@@ -32,8 +34,42 @@ export interface AnyIdLoginPVO {
 
 /** Any-ID 로그인 응답 결과 (POST /auth/anyid/login) */
 export interface AnyIdLoginRVO {
+  /**
+   * status: 로그인 상태 (LoggedIn: 로그인 성공, SignUpSel: 회원가입 선택)
+   */
   status?: string
+
+  /**
+   * Any-ID 본인인증 응답 결과로 CI(Certification Information) 값을 전달 받음.
+   * ci: 인증 토큰
+   */
   ci?: string
+
+  /**
+   * status: 로그인 상태((로그인 성공, status=LoggedIn)일 경우만  회원정보가 전달됨.)
+   * 회원정보
+   */
+  userInfo?: MbrInfoRVO
+
+  /**
+   * JWT토큰일련번호((로그인 성공, status=LoggedIn)일 경우만 JWT토큰일련번호가 전달됨.)
+   */
+  tokenSn?: number
+
+  /**
+   * JWT_Access_Token((로그인 성공, status=LoggedIn)일 경우만 JWT_Access_Token가 전달됨.)
+   */
+  acsTokenCn?: string
+
+  /**
+   * JWT_Refresh_Token((로그인 성공, status=LoggedIn)일 경우만 JWT_Refresh_Token가 전달됨.)
+   */
+  updtTokenCn?: string
+
+  /**
+   * 비밀번호오류횟수((로그인 성공, status=LoggedIn)일 경우만 비밀번호오류횟수=0이 전달됨.)
+   */
+  pswdErrNmtm?: number
 }
 
 /** Any-ID 사용자 정보 조회 결과 */

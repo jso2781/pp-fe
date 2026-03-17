@@ -103,6 +103,9 @@ export default function LoginMethod() {
           sso: ssoInfo ?? undefined,
           success: async (data: any) => {
             try {
+              /*
+               * AnyidSlice에서 postAnyIdLogin.fulfilled 액션 핸들러가 실행될 때 AuthSlice 에서도 postAnyIdLogin.fulfilled 액션을 감지해서 auth 상태를 동기화 함.
+               */
               const payload = await dispatch(postAnyIdLogin({ ssob: data?.ssob, tag: tx, ci: data?.res?.ci })).unwrap()
               if (payload.status === 'LoggedIn') {
                 navigate('/pp/ko')
@@ -168,7 +171,7 @@ export default function LoginMethod() {
         fail: failCb,
         log: logCb,
         redirect_uri: redirectUri,
-        cfg: anyidInit?.cfg ?? '/anyid/config/config.anyidc.json',
+        cfg: anyidInit?.cfg ?? '/config/config.anyidc.json',
         txId: anyidInit?.txId ?? tx,
         tag: anyidInit?.tag ?? tx,
         lvl: anyidInit?.lvl ?? acrValues,
