@@ -239,8 +239,8 @@ export default function Login() {
                       <Box component="form" onSubmit={onSubmit} noValidate autoComplete="off">
                         {/* 브라우저 자동입력이 더미를 채우도록 유도 (Chrome 등은 autocomplete="off"를 로그인 필드에서 무시함) */}
                         <div style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }} aria-hidden="true">
-                          <input type="text" name="username" autoComplete="username" tabIndex={-1} />
-                          <input type="password" name="password" autoComplete="current-password" tabIndex={-1} />
+                          <input type="text" name="username" autoComplete="username" tabIndex={-1} title="사용자 아이디(자동완성용)"/>
+                          <input type="password" name="password" autoComplete="current-password" tabIndex={-1}  title="비밀번호(자동완성용)"/>
                         </div>
                         <Box className="form-item">
                           <Typography component="label" htmlFor="loginId" id="loginId-label" className="label">
