@@ -1,6 +1,6 @@
 import { getTrmsStt, getTrmsSttLatest, selectTrmsSttList } from "@/features/stt/TrmsSttThunks";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { TrmsSttRVO } from "@/features/stt/TrmsSttTypes";
 import { Box } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
@@ -9,6 +9,7 @@ export default function RenderStt({ trmsSttCd, isList }: { trmsSttCd: string, is
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const { current, loading, error, list } = useAppSelector(s => s.stt);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     scrollTo(0, 0);
@@ -17,6 +18,7 @@ export default function RenderStt({ trmsSttCd, isList }: { trmsSttCd: string, is
       dispatch(selectTrmsSttList({ trmsSttCd })).unwrap()
         .then((res) => {
           const trmsSttAplcnYmd = res.list[0].trmsSttAplcnYmd;
+          setSelectedIndex(0);
           dispatch(getTrmsStt({ trmsSttCd, trmsSttAplcnYmd }));
         });
     } else {
@@ -43,9 +45,9 @@ export default function RenderStt({ trmsSttCd, isList }: { trmsSttCd: string, is
 
   if(!current?.trmsSttCn) return <>컨텐츠 없음</>
 
-  const handleSetCurrentClick = (trmsSttRVO: TrmsSttRVO) => () => {
+  const handleSetCurrentClick = (trmsSttRVO: TrmsSttRVO, index: number) => () => {
     const trmsSttAplcnYmd = trmsSttRVO.trmsSttAplcnYmd || '';
-    // navigate(`?${trmsSttAplcnYmd}`);
+    setSelectedIndex(index);
     setSearchParams({ d: trmsSttAplcnYmd });
   }
   
@@ -57,10 +59,19 @@ export default function RenderStt({ trmsSttCd, isList }: { trmsSttCd: string, is
           : <Box><pre>{current.trmsSttCn}</pre></Box>
       }
       {list.length > 0 && list.map((trmsSttRVO, i) => {
-        if(current.trmsSttAplcnYmd === trmsSttRVO.trmsSttAplcnYmd) {
-          return <Box key={`faq-${i}`} style={{fontWeight: "bold", color: "#087c80"}}>{formatter(trmsSttRVO.trmsSttAplcnYmd)} ~ {formatter(trmsSttRVO.trmsSttEndYmd)}</Box>;
-        }
-        return <Box key={`faq-${i}`} onClick={handleSetCurrentClick(trmsSttRVO)}>{formatter(trmsSttRVO.trmsSttAplcnYmd)} ~ {formatter(trmsSttRVO.trmsSttEndYmd)}</Box>
+        const isSelected = selectedIndex === i;
+        return (
+          <Box
+            key={`faq-${i}`}
+            onClick={isSelected ? undefined : handleSetCurrentClick(trmsSttRVO, i)}
+            sx={isSelected
+              ? { fontWeight: "bold", color: "#087c80" }
+              : { cursor: "pointer", "&:hover": { color: "#087c80", textDecoration: "underline" } }
+            }
+          >
+            {formatter(trmsSttRVO.trmsSttAplcnYmd)} ~ {formatter(trmsSttRVO.trmsSttEndYmd)}
+          </Box>
+        );
       })}
     </>
   );
