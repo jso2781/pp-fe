@@ -938,7 +938,7 @@
   .login-button-group {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-    gap: 0px;
+    gap: 10px;
 
     .login-button {
       height: 139px;
