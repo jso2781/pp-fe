@@ -491,7 +491,10 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   )}
 
                   {user && user.userInfo?.cnstnMbcmtYn === 'Y' ? (
-                    <Button size="small" onClick={() => window.open('https://www.drugsafe.or.kr/expert/main/main.do', '_blank', 'noopener,noreferrer')} className="btn-util adv-task">
+                    <Button size="small" onClick={() => {
+                      localStorage.setItem('uex_relay_token', user?.acsTokenCn ?? '')
+                      window.open(`${window.location.origin}/uex/cb/applt`, '_blank', 'noopener,noreferrer')
+                    }} className="btn-util adv-task">
                       {t('advTask')} {/* 자문위원 업무 */}
                     </Button>
                   ) : (
@@ -712,7 +715,10 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                 )}
 
                 {isAuthenticated && user && user.userInfo?.cnstnMbcmtYn === 'Y' ? (
-                  <Button size="small" onClick={() => { window.open('https://www.drugsafe.or.kr/expert/main/main.do', '_blank', 'noopener,noreferrer'); setMobileMenuOpen(false); }} className="btn-util adv-task">
+                  <Button size="small" onClick={() => {
+                    localStorage.setItem('uex_relay_token', user?.acsTokenCn ?? '')
+                    window.open(`${window.location.origin}/uex/cb/applt`, '_blank', 'noopener,noreferrer'); setMobileMenuOpen(false);
+                  }} className="btn-util adv-task">
                     {t('advTask')} {/* 자문위원 업무 */}
                   </Button>
                 ) : (
