@@ -23,7 +23,7 @@ publishing-snippets/
 │  └ button-cms.tsx (CMS 내 HTML 직접 입력용)
 ├ UI Elements
 │  ├ loading-progress.tsx (선형 로딩바 & 메시지)
-│  └ pagination.tsx (페이징 처구)
+│  └ pagination.tsx (페이지네이션)
 └ typography
    ├ list-bullet.tsx (블릿 리스트)
    ├ list-number.tsx (숫자 리스트)
@@ -418,7 +418,7 @@ publishing-snippets/
 **데이터가 없는 경우 표시하는 UI입니다.**
 ```tsx
 <Box className="no-data">
-  <p>게시물이없습니다.</p>
+  <p>게시물이 없습니다.</p>
 </Box>
 ```
 
@@ -1020,8 +1020,7 @@ publishing-snippets/
 ```tsx
 <p className="txt-icon-1">느낌표 원형 아이콘 주의 사항이나 안내 문구</p>
 ```
-
-## 웹,모바일 이미지
+locale
 **기기 해상도에 따라 PC용과 모바일용 이미지를 선택적으로 노출합니다.**
 ```tsx
 <div className="img-switcher">
