@@ -5,6 +5,12 @@
 let anyIdAssetsPromise: Promise<void> | null = null
 
 export function ensureAnyIdAssets(): Promise<void> {
+  // 로컬/개발 환경에서는 Any-ID 자원(스크립트/설정)을 로딩하지 않는다.
+  // (production 환경에서만 Any-ID SDK를 로딩하도록 강제)
+  if (import.meta.env.MODE !== 'production') {
+    return Promise.resolve()
+  }
+
   const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
 
   const ensureLink = (href: string) => {

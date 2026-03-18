@@ -25,7 +25,7 @@ import { getAnyIdInit, postAnyIdLogin } from '@/features/auth/AnyIdThunks'
 import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
 import DepsLocation from '@/components/common/DepsLocation'
 
-type LoginPhase = 'redirecting' | 'preparing' | 'ready' | 'error'
+type LoginPhase = 'local' | 'redirecting' | 'preparing' | 'ready' | 'error'
 
 // tx별 getAnyIdInit 결과 캐시 (중복 호출 방지)
 const anyIdInitPromiseCache = new Map<string, Promise<unknown>>()
@@ -36,8 +36,10 @@ export default function LoginMethod() {
   const dispatch = useAppDispatch()
   const ssoInfo = useAppSelector((s) => s.anyId.ssoInfo)
   const anyidInit = useAppSelector((s) => s.anyId.anyidInit)
+  const isLocalDev = import.meta.env.MODE !== 'production'
   const [anyIdReady, setAnyIdReady] = useState(false)
   const [phase, setPhase] = useState<LoginPhase>(() => {
+    if (import.meta.env.MODE !== 'production') return 'local'
     const p = new URLSearchParams(location.search)
     return p.get('tx') ? 'preparing' : 'redirecting'
   })
@@ -57,6 +59,10 @@ export default function LoginMethod() {
 
   // tx 없음 → 최소 UI만 보여주고 즉시 리다이렉트 (전체 레이아웃 스킵)
   useEffect(() => {
+    if (isLocalDev) {
+      setPhase('local')
+      return
+    }
     if (!tx) {
       setPhase('redirecting')
       const currentPath = location.pathname || '/pp/ko/auth/LoginMethod'
@@ -68,6 +74,10 @@ export default function LoginMethod() {
 
   // tx 있음 → 첫 페인트 후 스크립트·init 병렬 수행
   useEffect(() => {
+    if (isLocalDev) {
+      setPhase('local')
+      return
+    }
     if (!tx) return
 
     let cancelled = false
@@ -153,6 +163,7 @@ export default function LoginMethod() {
   // LOAD_MODULE 1회 호출 (bypass=0, KMS tx 사용)
   const loadModuleCalledRef = useRef(false)
   useEffect(() => {
+    if (isLocalDev) return
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE || loadModuleCalledRef.current) return
     if (!tx) return  // tx 없으면 호출하지 않음
 
@@ -231,6 +242,24 @@ export default function LoginMethod() {
                         </Box>
                       )}
                       {phase === 'ready' && <div id="anyidc" className="anyidc" />}
+                      {phase === 'local' && (
+                        <Box
+                          sx={{
+                            minHeight: 200,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            border: '1px dashed',
+                            borderColor: 'divider',
+                            borderRadius: 1,
+                            bgcolor: 'background.paper',
+                            px: 2,
+                            textAlign: 'center',
+                          }}
+                        >
+                          <Typography color="error">로컬 테스트 환경입니다. 개발환경에서는 사용할 수 없습니다.</Typography>
+                        </Box>
+                      )}
                       {phase === 'error' && (
                         <Box id="anyidc" className="anyidc" sx={{ minHeight: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <Typography color="error">로그인 도구를 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.</Typography>

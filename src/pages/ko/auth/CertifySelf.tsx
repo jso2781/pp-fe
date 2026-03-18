@@ -9,9 +9,6 @@ import React, { useMemo, useState, useRef, useEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Stepper, Step, StepLabel, Typography, Card, CardContent, Stack, Dialog, DialogTitle, DialogContent, DialogActions, IconButton} from '@mui/material';
 import {
-  PhoneAndroid as PhoneIcon,
-  AccountCircle as AccountIcon,
-  Fingerprint as FingerprintIcon,
   HelpOutline as HelpIcon,
   Close as CloseIcon,
 } from '@mui/icons-material'
@@ -32,6 +29,8 @@ declare global {
 
 import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
 
+const isProduction = import.meta.env.MODE === 'production'
+
 export default function CertifySelf() {
   const { lang } = useParams<{ lang: string }>();
   const navigate = useNavigate();
@@ -40,9 +39,6 @@ export default function CertifySelf() {
 
   // 본인인증 완료 상태
   const [isCertified, setIsCertified] = useState(false);
-  
-  // 선택한 인증 방식 추적
-  const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
 
   // Any-ID 준비 상태
   const [anyIdReady, setAnyIdReady] = useState(false);
@@ -109,6 +105,10 @@ export default function CertifySelf() {
 
   // Any-ID 자원 로드 (전역 1회 캐시) + AnyidC 준비 즉시 확인 + 짧은 간격 대기
   useEffect(() => {
+    // 로컬/개발 환경에서는 Any-ID SDK/설정을 로딩하지 않는다.
+    if (import.meta.env.MODE !== 'production') {
+      return
+    }
     if (hasLoadedAnyIdRef.current) return
     hasLoadedAnyIdRef.current = true
 
@@ -144,27 +144,17 @@ export default function CertifySelf() {
     setModalMessage('');
   };
 
-  const handleLoginMethod = (method: string) => {
-    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
-      openModal(t('certifySelfModuleNotReady'))
-      return
-    }
-    setSelectedMethod(method)
-  }
-
-  // selectedMethod 설정 후 #anyidc가 DOM에 마운트된 뒤 LOAD_MODULE 호출 (bypass: 1, toggle: false, theme: '4.1.0')
-  const loadModuleCalledRef = useRef<string | null>(null)
+  // #anyidc가 DOM에 마운트된 뒤 LOAD_MODULE 1회 호출 (bypass: 1, toggle: false, theme: '4.1.0') — production 전용
+  const loadModuleCalledRef = useRef(false)
   useEffect(() => {
-    if (!selectedMethod || !anyIdReady || !window.AnyidC?.LOAD_MODULE) return
-    if (loadModuleCalledRef.current === selectedMethod) return
-    loadModuleCalledRef.current = selectedMethod
+    if (!isProduction) return
+    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return
+    if (loadModuleCalledRef.current) return
+    loadModuleCalledRef.current = true
 
     const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
-    const txId = tx ?? `certify-${selectedMethod}-${Date.now()}`
-
-    let lvl = acrValues
-    if (selectedMethod === 'sms') lvl = 2
-    else if (selectedMethod === 'mobileId') lvl = 3
+    const txId = tx ?? `certify-${Date.now()}`
+    const lvl = acrValues
 
     window.anyidAdaptor = {
       success: (data: any) => {
@@ -193,11 +183,12 @@ export default function CertifySelf() {
         console.log(t('anyIdLog'), data)
       },
     })
-  }, [selectedMethod, anyIdReady, tx, acrValues, redirectUri, t])
+  }, [anyIdReady, tx, acrValues, redirectUri, t])
 
   // 다음단계 버튼 클릭 핸들러
   const handleNextStep = () => {
-    if (!isCertified) {
+    // production: 본인인증 완료 후에만 다음 화면으로 진행
+    if (isProduction && !isCertified) {
       openModal(t('certifySelfCompleteReminder'));
       return;
     }
@@ -313,49 +304,30 @@ export default function CertifySelf() {
                       </Typography>
                     </Box>
 
-                    {selectedMethod && (
+                    {/* production: anyidc 영역 자동 로드. non-production: 로컬 안내 문구만 표시 */}
+                    {isProduction ? (
                       <Box sx={{ mt: 2 }}>
                         <div id="anyidc" className="anyidc" />
                       </Box>
+                    ) : (
+                      <Box
+                        sx={{
+                          mt: 2,
+                          minHeight: 200,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          border: '1px dashed',
+                          borderColor: 'divider',
+                          borderRadius: 1,
+                          bgcolor: 'background.paper',
+                          px: 2,
+                          textAlign: 'center',
+                        }}
+                      >
+                        <Typography color="error">로컬 테스트 환경입니다. 개발환경에서는 사용할 수 없습니다.</Typography>
+                      </Box>
                     )}
-
-                    <Card className="login-method-card">
-                      <CardContent className="login-method-card-content">
-                        <Box className="login-button-group">
-                          <Button variant="outlined" onClick={() => handleLoginMethod('simple')} className="login-button">
-                            <Stack spacing={1} alignItems="center" className="login-button-stack">
-                              <AccountIcon className="login-icon" />
-                              <Typography variant="body1" className="login-label">{t('certifySelfSimple')}</Typography>
-                              <Typography variant="caption" className="login-desc">
-                                {t('certifySelfSimpleDesc')}
-                              </Typography>
-                            </Stack>
-                          </Button>
-                          
-                          <Button variant="outlined" onClick={() => handleLoginMethod('sms')} className="login-button">
-                            <Stack spacing={1} alignItems="center" className="login-button-stack">
-                              <PhoneIcon className="login-icon" />
-                              <Typography variant="body1" className="login-label">{t('certifySelfSms')}</Typography>
-                              <Typography variant="caption" className="login-desc">
-                                {t('certifySelfSmsDesc')}
-                              </Typography>
-                            </Stack>
-                          </Button>
-
-                          <Button variant="outlined" onClick={() => handleLoginMethod('mobileId')} className="login-button">
-                            <Stack spacing={1} alignItems="center" className="login-button-stack">
-                              <FingerprintIcon className="login-icon" />
-                              <Typography variant="body1" className="login-label">{t('certifySelfMobileId')}</Typography>
-                              <Typography variant="caption" className="login-desc">
-                                {t('certifySelfMobileIdDesc')}
-                              </Typography>
-                            </Stack>
-                          </Button>
-                        </Box>
-
-
-                      </CardContent>
-                    </Card>
 
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group between">
@@ -364,7 +336,7 @@ export default function CertifySelf() {
                         variant="contained" 
                         size="large" 
                         onClick={handleNextStep}
-                        disabled={!isCertified}
+                        disabled={isProduction && !isCertified}
                       >
                         {t('nextStep')}
                       </Button>
