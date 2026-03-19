@@ -235,7 +235,9 @@ export default function ExpertMyWork() {
                         <span className="user-name">{info?.encptExprtFlnm ?? '-'}</span>
                         <span className="user-company">{info?.instNm ?? '-'}</span>
                       </Box>
-                      <p className="last-login">마지막 접속일시 : {info?.lastLgnDt ?? '-'}</p>
+                      {info?.lastLgnDt && (
+                        <p className="last-login">마지막 접속일시 : {info?.lastLgnDt}</p>
+                      )}
                     </Box>
                     {info && (
                       <Box className="control-action">
