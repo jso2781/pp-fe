@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectMbrInfoList, getMbrInfo, insertMbrInfo, updateMbrInfo, saveMbrInfo, deleteMbrInfo, existMbrInfo, verifyPassword, findMbrInfoId, updateMbrInfoPw } from './MbrInfoThunks'
+import { selectMbrInfoList, getMbrInfo, insertMbrInfo, updateMbrInfo, saveMbrInfo, deleteMbrInfo, existMbrInfo, verifyPassword, findMbrInfoId, updateMbrInfoPw, insertMbrInfoWithSttyAgtInfo } from './MbrInfoThunks'
 import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO  } from './MbrInfoTypes'
 
 /**
@@ -101,6 +101,18 @@ const MbrInfoSlice = createSlice({
       .addCase(insertMbrInfo.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) || 'Failed to insert MbrInfo';
+      })
+      .addCase(insertMbrInfoWithSttyAgtInfo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(insertMbrInfoWithSttyAgtInfo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.insertCnt = action.payload;
+      })
+      .addCase(insertMbrInfoWithSttyAgtInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || 'Failed to insert MbrInfoWithSttyAgtInfo';
       })
       .addCase(updateMbrInfo.pending, (state) => {
         state.loading = true;

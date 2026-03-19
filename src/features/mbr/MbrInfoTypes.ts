@@ -1,3 +1,5 @@
+import { SttyAgtInfoPVO } from "./SttyAgtInfoTypes"
+
 /**
  * 대국민포털_회원정보기본 조회 목업 정보 
  */
@@ -153,6 +155,14 @@ export interface MbrInfoPVO {
 
   /** 수정일시 */
   mdfcnDt?: string | null
+}
+
+export interface MbrInfoWithSttyAgtInfoPVO{
+  /** 회원 정보 */
+  mbrInfo: MbrInfoPVO
+
+  /** 법정대리인 정보 */
+  sttyAgtInfo: SttyAgtInfoPVO
 }
 
 /**

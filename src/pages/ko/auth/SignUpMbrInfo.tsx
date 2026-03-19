@@ -11,8 +11,9 @@ import { Box, Button, Stepper, Step, StepLabel, Typography, TextField, Stack } f
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
-import { existMbrInfo, insertMbrInfo } from '@/features/mbr/MbrInfoThunks'
-import { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes'
+import { existMbrInfo, insertMbrInfo, insertMbrInfoWithSttyAgtInfo } from '@/features/mbr/MbrInfoThunks'
+import { MbrInfoPVO, MbrInfoWithSttyAgtInfoPVO } from '@/features/mbr/MbrInfoTypes'
+import { SttyAgtInfoPVO } from '@/features/mbr/SttyAgtInfoTypes'
 
 export default function SignUpMbrInfo() {
   const { t } = useTranslation();
@@ -27,7 +28,7 @@ export default function SignUpMbrInfo() {
   // 본인인증에서 전달받은 데이터
   // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)
   // 일반 가입의 경우: legalGuardFormData 없음 (본인인증에서 받은 데이터는 별도 처리)
-  const state = location.state as { 
+  const locationState = location.state as { 
     steps?: ReturnType<typeof getSignUpSteps>; 
     legalGuardFormData?: {
       userName?: string;           // 신청인 이름 (만 14세 미만)
@@ -79,16 +80,16 @@ export default function SignUpMbrInfo() {
 
   // 이전 화면에서 전달받은 steps를 사용하거나, 없으면 새로 생성 (본인인증 화면에서 전달받은 steps)
   const steps = useMemo(() => {
-    if (state?.steps && Array.isArray(state.steps)) {
-      return state.steps;
+    if (locationState?.steps && Array.isArray(locationState.steps)) {
+      return locationState.steps;
     }
     return getSignUpSteps(t, false); // 일반 가입 (14세 이상)
-  }, [state?.steps, t]);
+  }, [locationState?.steps, t]);
 
   // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터(이전 화면에서 전달받은 ci 파라미터)
   const ci = useMemo(() => {
-    return location.state?.ci as string;
-  }, [location.state?.ci]);
+    return locationState?.ci as string;
+  }, [locationState?.ci]);
 
   // currentStep을 steps 배열에서 'inputMbrInfo' 단계를 찾아서 동적으로 계산
   const currentStep = useMemo(() => {
@@ -96,14 +97,14 @@ export default function SignUpMbrInfo() {
   }, [steps, t]);
 
   // 전달받은 legalGuardFormData(법정대리인 동의 폼 데이터들) 또는 sessionStorage에서 불러온 legalGuardFormData(법정대리인 동의 폼 데이터들) 사용
-  // 14세 이상 일반 가입: state.legalGuardFormData 없음 → sessionStorage를 사용하지 않고 빈 값 사용 (이전 로그인/다른 흐름의 잔여 데이터 노출 방지)
+  // 14세 이상 일반 가입: locationState.legalGuardFormData 없음 → sessionStorage를 사용하지 않고 빈 값 사용 (이전 로그인/다른 흐름의 잔여 데이터 노출 방지)
   const initialFormData = useMemo(() => {
     // location.state에서 전달받은 legalGuardFormData(법정대리인 동의 폼 데이터들)가 있으면 우선 사용하고 저장 (만 14세 미만 가입)
-    if (state && state.legalGuardFormData) {
-      saveLegalGuardFormDataToStorage(state.legalGuardFormData);
+    if (locationState && locationState.legalGuardFormData) {
+      saveLegalGuardFormDataToStorage(locationState.legalGuardFormData);
       return {
-        userName: state.legalGuardFormData.userName || '',
-        phone: state.legalGuardFormData.phone || '',
+        userName: locationState.legalGuardFormData.userName || '',
+        phone: locationState.legalGuardFormData.phone || '',
       };
     }
     // 14세 이상 일반 가입: sessionStorage의 legalGuardFormData를 사용하지 않음 (이전 세션/다른 사용자·14세 미만 시도 잔여 데이터 방지)
@@ -111,7 +112,7 @@ export default function SignUpMbrInfo() {
       userName: '',
       phone: '',
     };
-  }, [state]);
+  }, [locationState]);
 
   // 폼 상태 관리
   const [formData, setFormData] = useState({
@@ -125,15 +126,15 @@ export default function SignUpMbrInfo() {
 
   // location.state에서 새로운 legalGuardFormData(법정대리인 동의 폼 데이터들)가 전달되면 업데이트
   useEffect(() => {
-    if (state && state.legalGuardFormData) {
-      saveLegalGuardFormDataToStorage(state.legalGuardFormData);
+    if (locationState && locationState.legalGuardFormData) {
+      saveLegalGuardFormDataToStorage(locationState.legalGuardFormData);
       setFormData(prev => ({
         ...prev,
-        userName: state.legalGuardFormData?.userName || prev.userName,
-        phone: state.legalGuardFormData?.phone || prev.phone,
+        userName: locationState.legalGuardFormData?.userName || prev.userName,
+        phone: locationState.legalGuardFormData?.phone || prev.phone,
       }));
     }
-  }, [state]);
+  }, [locationState]);
 
   // 에러 상태 관리
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -412,20 +413,35 @@ export default function SignUpMbrInfo() {
         mbrJoinDt: now,
         rgtrId: formData.mbrId,
         regDt: null,
-
         mdfrId: formData.mbrId,
         mdfcnDt: null,
-
         linkInfoIdntfId: ci,
         certTokenVl: null,
         pswdChgDt: null,
         pswdErrNmtm: 0,
         encptBfrPswd: null,
         mbrWhdwlRsn: null,
-        mbrWhdwlDt: null,
-      };
+        mbrWhdwlDt: null
+      }
 
-      const result = await dispatch(insertMbrInfo(mbrInfoPVO)).unwrap();
+    let sttyAgtInfoPVO: SttyAgtInfoPVO | undefined;
+
+    // sessionStorage에서 저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 불러오기
+    const storedLegalGuardFormData = getLegalGuardFormData();
+    if(storedLegalGuardFormData){
+      sttyAgtInfoPVO = {
+        mbrNo: '',                                                /* 백앤드 insertMbrInfoWithSttyAgtInfo Rest API 호출 시 회원번호 자동발번 해서 입력 처리됨. */
+        sttyAgtNm: storedLegalGuardFormData.userName,
+        sttyAgtEncptTelno: storedLegalGuardFormData.phone,
+        sttyAgtRel: storedLegalGuardFormData.relationship,
+        linkInfoIdntfId: storedLegalGuardFormData.ciFromGuardAgr,
+        certTokenVl: undefined,
+        rgtrId: formData.mbrId,
+        regDt: now,
+        mdfrId: formData.mbrId
+      };
+    }
+      const result = await dispatch(insertMbrInfoWithSttyAgtInfo({ mbrInfo: mbrInfoPVO, sttyAgtInfo: sttyAgtInfoPVO } as MbrInfoWithSttyAgtInfoPVO)).unwrap();
 
       // 회원정보 1건이 입력되었는지 확인
       if(result > 0){

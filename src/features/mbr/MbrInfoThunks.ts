@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectMbrInfoListApiPath, getMbrInfoApiPath, insertMbrInfoApiPath, updateMbrInfoApiPath, saveMbrInfoApiPath, deleteMbrInfoApiPath, verifyPasswordApiPath, updateMbrInfoPwApiPath, findMbrInfoIdApiPath } from '@/api/mbr/MbrInfoApiPaths'
-import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO, ExistMbrInfoPVO, ExistMbrInfoRVO, VerifyPasswordRVO, VerifyPasswordPVO, UpdateMbrInfoRVO } from './MbrInfoTypes'
+import { selectMbrInfoListApiPath, getMbrInfoApiPath, insertMbrInfoApiPath, updateMbrInfoApiPath, saveMbrInfoApiPath, deleteMbrInfoApiPath, verifyPasswordApiPath, updateMbrInfoPwApiPath, findMbrInfoIdApiPath, insertMbrInfoWithSttyAgtInfoApiPath } from '@/api/mbr/MbrInfoApiPaths'
+import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO, ExistMbrInfoPVO, ExistMbrInfoRVO, VerifyPasswordRVO, VerifyPasswordPVO, UpdateMbrInfoRVO, MbrInfoWithSttyAgtInfoPVO } from './MbrInfoTypes'
 import { existMbrInfoApiPath } from '@/api/mbr/MbrInfoApiPaths'
 
 
@@ -123,6 +123,27 @@ export const insertMbrInfo = createAsyncThunk<number, MbrInfoPVO, { rejectValue:
     catch (e) {
       console.log("MbrInfoThunks insertMbrInfo");
       return rejectWithValue('MbrInfoThunks insertMbrInfo error!!');
+    }
+  }
+)
+
+/**
+ * 대국민포털_회원정보기본 정보 입력(법정대리인정보기본 정보 포함 )
+ */
+export const insertMbrInfoWithSttyAgtInfo = createAsyncThunk<number, MbrInfoWithSttyAgtInfoPVO, { rejectValue: string }>(
+  '/mbr/insertMbrInfoWithSttyAgtInfo',
+  async (params: MbrInfoWithSttyAgtInfoPVO, { rejectWithValue }) => {
+    try {
+      const res = await https.post(insertMbrInfoWithSttyAgtInfoApiPath(), params);
+
+      const insertCnt = (res.data?.data?.insertCnt as number) ?? -1;
+
+      // 입력된 건수 반환함. 
+      return insertCnt;
+    }
+    catch (e) {
+      console.log("MbrInfoThunks insertMbrInfoWithSttyAgtInfo");
+      return rejectWithValue('MbrInfoThunks insertMbrInfoWithSttyAgtInfo error!!');
     }
   }
 )

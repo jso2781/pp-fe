@@ -34,6 +34,13 @@ export const getMbrInfoApiPath = () => '/mbr/getMbrInfo'
 export const insertMbrInfoApiPath = () => '/mbr/insertMbrInfo'
 
 /**
+ * 대국민포털_회원정보기본 정보 입력(법정대리인정보기본 정보 포함 )
+ */
+export const insertMbrInfoWithSttyAgtInfoApiPath = () => '/mbr/insertMbrInfoWithSttyAgtInfo'
+
+
+
+/**
  * 대국민포털_회원정보기본 정보 수정 
  */
 export const updateMbrInfoApiPath = () => '/mbr/updateMbrInfo'

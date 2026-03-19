@@ -138,7 +138,9 @@ export default function CertifySelf() {
   };
 
   // #anyidc가 DOM에 마운트된 뒤 LOAD_MODULE 1회 호출 (bypass: 1, toggle: false, theme: '4.1.0') — production 전용
-  const loadModuleCalledRef = useRef(false)
+  const loadModuleCalledRef = useRef(false);
+  const ciRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (!isProduction) return
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return
@@ -159,8 +161,11 @@ export default function CertifySelf() {
       theme: '4.1.0',
       redirect_uri: redirectUri,
       success: (data: any) => {
+        console.log('[AnyID] log:', data);
+
         setIsCertified(true);
-        handleNextStep
+
+        ciRef.current = data?.res?.ci;
       },
       fail: (err: any) => {
         console.error(t('certifySelfFailed'), err)
@@ -173,7 +178,7 @@ export default function CertifySelf() {
   }, [anyIdReady, tx, acrValues, redirectUri, t])
 
   // 다음단계 버튼 클릭 핸들러
-  const handleNextStep = (data?: any) => {
+  const handleNextStep = () => {
     // production: 본인인증 완료 후에만 다음 화면으로 진행
     if (isProduction && !isCertified) {
       openModal(t('certifySelfCompleteReminder'));
@@ -192,7 +197,7 @@ export default function CertifySelf() {
     /*
      * 현재창에서 본인인증을 완료한 경우만 회원정보입력 페이지로 이동할 수 있음.
      */
-    if(data.res?.ci){
+    if(ciRef.current){
       // 회원정보입력 페이지로 이동
       // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)을 회원 정보 입력 step에 그대로 전달
       // 일반 가입의 경우: legalGuardFormData 없음 (본인인증에서 받은 데이터는 별도 처리)
@@ -200,7 +205,7 @@ export default function CertifySelf() {
         state: { 
           steps, 
           legalGuardFormData: locationState?.legalGuardFormData,  // 법정대리인 동의 폼 데이터 전달 (만 14세 미만 가입인 경우)
-          ci: data.res?.ci ?? ''                                  // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터 전달 (현재창에서 본인인증을 완료한 경우만 전달)
+          ci: ciRef.current                                       // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터 전달 (현재창에서 본인인증을 완료한 경우만 전달)
         } 
       });
     }
