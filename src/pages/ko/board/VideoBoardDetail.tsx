@@ -165,9 +165,9 @@ export default function VideoBoardDetail() {
                       )}
                     </Box>
                     {/* 공공(KOGL) 저작물 */}
-                    {current?.pstKoglCprgtTypeCd && current?.pstKoglCprgtTypeCd?.trim() !== '' && (
+                    {current?.pstKoglCprgtTypeCd && current?.pstKoglCprgtTypeCd?.trim() !== '' ? (
                       <KoglLicense menuKoglCprgtTypeCd={current.pstKoglCprgtTypeCd} />  
-                    )}
+                    ) : (<Box className="kogl-license-wrap" />)}
                   </Box>
                   {/* 하단 버튼 영역 */}
                   <Box className="board-actions">

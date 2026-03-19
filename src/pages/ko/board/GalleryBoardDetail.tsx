@@ -8,7 +8,6 @@ import DepsLocation from '@/components/common/DepsLocation';
 import KoglLicense from '@/components/common/KoglLicense';
 import Lnb from '@/components/common/Lnb';
 import LnbSectionTitle from '@/components/common/LnbSectionTitle';
-import { useAuth } from '@/contexts/AuthContext';
 import { downloadAtch } from '@/features/atch/AtchThunks';
 import { getPst } from '@/features/pst/PstThunks';
 import { PstRVO } from '@/features/pst/PstTypes';
@@ -153,9 +152,9 @@ export default function GalleryBoardDetail() {
                       )}
                     </Box>
                     {/* 공공(KOGL) 저작물 */}
-                    {current?.pstKoglCprgtTypeCd && current?.pstKoglCprgtTypeCd?.trim() !== '' && (
+                    {current?.pstKoglCprgtTypeCd && current?.pstKoglCprgtTypeCd?.trim() !== '' ? (
                       <KoglLicense menuKoglCprgtTypeCd={current.pstKoglCprgtTypeCd} />  
-                    )}
+                    ) : (<Box className="kogl-license-wrap" />)}
                   </Box>
                   {/* 하단 버튼 영역 */}
                   <Box className="board-actions">
