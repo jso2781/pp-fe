@@ -10,48 +10,9 @@ import { useTranslation } from 'react-i18next'
 import { Box, Button, Stepper, Step, StepLabel, Typography, TextField, Stack, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
+import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
 
-// Any-ID 타입 선언
-declare global {
-  interface Window {
-    AnyidC?: {
-      LOAD_MODULE: (config: any) => void;
-    };
-    anyidAdaptor?: {
-      success?: (data: any) => void;
-    };
-  }
-}
-
-// Any-ID 자원 로드 함수 (Vite base path 반영)
-function ensureAnyIdAssets() {
-  const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
-
-  const ensureLink = (href: string) => {
-    if (document.querySelector(`link[href="${href}"]`)) return
-    const l = document.createElement('link')
-    l.rel = 'stylesheet'
-    l.href = href
-    document.head.appendChild(l)
-  }
-
-  const loadScript = (src: string) =>
-    new Promise<void>((resolve, reject) => {
-      if (document.querySelector(`script[src="${src}"]`)) return resolve()
-      const s = document.createElement('script')
-      s.src = src
-      s.async = true
-      s.onload = () => resolve()
-      s.onerror = () => reject(new Error(`Failed to load ${src}`))
-      document.body.appendChild(s)
-    })
-
-  ensureLink(`${baseNorm}anyid/css/app.css`)
-
-  return loadScript(`${baseNorm}anyid/js/manifest.js`)
-    .then(() => loadScript(`${baseNorm}anyid/js/vendor.js`))
-    .then(() => loadScript(`${baseNorm}anyid/js/app.js`))
-}
+const isProduction = import.meta.env.MODE === 'production'
 
 // formData 타입 정의
 type LegalGuardFormData = {
@@ -61,6 +22,8 @@ type LegalGuardFormData = {
   parentName: string;
   relationship: string;
   parentPhone: string;
+  /** 법정대리인 동의 폼에서 법정대리인의 본인인증 성공 시 Any-ID에서 전달받은 ci */
+  ciFromGuardAgr?: string;
 };
 
 export default function LegalGuardAgr() {
@@ -107,6 +70,7 @@ export default function LegalGuardAgr() {
         parentName: stored.parentName || '',
         relationship: stored.relationship || '',
         parentPhone: stored.parentPhone || '',
+        ciFromGuardAgr: stored.ciFromGuardAgr,
       };
     }
     return {
@@ -116,10 +80,11 @@ export default function LegalGuardAgr() {
       parentName: '',
       relationship: '',
       parentPhone: '',
+      ciFromGuardAgr: ''
     };
   };
 
-  // 폼 상태 관리
+  // 법정대리인 동의 폼 데이터 상태 관리
   const [formData, setFormData] = useState<LegalGuardFormData>(getInitialFormData());
 
   // 에러 상태 관리
@@ -127,10 +92,13 @@ export default function LegalGuardAgr() {
 
   // 본인인증 완료 상태
   const [isCertified, setIsCertified] = useState(false);
+  // Any-ID 영역 표시 여부 (본인인증 버튼 클릭 + 입력값 유효할 때 true)
+  const [showAnyIdArea, setShowAnyIdArea] = useState(false);
 
   // Any-ID 준비 상태
   const [anyIdReady, setAnyIdReady] = useState(false);
   const hasLoadedAnyIdRef = useRef(false);
+  const loadModuleCalledRef = useRef(false);
 
   // 약관 동의 화면에서 전달받은 steps를 사용하거나, 없으면 새로 생성
   const steps = useMemo(() => {
@@ -155,33 +123,70 @@ export default function LegalGuardAgr() {
     }
   }, [location.state]);
 
-  // Any-ID 자원 로드
+  // Any-ID 자원 로드 (production + Any-ID 영역 표시 시에만)
   useEffect(() => {
-    if (hasLoadedAnyIdRef.current) return;
-    hasLoadedAnyIdRef.current = true;
+    if (!isProduction) return
+    if (!showAnyIdArea) return
+    if (hasLoadedAnyIdRef.current) return
+    hasLoadedAnyIdRef.current = true
+
+    let cancelWait: (() => void) | null = null
 
     ensureAnyIdAssets()
       .then(() => {
-        // Any-ID 모듈이 로드될 때까지 대기
-        const checkInterval = setInterval(() => {
-          if (window.AnyidC?.LOAD_MODULE) {
-            setAnyIdReady(true);
-            clearInterval(checkInterval);
-          }
-        }, 100)
-
-        // 최대 5초 대기
-        setTimeout(() => {
-          clearInterval(checkInterval);
-          if (window.AnyidC?.LOAD_MODULE) {
-            setAnyIdReady(true);
-          }
-        }, 5000)
+        cancelWait = waitForAnyidC(
+          () => setAnyIdReady(true),
+          () => console.warn('[LegalGuardAgr] AnyidC.LOAD_MODULE not ready (timeout)'),
+          50,
+          40
+        )
       })
       .catch((err) => {
         console.error(t('anyIdAssetsLoadFailed'), err);
       })
-  }, []);
+
+    return () => {
+      cancelWait?.()
+    }
+  }, [showAnyIdArea, t]);
+
+  // Any-ID LOAD_MODULE 1회 호출 (production + Any-ID 영역 표시 + SDK 준비 완료 시)
+  useEffect(() => {
+    if (!isProduction) return
+    if (!showAnyIdArea) return
+    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return
+    if (loadModuleCalledRef.current) return
+    loadModuleCalledRef.current = true
+
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
+    const txId = `legal-guard-${Date.now()}`
+
+    window.AnyidC.LOAD_MODULE({
+      cfg: configAnyidcJsonUrl,
+      txId,
+      tag: txId,
+      lvl: 2,
+      bypass: 1,
+      toggle: true,
+      theme: '4.1.0',
+      redirect_uri: window.location.href,
+      success: (data: any) => {
+        setIsCertified(true);
+        const ciValue = data?.res?.ci as string | undefined;
+        if (ciValue) {
+          setFormData((prev) => ({ ...prev, ciFromGuardAgr: ciValue }));
+        }
+      },
+      fail: (err: any) => {
+        console.error(t('certifySelfFailed'), err)
+        setIsCertified(false)
+        alert(t('certifySelfFailedReminder'))
+      },
+      log: (data: any) => {
+        console.log('============================ ' + t('anyIdLog') + ' ============================', data)
+      },
+    })
+  }, [showAnyIdArea, anyIdReady, t]);
 
   // 이름 유효성 검사 (한글과 영문만, 2-30자)
   const validateName = (name: string): string => {
@@ -306,51 +311,21 @@ export default function LegalGuardAgr() {
 
   // 본인인증 버튼 클릭 핸들러
   const handleCertify = () => {
-    // 법정대리인 휴대전화번호 유효성 검사
-    const phoneError = validatePhone(formData.parentPhone);
-    if (phoneError) {
-      setErrors(prev => ({ ...prev, parentPhone: phoneError }));
+    // 법정대리인 휴대전화번호 + 신청인 정보까지 "모두 정상 입력"일 때만 Any-ID 영역 생성
+    if (!validateForm()) {
       return
     }
 
-    setIsCertified(true);
-    /*
-    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
-      alert(t('certifySelfModuleNotReady'));
+    setShowAnyIdArea(true)
+
+    // non-production: Any-ID를 사용할 수 없으므로, 인증 완료로 간주하고 다음 단계 버튼을 활성화
+    if (!isProduction) {
+      setIsCertified(true)
       return
     }
 
-    // public 폴더 기준 상대 경로 사용
-    // public/anyid/config/config.anyidc.json -> /anyid/config/config.anyidc.json
-    const configAnyidcJsonUrl = '/anyid/config/config.anyidc.json';
-
-    // Any-ID 본인인증 랩업장 호출
-    window.AnyidC.LOAD_MODULE({
-      cfg: configAnyidcJsonUrl,
-      txId: `legal-guard-${Date.now()}`,
-      tag: `legal-guard-${Date.now()}`,
-      lvl: '2',
-      bypass: 1,
-      toggle: true,
-      theme: '4.1.0',
-      redirect_uri: window.location.href,
-      success: function (data: unknown) {
-        // 본인인증 성공
-        setIsCertified(true);
-        window.anyidAdaptor?.success?.(data);
-      },
-      fail: function (err: unknown) {
-        console.error(t('certifySelfFailed'), err);
-        setIsCertified(false);
-        alert(t('certifySelfFailedReminder'));
-      },
-      log: function (data: unknown) {
-        console.log('============================ '+ t('anyIdLog') + ' ============================', data);
-        // 본인인증 성공
-        setIsCertified(true);
-      },
-    });
-    */
+    // production: isCertified는 Any-ID success 콜백에서만 true로 전환됨
+    setIsCertified(false)
   }
 
   // 다음단계 버튼 클릭 핸들러
@@ -359,7 +334,7 @@ export default function LegalGuardAgr() {
       return;
     }
 
-    if (!isCertified) {
+    if (isProduction && !isCertified) {
       alert(t('legalGuardCertifyComplete'));
       return;
     }
@@ -371,15 +346,17 @@ export default function LegalGuardAgr() {
       console.error('Failed to save form data to storage:', error);
     }
 
-    // ci가 있으면 회원정보입력 단계로 이동(로그인 Any-ID 본인인증을 완료한 경우이지만, 포탈 사용자의 회원정보는 없는 경우임.)
-    if(ci){
-      navigate('/pp/ko/auth/SignUpMbrInfo', { state: { steps, ci } });
+    /*
+     * 법정대리인 화면에서 법정대리인의 Any-ID 본인인증 성공시 전달받은 ci (formData.ciFromGuardAgr)
+     */
+    const ciFromGuardAgr = formData.ciFromGuardAgr || undefined;
+    if (ciFromGuardAgr) {
+      navigate('/pp/ko/auth/SignUpMbrInfo', { state: { steps, legalGuardFormData: formData, ci } });
+      return;
     }
+
     // ci가 없으면 본인인증 단계로 이동
-    else{
-      // 다음 단계로 이동 (본인인증 페이지)
-      navigate('/pp/ko/auth/CertifySelf', { state: { steps, "legalGuardFormData": formData, ci } });
-    }
+    navigate('/pp/ko/auth/CertifySelf', { state: { steps, legalGuardFormData: formData, ci } });
   }
 
   // 취소하기 버튼 클릭 핸들러 (만 14세 미만 회원가입 약관동의 페이지로 이동)
@@ -392,7 +369,7 @@ export default function LegalGuardAgr() {
     // 실제 에러 메시지가 있는지 확인 (빈 문자열은 에러가 아님)
     const hasErrors = Object.values(errors).some(error => error && error.trim() !== '');
     
-    const isFormValid = 
+    const isFormValid =
       formData.userName.trim().length >= 2 &&
       formData.birthDate.trim().length === 8 &&
       formData.phone.trim().length >= 11 &&
@@ -402,7 +379,7 @@ export default function LegalGuardAgr() {
       formData.parentPhone.trim().length >= 11 &&
       formData.parentPhone.trim().length <= 12 &&
       !hasErrors &&
-      isCertified
+      (!isProduction || isCertified)
 
     // 디버깅용 로그 (개발 환경에서만)
     // if (import.meta.env.DEV) {
@@ -709,6 +686,33 @@ export default function LegalGuardAgr() {
                               </Button>
                             </Stack>
                           </Box>
+
+                          {/* 본인 인증 버튼 클릭 + 입력값 정상일 때 Any-ID 영역 생성 */}
+                          {showAnyIdArea && (
+                            isProduction ? (
+                              <Box sx={{ mt: 2 }}>
+                                <div id="anyidc" className="anyidc" />
+                              </Box>
+                            ) : (
+                              <Box
+                                sx={{
+                                  mt: 2,
+                                  minHeight: 200,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  border: '1px dashed',
+                                  borderColor: 'divider',
+                                  borderRadius: 1,
+                                  bgcolor: 'background.paper',
+                                  px: 2,
+                                  textAlign: 'center',
+                                }}
+                              >
+                                <Typography color="error">로컬 테스트 환경입니다. 개발환경에서는 사용할 수 없습니다.</Typography>
+                              </Box>
+                            )
+                          )}
                         </Box>
                       </Box>
                     </Box>

@@ -15,18 +15,6 @@ import {
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
 
-// Any-ID 타입 선언
-declare global {
-  interface Window {
-    AnyidC?: {
-      LOAD_MODULE: (config: any) => void;
-    };
-    anyidAdaptor?: {
-      success?: (data: any) => void;
-    };
-  }
-}
-
 import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
 
 const isProduction = import.meta.env.MODE === 'production'
@@ -48,13 +36,35 @@ export default function CertifySelf() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
-  // URL로 직접 진입 시 location.state.ci 가 있으면 이전 페이지로 자동 이동
+  // 약관 동의 화면에서 전달받은 steps 사용
+  // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)
+  // 일반 가입의 경우: legalGuardFormData 없음
+  const locationState = useMemo(() => {
+    return location.state as {
+      steps?: ReturnType<typeof getSignUpSteps>; 
+      // 법정대리인 단계에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)
+      legalGuardFormData?: {
+        userName?: string;           // 신청인 이름 (만 14세 미만)
+        birthDate?: string;         // 신청인 생년월일 (만 14세 미만)
+        phone?: string;             // 신청인 휴대전화번호 (만 14세 미만)
+        parentName?: string;        // 법정대리인 이름 (만 14세 미만)
+        relationship?: string;      // 신청인과의 관계 (만 14세 미만)
+        parentPhone?: string;       // 법정대리인 휴대전화번호 (만 14세 미만)
+        ciFromGuardAgr?: string;    // 법정대리인 동의 폼에서 법정대리인의 본인인증 성공 시 Any-ID에서 전달받은 ci
+      };
+      // 본인인증 단계에서 전달받은 ci (포탈 사용자 가입 안된 상태에서 로그인시 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터)
+      ci?: string;
+    } | null;
+  }, [location.state]);
+  
+  // URL로 직접 진입 시 location.state.ci 가 있으면 SignUpMbrInfo로 자동 이동
   useEffect(() => {
-    const state = location.state as { ci?: string, steps?: ReturnType<typeof getSignUpSteps> } | null
-    if(state?.ci){
-      navigate('/pp/ko/auth/SignUpMbrInfo', { state: { steps: state?.steps, ci: state.ci } });
+    if (locationState?.ci) {
+      navigate('/pp/ko/auth/SignUpMbrInfo', {
+        state: { steps: locationState.steps, legalGuardFormData: locationState.legalGuardFormData, ci: locationState.ci },
+      });
     }
-  }, [location.state?.steps, location.state?.ci, navigate])
+  }, [locationState, navigate]);
 
   // URL 파라미터에서 tx, acrValues, redirectUri 추출
   const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
@@ -71,23 +81,6 @@ export default function CertifySelf() {
   }, [params]);
 
   const redirectUri = useMemo(() => params.get('redirect_uri') || window.location.href, [params]);
-
-  // 약관 동의 화면에서 전달받은 steps 사용
-  // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)
-  // 일반 가입의 경우: legalGuardFormData 없음
-  const locationState = useMemo(() => {
-    return location.state as { 
-      steps?: ReturnType<typeof getSignUpSteps>; 
-      legalGuardFormData?: {
-        userName?: string;           // 신청인 이름 (만 14세 미만)
-        birthDate?: string;         // 신청인 생년월일 (만 14세 미만)
-        phone?: string;             // 신청인 휴대전화번호 (만 14세 미만)
-        parentName?: string;        // 법정대리인 이름 (만 14세 미만)
-        relationship?: string;      // 신청인과의 관계 (만 14세 미만)
-        parentPhone?: string;       // 법정대리인 휴대전화번호 (만 14세 미만)
-      };
-    } | null;
-  }, [location.state]);
 
   const steps = useMemo(() => {
     if (locationState?.steps && Array.isArray(locationState.steps)) {
@@ -156,12 +149,6 @@ export default function CertifySelf() {
     const txId = tx ?? `certify-${Date.now()}`
     const lvl = acrValues
 
-    window.anyidAdaptor = {
-      success: (data: any) => {
-        setIsCertified(true)
-      },
-    } as typeof window.anyidAdaptor
-
     window.AnyidC.LOAD_MODULE({
       cfg: configAnyidcJsonUrl,
       txId,
@@ -172,8 +159,8 @@ export default function CertifySelf() {
       theme: '4.1.0',
       redirect_uri: redirectUri,
       success: (data: any) => {
-        setIsCertified(true)
-        window.anyidAdaptor?.success?.(data)
+        setIsCertified(true);
+        handleNextStep
       },
       fail: (err: any) => {
         console.error(t('certifySelfFailed'), err)
@@ -186,7 +173,7 @@ export default function CertifySelf() {
   }, [anyIdReady, tx, acrValues, redirectUri, t])
 
   // 다음단계 버튼 클릭 핸들러
-  const handleNextStep = () => {
+  const handleNextStep = (data?: any) => {
     // production: 본인인증 완료 후에만 다음 화면으로 진행
     if (isProduction && !isCertified) {
       openModal(t('certifySelfCompleteReminder'));
@@ -202,15 +189,21 @@ export default function CertifySelf() {
       }
     }
 
-    // 회원정보입력 페이지로 이동
-    // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)을 회원 정보 입력 step에 그대로 전달
-    // 일반 가입의 경우: legalGuardFormData 없음 (본인인증에서 받은 데이터는 별도 처리)
-    navigate('/pp/ko/auth/SignUpMbrInfo', { 
-      state: { 
-        steps, 
-        legalGuardFormData: locationState?.legalGuardFormData  // 법정대리인 동의 폼 데이터 전달 (만 14세 미만 가입인 경우)
-      } 
-    });
+    /*
+     * 현재창에서 본인인증을 완료한 경우만 회원정보입력 페이지로 이동할 수 있음.
+     */
+    if(data.res?.ci){
+      // 회원정보입력 페이지로 이동
+      // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)을 회원 정보 입력 step에 그대로 전달
+      // 일반 가입의 경우: legalGuardFormData 없음 (본인인증에서 받은 데이터는 별도 처리)
+      navigate('/pp/ko/auth/SignUpMbrInfo', { 
+        state: { 
+          steps, 
+          legalGuardFormData: locationState?.legalGuardFormData,  // 법정대리인 동의 폼 데이터 전달 (만 14세 미만 가입인 경우)
+          ci: data.res?.ci ?? ''                                  // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터 전달 (현재창에서 본인인증을 완료한 경우만 전달)
+        } 
+      });
+    }
   }
 
   // 취소하기 버튼 클릭 핸들러 (약관동의 페이지로 이동)
@@ -221,7 +214,7 @@ export default function CertifySelf() {
     // 본인인증 단계가 3번째(일반 가입)인 경우 약관동의 페이지로 이동
     // 본인인증 단계가 4번째(만 14세 미만 가입)인 경우 법정대리인 동의 페이지로 이동
     if(certifySelfIndex === 2){
-      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps } });
+      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, legalGuardFormData: locationState?.legalGuardFormData, ci: locationState?.ci } });
     }else{
       // sessionStorage에서 저장된 legalGuardFormData 불러오기
       let legalGuardFormData = null;
@@ -237,7 +230,8 @@ export default function CertifySelf() {
       navigate('/pp/ko/auth/LegalGuardAgr', { 
         state: { 
           steps,
-          legalGuardFormData: legalGuardFormData  // sessionStorage에서 불러온 legalGuardFormData 전달
+          legalGuardFormData: legalGuardFormData,        // sessionStorage에서 불러온 legalGuardFormData 전달
+          ci: locationState?.ci                          // 포탈 사용자 회원가입 안된 상태에서 로그인시 본인인증 단계에서 전달받은 ci 파라미터 전달
         } 
       });
     }

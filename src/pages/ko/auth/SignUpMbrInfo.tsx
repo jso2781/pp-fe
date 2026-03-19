@@ -36,6 +36,7 @@ export default function SignUpMbrInfo() {
       parentName?: string;        // 법정대리인 이름 (만 14세 미만)
       relationship?: string;      // 신청인과의 관계 (만 14세 미만)
       parentPhone?: string;       // 법정대리인 휴대전화번호 (만 14세 미만)
+      ciFromGuardAgr?: string;    // 법정대리인 동의 폼에서 법정대리인의 본인인증 성공 시 Any-ID에서 전달받은 ci
     };
     // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터
     ci?: string;
@@ -49,6 +50,7 @@ export default function SignUpMbrInfo() {
     parentName?: string;
     relationship?: string;
     parentPhone?: string;
+    ciFromGuardAgr?: string;
   };
 
   // sessionStorage에서 저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 불러오기
