@@ -227,7 +227,7 @@ export default function TaskproposalDetail() {
                     </Box>
 
                     {/* ===== 답변 ===== */}
-                    {answerData && (
+                    {answerData?.ansSn && (
                       <Box component="article" className="board-detail" sx={{ mt: 4 }}>
                         <Box className="board-header">
                           <Typography component="h2" className="board-title">
@@ -288,7 +288,7 @@ export default function TaskproposalDetail() {
 
                     {/* ===== 하단 버튼 ===== */}
                     <Box className="board-actions">
-                      {!answerData && isAuthor && (
+                      {!answerData?.ansSn && isAuthor && (
                         <Button
                           variant="contained"
                           size="large"
@@ -298,7 +298,7 @@ export default function TaskproposalDetail() {
                           제안수정
                         </Button>
                       )}
-                      {!answerData && isAuthor && (
+                      {!answerData?.ansSn && isAuthor && (
                         <Button
                           variant="contained"
                           color="error"
