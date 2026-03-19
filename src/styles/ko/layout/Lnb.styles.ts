@@ -28,7 +28,7 @@ export const lnbStyles = {
   // ★ isOpen 인자를 추가했습니다.
   itemButton: (depth: number, isOpen?: boolean): SxProps<Theme> => ({
     display: 'flex',  
-    alignItems: 'flex-start',
+    alignItems: 'center',
     padding: '10px 0px 10px 5px',
     transition: 'none',
     '&.Mui-disabled': {
@@ -90,6 +90,7 @@ export const lnbStyles = {
 
   // 텍스트 및 dot 스타일
   itemText: (depth: number, isOpen?: boolean): SxProps<Theme> => ({
+    margin: 0,
     '& .MuiTypography-root': {
       display: 'flex',
       alignItems: 'center',

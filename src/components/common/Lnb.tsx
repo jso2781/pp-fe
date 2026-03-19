@@ -6,6 +6,8 @@ import { useAppSelector } from '@/store/hooks';
 import { LnbItem } from '@/features/auth/MenuTypes'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getLangFromPathname, langPath } from '@/routes/lang';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { openExternalInNamedWindow } from '@/utils/externalWindow';
 
 type LnbProps = {
   /** (옵션) 기존처럼 직접 LnbItem[]을 넘기고 싶을 때 사용 */
@@ -168,12 +170,12 @@ function Lnb({ currentUrl, items }: LnbProps) {
           >
             <ListItemButton
               selected={active}
-              disabled={disabled}
+              // disabled={disabled}
               onClick={() => {
-                if (disabled) return;
+                // if (disabled) return;
                 if (hasChildren) return toggle(it.key);
                 if (it.key.startsWith('http')) {
-                  window.open(it.key, '_blank');
+                  openExternalInNamedWindow(it.key);
                   return;
                 }
                 const dest = langPath(it.key, currentLang);
@@ -185,6 +187,17 @@ function Lnb({ currentUrl, items }: LnbProps) {
                 primary={it.label} 
                 sx={lnbStyles.itemText(depth, isOpen)} 
               />
+              {/* 외부 링크면 새창 아이콘 표시 */}
+              {it.key.startsWith('http') && !hasChildren && (
+                <OpenInNewIcon 
+                  sx={{ 
+                    fontSize: '16px',
+                    marginLeft: '4px',
+                    verticalAlign: 'middle',
+                    color: 'inherit'
+                  }} 
+                />
+              )}              
               {hasChildren ? (
                 openKeys[it.key] ? 
                   <ExpandLess sx={{ fontSize: 30 }} /> : 

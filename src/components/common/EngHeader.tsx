@@ -26,6 +26,7 @@ import { loginExtend } from '@/features/auth/AuthThunks';
 import type { GnbDepth1Item, MenuRVO } from '@/features/auth/MenuTypes';
 import type { LoginExtendRVO } from '@/features/auth/AuthTypes';
 import { gnbListToSitemapSections, SITEMAP_SECTIONS, type SitemapLinkItem, type SitemapSection } from '@/components/common/SitemapSectionArr';
+import { openExternalInNamedWindow } from '@/utils/externalWindow';
 
 /**
  * 사이트맵 아이템 컴포넌트
@@ -611,14 +612,40 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                         <ul className="depth2-list">
                           {menu1.depth2.map((menu2: any, idx2: number) => (
                             <li key={idx2} className="depth2-item" onMouseEnter={() => setActiveDepth2(idx2)}>
+                              {(() => {
+                                const hasDepth3 = menu2.depth3 && menu2.depth3.length > 0;
+                                const isNewWindow = !!menu2.isNewWindow;
+
+                                return (
                               <Link
-                                to={menu2.url || "#"}
+                                to={isNewWindow ? "#" : (menu2.url || "#")}
                                 className={`depth2-link ${activeDepth2 === idx2 ? 'on' : ''}`}
                                 onFocus={() => setActiveDepth2(idx2)}
-                                onClick={menu2.url ? closeAll : undefined}
+                                onClick={(e) => {
+                                  if (menu2.url) {
+                                    closeAll();
+
+                                    if (isNewWindow) {
+                                      e.preventDefault();
+                                      openExternalInNamedWindow(menu2.url);
+                                    }
+                                  }
+                                }}
                               >
                                 {menu2.title}
+                                {isNewWindow && !hasDepth3 && (
+                                  <OpenInNew
+                                    sx={{
+                                      fontSize: '16px',
+                                      marginLeft: '4px',
+                                      verticalAlign: 'middle',
+                                      color: 'inherit'
+                                    }}
+                                  />
+                                )}
                               </Link>
+                                );
+                              })()}
 
                               {/* 3뎁스 영역 */}
                               {(activeDepth2 === idx2 || (activeDepth2 === null && idx2 === 0)) && menu2.depth3.length > 0 && (
@@ -630,11 +657,16 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                     return (
                                       <li key={idx3}>
                                         <Link
-                                          to={isObj ? menu3.url : "#"}
+                                          to={isNewWindow ? "#" : (isObj ? menu3.url : "#")}
                                           onFocus={() => setActiveDepth2(idx2)}
-                                          onClick={closeAll}
-                                          target={isNewWindow ? "_blank" : "_self"}
-                                          rel={isNewWindow ? "noopener noreferrer" : undefined}
+                                          onClick={(e) => {
+                                            closeAll();
+
+                                            if (isNewWindow && isObj) {
+                                              e.preventDefault();
+                                              openExternalInNamedWindow(menu3.url);
+                                            }
+                                          }}
                                           className={isNewWindow ? "ico-new" : ""}
                                         >
                                           {isObj ? menu3.name : menu3}
@@ -728,22 +760,37 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     <ul className="depth2-list">
                       {menu1.depth2.map((menu2: any, idx2: number) => {
                         const hasDepth3 = menu2.depth3 && menu2.depth3.length > 0;
+                        const isNewWindow = !!menu2.isNewWindow;
                         return (
                           <li key={idx2} className="depth2-item">
                             <Link 
-                              to={hasDepth3 ? "#" : (menu2.url || "/")} 
+                              to={hasDepth3 || isNewWindow ? "#" : (menu2.url || "/")} 
                               className={`depth2-btn ${openMobileDepth3 === idx2 ? 'active' : ''}`}
                               onClick={(e) => {
                                 if (hasDepth3) {
                                   e.preventDefault();
                                   handleDepth2Click(idx2);
                                 } else {
+                                  if (isNewWindow && menu2.url) {
+                                    e.preventDefault();
+                                    openExternalInNamedWindow(menu2.url);
+                                  }
                                   // 2-depth에 화면 링크만 있을 때: 링크 이동 후 모바일 Drawer 닫기
                                   setMobileMenuOpen(false);
                                 }
                               }}
                             >
                               {menu2.title}
+                              {!hasDepth3 && isNewWindow && (
+                                <OpenInNew 
+                                  sx={{ 
+                                    fontSize: '16px', 
+                                    marginLeft: '4px',
+                                    verticalAlign: 'middle',
+                                    color: 'inherit' 
+                                  }} 
+                                />
+                              )}
                               {hasDepth3 && (openMobileDepth3 === idx2 ? <ExpandLess /> : <ExpandMore />)}
                             </Link>
 
@@ -756,11 +803,17 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                   return (
                                     <li key={idx3} className="depth3-item">
                                       <Link 
-                                        to={isObj ? menu3.url : "#"} 
+                                        to={isNewWindow ? "#" : (isObj ? menu3.url : "#")} 
                                         className={`depth3-btn ${isNewWindow ? "ico-new" : ""}`}
-                                        target={isNewWindow ? "_blank" : "_self"}
-                                        rel={isNewWindow ? "noopener noreferrer" : undefined}
-                                        onClick={() => !isNewWindow && setMobileMenuOpen(false)} 
+                                        onClick={(e) => {
+                                          if (isNewWindow && isObj) {
+                                            e.preventDefault();
+                                            openExternalInNamedWindow(menu3.url);
+                                            return;
+                                          }
+
+                                          setMobileMenuOpen(false);
+                                        }} 
                                       >
                                         {isObj ? menu3.name : menu3}
                                         {/* 새창 열기 아이콘 */}

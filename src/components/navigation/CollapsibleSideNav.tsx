@@ -4,6 +4,7 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Box, Collapse, Drawer, IconButton, List, ListItemButton, ListItemText, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
+import { openExternalInNamedWindow } from '@/utils/externalWindow';
 
 export type CollapsibleNavItem = {
   key: string
@@ -178,7 +179,7 @@ export default function CollapsibleSideNav({
                     handleToggleOpen(it.key)
                   } else {
                     if (it.isExternal) {
-                      window.open(targetKey, '_blank'); 
+                      openExternalInNamedWindow(targetKey);
                     } else {
                       onSelect?.(targetKey);
                     }
@@ -244,7 +245,7 @@ export default function CollapsibleSideNav({
                           if (collapsed) return;
                           const targetKey = child.originalKey ?? child.key;
                           if (child.isExternal) {
-                            window.open(targetKey, '_blank');
+                            openExternalInNamedWindow(targetKey);
                           } else {
                             onSelect?.(targetKey);
                           }
