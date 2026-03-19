@@ -599,25 +599,27 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                             <li key={idx2} className="depth2-item" onMouseEnter={() => setActiveDepth2(idx2)}>
                               {(() => {
                                 const hasDepth3 = menu2.depth3 && menu2.depth3.length > 0;
-                                const isNewWindow = !!menu2.isNewWindow;
+                                const menu2Url = menu2.url || '#';
+                                const isNewWindow = typeof menu2Url === 'string' && menu2Url.startsWith('http');
 
                                 return (
                               <Link
-                                to={"#"}
+                                to={hasDepth3 ? "#" : menu2Url}
                                 className={`depth2-link ${activeDepth2 === idx2 ? 'on' : ''}`}
                                 onFocus={() => setActiveDepth2(idx2)}
                                 onClick={(e) => {
-                                  if (menu2.url) {
-                                    closeAll();
-                                    if (menu2.url.startsWith('http')) {
-                                      e.preventDefault();
-                                      openExternalInNamedWindow(menu2.url);
-                                    }
-                                  }                                  
+                                  if (hasDepth3) return;
+
+                                  closeAll();
+
+                                  if (isNewWindow) {
+                                    e.preventDefault();
+                                    openExternalInNamedWindow(menu2Url);
+                                  }
                                 }}
                               >
                                 {menu2.title}
-                                {!hasDepth3 && menu2.url.startsWith('http') && (
+                                {!hasDepth3 && isNewWindow && (
                                   <OpenInNew
                                     sx={{
                                       fontSize: '16px',
@@ -636,21 +638,21 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                 <ul className="depth3-list">
                                   {menu2.depth3.map((menu3: any, idx3: number) => {
                                     const isObj = typeof menu3 === 'object' && menu3 !== null;
-                                    const isNewWindow = isObj && menu3.isNewWindow;
+                                    const menu3Url = isObj ? (menu3.url || '#') : '#';
+                                    const isNewWindow = typeof menu3Url === 'string' && menu3Url.startsWith('http');
 
                                     return (
                                       <li key={idx3}>
                                         <Link
-                                          to={"#"}
+                                          to={menu3Url}
                                           onFocus={() => setActiveDepth2(idx2)}
                                           onClick={(e) => {
-                                            if (menu3.url) {
-                                              closeAll();
-                                              if (menu3.url.startsWith('http')) {
-                                                e.preventDefault();
-                                                openExternalInNamedWindow(menu3.url);
-                                              }
-                                            }                                  
+                                            closeAll();
+
+                                            if (isNewWindow) {
+                                              e.preventDefault();
+                                              openExternalInNamedWindow(menu3Url);
+                                            }
                                           }}
                                           className={isNewWindow ? "ico-new" : ""}
                                         >
@@ -810,20 +812,21 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     <ul className="depth2-list">
                       {menu1.depth2.map((menu2: any, idx2: number) => {
                         const hasDepth3 = menu2.depth3 && menu2.depth3.length > 0;
-                        const isNewWindow = !!menu2.isNewWindow;
+                        const menu2Url = menu2.url || '/';
+                        const isNewWindow = typeof menu2Url === 'string' && menu2Url.startsWith('http');
                         return (
                           <li key={idx2} className="depth2-item">
                             <Link
-                              to={hasDepth3 || isNewWindow ? "#" : (menu2.url || "/")}
+                              to={hasDepth3 ? "#" : menu2Url}
                               className={`depth2-btn ${openMobileDepth3 === idx2 ? 'active' : ''}`}
                               onClick={(e) => {
                                 if (hasDepth3) {
                                   e.preventDefault();
                                   handleDepth2Click(idx2);
                                 } else {
-                                  if (isNewWindow && menu2.url) {
+                                  if (isNewWindow) {
                                     e.preventDefault();
-                                    openExternalInNamedWindow(menu2.url);
+                                    openExternalInNamedWindow(menu2Url);
                                   }
                                   // 2-depth에 화면 링크만 있을 때: 링크 이동 후 모바일 Drawer 닫기
                                   setMobileMenuOpen(false);
@@ -848,17 +851,18 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                               <ul className="depth3-list">
                                 {menu2.depth3.map((menu3: any, idx3: number) => {
                                   const isObj = typeof menu3 === 'object' && menu3 !== null;
-                                  const isNewWindow = isObj && menu3.isNewWindow; // 새창 여부 확인
+                                  const menu3Url = isObj ? (menu3.url || '#') : '#';
+                                  const isNewWindow = typeof menu3Url === 'string' && menu3Url.startsWith('http');
 
                                   return (
                                     <li key={idx3} className="depth3-item">
                                       <Link
-                                        to={isNewWindow ? "#" : (isObj ? menu3.url : "#")}
+                                        to={menu3Url}
                                         className={`depth3-btn ${isNewWindow ? "ico-new" : ""}`}
                                         onClick={(e) => {
-                                          if (isNewWindow && isObj) {
+                                          if (isNewWindow) {
                                             e.preventDefault();
-                                            openExternalInNamedWindow(menu3.url);
+                                            openExternalInNamedWindow(menu3Url);
                                             return;
                                           }
 
