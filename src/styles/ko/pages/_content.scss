@@ -108,6 +108,7 @@
   .input-with-btn{
     .btn-form-util{
       min-width: 120px !important; 
+      padding: 0 5px;
     }
   }
 }
@@ -412,8 +413,19 @@
 
 // 아이디비번찾기
 .pageCont-idPwFind {
+
+  #anyidc .tit-wrap{display: none !important;}
+  @media (max-width:767px) {
+    #anyidc.thema_04 .pc-hide {
+      display: none !important;
+      display: none !important;
+      display: none !important;
+    }
+  } 
+
   .AnyID-area{margin:0 0 40px 0;}
   .caution-area{
+    margin:24px 0 0 0;
     padding:16px 24px;
     background:#EEF2F7;
     border-radius: 12px;
@@ -435,7 +447,6 @@
       }
     }
     .caution-list{
-      padding:0 0 0 25px; 
       @include mixins.list-bullet;
     }
   }
@@ -602,16 +613,14 @@
   }
 
   // 회원가입 - anyid
-  #anyidc.certify-sel-wrap.type-arrow.thema_04 .certify-type>li .login-link{
-    padding: 50px 18px;
-  }
-  #anyidc.certify-sel-wrap.type-arrow.thema_04 .certify-type>li .login-link:after, 
-  #anyidc.certify-sel-wrap.type-arrow.thema_04 .certify-type>li .login-link:before{
-    top: 54px;
-  }
-  #anyidc.certify-sel-wrap.type-arrow.thema_04 .certify-type>li .login-link:after{
-    top: 52px;
-  }
+  #anyidc .tit-wrap{display: none !important;}
+  @media (max-width:767px) {
+    #anyidc.thema_04 .pc-hide {
+      display: none !important;
+      display: none !important;
+      display: none !important;
+    }
+  } 
 }
 
 // 회원가입 - 약관동의
@@ -859,7 +868,7 @@
 
       .kids-login-title {
         margin:0;
-        padding:0 0 0 10px;
+        padding:18px 0 0 10px;
       }
 
       .kids-login-card-content {
