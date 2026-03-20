@@ -14,7 +14,7 @@ import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
 
 const isProduction = import.meta.env.MODE === 'production'
 
-// formData 타입 정의
+// LegalGuardFormData 타입 정의
 type LegalGuardFormData = {
   userName: string;
   birthDate: string;
@@ -40,8 +40,8 @@ export default function LegalGuardAgr() {
   const ci = location.state?.ci as string;
   console.log('LegalGuardAgr ci=', ci);
   
-  // sessionStorage에서 저장된 formData 불러오기
-  const getStoredFormData = (): LegalGuardFormData | null => {
+  // sessionStorage에서 저장된 LegalGuardFormData 불러오기
+  const getStoredLegalGuardFormData = (): LegalGuardFormData | null => {
     try {
       const stored = sessionStorage.getItem('legalGuardFormData');
       if (stored) {
@@ -53,15 +53,15 @@ export default function LegalGuardAgr() {
     return null;
   };
 
-  // location.state에서 전달받은 formData 또는 sessionStorage에서 불러온 formData 사용
-  const getInitialFormData = (): LegalGuardFormData => {
-    const state = location.state as { formData?: LegalGuardFormData } | null;
-    // location.state에서 전달받은 formData가 있으면 우선 사용
-    if (state?.formData) {
-      return state.formData;
+  // location.state에서 전달받은 legalGuardFormData 또는 sessionStorage에서 불러온 legalGuardFormData 사용
+  const getInitialLegalGuardFormData = (): LegalGuardFormData => {
+    const state = location.state as { legalGuardFormData?: LegalGuardFormData } | null;
+    // location.state에서 전달받은 legalGuardFormData가 있으면 우선 사용
+    if (state?.legalGuardFormData) {
+      return state.legalGuardFormData;
     }
     // 없으면 sessionStorage에서 불러오기
-    const stored = getStoredFormData();
+    const stored = getStoredLegalGuardFormData();
     if (stored) {
       return {
         userName: stored.userName || '',
@@ -85,7 +85,7 @@ export default function LegalGuardAgr() {
   };
 
   // 법정대리인 동의 폼 데이터 상태 관리
-  const [formData, setFormData] = useState<LegalGuardFormData>(getInitialFormData());
+  const [legalGuardFormData, setLegalGuardFormData] = useState<LegalGuardFormData>(getInitialLegalGuardFormData());
 
   // 에러 상태 관리
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -113,7 +113,7 @@ export default function LegalGuardAgr() {
   useEffect(() => {
     const state = location.state as { legalGuardFormData?: LegalGuardFormData } | null;
     if (state?.legalGuardFormData) {
-      setFormData(state.legalGuardFormData);
+      setLegalGuardFormData(state.legalGuardFormData);
       // sessionStorage에도 저장
       try {
         sessionStorage.setItem('legalGuardFormData', JSON.stringify(state.legalGuardFormData));
@@ -174,7 +174,7 @@ export default function LegalGuardAgr() {
         setIsCertified(true);
         const ciValue = data?.res?.ci as string | undefined;
         if (ciValue) {
-          setFormData((prev) => ({ ...prev, ciFromGuardAgr: ciValue }));
+          setLegalGuardFormData((prev) => ({ ...prev, ciFromGuardAgr: ciValue }));
         }
       },
       fail: (err: any) => {
@@ -242,7 +242,7 @@ export default function LegalGuardAgr() {
 
   // 입력 필드 변경 핸들러
   const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setLegalGuardFormData(prev => ({ ...prev, [field]: value }));
     
     // 실시간 유효성 검사
     let error = '';
@@ -252,14 +252,14 @@ export default function LegalGuardAgr() {
       // 숫자만 입력 허용
       const numericValue = value.replace(/[^0-9]/g, '')
       if (numericValue !== value) {
-        setFormData(prev => ({ ...prev, [field]: numericValue }));
+        setLegalGuardFormData(prev => ({ ...prev, [field]: numericValue }));
       }
       error = validateBirthDate(numericValue);
     } else if (field === 'phone') {
       // 숫자만 입력 허용
       const numericValue = value.replace(/[^0-9]/g, '');
       if (numericValue !== value) {
-        setFormData(prev => ({ ...prev, [field]: numericValue }));
+        setLegalGuardFormData(prev => ({ ...prev, [field]: numericValue }));
       }
       error = validatePhone(numericValue);
     } else if (field === 'parentName') {
@@ -268,7 +268,7 @@ export default function LegalGuardAgr() {
       // 숫자만 입력 허용
       const numericValue = value.replace(/[^0-9]/g, '');
       if (numericValue !== value) {
-        setFormData(prev => ({ ...prev, [field]: numericValue }));
+        setLegalGuardFormData(prev => ({ ...prev, [field]: numericValue }));
       }
       error = validatePhone(numericValue);
     }
@@ -286,23 +286,23 @@ export default function LegalGuardAgr() {
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
     
-    const userNameError = validateName(formData.userName);
+    const userNameError = validateName(legalGuardFormData.userName);
     if (userNameError) newErrors.userName = userNameError;
 
-    const birthDateError = validateBirthDate(formData.birthDate);
+    const birthDateError = validateBirthDate(legalGuardFormData.birthDate);
     if (birthDateError) newErrors.birthDate = birthDateError;
 
-    const phoneError = validatePhone(formData.phone);
+    const phoneError = validatePhone(legalGuardFormData.phone);
     if (phoneError) newErrors.phone = phoneError;
 
-    const parentNameError = validateName(formData.parentName);
+    const parentNameError = validateName(legalGuardFormData.parentName);
     if (parentNameError) newErrors.parentName = parentNameError;
 
-    if (!formData.relationship || formData.relationship === '') {
+    if (!legalGuardFormData.relationship || legalGuardFormData.relationship === '') {
       newErrors.relationship = t('selectRelationship');
     }
 
-    const parentPhoneError = validatePhone(formData.parentPhone);
+    const parentPhoneError = validatePhone(legalGuardFormData.parentPhone);
     if (parentPhoneError) newErrors.parentPhone = parentPhoneError;
 
     setErrors(newErrors);
@@ -339,24 +339,23 @@ export default function LegalGuardAgr() {
       return;
     }
 
-    // formData를 sessionStorage에 저장 (뒤로가기 시 유지)
+    // legalGuardFormData를 sessionStorage에 저장 (뒤로가기 시 유지)
     try {
-      sessionStorage.setItem('legalGuardFormData', JSON.stringify(formData));
+      sessionStorage.setItem('legalGuardFormData', JSON.stringify(legalGuardFormData));
     } catch (error) {
       console.error('Failed to save form data to storage:', error);
     }
 
     /*
-     * 법정대리인 화면에서 법정대리인의 Any-ID 본인인증을 성공시 전달받은 ci (formData.ciFromGuardAgr)
+     * 법정대리인 화면에서 법정대리인의 Any-ID 본인인증을 성공시 전달받은 ci (legalGuardFormData.ciFromGuardAgr)
      */
-    const ciFromGuardAgr = formData.ciFromGuardAgr || undefined;
-    if (ciFromGuardAgr) {
-      navigate('/pp/ko/auth/SignUpMbrInfo', { state: { steps, legalGuardFormData: formData, ci } });
+    const ciFromGuardAgr = legalGuardFormData.ciFromGuardAgr || undefined;
+
+    // 개발환경에서는 ciFromGuardAgr가 없어도 본인인증 페이지로 이동할 수 있음.
+    if (ciFromGuardAgr || !isProduction) {
+      navigate('/pp/ko/auth/CertifySelf', { state: { steps, legalGuardFormData: legalGuardFormData, ci } });
       return;
     }
-
-    // ci가 없으면 본인인증 단계로 이동
-    navigate('/pp/ko/auth/CertifySelf', { state: { steps, legalGuardFormData: formData, ci } });
   }
 
   // 취소하기 버튼 클릭 핸들러 (만 14세 미만 회원가입 약관동의 페이지로 이동)
@@ -370,26 +369,26 @@ export default function LegalGuardAgr() {
     const hasErrors = Object.values(errors).some(error => error && error.trim() !== '');
     
     const isFormValid =
-      formData.userName.trim().length >= 2 &&
-      formData.birthDate.trim().length === 8 &&
-      formData.phone.trim().length >= 11 &&
-      formData.phone.trim().length <= 12 &&
-      formData.parentName.trim().length >= 2 &&
-      formData.relationship !== '' &&
-      formData.parentPhone.trim().length >= 11 &&
-      formData.parentPhone.trim().length <= 12 &&
+      legalGuardFormData.userName.trim().length >= 2 &&
+      legalGuardFormData.birthDate.trim().length === 8 &&
+      legalGuardFormData.phone.trim().length >= 11 &&
+      legalGuardFormData.phone.trim().length <= 12 &&
+      legalGuardFormData.parentName.trim().length >= 2 &&
+      legalGuardFormData.relationship !== '' &&
+      legalGuardFormData.parentPhone.trim().length >= 11 &&
+      legalGuardFormData.parentPhone.trim().length <= 12 &&
       !hasErrors &&
       (!isProduction || isCertified)
 
     // 디버깅용 로그 (개발 환경에서만)
     // if (import.meta.env.DEV) {
     //   console.log('isNextStepEnabled 체크:', {
-    //     userName: formData.userName.trim().length >= 2,
-    //     birthDate: formData.birthDate.trim().length === 8,
-    //     phone: formData.phone.trim().length >= 11 && formData.phone.trim().length <= 12,
-    //     parentName: formData.parentName.trim().length >= 2,
-    //     relationship: formData.relationship !== '',
-    //     parentPhone: formData.parentPhone.trim().length >= 11 && formData.parentPhone.trim().length <= 12,
+    //     userName: legalGuardFormData.userName.trim().length >= 2,
+    //     birthDate: legalGuardFormData.birthDate.trim().length === 8,
+    //     phone: legalGuardFormData.phone.trim().length >= 11 && legalGuardFormData.phone.trim().length <= 12,
+    //     parentName: legalGuardFormData.parentName.trim().length >= 2,
+    //     relationship: legalGuardFormData.relationship !== '',
+    //     parentPhone: legalGuardFormData.parentPhone.trim().length >= 11 && legalGuardFormData.parentPhone.trim().length <= 12,
     //     hasErrors,
     //     isCertified,
     //     errors
@@ -397,7 +396,7 @@ export default function LegalGuardAgr() {
     // }
 
     return isFormValid;
-  }, [formData, errors, isCertified]);
+  }, [legalGuardFormData, errors, isCertified]);
 
   return (
     <>
@@ -476,7 +475,7 @@ export default function LegalGuardAgr() {
                               </Typography>
                               <TextField
                                 id="userName"
-                                value={formData.userName}
+                                value={legalGuardFormData.userName}
                                 onChange={(e) => handleChange('userName', e.target.value)}
                                 placeholder={t('namePlaceholder')}
                                 size="large"
@@ -506,7 +505,7 @@ export default function LegalGuardAgr() {
                               </Typography>
                               <TextField
                                 id="birthDate"
-                                value={formData.birthDate}
+                                value={legalGuardFormData.birthDate}
                                 onChange={(e) => handleBirthDateChange(e.target.value)}
                                 placeholder={t('birthDatePlaceholder')}
                                 size="large"
@@ -539,7 +538,7 @@ export default function LegalGuardAgr() {
                             </Typography>
                             <TextField
                               id="phone"
-                              value={formData.phone}
+                              value={legalGuardFormData.phone}
                               onChange={(e) => handleChange('phone', e.target.value)}
                               placeholder={t('phonePlaceholder')}
                               size="large"
@@ -577,7 +576,7 @@ export default function LegalGuardAgr() {
                               </Typography>
                               <TextField
                                 id="parentName"
-                                value={formData.parentName}
+                                value={legalGuardFormData.parentName}
                                 onChange={(e) => handleChange('parentName', e.target.value)}
                                 placeholder={t('namePlaceholder')}
                                 size="large"
@@ -610,7 +609,7 @@ export default function LegalGuardAgr() {
                                 <Select
                                   labelId="relationship-label"
                                   id="relationship"
-                                  value={formData.relationship}
+                                  value={legalGuardFormData.relationship}
                                   onChange={(e) => handleChange('relationship', e.target.value)}
                                   label="선택"
                                   inputProps={{
@@ -651,7 +650,7 @@ export default function LegalGuardAgr() {
                             <Stack direction="row" spacing={1} className="input-with-btn">
                               <TextField
                                 id="parentPhone"
-                                value={formData.parentPhone}
+                                value={legalGuardFormData.parentPhone}
                                 onChange={(e) => handleChange('parentPhone', e.target.value)}
                                 placeholder={t('phonePlaceholder')}
                                 size="large"
