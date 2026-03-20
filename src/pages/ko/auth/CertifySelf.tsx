@@ -196,8 +196,9 @@ export default function CertifySelf() {
 
     /*
      * 현재창에서 본인인증을 완료한 경우만 회원정보입력 페이지로 이동할 수 있음.
+     * 개발환경에서는 ciRef.current가 없어도 회원정보입력 페이지로 이동할 수 있음.
      */
-    if(ciRef.current){
+    if(ciRef.current || !isProduction){
       // 회원정보입력 페이지로 이동
       // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)을 회원 정보 입력 step에 그대로 전달
       // 일반 가입의 경우: legalGuardFormData 없음 (본인인증에서 받은 데이터는 별도 처리)

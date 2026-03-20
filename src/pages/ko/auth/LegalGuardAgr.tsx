@@ -109,14 +109,14 @@ export default function LegalGuardAgr() {
     return getSignUpSteps(t, true);
   }, [location.state, t]);
 
-  // location.state에서 새로운 formData가 전달되면 업데이트
+  // location.state에서 이전 legalGuardFormData가 전달되면 업데이트
   useEffect(() => {
-    const state = location.state as { formData?: LegalGuardFormData } | null;
-    if (state?.formData) {
-      setFormData(state.formData);
+    const state = location.state as { legalGuardFormData?: LegalGuardFormData } | null;
+    if (state?.legalGuardFormData) {
+      setFormData(state.legalGuardFormData);
       // sessionStorage에도 저장
       try {
-        sessionStorage.setItem('legalGuardFormData', JSON.stringify(state.formData));
+        sessionStorage.setItem('legalGuardFormData', JSON.stringify(state.legalGuardFormData));
       } catch (error) {
         console.error('Failed to save form data to storage:', error);
       }
@@ -347,7 +347,7 @@ export default function LegalGuardAgr() {
     }
 
     /*
-     * 법정대리인 화면에서 법정대리인의 Any-ID 본인인증 성공시 전달받은 ci (formData.ciFromGuardAgr)
+     * 법정대리인 화면에서 법정대리인의 Any-ID 본인인증을 성공시 전달받은 ci (formData.ciFromGuardAgr)
      */
     const ciFromGuardAgr = formData.ciFromGuardAgr || undefined;
     if (ciFromGuardAgr) {

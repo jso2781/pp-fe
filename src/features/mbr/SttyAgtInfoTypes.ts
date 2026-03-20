@@ -13,10 +13,10 @@ export const mockSttyAgtInfoList = [
     sttyAgtNm: 'XXX',
 
     /** 법정대리인암호화전화번호 */
-    sttyAgtEncptTelno: 'XXX',
+    encptSttyAgtTelno: 'XXX',
 
     /** 법정대리인관계 */
-    sttyAgtRel: 'XXX',
+    sttyAgtRelNm: 'XXX',
 
     /** 연계정보식별아이디 */
     linkInfoIdntfId: 'XXX',
@@ -48,10 +48,10 @@ export interface SttyAgtInfoPVO {
   sttyAgtNm?: string
 
   /** 법정대리인암호화전화번호 */
-  sttyAgtEncptTelno?: string
+  encptSttyAgtTelno?: string
 
   /** 법정대리인관계 */
-  sttyAgtRel?: string
+  sttyAgtRelNm?: string
 
   /** 연계정보식별아이디 */
   linkInfoIdntfId?: string
@@ -85,10 +85,10 @@ export interface SttyAgtInfoRVO {
   sttyAgtNm?: string
 
   /** 법정대리인암호화전화번호 */
-  sttyAgtEncptTelno?: string
+  encptSttyAgtTelno?: string
 
   /** 법정대리인관계 */
-  sttyAgtRel?: string
+  sttyAgtRelNm?: string
 
   /** 연계정보식별아이디 */
   linkInfoIdntfId?: string
@@ -119,10 +119,10 @@ export interface SttyAgtInfoListPVO {
   sttyAgtNm?: string
 
   /** 법정대리인암호화전화번호 */
-  sttyAgtEncptTelno?: string
+  encptSttyAgtTelno?: string
 
   /** 법정대리인관계 */
-  sttyAgtRel?: string
+  sttyAgtRelNm?: string
 
   /** 연계정보식별아이디 */
   linkInfoIdntfId?: string

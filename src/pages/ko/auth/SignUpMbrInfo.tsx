@@ -431,9 +431,10 @@ export default function SignUpMbrInfo() {
     if(storedLegalGuardFormData){
       sttyAgtInfoPVO = {
         mbrNo: '',                                                /* 백앤드 insertMbrInfoWithSttyAgtInfo Rest API 호출 시 회원번호 자동발번 해서 입력 처리됨. */
-        sttyAgtNm: storedLegalGuardFormData.userName,
-        sttyAgtEncptTelno: storedLegalGuardFormData.phone,
-        sttyAgtRel: storedLegalGuardFormData.relationship,
+        /* 법정대리인(대리인): LegalGuardAgr의 parentName / parentPhone (신청인 userName·phone 아님) */
+        sttyAgtNm: storedLegalGuardFormData.parentName,
+        encptSttyAgtTelno: storedLegalGuardFormData.parentPhone,
+        sttyAgtRelNm: storedLegalGuardFormData.relationship,
         linkInfoIdntfId: storedLegalGuardFormData.ciFromGuardAgr,
         certTokenVl: undefined,
         rgtrId: formData.mbrId,
