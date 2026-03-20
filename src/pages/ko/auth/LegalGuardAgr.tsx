@@ -166,7 +166,7 @@ export default function LegalGuardAgr() {
       txId,
       tag: txId,
       lvl: 2,
-      bypass: 1,
+      bypass: 0,
       toggle: true,
       theme: '4.1.0',
       redirect_uri: window.location.href,

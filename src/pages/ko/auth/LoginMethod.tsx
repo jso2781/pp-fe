@@ -112,7 +112,9 @@ export default function LoginMethod() {
         const adaptor = {
           sso: ssoInfo ?? undefined,
           success: async (data: any) => {
-            try {
+            console.error('[AnyID] window.AnyidC.LOAD_MODULE success data=', data);
+
+            try{
               /*
                * AnyidSlice에서 postAnyIdLogin.fulfilled 액션 핸들러가 실행될 때 AuthSlice 에서도 postAnyIdLogin.fulfilled 액션을 감지해서 auth 상태를 동기화 함.
                */
@@ -126,9 +128,23 @@ export default function LoginMethod() {
                 navigate('/pp/ko/auth/SignUpSel', { state: { ci: payload?.ci ?? '' } })
                 return
               }
-            } catch (e) {
+            }catch(e){
               console.error('[AnyID] login error:', e)
               alert('인증에 실패했습니다. 다시 시도해주세요.')
+            }finally{
+              const ci = data?.res?.ci
+              const ciIsValid = typeof ci === 'string' && ci.trim().length > 0
+
+              if (!ciIsValid) {
+                const resShape = data?.res
+                console.warn('[AnyID] success callback 응답에 ci가 없습니다.', {
+                  hasRes: Boolean(resShape),
+                  hasCiKey: Boolean(resShape && Object.prototype.hasOwnProperty.call(resShape, 'ci')),
+                  ci,
+                  data,
+                })
+                alert('Any-ID 인증 응답 형식이 올바르지 않습니다. ci 값을 확인할 수 없습니다.')
+              }
             }
           },
         }

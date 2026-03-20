@@ -156,7 +156,7 @@ export default function CertifySelf() {
       txId,
       tag: txId,
       lvl,
-      bypass: 1,
+      bypass: 0,
       toggle: false,
       theme: '4.1.0',
       redirect_uri: redirectUri,

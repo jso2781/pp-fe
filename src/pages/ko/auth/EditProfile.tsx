@@ -202,7 +202,7 @@ export default function EditProfile() {
       txId: txId,
       tag: txId,
       lvl: 2, // 휴대폰 SMS 인증 레벨
-      bypass: 1,
+      bypass: 0,
       toggle: true,
       theme: '4.1.0',
       redirect_uri: window.location.href,
