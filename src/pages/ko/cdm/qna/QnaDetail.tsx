@@ -3,20 +3,18 @@
  */
 import { useEffect, useState } from 'react';
 
-const CDM_BASE_URL = import.meta.env.VITE_CDM_API_BASE_URL ?? 'http://localhost:8081';
 import { Box, Button, Link, Typography } from '@mui/material';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import type { QnaItem } from '@/api/cdm/communityInterface.ts';
+import { type BoardType } from '@/api/cdm/boardConfig';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
-  fetchQnaDetail,
-  fetchQnaAnswer,
+  getQnaDetail,
+  getQnaAnswer,
   deleteQna,
   increaseQnaViewCount,
-} from '@/api/cdm/communityApi';
-import { type BoardType } from '@/api/cdm/boardConfig';
-import { useAppSelector } from '@/store/hooks';
+} from '@/features/cdm/qna/QnaCdmThunks';
 
 const BOARD_BBS_ID: Partial<Record<BoardType, string>> = {
   qna: 'BBS0000001',
@@ -37,10 +35,11 @@ export default function QnaDetail() {
 
   const bbsId = BOARD_BBS_ID['qna'];
   const currentUrl = location.pathname;
-  const userInfo = useAppSelector((s) => s.auth.userInfo) ?? { mbrId: 'admin' } as any; // 🚧 임시 - 원복 시 ?? { mbrId: 'admin' } as any 제거
+  const dispatch = useAppDispatch();
+  const userInfo = useAppSelector((s) => s.auth.userInfo);
+  const qnaData = useAppSelector((s) => s.cdmQna.detail);
+  const ansData = useAppSelector((s) => s.cdmQna.answer);
 
-  const [qnaData, setQnaData] = useState<QnaItem | null>(null);
-  const [ansData, setAnsData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
 
@@ -54,12 +53,9 @@ export default function QnaDetail() {
     if (!qstnSn) return;
     setLoading(true);
     Promise.all([
-      fetchQnaDetail(qstnSn, bbsId),
-      fetchQnaAnswer(qstnSn).catch(() => null),
-    ]).then(([detail, answer]) => {
-      setQnaData(detail ?? null);
-      setAnsData(answer ?? null);
-    }).finally(() => setLoading(false));
+      dispatch(getQnaDetail({ qstnSn, bbsId })),
+      dispatch(getQnaAnswer({ qstnSn })),
+    ]).finally(() => setLoading(false));
   }, [qstnSn]);
 
   // 조회수 증가 (세션 1회)
@@ -67,19 +63,18 @@ export default function QnaDetail() {
     if (!qstnSn) return;
     const viewKey = `QNA_VIEWED_${qstnSn}`;
     if (sessionStorage.getItem(viewKey)) return;
-    increaseQnaViewCount(qstnSn)
+    dispatch(increaseQnaViewCount({ qstnSn }))
       .then(() => sessionStorage.setItem(viewKey, 'Y'))
       .catch(() => {});
   }, [qstnSn]);
 
-  const isAuthor = !!userInfo?.mbrId; // 🚧 임시 - 원복 시 이 줄을 아래 줄로 교체
-  // const isAuthor = !!userInfo?.mbrId && !!qnaData?.rgtrId && userInfo.mbrId === qnaData.rgtrId;
+  const isAuthor = !!userInfo?.mbrId;
 
   const handleDelete = async () => {
     if (!window.confirm('질문을 삭제하시겠습니까?')) return;
     setDeleting(true);
     try {
-      await deleteQna({ ansSn: ansData?.ansSn, qstnSn: qstnSn! });
+      await dispatch(deleteQna({ ansSn: ansData?.ansSn, qstnSn: qstnSn! })).unwrap();
       alert('삭제되었습니다.');
       navigate(`/pp/${lang}/cdm/qna`);
     } catch {
@@ -176,10 +171,12 @@ export default function QnaDetail() {
                               {qnaFileList.map((file: any, index: number) => (
                                 <li key={file.atchFileId ?? index}>
                                   <Link
-                                    href={`${CDM_BASE_URL}/api/common/file/download/${file.atchFileId}`}
+                                    href={`${import.meta.env.VITE_CDM_API_BASE_URL ?? '/api/cm'}/common/file/download/${file.atchFileId}`}
                                     className="attachment-item"
                                     underline="none"
                                     title="첨부파일 다운로드"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                   >
                                     <Box className="file-info">
                                       <span className="file-label">
@@ -234,10 +231,12 @@ export default function QnaDetail() {
                                 {ansFileList.map((file: any, index: number) => (
                                   <li key={file.atchFileId ?? index}>
                                     <Link
-                                      href={`${CDM_BASE_URL}/api/common/file/download/${file.atchFileId}`}
+                                      href={`${import.meta.env.VITE_CDM_API_BASE_URL ?? '/api/cm'}/common/file/download/${file.atchFileId}`}
                                       className="attachment-item"
                                       underline="none"
                                       title="첨부파일 다운로드"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
                                     >
                                       <Box className="file-info">
                                         <span className="file-label">

@@ -6,8 +6,8 @@ import { Box, Button, Link, Typography } from '@mui/material';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import { fetchAsmtPrpDetail, insertAsmtPrp, updateAsmtPrp } from '@/api/cdm/communityApi';
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { getAsmtPrpDetail, insertAsmtPrp, updateAsmtPrp } from '@/features/cdm/asmtprp/AsmtprpCdmThunks';
 
 interface FileInputRow {
   id: number;
@@ -34,6 +34,7 @@ export default function TaskproposalWrite() {
 
   const isEditMode = !!asmtPrpSn;
   const currentUrl = location.pathname;
+  const dispatch = useAppDispatch();
   const userInfo = useAppSelector((s) => s.auth.userInfo) ?? { mbrId: 'admin' } as any; // 🚧 임시 - 원복 시 ?? { mbrId: 'admin' } as any 제거
 
   const [topicTitle, setTopicTitle] = useState('');
@@ -59,7 +60,8 @@ export default function TaskproposalWrite() {
   useEffect(() => {
     if (!isEditMode || !asmtPrpSn) return;
     setLoading(true);
-    fetchAsmtPrpDetail(asmtPrpSn)
+    dispatch(getAsmtPrpDetail({ asmtPrpSn }))
+      .unwrap()
       .then((data) => {
         if (!data) return;
         setTopicTitle(data.tpcTtlNm || '');
@@ -67,7 +69,7 @@ export default function TaskproposalWrite() {
         setExpectedEffect(data.asmtExptEfctCn || '');
         setEtcExplanation(data.asmtEtcExplnCn || '');
         setCaution(data.asmtCutnMttrCn || '');
-        
+
         if (Array.isArray(data.fileList) && data.fileList.length > 0) {
           setExistingFiles(data.fileList as ExistingFile[]);
         } else {
@@ -124,16 +126,18 @@ export default function TaskproposalWrite() {
       formData.append('asmtExptEfctCn', expectedEffect);
       formData.append('asmtEtcExplnCn', etcExplanation);
       formData.append('asmtCutnMttrCn', caution);
+      formData.append('rgtrId', userInfo?.mbrId ?? '');
+      formData.append('mdfrId', userInfo?.mbrId ?? '');
       if (isEditMode && asmtPrpSn) formData.append('asmtPrpSn', asmtPrpSn);
       fileRows.forEach((row) => { if (row.file) formData.append('files', row.file, row.file.name); });
       deleteFileIds.forEach((id) => formData.append('deleteFileIds', id));
 
       if (isEditMode) {
-        await updateAsmtPrp(formData);
+        await dispatch(updateAsmtPrp(formData)).unwrap();
         alert('수정되었습니다.');
         navigate(`/pp/${lang}/cdm/taskproposal/member/taskproposalDetail/${asmtPrpSn}`);
       } else {
-        await insertAsmtPrp(formData);
+        await dispatch(insertAsmtPrp(formData)).unwrap();
         alert('등록되었습니다.');
         navigate(`/pp/${lang}/cdm/taskproposal`);
       }

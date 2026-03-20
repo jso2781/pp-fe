@@ -3,19 +3,17 @@
  */
 import { useEffect, useState } from 'react';
 
-const CDM_BASE_URL = import.meta.env.VITE_CDM_API_BASE_URL ?? 'http://localhost:8081';
 import { Box, Button, Link, Stack, Typography } from '@mui/material';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import type { AsmtPrpItem } from '@/api/cdm/communityInterface.ts';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
-  fetchAsmtPrpDetail,
-  fetchAsmtPrpAnswer,
+  getAsmtPrpDetail,
+  getAsmtPrpAnswer,
   deleteAsmtPrp,
   increaseAsmtPrpViewCount,
-} from '@/api/cdm/communityApi';
-import { useAppSelector } from '@/store/hooks';
+} from '@/features/cdm/asmtprp/AsmtprpCdmThunks';
 
 function formatDate(value: string): string {
   if (!value) return '-';
@@ -30,10 +28,12 @@ export default function TaskproposalDetail() {
   const { asmtPrpSn, lang } = useParams<{ asmtPrpSn: string; lang: string }>();
 
   const currentUrl = location.pathname;
-  const userInfo = useAppSelector((s) => s.auth.userInfo) ?? { mbrId: 'admin' } as any; // 🚧 임시 - 원복 시 ?? { mbrId: 'admin' } as any 제거
+  const dispatch = useAppDispatch();
+  const userInfo = useAppSelector((s) => s.auth.userInfo);
+  const proposalData = useAppSelector((s) => s.cdmAsmtPrp.detail);
+  const rawAnswer = useAppSelector((s) => s.cdmAsmtPrp.answer);
+  const answerData = Array.isArray(rawAnswer) ? rawAnswer[0] ?? null : rawAnswer ?? null;
 
-  const [proposalData, setProposalData] = useState<AsmtPrpItem | null>(null);
-  const [answerData, setAnswerData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
 
@@ -47,13 +47,9 @@ export default function TaskproposalDetail() {
     if (!asmtPrpSn) return;
     setLoading(true);
     Promise.all([
-      fetchAsmtPrpDetail(asmtPrpSn),
-      fetchAsmtPrpAnswer(asmtPrpSn).catch(() => null),
-    ]).then(([detail, answer]) => {
-      setProposalData(detail ?? null);
-      const ans = Array.isArray(answer) ? answer[0] ?? null : answer ?? null;
-      setAnswerData(ans);
-    }).finally(() => setLoading(false));
+      dispatch(getAsmtPrpDetail({ asmtPrpSn })),
+      dispatch(getAsmtPrpAnswer({ asmtPrpSn })),
+    ]).finally(() => setLoading(false));
   }, [asmtPrpSn]);
 
   // 조회수 증가 (세션 1회)
@@ -61,22 +57,21 @@ export default function TaskproposalDetail() {
     if (!asmtPrpSn) return;
     const viewKey = `ASMT_PRP_VIEW_${asmtPrpSn}`;
     if (sessionStorage.getItem(viewKey)) return;
-    increaseAsmtPrpViewCount(asmtPrpSn)
+    dispatch(increaseAsmtPrpViewCount({ asmtPrpSn }))
       .then(() => sessionStorage.setItem(viewKey, 'Y'))
       .catch(() => {});
   }, [asmtPrpSn]);
 
-  const isAuthor = !!userInfo?.mbrId; // 🚧 임시 - 원복 시 이 줄을 아래 줄로 교체
-  // const isAuthor = !!userInfo?.mbrId && !!proposalData?.rgtrId && userInfo.mbrId === proposalData.rgtrId;
+  const isAuthor = !!userInfo?.mbrId;
 
   const handleDelete = async () => {
     if (!window.confirm('이 제안을 삭제하시겠습니까?')) return;
     setDeleting(true);
     try {
-      await deleteAsmtPrp({
+      await dispatch(deleteAsmtPrp({
         asmtPrpSn: asmtPrpSn!,
-        ...(answerData?.ansSn ? { ansSn: answerData.ansSn } : {}),
-      });
+        ...(answerData?.ansSn ? { ansSn: String(answerData.ansSn) } : {}),
+      })).unwrap();
       alert('삭제되었습니다.');
       navigate(`/pp/${lang}/cdm/taskproposal`);
     } catch {
@@ -202,10 +197,12 @@ export default function TaskproposalDetail() {
                               {fileList.map((file: any, index: number) => (
                                 <li key={file.atchFileId ?? index}>
                                   <Link
-                                    href={`${CDM_BASE_URL}/api/common/file/download/${file.atchFileId}`}
+                                    href={`${import.meta.env.VITE_CDM_API_BASE_URL ?? '/api/cm'}/common/file/download/${file.atchFileId}`}
                                     className="attachment-item"
                                     underline="none"
                                     title="첨부파일 다운로드"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                   >
                                     <Box className="file-info">
                                       <span className="file-label">
@@ -261,10 +258,12 @@ export default function TaskproposalDetail() {
                                 {ansFileList.map((file: any, index: number) => (
                                   <li key={file.atchFileId ?? index}>
                                     <Link
-                                      href={`${CDM_BASE_URL}/api/common/file/download/${file.atchFileId}`}
+                                      href={`${import.meta.env.VITE_CDM_API_BASE_URL ?? '/api/cm'}/common/file/download/${file.atchFileId}`}
                                       className="attachment-item"
                                       underline="none"
                                       title="첨부파일 다운로드"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
                                     >
                                       <Box className="file-info">
                                         <span className="file-label">

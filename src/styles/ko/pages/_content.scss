@@ -108,7 +108,6 @@
   .input-with-btn{
     .btn-form-util{
       min-width: 120px !important; 
-      padding:0 5px;
     }
   }
 }
@@ -613,17 +612,6 @@
   #anyidc.certify-sel-wrap.type-arrow.thema_04 .certify-type>li .login-link:after{
     top: 52px;
   }
-
-  @media (max-width:767px) {
-    #anyidc.certify-sel-wrap.type-arrow.thema_04 .certify-type>li .login-link{
-      padding: 10px;
-    }
-    #anyidc.certify-sel-wrap.type-arrow.thema_04 .certify-type>li .login-link:after, 
-    #anyidc.certify-sel-wrap.type-arrow.thema_04 .certify-type>li .login-link:before{
-      top: 0px;
-    }
-  }
-
 }
 
 // 회원가입 - 약관동의
@@ -871,7 +859,7 @@
 
       .kids-login-title {
         margin:0;
-        padding:18px 0 0 10px;
+        padding:0 0 0 10px;
       }
 
       .kids-login-card-content {
@@ -990,9 +978,7 @@
       }
 
       &:focus {
-        /* box-shadow: 0 0 0 3px var(--color-text-2); */
-        outline-offset: -2px;
-        outline: 2px solid var(--color-text-2);
+        box-shadow: 0 0 0 3px var(--color-text-2);
       }
 
       .login-button-stack {

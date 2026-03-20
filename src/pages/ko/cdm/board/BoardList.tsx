@@ -28,8 +28,8 @@ import { useTranslation } from 'react-i18next';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import { BOARD_CONFIG, type BoardType } from '@/api/cdm/boardConfig';
-import type { BoardItem } from '@/api/cdm/communityInterface.ts';
-import { fetchBoardList } from '@/api/cdm/communityApi';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { selectBoardList } from '@/features/cdm/board/BoardCdmThunks';
 
 export default function BoardList() {
   const { t } = useTranslation();
@@ -49,9 +49,8 @@ export default function BoardList() {
   const [pageNum, setPageNum] = useState(1);
   const pageSize = 10;
 
-  // 목록 데이터
-  const [boardData, setBoardData] = useState<BoardItem[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
+  const dispatch = useAppDispatch();
+  const { list: boardData, totalCount } = useAppSelector((s) => s.cdmBoard);
 
   const config = BOARD_CONFIG[boardType as BoardType];
 
@@ -66,22 +65,19 @@ export default function BoardList() {
   // 목록 조회
   useEffect(() => {
     if (!boardType) return;
-    fetchBoardList({
+    dispatch(selectBoardList({
       bbsId: config?.bbsId || boardType || "",
       page: pageNum,
       pageSize: String(pageSize),
       searchType: appliedCnd,
       searchKeyword: appliedWrd,
-    }).then((res) => {
-      setBoardData(res.list ?? []);
-      setTotalCount(res.totalCount ?? 0);
-    });
+    }));
   }, [boardType, pageNum, appliedCnd, appliedWrd]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
   const rows = useMemo(() => {
-    return boardData.map((n: BoardItem, idx: number) => ({
+    return boardData.map((n, idx: number) => ({
       id: n.pstSn ?? String(idx),
       title: n.pstTtl ?? '',
       writer: n.rgtrId ?? '',

@@ -23,8 +23,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useLocation, useParams } from 'react-router-dom';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import type { FaqItem } from '@/api/cdm/communityInterface.ts';
-import { fetchFaqList, increaseFaqViewCount } from '@/api/cdm/communityApi';
+import type { FaqItem } from '@/features/cdm/faq/FaqCdmTypes';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { selectFaqList, increaseFaqViewCount } from '@/features/cdm/faq/FaqCdmThunks';
 
 const FAQ_CATEGORY_MAP: Record<string, string> = {
   '01': 'CDM의 이해',
@@ -108,10 +109,8 @@ export default function FaqList() {
 
   const currentUrl = location.pathname;
 
-  // FAQ 목록 데이터
-  const [faqList, setFaqList] = useState<FaqItem[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const { list: faqList, totalCount, loading } = useAppSelector((s) => s.cdmFaq);
 
   // 페이징
   const [pageNum, setPageNum] = useState(1);
@@ -136,19 +135,14 @@ export default function FaqList() {
 
   // FAQ 서버사이드 조회
   useEffect(() => {
-    setLoading(true);
-    fetchFaqList({
+    dispatch(selectFaqList({
       page: pageNum,
       pageSize: String(pageSize),
+      bbsId: '',
       faqClsfNm: activeCategory,
       searchType: appliedType,
       searchKeyword: appliedWrd || undefined,
-    })
-      .then((res) => {
-        setFaqList(res.list ?? []);
-        setTotalCount(res.totalCount ?? 0);
-      })
-      .finally(() => setLoading(false));
+    }));
   }, [pageNum, activeCategory, appliedType, appliedWrd]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
@@ -172,7 +166,7 @@ export default function FaqList() {
     if (willOpen) {
       const key = `FAQ_VIEWED_${faqSn}`;
       if (!sessionStorage.getItem(key)) {
-        increaseFaqViewCount(faqSn)
+        dispatch(increaseFaqViewCount({ faqSn }))
           .then(() => sessionStorage.setItem(key, 'Y'))
           .catch(() => {});
       }

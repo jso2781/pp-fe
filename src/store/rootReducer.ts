@@ -20,6 +20,10 @@ import DurPrdctDetailReducer from '@/features/dur/DurPrdctDetailSlice'
 import IntegratedSearchReducer from '@/features/search/IntegratedSearchSlice'
 import AnyIdReducer from '@/features/auth/AnyIdSlice'
 import mbcmtApplyReducer from '@/features/advice/MbcmtApplySlice'
+import cdmBoardReducer from '@/features/cdm/board/BoardCdmSlice'
+import cdmFaqReducer from '@/features/cdm/faq/FaqCdmSlice'
+import cdmQnaReducer from '@/features/cdm/qna/QnaCdmSlice'
+import cdmAsmtPrpReducer from '@/features/cdm/asmtprp/AsmtprpCdmSlice'
 
 const rootReducer = combineReducers({
   ui: uiReducer,
@@ -43,6 +47,10 @@ const rootReducer = combineReducers({
   integratedSearch: IntegratedSearchReducer, // 통합검색
   anyId: AnyIdReducer, // SSO, ANY-ID 정보
   mbcmtApply: mbcmtApplyReducer, // 자문위원 전환신청
+  cdmBoard: cdmBoardReducer, // CDM 게시판
+  cdmFaq: cdmFaqReducer, // CDM FAQ
+  cdmQna: cdmQnaReducer, // CDM Q&A
+  cdmAsmtPrp: cdmAsmtPrpReducer, // CDM 과제제안
 })
 
 export default rootReducer

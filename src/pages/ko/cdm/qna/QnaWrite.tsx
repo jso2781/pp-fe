@@ -6,9 +6,9 @@ import { Box, Button, Link, Typography } from '@mui/material';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import { fetchQnaDetail, insertQna, updateQna } from '@/api/cdm/communityApi';
 import type { BoardType } from '@/api/cdm/boardConfig';
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { getQnaDetail, insertQna, updateQna } from '@/features/cdm/qna/QnaCdmThunks';
 
 const BOARD_BBS_ID: Partial<Record<BoardType, string>> = {
   qna: 'BBS0000001',
@@ -46,6 +46,7 @@ export default function QnaWrite() {
 
   const isEditMode = !!qstnSn;
   const currentUrl = location.pathname;
+  const dispatch = useAppDispatch();
   const userInfo = useAppSelector((s) => s.auth.userInfo) ?? { mbrId: 'admin' } as any; // 🚧 임시 - 원복 시 ?? { mbrId: 'admin' } as any 제거
 
   const [title, setTitle] = useState('');
@@ -68,13 +69,14 @@ export default function QnaWrite() {
   useEffect(() => {
     if (!isEditMode || !qstnSn) return;
     setLoading(true);
-    fetchQnaDetail(qstnSn, bbsId)
+    dispatch(getQnaDetail({ qstnSn, bbsId }))
+      .unwrap()
       .then((data) => {
         if (!data) return;
         setTitle(data.pstTtl || '');
         setContent(data.pstCn || '');
-        
-        if (data.fileList?.length > 0) {
+
+        if (data.fileList && data.fileList.length > 0) {
           setExistingFiles(data.fileList);
         }
       })
@@ -122,17 +124,18 @@ export default function QnaWrite() {
       formData.append('pstTtl', title);
       formData.append('pstCn', content);
       formData.append('bbsId', bbsId ?? '');
+      formData.append('rgtrId', userInfo?.mbrId ?? '');
+      formData.append('mdfrId', userInfo?.mbrId ?? '');
       if (isEditMode && qstnSn) formData.append('qstnSn', qstnSn);
       fileRows.forEach((row) => { if (row.file) formData.append('files', row.file, row.file.name); });
       deleteFileIds.forEach((id) => formData.append('deleteFileIds', id));
 
-      const headers = { 'Content-Type': 'multipart/form-data' };
       if (isEditMode) {
-        await updateQna(formData);
+        await dispatch(updateQna(formData)).unwrap();
         alert('수정되었습니다.');
         navigate(`/pp/${lang}/cdm/qna/member/qnaDetail/${qstnSn}`);
       } else {
-        await insertQna(formData);
+        await dispatch(insertQna(formData)).unwrap();
         alert('등록되었습니다.');
         navigate(`/pp/${lang}/cdm/qna`);
       }

@@ -1,15 +1,15 @@
 /**
  * CDM 게시판 상세
  */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Box, Button, Link, Typography } from '@mui/material';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import { BOARD_CONFIG, type BoardType } from '@/api/cdm/boardConfig';
-import type { BoardItem } from '@/api/cdm/communityInterface.ts';
-import { fetchBoardDetail, increaseViewCount } from '@/api/cdm/communityApi';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { getBoardDetail, increaseBoardViewCount } from '@/features/cdm/board/BoardCdmThunks';
 
 export default function BoardDetail() {
   const { t } = useTranslation();
@@ -20,12 +20,11 @@ export default function BoardDetail() {
 
   const config = BOARD_CONFIG[boardType as BoardType];
 
+  const dispatch = useAppDispatch();
+  const { detail: boardData, loading } = useAppSelector((s) => s.cdmBoard);
+
   // Lnb 랜더링용
   const currentUrl = location.pathname;
-
-  // 상세 데이터
-  const [boardData, setBoardData] = useState<BoardItem | null>(null);
-  const [loading, setLoading] = useState(true);
 
   // 스크롤 상단 이동
   useEffect(() => {
@@ -35,10 +34,7 @@ export default function BoardDetail() {
   // 상세 조회
   useEffect(() => {
     if (!boardType || !pstSn) return;
-    setLoading(true);
-    fetchBoardDetail({ bbsId: config?.bbsId || boardType || "", pstSn })
-      .then((res) => setBoardData(res ?? null))
-      .finally(() => setLoading(false));
+    dispatch(getBoardDetail({ bbsId: config?.bbsId || boardType || "", pstSn }));
   }, [boardType, pstSn]);
 
   // 조회수 증가 (세션 중복 방지)
@@ -47,7 +43,7 @@ export default function BoardDetail() {
     const mbrId = localStorage.getItem('mbrId') ?? 'GUEST';
     const viewKey = `BOARD_VIEW_${boardType}_${pstSn}_${mbrId}`;
     if (!sessionStorage.getItem(viewKey)) {
-      increaseViewCount({ pstSn }).catch((e) => console.warn('조회수 증가 실패', e));
+      dispatch(increaseBoardViewCount({ pstSn }));
       sessionStorage.setItem(viewKey, 'Y');
     }
   }, [boardType, pstSn]);
@@ -141,10 +137,12 @@ export default function BoardDetail() {
                               {fileList.map((file, index) => (
                                 <li key={file.atchFileId ?? index}>
                                   <Link
-                                    href={`/api/community/file/download/${file.atchFileId}`}
+                                    href={`${import.meta.env.VITE_CDM_API_BASE_URL ?? '/api/cm'}/common/file/download/${file.atchFileId}`}
                                     className="attachment-item"
                                     underline="none"
                                     title="첨부파일 다운로드"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                   >
                                     <Box className="file-info">
                                       <span className="file-label">

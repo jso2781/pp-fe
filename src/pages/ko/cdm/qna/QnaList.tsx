@@ -25,9 +25,9 @@ import {
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
-import type { QnaItem } from '@/api/cdm/communityInterface.ts';
-import { fetchQnaList } from '@/api/cdm/communityApi';
-import { useAppSelector } from '@/store/hooks';
+import type { QnaItem } from '@/features/cdm/qna/QnaCdmTypes';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { selectQnaList } from '@/features/cdm/qna/QnaCdmThunks';
 
 const QNA_BBS_ID = 'BBS0000001';
 
@@ -44,7 +44,9 @@ export default function QnaList() {
   const location = useLocation();
 
   const currentUrl = location.pathname;
-  const userInfo = useAppSelector((s) => s.auth.userInfo) ?? { mbrId: 'admin' } as any; // 🚧 임시 - 원복 시 ?? { mbrId: 'admin' } as any 제거
+  const dispatch = useAppDispatch();
+  const userInfo = useAppSelector((s) => s.auth.userInfo);
+  const { list: qnaData, totalCount } = useAppSelector((s) => s.cdmQna);
 
   // 검색 폼
   const [searchCnd, setSearchCnd] = useState('title');
@@ -56,10 +58,6 @@ export default function QnaList() {
   const [pageNum, setPageNum] = useState(1);
   const pageSize = 10;
 
-  // 목록 데이터
-  const [qnaData, setQnaData] = useState<QnaItem[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-
   // 스크롤 상단 이동
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -67,22 +65,22 @@ export default function QnaList() {
 
   // 목록 조회
   useEffect(() => {
-    fetchQnaList({
+    dispatch(selectQnaList({
       bbsId: QNA_BBS_ID,
       page: pageNum,
       pageSize: String(pageSize),
       searchType: appliedCnd,
       searchKeyword: appliedWrd,
-    }).then((res) => {
-      setQnaData(res.list ?? []);
-      setTotalCount(res.totalCount ?? 0);
-    });
+    }));
   }, [pageNum, appliedCnd, appliedWrd]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
   const rows = useMemo(() => {
-    return qnaData.map((item: QnaItem, idx: number) => ({
+    const filtered = userInfo?.mbrId
+      ? qnaData.filter((item: QnaItem) => item.mdfrId === userInfo.mbrId)
+      : qnaData;
+    return filtered.map((item: QnaItem, idx: number) => ({
       qstnSn: item.qstnSn ?? String(idx),
       title: item.pstTtl ?? '',
       writer: item.rgtrId ?? '',
@@ -91,7 +89,7 @@ export default function QnaList() {
       hasFile: item.hasFile ?? 'N',
       status: item.qstnPrgrsSttsCd ?? '',
     }));
-  }, [qnaData]);
+  }, [qnaData, userInfo]);
 
   const onSearch = () => {
     setAppliedCnd(searchCnd);
@@ -195,8 +193,7 @@ export default function QnaList() {
                       <TableHead>
                         <TableRow>
                           <TableCell component="th" scope="col" align="center" sx={{ width: '8%' }}>No</TableCell>
-                          <TableCell component="th" scope="col" align="center" sx={{ width: '38%' }}>제목</TableCell>
-                          <TableCell component="th" scope="col" align="center" sx={{ width: '8%' }}>파일</TableCell>
+                          <TableCell component="th" scope="col" align="center" sx={{ width: '46%' }}>제목</TableCell>
                           <TableCell component="th" scope="col" align="center" sx={{ width: '12%' }}>진행</TableCell>
                           <TableCell component="th" scope="col" align="center" sx={{ width: '18%' }}>작성일</TableCell>
                           <TableCell component="th" scope="col" align="center" sx={{ width: '8%' }}>조회수</TableCell>
@@ -205,7 +202,7 @@ export default function QnaList() {
                       <TableBody>
                         {rows.length === 0 ? (
                           <TableRow>
-                            <TableCell colSpan={6} align="center" sx={{ py: 6, color: 'text.secondary' }}>
+                            <TableCell colSpan={5} align="center" sx={{ py: 6, color: 'text.secondary' }}>
                               게시물이 존재하지 않습니다.
                             </TableCell>
                           </TableRow>
@@ -222,11 +219,6 @@ export default function QnaList() {
                               </TableCell>
                               <TableCell align="left" sx={{ fontWeight: 500 }}>
                                 {r.title}
-                              </TableCell>
-                              <TableCell align="center">
-                                {r.hasFile === 'Y' && (
-                                  <img src="/images/common/ico-attfile.svg" width={20} height={20} alt="첨부파일" />
-                                )}
                               </TableCell>
                               <TableCell align="center">
                                 <QnaStatusChip status={r.status} />
