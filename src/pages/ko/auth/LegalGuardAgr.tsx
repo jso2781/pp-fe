@@ -363,12 +363,20 @@ export default function LegalGuardAgr() {
 
     /*
      * 법정대리인 화면에서 법정대리인의 Any-ID 본인인증을 성공시 전달받은 ci (legalGuardFormData.ciFromGuardAgr)
+     * 요구사항: 만 14세 미만 가입은 CertifySelf를 거치지 않고 SignUpMbrInfo로 바로 이동,
+     *          이때 다음 화면의 location.state.ci에는 ciFromGuardAgr를 전달한다.
      */
     const ciFromGuardAgr = legalGuardFormData.ciFromGuardAgr || undefined;
 
-    // 개발환경에서는 ciFromGuardAgr가 없어도 본인인증 페이지로 이동할 수 있음.
+    // 개발환경에서는 ciFromGuardAgr가 없어도 다음 단계로 진행할 수 있음.
     if (ciFromGuardAgr || !isProduction) {
-      navigate('/pp/ko/auth/CertifySelf', { state: { steps, legalGuardFormData: legalGuardFormData, ci } });
+      navigate('/pp/ko/auth/SignUpMbrInfo', {
+        state: {
+          steps,
+          legalGuardFormData,
+          ci: ciFromGuardAgr ?? '',
+        },
+      });
       return;
     }
   }

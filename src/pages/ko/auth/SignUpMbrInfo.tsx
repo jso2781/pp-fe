@@ -477,26 +477,15 @@ export default function SignUpMbrInfo() {
       // 일반 가입: 본인인증 단계가 3번째(인덱스 2) → 약관동의 페이지로 이동
       navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, ci } });
     }
-    // 만 14세 미만 가입인 경우
+    // 만 14세 미만 가입인 경우: 취소 시 항상 법정대리인 동의 화면으로 이동
     else if(certifySelfIndex === 3){
-      if(ci){
-        // ci가 있으면 법정대리인 동의 단계로 이동
-        navigate('/pp/ko/auth/LegalGuardAgr', { state: { steps, ci } });
-      }
-      else {
-        /* 
-         * ci가 없으면 본인인증 단계로 이동
-         * 만 14세 미만 가입: 본인인증 단계가 4번째(인덱스 3) → 본인인증 페이지로 이동 (저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 전달)
-         * 
-         */
-        navigate('/pp/ko/auth/CertifySelf', {
-          state: { 
-            steps,
-            legalGuardFormData: storedLegalGuardFormData,  // sessionStorage에서 불러온 legalGuardFormData(법정대리인 동의 폼 데이터들) 전달
-            ci                                             // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터 전달
-          } 
-        });
-      }
+      navigate('/pp/ko/auth/LegalGuardAgr', {
+        state: {
+          steps,
+          legalGuardFormData: storedLegalGuardFormData,  // sessionStorage에서 불러온 legalGuardFormData 전달
+          ci,                                            // 현재 전달된 ci 유지
+        }
+      });
     }
     else{
       // 기본값: 약관동의 페이지로 이동
