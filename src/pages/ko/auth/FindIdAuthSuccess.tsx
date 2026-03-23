@@ -21,6 +21,7 @@ export default function FindIdAuthSuccess() {
 
   useEffect(() => {scrollTo(0, 0);}, []);
 
+  console.log("FindIdAuthSuccess.tsx location.state=", location.state);
   if(!location.state?.id || !location.state?.name) {
     alert('잘못된 접근입니다.');
     return <Navigate to="/" replace />;

@@ -89,7 +89,7 @@ export const getMbrInfo = createAsyncThunk<MbrInfoRVO, MbrInfoPVO, { rejectValue
     try {
       const res = await https.post(getMbrInfoApiPath(), params);
 
-      const payload = res.data?.data as MbrInfoRVO;
+      const payload = res.data?.data?.result as MbrInfoRVO;
 
       // 서버가 MbrInfoRVO 형식으로 단 건 데이터를 반환함. 
       return payload;

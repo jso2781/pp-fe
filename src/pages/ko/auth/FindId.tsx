@@ -90,6 +90,8 @@ export default function FindId() {
         }
         try {
           const res = await dispatchRef.current(getMbrInfo({ linkInfoIdntfId: ci } as MbrInfoPVO)).unwrap();
+          console.log("FindId.tsx window.anyidAdaptor success getMbrInfo=", res);
+
           navigateRef.current('/pp/ko/auth/FindIdAuthSuccess', {
             state: { id: res?.mbrId, name: res?.encptMbrFlnm },
           });
