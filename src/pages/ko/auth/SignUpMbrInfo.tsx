@@ -424,24 +424,24 @@ export default function SignUpMbrInfo() {
         mbrWhdwlDt: null
       }
 
-    let sttyAgtInfoPVO: SttyAgtInfoPVO | undefined;
+      let sttyAgtInfoPVO: SttyAgtInfoPVO | undefined;
 
-    // sessionStorage에서 저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 불러오기
-    const storedLegalGuardFormData = getLegalGuardFormData();
-    if(storedLegalGuardFormData){
-      sttyAgtInfoPVO = {
-        mbrNo: '',                                                /* 백앤드 insertMbrInfoWithSttyAgtInfo Rest API 호출 시 회원번호 자동발번 해서 입력 처리됨. */
-        /* 법정대리인(대리인): LegalGuardAgr의 parentName / parentPhone (신청인 userName·phone 아님) */
-        sttyAgtNm: storedLegalGuardFormData.parentName,
-        encptSttyAgtTelno: storedLegalGuardFormData.parentPhone,
-        sttyAgtRelNm: storedLegalGuardFormData.relationship,
-        linkInfoIdntfId: storedLegalGuardFormData.ciFromGuardAgr,
-        certTokenVl: undefined,
-        rgtrId: formData.mbrId,
-        regDt: now,
-        mdfrId: formData.mbrId
-      };
-    }
+      // sessionStorage에서 저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 불러오기
+      const storedLegalGuardFormData = getLegalGuardFormData();
+      if(storedLegalGuardFormData){
+        sttyAgtInfoPVO = {
+          mbrNo: '',                                                /* 백앤드 insertMbrInfoWithSttyAgtInfo Rest API 호출 시 회원번호 자동발번 해서 입력 처리됨. */
+          /* 법정대리인(대리인): LegalGuardAgr의 parentName / parentPhone (신청인 userName·phone 아님) */
+          sttyAgtNm: storedLegalGuardFormData.parentName,
+          encptSttyAgtTelno: storedLegalGuardFormData.parentPhone,
+          sttyAgtRelNm: storedLegalGuardFormData.relationship,
+          linkInfoIdntfId: storedLegalGuardFormData.ciFromGuardAgr,
+          certTokenVl: undefined,
+          rgtrId: formData.mbrId,
+          regDt: now,
+          mdfrId: formData.mbrId
+        };
+      }
       const result = await dispatch(insertMbrInfoWithSttyAgtInfo({ mbrInfo: mbrInfoPVO, sttyAgtInfo: sttyAgtInfoPVO } as MbrInfoWithSttyAgtInfoPVO)).unwrap();
 
       // 회원정보 1건이 입력되었는지 확인
