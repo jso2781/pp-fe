@@ -16,6 +16,8 @@ const PASS_PREFIXES = new Set([
   'uca',
   'ed',
   'ued',
+  'cc',
+  'ucc',
 ])
 
 function FallbackRoute() {

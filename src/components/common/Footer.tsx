@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Box, Link as MuiLink, Stack, Typography } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { openUrlInNamedPopupNearElement } from '@/utils/externalWindow';
 import RelatedSites from './RelatedSites'
 
 type TKey =
@@ -46,8 +47,6 @@ const FOOTER_SNS_LINKS: Array<{ key: string; labelKey: TKey; href: string }> = [
 
 export default function Footer() {
   const { t } = useTranslation()
-  const year = new Date().getFullYear()
-
   
   //퀵메뉴
   const navigate = useNavigate();
@@ -119,7 +118,18 @@ export default function Footer() {
         </Box>
 
         <Box className="quick-item">
-          <button type="button" className="btn-quick chatbot" onClick={() => navigate('#')}>
+          <button
+            type="button"
+            className="btn-quick chatbot"
+            onClick={(event) =>
+              openUrlInNamedPopupNearElement('/cc/agent/', {
+                anchorElement: event.currentTarget,
+                targetName: 'cc_agent',
+                width: 500,
+                height: 800,
+              })
+            }
+          >
             <i className="ico-chatbot" aria-hidden="true" />
           </button>
           <span className="quick-txt">챗봇</span>
