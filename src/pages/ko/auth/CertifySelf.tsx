@@ -82,6 +82,18 @@ export default function CertifySelf() {
 
   const redirectUri = useMemo(() => params.get('redirect_uri') || window.location.href, [params]);
 
+  /** LoginMethod 등에서 남은 window.anyidAdaptor가 Any-ID 성공 시 /auth/anyid/login을 호출하지 않도록 본 화면 전용으로 덮어씀 */
+  const txRef = useRef(tx)
+  const acrValuesRef = useRef(acrValues)
+  const redirectUriRef = useRef(redirectUri)
+  const tRef = useRef(t)
+  useEffect(() => {
+    txRef.current = tx
+    acrValuesRef.current = acrValues
+    redirectUriRef.current = redirectUri
+    tRef.current = t
+  })
+
   const steps = useMemo(() => {
     if (locationState?.steps && Array.isArray(locationState.steps)) {
       return locationState.steps;
@@ -147,9 +159,18 @@ export default function CertifySelf() {
     if (loadModuleCalledRef.current) return
     loadModuleCalledRef.current = true
 
+    const prevAdaptor = window.anyidAdaptor
+    window.anyidAdaptor = {
+      success: async (data: any) => {
+        console.log('[AnyID] log:', data)
+        setIsCertified(true)
+        ciRef.current = data?.res?.ci ?? null
+      },
+    }
+
     const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
-    const txId = tx ?? `certify-${Date.now()}`
-    const lvl = acrValues
+    const txId = txRef.current ?? `certify-${Date.now()}`
+    const lvl = acrValuesRef.current
 
     window.AnyidC.LOAD_MODULE({
       cfg: configAnyidcJsonUrl,
@@ -159,23 +180,22 @@ export default function CertifySelf() {
       bypass: 0,
       toggle: false,
       theme: '4.1.0',
-      redirect_uri: redirectUri,
-      success: (data: any) => {
-        console.log('[AnyID] log:', data);
-
-        setIsCertified(true);
-
-        ciRef.current = data?.res?.ci;
-      },
+      redirect_uri: redirectUriRef.current,
+      success: (data: any) => window.anyidAdaptor?.success?.(data),
       fail: (err: any) => {
-        console.error(t('certifySelfFailed'), err)
-        openModal(t('certifySelfFailedReminder'))
+        console.error(tRef.current('certifySelfFailed'), err)
+        setModalMessage(tRef.current('certifySelfFailedReminder'))
+        setModalOpen(true)
       },
       log: (data: any) => {
-        console.log(t('anyIdLog'), data)
+        console.log(tRef.current('anyIdLog'), data)
       },
     })
-  }, [anyIdReady, tx, acrValues, redirectUri, t])
+
+    return () => {
+      window.anyidAdaptor = prevAdaptor
+    }
+  }, [anyIdReady])
 
   // 다음단계 버튼 클릭 핸들러
   const handleNextStep = () => {

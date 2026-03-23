@@ -30,6 +30,16 @@ export default function FindId() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
+  /** Any-ID SDK가 LOAD_MODULE에 넘긴 success 외에 window.anyidAdaptor.success만 호출하는 경우 대비 (LoginMethod 잔여 핸들러로 /auth/anyid/login 호출 방지) */
+  const dispatchRef = useRef(dispatch);
+  const navigateRef = useRef(navigate);
+  const tRef = useRef(t);
+  useEffect(() => {
+    dispatchRef.current = dispatch;
+    navigateRef.current = navigate;
+    tRef.current = t;
+  });
+
   useEffect(() => { scrollTo(0, 0); }, []);
 
   // Any-ID 자원 로드 (CertifySelf와 동일)
@@ -69,6 +79,27 @@ export default function FindId() {
     if (loadModuleCalledRef.current) return;
     loadModuleCalledRef.current = true;
 
+    const prevAdaptor = window.anyidAdaptor;
+    window.anyidAdaptor = {
+      success: async (data: any) => {
+        const ci = data?.res?.ci;
+        if (!ci) {
+          setModalMessage(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
+          setModalOpen(true);
+          return;
+        }
+        try {
+          const res = await dispatchRef.current(getMbrInfo({ linkInfoIdntfId: ci } as MbrInfoPVO)).unwrap();
+          navigateRef.current('/pp/ko/auth/FindIdAuthSuccess', {
+            state: { id: res?.mbrId, name: res?.encptMbrFlnm },
+          });
+        } catch {
+          setModalMessage('회원 정보 조회에 실패했습니다.');
+          setModalOpen(true);
+        }
+      },
+    };
+
     const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`;
     const txId = `findId-${Date.now()}`;
     const lvl = 3;
@@ -82,31 +113,21 @@ export default function FindId() {
       toggle: false,
       theme: '4.1.0',
       redirect_uri: window.location.href,
-      success: (data: any) => {
-        const ci = data?.res?.ci;
-        if (!ci) {
-          openModal(t('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
-          return;
-        }
-        dispatch(getMbrInfo({linkInfoIdntfId: ci} as MbrInfoPVO)).unwrap()
-          .then((res) => {
-            navigate('/pp/ko/auth/FindIdAuthSuccess', {
-              state: { id: res?.mbrId, name: res?.encptMbrFlnm },
-            });
-          })
-          .catch(() => {
-            openModal('회원 정보 조회에 실패했습니다.');
-          });
-      },
+      success: (data: any) => window.anyidAdaptor?.success?.(data),
       fail: (err: any) => {
-        console.error(t('certifySelfFailed'), err);
-        openModal(t('certifySelfFailedReminder'));
+        console.error(tRef.current('certifySelfFailed'), err);
+        setModalMessage(tRef.current('certifySelfFailedReminder'));
+        setModalOpen(true);
       },
       log: (data: any) => {
-        console.log(t('anyIdLog'), data);
+        console.log(tRef.current('anyIdLog'), data);
       },
     });
-  }, [anyIdReady, dispatch, navigate, t]);
+
+    return () => {
+      window.anyidAdaptor = prevAdaptor;
+    };
+  }, [anyIdReady]);
 
   return (
     <>

@@ -30,6 +30,16 @@ export default function FindPw() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
+  /** LoginMethod 등에서 남은 window.anyidAdaptor가 Any-ID 성공 시 /auth/anyid/login을 호출하지 않도록 이 화면 전용으로 덮어씀 */
+  const dispatchRef = useRef(dispatch);
+  const navigateRef = useRef(navigate);
+  const tRef = useRef(t);
+  useEffect(() => {
+    dispatchRef.current = dispatch;
+    navigateRef.current = navigate;
+    tRef.current = t;
+  });
+
   useEffect(() => { scrollTo(0, 0); }, []);
 
   // Any-ID 자원 로드 (CertifySelf와 동일)
@@ -69,6 +79,27 @@ export default function FindPw() {
     if (loadModuleCalledRef.current) return;
     loadModuleCalledRef.current = true;
 
+    const prevAdaptor = window.anyidAdaptor;
+    window.anyidAdaptor = {
+      success: async (data: any) => {
+        const ci = data?.res?.ci;
+        if (!ci) {
+          setModalMessage(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
+          setModalOpen(true);
+          return;
+        }
+        try {
+          const res = await dispatchRef.current(getMbrInfo({ linkInfoIdntfId: ci } as MbrInfoPVO)).unwrap();
+          navigateRef.current('/pp/ko/auth/FindPwModify', {
+            state: { mbrNo: res?.mbrNo },
+          });
+        } catch {
+          setModalMessage('회원 정보 조회에 실패했습니다.');
+          setModalOpen(true);
+        }
+      },
+    };
+
     const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`;
     const txId = `findPw-${Date.now()}`;
     const lvl = 3;
@@ -82,32 +113,21 @@ export default function FindPw() {
       toggle: false,
       theme: '4.1.0',
       redirect_uri: window.location.href,
-      success: (data: any) => {
-        const ci = data?.res?.ci;
-        if (!ci) {
-          openModal(t('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
-          return;
-        }
-
-        dispatch(getMbrInfo({linkInfoIdntfId: ci} as MbrInfoPVO)).unwrap()
-          .then((res) => {
-            navigate('/pp/ko/auth/FindPwModify', {
-              state: { mbrNo: res?.mbrNo },
-            });
-          })
-          .catch(() => {
-            openModal('회원 정보 조회에 실패했습니다.');
-          });
-      },
+      success: (data: any) => window.anyidAdaptor?.success?.(data),
       fail: (err: any) => {
-        console.error(t('certifySelfFailed'), err);
-        openModal(t('certifySelfFailedReminder'));
+        console.error(tRef.current('certifySelfFailed'), err);
+        setModalMessage(tRef.current('certifySelfFailedReminder'));
+        setModalOpen(true);
       },
       log: (data: any) => {
-        console.log(t('anyIdLog'), data);
+        console.log(tRef.current('anyIdLog'), data);
       },
     });
-  }, [anyIdReady, dispatch, navigate, t]);
+
+    return () => {
+      window.anyidAdaptor = prevAdaptor;
+    };
+  }, [anyIdReady]);
 
   return (
     <>

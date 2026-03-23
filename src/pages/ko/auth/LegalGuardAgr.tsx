@@ -33,6 +33,12 @@ export default function LegalGuardAgr() {
   const currentStep = 2;
   const { lang } = useParams<{ lang: string }>();
 
+  /** LoginMethod 등에서 남은 window.anyidAdaptor가 Any-ID 성공 시 /auth/anyid/login을 호출하지 않도록 이 화면 전용으로 덮어씀 */
+  const tRef = useRef(t);
+  useEffect(() => {
+    tRef.current = t;
+  });
+
   /*
    * 로그인 Any-ID 본인인증 응답 결과로 법정대리인 동의 화면에 이동된 경우 전달받은 ci 파라미터 가져옴.
    * (=Any-ID 본인인증은 통과되었으나, 회원정보가 없는 경우 가입절차가 진행됨.)
@@ -158,6 +164,17 @@ export default function LegalGuardAgr() {
     if (loadModuleCalledRef.current) return
     loadModuleCalledRef.current = true
 
+    const prevAdaptor = window.anyidAdaptor
+    window.anyidAdaptor = {
+      success: async (data: any) => {
+        setIsCertified(true)
+        const ciValue = data?.res?.ci as string | undefined
+        if (ciValue) {
+          setLegalGuardFormData((prev) => ({ ...prev, ciFromGuardAgr: ciValue }))
+        }
+      },
+    }
+
     const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
     const txId = `legal-guard-${Date.now()}`
 
@@ -170,23 +187,21 @@ export default function LegalGuardAgr() {
       toggle: true,
       theme: '4.1.0',
       redirect_uri: window.location.href,
-      success: (data: any) => {
-        setIsCertified(true);
-        const ciValue = data?.res?.ci as string | undefined;
-        if (ciValue) {
-          setLegalGuardFormData((prev) => ({ ...prev, ciFromGuardAgr: ciValue }));
-        }
-      },
+      success: (data: any) => window.anyidAdaptor?.success?.(data),
       fail: (err: any) => {
-        console.error(t('certifySelfFailed'), err)
+        console.error(tRef.current('certifySelfFailed'), err)
         setIsCertified(false)
-        alert(t('certifySelfFailedReminder'))
+        alert(tRef.current('certifySelfFailedReminder'))
       },
       log: (data: any) => {
-        console.log('============================ ' + t('anyIdLog') + ' ============================', data)
+        console.log('============================ ' + tRef.current('anyIdLog') + ' ============================', data)
       },
     })
-  }, [showAnyIdArea, anyIdReady, t]);
+
+    return () => {
+      window.anyidAdaptor = prevAdaptor
+    }
+  }, [showAnyIdArea, anyIdReady]);
 
   // 이름 유효성 검사 (한글과 영문만, 2-30자)
   const validateName = (name: string): string => {
