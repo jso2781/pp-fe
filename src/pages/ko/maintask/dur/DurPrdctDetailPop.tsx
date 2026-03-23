@@ -93,12 +93,12 @@ return (
               <caption className="sr-only">성분명 정보</caption>
               <colgroup>
                 <col />
-                <col style={{ width: '30%' }} />  
+                {/* <col style={{ width: '30%' }} />   */}
               </colgroup>
               <thead>
                 <tr>
                   <th scope="col">제품명</th>
-                  <th scope="col">제약회사</th>
+                  {/* <th scope="col">제약회사</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -106,9 +106,9 @@ return (
                   rows.length > 0 && rows.map((row) => (
                     <tr key={row.id}>
                       <td>{row.prdctNm}</td>
-                      <td>
+                      {/* <td>
                         {row.bzentyNm}
-                      </td>
+                      </td> */}
                     </tr>
                   ))
                 }
