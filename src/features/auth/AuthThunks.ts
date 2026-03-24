@@ -21,13 +21,14 @@ export const login = createAsyncThunk<
       console.log("login res.data=",res.data);
       // ✅ 여기서 "서버 응답"을 표준 형태로 맞춰서 return
       const userInfo = res.data?.data?.userInfo;
+      const lgnSeCd = res.data?.data?.lgnSeCd;
       const tokenSn = res.data?.data?.tokenSn;
       const acsTokenCn = res.data?.data?.acsTokenCn;
       const updtTokenCn = res.data?.data?.updtTokenCn;
       const pswdErrNmtm = res.data?.data?.pswdErrNmtm;
       
       // 서버가 AuthRVO 형식으로 주므로 AuthRVO 형식으로 데이터 구조 재조정 
-      return { userInfo: userInfo as MbrInfoRVO, tokenSn: tokenSn ?? null, acsTokenCn: acsTokenCn ?? null, updtTokenCn: updtTokenCn ?? null, pswdErrNmtm: pswdErrNmtm ?? null };
+      return { userInfo: userInfo as MbrInfoRVO, lgnSeCd: lgnSeCd ?? null, tokenSn: tokenSn ?? null, acsTokenCn: acsTokenCn ?? null, updtTokenCn: updtTokenCn ?? null, pswdErrNmtm: pswdErrNmtm ?? null };
     } catch (error) {
       console.log("AuthThunks login catch error=",error);
       // AxiosError 에러 객체 구조:

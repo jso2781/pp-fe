@@ -193,6 +193,9 @@ export interface MbrInfoRVO {
   /** 회원아이디 */
   mbrId?: string
 
+  /** 로그인구분코드 (1 : ID 로그인 , 2 : 애니아이디 로그인) */
+  lgnSeCd?: string
+
   /** 회원암호화성명 */
   encptMbrFlnm?: string
 

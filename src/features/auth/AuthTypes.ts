@@ -41,6 +41,9 @@ export interface LoginRVO {
    */
   userInfo: MbrInfoRVO
 
+  /** 로그인구분코드 (1 : ID 로그인 , 2 : 애니아이디 로그인) */
+  lgnSeCd: string
+
   /**
    * JWT토큰일련번호
    */
