@@ -14,14 +14,13 @@ export interface StepItem {
 export function getSignUpSteps(t: TFunction, isJunior: boolean = false): StepItem[] {
   // const { t } = useTranslation();
   if (isJunior) {
-    // 만 14세 미만 가입: 6단계 (법정 대리인 동의 단계 추가)
+    // 만 14세 미만 가입: 5단계 (법정대리인 동의 후 본인인증 CertifySelf 단계 없이 회원정보 입력으로 진행)
     return [
       { label: t('step1'), description: t('signUpSelect') },
       { label: t('step2'), description: t('signUpAgree') },
       { label: t('step3'), description: t('legalGuardAgree') },
-      { label: t('step4'), description: t('certifySelf') },
-      { label: t('step5'), description: t('inputMbrInfo') },
-      { label: t('step6'), description: t('signUpComplete') },
+      { label: t('step4'), description: t('inputMbrInfo') },
+      { label: t('step5'), description: t('signUpComplete') },
     ];
   } else {
     // 일반 가입: 5단계

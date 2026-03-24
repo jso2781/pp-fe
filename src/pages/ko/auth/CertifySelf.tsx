@@ -108,6 +108,20 @@ export default function CertifySelf() {
     return steps.findIndex(step => step.description === t('certifySelf'));
   }, [steps, t]);
 
+  // 만 14세 미만 가입 steps에는 본인인증 단계가 없음 → 이 화면으로 오면 회원정보 입력으로 보냄
+  useEffect(() => {
+    if (currentStep < 0) {
+      navigate('/pp/ko/auth/SignUpMbrInfo', {
+        replace: true,
+        state: {
+          steps,
+          ci: locationState?.ci,
+          legalGuardFormData: locationState?.legalGuardFormData,
+        },
+      });
+    }
+  }, [currentStep, steps, navigate, locationState]);
+
   // Any-ID 자원 로드 (전역 1회 캐시) + AnyidC 준비 즉시 확인 + 짧은 간격 대기
   useEffect(() => {
     // 로컬/개발 환경에서는 Any-ID SDK/설정을 로딩하지 않는다.
@@ -261,6 +275,11 @@ export default function CertifySelf() {
         } 
       });
     }
+  }
+
+  // 만 14세 미만 steps에는 certifySelf가 없음 → 리다이렉트 중에는 렌더 생략 (steps[currentStep] 접근 방지)
+  if (currentStep < 0) {
+    return null;
   }
 
   return (

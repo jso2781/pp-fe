@@ -469,26 +469,23 @@ export default function SignUpMbrInfo() {
     // sessionStorage에서 저장된 legalGuardFormData(법정대리인 동의 폼 데이터들) 불러오기
     const storedLegalGuardFormData = getLegalGuardFormData();
     
-    // 본인인증 단계 인덱스 찾기
     const certifySelfIndex = steps.findIndex(step => step.description === t('certifySelf'));
+    const isJuniorSignUpFlow = steps.some(step => step.description === t('legalGuardAgree'));
 
-    // 일반 가입인 경우
-    if(certifySelfIndex === 2){
-      // 일반 가입: 본인인증 단계가 3번째(인덱스 2) → 약관동의 페이지로 이동
+    // 일반(14세 이상) 가입: 본인인증 단계가 인덱스 2 → 약관동의로
+    if (certifySelfIndex === 2) {
       navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, ci } });
     }
-    // 만 14세 미만 가입인 경우: 취소 시 항상 법정대리인 동의 화면으로 이동
-    else if(certifySelfIndex === 3){
+    // 만 14세 미만 가입: steps에 certifySelf 없음 → 법정대리인 동의로
+    else if (isJuniorSignUpFlow) {
       navigate('/pp/ko/auth/LegalGuardAgr', {
         state: {
           steps,
-          legalGuardFormData: storedLegalGuardFormData,  // sessionStorage에서 불러온 legalGuardFormData 전달
-          ci,                                            // 현재 전달된 ci 유지
-        }
+          legalGuardFormData: storedLegalGuardFormData,
+          ci,
+        },
       });
-    }
-    else{
-      // 기본값: 약관동의 페이지로 이동
+    } else {
       navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, ci } });
     }
   }
