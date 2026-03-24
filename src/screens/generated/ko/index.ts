@@ -101,6 +101,7 @@ export const screenComponentLoaders = {
 
   // 내업무
   'KIDS-PP-US-MT-01-LAYOUT': () => import('../../published/ko/KIDS-PP-US-MT-01-LAYOUT'),
+  'KIDS-PP-US-MT-02-comment': () => import('../../published/ko/KIDS-PP-US-MT-02-comment'),
 
   // 전문가관리
   'UI-EX-05-02-09': () => import('../../published/ko/UI-EX-05-02-09'),

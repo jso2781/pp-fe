@@ -494,6 +494,12 @@ export const screensKo: ScreenMeta[] = [
     "title": "============ 내업무 : 레이아웃",
     "uiType": "page"
   },
+  {
+    "id": "KIDS-PP-US-MT-02-comment",
+    "title": "============ 내업무 : 게시판댓글",
+    "uiType": "page"
+  },
+
   //전문가 관리
   {
     "id": "UI-EX-05-02-09",
