@@ -9,6 +9,7 @@ import { getLangFromPathname } from './lang'
 import Layout from './Layout'
 import BlankLayout from './BlankLayout'
 import ProtectedRoute from './ProtectedRoute'
+import AnyIdRoute from './AnyIdRoute'
 import GlobalErrorHandler from './GlobalErrorHandler';
 
 // ko 페이지들 (라우트 방문 시에만 로드 → 초기 번들 크기 감소)
@@ -64,6 +65,7 @@ const FindIdKo = lazy(() => import('@/pages/ko/auth/FindId'))
 const FindIdAuthSuccessKo = lazy(() => import('@/pages/ko/auth/FindIdAuthSuccess'))
 const FindPwKo = lazy(() => import('@/pages/ko/auth/FindPw'))
 const FindPwModifyKo = lazy(() => import('@/pages/ko/auth/FindPwModify'))
+const ExpertCertKo = lazy(() => import('@/pages/ko/auth/ExpertCert'))
 
 const IntegratedSearchKo = lazy(() => import('@/pages/ko/search/IntegratedSearch'))
 const ExpertMemberApplyKo = lazy(() => import('@/pages/ko/expert/ExpertMemberApply'))
@@ -345,6 +347,7 @@ export default function Router() {
                 <Route path="/pp/:lang/auth/FindIdAuthSuccess" element={<LangElement byLang={{ ko: <FindIdAuthSuccessKo />, en: <FindIdAuthSuccessKo /> }} />} />
                 <Route path="/pp/:lang/auth/FindPw" element={<LangElement byLang={{ ko: <FindPwKo />, en: <FindPwKo /> }} />} />
                 <Route path="/pp/:lang/auth/FindPwModify" element={<LangElement byLang={{ ko: <FindPwModifyKo />, en: <FindPwModifyKo /> }} />} />
+                <Route path="/pp/:lang/auth/ExpertCert" element={<LangElement byLang={{ ko: <ExpertCertKo />, en: <ExpertCertKo /> }} />} />
 
                 {/* IntegratedSearch(통합검색) */}
                 <Route path="/pp/:lang/search/IntegratedSearch" element={<LangElement byLang={{ ko: <IntegratedSearchKo />, en: <IntegratedSearchKo /> }} />} />
@@ -389,10 +392,10 @@ export default function Router() {
               {/* 전문가 메뉴에서 사용할 화면 레이아웃 */}
               <Route element={<ExpertLayout />}>
                 {/* 전문가 메뉴- 내 업무 */}
-                <Route path="/pp/:lang/expert/ExpertMyWork" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertMyWorkKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertMyWorkKo /></ProtectedRoute> }} />} />
-                <Route path="/pp/:lang/expert/ExpertApproval" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalKo /></ProtectedRoute> }} />} />
-                <Route path="/pp/:lang/expert/ExpertApproval/:exprtTaskSn" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalDetailKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalDetailKo /></ProtectedRoute> }} />} />
-                <Route path="/pp/:lang/expert/ExpertApprovalUpdate/:exprtTaskSn" element={<LangElement byLang={{ ko: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute>, en: <ProtectedRoute><ExpertApprovalUpdateKo /></ProtectedRoute> }} />} />
+                <Route path="/pp/:lang/expert/ExpertMyWork" element={<LangElement byLang={{ ko: <AnyIdRoute><ExpertMyWorkKo /></AnyIdRoute>, en: <AnyIdRoute><ExpertMyWorkKo /></AnyIdRoute> }} />} />
+                <Route path="/pp/:lang/expert/ExpertApproval" element={<LangElement byLang={{ ko: <AnyIdRoute><ExpertApprovalKo /></AnyIdRoute>, en: <AnyIdRoute><ExpertApprovalKo /></AnyIdRoute> }} />} />
+                <Route path="/pp/:lang/expert/ExpertApproval/:exprtTaskSn" element={<LangElement byLang={{ ko: <AnyIdRoute><ExpertApprovalDetailKo /></AnyIdRoute>, en: <AnyIdRoute><ExpertApprovalDetailKo /></AnyIdRoute> }} />} />
+                <Route path="/pp/:lang/expert/ExpertApprovalUpdate/:exprtTaskSn" element={<LangElement byLang={{ ko: <AnyIdRoute><ExpertApprovalUpdateKo /></AnyIdRoute>, en: <AnyIdRoute><ExpertApprovalUpdateKo /></AnyIdRoute> }} />} />
               </Route>
 
               {/* 영문 사용자 메뉴에서 사용할 화면 레이아웃 */}

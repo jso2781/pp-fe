@@ -191,6 +191,11 @@ export default function DepsLocation() {
       // 업무 신청 관리 > 업무 신청 수정
       pattern: /^\/pp\/[A-Za-z]{2}\/expert\/ExpertApprovalUpdate(\/\d+)?$/,
       labels: ["expertMyWork", "expertApproval"]
+    },
+    {
+      // 내 업무 > 본인 인증
+      pattern: /^\/pp\/[A-Za-z]{2}\/auth\/ExpertCert(\/\d+)?$/,
+      labels: ["expertMyWork", "certifySelf"]
     }
   ], []);
 
