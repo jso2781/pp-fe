@@ -194,6 +194,7 @@ function RouteAccessLogger() {
       acsrNm: auth?.userInfo?.encptMbrFlnm ?? '',
       etcMemoCn: '',
       prvcInclYn: prvcInclYn,
+      flfmtTaskCd: '1',
       rgtrId: auth?.userInfo?.mbrId ?? '',
       mdfrId: auth?.userInfo?.mbrId ?? ''
     }));

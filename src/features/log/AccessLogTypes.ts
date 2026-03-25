@@ -28,4 +28,7 @@ export interface AccessLogPVO {
 
   /** 개인정보포함여부 */
   prvcInclYn?: string;  
+
+  /** 수행업무코드 */
+  flfmtTaskCd?: string;    
 }
