@@ -9,6 +9,7 @@ import { GnbDepth3Item } from '@/features/auth/MenuTypes'
 
 interface AuthData {
   userInfo?: any
+  lgnSeCd?: string | null
   tokenSn?: number | null
   acsTokenCn?: string | null
   updtTokenCn?: string | null
@@ -36,7 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   /********************************* AuthSlice Redux 상태 구독 및 상태 데이터 추출 시작 ************************************************/
   // AuthSlice Redux 상태 구독
   const auth = useAppSelector((s: RootState) => s.auth) as AuthState
-  const { userInfo, tokenSn, acsTokenCn, updtTokenCn, pswdErrNmtm } = auth || {}
+  const { userInfo, lgnSeCd, tokenSn, acsTokenCn, updtTokenCn, pswdErrNmtm } = auth || {}
   const ssoInfo = useAppSelector((s: RootState) => s.anyId.ssoInfo)
 
   // Redux 상태에서 직접 계산
@@ -58,12 +59,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     return {
       userInfo,
+      lgnSeCd,
       tokenSn,
       acsTokenCn,
       updtTokenCn,
       pswdErrNmtm,
     }
-  }, [userInfo, tokenSn, acsTokenCn, updtTokenCn, pswdErrNmtm])
+  }, [userInfo, lgnSeCd, tokenSn, acsTokenCn, updtTokenCn, pswdErrNmtm])
 
   const logoutContext = useCallback(() => {
     // Redux logout 액션을 dispatch (서버 세션 무효화)

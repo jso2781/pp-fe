@@ -41,7 +41,9 @@ export interface LoginRVO {
    */
   userInfo: MbrInfoRVO
 
-  /** 로그인구분코드 (1 : ID 로그인 , 2 : 애니아이디 로그인) */
+  /**
+   * 로그인구분코드 (1 : ID 로그인 , 2 : 애니아이디 로그인)
+   */
   lgnSeCd: string
 
   /**
@@ -78,6 +80,7 @@ export interface RefreshPVO {
 }
 
 export interface RefreshRVO {
+  lgnSeCd: string
   tokenSn: number
   acsTokenCn: string
   updtTokenCn: string

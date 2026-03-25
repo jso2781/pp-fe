@@ -86,6 +86,7 @@ export const refresh = createAsyncThunk<RefreshRVO, RefreshPVO | undefined, { re
       const payload = res.data?.data;
 
       return {
+        lgnSeCd: payload.lgnSeCd ?? null,
         tokenSn: payload.tokenSn ?? null,
         acsTokenCn: payload.acsTokenCn ?? null,
         updtTokenCn: payload.updtTokenCn ?? null,

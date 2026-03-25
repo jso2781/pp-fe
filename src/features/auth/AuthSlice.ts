@@ -8,6 +8,7 @@ import { MbrInfoRVO } from '../mbr/MbrInfoTypes';
  */
 export interface AuthState {
   userInfo: MbrInfoRVO | null;
+  lgnSeCd: string | null;
   tokenSn: number | null;
   acsTokenCn: string | null;
   updtTokenCn: string | null;
@@ -21,6 +22,7 @@ export interface AuthState {
  */
 const initialState: AuthState = {
   userInfo: null,
+  lgnSeCd: null,
   tokenSn: null,
   acsTokenCn: null,
   updtTokenCn: null,
@@ -35,6 +37,7 @@ const AuthSlice = createSlice({
   initialState,
   reducers: {
     setAcsTokenCn(state, action: PayloadAction<MbrInfoRVO | null>) {
+      state.lgnSeCd = action.payload?.lgnSeCd ?? null;
       state.tokenSn = action.payload?.tokenSn ?? null;
       state.acsTokenCn = action.payload?.acsTokenCn ?? null;
       state.updtTokenCn = action.payload?.updtTokenCn ?? null;
@@ -45,6 +48,7 @@ const AuthSlice = createSlice({
       // localStorage에 통일된 키로 저장 (AuthContext와 동기화)
       if(action.payload?.acsTokenCn) {
         const authData = {
+          lgnSeCd: action.payload?.lgnSeCd,
           tokenSn: action.payload?.tokenSn,
           acsTokenCn: action.payload?.acsTokenCn,
           updtTokenCn: action.payload?.updtTokenCn,
@@ -75,6 +79,7 @@ const AuthSlice = createSlice({
           // sessionStorage에 auth 데이터가 없지만 acsTokenCn이 있는 경우 새로 생성
           const authData = {
             userInfo: action.payload,
+            lgnSeCd: state.lgnSeCd,
             tokenSn: state.tokenSn,
             acsTokenCn: state.acsTokenCn,
             updtTokenCn: state.updtTokenCn,
@@ -88,6 +93,7 @@ const AuthSlice = createSlice({
     },
     clearUserInfo: (state) => {
       state.userInfo = null;
+      state.lgnSeCd = null;
       state.tokenSn = null;
       state.acsTokenCn = null;
       state.updtTokenCn = null;
@@ -108,6 +114,7 @@ const AuthSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.userInfo = action.payload.userInfo;
+        state.lgnSeCd = action.payload.lgnSeCd;
         state.tokenSn = action.payload.tokenSn;
         state.acsTokenCn = action.payload.acsTokenCn;
         state.updtTokenCn = action.payload.updtTokenCn;
@@ -117,6 +124,7 @@ const AuthSlice = createSlice({
         if (action.payload.userInfo && action.payload.acsTokenCn) {
           const authData = {
             userInfo: action.payload.userInfo,
+            lgnSeCd: action.payload.lgnSeCd,
             tokenSn: action.payload.tokenSn,
             acsTokenCn: action.payload.acsTokenCn,
             updtTokenCn: action.payload.updtTokenCn,
@@ -137,6 +145,7 @@ const AuthSlice = createSlice({
         // AuthThunks.ts login 함수에서 모든 에러를 rejectWithValue로 처리하므로 action.payload가 항상 존재
         state.error = action.payload ?? '로그인에 실패했습니다.';
         state.userInfo = null;
+        state.lgnSeCd = null;
         state.tokenSn = null;
         state.acsTokenCn = null;
         state.updtTokenCn = null;
@@ -146,6 +155,7 @@ const AuthSlice = createSlice({
       .addCase(postAnyIdLogin.fulfilled, (state, action) => {
         const payload = action.payload;
         state.userInfo = payload?.userInfo ?? null;
+        state.lgnSeCd = payload?.lgnSeCd ?? null;
         state.tokenSn = payload?.tokenSn ?? null;
         state.acsTokenCn = payload?.acsTokenCn ?? null;
         state.updtTokenCn = payload?.updtTokenCn ?? null;
@@ -153,6 +163,7 @@ const AuthSlice = createSlice({
         if (payload?.acsTokenCn && payload?.userInfo) {
           const authData = {
             userInfo: payload.userInfo,
+            lgnSeCd: payload.lgnSeCd,
             tokenSn: payload.tokenSn,
             acsTokenCn: payload.acsTokenCn,
             updtTokenCn: payload.updtTokenCn,
@@ -172,6 +183,7 @@ const AuthSlice = createSlice({
       .addCase(refresh.fulfilled, (state, action) => {
         state.loading = false;
         state.userInfo = action.payload.userInfo;
+        state.lgnSeCd = action.payload.lgnSeCd;
         state.tokenSn = action.payload.tokenSn;
         state.acsTokenCn = action.payload.acsTokenCn;
         state.updtTokenCn = action.payload.updtTokenCn;
@@ -181,6 +193,7 @@ const AuthSlice = createSlice({
         state.loading = false;
         state.error = (action.payload as string) ?? 'JWT Token 갱신에 실패했습니다.';
         state.userInfo = null;
+        state.lgnSeCd = null;
         state.tokenSn = null;
         state.acsTokenCn = null;
         state.updtTokenCn = null;
@@ -193,6 +206,7 @@ const AuthSlice = createSlice({
       .addCase(logout.fulfilled, (state, action) => {
         state.loading = false;
         state.userInfo = null;
+        state.lgnSeCd = null;
         state.tokenSn = null;
         state.acsTokenCn = null;
         state.updtTokenCn = null;
@@ -206,6 +220,7 @@ const AuthSlice = createSlice({
         state.loading = false;
         state.error = action.payload ?? '로그아웃에 실패했습니다.';
         state.userInfo = null;
+        state.lgnSeCd = null;
         state.tokenSn = null;
         state.acsTokenCn = null;
         state.updtTokenCn = null;
