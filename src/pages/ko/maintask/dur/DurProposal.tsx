@@ -195,8 +195,7 @@ export default function DurProposal() {
                   <Box className="info-drug-box">
                     <p>한국의약품관리원에서는 DUR정보의 추가 또는 변경이 필요한 부분에 대해서 수시평가를 실시하고 있습니다.</p>
                     <p>보건의료 전문가들로부터 제안된 의견들을 검토함으로써 현장의 의견을 반영하고자 합니다.</p>
-                    <p>의견제안과 관련하여 궁금한 점이 있으시면 <span className="fw-700">DUR정보팀(T.02-2172-6824, kids_dur@drugsafe.or.kr)</span>
-                    으로 연락주시기 바랍니다.</p>
+                    <p>의견제안과 관련하여 궁금한 점이 있으시면 <span className="fw-700">DUR정보팀(T.02-2172-6824, kids_dur@drugsafe.or.kr)</span>으로<br></br>연락주시기 바랍니다.</p>
                     <p>의견 접수 후 남겨주신 연락처로 연락 드리겠습니다.</p>
                     <p>건강보험심사평가원 DUR 전산시스템(의약품안전사용서비스) 관련 문의는 답변이 제한될 수 있습니다.</p>
                   </Box>
