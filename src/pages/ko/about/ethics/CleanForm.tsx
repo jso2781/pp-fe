@@ -11,7 +11,7 @@ import { insertDshstyDclr } from "@/features/dclr/DshstyDclrThunks";
 import type { DshstyDclrPVO } from "@/features/dclr/DshstyDclrTypes";
 import { useAppDispatch } from "@/store/hooks";
 import { Box, Button, Typography } from "@mui/material";
-import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as z from 'zod';
 import { ZodFormProvider } from "@/components/rhf/ZodFormProvider";
 import { useZodForm } from "@/components/rhf/useZodForm";
@@ -30,13 +30,7 @@ export default function CleanForm () {
   const dispatch = useAppDispatch();
   const { showAlert } = useDialog();
 
-  const { lang } = useParams<{ lang: string }>();
   const currentUrl = location.pathname;
-
-  if(false) {
-    //TODO Any-Id 인증이 안되있다면 본인인증 페이지로 이동
-    return <Navigate to="/" replace />;
-  }
 
   useEffect(() => {scrollTo(0, 0);}, []);
 

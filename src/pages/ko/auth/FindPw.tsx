@@ -113,7 +113,9 @@ export default function FindPw() {
       toggle: false,
       theme: '4.1.0',
       redirect_uri: window.location.href,
-      success: (data: any) => window.anyidAdaptor?.success?.(data),
+      success: (data: any) => {
+        void window.anyidAdaptor?.success?.(data)
+      },
       fail: (err: any) => {
         console.error(tRef.current('certifySelfFailed'), err);
         setModalMessage(tRef.current('certifySelfFailedReminder'));

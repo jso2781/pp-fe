@@ -280,6 +280,11 @@ export default function AboutOrg() {
                           <Box className="table-responsive">
                             <table className="base-table table-type-2">
                               <caption className="sr-only">직원 정보 없음</caption>
+                              <thead>
+                                <tr>
+                                  <th scope="col">안내</th>
+                                </tr>
+                              </thead>
                               <tbody>
                                 <tr>
                                   <td>등록된 직원 정보가 없습니다.</td>

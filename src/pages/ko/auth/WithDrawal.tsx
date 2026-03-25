@@ -66,19 +66,13 @@ export default function WithDrawal() {
             logoutContext();  
           },
         });        
-        return;
       }else if(result?.updateCnt && result.updateCnt === 0){
         // openDialog(t('error') || '오류', t('mbrWithdrawalFailed') || '회원탈퇴에 실패했습니다.');
-        return;
       }else{
         // openDialog(t('error') || '오류', t('mbrWithdrawalFailed') || '회원탈퇴에 실패했습니다.');
-        return;
       }
     }catch(err){
       console.log(t('mbrWithdrawalFailed'), err);
-    }finally{
-      // navigate('/pp/ko');
-      return;
     }
   }
 

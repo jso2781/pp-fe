@@ -988,7 +988,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           }}
           transformOrigin={{
             vertical: 'top',
-            horizontal: isSubmenu ? 'left' : 'left',
+            horizontal: 'left',
           }}
           PaperProps={{
             'data-menu-key': menuKey,

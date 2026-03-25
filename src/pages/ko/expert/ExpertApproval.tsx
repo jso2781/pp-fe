@@ -86,8 +86,10 @@ export default function ExpertApproval() {
                     <h3 className="section-title-work">소속 전문가 회원 현황</h3>
                     <Box component="form" className="search-filter">
                       <Box className="filter-item">
-                        <label className="search-label">상태</label> 
+                        <label htmlFor="expert-approval-status" id="expert-approval-status-label" className="search-label">상태</label> 
                         <Select 
+                          id="expert-approval-status"
+                          labelId="expert-approval-status-label"
                           size="large" 
                           value={aprvSttsCode}
                           className="search-select"

@@ -34,7 +34,7 @@ export default function DurNoticeList() {
   const filteredRows = useMemo(() => {
     const q = searchWrd.trim()
     if (!q) return sampleRows
-    const key = searchCnd === 'content' ? 'title' : 'title'
+    const key = 'title'
     return sampleRows.filter((r) => String(r[key] ?? '').includes(q))
   }, [sampleRows, searchCnd, searchWrd])
 
@@ -48,17 +48,16 @@ export default function DurNoticeList() {
         cellRenderer: (p: ICellRendererParams<DurNoticeListItem>) => {
           const v = p.value ?? ''
           return (
-            <a
+            <button
+              type="button"
               className="ds-board-link"
               style={{ display: 'inline-block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-              href="#"
               onClick={(e) => {
-                e.preventDefault()
                 if (p.data?.id) navigate(`/pp/${lang}/maintask/dur/DurNoticeList/${p.data.id}`)
               }}
             >
               {String(v)}
-            </a>
+            </button>
           )
         },
       },

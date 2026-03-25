@@ -42,17 +42,15 @@ export default function DurNoticeList() {
         cellRenderer: (p: ICellRendererParams<DurNoticeListItem>) => {
           const v = p.value ?? ''
           return (
-            <a
+            <Button
               className="ds-board-link"
-              style={{ display: 'inline-block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-              href="#"
+              sx={{ display: 'inline-block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
               onClick={(e) => {
-                e.preventDefault()
                 if (p.data?.id) navigate(`/en/dur/notice/${p.data.id}`)
               }}
             >
               {String(v)}
-            </a>
+            </Button>
           )
         },
       },
