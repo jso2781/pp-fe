@@ -171,9 +171,13 @@ function RouteAccessLogger() {
   const auth = useAppSelector((s) => s.auth);
   const menuList = useAppSelector((s) => s.menu.list);
   const menuUrl = location.pathname;
-  const menuSn = useMemo(() => {
-    return menuList.find(m => `${m.menuUrlAddr}` === menuUrl)?.menuSn ?? ''
+
+  const currentMenu = useMemo(() => {
+    return menuList.find(m => menuUrl.startsWith(`${m.menuUrlAddr}`));
   }, [menuList, menuUrl]);
+
+  const menuSn = currentMenu?.menuSn ?? '';
+  const prvcInclYn = currentMenu?.prvcInclYn ?? '';
 
   useEffect(() => {
     // 같은 URL 중복 방지    
@@ -189,6 +193,7 @@ function RouteAccessLogger() {
       taskSeCd: 'PP',
       acsrNm: auth?.userInfo?.encptMbrFlnm ?? '',
       etcMemoCn: '',
+      prvcInclYn: prvcInclYn,
       rgtrId: auth?.userInfo?.mbrId ?? '',
       mdfrId: auth?.userInfo?.mbrId ?? ''
     }));

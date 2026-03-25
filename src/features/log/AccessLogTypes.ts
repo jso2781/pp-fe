@@ -25,4 +25,7 @@ export interface AccessLogPVO {
 
   /** 수정자ID */
   mdfrId?: string;
+
+  /** 개인정보포함여부 */
+  prvcInclYn?: string;  
 }
