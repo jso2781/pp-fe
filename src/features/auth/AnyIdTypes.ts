@@ -54,7 +54,7 @@ export interface AnyIdLoginRVO {
   /**
    * 로그인구분코드 (1 : ID 로그인 , 2 : 애니아이디 로그인)
    */
-  lgnSeCd: string
+  lgnSeCd?: string
 
   /**
    * JWT토큰일련번호((로그인 성공, status=LoggedIn)일 경우만 JWT토큰일련번호가 전달됨.)
