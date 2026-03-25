@@ -6,6 +6,7 @@ import { selectMenuList } from '@/features/auth/MenuThunks'
 import { getSsoInfo } from '@/features/auth/AnyIdThunks'
 import { redirectToSsoLoginPage } from '@/features/auth/SsoLoginPage'
 import { getLangFromPathname } from './lang'
+import { insertAccessLog } from '@/features/log/AccessLogThunks'
 import Layout from './Layout'
 import BlankLayout from './BlankLayout'
 import ProtectedRoute from './ProtectedRoute'
@@ -161,6 +162,41 @@ function SsoInfoSync() {
   return null;
 }
 
+/** 업무별 접속 이력 적재 */
+function RouteAccessLogger() {
+  const location = useLocation()
+  const dispatch = useAppDispatch()
+  const prevRef = useRef<string>('')
+
+  const auth = useAppSelector((s) => s.auth);
+  const menuList = useAppSelector((s) => s.menu.list);
+  const menuUrl = location.pathname;
+  const menuSn = useMemo(() => {
+    return menuList.find(m => `${m.menuUrlAddr}` === menuUrl)?.menuSn ?? ''
+  }, [menuList, menuUrl]);
+
+  useEffect(() => {
+    // 같은 URL 중복 방지    
+    const url = `${menuUrl}${location.search}`
+    if (prevRef.current === url) return
+    prevRef.current = url
+        
+    // 접속 이력 적재
+    dispatch(insertAccessLog({
+      menuId: menuSn.toString(),
+      urlAddr: location.pathname,
+      taskSeCdNo: 'PP',
+      taskSeCd: 'PP',
+      acsrNm: auth?.userInfo?.encptMbrFlnm ?? '',
+      etcMemoCn: '',
+      rgtrId: auth?.userInfo?.mbrId ?? '',
+      mdfrId: auth?.userInfo?.mbrId ?? ''
+    }));
+  }, [location.pathname, location.search, dispatch])
+
+  return null
+}
+
 /** 이 경로로 진입 시 SSO 로그인 페이지로 리다이렉트 */
 const SSO_REDIRECT_AUTH_PATHS = ['/auth/LoginMethod', '/auth/CertifySelf', '/auth/FindId', '/auth/FindPw', '/advice/MbcmtApply'];
 
@@ -284,6 +320,7 @@ export default function Router() {
           <GlobalErrorHandler>
             <LangSync />
             <SsoInfoSync />
+            <RouteAccessLogger />
             <Routes>
 
               {/* 팝업 전용: Header/Footer 없이 본문만 표시 */}
