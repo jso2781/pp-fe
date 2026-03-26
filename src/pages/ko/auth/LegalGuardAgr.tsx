@@ -488,9 +488,10 @@ export default function LegalGuardAgr() {
                     <Box className="bordered-box">
                       <Box component="form" noValidate>
                         <Box className="form-group-wrap">
-                          <Box component="h3" className="sub-title">
+                          <Box component="h3" className="sub-title mb5">
                             {t('applyJuniorInfo')}
                           </Box>
+                          <Box className="desc-text txt-2 mt0">Any-ID 통합인증 서비스 가입을 하셔야 이용 가능합니다.</Box>
                           <Box className="flex-container flex-half">
                             {/* 이름 (필수) */}
                             <Box className="form-item">
