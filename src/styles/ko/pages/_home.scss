@@ -345,10 +345,7 @@
 
     @media (max-width: 768px) {
       background-position: top center;
-      .promotion-area {
-        max-width: 320px;
-      }
-
+    
       .slogan-title {
         font-size: 30px;
         word-break: keep-all;
@@ -362,6 +359,7 @@
       }
 
       .promotion-area {
+        width: 320px;
         top: 30px;
 
         .promotion-swiper {
@@ -389,14 +387,16 @@
       }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 420px) {
       .slogan-title {
         font-size: 24px;
       }
 
       .promotion-area {
+         width:260px;
         .promotion-swiper {
-          height: 250px;
+          width:260px;
+          height: 260px;
         }
 
         .pagination-wrapper {
@@ -1246,8 +1246,17 @@
 
           .card-news-content {
             width: 100%;
-            max-width:378px;
-            margin:0 auto
+            max-width:380px;
+            margin:0 auto;
+          }
+        }
+      }
+
+      @media (max-width: 420px) {
+        .card-news-area {
+         .card-news-content {
+            max-width:260px;
+            height: 260px;
           }
         }
       }
