@@ -6,7 +6,7 @@ import { selectMenuList } from '@/features/auth/MenuThunks'
 import { getSsoInfo } from '@/features/auth/AnyIdThunks'
 import { redirectToSsoLoginPage } from '@/features/auth/SsoLoginPage'
 import { getLangFromPathname } from './lang'
-import { insertAccessLog } from '@/features/log/AccessLogThunks'
+import { insertWorkAccessLog } from '@/features/log/AccessLogThunks'
 import Layout from './Layout'
 import BlankLayout from './BlankLayout'
 import ProtectedRoute from './ProtectedRoute'
@@ -163,7 +163,7 @@ function SsoInfoSync() {
 }
 
 /** 업무별 접속 이력 적재 */
-function RouteAccessLogger() {
+function RouteWorkAccessLogger() {
   const location = useLocation()
   const dispatch = useAppDispatch()
   const prevRef = useRef<string>('')
@@ -185,8 +185,8 @@ function RouteAccessLogger() {
     if (prevRef.current === url) return
     prevRef.current = url
       
-    // 접속 이력 적재
-    dispatch(insertAccessLog({
+    // 업무별 접속 이력 적재
+    dispatch(insertWorkAccessLog({
       menuId: menuSn.toString(),
       urlAddr: location.pathname,
       taskSeCdNo: 'PP',
@@ -326,7 +326,7 @@ export default function Router() {
           <GlobalErrorHandler>
             <LangSync />
             <SsoInfoSync />
-            <RouteAccessLogger />
+            <RouteWorkAccessLogger />
             <Routes>
 
               {/* 팝업 전용: Header/Footer 없이 본문만 표시 */}

@@ -1,4 +1,4 @@
 /**
  * 접근이력 적재
  */
-export const insertAccessLogApiPath = () => '/workAccessLog/insert'
+export const insertWorkAccessLogApiPath = () => '/workAccessLog/insert'

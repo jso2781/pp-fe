@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { insertAccessLog } from './AccessLogThunks'
+import { insertWorkAccessLog } from './AccessLogThunks'
 
 /**
  * 대국민포털_업무별 접속이력 적재 (Redux 저장 구조) 
@@ -24,16 +24,16 @@ const AccessLogSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(insertAccessLog.pending, (state) => {
+      .addCase(insertWorkAccessLog.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(insertAccessLog.fulfilled, (state, action) => {
+      .addCase(insertWorkAccessLog.fulfilled, (state, action) => {
         state.loading = false;
       })
-      .addCase(insertAccessLog.rejected, (state, action) => {
+      .addCase(insertWorkAccessLog.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message || 'Failed to load inertAccessLog';
+        state.error = action.error?.message || 'Failed to load insertWorkAccessLog';
       })
   }
 });
