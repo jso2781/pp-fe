@@ -184,7 +184,7 @@ function RouteAccessLogger() {
     const url = `${menuUrl}${location.search}`
     if (prevRef.current === url) return
     prevRef.current = url
-        
+      
     // 접속 이력 적재
     dispatch(insertAccessLog({
       menuId: menuSn.toString(),

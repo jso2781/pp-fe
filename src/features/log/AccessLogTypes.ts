@@ -27,8 +27,8 @@ export interface AccessLogPVO {
   mdfrId?: string;
 
   /** 개인정보포함여부 */
-  prvcInclYn?: string;  
+  prvcInclYn?: string;
 
   /** 수행업무코드 */
-  flfmtTaskCd?: string;    
+  flfmtTaskCd?: string;
 }
