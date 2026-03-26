@@ -59,7 +59,7 @@ const https: AxiosInstance = axios.create({
  */
 https.interceptors.request.use((config) => {
   const url = config.url ?? ''
-  if (AUTH_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
+  if (AUTH_PATHS.some((p) => (url === p || url.startsWith(p + '?')) && !url.startsWith('/anyid/login'))) {
     config.baseURL = authApiBaseURL
   }
   else if(CA_PATHS.some((p) => url === p || url.startsWith(p + '?'))) {
