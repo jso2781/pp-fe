@@ -2,8 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
 import { getIntegratedSearchJsonApiPath } from '@/api/search/IntegratedSearchPaths'
 import { IntegratedSearchPVO, IntegratedSearchRVO } from '@/features/search/IntegratedSearchTypes'
-import { AnyIdInitPVO, AnyIdInitRVO, AnyIdLoginPVO, AnyIdLoginRVO, AnyIdUserInfoRVO, SsoInfoPVO, SsoInfoRVO } from './AnyIdTypes'
-import { anyIdInitApiPath, anyIdLoginApiPath, anyIdUserInfoApiPath, ssoInfoApiPath } from '@/api/auth/AnyIdApiPaths'
+import { AnyIdCiFromSsobPVO, AnyIdInitPVO, AnyIdInitRVO, AnyIdLoginPVO, AnyIdLoginRVO, AnyIdUserInfoFromSsobPVO, AnyIdUserInfoFromSsobRVO, AnyIdUserInfoRVO, SsoInfoPVO, SsoInfoRVO } from './AnyIdTypes'
+import { anyIdCiFromSsobApiPath, anyIdInitApiPath, anyIdLoginApiPath, anyIdUserInfoApiPath, anyIdUserInfoFromSsobApiPath, ssoInfoApiPath } from '@/api/auth/AnyIdApiPaths'
 
 /**
  * SSO 기본 정보 조회
@@ -84,4 +84,40 @@ export const getAnyIdUserInfo = createAsyncThunk<AnyIdUserInfoRVO, undefined, { 
       return rejectWithValue('AnyIdThunks getAnyIdUserInfo error!!');
     }
   }
+)
+
+/**
+ * ANY-ID 인증완료 후 전달받은 ssob를 복호화 후 ssob 정보중에 CI 정보를 추출 요청
+ */
+export const getAnyIdCiFromSsob = createAsyncThunk<string, AnyIdCiFromSsobPVO, { rejectValue: string }>(
+  '/auth/anyid/getCiFromSsob',
+  async (params: AnyIdCiFromSsobPVO, { rejectWithValue }) => {
+    try {
+      const res = await https.post(anyIdCiFromSsobApiPath(), params);
+      const ci = res.data?.data?.ci;
+      return ci as string;
+    }
+    catch (e) {
+      console.log("AnyIdThunks getAnyIdCiFromSsob error!!");
+      return rejectWithValue('AnyIdThunks getAnyIdCiFromSsob error!!');
+    }
+  }  
+)
+
+/**
+ * ANY-ID 인증완료 후 전달받은 ssob를 복호화 후 ssob 내용 전체(JSON)를 추출 요청
+ */
+export const getAnyIdUserInfoFromSsob = createAsyncThunk<AnyIdUserInfoFromSsobRVO, AnyIdUserInfoFromSsobPVO, { rejectValue: string }>(
+  '/auth/anyid/getUserInfoFromSsob',
+  async (params: AnyIdUserInfoFromSsobPVO, { rejectWithValue }) => {
+    try {
+      const res = await https.post(anyIdUserInfoFromSsobApiPath(), params);
+      const userInfo = res.data?.data;
+      return userInfo as AnyIdUserInfoFromSsobRVO;
+    }
+    catch (e) {
+      console.log("AnyIdThunks getAnyIdUserInfoFromSsob error!!");
+      return rejectWithValue('AnyIdThunks getAnyIdUserInfoFromSsob error!!');
+    }
+  }  
 )

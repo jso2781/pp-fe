@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getSsoInfo, getAnyIdInit, postAnyIdLogin, getAnyIdUserInfo } from './AnyIdThunks'
-import { SsoInfoRVO, AnyIdInitRVO, AnyIdLoginRVO, AnyIdUserInfoRVO } from './AnyIdTypes'
+import { getSsoInfo, getAnyIdInit, postAnyIdLogin, getAnyIdUserInfo, getAnyIdCiFromSsob, getAnyIdUserInfoFromSsob } from './AnyIdThunks'
+import { SsoInfoRVO, AnyIdInitRVO, AnyIdLoginRVO, AnyIdUserInfoRVO, AnyIdUserInfoFromSsobRVO } from './AnyIdTypes'
 
 /**
  * SSO, ANY-ID 정보(Redux 저장 구조)
@@ -15,6 +15,10 @@ export interface AnyIdState {
   anyIdLoginResult: AnyIdLoginRVO | null
   /** getAnyIdUserInfo 결과 (persist 시 'anyIdUserInfo' 키로 저장) */
   anyIdUserInfo: AnyIdUserInfoRVO | null
+  /** getAnyIdCiFromSsob 결과 (persist 시 'ciFromSsob' 키로 저장) */
+  ciFromSsob: string | null
+  /** getAnyIdUserInfoFromSsob 결과 (persist 시 'userInfoFromSsob' 키로 저장) */
+  userInfoFromSsob: AnyIdUserInfoFromSsobRVO | null
   loading: boolean
   error: string | null
 }
@@ -24,6 +28,8 @@ const initialState: AnyIdState = {
   anyidInit: null,
   anyIdLoginResult: null,
   anyIdUserInfo: null,
+  ciFromSsob: null,
+  userInfoFromSsob: null,
   loading: false,
   error: null
 }
@@ -37,6 +43,8 @@ const AnyIdSlice = createSlice({
       state.anyidInit = null;
       state.anyIdLoginResult = null;
       state.anyIdUserInfo = null;
+      state.ciFromSsob = null;
+      state.userInfoFromSsob = null;
     },
     /** 다른 메뉴로 나갔다가 돌아올 때 조회 결과 제거용 */
     resetResults: (state) => {
@@ -44,6 +52,8 @@ const AnyIdSlice = createSlice({
       state.anyidInit = null;
       state.anyIdLoginResult = null;
       state.anyIdUserInfo = null;
+      state.ciFromSsob = null;
+      state.userInfoFromSsob = null;
       state.error = null;
     }
   },
@@ -94,6 +104,30 @@ const AnyIdSlice = createSlice({
         state.anyIdUserInfo = action.payload as AnyIdUserInfoRVO ?? null;
       })
       .addCase(getAnyIdUserInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message || 'Failed to load notice list';
+      })
+      .addCase(getAnyIdCiFromSsob.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAnyIdCiFromSsob.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ciFromSsob = action.payload as string ?? null;
+      })
+      .addCase(getAnyIdCiFromSsob.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message || 'Failed to load notice list';
+      })
+      .addCase(getAnyIdUserInfoFromSsob.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAnyIdUserInfoFromSsob.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userInfoFromSsob = action.payload as AnyIdUserInfoFromSsobRVO ?? null;
+      })
+      .addCase(getAnyIdUserInfoFromSsob.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error?.message || 'Failed to load notice list';
       })

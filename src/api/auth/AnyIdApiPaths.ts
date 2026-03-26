@@ -18,3 +18,13 @@ export const anyIdLoginApiPath = () => '/auth/anyid/login';
  * (SSO 사용자 정보와 Any-ID 세션 정보를 조회)
  */
 export const anyIdUserInfoApiPath = () => '/auth/anyid/userInfo';
+
+/**
+ * ANY-ID 인증완료 후 전달받은 ssob를 복호화 후 ssob 정보중에 CI 정보를 추출
+ */
+export const anyIdCiFromSsobApiPath = () => '/auth/anyid/getCiFromSsob';
+
+/**
+ * ANY-ID 인증완료 후 전달받은 ssob를 복호화 후 ssob 내용 전체(JSON)를 추출
+ */
+export const anyIdUserInfoFromSsobApiPath = () => '/auth/anyid/getUserInfoFromSsob';

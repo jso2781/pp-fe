@@ -16,6 +16,8 @@ import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
 
 import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
+import { getAnyIdCiFromSsob } from '@/features/auth/AnyIdThunks';
+import { useAppDispatch } from '@/store/hooks';
 
 const isProduction = import.meta.env.MODE === 'production'
 
@@ -23,7 +25,9 @@ export default function CertifySelf() {
   const { lang } = useParams<{ lang: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
+
 
   // 본인인증 완료 상태
   const [isCertified, setIsCertified] = useState(false);
@@ -176,9 +180,17 @@ export default function CertifySelf() {
     const prevAdaptor = window.anyidAdaptor
     window.anyidAdaptor = {
       success: async (data: any) => {
-        console.log('[AnyID] log:', data)
-        setIsCertified(true)
-        ciRef.current = data?.res?.ci ?? null
+        console.log('[AnyID] log:', data);
+        setIsCertified(true);
+
+        try{
+          const ci = await dispatch(getAnyIdCiFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.tag })).unwrap();
+          ciRef.current = ci ?? null;
+          console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdCiFromSsob ci=', ciRef.current);
+        }catch(error){
+          // API 호출 실패 시 오류 처리
+          console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdCiFromSsob error=', error);
+        }finally{}
       },
     }
 
