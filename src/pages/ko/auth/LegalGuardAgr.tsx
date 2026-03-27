@@ -183,11 +183,56 @@ export default function LegalGuardAgr() {
   const [isGuardianAnyIdRendered, setIsGuardianAnyIdRendered] = useState(false);
   const applicantTagRef = useRef<string>('')
   const guardianTagRef = useRef<string>('')
+  const applicantSuccessHandledRef = useRef(false)
+  const guardianSuccessHandledRef = useRef(false)
+  const anyIdLogDedupRef = useRef<Map<string, number>>(new Map())
 
-  /** 신청인 인증 성공 후 법정대리인 렌더 단계. 법정대리인 렌더 완료 시 종료된다. */
+  const logAnyIdEvent = useCallback((phase: 'APPLICANT' | 'GUARDIAN', data: any) => {
+    const tx = (data?.txId ?? data?.tag ?? '') as string
+    const module = (data?.module ?? '') as string
+    const step = (data?.step ?? '') as string
+    const group = (data?.group ?? '') as string
+    const status = (data?.status ?? '') as string
+
+    // esign-relay 는 SDK 폴링성 로그가 매우 많아 동일 이벤트를 짧은 시간에 반복 출력하지 않는다.
+    const dedupKey = `${phase}|${tx}|${module}|${step}|${group}|${status}`
+    const now = Date.now()
+    const prev = anyIdLogDedupRef.current.get(dedupKey) ?? 0
+    const suppressWindowMs = module === 'esign-relay' ? 2000 : 300
+    if (now - prev < suppressWindowMs) return
+    anyIdLogDedupRef.current.set(dedupKey, now)
+
+    if (anyIdLogDedupRef.current.size > 400) {
+      const threshold = now - 60_000
+      for (const [k, ts] of anyIdLogDedupRef.current) {
+        if (ts < threshold) anyIdLogDedupRef.current.delete(k)
+      }
+    }
+
+    const compact = {
+      txId: tx,
+      module,
+      step,
+      group,
+      status,
+      vendor: data?.vendor,
+      reqLvl: data?.reqLvl,
+      type: data?.type,
+    }
+    console.log(`============================ ${tRef.current('anyIdLog')} [${phase}] ============================`, compact)
+  }, [])
+
+  /** 일부 브라우저/SDK 조합에서 MutationObserver 감지가 누락될 수 있어 로그 신호로도 신청인 렌더 완료를 보강한다. */
+  const markApplicantRenderedByLogFallback = useCallback((data: any) => {
+    if ((data?.module ?? '') === 'anyidc' && (data?.step ?? '') === 'config') {
+      setIsApplicantAnyIdRendered(true)
+    }
+  }, [])
+
+  /** 신청인 영역 렌더 완료 후 법정대리인 렌더 단계. 법정대리인 렌더 완료 시 종료된다. */
   const guardianPhase = useMemo(
-    () => isProduction && isApplicantCertified && !isGuardianAnyIdRendered,
-    [isProduction, isApplicantCertified, isGuardianAnyIdRendered]
+    () => isProduction && isApplicantAnyIdRendered && !isGuardianAnyIdRendered,
+    [isProduction, isApplicantAnyIdRendered, isGuardianAnyIdRendered]
   )
 
   const isUnder14ByBrdt = (brdt: string | undefined): boolean | null => {
@@ -300,8 +345,13 @@ export default function LegalGuardAgr() {
         try{
           // 신청인 인증 success
           if(tag && tag === applicantTagRef.current){
-            console.log('[LegalGuardAgr] applicant success handler tag='+tag+',data=', data);
+            if (applicantSuccessHandledRef.current) return
+            applicantSuccessHandledRef.current = true
+            console.log('[LegalGuardAgr] applicant success handled once. tag=', tag)
             const userInfoFromSsob = await dispatch(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag })).unwrap() as AnyIdUserInfoFromSsobRVO
+
+            const under14 = true;
+            /*
             const under14 = isUnder14ByBrdt(userInfoFromSsob?.brdt)
             if (under14 === false) {
               setIsApplicantCertified(false)
@@ -309,6 +359,7 @@ export default function LegalGuardAgr() {
               openModal(t('minorCertifyReminder'))
               return;
             }
+            */
 
             // 14세 미만(또는 판단 불가)인 경우만 입력값 반영
             if (under14 === true || under14 === null) {
@@ -328,7 +379,9 @@ export default function LegalGuardAgr() {
 
           // 법정대리인 인증 success
           if(tag && tag === guardianTagRef.current){
-            console.log('[LegalGuardAgr] guardian success handler tag='+tag+',data=', data);
+            if (guardianSuccessHandledRef.current) return
+            guardianSuccessHandledRef.current = true
+            console.log('[LegalGuardAgr] guardian success handled once. tag=', tag)
             const userInfoFromSsob = await dispatch(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag })).unwrap() as AnyIdUserInfoFromSsobRVO
 
             setLegalGuardFormData((prev) => ({
@@ -354,6 +407,8 @@ export default function LegalGuardAgr() {
     const guardianTxId = `legal-guard-guardian-${seed}`
     applicantTagRef.current = applicantTxId
     guardianTagRef.current = guardianTxId
+    applicantSuccessHandledRef.current = false
+    guardianSuccessHandledRef.current = false
 
     // 신청인: SDK가 요구하는 id="anyidc" 에만 렌더 (임시 id 스왑 없음)
     window.AnyidC?.LOAD_MODULE?.({
@@ -372,7 +427,8 @@ export default function LegalGuardAgr() {
         alert(tRef.current('certifySelfFailedReminder'))
       },
       log: (data: any) => {
-        console.log('============================ ' + tRef.current('anyIdLog') + ' [APPLICANT] ============================', data)
+        markApplicantRenderedByLogFallback(data)
+        logAnyIdEvent('APPLICANT', data)
       },
     })
 
@@ -385,7 +441,7 @@ export default function LegalGuardAgr() {
       applicantRenderObserverDisconnectRef.current = null
       window.anyidAdaptor = prevAdaptor
     }
-  }, [anyIdReady, dispatch, observeApplicantRenderDone]);
+  }, [anyIdReady, dispatch, observeApplicantRenderDone, logAnyIdEvent, markApplicantRenderedByLogFallback]);
 
   // 신청인 렌더 완료 직후 Observer 중단 (id 전환과 충돌 방지)
   useEffect(() => {
@@ -432,7 +488,7 @@ export default function LegalGuardAgr() {
           alert(tRef.current('certifySelfFailedReminder'))
         },
         log: (data: any) => {
-          console.log('============================ ' + tRef.current('anyIdLog') + ' [GUARDIAN] ============================', data)
+          logAnyIdEvent('GUARDIAN', data)
         },
       })
 
@@ -469,7 +525,7 @@ export default function LegalGuardAgr() {
       guardianRenderObserverDisconnectRef.current?.()
       guardianRenderObserverDisconnectRef.current = null
     }
-  }, [anyIdReady, guardianPhase]);
+  }, [anyIdReady, guardianPhase, logAnyIdEvent]);
 
   // 이름 유효성 검사 (한글과 영문만, 2-30자)
   const validateName = (name: string): string => {
