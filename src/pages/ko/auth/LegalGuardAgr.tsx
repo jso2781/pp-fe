@@ -11,9 +11,9 @@ import { Box, Button, Stepper, Step, StepLabel, Typography, TextField, Stack, Fo
 import { Close as CloseIcon } from '@mui/icons-material'
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
-import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
+import { ensureAnyIdAssets, ensureApplicantAnyIdCompatCss, ensureGuardianAnyIdCompatCss, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
 import { useAppDispatch } from '@/store/hooks'
-import { getAnyIdCiFromSsob, getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks'
+import { getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks'
 import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes'
 
 const isProduction = import.meta.env.MODE === 'production'
@@ -51,6 +51,34 @@ function isApplicantAnyIdDomReady(root: Element): boolean {
     return true
   }
   return false
+}
+
+const ANYID_APPLICANT_SHELL = '[data-legal-guard-anyid="applicant"]'
+const ANYID_GUARDIAN_SHELL = '[data-legal-guard-anyid="guardian"]'
+
+/**
+ * Any-ID SDK가 마운트 후에도 id="anyidc" 를 유지해 React의 id={anyidc_applicant_done} 전환이 DOM에 반영되지 않을 수 있다.
+ * 법정대리인 LOAD_MODULE 전에 신청인 영역의 노드 id만 임의로 바꿔 문서에 #anyidc 가 하나만 남게 한다.
+ */
+function releaseApplicantAnyIdcId(): void {
+  const shell = document.querySelector(ANYID_APPLICANT_SHELL)
+  let node = shell?.querySelector<HTMLElement>('#anyidc')
+  if (!node) {
+    const first = document.getElementById('anyidc')
+    if (first && first.closest(ANYID_APPLICANT_SHELL)) node = first as HTMLElement
+  }
+  if (node) node.id = 'anyidc_applicant_done'
+}
+
+/** 초기 2단계(신청인/법정대리인) 로딩이 끝난 후 신청인 id를 원래 anyidc로 복원 */
+function restoreApplicantAnyIdcId(): void {
+  const shell = document.querySelector(ANYID_APPLICANT_SHELL)
+  const node = shell?.querySelector<HTMLElement>('#anyidc_applicant_done')
+  if (node) node.id = 'anyidc'
+}
+
+function getGuardianAnyIdMountElement(): HTMLElement | null {
+  return document.querySelector<HTMLElement>(`${ANYID_GUARDIAN_SHELL} #anyidc`)
 }
 
 export default function LegalGuardAgr() {
@@ -148,15 +176,18 @@ export default function LegalGuardAgr() {
   const hasLoadedAnyIdRef = useRef(false);
   const applicantLoadModuleCalledRef = useRef(false);
   const guardianLoadModuleCalledRef = useRef(false);
+  const guardianRenderObserverDisconnectRef = useRef<(() => void) | null>(null);
+  const applicantIdRestoreDoneRef = useRef(false);
   const applicantRenderObserverDisconnectRef = useRef<(() => void) | null>(null);
   const [isApplicantAnyIdRendered, setIsApplicantAnyIdRendered] = useState(false);
+  const [isGuardianAnyIdRendered, setIsGuardianAnyIdRendered] = useState(false);
   const applicantTagRef = useRef<string>('')
   const guardianTagRef = useRef<string>('')
 
-  /** 신청인 Any-ID 렌더 완료 후에는 문서에 id="anyidc" 하나만 두고 법정대리인 영역에 SDK를 다시 띄운다. */
+  /** 신청인 렌더 후 법정대리인 렌더 단계. 법정대리인 렌더 완료 시 종료된다. */
   const guardianPhase = useMemo(
-    () => isProduction && isApplicantAnyIdRendered,
-    [isProduction, isApplicantAnyIdRendered]
+    () => isProduction && isApplicantAnyIdRendered && !isGuardianAnyIdRendered,
+    [isProduction, isApplicantAnyIdRendered, isGuardianAnyIdRendered]
   )
 
   const isUnder14ByBrdt = (brdt: string | undefined): boolean | null => {
@@ -233,6 +264,9 @@ export default function LegalGuardAgr() {
 
     let cancelWait: (() => void) | null = null
 
+    ensureAnyIdAssets()
+    ensureApplicantAnyIdCompatCss()
+    ensureGuardianAnyIdCompatCss()
     ensureAnyIdAssets()
       .then(() => {
         cancelWait = waitForAnyidC(
@@ -326,7 +360,7 @@ export default function LegalGuardAgr() {
       tag: applicantTxId,
       lvl: 2,
       bypass: 0,
-      toggle: true,
+      toggle: false,
       theme: '4.1.0',
       redirect_uri: window.location.href,
       success: (data: any) => void window.anyidAdaptor?.success?.(data),
@@ -358,6 +392,14 @@ export default function LegalGuardAgr() {
     applicantRenderObserverDisconnectRef.current = null
   }, [isApplicantAnyIdRendered]);
 
+  // 법정대리인 렌더 완료 시점에 신청인 id를 anyidc로 되돌림
+  useEffect(() => {
+    if (!isGuardianAnyIdRendered) return
+    if (applicantIdRestoreDoneRef.current) return
+    restoreApplicantAnyIdcId()
+    applicantIdRestoreDoneRef.current = true
+  }, [isGuardianAnyIdRendered]);
+
   // guardianPhase: id="anyidc" 가 법정대리인 div로 옮긴 직후 LOAD_MODULE (레이아웃 커밋 직후 실행)
   useLayoutEffect(() => {
     if (!isProduction) return
@@ -370,6 +412,7 @@ export default function LegalGuardAgr() {
 
     const runGuardianLoad = (anchor: HTMLElement) => {
       guardianLoadModuleCalledRef.current = true
+      releaseApplicantAnyIdcId()
       anchor.innerHTML = ''
       window.AnyidC?.LOAD_MODULE?.({
         cfg: configAnyidcJsonUrl,
@@ -377,7 +420,7 @@ export default function LegalGuardAgr() {
         tag: guardianTxId,
         lvl: 2,
         bypass: 0,
-        toggle: true,
+        toggle: false,
         theme: '4.1.0',
         redirect_uri: window.location.href,
         success: (data: any) => void window.anyidAdaptor?.success?.(data),
@@ -390,20 +433,40 @@ export default function LegalGuardAgr() {
           console.log('============================ ' + tRef.current('anyIdLog') + ' [GUARDIAN] ============================', data)
         },
       })
+
+      const markRenderedOnce = (): boolean => {
+        if (!isApplicantAnyIdDomReady(anchor)) return false
+        setIsGuardianAnyIdRendered(true)
+        return true
+      }
+
+      if (markRenderedOnce()) return
+
+      const observer = new MutationObserver(() => {
+        if (markRenderedOnce()) {
+          observer.disconnect()
+        }
+      })
+      observer.observe(anchor, { childList: true, subtree: true })
+      guardianRenderObserverDisconnectRef.current = () => observer.disconnect()
     }
 
-    const mount = document.getElementById('anyidc')
+    const mount = getGuardianAnyIdMountElement()
     if (mount) {
       runGuardianLoad(mount)
       return
     }
 
-    console.warn('[LegalGuardAgr] guardian phase: #anyidc not found, retry next frame')
+    console.warn('[LegalGuardAgr] guardian phase: 법정대리인 #anyidc not found, retry next frame')
     const raf = requestAnimationFrame(() => {
-      const m = document.getElementById('anyidc')
+      const m = getGuardianAnyIdMountElement()
       if (m && !guardianLoadModuleCalledRef.current) runGuardianLoad(m)
     })
-    return () => cancelAnimationFrame(raf)
+    return () => {
+      cancelAnimationFrame(raf)
+      guardianRenderObserverDisconnectRef.current?.()
+      guardianRenderObserverDisconnectRef.current = null
+    }
   }, [anyIdReady, guardianPhase]);
 
   // 이름 유효성 검사 (한글과 영문만, 2-30자)
@@ -675,11 +738,8 @@ export default function LegalGuardAgr() {
                           {/* 신청인(만 14세 미만) 본인인증 Any-ID 영역 - 화면 로딩과 함께 표시 */}
                           {showAnyIdArea && (
                             isProduction ? (
-                              <Box sx={{ mt: 2 }}>
-                                <div
-                                  id={guardianPhase ? 'anyidc_applicant_done' : 'anyidc'}
-                                  className="anyidc"
-                                />
+                              <Box sx={{ mt: 2 }} data-legal-guard-anyid="applicant">
+                                <div id={guardianPhase ? 'anyidc_applicant_done' : 'anyidc'} className="anyidc" />
                               </Box>
                             ) : (
                               <Box
@@ -808,11 +868,8 @@ export default function LegalGuardAgr() {
                           </Box>
                           {/* 화면 로딩과 함께 Any-ID 영역 표시 (버튼 클릭과 무관) */}
                           {isProduction ? (
-                            <Box sx={{ mt: 2 }}>
-                              <div
-                                id={guardianPhase ? 'anyidc' : 'anyidcGuardian'}
-                                className="anyidc"
-                              />
+                            <Box sx={{ mt: 2 }} data-legal-guard-anyid="guardian">
+                              <div id={guardianPhase ? 'anyidc' : 'anyidcGuardian'} className="anyidc" />
                             </Box>
                           ) : (
                             <Box

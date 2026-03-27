@@ -4,6 +4,14 @@
  */
 let anyIdAssetsPromise: Promise<void> | null = null
 
+function ensureLinkOnce(href: string): void {
+  if (document.querySelector(`link[href="${href}"]`)) return
+  const l = document.createElement('link')
+  l.rel = 'stylesheet'
+  l.href = href
+  document.head.appendChild(l)
+}
+
 export function ensureAnyIdAssets(): Promise<void> {
   // 로컬/개발 환경에서는 Any-ID 자원(스크립트/설정)을 로딩하지 않는다.
   // (production 환경에서만 Any-ID SDK를 로딩하도록 강제)
@@ -12,14 +20,6 @@ export function ensureAnyIdAssets(): Promise<void> {
   }
 
   const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
-
-  const ensureLink = (href: string) => {
-    if (document.querySelector(`link[href="${href}"]`)) return
-    const l = document.createElement('link')
-    l.rel = 'stylesheet'
-    l.href = href
-    document.head.appendChild(l)
-  }
 
   const loadScript = (src: string) =>
     new Promise<void>((resolve, reject) => {
@@ -42,13 +42,27 @@ export function ensureAnyIdAssets(): Promise<void> {
     })
 
   if (!anyIdAssetsPromise) {
-    ensureLink(`${baseNorm}css/app.css`)
+    ensureLinkOnce(`${baseNorm}css/app.css`)
     anyIdAssetsPromise = loadScript(`${baseNorm}js/manifest.js`)
       .then(() => loadScript(`${baseNorm}js/vendor.js`))
       .then(() => loadScript(`${baseNorm}js/app.js`))
   }
 
   return anyIdAssetsPromise
+}
+
+/** LegalGuardAgr 전용: 신청인 영역(anyidc_applicant_done) 호환 스타일 */
+export function ensureApplicantAnyIdCompatCss(): void {
+  if (import.meta.env.MODE !== 'production') return
+  const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
+  ensureLinkOnce(`${baseNorm}css/anyidc-applicant-done-compat.css`)
+}
+
+/** LegalGuardAgr 전용: 법정대리인 영역(anyidcGuardian) 호환 스타일 */
+export function ensureGuardianAnyIdCompatCss(): void {
+  if (import.meta.env.MODE !== 'production') return
+  const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
+  ensureLinkOnce(`${baseNorm}css/anyidc-guardian-compat.css`)
 }
 
 /** AnyidC.LOAD_MODULE 준비 여부를 즉시 1회 확인 후 짧은 간격(50ms)으로 재시도, 최대 약 2초 */
