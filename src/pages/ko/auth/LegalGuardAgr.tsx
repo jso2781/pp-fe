@@ -4,7 +4,7 @@
  * 화면경로: /ko/auth/LegalGuardAgr
  * 화면설명: 만14세미만가입 법정대리인동의 화면
  */
-import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react'
+import React, { useMemo, useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Box, Button, Stepper, Step, StepLabel, Typography, TextField, Stack, FormControl, InputLabel, Select, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
@@ -29,6 +29,29 @@ type LegalGuardFormData = {
   /** 법정대리인 동의 폼에서 법정대리인의 본인인증 성공 시 Any-ID에서 전달받은 ci */
   ciFromGuardAgr?: string;
 };
+
+/**
+ * Any-ID가 #anyidc 안에 본인인증 UI를 그렸는지 판별한다.
+ * theme 4.1.x 는 ul.certify-type 대신 .login-4btn 등을 사용한다.
+ */
+function isApplicantAnyIdDomReady(root: Element): boolean {
+  if (root.querySelector('ul.certify-type > li')) return true
+  if (
+    root.querySelector('.login-4btn li') ||
+    root.querySelector('.certificate-wrapper.login-4btn li') ||
+    root.querySelector('.newLoginWrap .login-4btn li')
+  ) {
+    return true
+  }
+  if (
+    (root.classList.contains('thema_04') || root.classList.contains('container')) &&
+    root.querySelector('.newLoginWrap, .login-4btn, .tab-content-wrap') &&
+    root.querySelectorAll('li, button, a[href]').length >= 1
+  ) {
+    return true
+  }
+  return false
+}
 
 export default function LegalGuardAgr() {
   const navigate = useNavigate();
@@ -154,15 +177,17 @@ export default function LegalGuardAgr() {
     return age < 14
   }
 
-  /** Any-ID SDK가 신청인 영역(#anyidc) 렌더 완료했는지 감지한다. */
+  /** #anyidc 에 실제 위젯이 붙었는지 MutationObserver 로 감지 */
   const observeApplicantRenderDone = useCallback((): (() => void) | void => {
     const source = document.getElementById('anyidc')
     if (!source) return
 
     const markRenderedOnce = (): boolean => {
-      const items = source.querySelectorAll('ul.certify-type > li')
-      if (items.length < 1) return false
+      if (!isApplicantAnyIdDomReady(source)) return false
       setIsApplicantAnyIdRendered(true)
+      if (import.meta.env.DEV) {
+        console.log('[LegalGuardAgr] Any-ID applicant mount detected, switching to guardian #anyidc phase')
+      }
       return true
     }
 
@@ -236,7 +261,7 @@ export default function LegalGuardAgr() {
     const prevAdaptor = window.anyidAdaptor
     window.anyidAdaptor = {
       success: async (data: any) => {
-        const tag = (data?.tag ?? '') as string
+        const tag = (data?.tag ?? data?.txId ?? '') as string
 
         try{
           // 신청인 인증 success
@@ -333,40 +358,52 @@ export default function LegalGuardAgr() {
     applicantRenderObserverDisconnectRef.current = null
   }, [isApplicantAnyIdRendered]);
 
-  // 신청인 인증 완료 후(guardianPhase): React가 법정대리인 div에 id="anyidc"를 부여한 뒤 법정대리인 전용 LOAD_MODULE
-  useEffect(() => {
+  // guardianPhase: id="anyidc" 가 법정대리인 div로 옮긴 직후 LOAD_MODULE (레이아웃 커밋 직후 실행)
+  useLayoutEffect(() => {
     if (!isProduction) return
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return
     if (!guardianPhase) return
     if (guardianLoadModuleCalledRef.current) return
 
-    const mount = document.getElementById('anyidc')
-    if (!mount) return
-    guardianLoadModuleCalledRef.current = true
-    mount.innerHTML = ''
-
     const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
     const guardianTxId = guardianTagRef.current
 
-    window.AnyidC?.LOAD_MODULE?.({
-      cfg: configAnyidcJsonUrl,
-      txId: guardianTxId,
-      tag: guardianTxId,
-      lvl: 2,
-      bypass: 0,
-      toggle: true,
-      theme: '4.1.0',
-      redirect_uri: window.location.href,
-      success: (data: any) => void window.anyidAdaptor?.success?.(data),
-      fail: (err: any) => {
-        console.error(tRef.current('certifySelfFailed'), err)
-        setIsLegalGuardCertified(false)
-        alert(tRef.current('certifySelfFailedReminder'))
-      },
-      log: (data: any) => {
-        console.log('============================ ' + tRef.current('anyIdLog') + ' [GUARDIAN] ============================', data)
-      },
+    const runGuardianLoad = (anchor: HTMLElement) => {
+      guardianLoadModuleCalledRef.current = true
+      anchor.innerHTML = ''
+      window.AnyidC?.LOAD_MODULE?.({
+        cfg: configAnyidcJsonUrl,
+        txId: guardianTxId,
+        tag: guardianTxId,
+        lvl: 2,
+        bypass: 0,
+        toggle: true,
+        theme: '4.1.0',
+        redirect_uri: window.location.href,
+        success: (data: any) => void window.anyidAdaptor?.success?.(data),
+        fail: (err: any) => {
+          console.error(tRef.current('certifySelfFailed'), err)
+          setIsLegalGuardCertified(false)
+          alert(tRef.current('certifySelfFailedReminder'))
+        },
+        log: (data: any) => {
+          console.log('============================ ' + tRef.current('anyIdLog') + ' [GUARDIAN] ============================', data)
+        },
+      })
+    }
+
+    const mount = document.getElementById('anyidc')
+    if (mount) {
+      runGuardianLoad(mount)
+      return
+    }
+
+    console.warn('[LegalGuardAgr] guardian phase: #anyidc not found, retry next frame')
+    const raf = requestAnimationFrame(() => {
+      const m = document.getElementById('anyidc')
+      if (m && !guardianLoadModuleCalledRef.current) runGuardianLoad(m)
     })
+    return () => cancelAnimationFrame(raf)
   }, [anyIdReady, guardianPhase]);
 
   // 이름 유효성 검사 (한글과 영문만, 2-30자)
