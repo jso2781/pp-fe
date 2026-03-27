@@ -115,7 +115,7 @@ export default function LegalGuardAgr() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // 본인인증 완료 상태
-  const [isCertified, setIsCertified] = useState(false); // 법정대리인 인증
+  const [isLegalGuardCertified, setIsLegalGuardCertified] = useState(false); // 법정대리인 인증
   const [isApplicantCertified, setIsApplicantCertified] = useState(false); // 신청인 인증
   // Any-ID 영역 표시 여부: 요구사항상 화면 로딩 즉시 표시
   const [showAnyIdArea, setShowAnyIdArea] = useState(true);
@@ -123,9 +123,18 @@ export default function LegalGuardAgr() {
   // Any-ID 준비 상태
   const [anyIdReady, setAnyIdReady] = useState(false);
   const hasLoadedAnyIdRef = useRef(false);
-  const loadModuleCalledRef = useRef(false);
+  const applicantLoadModuleCalledRef = useRef(false);
+  const guardianLoadModuleCalledRef = useRef(false);
+  const applicantRenderObserverDisconnectRef = useRef<(() => void) | null>(null);
+  const [isApplicantAnyIdRendered, setIsApplicantAnyIdRendered] = useState(false);
   const applicantTagRef = useRef<string>('')
   const guardianTagRef = useRef<string>('')
+
+  /** 신청인 Any-ID 렌더 완료 후에는 문서에 id="anyidc" 하나만 두고 법정대리인 영역에 SDK를 다시 띄운다. */
+  const guardianPhase = useMemo(
+    () => isProduction && isApplicantAnyIdRendered,
+    [isProduction, isApplicantAnyIdRendered]
+  )
 
   const isUnder14ByBrdt = (brdt: string | undefined): boolean | null => {
     if (!brdt) return null
@@ -145,26 +154,27 @@ export default function LegalGuardAgr() {
     return age < 14
   }
 
-  /**
-   * Any-ID는 id="anyidc" 영역에 렌더된다는 전제가 있어서,
-   * 한 화면에 2개 모듈을 띄우기 위해 LOAD_MODULE 호출 직전에 대상 div의 id를 임시로 anyidc로 바꿉니다.
-   */
-  const withAnyIdMount = useCallback((targetId: string, run: () => void) => {
-    const target = document.getElementById(targetId)
-    if (!target) return
+  /** Any-ID SDK가 신청인 영역(#anyidc) 렌더 완료했는지 감지한다. */
+  const observeApplicantRenderDone = useCallback((): (() => void) | void => {
+    const source = document.getElementById('anyidc')
+    if (!source) return
 
-    const existing = document.getElementById('anyidc')
-    if (existing && existing !== target) {
-      existing.id = `anyidc_tmp_${Date.now()}`
+    const markRenderedOnce = (): boolean => {
+      const items = source.querySelectorAll('ul.certify-type > li')
+      if (items.length < 1) return false
+      setIsApplicantAnyIdRendered(true)
+      return true
     }
 
-    const oldId = target.id
-    target.id = 'anyidc'
-    try {
-      run()
-    } finally {
-      target.id = oldId
-    }
+    if (markRenderedOnce()) return
+
+    const observer = new MutationObserver(() => {
+      if (markRenderedOnce()) {
+        observer.disconnect()
+      }
+    })
+    observer.observe(source, { childList: true, subtree: true })
+    return () => observer.disconnect()
   }, [])
 
   // 약관 동의 화면에서 전달받은 steps를 사용하거나, 없으면 새로 생성
@@ -216,12 +226,12 @@ export default function LegalGuardAgr() {
     }
   }, [t]);
 
-  // Any-ID LOAD_MODULE 2회 호출 (production + SDK 준비 완료 시): 신청인/법정대리인
+  // Any-ID: 신청인 영역(#anyidc)에 LOAD_MODULE 1회 → 렌더 완료 확인
   useEffect(() => {
     if (!isProduction) return
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return
-    if (loadModuleCalledRef.current) return
-    loadModuleCalledRef.current = true
+    if (applicantLoadModuleCalledRef.current) return
+    applicantLoadModuleCalledRef.current = true
 
     const prevAdaptor = window.anyidAdaptor
     window.anyidAdaptor = {
@@ -267,7 +277,7 @@ export default function LegalGuardAgr() {
               ciFromGuardAgr: userInfoFromSsob?.ci ?? prev.ciFromGuardAgr
             }))
 
-            setIsCertified(true)
+            setIsLegalGuardCertified(true)
             return
           }
         }
@@ -284,56 +294,80 @@ export default function LegalGuardAgr() {
     applicantTagRef.current = applicantTxId
     guardianTagRef.current = guardianTxId
 
-    // 신청인 Any-ID 렌더
-    withAnyIdMount('anyidcApplicant', () => {
-      window.AnyidC?.LOAD_MODULE?.({
-        cfg: configAnyidcJsonUrl,
-        txId: applicantTxId,
-        tag: applicantTxId,
-        lvl: 2,
-        bypass: 0,
-        toggle: true,
-        theme: '4.1.0',
-        redirect_uri: window.location.href,
-        success: (data: any) => void window.anyidAdaptor?.success?.(data),
-        fail: (err: any) => {
-          console.error(tRef.current('certifySelfFailed'), err)
-          setIsApplicantCertified(false)
-          alert(tRef.current('certifySelfFailedReminder'))
-        },
-        log: (data: any) => {
-          console.log('============================ ' + tRef.current('anyIdLog') + ' [APPLICANT] ============================', data)
-        },
-      })
+    // 신청인: SDK가 요구하는 id="anyidc" 에만 렌더 (임시 id 스왑 없음)
+    window.AnyidC?.LOAD_MODULE?.({
+      cfg: configAnyidcJsonUrl,
+      txId: applicantTxId,
+      tag: applicantTxId,
+      lvl: 2,
+      bypass: 0,
+      toggle: true,
+      theme: '4.1.0',
+      redirect_uri: window.location.href,
+      success: (data: any) => void window.anyidAdaptor?.success?.(data),
+      fail: (err: any) => {
+        console.error(tRef.current('certifySelfFailed'), err)
+        setIsApplicantCertified(false)
+        alert(tRef.current('certifySelfFailedReminder'))
+      },
+      log: (data: any) => {
+        console.log('============================ ' + tRef.current('anyIdLog') + ' [APPLICANT] ============================', data)
+      },
     })
 
-    // 법정대리인 Any-ID 렌더
-    withAnyIdMount('anyidcGuardian', () => {
-      window.AnyidC?.LOAD_MODULE?.({
-        cfg: configAnyidcJsonUrl,
-        txId: guardianTxId,
-        tag: guardianTxId,
-        lvl: 2,
-        bypass: 0,
-        toggle: true,
-        theme: '4.1.0',
-        redirect_uri: window.location.href,
-        success: (data: any) => void window.anyidAdaptor?.success?.(data),
-        fail: (err: any) => {
-          console.error(tRef.current('certifySelfFailed'), err)
-          setIsCertified(false)
-          alert(tRef.current('certifySelfFailedReminder'))
-        },
-        log: (data: any) => {
-          console.log('============================ ' + tRef.current('anyIdLog') + ' [GUARDIAN] ============================', data)
-        },
-      })
-    })
+    const disconnectObserver = observeApplicantRenderDone()
+    applicantRenderObserverDisconnectRef.current =
+      typeof disconnectObserver === 'function' ? disconnectObserver : null
 
     return () => {
+      applicantRenderObserverDisconnectRef.current?.()
+      applicantRenderObserverDisconnectRef.current = null
       window.anyidAdaptor = prevAdaptor
     }
-  }, [anyIdReady, dispatch, withAnyIdMount]);
+  }, [anyIdReady, dispatch, observeApplicantRenderDone]);
+
+  // 신청인 렌더 완료 직후 Observer 중단 (id 전환과 충돌 방지)
+  useEffect(() => {
+    if (!isApplicantAnyIdRendered) return
+    applicantRenderObserverDisconnectRef.current?.()
+    applicantRenderObserverDisconnectRef.current = null
+  }, [isApplicantAnyIdRendered]);
+
+  // 신청인 인증 완료 후(guardianPhase): React가 법정대리인 div에 id="anyidc"를 부여한 뒤 법정대리인 전용 LOAD_MODULE
+  useEffect(() => {
+    if (!isProduction) return
+    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return
+    if (!guardianPhase) return
+    if (guardianLoadModuleCalledRef.current) return
+
+    const mount = document.getElementById('anyidc')
+    if (!mount) return
+    guardianLoadModuleCalledRef.current = true
+    mount.innerHTML = ''
+
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
+    const guardianTxId = guardianTagRef.current
+
+    window.AnyidC?.LOAD_MODULE?.({
+      cfg: configAnyidcJsonUrl,
+      txId: guardianTxId,
+      tag: guardianTxId,
+      lvl: 2,
+      bypass: 0,
+      toggle: true,
+      theme: '4.1.0',
+      redirect_uri: window.location.href,
+      success: (data: any) => void window.anyidAdaptor?.success?.(data),
+      fail: (err: any) => {
+        console.error(tRef.current('certifySelfFailed'), err)
+        setIsLegalGuardCertified(false)
+        alert(tRef.current('certifySelfFailedReminder'))
+      },
+      log: (data: any) => {
+        console.log('============================ ' + tRef.current('anyIdLog') + ' [GUARDIAN] ============================', data)
+      },
+    })
+  }, [anyIdReady, guardianPhase]);
 
   // 이름 유효성 검사 (한글과 영문만, 2-30자)
   const validateName = (name: string): string => {
@@ -462,7 +496,7 @@ export default function LegalGuardAgr() {
       return;
     }
 
-    if (isProduction && (!isApplicantCertified || !isCertified)) {
+    if (isProduction && (!isApplicantCertified || !isLegalGuardCertified)) {
       openModal(t('legalGuardCertifyComplete'));
       return;
     }
@@ -507,7 +541,7 @@ export default function LegalGuardAgr() {
       legalGuardFormData.parentPhone.trim().length >= 11 &&
       legalGuardFormData.parentPhone.trim().length <= 12 &&
       !hasErrors &&
-      (!isProduction || (isApplicantCertified && isCertified))
+      (!isProduction || (isApplicantCertified && isLegalGuardCertified))
 
     // 디버깅용 로그 (개발 환경에서만)
     // if (import.meta.env.DEV) {
@@ -519,13 +553,13 @@ export default function LegalGuardAgr() {
     //     relationship: legalGuardFormData.relationship !== '',
     //     parentPhone: legalGuardFormData.parentPhone.trim().length >= 11 && legalGuardFormData.parentPhone.trim().length <= 12,
     //     hasErrors,
-    //     isCertified,
+    //     isLegalGuardCertified,
     //     errors
     //   });
     // }
 
     return isFormValid;
-  }, [legalGuardFormData, errors, isCertified, isApplicantCertified]);
+  }, [legalGuardFormData, errors, isLegalGuardCertified, isApplicantCertified]);
 
   return (
     <>
@@ -600,6 +634,37 @@ export default function LegalGuardAgr() {
                               {t('minorCertifyReminderDescription')}
                             </Typography>
                           </Box>
+
+                          {/* 신청인(만 14세 미만) 본인인증 Any-ID 영역 - 화면 로딩과 함께 표시 */}
+                          {showAnyIdArea && (
+                            isProduction ? (
+                              <Box sx={{ mt: 2 }}>
+                                <div
+                                  id={guardianPhase ? 'anyidc_applicant_done' : 'anyidc'}
+                                  className="anyidc"
+                                />
+                              </Box>
+                            ) : (
+                              <Box
+                                sx={{
+                                  mt: 2,
+                                  minHeight: 200,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  border: '1px dashed',
+                                  borderColor: 'divider',
+                                  borderRadius: 1,
+                                  bgcolor: 'background.paper',
+                                  px: 2,
+                                  textAlign: 'center',
+                                }}
+                              >
+                                <Typography color="error">로컬 테스트 환경입니다. 개발환경에서는 사용할 수 없습니다.</Typography>
+                              </Box>
+                            )
+                          )}
+
                           <Box className="flex-container flex-half">
                             {/* 이름 (필수) */}
                             <Box className="form-item">
@@ -700,33 +765,6 @@ export default function LegalGuardAgr() {
                             />
                           </Box>
 
-                          {/* 신청인(만 14세 미만) 본인인증 Any-ID 영역 - 화면 로딩과 함께 표시 */}
-                          {showAnyIdArea && (
-                            isProduction ? (
-                              <Box sx={{ mt: 2 }}>
-                                <div id="anyidcApplicant" className="anyidc" />
-                              </Box>
-                            ) : (
-                              <Box
-                                sx={{
-                                  mt: 2,
-                                  minHeight: 200,
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  border: '1px dashed',
-                                  borderColor: 'divider',
-                                  borderRadius: 1,
-                                  bgcolor: 'background.paper',
-                                  px: 2,
-                                  textAlign: 'center',
-                                }}
-                              >
-                                <Typography color="error">로컬 테스트 환경입니다. 개발환경에서는 사용할 수 없습니다.</Typography>
-                              </Box>
-                            )
-                          )}
-
                           {/* 법정 대리인 정보 */}
                           <Box component="h3" className="sub-title">
                             {t('legalGuardInfo')}
@@ -734,7 +772,10 @@ export default function LegalGuardAgr() {
                           {/* 화면 로딩과 함께 Any-ID 영역 표시 (버튼 클릭과 무관) */}
                           {isProduction ? (
                             <Box sx={{ mt: 2 }}>
-                              <div id="anyidcGuardian" className="anyidc" />
+                              <div
+                                id={guardianPhase ? 'anyidc' : 'anyidcGuardian'}
+                                className="anyidc"
+                              />
                             </Box>
                           ) : (
                             <Box

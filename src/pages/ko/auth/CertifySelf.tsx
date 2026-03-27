@@ -184,7 +184,7 @@ export default function CertifySelf() {
         setIsCertified(true);
 
         try{
-          const ci = await dispatch(getAnyIdCiFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.tag })).unwrap();
+          const ci = await dispatch(getAnyIdCiFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.txId })).unwrap();
           ciRef.current = ci ?? null;
           console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdCiFromSsob ci=', ciRef.current);
         }catch(error){
