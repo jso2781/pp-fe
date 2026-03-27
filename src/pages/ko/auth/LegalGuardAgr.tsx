@@ -184,10 +184,10 @@ export default function LegalGuardAgr() {
   const applicantTagRef = useRef<string>('')
   const guardianTagRef = useRef<string>('')
 
-  /** 신청인 렌더 후 법정대리인 렌더 단계. 법정대리인 렌더 완료 시 종료된다. */
+  /** 신청인 인증 성공 후 법정대리인 렌더 단계. 법정대리인 렌더 완료 시 종료된다. */
   const guardianPhase = useMemo(
-    () => isProduction && isApplicantAnyIdRendered && !isGuardianAnyIdRendered,
-    [isProduction, isApplicantAnyIdRendered, isGuardianAnyIdRendered]
+    () => isProduction && isApplicantCertified && !isGuardianAnyIdRendered,
+    [isProduction, isApplicantCertified, isGuardianAnyIdRendered]
   )
 
   const isUnder14ByBrdt = (brdt: string | undefined): boolean | null => {
@@ -300,6 +300,7 @@ export default function LegalGuardAgr() {
         try{
           // 신청인 인증 success
           if(tag && tag === applicantTagRef.current){
+            console.log('[LegalGuardAgr] applicant success handler tag='+tag+',data=', data);
             const userInfoFromSsob = await dispatch(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag })).unwrap() as AnyIdUserInfoFromSsobRVO
             const under14 = isUnder14ByBrdt(userInfoFromSsob?.brdt)
             if (under14 === false) {
@@ -327,6 +328,7 @@ export default function LegalGuardAgr() {
 
           // 법정대리인 인증 success
           if(tag && tag === guardianTagRef.current){
+            console.log('[LegalGuardAgr] guardian success handler tag='+tag+',data=', data);
             const userInfoFromSsob = await dispatch(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag })).unwrap() as AnyIdUserInfoFromSsobRVO
 
             setLegalGuardFormData((prev) => ({
