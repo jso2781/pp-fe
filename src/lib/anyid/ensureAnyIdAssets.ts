@@ -12,10 +12,21 @@ function ensureLinkOnce(href: string): void {
   document.head.appendChild(l)
 }
 
-export function ensureAnyIdAssets(): Promise<void> {
-  // 로컬/개발 환경에서는 Any-ID 자원(스크립트/설정)을 로딩하지 않는다.
-  // (production 환경에서만 Any-ID SDK를 로딩하도록 강제)
-  if (import.meta.env.MODE !== 'production') {
+/**
+ * LegalGuardAgr·CertifySelf 등에서 Any-ID UI/SDK 를 켤지 여부.
+ * production 이거나 `.env.development` 등에 `VITE_SHOW_ANYID_AREA=true` 일 때만 true.
+ */
+export function shouldLoadAnyIdSdk(): boolean {
+  return import.meta.env.MODE === 'production' || import.meta.env.VITE_SHOW_ANYID_AREA === 'true'
+}
+
+/**
+ * Any-ID 자원 로드
+ * @param isVisibleTitle - Any-ID 타이틀 표시 여부(=정부 통합로그인 행 표시 여부)
+ * @returns Promise<void>
+ */
+export function ensureAnyIdAssets(isVisibleTitle: boolean = true): Promise<void> {
+  if (!shouldLoadAnyIdSdk()) {
     return Promise.resolve()
   }
 
@@ -42,27 +53,16 @@ export function ensureAnyIdAssets(): Promise<void> {
     })
 
   if (!anyIdAssetsPromise) {
-    ensureLinkOnce(`${baseNorm}css/app.css`)
+    ensureLinkOnce(`${baseNorm}css/app.css`);
+    if(!isVisibleTitle) {
+      ensureLinkOnce(`${baseNorm}css/app-overrides.css`);
+    }
     anyIdAssetsPromise = loadScript(`${baseNorm}js/manifest.js`)
       .then(() => loadScript(`${baseNorm}js/vendor.js`))
       .then(() => loadScript(`${baseNorm}js/app.js`))
   }
 
   return anyIdAssetsPromise
-}
-
-/** LegalGuardAgr 전용: 신청인 영역(anyidc_applicant_done) 호환 스타일 */
-export function ensureApplicantAnyIdCompatCss(): void {
-  if (import.meta.env.MODE !== 'production') return
-  const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
-  ensureLinkOnce(`${baseNorm}css/anyidc-applicant-done-compat.css`)
-}
-
-/** LegalGuardAgr 전용: 법정대리인 영역(anyidcGuardian) 호환 스타일 */
-export function ensureGuardianAnyIdCompatCss(): void {
-  if (import.meta.env.MODE !== 'production') return
-  const baseNorm = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '') + '/'
-  ensureLinkOnce(`${baseNorm}css/anyidc-guardian-compat.css`)
 }
 
 /** AnyidC.LOAD_MODULE 준비 여부를 즉시 1회 확인 후 짧은 간격(50ms)으로 재시도, 최대 약 2초 */

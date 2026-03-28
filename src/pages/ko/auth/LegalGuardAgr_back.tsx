@@ -3,8 +3,6 @@
  * 화면명: 만14세미만가입 법정대리인동의
  * 화면경로: /ko/auth/LegalGuardAgr
  * 화면설명: 만14세미만가입 법정대리인동의 화면
- *
- * ## Any-ID iframe 개발
  */
 import React, { useMemo, useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
@@ -13,32 +11,14 @@ import { Box, Button, Stepper, Step, StepLabel, Typography, TextField, Stack, Fo
 import { Close as CloseIcon } from '@mui/icons-material'
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
-import {
-  ANYID_EMBED_PARENT_SOURCE,
-  ANYID_EMBED_PROTOCOL_V,
-  ANYID_EMBED_CHILD_SOURCE,
-  isTrustedEmbedOrigin,
-  type AnyidEmbedChildToParent,
-  type AnyidEmbedInitParams,
-  type AnyidEmbedParentToChild,
-} from '@/lib/anyid/anyidEmbedProtocol'
-import { shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
+import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
 import { useAppDispatch } from '@/store/hooks'
 import { getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks'
 import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes'
 
-/** production 이거나, 개발 시 `VITE_SHOW_ANYID_AREA=true` 로 iframe·postMessage 활성화 (`shouldLoadAnyIdSdk`) */
-const showAnyIdArea = shouldLoadAnyIdSdk()
+const isProduction = import.meta.env.MODE === 'production'
 
-/**
- * `public` 자산 경로 — 반드시 Vite `base`(`import.meta.env.BASE_URL`, 예: `/pp/`)와 맞출 것.
- * `/anyid-embed.html` 처럼 루트만 쓰면 `http://localhost:5173/pp/...` 앱에서 iframe·cfg 가 404 나고 INIT 이 실패한다.
- */
-const anyIdPublicBase = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '')}/`
-const ANYID_EMBED_PAGE = `${anyIdPublicBase}anyid-embed.html`
-const ANYID_CONFIG_JSON_URL = `${anyIdPublicBase}config/config.anyidc.json`
-
-// 법정대리인동의 화면의 입력 데이터 JSON 구조 (LegalGuardFormData 타입)
+// LegalGuardFormData 타입 정의
 type LegalGuardFormData = {
   userName: string;
   birthDate: string;
@@ -50,6 +30,57 @@ type LegalGuardFormData = {
   ciFromGuardAgr?: string;
 };
 
+/**
+ * Any-ID가 #anyidc 안에 본인인증 UI를 그렸는지 판별한다.
+ * theme 4.1.x 는 ul.certify-type 대신 .login-4btn 등을 사용한다.
+ */
+function isApplicantAnyIdDomReady(root: Element): boolean {
+  if (root.querySelector('ul.certify-type > li')) return true
+  if (
+    root.querySelector('.login-4btn li') ||
+    root.querySelector('.certificate-wrapper.login-4btn li') ||
+    root.querySelector('.newLoginWrap .login-4btn li')
+  ) {
+    return true
+  }
+  if (
+    (root.classList.contains('thema_04') || root.classList.contains('container')) &&
+    root.querySelector('.newLoginWrap, .login-4btn, .tab-content-wrap') &&
+    root.querySelectorAll('li, button, a[href]').length >= 1
+  ) {
+    return true
+  }
+  return false
+}
+
+const ANYID_APPLICANT_SHELL = '[data-legal-guard-anyid="applicant"]'
+const ANYID_GUARDIAN_SHELL = '[data-legal-guard-anyid="guardian"]'
+
+/**
+ * Any-ID SDK가 마운트 후에도 id="anyidc" 를 유지해 React의 id={anyidc_applicant_done} 전환이 DOM에 반영되지 않을 수 있다.
+ * 법정대리인 LOAD_MODULE 전에 신청인 영역의 노드 id만 임의로 바꿔 문서에 #anyidc 가 하나만 남게 한다.
+ */
+function releaseApplicantAnyIdcId(): void {
+  const shell = document.querySelector(ANYID_APPLICANT_SHELL)
+  let node = shell?.querySelector<HTMLElement>('#anyidc')
+  if (!node) {
+    const first = document.getElementById('anyidc')
+    if (first && first.closest(ANYID_APPLICANT_SHELL)) node = first as HTMLElement
+  }
+  if (node) node.id = 'anyidc_applicant_done'
+}
+
+/** 초기 2단계(신청인/법정대리인) 로딩이 끝난 후 신청인 id를 원래 anyidc로 복원 */
+function restoreApplicantAnyIdcId(): void {
+  const shell = document.querySelector(ANYID_APPLICANT_SHELL)
+  const node = shell?.querySelector<HTMLElement>('#anyidc_applicant_done')
+  if (node) node.id = 'anyidc'
+}
+
+function getGuardianAnyIdMountElement(): HTMLElement | null {
+  return document.querySelector<HTMLElement>(`${ANYID_GUARDIAN_SHELL} #anyidc`)
+}
+
 export default function LegalGuardAgr() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,7 +89,7 @@ export default function LegalGuardAgr() {
   const currentStep = 2;
   const { lang } = useParams<{ lang: string }>();
 
-  /** Any-ID는 `public/anyid-embed.html` iframe에서만 로드되며, 성공/실패는 postMessage로만 처리한다. */
+  /** LoginMethod 등에서 남은 window.anyidAdaptor가 Any-ID 성공 시 /auth/anyid/login을 호출하지 않도록 이 화면 전용으로 덮어씀 */
   const tRef = useRef(t);
   useEffect(() => {
     tRef.current = t;
@@ -137,23 +168,24 @@ export default function LegalGuardAgr() {
   // 본인인증 완료 상태
   const [isLegalGuardCertified, setIsLegalGuardCertified] = useState(false); // 법정대리인 인증
   const [isApplicantCertified, setIsApplicantCertified] = useState(false); // 신청인 인증
+  // Any-ID 영역 표시 여부: 요구사항상 화면 로딩 즉시 표시
+  const [showAnyIdArea, setShowAnyIdArea] = useState(true);
 
-  /** Any-ID INIT·콜백 식별용 txId/tag (신청인·법정대리인 각각 고유 문자열). processAnyIdSuccess 에서 어느 iframe 결과인지 구분 */
+  // Any-ID 준비 상태
+  const [anyIdReady, setAnyIdReady] = useState(false);
+  const hasLoadedAnyIdRef = useRef(false);
+  const applicantLoadModuleCalledRef = useRef(false);
+  const guardianLoadModuleCalledRef = useRef(false);
+  const guardianRenderObserverDisconnectRef = useRef<(() => void) | null>(null);
+  const applicantIdRestoreDoneRef = useRef(false);
+  const applicantRenderObserverDisconnectRef = useRef<(() => void) | null>(null);
+  const [isApplicantAnyIdRendered, setIsApplicantAnyIdRendered] = useState(false);
+  const [isGuardianAnyIdRendered, setIsGuardianAnyIdRendered] = useState(false);
   const applicantTagRef = useRef<string>('')
   const guardianTagRef = useRef<string>('')
-  /** 동일 인증 영역에서 success 가 중복 호출될 수 있어, 한 번만 폼 반영·상태 갱신하도록 막음 */
   const applicantSuccessHandledRef = useRef(false)
   const guardianSuccessHandledRef = useRef(false)
-  /** SDK log 이벤트가 폴링처럼 반복될 때 동일 키를 짧은 간격으로만 1회 출력하기 위한 디듀프 맵 */
   const anyIdLogDedupRef = useRef<Map<string, number>>(new Map())
-
-  /** postMessage 수신 시 event.source 가 어느 iframe 인지 구분할 때 사용 */
-  const applicantIframeRef = useRef<HTMLIFrameElement | null>(null)
-  const guardianIframeRef = useRef<HTMLIFrameElement | null>(null)
-
-  /** 자식이 READY 보낸 뒤 부모가 INIT(LOAD_MODULE 옵션)을 1회만 보냈는지 */
-  const applicantInitSentRef = useRef(false)
-  const guardianInitSentRef = useRef(false)
 
   const logAnyIdEvent = useCallback((phase: 'APPLICANT' | 'GUARDIAN', data: any) => {
     const tx = (data?.txId ?? data?.tag ?? '') as string
@@ -190,59 +222,61 @@ export default function LegalGuardAgr() {
     console.log(`============================ ${tRef.current('anyIdLog')} [${phase}] ============================`, compact)
   }, [])
 
-  /** `public/anyid-embed.html` iframe → postMessage SUCCESS 페이로드 처리 */
-  const processAnyIdSuccess = useCallback(
-    async (data: any) => {
-      const tag = (data?.tag ?? data?.txId ?? '') as string
+  /** 일부 브라우저/SDK 조합에서 MutationObserver 감지가 누락될 수 있어 로그 신호로도 신청인 렌더 완료를 보강한다. */
+  const markApplicantRenderedByLogFallback = useCallback((data: any) => {
+    if ((data?.module ?? '') === 'anyidc' && (data?.step ?? '') === 'config') {
+      setIsApplicantAnyIdRendered(true)
+    }
+  }, [])
 
-      try {
-        if (tag && tag === applicantTagRef.current) {
-          if (applicantSuccessHandledRef.current) return
-          applicantSuccessHandledRef.current = true
-          console.log('[LegalGuardAgr] applicant success handled once. tag=', tag)
-          const userInfoFromSsob = (await dispatch(
-            getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag })
-          ).unwrap()) as AnyIdUserInfoFromSsobRVO
-
-          const under14 = true
-          if (under14 === true || under14 === null) {
-            setLegalGuardFormData((prev) => ({
-              ...prev,
-              userName: userInfoFromSsob?.name ?? prev.userName,
-              birthDate: userInfoFromSsob?.brdt ?? prev.birthDate,
-              phone: userInfoFromSsob?.phone ?? prev.phone,
-            }))
-
-            const ciValue = userInfoFromSsob.ci
-            setCi(ciValue ?? '')
-            setIsApplicantCertified(true)
-          }
-          return
-        }
-
-        if (tag && tag === guardianTagRef.current) {
-          if (guardianSuccessHandledRef.current) return
-          guardianSuccessHandledRef.current = true
-          console.log('[LegalGuardAgr] guardian success handled once. tag=', tag)
-          const userInfoFromSsob = (await dispatch(
-            getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag })
-          ).unwrap()) as AnyIdUserInfoFromSsobRVO
-
-          setLegalGuardFormData((prev) => ({
-            ...prev,
-            parentName: userInfoFromSsob?.name ?? prev.parentName,
-            parentPhone: userInfoFromSsob?.phone ?? prev.parentPhone,
-            ciFromGuardAgr: userInfoFromSsob?.ci ?? prev.ciFromGuardAgr,
-          }))
-
-          setIsLegalGuardCertified(true)
-        }
-      } catch (error) {
-        console.error('[LegalGuardAgr] anyid success handler error=', error)
-      }
-    },
-    [dispatch]
+  /** 신청인 영역 렌더 완료 후 법정대리인 렌더 단계. 법정대리인 렌더 완료 시 종료된다. */
+  const guardianPhase = useMemo(
+    () => isProduction && isApplicantAnyIdRendered && !isGuardianAnyIdRendered,
+    [isProduction, isApplicantAnyIdRendered, isGuardianAnyIdRendered]
   )
+
+  const isUnder14ByBrdt = (brdt: string | undefined): boolean | null => {
+    if (!brdt) return null
+    const s = String(brdt).trim()
+    if (!/^\d{8}$/.test(s)) return null
+    const y = Number(s.slice(0, 4))
+    const m = Number(s.slice(4, 6))
+    const d = Number(s.slice(6, 8))
+    if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return null
+    const birth = new Date(y, m - 1, d)
+    if (Number.isNaN(birth.getTime())) return null
+
+    const today = new Date()
+    let age = today.getFullYear() - birth.getFullYear()
+    const mm = today.getMonth() - birth.getMonth()
+    if (mm < 0 || (mm === 0 && today.getDate() < birth.getDate())) age -= 1
+    return age < 14
+  }
+
+  /** #anyidc 에 실제 위젯이 붙었는지 MutationObserver 로 감지 */
+  const observeApplicantRenderDone = useCallback((): (() => void) | void => {
+    const source = document.getElementById('anyidc')
+    if (!source) return
+
+    const markRenderedOnce = (): boolean => {
+      if (!isApplicantAnyIdDomReady(source)) return false
+      setIsApplicantAnyIdRendered(true)
+      if (import.meta.env.DEV) {
+        console.log('[LegalGuardAgr] Any-ID applicant mount detected, switching to guardian #anyidc phase')
+      }
+      return true
+    }
+
+    if (markRenderedOnce()) return
+
+    const observer = new MutationObserver(() => {
+      if (markRenderedOnce()) {
+        observer.disconnect()
+      }
+    })
+    observer.observe(source, { childList: true, subtree: true })
+    return () => observer.disconnect()
+  }, [])
 
   // 약관 동의 화면에서 전달받은 steps를 사용하거나, 없으면 새로 생성
   const steps = useMemo(() => {
@@ -267,129 +301,228 @@ export default function LegalGuardAgr() {
     }
   }, [location.state]);
 
-  // txId/tag 는 iframe READY 이전에 준비 (부모 INIT 에 사용). Any-ID 번들은 `public/anyid-embed.html` 이 로드.
-  useLayoutEffect(() => {
-    if (!showAnyIdArea) return
+  // Any-ID 자원 로드 (production)
+  useEffect(() => {
+    if (!isProduction) return
+    if (hasLoadedAnyIdRef.current) return
+    hasLoadedAnyIdRef.current = true
+
+    let cancelWait: (() => void) | null = null
+
+    ensureAnyIdAssets(false)
+      .then(() => {
+        cancelWait = waitForAnyidC(
+          () => setAnyIdReady(true),
+          () => console.warn('[LegalGuardAgr] AnyidC.LOAD_MODULE not ready (timeout)'),
+          50,
+          40
+        )
+      })
+      .catch((err) => {
+        console.error(t('anyIdAssetsLoadFailed'), err);
+      })
+
+    return () => {
+      cancelWait?.()
+    }
+  }, [t]);
+
+  // Any-ID: 신청인 영역(#anyidc)에 LOAD_MODULE 1회 → 렌더 완료 확인
+  useEffect(() => {
+    if (!isProduction) return
+    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return
+    if (applicantLoadModuleCalledRef.current) return
+    applicantLoadModuleCalledRef.current = true
+
+    const prevAdaptor = window.anyidAdaptor
+    window.anyidAdaptor = {
+      success: async (data: any) => {
+        const tag = (data?.tag ?? data?.txId ?? '') as string
+
+        try{
+          // 신청인 인증 success
+          if(tag && tag === applicantTagRef.current){
+            if (applicantSuccessHandledRef.current) return
+            applicantSuccessHandledRef.current = true
+            console.log('[LegalGuardAgr] applicant success handled once. tag=', tag)
+            const userInfoFromSsob = await dispatch(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag })).unwrap() as AnyIdUserInfoFromSsobRVO
+
+            const under14 = true;
+            /*
+            const under14 = isUnder14ByBrdt(userInfoFromSsob?.brdt)
+            if (under14 === false) {
+              setIsApplicantCertified(false)
+              setCi('')
+              openModal(t('minorCertifyReminder'))
+              return;
+            }
+            */
+
+            // 14세 미만(또는 판단 불가)인 경우만 입력값 반영
+            if (under14 === true || under14 === null) {
+              setLegalGuardFormData((prev) => ({
+                ...prev,
+                userName: userInfoFromSsob?.name ?? prev.userName,
+                birthDate: userInfoFromSsob?.brdt ?? prev.birthDate,
+                phone: userInfoFromSsob?.phone ?? prev.phone
+              }))
+
+              const ciValue = userInfoFromSsob.ci;
+              setCi(ciValue ?? '');
+              setIsApplicantCertified(true)
+            }
+            return
+          }
+
+          // 법정대리인 인증 success
+          if(tag && tag === guardianTagRef.current){
+            if (guardianSuccessHandledRef.current) return
+            guardianSuccessHandledRef.current = true
+            console.log('[LegalGuardAgr] guardian success handled once. tag=', tag)
+            const userInfoFromSsob = await dispatch(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag })).unwrap() as AnyIdUserInfoFromSsobRVO
+
+            setLegalGuardFormData((prev) => ({
+              ...prev,
+              parentName: userInfoFromSsob?.name ?? prev.parentName,
+              parentPhone: userInfoFromSsob?.phone ?? prev.parentPhone,
+              ciFromGuardAgr: userInfoFromSsob?.ci ?? prev.ciFromGuardAgr
+            }))
+
+            setIsLegalGuardCertified(true)
+            return
+          }
+        }
+        catch(error){
+          console.error('[LegalGuardAgr] anyid success handler error=', error);
+        }
+      },
+    }
+
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
     const seed = Date.now()
-    applicantTagRef.current = `legal-guard-applicant-${seed}`
-    guardianTagRef.current = `legal-guard-guardian-${seed}`
+    const applicantTxId = `legal-guard-applicant-${seed}`
+    const guardianTxId = `legal-guard-guardian-${seed}`
+    applicantTagRef.current = applicantTxId
+    guardianTagRef.current = guardianTxId
     applicantSuccessHandledRef.current = false
     guardianSuccessHandledRef.current = false
-    applicantInitSentRef.current = false
-    guardianInitSentRef.current = false
-  }, [])
 
-  /**
-   * iframe(`anyid-embed.html`) ↔ 부모 창 `postMessage` 브리지.
-   * - 자식이 스크립트 로드 후 READY → 부모가 INIT(LOAD_MODULE 인자) 전달
-   * - 이후 LOG / SUCCESS / FAIL / ERROR 는 프로토콜(`anyidEmbedProtocol`)대로 처리
-   * - 수신 시 `event.origin`·`event.source` 로 위조·다른 창 메시지 차단
-   */
-  useEffect(() => {
-    if (!showAnyIdArea) return
-
-    /**
-     * 자식 iframe 에 보낼 window.AnyidC.LOAD_MODULE 실행시 필요한 초기화 파라메터들을 생성함.
-     * `tag`/`txId`는 신청인·법정대리인 구분 및 서버 연동용으로 동일 값 사용.
-     */
-    const runInitForAnyIdModule = (tag: string): AnyidEmbedInitParams => ({
-      cfg: ANYID_CONFIG_JSON_URL,
-      txId: tag,
-      tag,
+    // 신청인: SDK가 요구하는 id="anyidc" 에만 렌더 (임시 id 스왑 없음)
+    window.AnyidC?.LOAD_MODULE?.({
+      cfg: configAnyidcJsonUrl,
+      txId: applicantTxId,
+      tag: applicantTxId,
       lvl: 2,
-      /**
-       * SDK(`app.js`): `bypass === 0` 이고 theme 이 4.1.x 이면 `#anyidtoggle`·`#anyidinfo`(사용자 등록/관리)를
-       * 항상 마운트한다. `toggle: false` 는 스위치 "미사용" 상태만 줄 뿐 행 전체를 숨기지 않는다.
-       * 통합로그인 없이 본인인증만 쓰려면 `bypass: 1`(프로젝트 내 SSO 비연동 흐름과 동일).
-       */
-      bypass: 1,
+      bypass: 0,
       toggle: false,
-      /** 토글 행 `toggleSwitch.show` — `bypass:1` 과 함께 이중으로 막음 */
-      show: false,
       theme: '4.1.0',
-      /** 인증 완료 후 돌아올 부모 페이지 URL (동일 탭 기준) */
       redirect_uri: window.location.href,
+      success: (data: any) => void window.anyidAdaptor?.success?.(data),
+      fail: (err: any) => {
+        console.error(tRef.current('certifySelfFailed'), err)
+        setIsApplicantCertified(false)
+        alert(tRef.current('certifySelfFailedReminder'))
+      },
+      log: (data: any) => {
+        markApplicantRenderedByLogFallback(data)
+        logAnyIdEvent('APPLICANT', data)
+      },
     })
 
-    /** 지정 iframe 창에만 `INIT` 메시지 전송. `targetOrigin`은 동일 출처로 고정해 누설 방지 */
-    const sendInit = (target: Window, payload: AnyidEmbedInitParams) => {
-      const msg: AnyidEmbedParentToChild = {
-        source: ANYID_EMBED_PARENT_SOURCE,
-        v: ANYID_EMBED_PROTOCOL_V,
-        type: 'INIT',
-        payload,
-      }
-      target.postMessage(msg, window.location.origin)
+    const disconnectObserver = observeApplicantRenderDone()
+    applicantRenderObserverDisconnectRef.current =
+      typeof disconnectObserver === 'function' ? disconnectObserver : null
+
+    return () => {
+      applicantRenderObserverDisconnectRef.current?.()
+      applicantRenderObserverDisconnectRef.current = null
+      window.anyidAdaptor = prevAdaptor
     }
+  }, [anyIdReady, dispatch, observeApplicantRenderDone, logAnyIdEvent, markApplicantRenderedByLogFallback]);
 
-    /** `window` 로 도착하는 모든 `message` 수신 핸들러 */
-    const onMessage = (event: MessageEvent) => {
-      // 다른 도메인에서 온 메시지 무시
-      if (!isTrustedEmbedOrigin(event.origin, window.location.origin)) return
-      const d = event.data as AnyidEmbedChildToParent | undefined
-      // 우리 프로토콜이 아닌 일반 postMessage(타 라이브러리 등) 무시
-      if (!d || d.source !== ANYID_EMBED_CHILD_SOURCE || d.v !== ANYID_EMBED_PROTOCOL_V) return
+  // 신청인 렌더 완료 직후 Observer 중단 (id 전환과 충돌 방지)
+  useEffect(() => {
+    if (!isApplicantAnyIdRendered) return
+    applicantRenderObserverDisconnectRef.current?.()
+    applicantRenderObserverDisconnectRef.current = null
+  }, [isApplicantAnyIdRendered]);
 
-      const src = event.source as Window | null
-      const applicantWin = applicantIframeRef.current?.contentWindow ?? null
-      const guardianWin = guardianIframeRef.current?.contentWindow ?? null
-      const fromApplicant = src === applicantWin
-      const fromGuardian = src === guardianWin
-      // 신청인/법정대리인 iframe 이 아닌 source(예: 팝업)면 무시
-      if (!fromApplicant && !fromGuardian) return
+  // 법정대리인 렌더 완료 시점에 신청인 id를 anyidc로 되돌림
+  useEffect(() => {
+    if (!isGuardianAnyIdRendered) return
+    if (applicantIdRestoreDoneRef.current) return
+    restoreApplicantAnyIdcId()
+    applicantIdRestoreDoneRef.current = true
+  }, [isGuardianAnyIdRendered]);
 
-      // 자식이 manifest·vendor·app 로드 후 AnyidC 준비 완료 → 그때 INIT 1회만 송신
-      if (d.type === 'READY') {
-        if (fromApplicant && !applicantInitSentRef.current && applicantTagRef.current) {
-          applicantInitSentRef.current = true
-          sendInit(src!, runInitForAnyIdModule(applicantTagRef.current))
-        }
-        if (fromGuardian && !guardianInitSentRef.current && guardianTagRef.current) {
-          guardianInitSentRef.current = true
-          sendInit(src!, runInitForAnyIdModule(guardianTagRef.current))
-        }
-        return
-      }
+  // guardianPhase: id="anyidc" 가 법정대리인 div로 옮긴 직후 LOAD_MODULE (레이아웃 커밋 직후 실행)
+  useLayoutEffect(() => {
+    if (!isProduction) return
+    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return
+    if (!guardianPhase) return
+    if (guardianLoadModuleCalledRef.current) return
 
-      // SDK 내부 단계 로그(디버그 콘솔용, 과다 출력은 logAnyIdEvent 쪽에서 디듀프)
-      if (d.type === 'LOG') {
-        const payload = d.payload as Record<string, unknown> | undefined
-        if (d.role === 'applicant') {
-          logAnyIdEvent('APPLICANT', payload)
-        } else {
-          logAnyIdEvent('GUARDIAN', payload)
-        }
-        return
-      }
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
+    const guardianTxId = guardianTagRef.current
 
-      // 본인인증 성공 → SSOB 등으로 사용자 정보 조회 후 폼 반영
-      if (d.type === 'SUCCESS') {
-        void processAnyIdSuccess(d.payload)
-        return
-      }
-
-      // LOAD_MODULE fail 콜백과 동일: 인증 실패 시 완료 플래그 해제 + 사용자 알림
-      if (d.type === 'FAIL') {
-        console.error(tRef.current('certifySelfFailed'), d.payload)
-        if (d.role === 'applicant') {
-          setIsApplicantCertified(false)
-        } else {
+    const runGuardianLoad = (anchor: HTMLElement) => {
+      guardianLoadModuleCalledRef.current = true
+      releaseApplicantAnyIdcId()
+      anchor.innerHTML = ''
+      window.AnyidC?.LOAD_MODULE?.({
+        cfg: configAnyidcJsonUrl,
+        txId: guardianTxId,
+        tag: guardianTxId,
+        lvl: 2,
+        bypass: 0,
+        toggle: false,
+        theme: '4.1.0',
+        redirect_uri: window.location.href,
+        success: (data: any) => void window.anyidAdaptor?.success?.(data),
+        fail: (err: any) => {
+          console.error(tRef.current('certifySelfFailed'), err)
           setIsLegalGuardCertified(false)
-        }
-        alert(tRef.current('certifySelfFailedReminder'))
-        return
+          alert(tRef.current('certifySelfFailedReminder'))
+        },
+        log: (data: any) => {
+          logAnyIdEvent('GUARDIAN', data)
+        },
+      })
+
+      const markRenderedOnce = (): boolean => {
+        if (!isApplicantAnyIdDomReady(anchor)) return false
+        setIsGuardianAnyIdRendered(true)
+        return true
       }
 
-      // 임베드 HTML 내 스크립트 로드 실패·AnyidC 타임아웃 등
-      if (d.type === 'ERROR') {
-        console.error('[LegalGuardAgr] anyid-embed:', d.message)
-        alert(tRef.current('anyIdAssetsLoadFailed'))
-      }
+      if (markRenderedOnce()) return
+
+      const observer = new MutationObserver(() => {
+        if (markRenderedOnce()) {
+          observer.disconnect()
+        }
+      })
+      observer.observe(anchor, { childList: true, subtree: true })
+      guardianRenderObserverDisconnectRef.current = () => observer.disconnect()
     }
 
-    window.addEventListener('message', onMessage)
-    return () => window.removeEventListener('message', onMessage)
-  }, [logAnyIdEvent, processAnyIdSuccess])
+    const mount = getGuardianAnyIdMountElement()
+    if (mount) {
+      runGuardianLoad(mount)
+      return
+    }
+
+    console.warn('[LegalGuardAgr] guardian phase: 법정대리인 #anyidc not found, retry next frame')
+    const raf = requestAnimationFrame(() => {
+      const m = getGuardianAnyIdMountElement()
+      if (m && !guardianLoadModuleCalledRef.current) runGuardianLoad(m)
+    })
+    return () => {
+      cancelAnimationFrame(raf)
+      guardianRenderObserverDisconnectRef.current?.()
+      guardianRenderObserverDisconnectRef.current = null
+    }
+  }, [anyIdReady, guardianPhase, logAnyIdEvent]);
 
   // 이름 유효성 검사 (한글과 영문만, 2-30자)
   const validateName = (name: string): string => {
@@ -518,8 +651,7 @@ export default function LegalGuardAgr() {
       return;
     }
 
-    if (showAnyIdArea && (!isApplicantCertified || !isLegalGuardCertified)) {
-      // 법정 대리인 본인인증을 완료해주세요.
+    if (isProduction && (!isApplicantCertified || !isLegalGuardCertified)) {
       openModal(t('legalGuardCertifyComplete'));
       return;
     }
@@ -531,8 +663,8 @@ export default function LegalGuardAgr() {
       console.error('Failed to save form data to storage:', error);
     }
 
-    // Any-ID 미사용(dev 기본)일 때만 ci 없이 다음 단계 허용
-    if (ci || !showAnyIdArea) {
+    // 개발환경에서는 ci가 없어도 다음 단계로 진행할 수 있음.
+    if (ci || !isProduction) {
       navigate('/pp/ko/auth/SignUpMbrInfo', {
         state: {
           steps,
@@ -564,10 +696,25 @@ export default function LegalGuardAgr() {
       legalGuardFormData.parentPhone.trim().length >= 11 &&
       legalGuardFormData.parentPhone.trim().length <= 12 &&
       !hasErrors &&
-      (!showAnyIdArea || (isApplicantCertified && isLegalGuardCertified));
+      (!isProduction || (isApplicantCertified && isLegalGuardCertified))
+
+    // 디버깅용 로그 (개발 환경에서만)
+    // if (import.meta.env.DEV) {
+    //   console.log('isNextStepEnabled 체크:', {
+    //     userName: legalGuardFormData.userName.trim().length >= 2,
+    //     birthDate: legalGuardFormData.birthDate.trim().length === 8,
+    //     phone: legalGuardFormData.phone.trim().length >= 11 && legalGuardFormData.phone.trim().length <= 12,
+    //     parentName: legalGuardFormData.parentName.trim().length >= 2,
+    //     relationship: legalGuardFormData.relationship !== '',
+    //     parentPhone: legalGuardFormData.parentPhone.trim().length >= 11 && legalGuardFormData.parentPhone.trim().length <= 12,
+    //     hasErrors,
+    //     isLegalGuardCertified,
+    //     errors
+    //   });
+    // }
 
     return isFormValid;
-  }, [legalGuardFormData, errors, isLegalGuardCertified, isApplicantCertified, showAnyIdArea]);
+  }, [legalGuardFormData, errors, isLegalGuardCertified, isApplicantCertified]);
 
   return (
     <>
@@ -644,19 +791,15 @@ export default function LegalGuardAgr() {
                           </Box>
 
                           {/* 신청인(만 14세 미만) 본인인증 Any-ID 영역 - 화면 로딩과 함께 표시 */}
-                          {showAnyIdArea ? (
-                              <Box sx={{ mt: 1 }} data-legal-guard-anyid="applicant">
-                                <iframe
-                                  ref={applicantIframeRef}
-                                  src={`${ANYID_EMBED_PAGE}?role=applicant`}
-                                  title={`${t('applyJuniorInfo')} Any-ID`}
-                                  style={{ width: '100%', minHeight: 170, border: 'none', display: 'block' }}
-                                />
+                          {showAnyIdArea && (
+                            isProduction ? (
+                              <Box sx={{ mt: 2 }} data-legal-guard-anyid="applicant">
+                                <div id={guardianPhase ? 'anyidc_applicant_done' : 'anyidc'} className="anyidc" />
                               </Box>
                             ) : (
                               <Box
                                 sx={{
-                                  mt: 1,
+                                  mt: 2,
                                   minHeight: 200,
                                   display: 'flex',
                                   alignItems: 'center',
@@ -669,16 +812,12 @@ export default function LegalGuardAgr() {
                                   textAlign: 'center',
                                 }}
                               >
-                                <Typography color="text.secondary">
-                                  Any-ID iframe 은 비활성입니다. 로컬에서 쓰려면 `.env.development` 에
-                                  `VITE_SHOW_ANYID_AREA=true` 를 추가하세요.
-                                  따르세요.
-                                </Typography>
+                                <Typography color="error">로컬 테스트 환경입니다. 개발환경에서는 사용할 수 없습니다.</Typography>
                               </Box>
                             )
-                          }
+                          )}
 
-                          <Box className="flex-container flex-half" sx={{ mt: 1 }}>
+                          <Box className="flex-container flex-half">
                             {/* 이름 (필수) */}
                             <Box className="form-item">
                               <Typography component="label" htmlFor="userName" className="label">
@@ -783,19 +922,14 @@ export default function LegalGuardAgr() {
                             {t('legalGuardInfo')}
                           </Box>
                           {/* 화면 로딩과 함께 Any-ID 영역 표시 (버튼 클릭과 무관) */}
-                          {showAnyIdArea ? (
-                            <Box sx={{ mt: 1 }} data-legal-guard-anyid="guardian">
-                              <iframe
-                                ref={guardianIframeRef}
-                                src={`${ANYID_EMBED_PAGE}?role=guardian`}
-                                title={`${t('legalGuardInfo')} Any-ID`}
-                                style={{ width: '100%', minHeight: 170, border: 'none', display: 'block' }}
-                              />
+                          {isProduction ? (
+                            <Box sx={{ mt: 2 }} data-legal-guard-anyid="guardian">
+                              <div id={guardianPhase ? 'anyidc' : 'anyidcGuardian'} className="anyidc" />
                             </Box>
                           ) : (
                             <Box
                               sx={{
-                                mt: 1,
+                                mt: 2,
                                 minHeight: 200,
                                 display: 'flex',
                                 alignItems: 'center',
@@ -808,12 +942,10 @@ export default function LegalGuardAgr() {
                                 textAlign: 'center',
                               }}
                             >
-                              <Typography color="text.secondary">
-                                Any-ID iframe 은 비활성입니다. `VITE_SHOW_ANYID_AREA=true` 를 추가하세요.
-                              </Typography>
+                              <Typography color="error">로컬 테스트 환경입니다. 개발환경에서는 사용할 수 없습니다.</Typography>
                             </Box>
                           )}
-                          <Box className="flex-container flex-half" sx={{ mt: 1 }}>
+                          <Box className="flex-container flex-half">
                             {/* 법정대리인 이름 */}
                             <Box className="form-item">
                               <Typography component="label" htmlFor="parentName" className="label">

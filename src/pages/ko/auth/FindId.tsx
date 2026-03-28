@@ -13,10 +13,10 @@ import { useAppDispatch } from '@/store/hooks';
 import { Box, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { useEffect, useRef, useState } from "react";
-import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets';
+import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets';
 import type { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes';
 
-const isProduction = import.meta.env.MODE === 'production'
+const showAnyIdArea = shouldLoadAnyIdSdk();
 
 export default function FindId() {
   const navigate = useNavigate();
@@ -42,13 +42,13 @@ export default function FindId() {
 
   useEffect(() => { scrollTo(0, 0); }, []);
 
-  // Any-ID 자원 로드 (CertifySelf와 동일)
+  // Any-ID 자원 로드 (CertifySelf·ExpertCert와 동일 — `shouldLoadAnyIdSdk` 와 일치해야 함)
   useEffect(() => {
-    if (import.meta.env.MODE !== 'production') return;
+    if (!showAnyIdArea) return;
     if (hasLoadedAnyIdRef.current) return;
     hasLoadedAnyIdRef.current = true;
     let cancelWait: (() => void) | null = null;
-    ensureAnyIdAssets()
+    ensureAnyIdAssets(false)
       .then(() => {
         cancelWait = waitForAnyidC(
           () => setAnyIdReady(true),
@@ -61,7 +61,7 @@ export default function FindId() {
         console.error(t('anyIdAssetsLoadFailed'), err);
       });
     return () => { cancelWait?.(); };
-  }, [t]);
+  }, [showAnyIdArea, t]);
 
   const openModal = (message: string) => {
     setModalMessage(message);
@@ -72,9 +72,9 @@ export default function FindId() {
     setModalMessage('');
   };
 
-  // #anyidc 마운트 후 LOAD_MODULE 1회 호출 — production 전용
+  // #anyidc 마운트 후 LOAD_MODULE 1회 호출 — showAnyIdArea 일 때만
   useEffect(() => {
-    if (!isProduction) return;
+    if (!showAnyIdArea) return;
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return;
     if (loadModuleCalledRef.current) return;
     loadModuleCalledRef.current = true;
@@ -88,16 +88,24 @@ export default function FindId() {
           setModalOpen(true);
           return;
         }
-        try {
-          const res = await dispatchRef.current(getMbrInfo({ linkInfoIdntfId: ci } as MbrInfoPVO)).unwrap();
-          console.log("FindId.tsx window.anyidAdaptor success getMbrInfo=", res);
+        try{
+          const info = await dispatchRef.current(getMbrInfo({ linkInfoIdntfId: ci } as MbrInfoPVO)).unwrap();
+          console.log("FindId.tsx window.anyidAdaptor success getMbrInfo=", info);
 
-          navigateRef.current('/pp/ko/auth/FindIdAuthSuccess', {
-            state: { id: res?.mbrId, name: res?.encptMbrFlnm },
-          });
-        } catch {
-          setModalMessage('회원 정보 조회에 실패했습니다.');
+          if(!info){
+            setModalMessage(tRef.current('mbrInfoSearchFailed'));
+            setModalOpen(true);
+            return;
+          }
+          else{
+            navigateRef.current('/pp/ko/auth/FindIdAuthSuccess', {
+              state: { id: info?.mbrId, name: info?.encptMbrFlnm },
+            });
+          }
+        }catch{
+          setModalMessage(tRef.current('mbrInfoSearchFailed'));
           setModalOpen(true);
+          return;
         }
       },
     };
@@ -111,8 +119,9 @@ export default function FindId() {
       txId,
       tag: txId,
       lvl,
-      bypass: 0,
+      bypass: 1,
       toggle: false,
+      show: false,
       theme: '4.1.0',
       redirect_uri: window.location.href,
       success: (data: any) => {
@@ -144,7 +153,7 @@ export default function FindId() {
                 <Box className="page-content">
                   <Box className="pageCont-idPwFind member-page">
                     <p className="guide-text">{t('findIdSelectMethod')}</p>
-                    {isProduction ? (
+                    {showAnyIdArea ? (
                       <Box sx={{ mt: 2 }}>
                         <div id="anyidc" className="anyidc" />
                       </Box>

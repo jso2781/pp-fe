@@ -60,9 +60,7 @@ export default function Home() {
   const navigate = useNavigate();
   const [q, setQ] = useState('');
   const [tab, setTab] = useState<TabKey>('all');
-  
-  const baseUrl = import.meta.env.VITE_ANY_ID_STATIC_URL || '';
-  
+
   // 썸네일 이미지 URL 생성 헬퍼 함수
   const getThumbnailUrl = (item: { thmbFileNm?: string | null }) => {
     if (item.thmbFileNm) {

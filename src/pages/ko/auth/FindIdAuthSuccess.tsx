@@ -8,23 +8,27 @@
 import { Box, Typography, Button, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DepsLocation from '@/components/common/DepsLocation';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, replace, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useDialog } from '@/contexts/DialogContext';
 
 export default function FindIdAuthSuccess() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { showAlert } = useDialog();
   const { t, i18n: i18nInstance } = useTranslation();
   const { lang } = useParams<{ lang: string }>();
 
   useEffect(() => {scrollTo(0, 0);}, []);
 
-  console.log("FindIdAuthSuccess.tsx location.state=", location.state);
   if(!location.state?.id || !location.state?.name) {
-    alert('잘못된 접근입니다.');
-    return <Navigate to="/" replace />;
+    showAlert(t('invalidAccessMessage'), t('error'), () => {
+      navigate('/', { replace: true });
+    });
+
+    return;
   }
 
   const handleFindPwClick = () => {

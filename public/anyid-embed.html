@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Any-ID</title>
+  <!--
+    LegalGuardAgr.tsx 전용 임베드: 현재 문서는 부모(LegalGuardAgr.tsx) 페이지에서 iframe에 이식되어 표시됨.
+    부모(LegalGuardAgr.tsx) 페이지에서 iframe 여러 개에 이 문서를 이식해서 여러 개의 Any-ID 인증영역을 만들어도,
+    화면내 여러 개의 Any-ID 인증영역간 메시지 송수신은 독립적으로 이루어짐.
+    부모(LegalGuardAgr.tsx)와의 메시지 프로토콜 정의: src/lib/anyid/anyidEmbedProtocol.ts (postMessage source / type / v)
+    theme 4.1.x 상단 "정부 통합로그인" 제목 행 제거: css/app-overrides.css (SDK 옵션만으로는 tit-wrap 비표시 불가)
+  -->
+</head>
+<body>
+  <div id="anyidtoggle"></div>
+  <div id="anyidinfo"></div>
+  <div id="anyidc" class="anyidc"></div>
+  <script>
+(function () {
+  var PARENT_SOURCE = 'pp-anyid-embed-parent'
+  var CHILD_SOURCE = 'pp-anyid-embed'
+  var PROTO_V = 1
+
+  var params = new URLSearchParams(window.location.search)
+  var ROLE = params.get('role') === 'guardian' ? 'guardian' : 'applicant'
+
+  var base = new URL('./', window.location.href).href
+
+  function loadCss(href) {
+    var l = document.createElement('link')
+    l.rel = 'stylesheet'
+    l.href = href
+    document.head.appendChild(l)
+  }
+
+  /** Any-ID 공식 번들과 동일하게 `public/css/app.css` 만 사용 (다른 화면 ensureAnyIdAssets 와 동일). iframe 전용 보정용 compat 시트는 부모 레이아웃용이었으므로 임베드 문서에서는 불필요 */
+  loadCss(new URL('css/app.css', base).href)
+  loadCss(new URL('css/app-overrides.css', base).href)
+
+  function post(msg) {
+    var out = Object.assign({}, msg, { source: CHILD_SOURCE, v: PROTO_V, role: ROLE })
+    window.parent.postMessage(out, window.location.origin)
+  }
+
+  function loadScript(src, onload) {
+    var s = document.createElement('script')
+    s.src = src
+    s.async = true
+    s.onload = onload
+    s.onerror = function () {
+      post({ type: 'ERROR', message: 'script load failed: ' + src })
+    }
+    document.head.appendChild(s)
+  }
+
+  var initDone = false
+
+  /**
+   * 부모 창(LegalGuardAgr)만이 보내는 INIT 을 받아 Any-ID 를 1회 기동한다.
+   * - READY 를 보낸 뒤 부모가 postMessage 로 넣는 cfg·txId·tag 등이 payload 로 온다.
+   * - 타 도메인·형식 불일치·중복 INIT 은 무시 (보안·idempotent).
+   */
+  window.addEventListener('message', function (ev) {
+    // 이 문서와 다른 origin 에서 온 메시지 차단 (악성 부모 사이트 등)
+    if (ev.origin !== window.location.origin) return
+    // iframe 이므로 메시지는 반드시 직계 부모만 보내도록 제한 (형제 iframe·팝업 차단)
+    if (ev.source !== window.parent) return
+    var d = ev.data
+    // LegalGuardAgr 과 약속한 프로토콜(source·버전)만 처리
+    if (!d || d.source !== PARENT_SOURCE || d.v !== PROTO_V) return
+    // LOAD_MODULE 인자는 INIT 한 종류만 지원
+    if (d.type !== 'INIT') return
+    // 이미 LOAD_MODULE 호출했으면 재실행하지 않음
+    if (initDone) return
+    initDone = true
+    runInit(d.payload || {})
+  })
+
+  function runInit(p) {
+    window.anyidAdaptor = {
+      success: function (data) {
+        var tag = (data && (data.tag || data.txId)) || ''
+        post({ type: 'SUCCESS', tag: tag, payload: data })
+      }
+    }
+
+    if (!window.AnyidC || typeof window.AnyidC.LOAD_MODULE !== 'function') {
+      post({ type: 'ERROR', message: 'AnyidC.LOAD_MODULE not available' })
+      return
+    }
+
+    window.AnyidC.LOAD_MODULE({
+      cfg: p.cfg,
+      txId: p.txId,
+      tag: p.tag,
+      lvl: p.lvl,
+      bypass: p.bypass,
+      toggle: p.toggle,
+      theme: p.theme,
+      redirect_uri: p.redirect_uri,
+      show: p.show,
+      success: function (data) {
+        window.anyidAdaptor.success(data)
+      },
+      fail: function (err) {
+        post({ type: 'FAIL', tag: p.tag || '', payload: err })
+      },
+      log: function (data) {
+        var tag = (data && (data.tag || data.txId)) || p.tag || ''
+        post({ type: 'LOG', tag: tag, payload: data })
+      }
+    })
+  }
+
+  loadScript(new URL('js/manifest.js', base).href, function () {
+    loadScript(new URL('js/vendor.js', base).href, function () {
+      loadScript(new URL('js/app.js', base).href, function () {
+        var tries = 0
+        function wait() {
+          if (window.AnyidC && typeof window.AnyidC.LOAD_MODULE === 'function') {
+            post({ type: 'READY' })
+            return
+          }
+          tries += 1
+          if (tries > 200) {
+            post({ type: 'ERROR', message: 'AnyidC.LOAD_MODULE timeout' })
+            return
+          }
+          setTimeout(wait, 50)
+        }
+        wait()
+      })
+    })
+  })
+})()
+  </script>
+</body>
+</html>

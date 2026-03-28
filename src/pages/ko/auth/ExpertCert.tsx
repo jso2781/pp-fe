@@ -13,10 +13,10 @@ import { useAppDispatch } from '@/store/hooks';
 import { Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { useEffect, useRef, useState } from "react";
-import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets';
+import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets';
 import type { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes';
 
-const isProduction = import.meta.env.MODE === 'production'
+const showAnyIdArea = shouldLoadAnyIdSdk();
 
 export default function ExpertCert() {
   const navigate = useNavigate();
@@ -44,15 +44,15 @@ export default function ExpertCert() {
 
   // Any-ID 자원 로드 (CertifySelf와 동일)
   useEffect(() => {
-    if (import.meta.env.MODE !== 'production') return;
+    if (!showAnyIdArea) return;
     if (hasLoadedAnyIdRef.current) return;
     hasLoadedAnyIdRef.current = true;
     let cancelWait: (() => void) | null = null;
-    ensureAnyIdAssets()
+    ensureAnyIdAssets(false)
       .then(() => {
         cancelWait = waitForAnyidC(
           () => setAnyIdReady(true),
-          () => console.warn('[FindPw] AnyidC.LOAD_MODULE not ready (timeout)'),
+          () => console.warn('[ExpertCert] AnyidC.LOAD_MODULE not ready (timeout)'),
           50,
           40
         );
@@ -61,7 +61,7 @@ export default function ExpertCert() {
         console.error(t('anyIdAssetsLoadFailed'), err);
       });
     return () => { cancelWait?.(); };
-  }, [t]);
+  }, [showAnyIdArea, t]);
 
   const openModal = (message: string) => {
     setModalMessage(message);
@@ -72,9 +72,9 @@ export default function ExpertCert() {
     setModalMessage('');
   };
 
-  // #anyidc 마운트 후 LOAD_MODULE 1회 호출 — production 전용
+  // #anyidc 마운트 후 LOAD_MODULE 1회 호출 — showAnyIdArea 일 때만
   useEffect(() => {
-    if (!isProduction) return;
+    if (!showAnyIdArea) return;
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return;
     if (loadModuleCalledRef.current) return;
     loadModuleCalledRef.current = true;
@@ -111,8 +111,9 @@ export default function ExpertCert() {
       txId,
       tag: txId,
       lvl,
-      bypass: 0,
+      bypass: 1,
       toggle: false,
+      show: false,
       theme: '4.1.0',
       redirect_uri: window.location.href,
       success: (data: any) => {
@@ -144,7 +145,7 @@ export default function ExpertCert() {
                 <Box className="page-content">
                   <Box className="pageCont-expertCert member-page">
                     <p className="guide-text">전문가 회원 메뉴는 Any-ID 인증 후 이용 가능합니다.</p>
-                    {isProduction ? (
+                    {showAnyIdArea ? (
                       <Box sx={{ mt: 2 }}>
                         <div id="anyidc" className="anyidc" />
                       </Box>

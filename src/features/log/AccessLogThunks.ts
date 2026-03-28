@@ -7,7 +7,7 @@ import { AccessLogPVO } from './AccessLogTypes'
  * 대국민포털_업무별 접속이력 적재
  */
 export const insertWorkAccessLog = createAsyncThunk<string, AccessLogPVO | undefined, { rejectValue: string }>(
-  '/workAccessLog/insert',
+  'log/insertWorkAccessLog',
   async (params: AccessLogPVO = {}, { rejectWithValue }) => {
     try {
       const res = await https.post(insertWorkAccessLogApiPath(), params);

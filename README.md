@@ -39,7 +39,9 @@ cp .env.production.example  .env.production
 - `VITE_API_BASE_URL` — API 베이스 (없으면 `/api`)
 - `VITE_APP_BASE` — UI base path (예: `/`, `/pp/`)
 - `VITE_PRGRM_ID` — 앱 ID (로그인 등)
+- `VITE_SHOW_ANYID_AREA` — true일 때 개발모드에서도 Any-ID 인증영역을 보여준다.
 - `PROXY_TARGET`, `PROXY_PREFIX` — dev 서버 프록시용 (`vite.config.ts`)
+- `PROXY_PP_ESIGN_TARGET` — 개발모드에서 Any-ID esign 경로 `http://localhost:5173/api/pp/auth/esign/*` 를 예: `https://stg.drugsafe.or.kr` 로 넘길 때. 미설정이면 기존 `PROXY_TARGET` 규칙을 탄다.
 
 ## 데모용 API 응답 형태(예시)
 

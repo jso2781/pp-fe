@@ -15,11 +15,11 @@ import {
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
 
-import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
+import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
 import { getAnyIdCiFromSsob } from '@/features/auth/AnyIdThunks';
 import { useAppDispatch } from '@/store/hooks';
 
-const isProduction = import.meta.env.MODE === 'production'
+const showAnyIdArea = shouldLoadAnyIdSdk()
 
 export default function CertifySelf() {
   const { lang } = useParams<{ lang: string }>();
@@ -128,16 +128,13 @@ export default function CertifySelf() {
 
   // Any-ID 자원 로드 (전역 1회 캐시) + AnyidC 준비 즉시 확인 + 짧은 간격 대기
   useEffect(() => {
-    // 로컬/개발 환경에서는 Any-ID SDK/설정을 로딩하지 않는다.
-    if (import.meta.env.MODE !== 'production') {
-      return
-    }
+    if (!showAnyIdArea) return
     if (hasLoadedAnyIdRef.current) return
     hasLoadedAnyIdRef.current = true
 
     let cancelWait: (() => void) | null = null
 
-    ensureAnyIdAssets()
+    ensureAnyIdAssets(false)
       .then(() => {
         cancelWait = waitForAnyidC(
           () => setAnyIdReady(true),
@@ -153,7 +150,7 @@ export default function CertifySelf() {
     return () => {
       cancelWait?.()
     }
-  }, [t])
+  }, [showAnyIdArea, t])
 
   // 모달 열기 함수
   const openModal = (message: string) => {
@@ -167,12 +164,12 @@ export default function CertifySelf() {
     setModalMessage('');
   };
 
-  // #anyidc가 DOM에 마운트된 뒤 LOAD_MODULE 1회 호출 (bypass: 1, toggle: false, theme: '4.1.0') — production 전용
+  // #anyidc가 DOM에 마운트된 뒤 LOAD_MODULE 1회 호출 (bypass: 1, toggle: false, theme: '4.1.0') — showAnyIdArea 일 때만
   const loadModuleCalledRef = useRef(false);
   const ciRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!isProduction) return
+    if (!showAnyIdArea) return
     if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return
     if (loadModuleCalledRef.current) return
     loadModuleCalledRef.current = true
@@ -203,8 +200,9 @@ export default function CertifySelf() {
       txId,
       tag: txId,
       lvl,
-      bypass: 0,
+      bypass: 1,
       toggle: false,
+      show: false,
       theme: '4.1.0',
       redirect_uri: redirectUriRef.current,
       success: (data: any) => {
@@ -228,7 +226,7 @@ export default function CertifySelf() {
   // 다음단계 버튼 클릭 핸들러
   const handleNextStep = () => {
     // production: 본인인증 완료 후에만 다음 화면으로 진행
-    if (isProduction && !isCertified) {
+    if (showAnyIdArea && !isCertified) {
       openModal(t('certifySelfCompleteReminder'));
       return;
     }
@@ -246,7 +244,7 @@ export default function CertifySelf() {
      * 현재창에서 본인인증을 완료한 경우만 회원정보입력 페이지로 이동할 수 있음.
      * 개발환경에서는 ciRef.current가 없어도 회원정보입력 페이지로 이동할 수 있음.
      */
-    if(ciRef.current || !isProduction){
+    if(ciRef.current || !showAnyIdArea){
       // 회원정보입력 페이지로 이동
       // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)을 회원 정보 입력 step에 그대로 전달
       // 일반 가입의 경우: legalGuardFormData 없음 (본인인증에서 받은 데이터는 별도 처리)
@@ -357,8 +355,8 @@ export default function CertifySelf() {
                       </Typography>
                     </Box>
 
-                    {/* production: anyidc 영역 자동 로드. non-production: 로컬 안내 문구만 표시 */}
-                    {isProduction ? (
+                    {/* showAnyIdArea: anyidc + SDK. 아니면 로컬 안내 문구 */}
+                    {showAnyIdArea ? (
                       <Box sx={{ mt: 2 }}>
                         <div id="anyidc" className="anyidc" />
                       </Box>
@@ -389,7 +387,7 @@ export default function CertifySelf() {
                         variant="contained" 
                         size="large" 
                         onClick={handleNextStep}
-                        disabled={isProduction && !isCertified}
+                        disabled={showAnyIdArea && !isCertified}
                       >
                         {t('nextStep')}
                       </Button>

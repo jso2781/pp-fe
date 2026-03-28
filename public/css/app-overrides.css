@@ -1,0 +1,9 @@
+/**
+ * anyid-embed.html 전용: theme 4.1.x 에서 bypass/show 로 토글만 숨겨도
+ * 상단 "정부 통합로그인" 제목 행(.tit-wrap)은 SDK가 항상 그린다.
+ * 본인인증만 쓰는 임베드에서는 해당 행을 숨긴다 (#anyidc 직계 .tit-wrap 만).
+ * tab-area(인증 수단 목록)는 #anyidc 밖 형제 영역이므로 영향 없음.
+ */
+#anyidc > .tit-wrap {
+  display: none !important;
+}

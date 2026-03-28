@@ -128,7 +128,9 @@ export default function FindPwModify() {
         () => navigate('/pp/ko')
       );
     } catch(e) {
-      showAlert('비밀번호 변경 실패');
+      showAlert(t('findPwModifyFailedMessage'), t('error'), () => {
+        navigate('/pp/ko/auth/FindPw');
+      });
     } finally {
       setFormData({
         password: '',

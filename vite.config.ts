@@ -20,10 +20,36 @@ export default defineConfig(({ mode }) => {
   /**
    * Dev-only proxy settings
    * (vite dev server에서만 사용됨)
-   * - /api/* 요청이 proxyTarget으로 전달됨 → 실제 백엔드 수신 URL: {proxyTarget}/api/...
+   * - `/api/ca/auth/*` → CA auth 서버 (기본 `VITE_AUTH_API_BASE_URL` 의 host, 또는 `PROXY_AUTH_TARGET`)
+   * - (선택) `PROXY_PP_ESIGN_TARGET` 설정 시 `/api/pp/auth/esign/*` → 해당 호스트 (Any-ID esign accessInfo 등 스테이징 강제)
+   * - 그 외 `/api/*` → proxyTarget + PROXY_PREFIX rewrite (pp-be)
    */
   const proxyTarget = env.PROXY_TARGET || 'http://localhost:8080/'
   const proxyPrefix = env.PROXY_PREFIX || '/api/pp'
+
+  /** CA auth API (예: workAccessLog) — 브라우저는 `/api/ca/auth/...`, Vite가 `VITE_AUTH_API_BASE_URL` 호스트로 그대로 전달 */
+  const proxyAuthTarget = (() => {
+    const raw = env.PROXY_AUTH_TARGET?.replace(/\/+$/, '')
+    if (raw) return raw
+    const base = env.VITE_AUTH_API_BASE_URL
+    if (base) {
+      try {
+        const u = new URL(base)
+        return `${u.protocol}//${u.host}`
+      } catch {
+        /* ignore */
+      }
+    }
+    return 'http://localhost:8088'
+  })()
+
+  /**
+   * Any-ID 간편인증(esign/accessInfo, esign/extractInfo) 경로가 /api/pp/auth/esign/* 로 호출될 때
+   * 로컬 백엔드 대신 스테이징(예: https://stg.drugsafe.or.kr)으로 넘기고 싶으면 PROXY_PP_ESIGN_TARGET 설정.
+   * 경로는 그대로 유지: {target}/api/pp/auth/esign/accessInfo
+   *                    {target}/api/pp/auth/esign/extractInfo
+   */
+  const proxyPpEsignTarget = env.PROXY_PP_ESIGN_TARGET?.replace(/\/+$/, '') || ''
 
   return {
     base,
@@ -105,6 +131,20 @@ export default defineConfig(({ mode }) => {
          *   vite proxy 미사용
          *   -> infra/nginx handles /api/*
          */
+        '/api/ca/auth': {
+          target: proxyAuthTarget,
+          changeOrigin: true,
+          secure: false,
+        },
+        ...(proxyPpEsignTarget
+          ? {
+              '/api/pp/auth/esign': {
+                target: proxyPpEsignTarget,
+                changeOrigin: true,
+                secure: true,
+              },
+            }
+          : {}),
         '/api': {
           target: proxyTarget,
           changeOrigin: true,
