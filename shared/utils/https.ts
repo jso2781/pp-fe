@@ -3,9 +3,10 @@ import i18n from '@/i18n/i18n'
 import { store } from '@/store/store'
 import type { AppDispatch } from '@/store/store'
 import { setAcsTokenCn } from '@/features/auth/AuthSlice'
+import type { MbrInfoRVO } from '@/features/mbr/MbrInfoTypes'
 import { logout } from '@/features/auth/AuthThunks'
+import { clearAuthSessionAction } from '@/features/auth/authSessionActions'
 import { refreshApiPath } from '@/api/auth/AuthApiPaths'
-import { useNavigate } from 'react-router-dom'
 import { setInternalServerError } from '@/features/ui/uiSlice'
 
 /**
@@ -40,6 +41,54 @@ const ADVICE_PATHS = ['/exprt/exprtAplyChk', '/exprt/updateExprtAprvStts']
 /** CDM API 서버 */
 const cdmApiBaseURL = import.meta.env.VITE_CDM_API_BASE_URL ?? 'http://localhost:8090/api/cm'
 const CDM_PATHS = ['/community']
+
+const ppApiPathPrefix =
+  import.meta.env.MODE === 'production' ? '/api/pp' : (import.meta.env.VITE_API_BASE_URL ?? '/api')
+
+function resolveLgnSeCdFromClient(): string {
+  const fromStore = store.getState().auth.lgnSeCd
+  if (fromStore != null && fromStore !== '') return String(fromStore)
+  try {
+    const raw = sessionStorage.getItem('auth')
+    if (raw) {
+      const p = JSON.parse(raw) as { lgnSeCd?: string }
+      if (p?.lgnSeCd != null && p.lgnSeCd !== '') return String(p.lgnSeCd)
+    }
+  } catch {
+    /* ignore */
+  }
+  return '1'
+}
+
+async function requestAnyIdLogoutThenClearClient(dispatch: AppDispatch): Promise<void> {
+  const token = store.getState().auth.acsTokenCn
+  const lang = (i18n.language || 'ko').startsWith('en') ? 'en' : 'ko'
+  try {
+    await axios.post(`${ppApiPathPrefix}/auth/anyid/logout`, {}, {
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Accept-Language': lang,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        'X-App-Id': import.meta.env.VITE_PRGRM_ID ?? 'kids-pp-dev',
+      },
+    })
+  } catch {
+    /* PP 세션 무효화 실패 시에도 클라이언트 상태는 정리 */
+  }
+  dispatch(clearAuthSessionAction())
+}
+
+async function dispatchLogoutByLoginChannel(dispatch: AppDispatch, tokenSn: number | null): Promise<void> {
+  if (resolveLgnSeCdFromClient() === '2') {
+    await requestAnyIdLogoutThenClearClient(dispatch)
+    return
+  }
+  if (tokenSn != null) {
+    dispatch(logout({ tokenSn }))
+  }
+}
 
 const https: AxiosInstance = axios.create({
   baseURL: apiBaseURL,
@@ -108,25 +157,26 @@ https.interceptors.response.use(
 
       let tokenSn1: number | null = null;
       let updtTokenCn1: string | null = null;
+      let lgnSeCd1: string | null = null;
 
       if (authData) {
         try {
           const parsed = JSON.parse(authData);
           tokenSn1 = parsed.tokenSn || null;
           updtTokenCn1 = parsed.updtTokenCn || null;
+          lgnSeCd1 = parsed.lgnSeCd || null;
         } catch (e) {
           // 파싱 실패 시 별도 키에서 가져오기
           updtTokenCn1 = sessionStorage.getItem("updtTokenCn");
         }
       } else {
         updtTokenCn1 = sessionStorage.getItem("updtTokenCn");
+        lgnSeCd1 = store.getState().auth.lgnSeCd;
       }
 
+      // 401이고 refresh 토큰이 없을 때 더 이상 엑세스 토큰을 갱신 못 하니 강제 로그아웃 처리
       if (!updtTokenCn1) {
-        // tokenSn가 있으면 로그아웃 처리, 없으면 그냥 에러 반환
-        if (tokenSn1) {
-          dispatch(logout({ tokenSn: tokenSn1 }));
-        }
+        await dispatchLogoutByLoginChannel(dispatch, tokenSn1);
         return Promise.reject(error);
       }
 
@@ -148,37 +198,67 @@ https.interceptors.response.use(
 
         console.log("/auth/refresh rest api response resp.data=", resp.data);
 
-        // 서버 응답에서 토큰 정보 추출
-        const tokenSn = resp.data?.data?.tokenSn ?? null;
-        const newAcsTokenCn = resp.data?.data?.acsTokenCn ?? null;
-        const newUpdtTokenCn = resp.data?.data?.updtTokenCn ?? null;
-        const userInfo = resp.data?.data?.userInfo ?? null;
+        // RefreshRVO: lgnSeCd·토큰은 data 최상위, userInfo는 별도 — userInfo만 넘기면 회원객체의 lgnSeCd(예: 과거 자체로그인 1)가 남아 Any-ID(2) 세션과 불일치
+        const d = resp.data?.data ?? {}
+        const tokenSn = d.tokenSn ?? null
+        const newAcsTokenCn = d.acsTokenCn ?? null
+        const newUpdtTokenCn = d.updtTokenCn ?? null
+        const pswdErrNmtm = d.pswdErrNmtm
+        const userInfoRaw = d.userInfo ?? null
+        type UserInfoShape = Record<string, unknown> & { lgnSeCd?: string }
+        const ui = userInfoRaw as UserInfoShape | null
 
-        // Redux store에 새 토큰 저장 (setAcsTokenCn 액션 사용)
-        dispatch(setAcsTokenCn(userInfo));
+        // Redux Store의 AuthSlice에 저장할 데이터 생성(신규 newAcsTokenCn, newUpdtTokenCn, pswdErrNmtm 등 포함)
+        const mergedForStore =
+          ui != null
+            ? {
+                ...ui,
+                lgnSeCd: lgnSeCd1 ?? ui.lgnSeCd,
+                tokenSn: tokenSn ?? (ui.tokenSn as number | undefined),
+                acsTokenCn: newAcsTokenCn ?? (ui.acsTokenCn as string | undefined),
+                updtTokenCn: newUpdtTokenCn ?? (ui.updtTokenCn as string | undefined),
+                pswdErrNmtm: pswdErrNmtm ?? ui.pswdErrNmtm,
+              }
+            : ({
+                lgnSeCd: lgnSeCd1,
+                tokenSn,
+                acsTokenCn: newAcsTokenCn,
+                updtTokenCn: newUpdtTokenCn,
+                pswdErrNmtm,
+              } as UserInfoShape)
+
+        // Redux Store의 AuthSlice에 저장(AuthSlice.setAcsTokenCn)
+        dispatch(setAcsTokenCn(mergedForStore as MbrInfoRVO))
 
         // sessionStorage에 통일된 키로 저장 (AuthContext와 동기화)
         if (newUpdtTokenCn) {
-          // 기존 auth 데이터 가져오기
-          const existingAuth = sessionStorage.getItem("auth");
-          let authData: Record<string, unknown> = {};
+          const existingAuth = sessionStorage.getItem("auth")
+          let authData: Record<string, unknown> = {}
           if (existingAuth) {
             try {
-              authData = JSON.parse(existingAuth) as Record<string, unknown>;
-            } catch (e) {
-              // 파싱 실패 시 빈 객체 사용
+              authData = JSON.parse(existingAuth) as Record<string, unknown>
+            } catch {
+              /* ignore */
             }
           }
 
-          // 토큰 정보 업데이트
-          authData.tokenSn = tokenSn;
-          authData.acsTokenCn = newAcsTokenCn;
-          authData.updtTokenCn = newUpdtTokenCn;
+          authData.tokenSn = tokenSn
+          authData.acsTokenCn = newAcsTokenCn
+          authData.updtTokenCn = newUpdtTokenCn
+          if (lgnSeCd1 != null && lgnSeCd1 !== "") {
+            authData.lgnSeCd = lgnSeCd1
+          }
+          if (ui != null) {
+            authData.userInfo = {
+              ...ui,
+              lgnSeCd: lgnSeCd1 ?? ui.lgnSeCd,
+            }
+          }
 
-          // 통일된 키로 저장
-          sessionStorage.setItem("auth", JSON.stringify(authData));
+          // sessionStorage에 auth 데이터 저장
+          sessionStorage.setItem("auth", JSON.stringify(authData))
           // 하위 호환성을 위해 updtTokenCn도 별도로 저장
-          sessionStorage.setItem("updtTokenCn", newUpdtTokenCn);
+          sessionStorage.setItem("updtTokenCn", newUpdtTokenCn)
         }
 
         // 대기 중인 요청들에 새 토큰 전달
@@ -192,10 +272,7 @@ https.interceptors.response.use(
       }catch (e){
         // refresh 실패 시 대기 중인 요청들 모두 실패 처리
         runQueue(null);
-        // 로그아웃 처리 (tokenSn가 null이면 0 사용, AuthContext와 동일한 로직)
-        if (tokenSn1) {
-          dispatch(logout({ tokenSn: tokenSn1 }));
-        }
+        await dispatchLogoutByLoginChannel(dispatch, tokenSn1);
         return Promise.reject(e);
       } finally {
         isRefreshing = false;
@@ -209,16 +286,21 @@ https.interceptors.response.use(
 
       if(authData){
         try{
-          const parsed = JSON.parse(authData);
-          let tokenSn = parsed.tokenSn || null;
+          const parsed = JSON.parse(authData) as { tokenSn?: number; lgnSeCd?: string };
+          const tokenSn = parsed.tokenSn || null;
+          const lgn = parsed.lgnSeCd ?? store.getState().auth.lgnSeCd;
 
+          if (String(lgn ?? '1') === '2') {
+            console.log('408 Request Timeout — Any-ID 로그아웃 처리');
+            await requestAnyIdLogoutThenClearClient(dispatch);
+            return Promise.reject(error);
+          }
           if(tokenSn){
-            console.log("408 Request Timeout 시 로그아웃 처리(서버 Idle Timeout 처리) tokenSn=", tokenSn);
+            console.log("408 Request Timeout 시 자체로그인에 대한 로그아웃 처리(서버 Idle Timeout 처리) tokenSn=", tokenSn);
             dispatch(logout({ tokenSn }));
             return Promise.reject(error);
-          }else{
-            console.log("408 Request Timeout 시 로그아웃 처리(서버 Idle Timeout 처리) tokenSn 없음");
           }
+          console.log("408 Request Timeout 시 로그아웃 처리(서버 Idle Timeout 처리) tokenSn 없음");
         }catch(e){}
       }
 

@@ -196,7 +196,8 @@ function RouteWorkAccessLogger() {
       prvcInclYn: prvcInclYn,
       flfmtTaskCd: '1',
       rgtrId: auth?.userInfo?.mbrId ?? '',
-      mdfrId: auth?.userInfo?.mbrId ?? ''
+      mdfrId: auth?.userInfo?.mbrId ?? '',
+      lgnSeCd: auth?.lgnSeCd ?? ''
     }));
   }, [location.pathname, location.search, dispatch])
 

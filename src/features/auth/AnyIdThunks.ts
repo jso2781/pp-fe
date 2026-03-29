@@ -1,9 +1,30 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import type { AxiosError } from 'axios'
 import https from '@/api/axiosInstance'
 import { getIntegratedSearchJsonApiPath } from '@/api/search/IntegratedSearchPaths'
 import { IntegratedSearchPVO, IntegratedSearchRVO } from '@/features/search/IntegratedSearchTypes'
-import { AnyIdCiFromSsobPVO, AnyIdInitPVO, AnyIdInitRVO, AnyIdLoginPVO, AnyIdLoginRVO, AnyIdUserInfoFromSsobPVO, AnyIdUserInfoFromSsobRVO, AnyIdUserInfoRVO, SsoInfoPVO, SsoInfoRVO } from './AnyIdTypes'
-import { anyIdCiFromSsobApiPath, anyIdInitApiPath, anyIdLoginApiPath, anyIdUserInfoApiPath, anyIdUserInfoFromSsobApiPath, ssoInfoApiPath } from '@/api/auth/AnyIdApiPaths'
+import {
+  AnyIdCiFromSsobPVO,
+  AnyIdInitPVO,
+  AnyIdInitRVO,
+  AnyIdLoginPVO,
+  AnyIdLoginRVO,
+  AnyIdUserInfoFromSsobPVO,
+  AnyIdUserInfoFromSsobRVO,
+  AnyIdUserInfoRVO,
+  SsoInfoPVO,
+  SsoInfoRVO,
+} from './AnyIdTypes'
+import type { LogoutRVO } from './AuthTypes'
+import {
+  anyIdCiFromSsobApiPath,
+  anyIdInitApiPath,
+  anyIdLoginApiPath,
+  anyIdLogoutApiPath,
+  anyIdUserInfoApiPath,
+  anyIdUserInfoFromSsobApiPath,
+  ssoInfoApiPath,
+} from '@/api/auth/AnyIdApiPaths'
 
 /**
  * SSO 기본 정보 조회
@@ -55,11 +76,43 @@ export const postAnyIdLogin = createAsyncThunk<AnyIdLoginRVO, AnyIdLoginPVO, { r
   async (params: AnyIdLoginPVO, { rejectWithValue }) => {
     try {
       const res = await https.post(anyIdLoginApiPath(), params ?? {});
-      const payload = res.data?.data;
+      const raw = res.data?.data as AnyIdLoginRVO | { result?: AnyIdLoginRVO } | undefined
+      const payload =
+        raw != null && typeof raw === 'object' && 'result' in raw && raw.result != null
+          ? raw.result
+          : (raw as AnyIdLoginRVO)
       return payload as AnyIdLoginRVO;
     } catch (e) {
       console.log('AnyIdThunks postAnyIdLogin error!!', e);
       return rejectWithValue('AnyIdThunks postAnyIdLogin error!!');
+    }
+  }
+);
+
+/**
+ * ANY-ID 로그아웃 (POST /api/pp/auth/anyid/logout — 세션 무효화·접속이력 lgnSeCd=2)
+ */
+export const anyIdLogout = createAsyncThunk<LogoutRVO, undefined, { rejectValue: string }>(
+  '/auth/anyid/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await https.post(anyIdLogoutApiPath(), {});
+      const payload = res.data;
+      return {
+        code: (payload?.code as string) ?? '',
+        msg: (payload?.msg as string) ?? '',
+      };
+    } catch (error) {
+      const axiosError = error as AxiosError<{ code?: string; msg?: string }>;
+      if (axiosError.response) {
+        const errorData = axiosError.response.data as any;
+        const msg = errorData?.msg ?? errorData?.data?.msg;
+        return rejectWithValue(msg ?? 'Failed to logout Any-ID');
+      }
+      if (axiosError.request) {
+        return rejectWithValue('Network error occurred. Please check your connection.');
+      }
+      return rejectWithValue(axiosError.message || 'Failed to logout Any-ID');
     }
   }
 );

@@ -2,19 +2,10 @@
  * 화면ID: KIDS-PP-US-LG-01
  * 화면명: 로그인 방식 선택
  * 화면경로: /ko/auth/LoginMethod
- * 화면설명: 로그인 방식 선택 화면
  *
- * [인증 흐름]
- * 1. tx 파라미터 없이 진입 시 → /oidc/auth 로 리다이렉트 (KMS tx 발급)
- * 2. SSO 완료 → /loginPage?tx=KMS발급값 → 이 페이지로 돌아옴
- * 3. tx 있으면 → /api/pp/auth/anyid/init 호출 (bypass=0 응답)
- * 4. AnyidC.LOAD_MODULE({ bypass: 0, txId: KMS발급tx })
- * 5. extractInfo → success 콜백 (ssob 포함)
- * 6. /api/pp/auth/anyid/login (ssob + tx) → 세션 생성 → 이동
- *
- * [로딩 개선]
- * - tx 없음: 최소 UI("이동 중...")만 표시 후 리다이렉트
- * - tx 있음: 스켈레톤 먼저 표시, 스크립트·init 병렬 수행 후 위젯 표시
+ * - production + tx 없음: /oidc/auth (KMS tx)
+ * - production + tx 있음: getAnyIdInit → LOAD_MODULE(SSO)
+ * - development + `VITE_SHOW_ANYID_AREA=true` + tx 없음: 임베드 LOAD_MODULE(bypass 1, KMS/oidc 없음) — 성공 시 콜백의 ssob·tag(tx)로 /auth/anyid/login (Any-ID 가이드·영문 Login.tsx와 동일 패턴)
  */
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material'
@@ -22,32 +13,41 @@ import { AccountCircle as AccountIcon } from '@mui/icons-material'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { getAnyIdInit, postAnyIdLogin } from '@/features/auth/AnyIdThunks'
-import { ensureAnyIdAssets, waitForAnyidC } from '@/lib/anyid/ensureAnyIdAssets'
+import { shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
+import { useAnyIdSdkReady } from '@/lib/anyid/useAnyIdSdkReady'
 import DepsLocation from '@/components/common/DepsLocation'
+import { useDialog } from '@/contexts/DialogContext'
+import { useTranslation } from 'react-i18next'
 
 type LoginPhase = 'local' | 'redirecting' | 'preparing' | 'ready' | 'error'
 
-// tx별 getAnyIdInit 결과 캐시 (중복 호출 방지)
+/** production 또는 `VITE_SHOW_ANYID_AREA=true` 일 때 로컬에서도 Any-ID 로드·표시 */
+const showAnyIdArea = shouldLoadAnyIdSdk()
+const isProd = import.meta.env.MODE === 'production'
+
 const anyIdInitPromiseCache = new Map<string, Promise<unknown>>()
+
+function initialPhase(search: string): LoginPhase {
+  if (!showAnyIdArea) return 'local'
+  if (isProd) {
+    return new URLSearchParams(search).get('tx') ? 'preparing' : 'redirecting'
+  }
+  return 'preparing'
+}
 
 export default function LoginMethod() {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useAppDispatch()
+  const { showAlert } = useDialog()
+  const { t } = useTranslation()
   const ssoInfo = useAppSelector((s) => s.anyId.ssoInfo)
   const anyidInit = useAppSelector((s) => s.anyId.anyidInit)
-  const isLocalDev = import.meta.env.MODE !== 'production'
-  const [anyIdReady, setAnyIdReady] = useState(false)
-  const [phase, setPhase] = useState<LoginPhase>(() => {
-    if (import.meta.env.MODE !== 'production') return 'local'
-    const p = new URLSearchParams(location.search)
-    return p.get('tx') ? 'preparing' : 'redirecting'
-  })
 
+  const [phase, setPhase] = useState<LoginPhase>(() => initialPhase(location.search))
   const params = useMemo(() => new URLSearchParams(location.search), [location.search])
-
-  // tx는 반드시 /oidc/auth → KMS에서 발급된 값이어야 함
   const tx = useMemo(() => params.get('tx') || null, [params])
+  const hasUrlTx = Boolean(tx)
 
   const acrValues = useMemo(() => {
     const v = params.get('acrValues')
@@ -55,163 +55,212 @@ export default function LoginMethod() {
     return Number.isFinite(n) ? n : 3
   }, [params])
 
-  const redirectUri = useMemo(() => params.get('redirect_uri') || '/pp/ko', [params])
+  const redirectUri = useMemo(() => {
+    const r = params.get('redirect_uri') || '/pp/ko'
+    if (r.startsWith('http://') || r.startsWith('https://')) return r
+    return `${window.location.origin}${r.startsWith('/') ? '' : '/'}${r}`
+  }, [params])
 
-  // tx 없음 → 최소 UI만 보여주고 즉시 리다이렉트 (전체 레이아웃 스킵)
+  const devEmbedLogin = showAnyIdArea && !isProd && !hasUrlTx
+  const devLoginTag = useMemo(() => `login-dev-${Date.now()}`, [])
+
+  const sdkEnabled = showAnyIdArea && (!isProd || hasUrlTx)
+  const anyIdSdkReady = useAnyIdSdkReady(sdkEnabled, {
+    showGovLoginTitleRow: !devEmbedLogin,
+  })
+
   useEffect(() => {
-    if (isLocalDev) {
+    if (!showAnyIdArea) {
       setPhase('local')
       return
     }
-    if (!tx) {
-      setPhase('redirecting')
-      const currentPath = location.pathname || '/pp/ko/auth/LoginMethod'
-      const endPoint = encodeURIComponent(currentPath)
-      window.location.href = `/oidc/auth?end_point=${endPoint}`
-      return
-    }
-  }, [tx, location.pathname])
+    if (!isProd) return
+    if (hasUrlTx) return
+    setPhase('redirecting')
+    const currentPath = location.pathname || '/pp/ko/auth/LoginMethod'
+    window.location.href = `/oidc/auth?end_point=${encodeURIComponent(currentPath)}`
+  }, [showAnyIdArea, hasUrlTx, location.pathname])
 
-  // tx 있음 → 첫 페인트 후 스크립트·init 병렬 수행
   useEffect(() => {
-    if (isLocalDev) {
-      setPhase('local')
-      return
-    }
-    if (!tx) return
-
+    if (!showAnyIdArea || !hasUrlTx) return
     let cancelled = false
-    let cancelWait: (() => void) | null = null
-
     ;(async () => {
       try {
         setPhase('preparing')
-
-        // tx별 init 결과 캐시: 동일 tx에 대해 getAnyIdInit 중복 호출 방지
-        const initPromise =
-          anyidInit?.txId === tx
-            ? Promise.resolve(anyidInit)
-            : (() => {
-                const cached = anyIdInitPromiseCache.get(tx)
-                if (cached) return cached
-                const p = dispatch(getAnyIdInit({ tx }))
-                  .unwrap()
-                  .catch((e) => {
-                    console.error('[AnyID] getAnyIdInit error', e)
-                    anyIdInitPromiseCache.delete(tx)
-                    return null
-                  })
-                anyIdInitPromiseCache.set(tx, p)
-                return p
-              })()
-
-        // 스크립트 로드와 init API 병렬 처리
-        await Promise.all([ensureAnyIdAssets(), initPromise])
+        const cached = anyIdInitPromiseCache.get(tx!)
+        const p =
+          cached ??
+          (() => {
+            const np = dispatch(getAnyIdInit({ tx: tx! }))
+              .unwrap()
+              .catch((e) => {
+                console.error('[AnyID] getAnyIdInit error', e)
+                anyIdInitPromiseCache.delete(tx!)
+                return null
+              })
+            anyIdInitPromiseCache.set(tx!, np)
+            return np
+          })()
+        const r = await p
         if (cancelled) return
-
-        const adaptor = {
-          sso: ssoInfo ?? undefined,
-          success: async (data: any) => {
-            console.error('[AnyID] window.AnyidC.LOAD_MODULE success data=', data);
-
-            try{
-              /*
-               * AnyidSlice에서 postAnyIdLogin.fulfilled 액션 핸들러가 실행될 때 AuthSlice 에서도 postAnyIdLogin.fulfilled 액션을 감지해서 auth 상태를 동기화 함.
-               */
-              const payload = await dispatch(postAnyIdLogin({ ssob: data?.ssob, tag: tx, ci: data?.res?.ci })).unwrap()
-              if (payload.status === 'LoggedIn') {
-                navigate('/pp/ko')
-                return
-              }
-              // 회원가입 선택 페이지로 이동(ci 파라미터 전달)
-              if (payload.status === 'SignUpSel') {
-                navigate('/pp/ko/auth/SignUpSel', { state: { ci: payload?.ci ?? '' } })
-                return
-              }
-            }catch(e){
-              console.error('[AnyID] login error:', e)
-              alert('인증에 실패했습니다. 다시 시도해주세요.')
-            }finally{
-              const ci = data?.res?.ci
-              const ciIsValid = typeof ci === 'string' && ci.trim().length > 0
-
-              if (!ciIsValid) {
-                const resShape = data?.res
-                console.warn('[AnyID] success callback 응답에 ci가 없습니다.', {
-                  hasRes: Boolean(resShape),
-                  hasCiKey: Boolean(resShape && Object.prototype.hasOwnProperty.call(resShape, 'ci')),
-                  ci,
-                  data,
-                })
-                alert('Any-ID 인증 응답 형식이 올바르지 않습니다. ci 값을 확인할 수 없습니다.')
-              }
-            }
-          },
-        }
-        window.anyidAdaptor = adaptor as typeof window.anyidAdaptor
-
-        cancelWait = waitForAnyidC(
-          () => {
-            if (!cancelled) {
-              setAnyIdReady(true)
-              setPhase('ready')
-            }
-          },
-          () => {
-            if (!cancelled) {
-              console.error('[AnyID] window.AnyidC.LOAD_MODULE not ready (timeout)')
-              setPhase('error')
-            }
-          }
-        )
+        if (!r) setPhase('error')
       } catch (e) {
-        console.error('[AnyID] SDK load error:', e)
+        console.error('[AnyID] init error', e)
         if (!cancelled) setPhase('error')
       }
     })()
-
     return () => {
       cancelled = true
-      cancelWait?.()
     }
-  }, [tx, navigate, dispatch, ssoInfo])
+  }, [showAnyIdArea, hasUrlTx, tx, dispatch])
 
-  // LOAD_MODULE 1회 호출 (bypass=0, KMS tx 사용)
-  const loadModuleCalledRef = useRef(false)
   useEffect(() => {
-    if (isLocalDev) return
-    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE || loadModuleCalledRef.current) return
-    if (!tx) return  // tx 없으면 호출하지 않음
+    if (!showAnyIdArea) return
+    if (phase === 'local' || phase === 'error' || phase === 'redirecting') return
+    if (!anyIdSdkReady) return
+    if (hasUrlTx && anyidInit?.txId !== tx) return
+    setPhase('ready')
+  }, [showAnyIdArea, phase, anyIdSdkReady, hasUrlTx, anyidInit?.txId, tx])
 
+  const loadModuleCalledRef = useRef(false)
+  /** Any-ID가 success를 여러 번 호출해도 /auth/anyid/login 은 1회만 */
+  const anyIdLoginOnceRef = useRef(false)
+  /**
+   * tx / devLoginTag 가 바뀔 때만 LOAD_MODULE·login 가드 리셋.
+   * (React 18 StrictMode 개발 모드에서 동일 세션으로 재마운트될 때마다 ref를 지우면 LOAD_MODULE 이 2번 돌아가고,
+   *  SDK 내부 extractInfo 호출도 배수로 늘어남)
+   */
+  const anyIdSessionKeyRef = useRef<{ tx: string | null; tag: string }>({ tx: null, tag: '' })
+  useEffect(() => {
+    const prev = anyIdSessionKeyRef.current
+    if (prev.tx === tx && prev.tag === devLoginTag) return
+    anyIdSessionKeyRef.current = { tx, tag: devLoginTag }
+    loadModuleCalledRef.current = false
+    anyIdLoginOnceRef.current = false
+  }, [tx, devLoginTag])
+
+  const navigateRef = useRef(navigate)
+  const dispatchRef = useRef(dispatch)
+  const tRef = useRef(t)
+  useEffect(() => {
+    navigateRef.current = navigate
+    dispatchRef.current = dispatch
+    tRef.current = t
+  })
+
+  useEffect(() => {
+    if (!showAnyIdArea) return
+    if (phase !== 'ready') return
+    if (!anyIdSdkReady || !window.AnyidC?.LOAD_MODULE) return
+    if (hasUrlTx && anyidInit?.txId !== tx) return
+    if (loadModuleCalledRef.current) return
     loadModuleCalledRef.current = true
 
-    const successCb = (data: any) => window.anyidAdaptor?.success?.(data)
-    const failCb = (err: any) => console.error('[AnyID] fail:', err)
+    const loginTag: string = hasUrlTx && tx ? (anyidInit?.txId ?? tx) : devLoginTag
+
+    const adaptor = {
+      sso: ssoInfo ?? undefined,
+      success: async (data: any) => {
+        // esign 등에서 단계마다 success가 반복 호출됨 — 최종 완료만 처리(step 없으면 기존 SDK 호환)
+        if (data?.step != null && data.step !== 'authComplete') {
+          return
+        }
+        if (anyIdLoginOnceRef.current) {
+          return
+        }
+        anyIdLoginOnceRef.current = true
+
+        // bypass(임베드)에서도 Any-ID는 인증 완료 시 ssob·tag(tx)를 넘길 수 있음 — 콜백 값 우선, 없으면 LOAD_MODULE에 넣은 tag
+        const tagFromCallback =
+          (typeof data?.tag === 'string' && data.tag) || (typeof data?.txId === 'string' && data.txId) || loginTag
+        try {
+          const payload = await dispatchRef
+            .current(postAnyIdLogin({ ssob: data?.ssob, tag: tagFromCallback, ci: data?.res?.ci }))
+            .unwrap()
+          if (payload.status === 'LoggedIn') {
+            navigateRef.current('/pp/ko')
+            return
+          }
+          if (payload.status === 'SignUpSel') {
+            navigateRef.current('/pp/ko/auth/SignUpSel', { state: { ci: payload?.ci ?? '' } })
+            return
+          }
+        } catch (e) {
+          console.error('[AnyID] login error:', e)
+          anyIdLoginOnceRef.current = false
+          showAlert(tRef.current('loginFailedMessage'), tRef.current('error'))
+        } finally {
+          const ci = data?.res?.ci
+          if (typeof ci !== 'string' || !ci.trim()) {
+            console.warn('[AnyID] success callback 응답에 ci가 없습니다.', { data })
+          }
+        }
+      },
+    }
+    window.anyidAdaptor = adaptor as typeof window.anyidAdaptor
+
+    const baseCfg = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
+    const successCb = (data: any) => void window.anyidAdaptor?.success?.(data)
+    const failCb = (err: any) => {
+      console.error('[AnyID] fail:', err)
+      setPhase('error')
+    }
     const logCb = (data: any) => console.log('[AnyID] log:', data)
 
-    console.log('[AnyID] LOAD_MODULE 호출, txId:', anyidInit?.txId ?? tx, 'bypass:', anyidInit?.bypass ?? 0)
-
-    window.AnyidC.LOAD_MODULE(Object.assign(
-      {
+    if (devEmbedLogin) {
+      window.AnyidC.LOAD_MODULE({
+        cfg: baseCfg,
         contextRoot: location.pathname,
+        txId: devLoginTag,
+        tag: devLoginTag,
+        lvl: acrValues,
+        bypass: 1,
+        toggle: false,
+        show: false,
+        theme: '4.1.0',
+        redirect_uri: redirectUri,
         success: successCb,
         fail: failCb,
         log: logCb,
-        redirect_uri: redirectUri,
-        cfg: anyidInit?.cfg ?? '/config/config.anyidc.json',
-        txId: anyidInit?.txId ?? tx,
-        tag: anyidInit?.tag ?? tx,
-        lvl: anyidInit?.lvl ?? acrValues,
-        bypass: anyidInit?.bypass ?? 0,   // 기본값 0 (SSO 모드, 1→0 수정)
-        toggle: anyidInit?.toggle ?? true,
-        theme: anyidInit?.theme ?? '4.1.0',
-      },
-      anyidInit || {},
-      { success: successCb, fail: failCb, log: logCb }
-    ))
-  }, [anyIdReady, location.pathname, redirectUri, tx, acrValues, anyidInit])
+      })
+      return
+    }
 
-  // tx 없음: 리다이렉트 중에는 최소 UI만 표시 (전체 레이아웃·리소스 절약)
+    window.AnyidC.LOAD_MODULE(
+      Object.assign(
+        {
+          contextRoot: location.pathname,
+          success: successCb,
+          fail: failCb,
+          log: logCb,
+          redirect_uri: redirectUri,
+          cfg: anyidInit?.cfg ?? '/config/config.anyidc.json',
+          txId: anyidInit?.txId ?? tx,
+          tag: anyidInit?.tag ?? tx,
+          lvl: anyidInit?.lvl ?? acrValues,
+          bypass: anyidInit?.bypass ?? 0,
+          toggle: anyidInit?.toggle ?? true,
+          theme: anyidInit?.theme ?? '4.1.0',
+        },
+        anyidInit || {},
+        { success: successCb, fail: failCb, log: logCb }
+      )
+    )
+  }, [
+    showAnyIdArea,
+    phase,
+    anyIdSdkReady,
+    hasUrlTx,
+    devEmbedLogin,
+    devLoginTag,
+    tx,
+    anyidInit,
+    acrValues,
+    redirectUri,
+    location.pathname,
+    ssoInfo,
+  ])
+
   if (phase === 'redirecting') {
     return (
       <Box className="page-layout" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
@@ -230,11 +279,8 @@ export default function LoginMethod() {
             <DepsLocation />
             <Box className="content-view" id="content">
               <Box className="page-content">
-
-                {/* --- 본문 시작 --- */}
                 <Box className="page-content__anyid">
                   <Box className="login-card-area">
-
                     <Box className="login-card-area__left">
                       {phase === 'preparing' && (
                         <Box
@@ -273,7 +319,10 @@ export default function LoginMethod() {
                             textAlign: 'center',
                           }}
                         >
-                          <Typography color="error">로컬 테스트 환경입니다. 개발환경에서는 사용할 수 없습니다.</Typography>
+                          <Typography color="text.secondary">
+                            Any-ID 영역을 보려면 `.env.development` 등에{' '}
+                            <code>VITE_SHOW_ANYID_AREA=true</code> 를 넣고 dev 서버를 재시작하세요.
+                          </Typography>
                         </Box>
                       )}
                       {phase === 'error' && (
@@ -284,16 +333,11 @@ export default function LoginMethod() {
                     </Box>
 
                     <Box className="login-card-area__right">
-                      {/* KIDS 로그인 */}
                       <Card className="kids-login-card">
                         <Typography className="kids-login-title">KIDS 로그인</Typography>
                         <CardContent className="kids-login-card-content">
                           <Box className="login-button-group">
-                            <Button
-                              variant="outlined"
-                              onClick={() => navigate('/pp/ko/auth/Login')}
-                              className="login-button"
-                            >
+                            <Button variant="outlined" onClick={() => navigate('/pp/ko/auth/Login')} className="login-button">
                               <Stack spacing={1} alignItems="center" className="login-button-stack">
                                 <Stack direction="row" spacing={1} alignItems="center">
                                   <AccountIcon className="login-icon" />
@@ -308,11 +352,8 @@ export default function LoginMethod() {
                         </CardContent>
                       </Card>
                     </Box>
-
                   </Box>
                 </Box>
-
-                {/* --- 본문 끝 --- */}
               </Box>
             </Box>
           </Box>

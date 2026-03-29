@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo, useCallback, useRef, ReactNode } from 'react'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { logout } from '@/features/auth/AuthThunks'
-import { redirectToSsoLogout } from '@/features/auth/SsoLoginPage'
+import { anyIdLogout } from '@/features/auth/AnyIdThunks'
 import { RootState } from '@/store/store'
 import { AuthState } from '@/features/auth/AuthSlice'
 import { MenuState } from '@/features/auth/MenuSlice'
@@ -38,7 +38,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // AuthSlice Redux 상태 구독
   const auth = useAppSelector((s: RootState) => s.auth) as AuthState
   const { userInfo, lgnSeCd, tokenSn, acsTokenCn, updtTokenCn, pswdErrNmtm } = auth || {}
-  const ssoInfo = useAppSelector((s: RootState) => s.anyId.ssoInfo)
 
   // Redux 상태에서 직접 계산
   // userInfo가 실제 데이터를 가진 객체인지 확인 (빈 객체가 아닌지)
@@ -68,11 +67,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [userInfo, lgnSeCd, tokenSn, acsTokenCn, updtTokenCn, pswdErrNmtm])
 
   const logoutContext = useCallback(() => {
-    // Redux logout 액션을 dispatch (서버 세션 무효화)
+    // lgnSeCd 2: PP Any-ID 로그아웃(접속이력 구분) / 그 외: CA 자체로그인 로그아웃
+    if (String(lgnSeCd ?? '1') === '2') {
+      dispatch(anyIdLogout());
+      return;
+    }
     dispatch(logout({ tokenSn: tokenSn ?? 0 }));
     // SSO 로그아웃으로 이동 (헤더 로그아웃 버튼 / 30분 타이머 완료 시 동일하게 적용)
-    redirectToSsoLogout(ssoInfo?.agencyContextPath ?? '', '/pp/ko');
-  }, [dispatch, tokenSn, ssoInfo?.agencyContextPath]);
+    // redirectToSsoLogout(ssoInfo?.agencyContextPath ?? '', '/pp/ko');
+  }, [dispatch, tokenSn, lgnSeCd]);
   /********************************* AuthSlice Redux 상태 구독 및 상태 데이터 추출 끝 ************************************************/
 
   /********************************* MenuSlice Redux 상태 구독 및 상태 데이터 추출 시작 ************************************************/

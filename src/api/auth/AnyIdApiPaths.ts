@@ -14,6 +14,11 @@ export const anyIdInitApiPath = () => '/auth/anyid/init';
 export const anyIdLoginApiPath = () => '/auth/anyid/login';
 
 /**
+ * ANY-ID 로그아웃 (PP 서버 세션 무효화, 접속이력 lgnSeCd=2)
+ */
+export const anyIdLogoutApiPath = () => '/auth/anyid/logout';
+
+/**
  * ANY-ID 사용자 정보 조회
  * (SSO 사용자 정보와 Any-ID 세션 정보를 조회)
  */

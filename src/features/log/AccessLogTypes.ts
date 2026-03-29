@@ -31,4 +31,7 @@ export interface AccessLogPVO {
 
   /** 수행업무코드 */
   flfmtTaskCd?: string;
+
+  /** 로그인구분코드 */
+  lgnSeCd?: string;
 }

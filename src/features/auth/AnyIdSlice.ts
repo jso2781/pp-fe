@@ -1,5 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getSsoInfo, getAnyIdInit, postAnyIdLogin, getAnyIdUserInfo, getAnyIdCiFromSsob, getAnyIdUserInfoFromSsob } from './AnyIdThunks'
+import {
+  getSsoInfo,
+  getAnyIdInit,
+  postAnyIdLogin,
+  anyIdLogout,
+  getAnyIdUserInfo,
+  getAnyIdCiFromSsob,
+  getAnyIdUserInfoFromSsob,
+} from './AnyIdThunks'
 import { SsoInfoRVO, AnyIdInitRVO, AnyIdLoginRVO, AnyIdUserInfoRVO, AnyIdUserInfoFromSsobRVO } from './AnyIdTypes'
 
 /**
@@ -95,6 +103,23 @@ const AnyIdSlice = createSlice({
         state.loading = false;
         state.error = action.error?.message || 'Failed to load notice list';
       })
+      .addCase(anyIdLogout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(anyIdLogout.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+        state.anyIdLoginResult = null;
+        state.anyidInit = null;
+        state.anyIdUserInfo = null;
+      })
+      .addCase(anyIdLogout.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error?.message ?? 'Failed to logout Any-ID';
+        state.anyIdLoginResult = null;
+        state.anyidInit = null;
+      })
       .addCase(getAnyIdUserInfo.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -105,7 +130,7 @@ const AnyIdSlice = createSlice({
       })
       .addCase(getAnyIdUserInfo.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error?.message || 'Failed to load notice list';
+        state.error = action.error?.message || 'Failed to load user info';
       })
       .addCase(getAnyIdCiFromSsob.pending, (state) => {
         state.loading = true;

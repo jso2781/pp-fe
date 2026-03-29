@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { login, refresh, logout, loginExtend } from './AuthThunks';
-import { postAnyIdLogin } from './AnyIdThunks';
+import { anyIdLogout, postAnyIdLogin } from './AnyIdThunks';
+import { clearAuthSessionAction } from './authSessionActions';
 import { MbrInfoRVO } from '../mbr/MbrInfoTypes';
 
 /**
@@ -102,7 +103,7 @@ const AuthSlice = createSlice({
       sessionStorage.removeItem("auth");
       sessionStorage.removeItem("updtTokenCn"); // 하위 호환성을 위해 유지
       sessionStorage.removeItem("legalGuardFormData"); // 회원가입 잔여 데이터 제거 (이전 사용자/다른 흐름 노출 방지)
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -154,16 +155,21 @@ const AuthSlice = createSlice({
       // Any-ID 로그인 성공 시 auth 상태 동기화 (AnyIdLoginRVO는 LoginRVO와 동일한 토큰/회원정보 필드 구조)
       .addCase(postAnyIdLogin.fulfilled, (state, action) => {
         const payload = action.payload;
-        state.userInfo = payload?.userInfo ?? null;
-        state.lgnSeCd = payload?.lgnSeCd ?? null;
+        const lgnSeCd = payload?.lgnSeCd ?? payload?.userInfo?.lgnSeCd ?? null;
+        const userInfo =
+          payload?.userInfo != null
+            ? { ...payload.userInfo, ...(lgnSeCd != null ? { lgnSeCd } : {}) }
+            : null;
+        state.userInfo = userInfo;
+        state.lgnSeCd = lgnSeCd;
         state.tokenSn = payload?.tokenSn ?? null;
         state.acsTokenCn = payload?.acsTokenCn ?? null;
         state.updtTokenCn = payload?.updtTokenCn ?? null;
         state.pswdErrNmtm = payload?.pswdErrNmtm ?? null;
-        if (payload?.acsTokenCn && payload?.userInfo) {
+        if (payload?.acsTokenCn && userInfo) {
           const authData = {
-            userInfo: payload.userInfo,
-            lgnSeCd: payload.lgnSeCd,
+            userInfo,
+            lgnSeCd,
             tokenSn: payload.tokenSn,
             acsTokenCn: payload.acsTokenCn,
             updtTokenCn: payload.updtTokenCn,
@@ -199,6 +205,35 @@ const AuthSlice = createSlice({
         state.updtTokenCn = null;
         state.pswdErrNmtm = null;
       })
+      .addCase(anyIdLogout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(anyIdLogout.fulfilled, (state) => {
+        state.loading = false;
+        state.userInfo = null;
+        state.lgnSeCd = null;
+        state.tokenSn = null;
+        state.acsTokenCn = null;
+        state.updtTokenCn = null;
+        state.pswdErrNmtm = null;
+        sessionStorage.removeItem("auth");
+        sessionStorage.removeItem("updtTokenCn");
+        sessionStorage.removeItem("legalGuardFormData");
+      })
+      .addCase(anyIdLogout.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) ?? 'Any-ID 로그아웃에 실패했습니다.';
+        state.userInfo = null;
+        state.lgnSeCd = null;
+        state.tokenSn = null;
+        state.acsTokenCn = null;
+        state.updtTokenCn = null;
+        state.pswdErrNmtm = null;
+        sessionStorage.removeItem("auth");
+        sessionStorage.removeItem("updtTokenCn");
+        sessionStorage.removeItem("legalGuardFormData");
+      })
       .addCase(logout.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -225,6 +260,8 @@ const AuthSlice = createSlice({
         state.acsTokenCn = null;
         state.updtTokenCn = null;
         state.pswdErrNmtm = null;
+        sessionStorage.removeItem("auth");
+        sessionStorage.removeItem("updtTokenCn");
         sessionStorage.removeItem("legalGuardFormData"); // 만 14세 미만 회원가입인 경우 법정대리인 동의 step에서 입력한 폼 데이터 제거
       })
       .addCase(loginExtend.pending, (state) => {
@@ -237,6 +274,19 @@ const AuthSlice = createSlice({
       .addCase(loginExtend.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) ?? '로그인 연장에 실패했습니다.';
+      })
+      .addCase(clearAuthSessionAction, (state) => {
+        state.loading = false;
+        state.error = null;
+        state.userInfo = null;
+        state.lgnSeCd = null;
+        state.tokenSn = null;
+        state.acsTokenCn = null;
+        state.updtTokenCn = null;
+        state.pswdErrNmtm = null;
+        sessionStorage.removeItem("auth");
+        sessionStorage.removeItem("updtTokenCn");
+        sessionStorage.removeItem("legalGuardFormData");
       })
     }
   })
