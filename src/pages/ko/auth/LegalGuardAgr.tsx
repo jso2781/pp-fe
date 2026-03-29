@@ -50,6 +50,28 @@ type LegalGuardFormData = {
   ciFromGuardAgr?: string;
 };
 
+/** 생년월일 정규화 함수
+ * - 6자리 숫자(yymmdd)를 8자리 숫자(yyyyMMdd)로 변환
+ */
+const normalizeBirthDate = (input: string): string => {
+  const value = String(input).replace(/\D/g, "");
+
+  if (value.length !== 6) {
+    return value;
+  }
+
+  const yy = parseInt(value.slice(0, 2), 10);
+  const mmdd = value.slice(2);
+
+  // 기준:
+  // 00 ~ 현재 연도(끝 2자리) => 2000년대
+  // 그 외 => 1900년대
+  const currentYearYY = new Date().getFullYear() % 100;
+  const fullYear = yy <= currentYearYY ? `20${value.slice(0, 2)}` : `19${value.slice(0, 2)}`;
+
+  return fullYear + mmdd;
+}
+
 export default function LegalGuardAgr() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -209,7 +231,7 @@ export default function LegalGuardAgr() {
             setLegalGuardFormData((prev) => ({
               ...prev,
               userName: userInfoFromSsob?.name ?? prev.userName,
-              birthDate: userInfoFromSsob?.brdt ?? prev.birthDate,
+              birthDate: normalizeBirthDate(userInfoFromSsob?.brdt ?? prev.birthDate),
               phone: userInfoFromSsob?.phone ?? prev.phone,
             }))
 
