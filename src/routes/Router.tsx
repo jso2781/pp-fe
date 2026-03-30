@@ -226,8 +226,8 @@ function RouteWorkAccessLogger() {
       etcMemoCn: '',
       prvcInclYn: prvcInclYn,
       flfmtTaskCd: '1',
-      rgtrId: auth?.userInfo?.mbrId ?? '',
-      mdfrId: auth?.userInfo?.mbrId ?? '',
+      rgtrId: auth?.userInfo?.mbrNo ?? '',
+      mdfrId: auth?.userInfo?.mbrNo ?? '',
       lgnSeCd: auth?.lgnSeCd ?? ''
     }));
 
