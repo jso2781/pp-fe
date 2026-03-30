@@ -25,7 +25,7 @@ export default function MenuGate({
         dispatch(getSsoInfo());
         // 이미 persist로 메뉴가 들어와 있으면 selectMenuList 생략
         if (!list || list.length === 0) {
-          await dispatch(selectMenuList({langSeCd: i18n.language})).unwrap?.();
+          await dispatch(selectMenuList({langSeCd: i18n.language === 'ko' ? 'KOR' : 'ENG'})).unwrap?.();
         }
       } catch (e) {
         // 실패해도 앱이 아예 안 뜨면 곤란하니,

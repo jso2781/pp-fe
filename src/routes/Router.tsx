@@ -109,6 +109,7 @@ import { DialogProvider } from '@/contexts/DialogContext';
 import ExpertLayout from './ExpertLayout';
 import EngLayout from './EngLayout';
 import FallbackRoute from './FallbackRoute';
+import { MenuListPVO } from '@/features/auth/MenuTypes';
 
 type LangElementProps = {
   byLang: Record<string, JSX.Element>;
@@ -273,7 +274,7 @@ const LangGuard = ({ children }: { children: JSX.Element }) => {
     // 이전 언어가 ko 또는 en이고, 언어가 변경되면 메뉴 재조회
     if (prevLang && (prevLang === 'ko' || prevLang === 'en') && prevLang !== currentLang) {
       console.log(`LangGuard: 언어 변경 감지 - ${prevLang} → ${currentLang}, 메뉴 재조회`);
-      dispatch(selectMenuList({ langSeCd: currentLang }));
+      dispatch(selectMenuList({ langSeCd: currentLang === 'ko' ? 'KOR' : 'ENG' } as MenuListPVO));
     }
 
     // 현재 언어를 이전 값으로 저장

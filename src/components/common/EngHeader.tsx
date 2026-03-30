@@ -461,7 +461,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
   // Rest API 호출 - 언어 변경 시 메뉴 목록 재조회 (getSsoInfo는 Router LangGuard에서만 1회 호출)
   useEffect(() => {
-    dispatch(selectMenuList({ langSeCd: i18nInstance.language }));
+    dispatch(selectMenuList({ langSeCd: i18nInstance.language === 'ko' ? 'KOR' : 'ENG' }));
   }, [dispatch, i18nInstance.language])
 
   const onToggleLang = () => {

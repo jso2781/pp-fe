@@ -11,6 +11,13 @@ export interface IntegratedSearchPVO {
    * 관련도순 - relevance
    */
   sortBy: string
+
+  /**
+   * 언어구분코드
+   * 한국어 - ko(pp-be backend에선 KOR로 치환)
+   * 영어 - en(pp-be backend에선 ENG로 치환)
+   */
+  langSeCd: string
 }
 
 /**

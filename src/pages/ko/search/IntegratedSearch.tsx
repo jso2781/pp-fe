@@ -61,7 +61,7 @@ function getListForCategory(current: { totalList: SearchItem[]; mainTaskList: Se
 }
 
 export default function IntegratedSearch() {
-    const { t } = useTranslation();
+    const { t, i18n: i18nInstance } = useTranslation();
     const dispatch = useAppDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
     const searchText = searchParams.get('searchText') ?? '';
@@ -85,7 +85,7 @@ export default function IntegratedSearch() {
             dispatch(resetResults());
             return;
         }
-        dispatch(getIntegratedSearchJson({ searchText: trimmed, sortBy: localSortBy }));
+        dispatch(getIntegratedSearchJson({ searchText: trimmed, sortBy: localSortBy, langSeCd: i18nInstance.language === 'ko' ? 'KOR' : 'ENG'}));
     }, [dispatch, searchText, localSortBy]);
 
     /** 탭별 현재 페이지 (탭 전환 시 유지, 검색 결과 갱신 시 1로 초기화) */

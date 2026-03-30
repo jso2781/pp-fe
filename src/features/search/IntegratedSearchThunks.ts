@@ -8,7 +8,7 @@ import { IntegratedSearchPVO, IntegratedSearchRVO } from '@/features/search/Inte
  */
 export const getIntegratedSearchJson = createAsyncThunk<IntegratedSearchRVO, IntegratedSearchPVO | undefined, { rejectValue: string }>(
   '/search/getIntegratedSearchJson',
-  async (params: IntegratedSearchPVO = { searchText: '', sortBy: '' }, { rejectWithValue }) => {
+  async (params: IntegratedSearchPVO = { searchText: '', sortBy: 'relevance', langSeCd: 'KOR' }, { rejectWithValue }) => {
     try {
       const res = await https.post(getIntegratedSearchJsonApiPath(), params);
 
