@@ -801,7 +801,7 @@ export default function LegalGuardAgr() {
                           </Box>
 
                           {/* 법정 대리인 정보 */}
-                          <Box component="h3" className="sub-title">
+                          <Box component="h3" className="sub-title mb0 mt40">
                             {t('legalGuardInfo')}
                           </Box>
                           {/* 화면 로딩과 함께 Any-ID 영역 표시 (버튼 클릭과 무관) */}
