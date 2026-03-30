@@ -2953,7 +2953,8 @@
 	margin-top: 5px!important
 }
 #anyidc.certify-sel-wrap.type-arrow.thema_04 .tab-area .certify-type {
-	margin-top: 16px!important
+	/* margin-top: 16px!important */
+	margin-top: 0px!important
 }
 @media (max-width:767px) {
 	#anyidc.certify-sel-wrap.type-arrow.thema_04 .certify-type {
