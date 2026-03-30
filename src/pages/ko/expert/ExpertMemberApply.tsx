@@ -62,9 +62,9 @@ export default function ExpertMemberApply() {
   const [exprtApplyPVO, setExprtApplyPVO] = useState<ExprtApplyPVO>({
     mbrNo: userInfo?.mbrNo,
     mbrId: userInfo?.mbrId,
-    name: userInfo?.encptMbrFlnm,
+    encptExprtFlnm: userInfo?.encptMbrFlnm,
     brno: '',
-    email: '',
+    encptExprtInstEmlNm: '',
     exprtHdofYn: 'Y',
     menuSn: menuSn,
     taskSystemCodes: [],    
@@ -163,7 +163,7 @@ export default function ExpertMemberApply() {
     }
 
     const result = await dispatch(existbyEmail({ 
-      email: organizationEmail,
+      encptExprtInstEmlNm: organizationEmail,
     })).unwrap();    
 
     if (result) {
@@ -174,7 +174,7 @@ export default function ExpertMemberApply() {
 
       setExprtApplyPVO(prev => ({
         ...prev,
-        email: organizationEmail,
+        encptExprtInstEmlNm: organizationEmail,
       }))         
     }
   };

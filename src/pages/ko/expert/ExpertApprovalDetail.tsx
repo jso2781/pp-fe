@@ -151,15 +151,15 @@ export default function ExpertApprovalDetail() {
                           </div>
                           <div className="info-item">
                             <dt>이름</dt>
-                            <dd>{current?.name ?? '-'}</dd>
+                            <dd>{current?.encptExprtFlnm ?? '-'}</dd>
                           </div>
                           <div className="info-item">
                             <dt>휴대전화번호</dt>
-                            <dd>{current?.telNo ?? '-'}</dd>
+                            <dd>{current?.encptMbrTelno ?? '-'}</dd>
                           </div>
                           <div className="info-item">
                             <dt>기관 이메일</dt>
-                            <dd>{current?.instEmlNm ?? '-'}</dd>
+                            <dd>{current?.encptExprtInstEmlNm ?? '-'}</dd>
                           </div>
                           <div className="info-item">
                             <dt>신청일</dt>
