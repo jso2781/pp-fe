@@ -2,6 +2,19 @@ import { createSlice } from '@reduxjs/toolkit'
 import { selectMenuList, getMenu, insertMenu, updateMenu, saveMenu, deleteMenu } from './MenuThunks'
 import { mockMenuList, MenuPVO, MenuRVO, MenuListPVO, MenuListRVO, MenuDVO, LnbItem, GnbDepth1Item, MenuListForGnb, GnbDepth3Item, GnbDepth2Item } from './MenuTypes'
 
+/** GNB/LNB 등 UI에 표시하지 않는 메뉴유형(사용자기본메뉴, 관리자기본메뉴 기준) */
+const MENU_TYPE_CD_HIDDEN_FROM_UI = 'Z'
+
+function isMenuHiddenFromUi(menu: MenuRVO): boolean {
+  const t = menu.menuTypeCd
+  if (t == null || t === '') return false
+  return String(t).trim() === MENU_TYPE_CD_HIDDEN_FROM_UI
+}
+
+function filterMenuListForUi(menuList: MenuRVO[]): MenuRVO[] {
+  return menuList.filter((m) => !isMenuHiddenFromUi(m))
+}
+
 /**
  * GNB용 GnbDepth1Item [] 구조체 변환
  */
@@ -270,9 +283,12 @@ function createLnbStructor(menuList: MenuRVO[]): LnbItem[] {
 }
 
 /**
- * 대국민포털_메뉴기본 정보 목록 조회(Redux 저장 구조) 
+ * 대국민포털_메뉴기본 정보 목록 조회(Redux 저장 구조)
+ * oriList: 원본 메뉴 목록(사용자기본메뉴, 관리자기본메뉴도 포함(menuTypeCd=Z))
+ * list: UI의 GNB/LNB에 표시하는 메뉴 목록(menuTypeCd !== 'Z')
  */
 export interface MenuState {
+  oriList: MenuRVO[]
   list: MenuRVO[]
   totalCount: number | null
   current: MenuRVO | null
@@ -289,6 +305,7 @@ export interface MenuState {
  * 대국민포털_메뉴기본 정보 목록 조회(Redux 저장 구조 초기상태) 
  */
 const initialState: MenuState = {
+  oriList: [],
   list: [],
   totalCount: null,
   current: null,
@@ -311,6 +328,7 @@ const MenuSlice = createSlice({
 
     // ✅ (선택) 캐시 초기화가 필요할 때 쓰기
     clearMenuCache: (state) => {
+      state.oriList = [];
       state.list = [];
       state.totalCount = null;
       state.langSeCd = null;
@@ -318,6 +336,22 @@ const MenuSlice = createSlice({
       state.error = null;
       state.lnbStructor = [];
       state.gnbList = [];
+    },
+
+    /**
+     * persist 복원 직후·필요 시: oriList(원본)가 있으면 그걸 기준으로 Z 제외 후 gnb/lnb 재생성.
+     * (세션에 예전 gnbList만 남아 있으면 fulfilled 필터가 다시 안 타도 동일 규칙 적용)
+     */
+    sanitizeMenuForUi: (state) => {
+      const source =
+        Array.isArray(state.oriList) && state.oriList.length > 0
+          ? state.oriList
+          : state.list
+      const uiList = filterMenuListForUi(source)
+      state.list = uiList
+      state.totalCount = uiList.length
+      state.lnbStructor = createLnbStructor(uiList)
+      state.gnbList = createGnbStructor(uiList)
     },
   },
   extraReducers: (builder) => {
@@ -328,14 +362,14 @@ const MenuSlice = createSlice({
       })
       .addCase(selectMenuList.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload.list;
-        state.totalCount = action.payload.totalCount;
-        
-        // Lnb lnbStructor 저장
-        state.lnbStructor = createLnbStructor(action.payload.list);     
+        state.oriList = action.payload.list;
+        const uiList = filterMenuListForUi(action.payload.list);
+        state.list = uiList;
+        state.totalCount = uiList.length;
 
-        // GNB gnbList 저장
-        state.gnbList = createGnbStructor(action.payload.list);
+        // Lnb lnbStructor / GNB gnbList — menuTypeCd=Z 는 UI에서 제외
+        state.lnbStructor = createLnbStructor(uiList);
+        state.gnbList = createGnbStructor(uiList);
 
         // 어떤 언어로 로딩됐는지 기록 + loaded
         state.langSeCd = action.meta.arg?.langSeCd ?? state.langSeCd ?? null;
@@ -438,5 +472,5 @@ const MenuSlice = createSlice({
 });
 
 
-export const { clearCurrent, clearMenuCache } = MenuSlice.actions;
+export const { clearCurrent, clearMenuCache, sanitizeMenuForUi } = MenuSlice.actions;
 export default MenuSlice.reducer;

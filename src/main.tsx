@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistor, store } from '@/store/store'
+import { sanitizeMenuForUi } from '@/features/auth/MenuSlice'
 import { FALLBACK_LANG, normalizeLang } from './routes/lang'
 import MenuGate from "@/components/gate/MenuGate";
 import App from './App'
@@ -31,7 +32,13 @@ function resolveInitialLang() {
 ReactDOM.createRoot(rootEl).render(
   <React.StrictMode>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+      <PersistGate
+        loading={null}
+        persistor={persistor}
+        onBeforeLift={() => {
+          store.dispatch(sanitizeMenuForUi())
+        }}
+      >
         <MenuGate fallback={<div style={{ padding: 16 }}>메뉴 불러오는 중...</div>}>
             <App />
         </MenuGate>

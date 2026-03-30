@@ -109,7 +109,7 @@ import { DialogProvider } from '@/contexts/DialogContext';
 import ExpertLayout from './ExpertLayout';
 import EngLayout from './EngLayout';
 import FallbackRoute from './FallbackRoute';
-import { MenuListPVO } from '@/features/auth/MenuTypes';
+import { MenuListPVO, MenuRVO } from '@/features/auth/MenuTypes';
 
 type LangElementProps = {
   byLang: Record<string, JSX.Element>;
@@ -163,28 +163,58 @@ function SsoInfoSync() {
   return null;
 }
 
+/** 현재 pathname이 메뉴 URL에 속하는지(동일 또는 / 하위). Login vs LoginMethod 혼동 방지 */
+function isPathUnderMenuUrl(pathname: string, menuUrlAddr: string): boolean {
+  const addr = menuUrlAddr.trim()
+  if (!addr) return false
+  if (pathname === addr) return true
+  return pathname.startsWith(`${addr}/`)
+}
+
+/** 일치하는 메뉴가 여러 개면 menuUrlAddr가 가장 긴(가장 구체적인) 항목 선택 */
+function findMenuRowForPath(rows: MenuRVO[], pathname: string): MenuRVO | undefined {
+  const candidates = rows.filter(
+    (m) => m.menuUrlAddr && isPathUnderMenuUrl(pathname, m.menuUrlAddr),
+  );
+  if (candidates.length === 0) return undefined;
+
+  // 같은 pathname에 여러 행이 맞을 수 있으면(예: 상위 /foo와 하위 /foo/bar), menuUrlAddr 길이가 긴 것(더 구체적인 것)을 선택
+  return candidates.reduce((best, m) =>
+    (m.menuUrlAddr ?? '').length > (best.menuUrlAddr ?? '').length ? m : best,
+  );
+}
+
 /** 업무별 접속 이력 적재 */
 function RouteWorkAccessLogger() {
   const location = useLocation()
   const dispatch = useAppDispatch()
   const prevRef = useRef<string>('')
+  const workAccessLogCnt = useRef<number>(0)
 
   const auth = useAppSelector((s) => s.auth);
-  const menuList = useAppSelector((s) => s.menu.list);
+
+  // 사용자기본메뉴, 관리자기본메뉴도 포함(menuTypeCd=Z)
+  const oriMenuList = useAppSelector((s) => s.menu.oriList);
+
   const menuUrl = location.pathname;
 
   const currentMenu = useMemo(() => {
-    return menuList.find(m => menuUrl.startsWith(`${m.menuUrlAddr}`));
-  }, [menuList, menuUrl]);
+    const rows = oriMenuList ?? []
+    return findMenuRowForPath(rows, menuUrl)
+  }, [oriMenuList, menuUrl])
 
   const menuSn = currentMenu?.menuSn ?? '';
   const prvcInclYn = currentMenu?.prvcInclYn ?? '';
 
   useEffect(() => {
-    // 같은 URL 중복 방지    
-    const url = `${menuUrl}${location.search}`
-    if (prevRef.current === url) return
-    prevRef.current = url
+    // 이전 URL과 현재 URL이 같으면 중복 방지
+    const url = `${menuUrl}${location.search}`;
+
+    // console.log('RouteWorkAccessLogger menuSn='+menuSn+', menuUrl='+menuUrl+', location.search='+location.search+', url='+url+', prevRef.current='+prevRef.current);
+
+    if(prevRef.current === url)return;
+
+    prevRef.current = url;
       
     // 업무별 접속 이력 적재
     dispatch(insertWorkAccessLog({
@@ -200,6 +230,8 @@ function RouteWorkAccessLogger() {
       mdfrId: auth?.userInfo?.mbrId ?? '',
       lgnSeCd: auth?.lgnSeCd ?? ''
     }));
+
+    workAccessLogCnt.current++;
   }, [location.pathname, location.search, dispatch])
 
   return null
