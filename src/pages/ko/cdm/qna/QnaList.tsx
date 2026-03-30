@@ -32,7 +32,7 @@ import { selectQnaList } from '@/features/cdm/qna/QnaCdmThunks';
 const QNA_BBS_ID = 'BBS0000001';
 
 /** 진행 상태 표시 (API 코드: "01" = 답변대기, "02" = 답변완료) */
-function QnaStatusChip({ status }: { status: string }) {
+function QnaStatusChip({ status }: Readonly<{ status: string }>) {
   const s = status?.trim() ?? '';
   if (s === '02') return <Chip size="small" label="답변완료" color="success" />;
   return <Chip size="small" label="답변대기" color="warning" />;
@@ -71,16 +71,14 @@ export default function QnaList() {
       pageSize: String(pageSize),
       searchType: appliedCnd,
       searchKeyword: appliedWrd,
+      loginId: userInfo?.mbrId,
     }));
-  }, [pageNum, appliedCnd, appliedWrd]);
+  }, [pageNum, appliedCnd, appliedWrd, userInfo?.mbrId]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
   const rows = useMemo(() => {
-    const filtered = userInfo?.mbrId
-      ? qnaData.filter((item: QnaItem) => item.mdfrId === userInfo.mbrId)
-      : qnaData;
-    return filtered.map((item: QnaItem, idx: number) => ({
+    return qnaData.map((item: QnaItem, idx: number) => ({
       qstnSn: item.qstnSn ?? String(idx),
       title: item.pstTtl ?? '',
       writer: item.rgtrId ?? '',

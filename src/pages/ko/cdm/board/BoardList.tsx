@@ -20,10 +20,9 @@ import {
   Typography,
   TextField,
   Paper,
+  Link,
 } from '@mui/material';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { Link as RouterLink } from 'react-router-dom';
-import { Link } from '@mui/material';
+import { useParams, useSearchParams, Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
@@ -76,6 +75,8 @@ export default function BoardList() {
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
+  const today = new Date().toISOString().replaceAll("-", "").substring(0, 8);
+
   const rows = useMemo(() => {
     return boardData.map((n, idx: number) => ({
       id: n.pstSn ?? String(idx),
@@ -83,6 +84,12 @@ export default function BoardList() {
       writer: n.rgtrId ?? '',
       date: n.regDt ?? '',
       views: n.pstInqCnt ?? 0,
+      isActiveNotice:
+        n.fixYn === 'Y' &&
+        !!n.fixBgngYmd &&
+        !!n.fixEndYmd &&
+        today >= n.fixBgngYmd &&
+        today <= n.fixEndYmd,
     }));
   }, [boardData]);
 
@@ -176,7 +183,7 @@ export default function BoardList() {
                           rows.map((r, idx) => (
                             <TableRow key={String(r.id)}>
                               <TableCell component="th" scope="row" align="center">
-                                {(pageNum - 1) * pageSize + idx + 1}
+                                {r.isActiveNotice ? '[공지]' : (pageNum - 1) * pageSize + idx + 1}
                               </TableCell>
                               <TableCell align="center">
                                 <Link

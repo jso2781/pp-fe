@@ -42,6 +42,7 @@ export type FetchAsmtPrpListParams = {
   pageSize: string;
   searchType?: string;
   searchKeyword?: string;
+  loginId?: string;
 };
 
 export type FetchAsmtPrpListResponse = {

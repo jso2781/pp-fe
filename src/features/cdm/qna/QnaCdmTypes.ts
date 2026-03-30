@@ -41,6 +41,7 @@ export type FetchQnaListParams = {
   searchType?: string;
   searchKeyword?: string;
   qstnPrgrsSttsCd?: string;
+  loginId?: string;
 };
 
 export type FetchQnaListResponse = {

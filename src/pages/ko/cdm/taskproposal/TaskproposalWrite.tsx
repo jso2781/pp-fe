@@ -38,6 +38,7 @@ export default function TaskproposalWrite() {
   const userInfo = useAppSelector((s) => s.auth.userInfo) ?? { mbrId: 'admin' } as any; // 🚧 임시 - 원복 시 ?? { mbrId: 'admin' } as any 제거
 
   const [topicTitle, setTopicTitle] = useState('');
+  const [rlsYn, setRlsYn] = useState('N');
   const [proposalContent, setProposalContent] = useState('');
   const [expectedEffect, setExpectedEffect] = useState('');
   const [etcExplanation, setEtcExplanation] = useState('');
@@ -65,6 +66,7 @@ export default function TaskproposalWrite() {
       .then((data) => {
         if (!data) return;
         setTopicTitle(data.tpcTtlNm || '');
+        setRlsYn(data.rlsYn || 'N');
         setProposalContent(data.asmtPrpCn || '');
         setExpectedEffect(data.asmtExptEfctCn || '');
         setEtcExplanation(data.asmtEtcExplnCn || '');
@@ -93,7 +95,7 @@ export default function TaskproposalWrite() {
 
   const handleFileClear = (rowId: number) => {
     setFileRows((prev) => prev.map((r) => (r.id === rowId ? { ...r, file: null } : r)));
-    if (fileInputRefs.current[rowId]) fileInputRefs.current[rowId]!.value = '';
+    if (fileInputRefs.current[rowId]) fileInputRefs.current[rowId].value = '';
   };
 
   const handleFileRowDelete = (rowId: number) => {
@@ -122,6 +124,7 @@ export default function TaskproposalWrite() {
     try {
       const formData = new FormData();
       formData.append('tpcTtlNm', topicTitle);
+      formData.append('rlsYn', rlsYn);
       formData.append('asmtPrpCn', proposalContent);
       formData.append('asmtExptEfctCn', expectedEffect);
       formData.append('asmtEtcExplnCn', etcExplanation);
@@ -158,6 +161,9 @@ export default function TaskproposalWrite() {
     verticalAlign: 'top',
     pt: 2.5,
   } as const;
+
+  const actionLabel = isEditMode ? '수정' : '저장';
+  const buttonLabel = saving ? `${actionLabel} 중...` : actionLabel;
 
   return (
     <Box className="page-layout">
@@ -218,6 +224,35 @@ export default function TaskproposalWrite() {
                               maxLength={50}
                               style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: 4, fontSize: '0.9rem', boxSizing: 'border-box' }}
                             />
+                          </Box>
+                        </Box>
+
+                        {/* 공개여부 */}
+                        <Box component="tr" sx={{ borderBottom: '1px solid #ddd' }}>
+                          <Box component="th" sx={{ ...thStyle, verticalAlign: 'middle' }}>공개여부</Box>
+                          <Box component="td" sx={{ p: 2 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                              <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: '0.9rem' }}>
+                                <input
+                                  type="radio"
+                                  name="rlsYn"
+                                  value="Y"
+                                  checked={rlsYn === 'Y'}
+                                  onChange={() => setRlsYn('Y')}
+                                />
+                                공개
+                              </label>
+                              <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: '0.9rem' }}>
+                                <input
+                                  type="radio"
+                                  name="rlsYn"
+                                  value="N"
+                                  checked={rlsYn === 'N'}
+                                  onChange={() => setRlsYn('N')}
+                                />
+                                비공개
+                              </label>
+                            </Box>
                           </Box>
                         </Box>
 
@@ -335,7 +370,7 @@ export default function TaskproposalWrite() {
                     {/* 하단 버튼 */}
                     <Box className="board-actions" sx={{ mt: 3 }}>
                       <Button variant="contained" size="large" onClick={handleSave} disabled={saving} sx={{ mr: 1, minWidth: 80, height: 48 }}>
-                        {saving ? (isEditMode ? '수정 중...' : '저장 중...') : isEditMode ? '수정' : '저장'}
+                        {buttonLabel}
                       </Button>
                       <Button
                         variant="contained"
