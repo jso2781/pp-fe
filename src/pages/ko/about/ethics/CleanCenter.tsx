@@ -18,7 +18,7 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function CleanCenter() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [page, setPage] = useState<number>(1);
@@ -36,7 +36,7 @@ export default function CleanCenter() {
     scrollTo(0, 0);
 
     if(true) {//TODO Any-Id 인증 여부
-      dispatch(selectDshstyDclrList({} as DshstyDclrListPVO));
+      dispatch(selectDshstyDclrList({linkInfoIdntfId: user?.userInfo?.linkInfoIdntfId ?? ''} as DshstyDclrListPVO));
     }
   }, []);
   

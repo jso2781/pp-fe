@@ -20,7 +20,7 @@ export interface ExprtApprovalPVO {
   searchCnd?: string
 
   /** 검색어 */
-  searchWrd?: string  
+  encptExprtFlnm?: string  
 
   /** 승인상태코드 */
   aprvSttsCode?: string
@@ -79,10 +79,10 @@ export interface ExprtApprovalRVO {
   mbrId?: string  
 
   /** 성명 */
-  name?: string
+  encptExprtFlnm?: string
 
   /** 전화번호 */
-  telNo?: string  
+  encptMbrTelno?: string  
 
   /** 전문가번호 */
   exprtNo?: string  
@@ -91,7 +91,7 @@ export interface ExprtApprovalRVO {
   instNm?: string
 
   /** 기관이메일 */
-  instEmlNm?: string
+  encptExprtInstEmlNm?: string
 
   /** 전문가재직여부 */
   exprtHdofYn?: string

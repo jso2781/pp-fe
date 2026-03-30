@@ -12,10 +12,10 @@ export interface ExprtApplyPVO {
   brno?: string
 
   /** 성명 */
-  name?: string
+  encptExprtFlnm?: string
   
   /** 이메일 */
-  email?: string
+  encptExprtInstEmlNm?: string
 
   /** 전문가재직여부 */
   exprtHdofYn?: string

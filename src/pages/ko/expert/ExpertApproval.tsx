@@ -38,7 +38,7 @@ export default function ExpertApproval() {
   // 검색조건
   // 검색 key는 사용할시 추후 설정 (현재는 이름만 검색)
   const [searchCnd, setSearchCnd] = useState(searchParams.get('searchCnd') || 'all');
-  const [searchWrd, setSearchWrd] = useState(searchParams.get('searchWrd') || '');  
+  const [encptExprtFlnm, setEncptExprtFlnm] = useState(searchParams.get('encptExprtFlnm') || '');  
   const [aprvSttsCode, setAprvSttsCode] = useState(searchParams.get('aprvSttsCode') || 'all');  
 
   // 페이징 관련
@@ -47,12 +47,12 @@ export default function ExpertApproval() {
 
   // 대국민포털_전문가업무신청관리 소속 전문가 회원 목록 조회
   useEffect(() => {
-    dispatch(selectExprtApprovalList({ pageNum, pageSize, mbrNo, searchCnd, searchWrd, aprvSttsCode }));
+    dispatch(selectExprtApprovalList({ pageNum, pageSize, mbrNo, searchCnd, encptExprtFlnm, aprvSttsCode }));
   }, [dispatch, pageNum, mbrNo]);
 
   const onSearch = () => {
     setPageNum(1);
-    dispatch(selectExprtApprovalList({ pageNum, pageSize, mbrNo, searchCnd, searchWrd, aprvSttsCode }));
+    dispatch(selectExprtApprovalList({ pageNum, pageSize, mbrNo, searchCnd, encptExprtFlnm, aprvSttsCode }));
   };
 
   //페이징
@@ -106,8 +106,8 @@ export default function ExpertApproval() {
                           size="large" 
                           placeholder="이름을 입력하세요" 
                           className="search-textfield"
-                          onChange={(e) => setSearchWrd(String(e.target.value))}
-                          value={searchWrd}
+                          onChange={(e) => setEncptExprtFlnm(String(e.target.value))}
+                          value={encptExprtFlnm}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                               onSearch();
@@ -162,10 +162,10 @@ export default function ExpertApproval() {
                                         //   cursor: 'pointer'
                                         // }}
                                       >
-                                        {item.name}
+                                        {item.encptExprtFlnm ?? '-'}
                                       </Link>                                      
                                     </TableCell>
-                                    <TableCell align="center">{item.instEmlNm ?? "-"}</TableCell>
+                                    <TableCell align="center">{item.encptExprtInstEmlNm ?? "-"}</TableCell>
                                     <TableCell align="center">{item.label ?? "-"}</TableCell>
                                     <TableCell align="center">{item.file?.fileExtnNm ?? '-'}</TableCell>
                                     <TableCell align="center">{item.taskApplyRegDt}</TableCell>
