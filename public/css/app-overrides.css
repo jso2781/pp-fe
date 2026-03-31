@@ -7,3 +7,9 @@
 #anyidc > .tit-wrap {
   display: none !important;
 }
+
+@media (max-width: 767px) {
+    #anyidc.thema_04 .pc-hide {
+        display: none !important;
+    }
+}
