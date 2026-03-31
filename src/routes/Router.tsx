@@ -67,6 +67,7 @@ const FindIdAuthSuccessKo = lazy(() => import('@/pages/ko/auth/FindIdAuthSuccess
 const FindPwKo = lazy(() => import('@/pages/ko/auth/FindPw'))
 const FindPwModifyKo = lazy(() => import('@/pages/ko/auth/FindPwModify'))
 const ExpertCertKo = lazy(() => import('@/pages/ko/auth/ExpertCert'))
+const CleanCenterCertKo = lazy(() => import('@/pages/ko/auth/CleanCenterCert'))
 
 const IntegratedSearchKo = lazy(() => import('@/pages/ko/search/IntegratedSearch'))
 const ExpertMemberApplyKo = lazy(() => import('@/pages/ko/expert/ExpertMemberApply'))
@@ -404,7 +405,7 @@ export default function Router() {
                 {/* about(기관소개) */}
                 <Route path="/pp/:lang/about/AboutOrg" element={<LangElement byLang={{ ko: <AboutOrgKo />, en: <AboutOrgEn /> }} />} />
                 <Route path="/pp/:lang/about/ethics/CleanCenter" element={<LangElement byLang={{ ko: <CleanCenterKo />, en: <CleanCenterKo /> }} />} />
-                <Route path="/pp/:lang/about/ethics/CleanForm" element={<LangElement byLang={{ ko: <CleanFormKo />, en: <CleanFormKo /> }} />} />
+                <Route path="/pp/:lang/about/ethics/CleanForm" element={<LangElement byLang={{ ko: <ProtectedRoute><CleanFormKo /></ProtectedRoute>, en: <ProtectedRoute><CleanFormKo /></ProtectedRoute> }} />} />
                 <Route path="/pp/:lang/about/ethics/CleanCenter/:dclrSn" element={<LangElement byLang={{ ko: <CleanDetailKo />, en: <CleanDetailKo /> }} />} />
 
                 {/* auth */}
@@ -425,6 +426,7 @@ export default function Router() {
                 <Route path="/pp/:lang/auth/FindPw" element={<LangElement byLang={{ ko: <FindPwKo />, en: <FindPwKo /> }} />} />
                 <Route path="/pp/:lang/auth/FindPwModify" element={<LangElement byLang={{ ko: <FindPwModifyKo />, en: <FindPwModifyKo /> }} />} />
                 <Route path="/pp/:lang/auth/ExpertCert" element={<LangElement byLang={{ ko: <ExpertCertKo />, en: <ExpertCertKo /> }} />} />
+                <Route path="/pp/:lang/auth/CleanCenterCert" element={<LangElement byLang={{ ko: <CleanCenterCertKo />, en: <CleanCenterCertKo /> }} />} />
 
                 {/* IntegratedSearch(통합검색) */}
                 <Route path="/pp/:lang/search/IntegratedSearch" element={<LangElement byLang={{ ko: <IntegratedSearchKo />, en: <IntegratedSearchKo /> }} />} />

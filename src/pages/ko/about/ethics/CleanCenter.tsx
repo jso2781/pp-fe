@@ -42,11 +42,19 @@ export default function CleanCenter() {
   
 
   const handleWriteForm = () => {
-    if(true){
-      navigate('/pp/ko/about/ethics/CleanForm');
+    if (!isAuthenticated) {
+      navigate(`/pp/${lang ?? 'ko'}/auth/LoginMethod`, {
+        state: { redirectTo: `/pp/${lang ?? 'ko'}/about/ethics/CleanForm` },
+      });
+      return;
     }
-    //TODO Any-Id 인증이 안되있다면 본인인증 페이지로 이동
-    // navigate('/');
+    if (String(user?.userInfo?.lgnSeCd ?? '') === '1') {
+      navigate(`/pp/${lang ?? 'ko'}/auth/CleanCenterCert`, {
+        state: { redirectTo: `/pp/${lang ?? 'ko'}/about/ethics/CleanForm` },
+      });
+      return;
+    }
+    navigate(`/pp/${lang ?? 'ko'}/about/ethics/CleanForm`);
   }
 
   return (
