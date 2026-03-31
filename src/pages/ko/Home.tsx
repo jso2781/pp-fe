@@ -483,8 +483,8 @@ export default function Home() {
                   <Card
                     sx={{
                       cursor: popup.popupLnkgAddr ? 'pointer' : 'default',
-                      width: '380px', // 팝업사이즈 고정
-                      height: '480px', // 팝업사이즈 고정
+                      width: '400px', // 팝업사이즈 고정
+                      height: '400px', // 팝업사이즈 고정
                       overflow: 'hidden',
                       display: 'flex',
                       flexDirection: 'column',
