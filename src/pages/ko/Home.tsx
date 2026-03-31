@@ -5,6 +5,7 @@
  * 화면설명: 메인(홈)
  */
 import { useMemo, useState, useRef, useEffect, useCallback} from 'react'
+import type { MouseEvent } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Card, Grid, CardContent, Link, List, ListItem, Tab, Tabs, Typography, IconButton } from '@mui/material';
 import { OpenInNew, PlayArrow, Pause } from '@mui/icons-material'
@@ -22,6 +23,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectMainContents } from '@/features/main/MainThunks';
 import type { PostVO } from '@/features/main/MainTypes';
 import { Link as RouterLink } from 'react-router-dom';
+import { openExternalInNamedWindow } from '@/utils/externalWindow';
 
 type TabKey = 'all' | 'youtube' | 'insta' | 'blog';
 type SnsItem = { 
@@ -325,7 +327,7 @@ export default function Home() {
   const handlePopupClick = (popup: PostVO) => {
     const url = popup.popupLnkgAddr || '';
     if (url) {
-      window.open(url, '_blank', 'noopener,noreferrer');
+      openExternalInNamedWindow(url);
     }
   };
   
@@ -637,21 +639,42 @@ export default function Home() {
               key={prevEl1 && nextEl1 ? 'ready1' : 'not-ready1'}
             >
               {(current?.promotion && current.promotion.length > 0) ? (
-                current.promotion.map((item, index) => (
-                  <SwiperSlide key={item.pstSn || index}>
-                    <Box 
-                      className="slide-item">
-                      <img 
-                        src={`${getThumbnailUrl(item)}`} 
-                        alt="프로모션 배너 1" 
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                        }} 
-                      />
-                    </Box>
-                  </SwiperSlide>
-                ))
+                current.promotion.map((item, index) => {
+                  const promotionUrl = item.videoId || '';
+
+                  return (
+                    <SwiperSlide key={item.pstSn || index}>
+                      <Box
+                        component={promotionUrl ? 'a' : 'div'}
+                        href={promotionUrl || undefined}
+                        className="slide-item"
+                        sx={{
+                          display: 'block',
+                          cursor: promotionUrl ? 'pointer' : 'default',
+                        }}
+                        onClick={(e: MouseEvent<HTMLElement>) => {
+                          if (!promotionUrl) return;
+                          e.preventDefault();
+                          openExternalInNamedWindow(promotionUrl);
+                        }}
+                      >
+                        <img 
+                          src={getThumbnailUrl(item)} 
+                          alt={item.pstTtl || `프로모션 배너 ${index + 1}`} 
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                          }} 
+                        />
+                        {promotionUrl && (
+                          <span className="sr-only">
+                            {`${item.pstTtl || `프로모션 배너 ${index + 1}`} 새창 열림`}
+                          </span>
+                        )}
+                      </Box>
+                    </SwiperSlide>
+                  );
+                })
               ) : (
                 <>
                   {/* <SwiperSlide>
