@@ -28,7 +28,7 @@ const apiBaseURL = import.meta.env.MODE === 'production'
 
 /** 인증 API 전용 서버 (login, refresh, logout, extend 만 이 도메인으로 호출) */
 const authApiBaseURL = import.meta.env.VITE_AUTH_API_BASE_URL ?? 'http://localhost:8088/api/ca/auth'
-const AUTH_PATHS = ['/login', '/refresh', '/logout', '/extend']
+const AUTH_PATHS = ['/login', '/refresh', '/logout', '/extend', '/workAccessLog/insert']
 
 /** CA API 서버(mail,..) */
 const caApiBaseURL = import.meta.env.VITE_CA_API_BASE_URL ?? 'http://localhost:8089/api/ca'
