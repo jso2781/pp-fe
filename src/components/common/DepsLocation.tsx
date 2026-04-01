@@ -203,6 +203,11 @@ export default function DepsLocation() {
       // 추가: /pp/{lang}/auth/CleanCenterCert (hash 라우팅의 "#/" 여부와 무관하게 pathname 기준으로 매칭)
       pattern: /^\/pp\/[A-Za-z]{2}\/(about\/ethics|auth)\/CleanCenterCert(\/\d+)?(\/)?$/,
       labels: ["cleanCenter", "cleanCenterCert"]
+    },
+    {
+      // 클린신고센터 > 신고서 작성
+      pattern: /^\/pp\/[A-Za-z]{2}\/about\/ethics\/CleanForm(\/\d+)?$/,
+      labels: ["cleanCenter", "cleanCenterWrite"]
     }
   ], []);
 
