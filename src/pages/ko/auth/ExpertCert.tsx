@@ -12,8 +12,9 @@ import { getMbrInfo } from '@/features/mbr/MbrInfoThunks';
 import { useAppDispatch } from '@/store/hooks';
 import { Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useEffect, useRef, useState } from "react";
 import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets';
+import { getAnyIdCiFromSsob } from '@/features/auth/AnyIdThunks';
 import type { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes';
 
 const showAnyIdArea = shouldLoadAnyIdSdk();
@@ -27,12 +28,22 @@ export default function ExpertCert() {
   const [anyIdReady, setAnyIdReady] = useState(false);
   const hasLoadedAnyIdRef = useRef(false);
   const loadModuleCalledRef = useRef(false);
+  const ciRef = useRef<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+
+  // URL 파라미터에서 tx, acrValues, redirectUri 추출
+  const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
+
+  const tx = useMemo(() => {
+    // SSO를 쓰는 구조라면 SSO 모듈이 txId를 내려줌(가이드). 없으면 로컬에서 생성.
+    return params.get('tx');
+  }, [params]);
 
   /** LoginMethod 등에서 남은 window.anyidAdaptor가 Any-ID 성공 시 /auth/anyid/login을 호출하지 않도록 이 화면 전용으로 덮어씀 */
   const dispatchRef = useRef(dispatch);
   const navigateRef = useRef(navigate);
+  const txRef = useRef(tx)
   const tRef = useRef(t);
   useEffect(() => {
     dispatchRef.current = dispatch;
@@ -82,7 +93,19 @@ export default function ExpertCert() {
     const prevAdaptor = window.anyidAdaptor;
     window.anyidAdaptor = {
       success: async (data: any) => {
-        const ci = data?.res?.ci;
+        console.log('[AnyID] log:', data);
+
+        let ci: string | null = null;
+
+        try{
+          ci = await dispatch(getAnyIdCiFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.txId })).unwrap();
+          ciRef.current = ci ?? null;
+          console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdCiFromSsob ci=', ciRef.current);
+        }catch(error){
+          // API 호출 실패 시 오류 처리
+          console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdCiFromSsob error=', error);
+        }finally{}
+
         if (!ci) {
           setModalMessage(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
           setModalOpen(true);
