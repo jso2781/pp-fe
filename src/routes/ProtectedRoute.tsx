@@ -8,7 +8,6 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-  console.log("ProtectedRoute i18n.language="+i18n.language);
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
