@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets';
 import type { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes';
 import { useDialog } from '@/contexts/DialogContext';
+import { getAnyIdCiFromSsob } from "@/features/auth/AnyIdThunks";
 
 const showAnyIdArea = shouldLoadAnyIdSdk();
 
@@ -25,8 +26,10 @@ export default function CleanCenterCert() {
   const { t } = useTranslation();
   const { showAlert } = useDialog()
   const { lang } = useParams<{ lang: string }>();
-  const redirectTo =
-    (location.state as { redirectTo?: string } | null)?.redirectTo ?? `/pp/${lang ?? 'ko'}/about/ethics/CleanForm`
+
+  // 현재 화면으로 넘어올 때, 직전 화면인 클린신고센터 화면에서 지정(redirectTo)한 다음 화면(CleanForm)의 라우터 주소
+  const redirectTo = (location.state as { redirectTo?: string } | null)?.redirectTo ?? `/pp/${lang ?? 'ko'}/about/ethics/CleanForm`
+
 
   const [anyIdReady, setAnyIdReady] = useState(false);
   const hasLoadedAnyIdRef = useRef(false);
@@ -75,26 +78,22 @@ export default function CleanCenterCert() {
     const prevAdaptor = window.anyidAdaptor;
     window.anyidAdaptor = {
       success: async (data: any) => {
-        const ci = data?.res?.ci;
-        if (!ci) {
-          showAlert(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
-          return;
-        }
+        console.log('[AnyID] success log:', data);
         try{
-          const info = await dispatchRef.current(getMbrInfo({ linkInfoIdntfId: ci } as MbrInfoPVO)).unwrap();
-          console.log("CleanCenterCert.tsx window.anyidAdaptor success getMbrInfo=", info);
+          const ci = await dispatchRef.current(getAnyIdCiFromSsob({ ssob: data?.ssob, tag: data?.txId })).unwrap();
+          console.log("CleanCenterCert.tsx window.anyidAdaptor success getAnyIdCiFromSsob ci=", ci);
 
-          if(!info){
-            showAlert(tRef.current('mbrInfoSearchFailed'));
+          if(!ci){
+            showAlert(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
             return;
           }
           else{
             navigateRef.current(redirectTo, {
-              state: { cleanCenterCert: { id: info?.mbrId, name: info?.encptMbrFlnm } },
+              state: { linkInfoIdntfId: ci },
             });
           }
         }catch{
-          showAlert(tRef.current('mbrInfoSearchFailed'));
+          showAlert(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
           return;
         }
       },
@@ -172,7 +171,6 @@ export default function CleanCenterCert() {
                       <ul className="caution-list">
                         <li>{t('cleanCenterCertCaution1')}</li>
                         <li>{t('cleanCenterCertCaution2')}</li>
-                        <li>{t('cleanCenterCertCaution3')}</li>
                       </ul>
                     </Box>
                   </Box>

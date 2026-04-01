@@ -10,11 +10,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getMbrInfo } from '@/features/mbr/MbrInfoThunks';
 import { useAppDispatch } from '@/store/hooks';
-import { Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
-import { Close as CloseIcon } from '@mui/icons-material';
+import { Box, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from "react";
 import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets';
 import type { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes';
+import { useDialog } from '@/contexts/DialogContext';
+import { getAnyIdCiFromSsob } from "@/features/auth/AnyIdThunks";
 
 const showAnyIdArea = shouldLoadAnyIdSdk();
 
@@ -22,13 +23,12 @@ export default function FindPw() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const { showAlert } = useDialog()
   const { lang } = useParams<{ lang: string }>();
 
   const [anyIdReady, setAnyIdReady] = useState(false);
   const hasLoadedAnyIdRef = useRef(false);
   const loadModuleCalledRef = useRef(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
 
   /** LoginMethod 등에서 남은 window.anyidAdaptor가 Any-ID 성공 시 /auth/anyid/login을 호출하지 않도록 이 화면 전용으로 덮어씀 */
   const dispatchRef = useRef(dispatch);
@@ -63,15 +63,6 @@ export default function FindPw() {
     return () => { cancelWait?.(); };
   }, [showAnyIdArea, t]);
 
-  const openModal = (message: string) => {
-    setModalMessage(message);
-    setModalOpen(true);
-  };
-  const closeModal = () => {
-    setModalOpen(false);
-    setModalMessage('');
-  };
-
   // #anyidc 마운트 후 LOAD_MODULE 1회 호출 — showAnyIdArea 일 때만
   useEffect(() => {
     if (!showAnyIdArea) return;
@@ -82,18 +73,19 @@ export default function FindPw() {
     const prevAdaptor = window.anyidAdaptor;
     window.anyidAdaptor = {
       success: async (data: any) => {
-        const ci = data?.res?.ci;
+        const ci = await dispatchRef.current(getAnyIdCiFromSsob({ ssob: data?.ssob, tag: data?.txId })).unwrap();
+        console.log("FindPw.tsx window.anyidAdaptor success getAnyIdCiFromSsob ci=", ci);
+
         if (!ci) {
-          setModalMessage(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
-          setModalOpen(true);
+          showAlert(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
           return;
         }
-
-        try{
+        else{
           const info = await dispatchRef.current(getMbrInfo({ linkInfoIdntfId: ci } as MbrInfoPVO)).unwrap();
+          console.log("FindPw.tsx window.anyidAdaptor success getMbrInfo info=", info);
+
           if(!info){
-            setModalMessage(tRef.current('mbrInfoSearchFailed'));
-            setModalOpen(true);
+            showAlert(tRef.current('mbrInfoSearchFailed'));
             return;
           }
           else{
@@ -102,10 +94,6 @@ export default function FindPw() {
             });
             return;
           }
-        }catch{
-          setModalMessage(tRef.current('mbrInfoSearchFailed'));
-          setModalOpen(true);
-          return;
         }
       },
     };
@@ -129,8 +117,7 @@ export default function FindPw() {
       },
       fail: (err: any) => {
         console.error(tRef.current('certifySelfFailed'), err);
-        setModalMessage(tRef.current('certifySelfFailedReminder'));
-        setModalOpen(true);
+        showAlert(tRef.current('certifySelfFailedReminder'));
       },
       log: (data: any) => {
         console.log(tRef.current('anyIdLog'), data);
@@ -193,21 +180,6 @@ export default function FindPw() {
           </Box>
         </Box>
       </Box>
-
-      <Dialog open={modalOpen} onClose={closeModal} maxWidth="sm" fullWidth>
-        <DialogTitle component="div" className="modal-title">
-          <h2>{t('alert')}</h2>
-          <IconButton aria-label={t('close')} onClick={closeModal} className="btn-modal-close">
-            <CloseIcon aria-hidden="true" />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent className="modal-content">
-          <Typography variant="body1">{modalMessage}</Typography>
-        </DialogContent>
-        <DialogActions className="modal-footer">
-          <Button variant="contained" onClick={closeModal}>{t('confirm')}</Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }

@@ -21,14 +21,22 @@ import RHFRadioGroup from "@/components/rhf/RHFRadioGroup";
 import { useEffect, useState } from "react";
 import i18n from "@/i18n/i18n";
 import { getTrmsSttLatest } from "@/features/stt/TrmsSttThunks";
+import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from "react-i18next";
+import { getMbrInfo } from "@/features/mbr/MbrInfoThunks";
 
 export default function CleanForm () {
   const [agreeEs, setAgreeEs] = useState<string | null>(null);
   const [agreeCh, setAgreeCh] = useState<string | null>(null);
+  const [encptMbrFlnm, setEncptMbrFlnm] = useState<string>('');
+  const [encptMbrTelno, setEncptMbrTelno] = useState<string>('');
+  const [encptMbrEmlNm, setEncptMbrEmlNm] = useState<string>('');
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showAlert } = useDialog();
+  const { t } = useTranslation();
+  const { user } = useAuth();
 
   const currentUrl = location.pathname;
 
@@ -38,10 +46,20 @@ export default function CleanForm () {
     Promise.all([
       dispatch(getTrmsSttLatest({ trmsSttCd: 'CLCT_AGRE_ES_2' })).unwrap(),
       dispatch(getTrmsSttLatest({ trmsSttCd: 'CLCT_AGRE_CH_2' })).unwrap(),
-    ]).then(([es, ch]) => {
-      setAgreeEs(es.trmsSttCn || null);
-      setAgreeCh(ch.trmsSttCn || null);
-    });
+      dispatch(getMbrInfo({ linkInfoIdntfId: getLinkInfoIdntfId() })).unwrap()
+    ])
+      .then(([es, ch, mbrInfo]) => {
+        // 일부 환경에서 약관 API가 null을 반환하는 케이스가 있어 방어적으로 처리
+        setAgreeEs(es?.trmsSttCn || null);
+        setAgreeCh(ch?.trmsSttCn || null);
+        setEncptMbrFlnm(mbrInfo?.encptMbrFlnm || '');
+        setEncptMbrTelno(mbrInfo?.encptMbrTelno || '');
+        setEncptMbrEmlNm(mbrInfo?.encptMbrEmlNm || '');
+      })
+      .catch((e) => {
+        console.error('[CleanForm] failed to bootstrap terms/memberInfo', e)
+        showAlert('화면 초기화 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+      });
   }, []);
 
   const schema = z.object({
@@ -75,8 +93,8 @@ export default function CleanForm () {
   const defaultValues: FormValues = {
     agreeRequired: undefined,
     agreeOptional: undefined,
-    encptMbrFlnm: '고정',
-    encptMbrTelno: '고정',
+    encptMbrFlnm: '',
+    encptMbrTelno: '',
     encptMbrEmlNm: '',
     dclrTtlNm: '',
     dshstyActrFlnm: '',
@@ -94,10 +112,24 @@ export default function CleanForm () {
     defaultValues,
   });
 
+  // 서버에서 내려온 회원정보(state)가 바뀌면 폼 입력값도 자동 반영
+  useEffect(() => {
+    form.setValue('encptMbrFlnm', encptMbrFlnm ?? '', { shouldDirty: false, shouldTouch: false, shouldValidate: false })
+    form.setValue('encptMbrTelno', encptMbrTelno ?? '', { shouldDirty: false, shouldTouch: false, shouldValidate: false })
+    form.setValue('encptMbrEmlNm', encptMbrEmlNm ?? '', { shouldDirty: false, shouldTouch: false, shouldValidate: false })
+  }, [encptMbrFlnm, encptMbrTelno, encptMbrEmlNm, form])
+
 
   const getLinkInfoIdntfId = (): string => {
-    // TODO: 인증/세션 등에서 연계정보식별아이디 반환 (예: useAuth().linkInfoIdntfId)
-    return 'temp';
+    // 클린신고센터 본인인증(/ko/auth/CleanCenterCert)으로부터 전달받은 CI(linkInfoIdntfId)
+    const fromState = (location.state as { linkInfoIdntfId?: string } | null)?.linkInfoIdntfId;
+
+    console.log("CleanForm.tsx getLinkInfoIdntfId fromState=", fromState);
+
+    // Any-ID 로그인(lgnSeCd=2)인 경우 auth redux state의 CI(userInfo.linkInfoIdntfId) 반환
+    const fromAuth = user?.userInfo?.linkInfoIdntfId;
+
+    return (fromState || fromAuth || '').trim()
   };
 
   const onSubmit = async (values: FormValues) => {
@@ -105,9 +137,16 @@ export default function CleanForm () {
       form.setError('agreeOptional', { type: 'validate', message: '이메일 수집·동의에 동의가 필요합니다.' }, { shouldFocus: true });
       return;
     }
+    const linkInfoIdntfId = getLinkInfoIdntfId()
+    if (!linkInfoIdntfId) {
+      showAlert('본인확인 정보가 없습니다. 다시 로그인 후 이용해주세요.', '알림', () => {
+        navigate(`/pp/${i18n.language}/auth/LoginMethod`);
+      })
+      return;
+    }
     const payload: DshstyDclrPVO = {
       ...values,
-      linkInfoIdntfId: getLinkInfoIdntfId(),
+      linkInfoIdntfId
     };
     try {
       await dispatch(insertDshstyDclr(payload)).unwrap();

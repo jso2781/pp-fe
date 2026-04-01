@@ -55,6 +55,13 @@ export default function CleanCenter() {
       });
       return;
     }
+    // Any-ID 로그인(lgnSeCd=2)인 경우 CleanForm에서 사용할 linkInfoIdntfId를 전달
+    if (String(user?.userInfo?.lgnSeCd ?? '') === '2') {
+      navigate(`/pp/${lang ?? 'ko'}/about/ethics/CleanForm`, {
+        state: { linkInfoIdntfId: user?.userInfo?.linkInfoIdntfId ?? '' },
+      });
+      return;
+    }
     navigate(`/pp/${lang ?? 'ko'}/about/ethics/CleanForm`);
   }
 

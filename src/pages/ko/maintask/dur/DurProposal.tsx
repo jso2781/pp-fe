@@ -42,9 +42,23 @@ export default function DurProposal() {
   const { showAlert } = useDialog();
   const menuInfo = getMenuInfo(location.pathname);
   const menuSn = menuInfo?.menuSn ?? 0;
+
+  /** 만족도조사여부 */
+  const dgstfnExmnYn = menuInfo?.dgstfnExmnYn ?? null;
+
+  /** 부서정보노출여부 */
+  const deptInfoExpsrYn = menuInfo?.deptInfoExpsrYn ?? null;
+
+  /** 공공(KOGL) 저작물유형코드 */
   const menuKoglCprgtTypeCd = menuInfo?.menuKoglCprgtTypeCd ?? '4';
+
+  /** 업무 담당 부서 명 */
   const contactDepNm = menuInfo?.menuTkcgDeptNm ?? null;
+
+  /** 업무 담당 담당자 명 */
   const contactPersonNm = menuInfo?.menuPicFlnm ?? null;
+
+  /** 업무 담당 담당자 연락처 */
   const contactPhoneNum = menuInfo?.encptPicTelno ?? null;
 
   // Lnb 랜더링용
@@ -151,6 +165,7 @@ export default function DurProposal() {
     formData.append('refMttrCn', values.etc ?? '');        // 참고사항내용
     formData.append('insdRefMttrCn', '');                  // 내부참고사항내용
     formData.append('atchFileSn', '');                     // 첨부파일
+    // formData.append('linkInfoIdntfId', values.linkInfoIdntfId); // 연계정보식별아이디
     values.files?.forEach((file) => {
       formData.append('attachFiles', file)
     })
@@ -457,18 +472,24 @@ export default function DurProposal() {
                 </ZodFormProvider>
 
                 {/* 공공(KOGL) 저작물 */}
-                <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
+                {menuKoglCprgtTypeCd && menuKoglCprgtTypeCd?.trim() !== '' && (
+                  <KoglLicense menuKoglCprgtTypeCd={menuKoglCprgtTypeCd} />
+                )}
+
                 {/* 만족도 조사 */}
-                <DgstfnExnm menuSn={menuSn} />
+                {dgstfnExmnYn && (
+                  <DgstfnExnm menuSn={menuSn} />
+                )}
+
                 {/* 업무 담당 부서 및 연락처 */}
-                {contactDepNm && contactPersonNm && contactPhoneNum && (
+                {deptInfoExpsrYn && (
                   <ContactArea
                     contactDepNm={contactDepNm}
                     contactPersonNm={contactPersonNm}
                     contactPhoneNum={contactPhoneNum}
                   />
-                )
-                }
+                )}
+
                 {/* --- 본문 끝 --- */}
               </Box>
             </Box>

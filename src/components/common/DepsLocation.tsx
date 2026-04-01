@@ -196,6 +196,13 @@ export default function DepsLocation() {
       // 내 업무 > 본인 인증
       pattern: /^\/pp\/[A-Za-z]{2}\/auth\/ExpertCert(\/\d+)?$/,
       labels: ["expertMyWork", "certifySelf"]
+    },
+    {
+      // 클린신고센터 > 본인인증
+      // 기존: /pp/{lang}/about/ethics/CleanCenterCert
+      // 추가: /pp/{lang}/auth/CleanCenterCert (hash 라우팅의 "#/" 여부와 무관하게 pathname 기준으로 매칭)
+      pattern: /^\/pp\/[A-Za-z]{2}\/(about\/ethics|auth)\/CleanCenterCert(\/\d+)?(\/)?$/,
+      labels: ["cleanCenter", "cleanCenterCert"]
     }
   ], []);
 

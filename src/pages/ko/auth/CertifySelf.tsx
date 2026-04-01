@@ -7,7 +7,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { useMemo, useState, useRef, useEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { Box, Button, Stepper, Step, StepLabel, Typography, Card, CardContent, Stack, Dialog, DialogTitle, DialogContent, DialogActions, IconButton} from '@mui/material';
+import { Box, Button, Stepper, Step, StepLabel, Typography, Card, CardContent, Stack } from '@mui/material';
 import {
   HelpOutline as HelpIcon,
   Close as CloseIcon,
@@ -18,6 +18,7 @@ import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
 import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
 import { getAnyIdCiFromSsob } from '@/features/auth/AnyIdThunks';
 import { useAppDispatch } from '@/store/hooks';
+import { useDialog } from '@/contexts/DialogContext';
 
 const showAnyIdArea = shouldLoadAnyIdSdk()
 
@@ -27,6 +28,7 @@ export default function CertifySelf() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const { showAlert } = useDialog()
 
 
   // 본인인증 완료 상태
@@ -35,10 +37,6 @@ export default function CertifySelf() {
   // Any-ID 준비 상태
   const [anyIdReady, setAnyIdReady] = useState(false);
   const hasLoadedAnyIdRef = useRef(false);
-
-  // 모달 상태 관리
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
 
   // 약관 동의 화면에서 전달받은 steps 사용
   // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)
@@ -87,14 +85,16 @@ export default function CertifySelf() {
   const redirectUri = useMemo(() => params.get('redirect_uri') || window.location.href, [params]);
 
   /** LoginMethod 등에서 남은 window.anyidAdaptor가 Any-ID 성공 시 /auth/anyid/login을 호출하지 않도록 본 화면 전용으로 덮어씀 */
-  const txRef = useRef(tx)
-  const acrValuesRef = useRef(acrValues)
-  const redirectUriRef = useRef(redirectUri)
-  const tRef = useRef(t)
+  const txRef = useRef(tx);
+  const acrValuesRef = useRef(acrValues);
+  const redirectUriRef = useRef(redirectUri);
+  const dispatchRef = useRef(dispatch);
+  const tRef = useRef(t);
   useEffect(() => {
     txRef.current = tx
     acrValuesRef.current = acrValues
     redirectUriRef.current = redirectUri
+    dispatchRef.current = dispatch
     tRef.current = t
   })
 
@@ -152,17 +152,9 @@ export default function CertifySelf() {
     }
   }, [showAnyIdArea, t])
 
-  // 모달 열기 함수
   const openModal = (message: string) => {
-    setModalMessage(message);
-    setModalOpen(true);
-  };
-
-  // 모달 닫기 함수
-  const closeModal = () => {
-    setModalOpen(false);
-    setModalMessage('');
-  };
+    showAlert(message)
+  }
 
   // #anyidc가 DOM에 마운트된 뒤 LOAD_MODULE 1회 호출 (bypass: 1, toggle: false, theme: '4.1.0') — showAnyIdArea 일 때만
   const loadModuleCalledRef = useRef(false);
@@ -181,7 +173,7 @@ export default function CertifySelf() {
         setIsCertified(true);
 
         try{
-          const ci = await dispatch(getAnyIdCiFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.txId })).unwrap();
+          const ci = await dispatchRef.current(getAnyIdCiFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.txId })).unwrap();
           ciRef.current = ci ?? null;
           console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdCiFromSsob ci=', ciRef.current);
         }catch(error){
@@ -210,8 +202,7 @@ export default function CertifySelf() {
       },
       fail: (err: any) => {
         console.error(tRef.current('certifySelfFailed'), err)
-        setModalMessage(tRef.current('certifySelfFailedReminder'))
-        setModalOpen(true)
+        showAlert(tRef.current('certifySelfFailedReminder'))
       },
       log: (data: any) => {
         console.log(tRef.current('anyIdLog'), data)
@@ -401,42 +392,6 @@ export default function CertifySelf() {
         </Box>
       </Box>
 
-      {/* 알림 모달 */}
-      <Dialog
-        open={modalOpen}
-        onClose={closeModal}
-        maxWidth="sm"
-        fullWidth
-        slotProps={{
-          paper: {
-            sx: {
-              width: undefined,
-            },
-            className: 'modal-small',
-          },
-        }}
-      >
-        <DialogTitle component="div" className="modal-title">
-          <h2>{t('alert')}</h2>
-          <IconButton
-            aria-label={t('close')}
-            onClick={closeModal}
-            className="btn-modal-close"
-          >
-            <CloseIcon aria-hidden="true" />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent className="modal-content">
-          <Typography variant="body1">
-            {modalMessage}
-          </Typography>
-        </DialogContent>
-        <DialogActions className="modal-footer">
-          <Button variant="contained" onClick={closeModal}>
-            {t('confirm')}
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   )
 }
