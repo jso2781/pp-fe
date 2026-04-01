@@ -48,6 +48,7 @@ export default function CleanCenter() {
       });
       return;
     }
+    // 자체 로그인만 한 경우, Any-Id 본인인증 화면으로 이동
     if (String(user?.userInfo?.lgnSeCd ?? '') === '1') {
       navigate(`/pp/${lang ?? 'ko'}/auth/CleanCenterCert`, {
         state: { redirectTo: `/pp/${lang ?? 'ko'}/about/ethics/CleanForm` },

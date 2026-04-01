@@ -355,6 +355,11 @@
     "notFound": "not found",
     "news": "Institution News",
     "customerCenter": "Customer Service",
+    "cleanCenter": "Adverse Drug Reaction Reporting and Damage Compensation Consultation",
+    "cleanCenterDescription": "Adverse Drug Reaction Reporting and Damage Compensation Consultation Screen",
+    "cleanCenterCertSelectMethod": "Please select a method to certify your identity.",
+    "cleanCenterCertCaution1": "The certification information is used when writing the Clean Report Center report.",
+    "cleanCenterCertCaution2": "The certification information is used when processing the Clean Report Center report.",
 
     "dgstfnExnmTitle": "Are you satisfied with the content of the current page?",
     "verySatisfied": "Very Satisfied",

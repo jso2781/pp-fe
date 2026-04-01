@@ -10,11 +10,11 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getMbrInfo } from '@/features/mbr/MbrInfoThunks';
 import { useAppDispatch } from '@/store/hooks';
-import { Box, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
-import { Close as CloseIcon } from '@mui/icons-material';
+import { Box, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from "react";
 import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets';
 import type { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes';
+import { useDialog } from '@/contexts/DialogContext';
 
 const showAnyIdArea = shouldLoadAnyIdSdk();
 
@@ -23,6 +23,7 @@ export default function CleanCenterCert() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const { showAlert } = useDialog()
   const { lang } = useParams<{ lang: string }>();
   const redirectTo =
     (location.state as { redirectTo?: string } | null)?.redirectTo ?? `/pp/${lang ?? 'ko'}/about/ethics/CleanForm`
@@ -30,8 +31,6 @@ export default function CleanCenterCert() {
   const [anyIdReady, setAnyIdReady] = useState(false);
   const hasLoadedAnyIdRef = useRef(false);
   const loadModuleCalledRef = useRef(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
 
   /** Any-ID SDK가 LOAD_MODULE에 넘긴 success 외에 window.anyidAdaptor.success만 호출하는 경우 대비 (LoginMethod 잔여 핸들러로 /auth/anyid/login 호출 방지) */
   const dispatchRef = useRef(dispatch);
@@ -66,15 +65,6 @@ export default function CleanCenterCert() {
     return () => { cancelWait?.(); };
   }, [showAnyIdArea, t]);
 
-  const openModal = (message: string) => {
-    setModalMessage(message);
-    setModalOpen(true);
-  };
-  const closeModal = () => {
-    setModalOpen(false);
-    setModalMessage('');
-  };
-
   // #anyidc 마운트 후 LOAD_MODULE 1회 호출 — showAnyIdArea 일 때만
   useEffect(() => {
     if (!showAnyIdArea) return;
@@ -87,8 +77,7 @@ export default function CleanCenterCert() {
       success: async (data: any) => {
         const ci = data?.res?.ci;
         if (!ci) {
-          setModalMessage(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
-          setModalOpen(true);
+          showAlert(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
           return;
         }
         try{
@@ -96,8 +85,7 @@ export default function CleanCenterCert() {
           console.log("CleanCenterCert.tsx window.anyidAdaptor success getMbrInfo=", info);
 
           if(!info){
-            setModalMessage(tRef.current('mbrInfoSearchFailed'));
-            setModalOpen(true);
+            showAlert(tRef.current('mbrInfoSearchFailed'));
             return;
           }
           else{
@@ -106,15 +94,14 @@ export default function CleanCenterCert() {
             });
           }
         }catch{
-          setModalMessage(tRef.current('mbrInfoSearchFailed'));
-          setModalOpen(true);
+          showAlert(tRef.current('mbrInfoSearchFailed'));
           return;
         }
       },
     };
 
     const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`;
-    const txId = `findId-${Date.now()}`;
+    const txId = `cleanCenterCert-${Date.now()}`;
     const lvl = 3;
 
     window.AnyidC.LOAD_MODULE({
@@ -132,8 +119,7 @@ export default function CleanCenterCert() {
       },
       fail: (err: any) => {
         console.error(tRef.current('certifySelfFailed'), err);
-        setModalMessage(tRef.current('certifySelfFailedReminder'));
-        setModalOpen(true);
+        showAlert(tRef.current('certifySelfFailedReminder'));
       },
       log: (data: any) => {
         console.log(tRef.current('anyIdLog'), data);
@@ -196,21 +182,6 @@ export default function CleanCenterCert() {
           </Box>
         </Box>
       </Box>
-
-      <Dialog open={modalOpen} onClose={closeModal} maxWidth="sm" fullWidth>
-        <DialogTitle component="div" className="modal-title">
-          <h2>{t('alert')}</h2>
-          <IconButton aria-label={t('close')} onClick={closeModal} className="btn-modal-close">
-            <CloseIcon aria-hidden="true" />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent className="modal-content">
-          <Typography variant="body1">{modalMessage}</Typography>
-        </DialogContent>
-        <DialogActions className="modal-footer">
-          <Button variant="contained" onClick={closeModal}>{t('confirm')}</Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }
