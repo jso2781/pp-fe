@@ -14,6 +14,7 @@ export interface AuthState {
   acsTokenCn: string | null;
   updtTokenCn: string | null;
   pswdErrNmtm: number | null;
+  cntnLogSn: number | null;
   loading: boolean;
   error: string | null;
 }
@@ -28,6 +29,7 @@ const initialState: AuthState = {
   acsTokenCn: null,
   updtTokenCn: null,
   pswdErrNmtm: null,
+  cntnLogSn: null,
   loading: false,
   error: null,
 
@@ -43,7 +45,6 @@ const AuthSlice = createSlice({
       state.acsTokenCn = action.payload?.acsTokenCn ?? null;
       state.updtTokenCn = action.payload?.updtTokenCn ?? null;
       state.pswdErrNmtm = action.payload?.pswdErrNmtm ?? null;
-
       state.userInfo = action.payload;
 
       // localStorage에 통일된 키로 저장 (AuthContext와 동기화)
@@ -54,6 +55,7 @@ const AuthSlice = createSlice({
           acsTokenCn: action.payload?.acsTokenCn,
           updtTokenCn: action.payload?.updtTokenCn,
           pswdErrNmtm: action.payload?.pswdErrNmtm,
+          cntnLogSn: state.cntnLogSn ?? null,
           userInfo: action.payload
         };
 
@@ -85,6 +87,7 @@ const AuthSlice = createSlice({
             acsTokenCn: state.acsTokenCn,
             updtTokenCn: state.updtTokenCn,
             pswdErrNmtm: state.pswdErrNmtm,
+            cntnLogSn: state.cntnLogSn,
           };
           sessionStorage.setItem("auth", JSON.stringify(authData));
         }
@@ -99,6 +102,8 @@ const AuthSlice = createSlice({
       state.acsTokenCn = null;
       state.updtTokenCn = null;
       state.pswdErrNmtm = null;
+      state.cntnLogSn = null;
+
       // sessionStorage에서 통일된 키 제거
       sessionStorage.removeItem("auth");
       sessionStorage.removeItem("updtTokenCn"); // 하위 호환성을 위해 유지
@@ -120,7 +125,9 @@ const AuthSlice = createSlice({
         state.acsTokenCn = action.payload.acsTokenCn;
         state.updtTokenCn = action.payload.updtTokenCn;
         state.pswdErrNmtm = action.payload.pswdErrNmtm;
-        
+        state.cntnLogSn = action.payload.cntnLogSn;
+        console.log("login.fulfilled state.cntnLogSn=", state.cntnLogSn);
+
         // sessionStorage에 통일된 키로 저장 (AuthContext와 동기화)
         if (action.payload.userInfo && action.payload.acsTokenCn) {
           const authData = {
@@ -130,6 +137,7 @@ const AuthSlice = createSlice({
             acsTokenCn: action.payload.acsTokenCn,
             updtTokenCn: action.payload.updtTokenCn,
             pswdErrNmtm: action.payload.pswdErrNmtm,
+            cntnLogSn: action.payload.cntnLogSn
           };
           sessionStorage.setItem("auth", JSON.stringify(authData));
           // 하위 호환성을 위해 updtTokenCn도 별도로 저장
@@ -151,6 +159,7 @@ const AuthSlice = createSlice({
         state.acsTokenCn = null;
         state.updtTokenCn = null;
         state.pswdErrNmtm = null;
+        state.cntnLogSn = null;
       })
       // Any-ID 로그인 성공 시 auth 상태 동기화 (AnyIdLoginRVO는 LoginRVO와 동일한 토큰/회원정보 필드 구조)
       .addCase(postAnyIdLogin.fulfilled, (state, action) => {
@@ -166,6 +175,7 @@ const AuthSlice = createSlice({
         state.acsTokenCn = payload?.acsTokenCn ?? null;
         state.updtTokenCn = payload?.updtTokenCn ?? null;
         state.pswdErrNmtm = payload?.pswdErrNmtm ?? null;
+        state.cntnLogSn = payload?.cntnLogSn ?? null;
         if (payload?.acsTokenCn && userInfo) {
           const authData = {
             userInfo,
@@ -174,6 +184,7 @@ const AuthSlice = createSlice({
             acsTokenCn: payload.acsTokenCn,
             updtTokenCn: payload.updtTokenCn,
             pswdErrNmtm: payload.pswdErrNmtm,
+            cntnLogSn: payload.cntnLogSn,
           };
           sessionStorage.setItem('auth', JSON.stringify(authData));
           if (payload.updtTokenCn) {

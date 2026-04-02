@@ -65,6 +65,11 @@ export interface LoginRVO {
    * 비밀번호오류횟수
    */
   pswdErrNmtm: number
+
+  /**
+   * 세션로그 일련번호
+   */
+  cntnLogSn: number
 }
 
 export interface RefreshPVO {

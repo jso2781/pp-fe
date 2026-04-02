@@ -75,6 +75,11 @@ export interface AnyIdLoginRVO {
    * 비밀번호오류횟수((로그인 성공, status=LoggedIn)일 경우만 비밀번호오류횟수=0이 전달됨.)
    */
   pswdErrNmtm?: number
+
+  /**
+   * 세션로그 일련번호((로그인 성공, status=LoggedIn)일 경우만 세션로그 일련번호가 전달됨.)
+   */
+  cntnLogSn?: number
 }
 
 /** Any-ID 사용자 정보 조회 결과 */
