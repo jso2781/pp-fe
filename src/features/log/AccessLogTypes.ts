@@ -17,6 +17,9 @@ export interface AccessLogPVO {
   /** 접속자명 */
   acsrNm?: string;
 
+  /** 요청자ID */
+  rqstrId?: string;
+
   /** 기타메모내용 */
   etcMemoCn?: string;
 

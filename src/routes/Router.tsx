@@ -111,6 +111,7 @@ import ExpertLayout from './ExpertLayout';
 import EngLayout from './EngLayout';
 import FallbackRoute from './FallbackRoute';
 import { MenuListPVO, MenuRVO } from '@/features/auth/MenuTypes';
+import { setLastViewedMenuSn } from '@/features/ui/uiSlice';
 
 type LangElementProps = {
   byLang: Record<string, JSX.Element>;
@@ -189,13 +190,16 @@ function findMenuRowForPath(rows: MenuRVO[], pathname: string): MenuRVO | undefi
 function RouteWorkAccessLogger() {
   const location = useLocation()
   const dispatch = useAppDispatch()
-  const prevRef = useRef<string>('')
-  const workAccessLogCnt = useRef<number>(0)
+  /** 동일 URL( pathname + search )에 대해 insertWorkAccessLog를 이미 1회 호출했으면 재호출하지 않음 */
+  const lastInsertedUrlRef = useRef<string>('')
 
   const auth = useAppSelector((s) => s.auth);
 
   // 사용자기본메뉴, 관리자기본메뉴도 포함(menuTypeCd=Z)
   const oriMenuList = useAppSelector((s) => s.menu.oriList);
+
+  // 직전에 진입했던 화면의 메뉴 일련번호. 현재 진입한 화면의 메뉴 일련번호가 없으면 이 값을 재사용한다.
+  const lastViewedMenuSn = useAppSelector((s) => s.ui.lastViewedMenuSn);
 
   const menuUrl = location.pathname;
 
@@ -204,26 +208,33 @@ function RouteWorkAccessLogger() {
     return findMenuRowForPath(rows, menuUrl)
   }, [oriMenuList, menuUrl])
 
-  const menuSn = currentMenu?.menuSn ?? '';
   const prvcInclYn = currentMenu?.prvcInclYn ?? '';
 
   useEffect(() => {
-    // 이전 URL과 현재 URL이 같으면 중복 방지
-    const url = `${menuUrl}${location.search}`;
+    const url = `${location.pathname}${location.search}`
+    // 현재 URL에 매칭된 메뉴 SN 우선, 없으면 직전 화면에서 저장한 SN으로 menuId 확보
+    const fromMenu = currentMenu?.menuSn
+    const fromLast = lastViewedMenuSn
+    const resolvedMenuSn = fromMenu != null && !Number.isNaN(Number(fromMenu)) ? Number(fromMenu) : (fromLast != null && !Number.isNaN(Number(fromLast)) ? Number(fromLast) : null);
 
-    // console.log('RouteWorkAccessLogger menuSn='+menuSn+', menuUrl='+menuUrl+', location.search='+location.search+', url='+url+', prevRef.current='+prevRef.current);
+    if(resolvedMenuSn == null || Number.isNaN(resolvedMenuSn)){
+      return;
+    }
 
-    if(prevRef.current === url)return;
+    // 동일 URL에 대해 insertWorkAccessLog는 1회만 (oriMenuList 지연 로딩으로 effect가 다시 돌 때는 아직 미기록이면 기록)
+    if(lastInsertedUrlRef.current === url){
+      return;
+    }
 
-    prevRef.current = url;
-      
-    // 업무별 접속 이력 적재
+    lastInsertedUrlRef.current = url;
+
     dispatch(insertWorkAccessLog({
-      menuId: menuSn.toString(),
+      menuId: String(resolvedMenuSn),
       urlAddr: location.pathname,
       taskSeCdNo: 'PP',
       taskSeCd: 'PP',
       acsrNm: auth?.userInfo?.encptMbrFlnm ?? '',
+      rqstrId: auth?.userInfo?.mbrId ?? '',
       etcMemoCn: '',
       prvcInclYn: prvcInclYn,
       flfmtTaskCd: '1',
@@ -232,10 +243,28 @@ function RouteWorkAccessLogger() {
       lgnSeCd: auth?.lgnSeCd ?? ''
     }));
 
-    workAccessLogCnt.current++;
-  }, [location.pathname, location.search, dispatch])
+    /*
+     * 현재 진입한 메뉴 일련번호와 직전에 진입했던 메뉴 일련번호가 서로 다르면 직전에 진입했던 메뉴 일련번호를 기록해서
+     * 다음 번 매뉴화면 진입 시 메뉴 일련번호가 없는 화면에 진입하더라도,
+     * 직전에 진입했던 메뉴 일련번호를 재사용하여 업무별 접속 이력을 적재할 수 있도록 한다.
+     */
+    if(currentMenu?.menuSn != null && Number(currentMenu.menuSn) !== Number(lastViewedMenuSn)){
+      dispatch(setLastViewedMenuSn(currentMenu.menuSn));
+    }
+  }, [
+    location.pathname,
+    location.search,
+    dispatch,
+    lastViewedMenuSn,
+    currentMenu,
+    oriMenuList,
+    auth?.userInfo?.encptMbrFlnm,
+    auth?.userInfo?.mbrNo,
+    auth?.lgnSeCd,
+    prvcInclYn,
+  ]);
 
-  return null
+  return null;
 }
 
 /** 이 경로로 진입 시 SSO 로그인 페이지로 리다이렉트 */

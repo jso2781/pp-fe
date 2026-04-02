@@ -16,7 +16,7 @@ import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
 
 import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
-import { getAnyIdCiFromSsob } from '@/features/auth/AnyIdThunks';
+import { getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks';
 import { useAppDispatch } from '@/store/hooks';
 import { useDialog } from '@/contexts/DialogContext';
 
@@ -173,12 +173,12 @@ export default function CertifySelf() {
         setIsCertified(true);
 
         try{
-          const ci = await dispatchRef.current(getAnyIdCiFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.txId })).unwrap();
-          ciRef.current = ci ?? null;
-          console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdCiFromSsob ci=', ciRef.current);
+          const userInfoFromSsob = await dispatchRef.current(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.txId })).unwrap();
+          ciRef.current = userInfoFromSsob.ci ?? null;
+          console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdUserInfoFromSsob ci=', ciRef.current);
         }catch(error){
           // API 호출 실패 시 오류 처리
-          console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdCiFromSsob error=', error);
+          console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdUserInfoFromSsob error=', error);
         }finally{}
       },
     }

@@ -3,35 +3,29 @@
  * 화면명: 로그인 방식 선택
  * 화면경로: /ko/auth/LoginMethod
  *
- * - production + tx 없음: /oidc/auth (KMS tx)
- * - production + tx 있음: getAnyIdInit → LOAD_MODULE(SSO)
- * - development + `VITE_SHOW_ANYID_AREA=true` + tx 없음: 임베드 LOAD_MODULE(bypass 1, KMS/oidc 없음) — 성공 시 콜백의 ssob·tag(tx)로 /auth/anyid/login (Any-ID 가이드·영문 Login.tsx와 동일 패턴)
+ * 요구사항:
+ * - 항상 임베드 로그인(=bypass: 1)만 노출
+ * - bypass=0(oidc redirect, getAnyIdInit 기반 SSO 로딩 등) 흐름은 사용하지 않음
  */
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material'
 import { AccountCircle as AccountIcon } from '@mui/icons-material'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { getAnyIdInit, postAnyIdLogin } from '@/features/auth/AnyIdThunks'
+import { postAnyIdLogin } from '@/features/auth/AnyIdThunks'
 import { shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
 import { useAnyIdSdkReady } from '@/lib/anyid/useAnyIdSdkReady'
 import DepsLocation from '@/components/common/DepsLocation'
 import { useDialog } from '@/contexts/DialogContext'
 import { useTranslation } from 'react-i18next'
 
-type LoginPhase = 'local' | 'redirecting' | 'preparing' | 'ready' | 'error'
+type LoginPhase = 'local' | 'preparing' | 'ready' | 'error'
 
 /** production 또는 `VITE_SHOW_ANYID_AREA=true` 일 때 로컬에서도 Any-ID 로드·표시 */
 const showAnyIdArea = shouldLoadAnyIdSdk()
-const isProd = import.meta.env.MODE === 'production'
 
-const anyIdInitPromiseCache = new Map<string, Promise<unknown>>()
-
-function initialPhase(search: string): LoginPhase {
+function initialPhase(): LoginPhase {
   if (!showAnyIdArea) return 'local'
-  if (isProd) {
-    return new URLSearchParams(search).get('tx') ? 'preparing' : 'redirecting'
-  }
   return 'preparing'
 }
 
@@ -42,12 +36,10 @@ export default function LoginMethod() {
   const { showAlert } = useDialog()
   const { t } = useTranslation()
   const ssoInfo = useAppSelector((s) => s.anyId.ssoInfo)
-  const anyidInit = useAppSelector((s) => s.anyId.anyidInit)
 
-  const [phase, setPhase] = useState<LoginPhase>(() => initialPhase(location.search))
+  const [phase, setPhase] = useState<LoginPhase>(() => initialPhase())
   const params = useMemo(() => new URLSearchParams(location.search), [location.search])
   const tx = useMemo(() => params.get('tx') || null, [params])
-  const hasUrlTx = Boolean(tx)
 
   const acrValues = useMemo(() => {
     const v = params.get('acrValues')
@@ -61,10 +53,11 @@ export default function LoginMethod() {
     return `${window.location.origin}${r.startsWith('/') ? '' : '/'}${r}`
   }, [params])
 
-  const devEmbedLogin = showAnyIdArea && !isProd && !hasUrlTx
+  // 요구사항: 항상 임베드 로그인만
+  const devEmbedLogin = showAnyIdArea
   const devLoginTag = useMemo(() => `login-dev-${Date.now()}`, [])
 
-  const sdkEnabled = showAnyIdArea && (!isProd || hasUrlTx)
+  const sdkEnabled = showAnyIdArea
   const anyIdSdkReady = useAnyIdSdkReady(sdkEnabled, {
     showGovLoginTitleRow: !devEmbedLogin,
   })
@@ -74,53 +67,14 @@ export default function LoginMethod() {
       setPhase('local')
       return
     }
-    if (!isProd) return
-    if (hasUrlTx) return
-    setPhase('redirecting')
-    const currentPath = location.pathname || '/pp/ko/auth/LoginMethod'
-    window.location.href = `/oidc/auth?end_point=${encodeURIComponent(currentPath)}`
-  }, [showAnyIdArea, hasUrlTx, location.pathname])
-
-  useEffect(() => {
-    if (!showAnyIdArea || !hasUrlTx) return
-    let cancelled = false
-    ;(async () => {
-      try {
-        setPhase('preparing')
-        const cached = anyIdInitPromiseCache.get(tx!)
-        const p =
-          cached ??
-          (() => {
-            const np = dispatch(getAnyIdInit({ tx: tx! }))
-              .unwrap()
-              .catch((e) => {
-                console.error('[AnyID] getAnyIdInit error', e)
-                anyIdInitPromiseCache.delete(tx!)
-                return null
-              })
-            anyIdInitPromiseCache.set(tx!, np)
-            return np
-          })()
-        const r = await p
-        if (cancelled) return
-        if (!r) setPhase('error')
-      } catch (e) {
-        console.error('[AnyID] init error', e)
-        if (!cancelled) setPhase('error')
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [showAnyIdArea, hasUrlTx, tx, dispatch])
+  }, [showAnyIdArea])
 
   useEffect(() => {
     if (!showAnyIdArea) return
-    if (phase === 'local' || phase === 'error' || phase === 'redirecting') return
+    if (phase === 'local' || phase === 'error') return
     if (!anyIdSdkReady) return
-    if (hasUrlTx && anyidInit?.txId !== tx) return
     setPhase('ready')
-  }, [showAnyIdArea, phase, anyIdSdkReady, hasUrlTx, anyidInit?.txId, tx])
+  }, [showAnyIdArea, phase, anyIdSdkReady])
 
   const loadModuleCalledRef = useRef(false)
   /** Any-ID가 success를 여러 번 호출해도 /auth/anyid/login 은 1회만 */
@@ -152,11 +106,10 @@ export default function LoginMethod() {
     if (!showAnyIdArea) return
     if (phase !== 'ready') return
     if (!anyIdSdkReady || !window.AnyidC?.LOAD_MODULE) return
-    if (hasUrlTx && anyidInit?.txId !== tx) return
     if (loadModuleCalledRef.current) return
     loadModuleCalledRef.current = true
 
-    const loginTag: string = hasUrlTx && tx ? (anyidInit?.txId ?? tx) : devLoginTag
+    const loginTag: string = tx ?? devLoginTag
 
     const adaptor = {
       sso: ssoInfo ?? undefined,
@@ -207,69 +160,34 @@ export default function LoginMethod() {
     }
     const logCb = (data: any) => console.log('[AnyID] log:', data)
 
-    if (devEmbedLogin) {
-      window.AnyidC.LOAD_MODULE({
-        cfg: baseCfg,
-        contextRoot: location.pathname,
-        txId: devLoginTag,
-        tag: devLoginTag,
-        lvl: acrValues,
-        bypass: 1,
-        toggle: false,
-        show: false,
-        theme: '4.1.0',
-        redirect_uri: redirectUri,
-        success: successCb,
-        fail: failCb,
-        log: logCb,
-      })
-      return
-    }
-
-    window.AnyidC.LOAD_MODULE(
-      Object.assign(
-        {
-          contextRoot: location.pathname,
-          success: successCb,
-          fail: failCb,
-          log: logCb,
-          redirect_uri: redirectUri,
-          cfg: anyidInit?.cfg ?? '/config/config.anyidc.json',
-          txId: anyidInit?.txId ?? tx,
-          tag: anyidInit?.tag ?? tx,
-          lvl: anyidInit?.lvl ?? acrValues,
-          bypass: anyidInit?.bypass ?? 0,
-          toggle: anyidInit?.toggle ?? true,
-          theme: anyidInit?.theme ?? '4.1.0',
-        },
-        anyidInit || {},
-        { success: successCb, fail: failCb, log: logCb }
-      )
-    )
+    // ✅ 항상 bypass: 1 (devEmbedLogin)만 사용
+    window.AnyidC.LOAD_MODULE({
+      cfg: baseCfg,
+      contextRoot: location.pathname,
+      txId: loginTag,
+      tag: loginTag,
+      lvl: acrValues,
+      bypass: 1,
+      toggle: false,
+      show: false,
+      theme: '4.1.0',
+      redirect_uri: redirectUri,
+      success: successCb,
+      fail: failCb,
+      log: logCb,
+    })
   }, [
     showAnyIdArea,
     phase,
     anyIdSdkReady,
-    hasUrlTx,
     devEmbedLogin,
     devLoginTag,
     tx,
-    anyidInit,
     acrValues,
     redirectUri,
     location.pathname,
     ssoInfo,
   ])
-
-  if (phase === 'redirecting') {
-    return (
-      <Box className="page-layout" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
-        <Typography variant="body1" color="text.secondary">
-          인증 페이지로 이동 중…
-        </Typography>
-      </Box>
-    )
-  }
 
   return (
     <Box className="page-layout">
