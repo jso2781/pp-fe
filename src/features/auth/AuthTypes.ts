@@ -69,7 +69,7 @@ export interface LoginRVO {
   /**
    * 세션로그 일련번호
    */
-  cntnLogSn: number
+  sessLogSn: number
 }
 
 export interface RefreshPVO {

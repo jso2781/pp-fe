@@ -79,7 +79,7 @@ export interface AnyIdLoginRVO {
   /**
    * 세션로그 일련번호((로그인 성공, status=LoggedIn)일 경우만 세션로그 일련번호가 전달됨.)
    */
-  cntnLogSn?: number
+  sessLogSn?: number
 }
 
 /** Any-ID 사용자 정보 조회 결과 */
