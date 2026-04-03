@@ -1,7 +1,7 @@
 /**
  * CDM FAQ 목록
  */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Accordion,
   AccordionDetails,
@@ -20,7 +20,7 @@ import {
   Typography,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import type { FaqItem } from '@/features/cdm/faq/FaqCdmTypes';
@@ -41,12 +41,13 @@ const categories = Object.entries(FAQ_CATEGORY_MAP).map(([code, name]) => ({ cod
 /** 검색어 하이라이트 컴포넌트 */
 const SearchRow = ({ text, word }: { text: string; word: string }) => {
   if (!word) return <>{text}</>;
-  const parts = text.split(new RegExp(`(${word})`, 'gi'));
+  const escaped = word.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const parts = text.split(new RegExp(`(${escaped})`, 'gi'));
   return (
     <>
       {parts.map((part, i) =>
         part.toLowerCase() === word.toLowerCase() ? (
-          <span key={i} style={{ color: '#087c80', fontWeight: 'bold' }}>
+          <span key={`${i}-${part}`} style={{ color: '#087c80', fontWeight: 'bold' }}>
             {part}
           </span>
         ) : (
@@ -105,7 +106,6 @@ const FaqRow = ({ faq, expanded, onToggle, searchType, searchWord }: FaqRowProps
 
 export default function FaqList() {
   const location = useLocation();
-  const { lang } = useParams<{ lang: string }>();
 
   const currentUrl = location.pathname;
 
@@ -172,6 +172,36 @@ export default function FaqList() {
       }
     }
   };
+
+  let faqContent: React.ReactNode;
+  if (loading) {
+    faqContent = (
+      <Box sx={{ py: 3 }}>
+        <Typography sx={{ py: 6, textAlign: 'center', color: 'text.secondary' }}>
+          데이터를 불러오는 중입니다...
+        </Typography>
+      </Box>
+    );
+  } else if (faqList.length === 0) {
+    faqContent = (
+      <Box sx={{ py: 3 }}>
+        <Typography align="center" color="text.secondary">
+          데이터가 없습니다.
+        </Typography>
+      </Box>
+    );
+  } else {
+    faqContent = faqList.map((faq) => (
+      <FaqRow
+        key={faq.faqSn}
+        faq={faq}
+        expanded={expandedSn === faq.faqSn}
+        onToggle={() => handleAccordionToggle(faq.faqSn)}
+        searchType={appliedType}
+        searchWord={appliedWrd}
+      />
+    ));
+  }
 
   return (
     <Box className="page-layout">
@@ -261,30 +291,7 @@ export default function FaqList() {
 
                 {/* FAQ 아코디언 목록 */}
                 <Box className="faq-list-area">
-                  {loading ? (
-                    <Box sx={{ py: 3 }}>
-                      <Typography sx={{ py: 6, textAlign: 'center', color: 'text.secondary' }}>
-                        데이터를 불러오는 중입니다...
-                      </Typography>
-                    </Box>
-                  ) : faqList.length === 0 ? (
-                    <Box sx={{ py: 3 }}>
-                      <Typography align="center" color="text.secondary">
-                        데이터가 없습니다.
-                      </Typography>
-                    </Box>
-                  ) : (
-                    faqList.map((faq) => (
-                      <FaqRow
-                        key={faq.faqSn}
-                        faq={faq}
-                        expanded={expandedSn === faq.faqSn}
-                        onToggle={() => handleAccordionToggle(faq.faqSn)}
-                        searchType={appliedType}
-                        searchWord={appliedWrd}
-                      />
-                    ))
-                  )}
+                  {faqContent}
                 </Box>
 
                 {/* 페이징 */}

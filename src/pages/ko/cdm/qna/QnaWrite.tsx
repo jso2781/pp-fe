@@ -47,7 +47,7 @@ export default function QnaWrite() {
   const isEditMode = !!qstnSn;
   const currentUrl = location.pathname;
   const dispatch = useAppDispatch();
-  const userInfo = useAppSelector((s) => s.auth.userInfo) ?? { mbrId: 'admin' } as any; // 🚧 임시 - 원복 시 ?? { mbrId: 'admin' } as any 제거
+  const userInfo = useAppSelector((s) => s.auth.userInfo);
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -97,7 +97,7 @@ export default function QnaWrite() {
 
   const handleFileClear = (rowId: number) => {
     setFileRows((prev) => prev.map((r) => (r.id === rowId ? { ...r, file: null } : r)));
-    if (fileInputRefs.current[rowId]) fileInputRefs.current[rowId]!.value = '';
+    if (fileInputRefs.current[rowId]) fileInputRefs.current[rowId].value = '';
   };
 
   const handleFileRowDelete = (rowId: number) => {
@@ -110,7 +110,7 @@ export default function QnaWrite() {
   };
 
   const handleSave = async () => {
-    if (!userInfo?.mbrId) {
+    if (!userInfo?.mbrNo) {
       alert('로그인이 필요합니다.');
       return;
     }
@@ -124,8 +124,8 @@ export default function QnaWrite() {
       formData.append('pstTtl', title);
       formData.append('pstCn', content);
       formData.append('bbsId', bbsId ?? '');
-      formData.append('rgtrId', userInfo?.mbrId ?? '');
-      formData.append('mdfrId', userInfo?.mbrId ?? '');
+      formData.append('rgtrId', userInfo?.mbrNo ?? '');
+      formData.append('mdfrId', userInfo?.mbrNo ?? '');
       if (isEditMode && qstnSn) formData.append('qstnSn', qstnSn);
       fileRows.forEach((row) => { if (row.file) formData.append('files', row.file, row.file.name); });
       deleteFileIds.forEach((id) => formData.append('deleteFileIds', id));
@@ -145,6 +145,9 @@ export default function QnaWrite() {
       setSaving(false);
     }
   };
+
+  const actionLabel = isEditMode ? '수정' : '저장';
+  const buttonLabel = saving ? `${actionLabel} 중...` : actionLabel;
 
   return (
     <Box className="page-layout">
@@ -276,7 +279,7 @@ export default function QnaWrite() {
                     {/* 하단 버튼 */}
                     <Box className="board-actions" sx={{ mt: 3 }}>
                       <Button variant="contained" size="large" onClick={handleSave} disabled={saving} sx={{ mr: 1, minWidth: 80, height: 48 }}>
-                        {saving ? (isEditMode ? '수정 중...' : '저장 중...') : isEditMode ? '수정' : '저장'}
+                        {buttonLabel}
                       </Button>
                       <Button
                         variant="contained"

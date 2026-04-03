@@ -35,7 +35,7 @@ export default function TaskproposalWrite() {
   const isEditMode = !!asmtPrpSn;
   const currentUrl = location.pathname;
   const dispatch = useAppDispatch();
-  const userInfo = useAppSelector((s) => s.auth.userInfo) ?? { mbrId: 'admin' } as any; // 🚧 임시 - 원복 시 ?? { mbrId: 'admin' } as any 제거
+  const userInfo = useAppSelector((s) => s.auth.userInfo);
 
   const [topicTitle, setTopicTitle] = useState('');
   const [rlsYn, setRlsYn] = useState('N');
@@ -108,7 +108,7 @@ export default function TaskproposalWrite() {
   };
 
   const handleSave = async () => {
-    if (!userInfo?.mbrId) {
+    if (!userInfo?.mbrNo) {
       alert('로그인이 필요합니다.');
       return;
     }
@@ -129,8 +129,8 @@ export default function TaskproposalWrite() {
       formData.append('asmtExptEfctCn', expectedEffect);
       formData.append('asmtEtcExplnCn', etcExplanation);
       formData.append('asmtCutnMttrCn', caution);
-      formData.append('rgtrId', userInfo?.mbrId ?? '');
-      formData.append('mdfrId', userInfo?.mbrId ?? '');
+      formData.append('rgtrId', userInfo?.mbrNo ?? '');
+      formData.append('mdfrId', userInfo?.mbrNo ?? '');
       if (isEditMode && asmtPrpSn) formData.append('asmtPrpSn', asmtPrpSn);
       fileRows.forEach((row) => { if (row.file) formData.append('files', row.file, row.file.name); });
       deleteFileIds.forEach((id) => formData.append('deleteFileIds', id));

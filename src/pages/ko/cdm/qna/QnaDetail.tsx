@@ -24,7 +24,7 @@ const BOARD_BBS_ID: Partial<Record<BoardType, string>> = {
 function formatDate(value: string): string {
   if (!value) return '-';
   const d = new Date(value);
-  if (isNaN(d.getTime())) return value;
+  if (Number.isNaN(d.getTime())) return value;
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
@@ -68,10 +68,10 @@ export default function QnaDetail() {
       .catch(() => {});
   }, [qstnSn]);
 
-  const isAuthor = !!userInfo?.mbrId;
+  const isAuthor = !!userInfo?.mbrNo;
 
   const handleDelete = async () => {
-    if (!window.confirm('질문을 삭제하시겠습니까?')) return;
+    if (!globalThis.confirm('질문을 삭제하시겠습니까?')) return;
     setDeleting(true);
     try {
       await dispatch(deleteQna({ ansSn: ansData?.ansSn, qstnSn: qstnSn! })).unwrap();

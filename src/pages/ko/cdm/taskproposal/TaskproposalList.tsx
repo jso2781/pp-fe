@@ -28,6 +28,7 @@ import Lnb from '@/components/common/Lnb';
 import type { AsmtPrpItem } from '@/features/cdm/asmtprp/AsmtprpCdmTypes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectAsmtPrpList } from '@/features/cdm/asmtprp/AsmtprpCdmThunks';
+import { resetResults } from '@/features/cdm/asmtprp/AsmtprpCdmSlice';
 
 /** 진행 상태 표시 (API 코드: "01" = 답변대기, "02" = 답변완료) */
 function AsmtStatusChip({ status }: Readonly<{ status: string }>) {
@@ -61,16 +62,20 @@ export default function TaskproposalList() {
     window.scrollTo(0, 0);
   }, [pageNum]);
 
-  // 목록 조회
+  // 목록 조회 (비로그인 시 빈 목록, 로그인 시 공개(rls_yn='Y') + 본인 작성 목록)
   useEffect(() => {
+    if (!userInfo?.mbrNo) {
+      dispatch(resetResults());
+      return;
+    }
     dispatch(selectAsmtPrpList({
       page: pageNum,
       pageSize: String(pageSize),
       searchType: appliedCnd,
       searchKeyword: appliedWrd,
-      loginId: userInfo?.mbrId,
+      loginId: userInfo.mbrNo,
     }));
-  }, [pageNum, appliedCnd, appliedWrd, userInfo?.mbrId]);
+  }, [pageNum, appliedCnd, appliedWrd, userInfo?.mbrNo]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
@@ -166,7 +171,7 @@ export default function TaskproposalList() {
                       <Typography component="span" className="count">{totalCount}</Typography>
                       건
                     </Typography>
-                    {userInfo?.mbrId && (
+                    {userInfo?.mbrNo && (
                       <Button
                         variant="contained"
                         size="medium"

@@ -28,6 +28,7 @@ import Lnb from '@/components/common/Lnb';
 import type { QnaItem } from '@/features/cdm/qna/QnaCdmTypes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectQnaList } from '@/features/cdm/qna/QnaCdmThunks';
+import { resetResults } from '@/features/cdm/qna/QnaCdmSlice';
 
 const QNA_BBS_ID = 'BBS0000001';
 
@@ -63,17 +64,21 @@ export default function QnaList() {
     window.scrollTo(0, 0);
   }, [pageNum]);
 
-  // 목록 조회
+  // 목록 조회 (비로그인 시 빈 목록)
   useEffect(() => {
+    if (!userInfo?.mbrNo) {
+      dispatch(resetResults());
+      return;
+    }
     dispatch(selectQnaList({
       bbsId: QNA_BBS_ID,
       page: pageNum,
       pageSize: String(pageSize),
       searchType: appliedCnd,
       searchKeyword: appliedWrd,
-      loginId: userInfo?.mbrId,
+      loginId: userInfo.mbrNo,
     }));
-  }, [pageNum, appliedCnd, appliedWrd, userInfo?.mbrId]);
+  }, [pageNum, appliedCnd, appliedWrd, userInfo?.mbrNo]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
@@ -175,7 +180,7 @@ export default function QnaList() {
                       <Typography component="span" className="count">{totalCount}</Typography>
                       건
                     </Typography>
-                    {userInfo?.mbrId && (
+                    {userInfo?.mbrNo && (
                       <Button
                         variant="contained"
                         size="medium"

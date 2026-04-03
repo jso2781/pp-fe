@@ -500,7 +500,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     </Button>
                   ) : (
                     <Button size="small" onClick={() => navigate(to(`/pp/${i18nInstance.language}/advice/MbcmtApply`))} className="btn-util user-adv">
-                      {t('advAppReg')} {/* 자문위원신청 */}
+                      {t('advAppReg')} {/* 자문 시작하기 */}
                     </Button>
                   )}
 
@@ -757,7 +757,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   </Button>
                 ) : (
                   <Button size="small" onClick={() => { navigate(to(`/pp/${i18nInstance.language}/advice/MbcmtApply`)); setMobileMenuOpen(false); }} className="btn-util user-adv">
-                    {t('advAppReg')} {/* 자문위원신청 */}
+                    {t('advAppReg')} {/* 자문 시작하기 */}
                   </Button>
                 )}
 
