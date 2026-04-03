@@ -240,7 +240,8 @@ function RouteWorkAccessLogger() {
       flfmtTaskCd: '1',
       rgtrId: auth?.userInfo?.mbrNo ?? '',
       mdfrId: auth?.userInfo?.mbrNo ?? '',
-      lgnSeCd: auth?.lgnSeCd ?? ''
+      lgnSeCd: auth?.lgnSeCd ?? '',
+      sessLogSn: auth?.sessLogSn ?? 0
     }));
 
     /*

@@ -29,7 +29,7 @@ const initialState: AuthState = {
   acsTokenCn: null,
   updtTokenCn: null,
   pswdErrNmtm: null,
-  sessLogSn: null,
+  sessLogSn: 0,
   loading: false,
   error: null,
 
@@ -102,7 +102,7 @@ const AuthSlice = createSlice({
       state.acsTokenCn = null;
       state.updtTokenCn = null;
       state.pswdErrNmtm = null;
-      state.sessLogSn = null;
+      state.sessLogSn = 0;
 
       // sessionStorage에서 통일된 키 제거
       sessionStorage.removeItem("auth");
@@ -159,7 +159,7 @@ const AuthSlice = createSlice({
         state.acsTokenCn = null;
         state.updtTokenCn = null;
         state.pswdErrNmtm = null;
-        state.sessLogSn = null;
+        state.sessLogSn = 0;
       })
       // Any-ID 로그인 성공 시 auth 상태 동기화 (AnyIdLoginRVO는 LoginRVO와 동일한 토큰/회원정보 필드 구조)
       .addCase(postAnyIdLogin.fulfilled, (state, action) => {
@@ -215,6 +215,7 @@ const AuthSlice = createSlice({
         state.acsTokenCn = null;
         state.updtTokenCn = null;
         state.pswdErrNmtm = null;
+        state.sessLogSn = 0;
       })
       .addCase(anyIdLogout.pending, (state) => {
         state.loading = true;
@@ -228,6 +229,7 @@ const AuthSlice = createSlice({
         state.acsTokenCn = null;
         state.updtTokenCn = null;
         state.pswdErrNmtm = null;
+        state.sessLogSn = 0;
         sessionStorage.removeItem("auth");
         sessionStorage.removeItem("updtTokenCn");
         sessionStorage.removeItem("legalGuardFormData");
@@ -241,6 +243,7 @@ const AuthSlice = createSlice({
         state.acsTokenCn = null;
         state.updtTokenCn = null;
         state.pswdErrNmtm = null;
+        state.sessLogSn = 0;
         sessionStorage.removeItem("auth");
         sessionStorage.removeItem("updtTokenCn");
         sessionStorage.removeItem("legalGuardFormData");
@@ -257,6 +260,7 @@ const AuthSlice = createSlice({
         state.acsTokenCn = null;
         state.updtTokenCn = null;
         state.pswdErrNmtm = null;
+        state.sessLogSn = 0;
         // sessionStorage에서 통일된 키 제거
         sessionStorage.removeItem("auth");
         sessionStorage.removeItem("updtTokenCn");
@@ -271,6 +275,7 @@ const AuthSlice = createSlice({
         state.acsTokenCn = null;
         state.updtTokenCn = null;
         state.pswdErrNmtm = null;
+        state.sessLogSn = 0;
         sessionStorage.removeItem("auth");
         sessionStorage.removeItem("updtTokenCn");
         sessionStorage.removeItem("legalGuardFormData"); // 만 14세 미만 회원가입인 경우 법정대리인 동의 step에서 입력한 폼 데이터 제거
@@ -295,6 +300,7 @@ const AuthSlice = createSlice({
         state.acsTokenCn = null;
         state.updtTokenCn = null;
         state.pswdErrNmtm = null;
+        state.sessLogSn = 0;
         sessionStorage.removeItem("auth");
         sessionStorage.removeItem("updtTokenCn");
         sessionStorage.removeItem("legalGuardFormData");

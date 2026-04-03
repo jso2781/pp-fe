@@ -37,4 +37,7 @@ export interface AccessLogPVO {
 
   /** 로그인구분코드 */
   lgnSeCd?: string;
+
+  /** 세션로그일련번호 */
+  sessLogSn?: number;
 }
