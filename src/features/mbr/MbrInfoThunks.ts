@@ -3,7 +3,10 @@ import https from '@/api/axiosInstance'
 import { selectMbrInfoListApiPath, getMbrInfoApiPath, insertMbrInfoApiPath, updateMbrInfoApiPath, saveMbrInfoApiPath, deleteMbrInfoApiPath, verifyPasswordApiPath, updateMbrInfoPwApiPath, findMbrInfoIdApiPath, insertMbrInfoWithSttyAgtInfoApiPath } from '@/api/mbr/MbrInfoApiPaths'
 import { mockMbrInfoList, MbrInfoPVO, MbrInfoRVO, MbrInfoListPVO, MbrInfoListRVO, MbrInfoDVO, ExistMbrInfoPVO, ExistMbrInfoRVO, VerifyPasswordRVO, VerifyPasswordPVO, UpdateMbrInfoRVO, MbrInfoWithSttyAgtInfoPVO } from './MbrInfoTypes'
 import { existMbrInfoApiPath } from '@/api/mbr/MbrInfoApiPaths'
+import { AxiosError } from 'axios'
 
+/** insertMbrInfoWithSttyAgtInfo: HTTP 500 + 응답 body code "200" (CI 중복 등) 시 rejectWithValue 로 전달 */
+export const INSERT_MBR_CI_DUPLICATE_REJECT = 'INSERT_MBR_CI_DUPLICATE_REJECT' as const
 
 /**
  * 대국민포털_회원정보기본 기존 아이디, 패스워드 기준으로 데이터 존재 여부 조회
@@ -142,8 +145,29 @@ export const insertMbrInfoWithSttyAgtInfo = createAsyncThunk<number, MbrInfoWith
       return insertCnt;
     }
     catch (e) {
-      console.log("MbrInfoThunks insertMbrInfoWithSttyAgtInfo");
-      return rejectWithValue('MbrInfoThunks insertMbrInfoWithSttyAgtInfo error!!');
+
+      const axiosError = e as AxiosError<{ 
+        code?: string; 
+        msg?: string;
+      }>;
+
+      // 서버 응답이 있는 경우 (4xx, 5xx 에러)
+      if (axiosError.response) {
+        const errorData = axiosError.response.data as any;
+        const httpStatus = axiosError.response.status;
+
+        console.log('MbrInfoThunks insertMbrInfoWithSttyAgtInfo errorData=', errorData);
+        const code = errorData?.code ?? errorData?.data?.code;
+        const msg = errorData?.msg ?? errorData?.data?.msg;
+
+        // Http 500 + body code "200" → CI 중복(기가입) 등 — 화면에서 전용 문구 표시
+        if (httpStatus === 500 && String(code) === '200') {
+          return rejectWithValue(INSERT_MBR_CI_DUPLICATE_REJECT);
+        }
+        return rejectWithValue(typeof msg === 'string' && msg.trim() !== '' ? msg : 'MbrInfoThunks insertMbrInfoWithSttyAgtInfo error11!!');
+      }
+      
+      return rejectWithValue('MbrInfoThunks insertMbrInfoWithSttyAgtInfo error22!!');
     }
   }
 )

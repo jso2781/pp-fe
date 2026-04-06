@@ -40,10 +40,9 @@ export interface AnyIdLoginRVO {
   status?: string
 
   /**
-   * Any-ID 본인인증 응답 결과로 CI(Certification Information) 값을 전달 받음.
-   * ci: 인증 토큰
+   * Any-ID측의 사용자 정보(Any-ID 인증성공시 Any-ID로 넘겨받은 ssob를 복호화하여 추출한 Any-ID측의 사용자 정보)
    */
-  ci?: string
+  userInfoFromSsob?: AnyIdUserInfoFromSsobRVO
 
   /**
    * status: 로그인 상태((로그인 성공, status=LoggedIn)일 경우만  회원정보가 전달됨.)

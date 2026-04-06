@@ -17,8 +17,10 @@ import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
 
 import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
 import { getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks';
+import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes';
 import { useAppDispatch } from '@/store/hooks';
 import { useDialog } from '@/contexts/DialogContext';
+import { resolveCiFromSignUpFlowState, type SignUpFlowUserInfoState } from '@/pages/ko/auth/signUpFlowState';
 
 const showAnyIdArea = shouldLoadAnyIdSdk()
 
@@ -38,35 +40,19 @@ export default function CertifySelf() {
   const [anyIdReady, setAnyIdReady] = useState(false);
   const hasLoadedAnyIdRef = useRef(false);
 
-  // 약관 동의 화면에서 전달받은 steps 사용
-  // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)
-  // 일반 가입의 경우: legalGuardFormData 없음
+  // 약관 동의 화면에서 전달받은 steps 사용 (본 화면은 14세 이상 가입 전용)
   const locationState = useMemo(() => {
-    return location.state as {
-      steps?: ReturnType<typeof getSignUpSteps>; 
-      // 법정대리인 단계에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)
-      legalGuardFormData?: {
-        userName?: string;           // 신청인 이름 (만 14세 미만)
-        birthDate?: string;         // 신청인 생년월일 (만 14세 미만)
-        phone?: string;             // 신청인 휴대전화번호 (만 14세 미만)
-        parentName?: string;        // 법정대리인 이름 (만 14세 미만)
-        relationship?: string;      // 신청인과의 관계 (만 14세 미만)
-        parentPhone?: string;       // 법정대리인 휴대전화번호 (만 14세 미만)
-        ciFromGuardAgr?: string;    // 법정대리인 동의 폼에서 법정대리인의 본인인증 성공 시 Any-ID에서 전달받은 ci
-      };
-      // 본인인증 단계에서 전달받은 ci (포탈 사용자 가입 안된 상태에서 로그인시 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터)
-      ci?: string;
-    } | null;
+    return location.state as (SignUpFlowUserInfoState & {
+      steps?: ReturnType<typeof getSignUpSteps>;
+    }) | null;
   }, [location.state]);
-  
-  // URL로 직접 진입 시 location.state.ci 가 있으면 SignUpMbrInfo로 자동 이동
+
+  const userInfoFromSsobRef = useRef<AnyIdUserInfoFromSsobRVO | null>(null)
   useEffect(() => {
-    if (locationState?.ci) {
-      navigate('/pp/ko/auth/SignUpMbrInfo', {
-        state: { steps: locationState.steps, legalGuardFormData: locationState.legalGuardFormData, ci: locationState.ci },
-      });
+    if (locationState?.userInfoFromSsob) {
+      userInfoFromSsobRef.current = locationState.userInfoFromSsob
     }
-  }, [locationState, navigate]);
+  }, [locationState?.userInfoFromSsob])
 
   // URL 파라미터에서 tx, acrValues, redirectUri 추출
   const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
@@ -104,7 +90,7 @@ export default function CertifySelf() {
     }
     // steps가 없으면 일반 가입(14세 이상)으로 가정
     // 이전에 14세 미만 가입을 했다가 취소하고 일반 가입으로 변경한 경우를 대비
-    return getSignUpSteps(t, false);
+    return getSignUpSteps(t);
   }, [locationState?.steps, t]);
 
   // currentStep을 steps 배열에서 'certifySelf' 단계를 찾아서 동적으로 계산
@@ -112,19 +98,30 @@ export default function CertifySelf() {
     return steps.findIndex(step => step.description === t('certifySelf'));
   }, [steps, t]);
 
-  // 만 14세 미만 가입 steps에는 본인인증 단계가 없음 → 이 화면으로 오면 회원정보 입력으로 보냄
+  // 만 14세 미만: 본 화면 미포함 — 잘못 진입 시 법정대리인 동의(인증) 화면으로. 14세 이상: 이미 CI 있으면 본인인증 생략
   useEffect(() => {
-    if (currentStep < 0) {
-      navigate('/pp/ko/auth/SignUpMbrInfo', {
+    if (locationState?.signUpIsJunior === true) {
+      navigate('/pp/ko/auth/LegalGuardAgr', {
         replace: true,
         state: {
-          steps,
-          ci: locationState?.ci,
-          legalGuardFormData: locationState?.legalGuardFormData,
+          steps: locationState?.steps ?? steps,
+          userInfoFromSsob: locationState?.userInfoFromSsob,
+          signUpIsJunior: true,
+        },
+      });
+      return;
+    }
+    const existingCi = resolveCiFromSignUpFlowState(locationState);
+    if (existingCi) {
+      navigate('/pp/ko/auth/SignUpMbrInfo', {
+        state: {
+          steps: locationState?.steps,
+          userInfoFromSsob: locationState?.userInfoFromSsob,
+          signUpIsJunior: false,
         },
       });
     }
-  }, [currentStep, steps, navigate, locationState]);
+  }, [locationState, navigate, steps]);
 
   // Any-ID 자원 로드 (전역 1회 캐시) + AnyidC 준비 즉시 확인 + 짧은 간격 대기
   useEffect(() => {
@@ -174,6 +171,7 @@ export default function CertifySelf() {
 
         try{
           const userInfoFromSsob = await dispatchRef.current(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.txId })).unwrap();
+          userInfoFromSsobRef.current = userInfoFromSsob
           ciRef.current = userInfoFromSsob.ci ?? null;
           console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdUserInfoFromSsob ci=', ciRef.current);
         }catch(error){
@@ -222,66 +220,31 @@ export default function CertifySelf() {
       return;
     }
 
-    // legalGuardFormData를 sessionStorage에 저장 (뒤로가기 시 유지)
-    if (locationState?.legalGuardFormData) {
-      try {
-        sessionStorage.setItem('legalGuardFormData', JSON.stringify(locationState.legalGuardFormData));
-      } catch (error) {
-        console.error('Failed to save form data to storage:', error);
-      }
-    }
-
     /*
      * 현재창에서 본인인증을 완료한 경우만 회원정보입력 페이지로 이동할 수 있음.
      * 개발환경에서는 ciRef.current가 없어도 회원정보입력 페이지로 이동할 수 있음.
      */
     if(ciRef.current || !showAnyIdArea){
-      // 회원정보입력 페이지로 이동
-      // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)을 회원 정보 입력 step에 그대로 전달
-      // 일반 가입의 경우: legalGuardFormData 없음 (본인인증에서 받은 데이터는 별도 처리)
+      // 14세 이상 가입: 회원정보 입력 (만 14세 미만은 LegalGuardAgr에서 처리, 본 화면 미포함)
       navigate('/pp/ko/auth/SignUpMbrInfo', { 
         state: { 
           steps, 
-          legalGuardFormData: locationState?.legalGuardFormData,  // 법정대리인 동의 폼 데이터 전달 (만 14세 미만 가입인 경우)
-          ci: ciRef.current                                       // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터 전달 (현재창에서 본인인증을 완료한 경우만 전달)
+          userInfoFromSsob: userInfoFromSsobRef.current ?? locationState?.userInfoFromSsob,
+          signUpIsJunior: false,
         } 
       });
     }
   }
 
-  // 취소하기 버튼 클릭 핸들러 (약관동의 페이지로 이동)
+  // 취소하기: 본 화면은 14세 이상 가입 전용 → 일반 약관동의로만 이동 (만 14세 미만은 LegalGuardAgr에서 인증 처리, 본 화면이 플로우에 없음)
   const handleCancel = () => {
-    let certifySelfIndex = steps.findIndex(step => step.description === t('certifySelf'));
-    certifySelfIndex = certifySelfIndex >= 0 ? certifySelfIndex : 2; // 기본값: 일반 가입의 경우 2 (배열 인덱스)
-    
-    // 본인인증 단계가 3번째(일반 가입)인 경우 약관동의 페이지로 이동
-    // 본인인증 단계가 4번째(만 14세 미만 가입)인 경우 법정대리인 동의 페이지로 이동
-    if(certifySelfIndex === 2){
-      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, legalGuardFormData: locationState?.legalGuardFormData, ci: locationState?.ci } });
-    }else{
-      // sessionStorage에서 저장된 legalGuardFormData 불러오기
-      let legalGuardFormData = null;
-      try {
-        const stored = sessionStorage.getItem('legalGuardFormData');
-        if (stored) {
-          legalGuardFormData = JSON.parse(stored);
-        }
-      } catch (error) {
-        console.error('Failed to parse stored form data:', error);
-      }
-      //법정대리인 동의 페이지로 되돌아가기전에 sessionStorage에서 저장된 legalGuardFormData를 전달(이전 입력값 유지)
-      navigate('/pp/ko/auth/LegalGuardAgr', { 
-        state: { 
-          steps,
-          legalGuardFormData: legalGuardFormData,        // sessionStorage에서 불러온 legalGuardFormData 전달
-          ci: locationState?.ci                          // 포탈 사용자 회원가입 안된 상태에서 로그인시 본인인증 단계에서 전달받은 ci 파라미터 전달
-        } 
-      });
-    }
+    navigate('/pp/ko/auth/GeneralSignUpAgrTrms', {
+      state: { steps, signUpIsJunior: false },
+    });
   }
 
-  // 만 14세 미만 steps에는 certifySelf가 없음 → 리다이렉트 중에는 렌더 생략 (steps[currentStep] 접근 방지)
-  if (currentStep < 0) {
+  // 만 14세 미만 가입은 본 화면을 쓰지 않음 → 리다이렉트 중 렌더 생략 (steps[currentStep] 접근 방지)
+  if (locationState?.signUpIsJunior === true) {
     return null;
   }
 

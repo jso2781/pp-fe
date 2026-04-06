@@ -12,7 +12,8 @@ import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material
 import { AccountCircle as AccountIcon } from '@mui/icons-material'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { getAnyIdInit, postAnyIdLogin } from '@/features/auth/AnyIdThunks'
+import { getAnyIdInit, getAnyIdUserInfoFromSsob, postAnyIdLogin } from '@/features/auth/AnyIdThunks'
+import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes'
 import { shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
 import { useAnyIdSdkReady } from '@/lib/anyid/useAnyIdSdkReady'
 import DepsLocation from '@/components/common/DepsLocation'
@@ -182,8 +183,20 @@ export default function LoginMethod() {
             return
           }
           if (payload.status === 'SignUpSel') {
-            navigateRef.current('/pp/ko/auth/SignUpSel', { state: { ci: payload?.ci ?? '' } })
-            return
+            let userInfoFromSsob: AnyIdUserInfoFromSsobRVO | undefined = payload.userInfoFromSsob;
+            if (!userInfoFromSsob && data?.ssob) {
+              try {
+                userInfoFromSsob = await dispatchRef
+                  .current(getAnyIdUserInfoFromSsob({ ssob: data.ssob, tag: tagFromCallback }))
+                  .unwrap();
+              } catch (e) {
+                console.warn('[AnyID] SignUpSel: getAnyIdUserInfoFromSsob failed', e);
+              }
+            }
+            navigateRef.current('/pp/ko/auth/SignUpSel', {
+              state: { userInfoFromSsob },
+            });
+            return;
           }
         } catch (e) {
           console.error('[AnyID] login error:', e)

@@ -11,9 +11,45 @@ import { Box, Button, Stepper, Step, StepLabel, Typography, TextField, Stack } f
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
-import { existMbrInfo, insertMbrInfo, insertMbrInfoWithSttyAgtInfo } from '@/features/mbr/MbrInfoThunks'
+import {
+  existMbrInfo,
+  insertMbrInfoWithSttyAgtInfo,
+  INSERT_MBR_CI_DUPLICATE_REJECT,
+} from '@/features/mbr/MbrInfoThunks'
+import { useDialog } from '@/contexts/DialogContext'
 import { MbrInfoPVO, MbrInfoWithSttyAgtInfoPVO } from '@/features/mbr/MbrInfoTypes'
 import { SttyAgtInfoPVO } from '@/features/mbr/SttyAgtInfoTypes'
+import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes'
+import {
+  resolveCiFromSignUpFlowState,
+  isJuniorSignUpFlowState,
+  type SignUpFlowUserInfoState,
+} from '@/pages/ko/auth/signUpFlowState'
+import { shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
+
+const showAnyIdArea = shouldLoadAnyIdSdk()
+
+/** LegalGuardAgr와 동일한 필수 입력(만 14세 미만 법정대리인 폼) 충족 여부 */
+function isJuniorLegalGuardFormFieldsComplete(d: {
+  userName?: string
+  birthDate?: string
+  phone?: string
+  parentName?: string
+  relationship?: string
+  parentPhone?: string
+  ciFromGuardAgr?: string
+} | null): boolean {
+  if (!d) return false
+  const userNameOk = (d.userName?.trim().length ?? 0) >= 2
+  const birthOk = (d.birthDate?.trim().length ?? 0) === 8
+  const phone = d.phone?.trim() ?? ''
+  const phoneOk = phone.length >= 11 && phone.length <= 12
+  const parentNameOk = (d.parentName?.trim().length ?? 0) >= 2
+  const relOk = (d.relationship?.trim() ?? '') !== ''
+  const pPhone = d.parentPhone?.trim() ?? ''
+  const pPhoneOk = pPhone.length >= 11 && pPhone.length <= 12
+  return userNameOk && birthOk && phoneOk && parentNameOk && relOk && pPhoneOk
+}
 
 export default function SignUpMbrInfo() {
   const { t } = useTranslation();
@@ -21,6 +57,7 @@ export default function SignUpMbrInfo() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { lang } = useParams<{ lang: string }>();
+  const { showAlert } = useDialog();
 
   // Rest API 호출로 메뉴 가져오기
   const { list } = useAppSelector((s) => s.menu);
@@ -28,8 +65,8 @@ export default function SignUpMbrInfo() {
   // 본인인증에서 전달받은 데이터
   // 만 14세 미만 가입의 경우: LegalGuardAgr에서 전달받은 legalGuardFormData (법정대리인 동의 폼 데이터들)
   // 일반 가입의 경우: legalGuardFormData 없음 (본인인증에서 받은 데이터는 별도 처리)
-  const locationState = location.state as { 
-    steps?: ReturnType<typeof getSignUpSteps>; 
+  const locationState = location.state as (SignUpFlowUserInfoState & {
+    steps?: ReturnType<typeof getSignUpSteps>;
     legalGuardFormData?: {
       userName?: string;           // 신청인 이름 (만 14세 미만)
       birthDate?: string;          // 신청인 생년월일 (만 14세 미만)
@@ -39,9 +76,7 @@ export default function SignUpMbrInfo() {
       parentPhone?: string;       // 법정대리인 휴대전화번호 (만 14세 미만)
       ciFromGuardAgr?: string;    // 법정대리인 동의 폼에서 법정대리인의 본인인증 성공 시 Any-ID에서 전달받은 ci
     };
-    // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터
-    ci?: string;
-  } | null;
+  }) | null;
 
   // formData 타입 정의
   type LegalGuardFormData = {
@@ -83,18 +118,73 @@ export default function SignUpMbrInfo() {
     if (locationState?.steps && Array.isArray(locationState.steps)) {
       return locationState.steps;
     }
-    return getSignUpSteps(t, false); // 일반 가입 (14세 이상)
+    return getSignUpSteps(t);
   }, [locationState?.steps, t]);
 
-  // 로그인 Any-ID 본인인증 응답 결과로 전달받은 ci 파라미터(이전 화면에서 전달받은 ci 파라미터)
+  const userInfoFromSsob = locationState?.userInfoFromSsob as AnyIdUserInfoFromSsobRVO | undefined
+
   const ci = useMemo(() => {
-    return locationState?.ci as string;
-  }, [locationState?.ci]);
+    return resolveCiFromSignUpFlowState(locationState) as string | undefined
+  }, [locationState?.userInfoFromSsob]);
 
   // currentStep을 steps 배열에서 'inputMbrInfo' 단계를 찾아서 동적으로 계산
   const currentStep = useMemo(() => {
     return steps.findIndex(step => step.description === t('inputMbrInfo'));
   }, [steps, t]);
+
+  const isJuniorSignUpFlow = useMemo(
+    () => isJuniorSignUpFlowState(locationState),
+    [locationState?.signUpIsJunior]
+  )
+
+  const mergeLegalGuardFromStateAndStorage = (): LegalGuardFormData | null => {
+    const fromState = locationState?.legalGuardFormData
+    const fromStorage = getLegalGuardFormData()
+    if (fromState && fromStorage) {
+      return { ...fromStorage, ...fromState }
+    }
+    return fromState ?? fromStorage
+  }
+
+  /** 14세 이상: Any-ID 사용 시 userInfoFromSsob.ci(본인인증 완료) 필수. 미사용(dev)은 CertifySelf와 동일하게 완화. 만 14세 미만: 폼 완성 + Any-ID 사용 시 신청인 CI·법정대리인 ciFromGuardAgr 필수 */
+  const signUpAdmissionOk = useMemo(() => {
+    if (isJuniorSignUpFlow) {
+      const merged = mergeLegalGuardFromStateAndStorage()
+      if (!isJuniorLegalGuardFormFieldsComplete(merged)) return false
+      if (!showAnyIdArea) return true
+      const applicantCi = resolveCiFromSignUpFlowState(locationState)
+      const guardianCi =
+        typeof merged?.ciFromGuardAgr === 'string' && merged.ciFromGuardAgr.trim() !== ''
+      return !!applicantCi && guardianCi
+    }
+    if (!showAnyIdArea) return true
+    return !!resolveCiFromSignUpFlowState(locationState)
+  }, [isJuniorSignUpFlow, locationState])
+
+  useEffect(() => {
+    if (signUpAdmissionOk) return
+    if (isJuniorSignUpFlow) {
+      const merged = mergeLegalGuardFromStateAndStorage()
+      navigate('/pp/ko/auth/LegalGuardAgr', {
+        replace: true,
+        state: {
+          steps: locationState?.steps ?? getSignUpSteps(t),
+          legalGuardFormData: merged ?? undefined,
+          userInfoFromSsob: locationState?.userInfoFromSsob,
+          signUpIsJunior: true,
+        },
+      })
+    } else {
+      navigate('/pp/ko/auth/CertifySelf', {
+        replace: true,
+        state: {
+          steps: locationState?.steps ?? getSignUpSteps(t),
+          userInfoFromSsob: locationState?.userInfoFromSsob,
+          signUpIsJunior: false,
+        },
+      })
+    }
+  }, [signUpAdmissionOk, isJuniorSignUpFlow, locationState, navigate, t])
 
   // 전달받은 legalGuardFormData(법정대리인 동의 폼 데이터들) 또는 sessionStorage에서 불러온 legalGuardFormData(법정대리인 동의 폼 데이터들) 사용
   // 14세 이상 일반 가입: locationState.legalGuardFormData 없음 → sessionStorage를 사용하지 않고 빈 값 사용 (이전 로그인/다른 흐름의 잔여 데이터 노출 방지)
@@ -107,7 +197,14 @@ export default function SignUpMbrInfo() {
         phone: locationState.legalGuardFormData.phone || '',
       };
     }
-    // 14세 이상 일반 가입: sessionStorage의 legalGuardFormData를 사용하지 않음 (이전 세션/다른 사용자·14세 미만 시도 잔여 데이터 방지)
+    // Any-ID SSOB 복호화 객체(로그인·본인인증 플로우)로 이름·휴대전화 초기값
+    if (locationState?.userInfoFromSsob) {
+      const u = locationState.userInfoFromSsob
+      return {
+        userName: (u.name ?? '').trim(),
+        phone: (u.phone ?? '').trim(),
+      };
+    }
     return {
       userName: '',
       phone: '',
@@ -447,13 +544,17 @@ export default function SignUpMbrInfo() {
       // 회원정보 1건이 입력되었는지 확인
       if(result > 0){
         // 다음 단계로 이동 (가입 신청 완료 페이지)
-        navigate('/pp/ko/auth/SignUpComplete', { state: { steps, ci } });
+        navigate('/pp/ko/auth/SignUpComplete', { state: { steps, userInfoFromSsob } });
       } else {
         alert(t('insertMbrInfoFailed'));
       }
     }catch(error){
       console.error(t('insertMbrInfoFailed'), error);
-      alert(t('insertMbrInfoFailed'));
+      if (error === INSERT_MBR_CI_DUPLICATE_REJECT) {
+        showAlert('가입된 사용자가 있습니다. 본인인증을 다시 시도해 주세요.', );
+      } else {
+        alert(t('insertMbrInfoFailed'));
+      }
     }finally{
       // 회원가입 완료 시 만 14세 미만 가입의 경우 법정대리인 동의 폼 데이터를 sessionStorage에서 제거
       try{
@@ -470,11 +571,10 @@ export default function SignUpMbrInfo() {
     const storedLegalGuardFormData = getLegalGuardFormData();
     
     const certifySelfIndex = steps.findIndex(step => step.description === t('certifySelf'));
-    const isJuniorSignUpFlow = steps.some(step => step.description === t('legalGuardAgree'));
 
-    // 일반(14세 이상) 가입: 본인인증 단계가 인덱스 2 → 약관동의로
+    // 일반(14세 이상) 가입: 본인인증 단계가 인덱스 2 → 약관동의로 (Any-ID 연동 정보는 이탈 시 제거)
     if (certifySelfIndex === 2) {
-      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, ci } });
+      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, signUpIsJunior: false } });
     }
     // 만 14세 미만 가입: steps에 certifySelf 없음 → 법정대리인 동의로
     else if (isJuniorSignUpFlow) {
@@ -482,11 +582,12 @@ export default function SignUpMbrInfo() {
         state: {
           steps,
           legalGuardFormData: storedLegalGuardFormData,
-          ci,
+          userInfoFromSsob,
+          signUpIsJunior: true,
         },
       });
     } else {
-      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, ci } });
+      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, signUpIsJunior: false } });
     }
   }
 
@@ -511,6 +612,10 @@ export default function SignUpMbrInfo() {
 
     return isFormValid;
   }, [formData, errors, isMbrIdChecked, mbrIdAvailable, isEmailChecked, emailAvailable]);
+
+  if (!signUpAdmissionOk) {
+    return null
+  }
 
   return (
     <>

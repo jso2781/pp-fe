@@ -2,7 +2,7 @@
  * 화면ID: KIDS-PP-US-JM-07
  * 화면명: 만14세미만가입 법정대리인동의
  * 화면경로: /ko/auth/LegalGuardAgr
- * 화면설명: 만14세미만가입 법정대리인동의 화면
+ * 화면설명: 만 14세 미만 회원가입 전용. 신청인·법정대리인 Any-ID 본인인증을 동일 화면에서 처리하며, 둘 다 통과해야 다음 단계로 진행.
  *
  * ## Any-ID iframe 개발
  */
@@ -26,6 +26,7 @@ import { shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
 import { useAppDispatch } from '@/store/hooks'
 import { getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks'
 import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes'
+import { resolveCiFromSignUpFlowState, type SignUpFlowUserInfoState } from '@/pages/ko/auth/signUpFlowState'
 
 /** production 이거나, 개발 시 `VITE_SHOW_ANYID_AREA=true` 로 iframe·postMessage 활성화 (`shouldLoadAnyIdSdk`) */
 const showAnyIdArea = shouldLoadAnyIdSdk()
@@ -98,13 +99,10 @@ export default function LegalGuardAgr() {
     setModalMessage('')
   }
 
-  /*
-   * 로그인 Any-ID 본인인증 응답 결과로 법정대리인 동의 화면에 이동된 경우 전달받은 ci 파라미터 가져옴.
-   * (=Any-ID 본인인증은 통과되었으나, 회원정보가 없는 경우 가입절차가 진행됨.)
-   */
-  const initialCi = (location.state?.ci as string) ?? ''
-  const [ci, setCi] = useState<string>(initialCi) // 신청인 CI (다음 단계 state.ci로 전달)
-  console.log('LegalGuardAgr ci=', ci);
+  const signUpFlow = location.state as SignUpFlowUserInfoState | null
+  const initialCi = resolveCiFromSignUpFlowState(signUpFlow) ?? ''
+  const [ci, setCi] = useState<string>(initialCi)
+  console.log('LegalGuardAgr ci(userInfoFromSsob.ci)=', ci)
   
   // sessionStorage에서 저장된 LegalGuardFormData 불러오기
   const getStoredLegalGuardFormData = (): LegalGuardFormData | null => {
@@ -160,12 +158,27 @@ export default function LegalGuardAgr() {
   const [isLegalGuardCertified, setIsLegalGuardCertified] = useState(false); // 법정대리인 인증
   const [isApplicantCertified, setIsApplicantCertified] = useState(false); // 신청인 인증
 
+  /** 만 14세 미만 전용 화면 — 일반 가입(signUpIsJunior: false)으로 잘못 진입 시에만 일반 약관으로 이동 */
+  useEffect(() => {
+    if (signUpFlow?.signUpIsJunior === false) {
+      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', {
+        replace: true,
+        state: {
+          userInfoFromSsob: signUpFlow.userInfoFromSsob,
+          signUpIsJunior: false,
+        },
+      })
+    }
+  }, [signUpFlow?.signUpIsJunior, signUpFlow?.userInfoFromSsob, navigate])
+
   /** Any-ID INIT·콜백 식별용 txId/tag (신청인·법정대리인 각각 고유 문자열). processAnyIdSuccess 에서 어느 iframe 결과인지 구분 */
   const applicantTagRef = useRef<string>('')
   const guardianTagRef = useRef<string>('')
   /** 동일 인증 영역에서 success 가 중복 호출될 수 있어, 한 번만 폼 반영·상태 갱신하도록 막음 */
   const applicantSuccessHandledRef = useRef(false)
   const guardianSuccessHandledRef = useRef(false)
+  /** 신청인 Any-ID 복호화 결과 — 다음 화면(SignUpMbrInfo)에 `userInfoFromSsob.ci` 전달용 (라우터 state만으로는 누락될 수 있음) */
+  const applicantUserInfoFromSsobRef = useRef<AnyIdUserInfoFromSsobRVO | null>(null)
   /** SDK log 이벤트가 폴링처럼 반복될 때 동일 키를 짧은 간격으로만 1회 출력하기 위한 디듀프 맵 */
   const anyIdLogDedupRef = useRef<Map<string, number>>(new Map())
 
@@ -226,19 +239,18 @@ export default function LegalGuardAgr() {
             getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag })
           ).unwrap()) as AnyIdUserInfoFromSsobRVO
 
-          const under14 = true
-          if (under14 === true || under14 === null) {
-            setLegalGuardFormData((prev) => ({
-              ...prev,
-              userName: userInfoFromSsob?.name ?? prev.userName,
-              birthDate: normalizeBirthDate(userInfoFromSsob?.brdt ?? prev.birthDate),
-              phone: userInfoFromSsob?.phone ?? prev.phone,
-            }))
+          applicantUserInfoFromSsobRef.current = userInfoFromSsob
 
-            const ciValue = userInfoFromSsob.ci
-            setCi(ciValue ?? '')
-            setIsApplicantCertified(true)
-          }
+          setLegalGuardFormData((prev) => ({
+            ...prev,
+            userName: userInfoFromSsob?.name ?? prev.userName,
+            birthDate: normalizeBirthDate(userInfoFromSsob?.brdt ?? prev.birthDate),
+            phone: userInfoFromSsob?.phone ?? prev.phone,
+          }))
+
+          const ciValue = userInfoFromSsob.ci
+          setCi(ciValue ?? '')
+          setIsApplicantCertified(true)
           return
         }
 
@@ -266,13 +278,13 @@ export default function LegalGuardAgr() {
     [dispatch]
   )
 
-  // 약관 동의 화면에서 전달받은 steps를 사용하거나, 없으면 새로 생성
+  // 만 14세 미만 플로우 steps (state 없으면 동일 단계 배열로 보강)
   const steps = useMemo(() => {
     const state = location.state as { steps?: ReturnType<typeof getSignUpSteps> } | null;
     if (state?.steps && Array.isArray(state.steps)) {
       return state.steps;
     }
-    return getSignUpSteps(t, true);
+    return getSignUpSteps(t);
   }, [location.state, t]);
 
   // location.state에서 이전 legalGuardFormData가 전달되면 업데이트
@@ -553,22 +565,40 @@ export default function LegalGuardAgr() {
       console.error('Failed to save form data to storage:', error);
     }
 
-    // Any-ID 미사용(dev 기본)일 때만 ci 없이 다음 단계 허용
-    if (ci || !showAnyIdArea) {
-      navigate('/pp/ko/auth/SignUpMbrInfo', {
-        state: {
-          steps,
-          legalGuardFormData,
-          ci: ci ?? '',
-        },
-      });
-      return;
-    }
+    const mergedUserInfoFromSsob: AnyIdUserInfoFromSsobRVO | undefined = (() => {
+      const base = signUpFlow?.userInfoFromSsob
+      const fromApplicant = applicantUserInfoFromSsobRef.current
+      if (!base && !fromApplicant) return undefined
+      return {
+        ...base,
+        ...fromApplicant,
+        ci:
+          fromApplicant?.ci ??
+          base?.ci ??
+          (ci.trim() !== '' ? ci : undefined),
+      }
+    })()
+
+    navigate('/pp/ko/auth/SignUpMbrInfo', {
+      state: {
+        steps,
+        legalGuardFormData,
+        userInfoFromSsob: mergedUserInfoFromSsob,
+        signUpIsJunior: true,
+      },
+    });
   }
 
   // 취소하기 버튼 클릭 핸들러 (만 14세 미만 회원가입 약관동의 페이지로 이동)
   const handleCancel = () => {
-    navigate('/pp/ko/auth/JuniorSignUpAgrTrms', { state: { steps, cancelled: true, ci } });
+    navigate('/pp/ko/auth/JuniorSignUpAgrTrms', {
+      state: {
+        steps,
+        cancelled: true,
+        userInfoFromSsob: signUpFlow?.userInfoFromSsob,
+        signUpIsJunior: true,
+      },
+    });
   }
 
   // 다음단계 버튼 활성화 조건
@@ -694,7 +724,6 @@ export default function LegalGuardAgr() {
                                 <Typography color="text.secondary">
                                   Any-ID iframe 은 비활성입니다. 로컬에서 쓰려면 `.env.development` 에
                                   `VITE_SHOW_ANYID_AREA=true` 를 추가하세요.
-                                  따르세요.
                                 </Typography>
                               </Box>
                             )

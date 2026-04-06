@@ -284,7 +284,7 @@ export default function LegalGuardAgr() {
     if (state?.steps && Array.isArray(state.steps)) {
       return state.steps;
     }
-    return getSignUpSteps(t, true);
+    return getSignUpSteps(t);
   }, [location.state, t]);
 
   // location.state에서 이전 legalGuardFormData가 전달되면 업데이트

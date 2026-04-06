@@ -14,6 +14,11 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectTrmsListForSignUp } from '@/features/stt/TrmsSttThunks'
 import type { TrmsSttRVO } from '@/features/stt/TrmsSttTypes'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
+import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes'
+import {
+  resolveCiFromSignUpFlowState,
+  type SignUpFlowUserInfoState,
+} from '@/pages/ko/auth/signUpFlowState'
  
 // --- 약관 상세 컨텐츠 (모달 내부에 들어갈 내용) ---
 interface TermsDetailProps {
@@ -68,12 +73,10 @@ export default function SignUpAgrTrms() {
   const { list, totalCount, loading, error } = useAppSelector((state) => state.stt);
   const hasFetchedRef = useRef(false); // 한 번만 호출되도록 보장하는 ref
 
-  /*
-   * 로그인 Any-ID 본인인증 응답 결과로 약관 동의 화면에 이동된 경우 전달받은 ci 파라미터 가져옴.
-   * (=Any-ID 본인인증은 통과되었으나, 회원정보가 없는 경우 가입절차가 진행됨.)
-   */
-  const ci = location.state?.ci as string;
-  console.log('SignUpAgrTrms ci=', ci);
+  const flowState = location.state as SignUpFlowUserInfoState | null
+  const userInfoFromSsob = flowState?.userInfoFromSsob as AnyIdUserInfoFromSsobRVO | undefined
+  const ci = resolveCiFromSignUpFlowState(flowState)
+  console.log('SignUpAgrTrms userInfoFromSsob=', userInfoFromSsob, 'ci(userInfoFromSsob.ci)=', ci)
  
 
   useEffect(() => {
@@ -149,7 +152,7 @@ export default function SignUpAgrTrms() {
   const isJunior = location.pathname.includes('/pp/ko/auth/JuniorSignUpAgrTrms');
 
   // 회원 유형에 따라 steps 배열 구성 (공통 유틸리티 함수 사용)
-  const steps = useMemo(() => getSignUpSteps(t, isJunior), [isJunior, t]);
+  const steps = useMemo(() => getSignUpSteps(t), [t]);
 
   // 필수 약관 미동의 알림 팝업 상태 (비활성화 방식을 쓰더라도 만약을 위해 유지)
   const [showErrorPopup, setShowErrorPopup] = useState(false);
@@ -173,20 +176,28 @@ export default function SignUpAgrTrms() {
   // 다음 버튼 클릭 핸들러
   const handleNextStep = () => {
     // 필수 약관이 전부 동의되었으면 다음 단계로 이동 
-    if (isRequiredAgreed) {
-      if (isJunior) {
+    if (isRequiredAgreed){
+      if(isJunior){
         // 만 14세 미만 가입: 법정 대리인 동의 단계로 이동 (steps 객체 전달)
-        navigate('/pp/ko/auth/LegalGuardAgr', { state: { steps, ci } });
-      } else {
-        // ci가 있으면 회원정보입력 단계로 이동(로그인 Any-ID 본인인증을 완료한 경우이지만, 포탈 사용자의 회원정보는 없는 경우임.)
-        // ci가 없으면 본인인증 단계로 이동
+        navigate('/pp/ko/auth/LegalGuardAgr', {
+          state: { steps, userInfoFromSsob, signUpIsJunior: true },
+        });
+      }else{
+        /*
+         * 1.Any-ID로 로그인 시도했을 때 Any-ID측의 사용자 정보는 있지만, 포탈시스템에 회원정보가 없는 경우 회원정보입력 단계로 이동, 
+         * 2.Any-ID로 로그인 시도했을 때 Any-ID측의 사용자 정보도 없는 경우 본인인증 단계로 이동.
+         */
         if(ci){
-          navigate('/pp/ko/auth/SignUpMbrInfo', { state: { steps, ci } });
-        } else {
-          navigate('/pp/ko/auth/CertifySelf', { state: { steps, ci } });
+          navigate('/pp/ko/auth/SignUpMbrInfo', {
+            state: { steps, userInfoFromSsob, signUpIsJunior: false },
+          });
+        }else{
+          navigate('/pp/ko/auth/CertifySelf', {
+            state: { steps, userInfoFromSsob, signUpIsJunior: false },
+          });
         }
       }
-    } else {
+    }else{
       // 필수 약관이 동의되지 않았으면 에러 팝업 표시
       setShowErrorPopup(true); 
     }
@@ -376,7 +387,11 @@ export default function SignUpAgrTrms() {
                       <Button 
                         variant="outlined02" 
                         size="large"
-                        onClick={() => navigate('/pp/ko/auth/SignUpSel', { state: { ci } })}
+                        onClick={() =>
+                          navigate('/pp/ko/auth/SignUpSel', {
+                            state: { userInfoFromSsob, signUpIsJunior: flowState?.signUpIsJunior },
+                          })
+                        }
                       >
                         {t('cancel')}
                       </Button>

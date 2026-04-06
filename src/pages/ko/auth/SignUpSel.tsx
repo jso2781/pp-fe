@@ -9,6 +9,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Card, CardContent, Stack, Stepper, Step, StepLabel, Typography } from '@mui/material';
 import { ArrowForward } from '@mui/icons-material'
 import DepsLocation from '@/components/common/DepsLocation'
+import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes'
+import { resolveCiFromSignUpFlowState, type SignUpFlowUserInfoState } from '@/pages/ko/auth/signUpFlowState'
 
 export default function SignUpSel() {
   const navigate = useNavigate();
@@ -17,12 +19,11 @@ export default function SignUpSel() {
   const currentStep = 0
   const { lang } = useParams<{ lang: string }>();
 
-  /*
-   * 로그인 Any-ID 본인인증 응답 결과로 회원 유형 선택 화면에 이동된 경우 전달받은 ci 파라미터 가져옴.
-   * (=Any-ID 본인인증은 통과되었으나, 회원정보가 없는 경우 가입절차가 진행됨.)
-   */
-  const ci = location.state?.ci as string;
-  console.log('SignUpSel ci:', ci);
+  /** Any-ID 로그인(회원 없음) 시 `userInfoFromSsob`만 전달 — CI는 `userInfoFromSsob.ci` */
+  const flowState = location.state as SignUpFlowUserInfoState | null
+  const userInfoFromSsob = flowState?.userInfoFromSsob as AnyIdUserInfoFromSsobRVO | undefined
+  const ci = resolveCiFromSignUpFlowState(flowState)
+  console.log('SignUpSel userInfoFromSsob:', userInfoFromSsob, 'ci(userInfoFromSsob.ci):', ci)
 
   const steps = [
     { label: t('step1'), description: t('signUpSelect') },
@@ -123,7 +124,11 @@ export default function SignUpSel() {
                         key={type.id}
                         variant="outlined"
                         className={`member-type-card member-type-card--${type.id}`}
-                        onClick={() => navigate(type.route, { state: { ci } })}
+                        onClick={() =>
+                          navigate(type.route, {
+                            state: { userInfoFromSsob, signUpIsJunior: type.id === 'junior' },
+                          })
+                        }
                       >
                         <CardContent className="member-type-card__link">
                           <Stack className="member-type-card__inner">
@@ -141,7 +146,9 @@ export default function SignUpSel() {
                               endIcon={<ArrowForward />}
                               onClick={(e) => {
                                 e.stopPropagation(); // Card 클릭 이벤트 방지
-                                navigate(type.route, { state: { ci } });
+                                navigate(type.route, {
+                                  state: { userInfoFromSsob, signUpIsJunior: type.id === 'junior' },
+                                });
                               }}
                             >
                               {t('signUpApply')}

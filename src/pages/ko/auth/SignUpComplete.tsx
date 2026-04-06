@@ -28,7 +28,7 @@ export default function SignUpComplete() {
     if (state?.steps && Array.isArray(state.steps)) {
       return state.steps;
     }
-    return getSignUpSteps(t, false); // 일반 가입 (14세 이상)
+    return getSignUpSteps(t);
   }, [state?.steps, t]);
 
   // currentStep을 steps 배열에서 'signUpComplete' 단계를 찾아서 동적으로 계산
