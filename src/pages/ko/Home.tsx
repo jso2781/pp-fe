@@ -70,7 +70,7 @@ export default function Home() {
       const normalizedFileName = item.thmbFileNm.replace(/^\/+/, '');
       return `${import.meta.env.VITE_THUMBNAIL_API_BASE_URL || 'api/pp'}/atch/thumb/${normalizedFileName}`;
     }
-    return '/img/img_test.png';
+    return '/fe/img/img_test.png';
   };
 
   // ==========================================
@@ -113,15 +113,15 @@ export default function Home() {
 
   const serviceShortcuts = useMemo(
     () => [
-      { title: '국내 이상사례 온라인 보고', url: 'https://kaers.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico01.png' },
-      { title: '의약품부작용피해구제 민원신청', url: 'https://nedrug.mfds.go.kr/cntnts/230', iconUrl: '/img/shortcut_ico02.png' },
-      { title: '마약류 통합관리 시스템', url: 'https://www.nims.or.kr/', iconUrl: '/img/shortcut_ico03.png' },
-      { title: '의약품 통합정보 시스템', url: 'https://nedrug.mfds.go.kr/index', iconUrl: '/img/shortcut_ico04.png' },
-      { title: '첨단바이오의약품 장기추적조사 시스템', url: 'https://ltfu.mfds.go.kr/main.do', iconUrl: '/img/shortcut_ico05.png' },
-      { title: '병원자료  분석네트워크', url: 'https://moa.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico06.png' },
-      { title: '의약품 안전관리책임자 교육', url: `/ued/common/api/check.do?check=${encodedAccessToken}`, iconUrl: '/img/shortcut_ico07.png' },
-      { title: '안전정보공개', url: 'https://open.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico08.png' },
-      { title: 'APEC 약물감시 전문교육훈련', url: 'https://kidscoe.drugsafe.or.kr/', iconUrl: '/img/shortcut_ico09.png' },
+      { title: '국내 이상사례 온라인 보고', url: 'https://kaers.drugsafe.or.kr/', iconUrl: '/fe/img/shortcut_ico01.png' },
+      { title: '의약품부작용피해구제 민원신청', url: 'https://nedrug.mfds.go.kr/cntnts/230', iconUrl: '/fe/img/shortcut_ico02.png' },
+      { title: '마약류 통합관리 시스템', url: 'https://www.nims.or.kr/', iconUrl: '/fe/img/shortcut_ico03.png' },
+      { title: '의약품 통합정보 시스템', url: 'https://nedrug.mfds.go.kr/index', iconUrl: '/fe/img/shortcut_ico04.png' },
+      { title: '첨단바이오의약품 장기추적조사 시스템', url: 'https://ltfu.mfds.go.kr/main.do', iconUrl: '/fe/img/shortcut_ico05.png' },
+      { title: '병원자료  분석네트워크', url: 'https://moa.drugsafe.or.kr/', iconUrl: '/fe/img/shortcut_ico06.png' },
+      { title: '의약품 안전관리책임자 교육', url: `/ued/common/api/check.do?check=${encodedAccessToken}`, iconUrl: '/fe/img/shortcut_ico07.png' },
+      { title: '안전정보공개', url: 'https://open.drugsafe.or.kr/', iconUrl: '/fe/img/shortcut_ico08.png' },
+      { title: 'APEC 약물감시 전문교육훈련', url: 'https://kidscoe.drugsafe.or.kr/', iconUrl: '/fe/img/shortcut_ico09.png' },
     ],
     []
   );
@@ -611,7 +611,7 @@ export default function Home() {
         sx={{
           // backgroundImage: current?.mainImageUrl 
           //   ? `url("${current.mainImageUrl}")` 
-          //   : 'url("/img/main_bg01.png")'
+          //   : 'url("/fe/img/main_bg01.png")'
           backgroundImage: `url("${current?.mainImageUrl}")`
         }}
       >
@@ -678,10 +678,10 @@ export default function Home() {
               ) : (
                 <>
                   {/* <SwiperSlide>
-                    <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner01.jpg")' }} />
+                    <Box className="slide-item" sx={{ backgroundImage: 'url("/fe/img/img_test_banner01.jpg")' }} />
                   </SwiperSlide>
                   <SwiperSlide>
-                    <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner02.jpg")' }} />
+                    <Box className="slide-item" sx={{ backgroundImage: 'url("/fe/img/img_test_banner02.jpg")' }} />
                   </SwiperSlide> */}
                 </>
               )}
@@ -858,7 +858,7 @@ export default function Home() {
                               <Link href={it.url} target="_blank" rel="noreferrer" title="새창 열림" className="sns-link">
                                 <Box className="thumb-area">
                                   <img 
-                                    src={it.thumbnail || '/img/img_test.png'} 
+                                    src={it.thumbnail || '/fe/img/img_test.png'} 
                                     alt={`${it.title} 썸네일 이미지`}
                                     style={{objectFit: 'unset'}}
                                   />
@@ -931,7 +931,7 @@ export default function Home() {
                           <Link href={it.url} target="_blank" rel="noreferrer" title="새창 열림" className="sns-link">
                             <Box className="thumb-area">
                               <img 
-                                src={it.thumbnail || '/img/img_test.png'} 
+                                src={it.thumbnail || '/fe/img/img_test.png'} 
                                 alt={`${it.title} 썸네일 이미지`}
                                 style={{objectFit: 'unset'}}
                               />                              
@@ -1078,12 +1078,12 @@ export default function Home() {
                 ) : (
                   <>
                     <SwiperSlide>
-                      <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner03.png")' }}>
+                      <Box className="slide-item" sx={{ backgroundImage: 'url("/fe/img/img_test_banner03.png")' }}>
                         <a href="#none" className="slide-link"><span className="sr-only">카드뉴스 1 상세보러가기</span></a>
                       </Box>
                     </SwiperSlide>
                     <SwiperSlide>
-                      <Box className="slide-item" sx={{ backgroundImage: 'url("/img/img_test_banner03.png")' }}>
+                      <Box className="slide-item" sx={{ backgroundImage: 'url("/fe/img/img_test_banner03.png")' }}>
                         <a href="#none" className="slide-link"><span className="sr-only">카드뉴스 2 상세보러가기</span></a>
                       </Box>
                     </SwiperSlide>

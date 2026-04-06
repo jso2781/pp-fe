@@ -71,7 +71,7 @@ export default function KIDS_PP_US_EN_21() {
                       </ul>
                       <div className="mb20"></div>
                       <div className="img-switcher">
-                        <img src="/img/cms/en/introNIMS_img01.png" alt="" className="responsive-img"/>
+                        <img src="/fe/img/cms/en/introNIMS_img01.png" alt="" className="responsive-img"/>
                       </div>
                       <div className="mb20"></div>
                       <p className="txt-type-5">
@@ -81,13 +81,13 @@ export default function KIDS_PP_US_EN_21() {
                       </p>
                       <div className="mb20"></div>
                       <div className="img-switcher">
-                        <img src="/img/cms/en/introNIMS_img02.png" alt="" className="responsive-img"/>
+                        <img src="/fe/img/cms/en/introNIMS_img02.png" alt="" className="responsive-img"/>
                       </div>
                     </div>
                     <h3 className="section-title">Utilization of NIMS Data</h3>
                     <div className="section-desc">
                       <div className="img-switcher">
-                        <img src="/img/cms/en/introNIMS_img03.png" alt="" className="responsive-img"/>
+                        <img src="/fe/img/cms/en/introNIMS_img03.png" alt="" className="responsive-img"/>
                       </div>
                       <div className="mb20"></div>
                       <div className="narcotic-prevention">
@@ -124,7 +124,7 @@ export default function KIDS_PP_US_EN_21() {
                       </p>
                       <p className="tac txt-3">&lt;Online Safety-Use Advisory Letters and Statistics/Analysis information&gt;</p>
                       <div className="img-switcher">
-                        <img src="/img/cms/en/introNIMS_img04.png" alt="" className="responsive-img"/>
+                        <img src="/fe/img/cms/en/introNIMS_img04.png" alt="" className="responsive-img"/>
                       </div>
                     </div>
                   </section>

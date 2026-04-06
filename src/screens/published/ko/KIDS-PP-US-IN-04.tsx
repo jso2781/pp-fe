@@ -72,8 +72,8 @@ export default function KIDS_PP_US_IN_04() {
                   
                   <h3 className="section-title">핵심가치</h3>
                   <div className="img-switcher">
-                    <img src="/img/aboutVision_img01.png" alt="핵심가치 5대 요소 도식화" className="responsive-img pc-only"/>
-                    <img src="/img/aboutVision_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                    <img src="/fe/img/aboutVision_img01.png" alt="핵심가치 5대 요소 도식화" className="responsive-img pc-only"/>
+                    <img src="/fe/img/aboutVision_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                   </div>
                   <div className="sr-only">
                       <ul>

@@ -376,14 +376,14 @@ src/styles/
 ```tsx
 // Header 로고
 <img
-  src={i18nInstance.language === 'ko' ? '/img/logo.png' : '/img/logo_eng02.png'}
+  src={i18nInstance.language === 'ko' ? '/fe/img/logo.png' : '/fe/img/logo_eng02.png'}
   alt={`KIDS ${t('kidsName')}`}
   style={{ height: 'auto', maxHeight: '40px' }}
 />
 
 // Footer 로고
 <img
-  src="/img/footer_logo.png"
+  src="/fe/img/footer_logo.png"
   alt={`KIDS ${t('kidsName')}`}
 />
 ```

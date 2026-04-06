@@ -1024,8 +1024,8 @@ locale
 **기기 해상도에 따라 PC용과 모바일용 이미지를 선택적으로 노출합니다.**
 ```tsx
 <div className="img-switcher">
-  <img src="/img/cms/이미지.png" alt="이미지설명" className="responsive-img pc-only"/>
-  <img src="/img/cms/이미지_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+  <img src="/fe/img/cms/이미지.png" alt="이미지설명" className="responsive-img pc-only"/>
+  <img src="/fe/img/cms/이미지_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
 </div>
 ```
 

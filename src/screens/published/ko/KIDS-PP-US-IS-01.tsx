@@ -152,7 +152,7 @@ export default function KIDS_PP_US_IS_01() {
                                     </dd>
                                   </dl>
                                   <Box className="item-thumb">
-                                    <img src="/img/img_test.png" alt="썸네일" />
+                                    <img src="/fe/img/img_test.png" alt="썸네일" />
                                   </Box>
                                 </Box>
                                 <Box className="item-action"> 

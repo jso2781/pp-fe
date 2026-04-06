@@ -102,7 +102,7 @@ export default function FaqNotice() {
 
   useEffect(() => {
     scrollTo(0, 0);
-    dispatch(selectFaqList({ langSeCd: 'ko' }));
+    dispatch(selectFaqList({ langSeCd: 'KOR' }));
   }, [dispatch]);
 
   const handleUI = ({ activeCategory, searchWord, searchType, page }: FaqParam) => {

@@ -254,7 +254,7 @@ body { overflow-x: hidden; }
   font-size:13px !important;
   font-weight: 400;
   color: var(--danger); 
-  background: url('/img/icon_error_circle.svg') no-repeat left top 2px;
+  background: url('/fe/img/icon_error_circle.svg') no-repeat left top 2px;
 }
 
 /* 별도의 클래스 추가 없이 MUI 기본 클래스로 타겟팅 */
@@ -269,7 +269,7 @@ body { overflow-x: hidden; }
     color: var(--danger);
     
     // 아이콘 이미지 설정
-    background: url('/img/icon_error_circle.svg') no-repeat left top 4px;
+    background: url('/fe/img/icon_error_circle.svg') no-repeat left top 4px;
     background-size: 14px; // 아이콘 크기가 크다면 적절히 조절하세요
 
     // MUI 기본에서 생기는 불필요한 왼쪽 여백 제거 (있는 경우)
@@ -1021,9 +1021,9 @@ body { overflow-x: hidden; }
         background-size: contain;
       }
 
-      .ico-popup { background-image: url('/img/ico_quick_popup.png'); }
-      .ico-faq   { background-image: url('/img/ico_quick_faq.png'); }
-      .ico-top   { background-image: url('/img/ico_quick_top.png'); }
+      .ico-popup { background-image: url('/fe/img/ico_quick_popup.png'); }
+      .ico-faq   { background-image: url('/fe/img/ico_quick_faq.png'); }
+      .ico-top   { background-image: url('/fe/img/ico_quick_top.png'); }
 
       &:hover {
         background-color: #f8faff;

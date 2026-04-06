@@ -54,8 +54,8 @@ export default function KIDS_PP_US_EN_21() {
                       </ul>
                     </div>
                     <div className="img-switcher">
-                      <img src="/img/cms/en/introPE_img01.png" alt="" className="responsive-img pc-only"/>
-                      <img src="/img/cms/en/introPE_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                      <img src="/fe/img/cms/en/introPE_img01.png" alt="" className="responsive-img pc-only"/>
+                      <img src="/fe/img/cms/en/introPE_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                     </div>
                     <h3 className="section-title">Methods for Causality Assessment</h3>
                     <div className="section-desc">

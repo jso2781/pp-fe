@@ -46,7 +46,7 @@ export default function KIDS_PP_US_EN_06() {
                   <section className="pageCont-contactUs">
                     <h3 className="section-title">Location</h3>
                     <div className="img-switcher">
-                      <img src="/img/cms/en/contactUs_img01.png" alt="" className="responsive-img"/>
+                      <img src="/fe/img/cms/en/contactUs_img01.png" alt="" className="responsive-img"/>
                     </div>
                     <div className="location-contact-list">
                       <div className="contact-item">

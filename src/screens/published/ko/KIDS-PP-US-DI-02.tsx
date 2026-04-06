@@ -183,15 +183,15 @@ export default function KIDS_PP_US_DI_02() {
                             <th scope="row">haloperidol</th>
                             <td>
                               <Box className="dur-icons">
-                                <img src="/img/ico_dur_01.png" alt="병용금기 성분 아이콘" />
-                                <img src="/img/ico_dur_02.png" alt="특정연령대 금기 성분 아이콘" />
-                                <img src="/img/ico_dur_03.png" alt="임부금기 성분 아이콘" />
-                                <img src="/img/ico_dur_04.png" alt="용량주의 성분 아이콘" />
-                                <img src="/img/ico_dur_05.png" alt="투여기간주의 성분 아이콘" />
-                                <img src="/img/ico_dur_06.png" alt="효능군중복주의 성분 아이콘" />
-                                <img src="/img/ico_dur_07.png" alt="노인주의 성분 아이콘" />
-                                <img src="/img/ico_dur_08.png" alt="수유부주의 성분 아이콘" />
-                                <img src="/img/ico_dur_09.png" alt="분할주의 의약품 아이콘" />
+                                <img src="/fe/img/ico_dur_01.png" alt="병용금기 성분 아이콘" />
+                                <img src="/fe/img/ico_dur_02.png" alt="특정연령대 금기 성분 아이콘" />
+                                <img src="/fe/img/ico_dur_03.png" alt="임부금기 성분 아이콘" />
+                                <img src="/fe/img/ico_dur_04.png" alt="용량주의 성분 아이콘" />
+                                <img src="/fe/img/ico_dur_05.png" alt="투여기간주의 성분 아이콘" />
+                                <img src="/fe/img/ico_dur_06.png" alt="효능군중복주의 성분 아이콘" />
+                                <img src="/fe/img/ico_dur_07.png" alt="노인주의 성분 아이콘" />
+                                <img src="/fe/img/ico_dur_08.png" alt="수유부주의 성분 아이콘" />
+                                <img src="/fe/img/ico_dur_09.png" alt="분할주의 의약품 아이콘" />
                               </Box>
                             </td>
                             <td>

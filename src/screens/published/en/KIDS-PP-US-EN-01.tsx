@@ -46,7 +46,7 @@ export default function KIDS_PP_US_EN_01() {
                   <section className="pageCont-greetings">
                     <p className="intro-message">Message from President <span>Soojung Sohn</span></p>
                     <div className="greeting-content-box">
-                      <div className="ceo-img"><img src="/img/cms/aboutGreeting_img01.png" alt="Soojung Sohn" /></div>
+                      <div className="ceo-img"><img src="/fe/img/cms/aboutGreeting_img01.png" alt="Soojung Sohn" /></div>
                       <div className="greeting-article">
                         <p className="mb24">
                           Greetings to all.<br/>

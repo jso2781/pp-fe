@@ -52,7 +52,7 @@ export default function KIDS_PP_US_EN_12() {
                       </ul>
                     </div>
                     <div className="img-switcher">
-                      <img src="/img/cms/en/currentRPVC_img01.png" alt="" className="responsive-img"/>
+                      <img src="/fe/img/cms/en/currentRPVC_img01.png" alt="" className="responsive-img"/>
                     </div>
                     <h3 className="section-title">Drug-AE intensive monitoring</h3>
                     <div className="section-desc">
@@ -73,8 +73,8 @@ export default function KIDS_PP_US_EN_12() {
                     </div>
                     <p className="tac fw-700 fs-18 mb10">&lt;Operating System of RPVCs&gt;</p>
                     <div className="img-switcher">
-                      <img src="/img/cms/en/currentRPVC_img02.png" alt="" className="responsive-img pc-only"/>
-                      <img src="/img/cms/en/currentRPVC_img02_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                      <img src="/fe/img/cms/en/currentRPVC_img02.png" alt="" className="responsive-img pc-only"/>
+                      <img src="/fe/img/cms/en/currentRPVC_img02_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                     </div>
                   </section>
 

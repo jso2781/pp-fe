@@ -1086,7 +1086,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                 }}
               >
                 <img
-                  src={i18nInstance.language === 'ko' ? '/img/logo.png' : '/img/logo_eng02.png'}
+                  src={i18nInstance.language === 'ko' ? '/fe/img/logo.png' : '/fe/img/logo_eng02.png'}
                   alt={`KIDS ${t('kidsName')}`}
                   style={{
                     height: 'auto',

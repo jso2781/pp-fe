@@ -79,7 +79,7 @@ export default function VideoBoardList() {
         thmbFileNm: n.thmbFileNm ?? '',
         thmbFilePath: n.thmbFileNm
           ? `${import.meta.env.VITE_THUMBNAIL_API_BASE_URL || 'api/pp'}/atch/thumb/${n.thmbFileNm}`
-          : '/img/img_no_thmb.png',          
+          : '/fe/img/img_no_thmb.png',          
       };
     });
   }, [list]);

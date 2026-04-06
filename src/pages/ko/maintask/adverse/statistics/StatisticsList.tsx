@@ -77,7 +77,7 @@ export default function StatisticsList() {
         thmbFileNm: n.thmbFileNm ?? '',
         thmbFilePath: n.thmbFileNm
           ? `/api/atch/thumb/${n.thmbFileNm}`
-          : '/img/img_no_thmb.png',          
+          : '/fe/img/img_no_thmb.png',          
       };
     });
   }, [list]);

@@ -97,7 +97,7 @@ export default function KIDS_PP_US_NO_08() {
                             <Link href="#" className="card-item-link" underline="none">
                               <Box className="thumb-area">
                                 <Box className="thumb-box">
-                                  <img src="/img/img_test.png" alt="썸네일설명" aria-hidden="true" />
+                                  <img src="/fe/img/img_test.png" alt="썸네일설명" aria-hidden="true" />
                                 </Box>
                               </Box>
                               <Box className="info-area">

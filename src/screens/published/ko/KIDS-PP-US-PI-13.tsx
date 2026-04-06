@@ -51,7 +51,7 @@ export default function KIDS_PP_US_PI_13() {
                           controls
                           preload="metadata"
                           aria-label="의약품·의료정보 연계분석 영상" 
-                          poster="/img/analysis_video_thumbnail.png" // 미리보기 이미지 제공
+                          poster="/fe/img/analysis_video_thumbnail.png" // 미리보기 이미지 제공
                         >
                           <source src="/video/20161220marketing.mp4" type="video/mp4" />
                           <source src="/video/20161220marketing.webm" type="video/webm" />
@@ -107,10 +107,10 @@ export default function KIDS_PP_US_PI_13() {
                     </div>
                     <div className="org-list">
                       <div className="org-info-box">
-                        <span className="logo"><img src="/img/logo_mfds.png" alt="식품의약품안전처"/></span>
+                        <span className="logo"><img src="/fe/img/logo_mfds.png" alt="식품의약품안전처"/></span>
                       </div>
                       <div className="org-info-box">
-                        <span className="logo"><img src="/img/logo_drugsafe.png" alt="한국의약품안전관리원"/></span>
+                        <span className="logo"><img src="/fe/img/logo_drugsafe.png" alt="한국의약품안전관리원"/></span>
                       </div>
                     </div>
                   </section>

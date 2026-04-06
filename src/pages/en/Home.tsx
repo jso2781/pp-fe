@@ -31,10 +31,10 @@ export default function Home() {
 
   const serviceShortcuts = useMemo(
     () => [
-      { title: 'Pharmacovigilance', url: '/pp/en/cms/CmsPage/cms0035', iconUrl: '/img/en/shortcut_ico01.png' },
-      { title: 'Drug Utilization Review', url: '/pp/en/cms/CmsPage/cms0043', iconUrl: '/img/en/shortcut_ico02.png' },
-      { title: 'Pharmacoepidemiology', url: '/pp/en/cms/CmsPage/cms0041', iconUrl: '/img/en/shortcut_ico03.png' },
-      { title: 'Korea DUR System', url: '/pp/en/cms/CmsPage/cms0043', iconUrl: '/img/en/shortcut_ico04.png' },
+      { title: 'Pharmacovigilance', url: '/pp/en/cms/CmsPage/cms0035', iconUrl: '/fe/img/en/shortcut_ico01.png' },
+      { title: 'Drug Utilization Review', url: '/pp/en/cms/CmsPage/cms0043', iconUrl: '/fe/img/en/shortcut_ico02.png' },
+      { title: 'Pharmacoepidemiology', url: '/pp/en/cms/CmsPage/cms0041', iconUrl: '/fe/img/en/shortcut_ico03.png' },
+      { title: 'Korea DUR System', url: '/pp/en/cms/CmsPage/cms0043', iconUrl: '/fe/img/en/shortcut_ico04.png' },
     ],
     []
   );

@@ -111,8 +111,8 @@ export default function KIDS_PP_US_EN_20() {
                       <p>In July 2015, KIDS was designated as the Center for Narcotics Information Management under the Narcotics Control Act. Since then, KIDS proactively operates a narcotics monitoring system called the ‘Narcotics Information Management System (NIMS)’ which collects data from the whole life-cycle of medical narcotics and psychotropic drugs. The collected big data of all handling information of narcotics and psychotropic drugs are standardized, analyzed and provided for research and education purposes. KIDS provide regular education and training for healthcare professionals and linkage guidance to healthcare software developers. KIDS also conduct risk prevention and narcotics management measures to prevent abuse and misuse of drugs and to promote safer public healthcare system.</p>
                     </div>
                     <div className="img-switcher">
-                      <img src="/img/cms/en/introNNHR_img01.png" alt="Role of KIDS" className="responsive-img pc-only"/>
-                      <img src="/img/cms/en/introNNHR_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                      <img src="/fe/img/cms/en/introNNHR_img01.png" alt="Role of KIDS" className="responsive-img pc-only"/>
+                      <img src="/fe/img/cms/en/introNNHR_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                     </div>
                   </section>
 

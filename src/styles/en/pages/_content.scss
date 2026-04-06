@@ -333,7 +333,7 @@
     top: 0px;
     width: 25px; 
     height: 25px;
-    background: url('/img/ico_exclamation_circle02.svg') no-repeat left top ;
+    background: url('/fe/img/ico_exclamation_circle02.svg') no-repeat left top ;
   }
 }
 
@@ -835,7 +835,7 @@
         text-align: left;
         &::before {
           left: -11.5px;
-          background: url('/img/cms/aboutHistory_ico01.png') no-repeat center / contain;
+          background: url('/fe/img/cms/aboutHistory_ico01.png') no-repeat center / contain;
         }
       }
 
@@ -845,7 +845,7 @@
         text-align: right;
         &::before {
           right: -11.5px;
-          background: url('/img/cms/aboutHistory_ico02.png') no-repeat center / contain;
+          background: url('/fe/img/cms/aboutHistory_ico02.png') no-repeat center / contain;
         }
         .history-desc p{text-align: left;}
       }
@@ -889,7 +889,7 @@
             top: 0px;
             left: 9px; 
             right: auto;
-            background: url('/img/cms/aboutHistory_ico01.png') no-repeat center / contain;
+            background: url('/fe/img/cms/aboutHistory_ico01.png') no-repeat center / contain;
           }
         }
 
@@ -1317,7 +1317,7 @@
           z-index: 5;
           width: 35px;
           height: 35px;
-          background: url('/img/cms/en/missionVision_ico01.png') no-repeat center center;
+          background: url('/fe/img/cms/en/missionVision_ico01.png') no-repeat center center;
           background-size: contain;
         }
       }
@@ -1343,7 +1343,7 @@
     }
     .value-description{
       padding:160px 20px 0 20px;
-      background: url('/img/cms/en/missionVision_img01.png') no-repeat center top;
+      background: url('/fe/img/cms/en/missionVision_img01.png') no-repeat center top;
       @media (max-width: 768px) {
         padding:120px 10px 0 10px;
         background-size: contain;

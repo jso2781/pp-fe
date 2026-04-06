@@ -58,7 +58,7 @@
         color: var(--color-text-2);
         margin: 0 10px 0 0;
         padding: 0 0 0 20px;
-        background: url('/img/ico_time.svg') no-repeat left center;
+        background: url('/fe/img/ico_time.svg') no-repeat left center;
       }
       .btn_extend {
         color: var(--color-text-1);
@@ -139,15 +139,15 @@
     &:hover { background-color: transparent; }
 
     /* 공통 아이콘 설정 */
-    &.search::before { background-image: url('/img/ico_search.svg'); }
-    &.signup::before { background-image: url('/img/ico_signup.svg'); }
-    &.edit-profile::before { background-image: url('/img/ico_edit_profile.svg'); }
-    &.user-reg::before { background-image: url('/img/ico_usrtReg.svg'); }
-    &.user-adv::before { background-image: url('/img/ico_usrSwtReg.svg'); }
-    &.my-task::before { background-image: url('/img/ico_task.svg'); }
-    &.adv-task::before { background-image: url('/img/ico_advTask.svg'); }
-    &.login::before { background-image: url('/img/ico_login.svg'); }
-    &.logout::before { background-image: url('/img/ico_login.svg'); }
+    &.search::before { background-image: url('/fe/img/ico_search.svg'); }
+    &.signup::before { background-image: url('/fe/img/ico_signup.svg'); }
+    &.edit-profile::before { background-image: url('/fe/img/ico_edit_profile.svg'); }
+    &.user-reg::before { background-image: url('/fe/img/ico_usrtReg.svg'); }
+    &.user-adv::before { background-image: url('/fe/img/ico_usrSwtReg.svg'); }
+    &.my-task::before { background-image: url('/fe/img/ico_task.svg'); }
+    &.adv-task::before { background-image: url('/fe/img/ico_advTask.svg'); }
+    &.login::before { background-image: url('/fe/img/ico_login.svg'); }
+    &.logout::before { background-image: url('/fe/img/ico_login.svg'); }
   }
 }
 
@@ -359,8 +359,8 @@
 
   }
 
-  .btn-util.login::before { background-image: url('/img/ico_login.svg'); }
-  .btn-mo-menu::before { background-image: url('/img/ico_allmenu.svg'); }
+  .btn-util.login::before { background-image: url('/fe/img/ico_login.svg'); }
+  .btn-mo-menu::before { background-image: url('/fe/img/ico_allmenu.svg'); }
 
   @media (min-width: 1200px) { display: none !important; }
  

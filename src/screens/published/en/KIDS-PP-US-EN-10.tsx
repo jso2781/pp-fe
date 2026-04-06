@@ -53,8 +53,8 @@ export default function KIDS_PP_US_EN_10() {
                       </ul>
                     </div>
                     <div className="img-switcher">
-                      <img src="/img/cms/en/introRPVC_img01.png" alt="" className="responsive-img pc-only"/>
-                      <img src="/img/cms/en/introRPVC_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                      <img src="/fe/img/cms/en/introRPVC_img01.png" alt="" className="responsive-img pc-only"/>
+                      <img src="/fe/img/cms/en/introRPVC_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                     </div>
                     <div className="mb40"></div>
                     <ul className="list-bullet-2">
@@ -62,8 +62,8 @@ export default function KIDS_PP_US_EN_10() {
                     </ul>
                     <div className="mb40"></div>
                     <div className="img-switcher">
-                      <img src="/img/cms/en/introRPVC_img02.png" alt="" className="responsive-img pc-only"/>
-                      <img src="/img/cms/en/introRPVC_img02_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                      <img src="/fe/img/cms/en/introRPVC_img02.png" alt="" className="responsive-img pc-only"/>
+                      <img src="/fe/img/cms/en/introRPVC_img02_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                     </div>
                   </section>
 

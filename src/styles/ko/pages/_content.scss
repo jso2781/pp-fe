@@ -310,7 +310,7 @@
         display: inline-block;
         width: 32px;
         height: 32px;
-        background: url("/img/ico_caution.svg") no-repeat center center;
+        background: url("/fe/img/ico_caution.svg") no-repeat center center;
       }
     }
     .caution-txt{
@@ -1046,7 +1046,7 @@
     transform: translateX(-50%); 
     width: 24px; 
     height: 24px; 
-    background: url('/img/ico_exclamation_circle02.svg') no-repeat center;
+    background: url('/fe/img/ico_exclamation_circle02.svg') no-repeat center;
   }
 
   .status-box__text {
@@ -1570,7 +1570,7 @@
       display: inline-block;
       width: 30px;
       height: 30px; 
-      background: url('/img/ico_guide_title.svg') no-repeat center center;
+      background: url('/fe/img/ico_guide_title.svg') no-repeat center center;
       margin-right: 8px;
     }
   }
@@ -1662,7 +1662,7 @@
       top: 2px;
       width: 20px; 
       height: 20px;
-      background: url('/img/ico_exclamation_circle03.svg') no-repeat center / contain;
+      background: url('/fe/img/ico_exclamation_circle03.svg') no-repeat center / contain;
     }
   }
   
@@ -1874,7 +1874,7 @@
 .info-drug-box {
   margin:0 0 40px 0;
   padding: 40px 40px 40px 110px;
-  background: #EEF2F7 url('/img/ico_drug_title.png') no-repeat left 40px top 30px;
+  background: #EEF2F7 url('/fe/img/ico_drug_title.png') no-repeat left 40px top 30px;
   border-radius: 12px;
   
   .drug-title {
@@ -2006,7 +2006,7 @@
         top: 2px;
         width: 18px;
         height: 18px;
-        background: url('/img/ico_exclamation_circle02.svg') no-repeat center center;
+        background: url('/fe/img/ico_exclamation_circle02.svg') no-repeat center center;
         background-size: contain;
       }
     }
@@ -2041,8 +2041,8 @@
   }
 
   // 섹션별 아이콘
-  .search-section .step-label { background: url('/img/ico_drug_search.png') no-repeat left top; }
-  .basket-section .step-label { background: url('/img/ico_drug_basket.png') no-repeat left top; }
+  .search-section .step-label { background: url('/fe/img/ico_drug_search.png') no-repeat left top; }
+  .basket-section .step-label { background: url('/fe/img/ico_drug_basket.png') no-repeat left top; }
 
   // 테이블 공통
   .base-table-container {
@@ -2200,7 +2200,7 @@
       font-size: var(--fs-20);
       font-weight: 700;
       padding-left: 50px;
-      background: url('/img/ico_drug_sresult.png') no-repeat left center; 
+      background: url('/fe/img/ico_drug_sresult.png') no-repeat left center; 
       span { display: block; }
     }
 
@@ -2240,7 +2240,7 @@
       top: 1px;
       width: 20px; 
       height: 20px;
-      background: url('/img/ico_exclamation_circle03.svg') no-repeat center / contain;
+      background: url('/fe/img/ico_exclamation_circle03.svg') no-repeat center / contain;
     }
   }
 
@@ -2434,7 +2434,7 @@
       &::after {
         content: "";
         position: absolute;
-        background: url('/img/ico_process_step_arrow.svg') no-repeat center;
+        background: url('/fe/img/ico_process_step_arrow.svg') no-repeat center;
         background-size: contain;
         top: 50%;
         right: -42px;
@@ -2816,7 +2816,7 @@
         width: 60px; 
         height: 60px;
         margin-bottom: 15px;
-        background: url('/img/ico_empty.png') no-repeat center / contain;
+        background: url('/fe/img/ico_empty.png') no-repeat center / contain;
       }
     }
 
@@ -2926,7 +2926,7 @@
     top: 0px;
     width: 25px; 
     height: 25px;
-    background: url('/img/ico_exclamation_circle02.svg') no-repeat left top ;
+    background: url('/fe/img/ico_exclamation_circle02.svg') no-repeat left top ;
   }
 }
 
@@ -3129,7 +3129,7 @@
     padding: 24px 24px 24px 150px;
     border: 1px solid #D8D8D8;
     border-radius: 10px;
-    background: url('/img/cms/adverseIntro_img01.png') no-repeat left 20px top 20px;
+    background: url('/fe/img/cms/adverseIntro_img01.png') no-repeat left 20px top 20px;
 
     .report-step-list {
       li {
@@ -3174,7 +3174,7 @@
 
       .report-step-list {
         padding:0 100px 0 0 ;
-        background: url('/img/cms/adverseIntro_img01.png') no-repeat right top;
+        background: url('/fe/img/cms/adverseIntro_img01.png') no-repeat right top;
         background-size: 80px auto;
         li{
           flex-direction: column;
@@ -3242,15 +3242,15 @@
 
     /* dt별 이미지 분기 */
     dl:nth-child(1) dt::before {
-      background-image: url('/img/cms/taskProgress_ico01.png');
+      background-image: url('/fe/img/cms/taskProgress_ico01.png');
     }
 
     dl:nth-child(2) dt::before {
-      background-image: url('/img/cms/taskProgress_ico02.png');
+      background-image: url('/fe/img/cms/taskProgress_ico02.png');
     }
 
     dl:nth-child(3) dt::before {
-      background-image: url('/img/cms/taskProgress_ico03.png'); 
+      background-image: url('/fe/img/cms/taskProgress_ico03.png'); 
     }
 
     @media (max-width: 1200px) {
@@ -3370,16 +3370,16 @@
     }
 
     &.type-target::before {
-      background: #EDF8F8 url("/img/cms/reliefIntro_ico01.png") no-repeat center center;
+      background: #EDF8F8 url("/fe/img/cms/reliefIntro_ico01.png") no-repeat center center;
     }
     &.type-period::before {
-      background: #EDF8F8 url("/img/cms/reliefIntro_ico02.png") no-repeat center center;
+      background: #EDF8F8 url("/fe/img/cms/reliefIntro_ico02.png") no-repeat center center;
     }
     &.type-post::before {
-      background: #EDF8F8 url("/img/cms/reliefIntro_ico03.png") no-repeat center center;
+      background: #EDF8F8 url("/fe/img/cms/reliefIntro_ico03.png") no-repeat center center;
     }
     &.type-online::before {
-      background: #EDF8F8 url("/img/cms/reliefIntro_ico04.png") no-repeat center center;
+      background: #EDF8F8 url("/fe/img/cms/reliefIntro_ico04.png") no-repeat center center;
     }
   }
  
@@ -3876,7 +3876,7 @@
         text-align: left;
         &::before {
           left: -11.5px;
-          background: url('/img/cms/aboutHistory_ico01.png') no-repeat center / contain;
+          background: url('/fe/img/cms/aboutHistory_ico01.png') no-repeat center / contain;
         }
       }
 
@@ -3886,7 +3886,7 @@
         text-align: right;
         &::before {
           right: -11.5px;
-          background: url('/img/cms/aboutHistory_ico02.png') no-repeat center / contain;
+          background: url('/fe/img/cms/aboutHistory_ico02.png') no-repeat center / contain;
         }
       }
 
@@ -3932,7 +3932,7 @@
             top: 0px;
             left: 9px; 
             right: auto;
-            background: url('/img/cms/aboutHistory_ico01.png') no-repeat center / contain;
+            background: url('/fe/img/cms/aboutHistory_ico01.png') no-repeat center / contain;
           }
         }
 
@@ -4233,10 +4233,10 @@
       margin-bottom: 20px; 
     }
 
-    &:nth-child(1)::before { background-image: url('/img/cms/aboutVision_ico01.png'); }
-    &:nth-child(2)::before { background-image: url('/img/cms/aboutVision_ico02.png'); }
-    &:nth-child(3)::before { background-image: url('/img/cms/aboutVision_ico03.png'); }
-    &:nth-child(4)::before { background-image: url('/img/cms/aboutVision_ico04.png'); }
+    &:nth-child(1)::before { background-image: url('/fe/img/cms/aboutVision_ico01.png'); }
+    &:nth-child(2)::before { background-image: url('/fe/img/cms/aboutVision_ico02.png'); }
+    &:nth-child(3)::before { background-image: url('/fe/img/cms/aboutVision_ico03.png'); }
+    &:nth-child(4)::before { background-image: url('/fe/img/cms/aboutVision_ico04.png'); }
   }
 
   .task-list li {
@@ -4511,10 +4511,10 @@
     }
   }
   .sec01::before {
-    background-image: url("/img/cms/aboutCharter_ico01.png");
+    background-image: url("/fe/img/cms/aboutCharter_ico01.png");
   }
   .sec02::before {
-    background-image: url("/img/cms/aboutCharter_ico02.png");
+    background-image: url("/fe/img/cms/aboutCharter_ico02.png");
   }
   .sec03{
     .txt{
@@ -4536,7 +4536,7 @@
         margin:0 8px 0 0;
         padding:0 0 0 8px;
         color:#fff;
-        background: url("/img/cms/aboutCharter_ico03.png") center center;
+        background: url("/fe/img/cms/aboutCharter_ico03.png") center center;
       }
     }
     li ~ li{margin-top: 16px;}

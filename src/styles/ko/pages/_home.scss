@@ -36,10 +36,10 @@
   } // 기본 Swiper 폰트 아이콘 제거
 
   &.swiper-button-prev {
-    background-image: url("/img/btn_swiper_prev.png") !important;
+    background-image: url("/fe/img/btn_swiper_prev.png") !important;
   }
   &.swiper-button-next {
-    background-image: url("/img/btn_swiper_next.png") !important;
+    background-image: url("/fe/img/btn_swiper_next.png") !important;
   }
 
   &.swiper-button-disabled {
@@ -672,16 +672,16 @@
           }
 
           &.tab-youtube::before {
-            -webkit-mask-image: url("/img/tab_ico_youtube.svg");
-            mask-image: url("/img/tab_ico_youtube.svg");
+            -webkit-mask-image: url("/fe/img/tab_ico_youtube.svg");
+            mask-image: url("/fe/img/tab_ico_youtube.svg");
           }
           &.tab-insta::before {
-            -webkit-mask-image: url("/img/tab_ico_instagram.svg");
-            mask-image: url("/img/tab_ico_instagram.svg");
+            -webkit-mask-image: url("/fe/img/tab_ico_instagram.svg");
+            mask-image: url("/fe/img/tab_ico_instagram.svg");
           }
           &.tab-blog::before {
-            -webkit-mask-image: url("/img/tab_ico_blog.svg");
-            mask-image: url("/img/tab_ico_blog.svg");
+            -webkit-mask-image: url("/fe/img/tab_ico_blog.svg");
+            mask-image: url("/fe/img/tab_ico_blog.svg");
           }
 
           &:hover,

@@ -42,7 +42,7 @@ export default function KIDS_PP_US_IN_01() {
                   <section className="pageCont-AboutGreeting">
                     <p className="intro-message"><span>‘한국의약품안전관리원 누리집’ </span>방문을 진심으로 환영합니다.</p>
                     <div className="greeting-content-box">
-                      <div className="ceo-img"><img src="/img/cms/aboutGreeting_img01.png" alt="한국의약품안전관리원장 손수정" /></div>
+                      <div className="ceo-img"><img src="/fe/img/cms/aboutGreeting_img01.png" alt="한국의약품안전관리원장 손수정" /></div>
                       <div className="greeting-article">
                         <p className="txt1 mb24">안녕하십니까?<br/>한국의약품안전관리원장 손수정입니다.</p>
                         <p className="mb24">

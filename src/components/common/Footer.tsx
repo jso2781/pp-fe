@@ -157,7 +157,7 @@ export default function Footer() {
               <Link to="/" aria-label={t("kidsHomeAria")}>
                 <Box
                   component="img"
-                  src="/img/footer_logo.png"
+                  src="/fe/img/footer_logo.png"
                   alt={`KIDS ${t("kidsName")}`}
                 />
               </Link>

@@ -46,7 +46,7 @@ export default function KIDS_PP_US_EN_21() {
                   <section className="pageCont-resources">
                     <div className="resource-item">
                       <div className="thumbnail">
-                        <img src="/img/cms/en/resources_img01.png" alt="2020 Ministry of Food and Drug Safety White Paper" />
+                        <img src="/fe/img/cms/en/resources_img01.png" alt="2020 Ministry of Food and Drug Safety White Paper" />
                       </div>
                       <div className="info-body">
                         <dl>
@@ -60,7 +60,7 @@ export default function KIDS_PP_US_EN_21() {
                     </div>
                     <div className="resource-item">
                       <div className="thumbnail">
-                        <img src="/img/cms/en/resources_img02.png" alt="2019 Ministry of Food and Drug Safety White Paper" />
+                        <img src="/fe/img/cms/en/resources_img02.png" alt="2019 Ministry of Food and Drug Safety White Paper" />
                       </div>
                       <div className="info-body">
                         <dl>
@@ -74,7 +74,7 @@ export default function KIDS_PP_US_EN_21() {
                     </div>
                     <div className="resource-item">
                       <div className="thumbnail">
-                        <img src="/img/cms/en/resources_img03.png" alt="2018 Ministry of Food and Drug Safety White Paper" />
+                        <img src="/fe/img/cms/en/resources_img03.png" alt="2018 Ministry of Food and Drug Safety White Paper" />
                       </div>
                       <div className="info-body">
                         <dl>
@@ -88,7 +88,7 @@ export default function KIDS_PP_US_EN_21() {
                     </div>
                     <div className="resource-item">
                       <div className="thumbnail">
-                        <img src="/img/cms/en/resources_img04.png" alt="2017 Ministry of Food and Drug Safety White Paper" />
+                        <img src="/fe/img/cms/en/resources_img04.png" alt="2017 Ministry of Food and Drug Safety White Paper" />
                       </div>
                       <div className="info-body">
                         <dl>
@@ -102,7 +102,7 @@ export default function KIDS_PP_US_EN_21() {
                     </div>
                     <div className="resource-item">
                       <div className="thumbnail">
-                        <img src="/img/cms/en/resources_img05.png" alt="Narcotics Control Act" />
+                        <img src="/fe/img/cms/en/resources_img05.png" alt="Narcotics Control Act" />
                       </div>
                       <div className="info-body">
                         <dl>

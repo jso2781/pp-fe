@@ -75,13 +75,13 @@ export default function KIDS_PP_US_DI_01() {
                     <div className="img-switcher">
                       {/* PC용 이미지 */}
                       <img 
-                        src="/img/cms/dur_intro_img01.png" 
+                        src="/fe/img/cms/dur_intro_img01.png" 
                         alt="한국의약품안전관리원 개발 정보가 식약처 고시를 거쳐 심평원 DUR 시스템으로 의료현장에 제공되는 과정 (PC)" 
                         className="responsive-img pc-only"
                       />
                       {/* 모바일용 이미지 */}
                       <img 
-                        src="/img/cms/dur_intro_img01_m.png" 
+                        src="/fe/img/cms/dur_intro_img01_m.png" 
                         alt="한국의약품안전관리원 개발 정보가 식약처 고시를 거쳐 심평원 DUR 시스템으로 의료현장에 제공되는 과정 (모바일)" 
                         className="responsive-img mo-only"
                       />
@@ -92,7 +92,7 @@ export default function KIDS_PP_US_DI_01() {
                       {/* 1. 병용금기 */}
                       <li className="definition-list__item">
                         <div className="definition-list__icon">
-                          <img src="/img/cms/ico_dur_01.png" alt="병용금기 성분 아이콘" />
+                          <img src="/fe/img/cms/ico_dur_01.png" alt="병용금기 성분 아이콘" />
                         </div>
                         <div className="definition-list__text">
                           <span className="definition-list__title">1. 병용금기 성분</span>
@@ -105,7 +105,7 @@ export default function KIDS_PP_US_DI_01() {
                       {/* 2. 특정연령대 금기 */}
                       <li className="definition-list__item">
                         <div className="definition-list__icon">
-                          <img src="/img/cms/ico_dur_02.png" alt="특정연령대 금기 성분 아이콘" />
+                          <img src="/fe/img/cms/ico_dur_02.png" alt="특정연령대 금기 성분 아이콘" />
                         </div>
                         <div className="definition-list__text">
                           <span className="definition-list__title">2. 특정연령대 금기 성분</span>
@@ -118,7 +118,7 @@ export default function KIDS_PP_US_DI_01() {
                       {/* 3. 임부금기 */}
                       <li className="definition-list__item">
                         <div className="definition-list__icon">
-                          <img src="/img/cms/ico_dur_03.png" alt="임부금기 성분 아이콘" />
+                          <img src="/fe/img/cms/ico_dur_03.png" alt="임부금기 성분 아이콘" />
                         </div>
                         <div className="definition-list__text">
                           <span className="definition-list__title">3. 임부금기 성분</span>
@@ -131,7 +131,7 @@ export default function KIDS_PP_US_DI_01() {
                       {/* 4. 용량주의 */}
                       <li className="definition-list__item">
                         <div className="definition-list__icon">
-                          <img src="/img/cms/ico_dur_04.png" alt="용량주의 성분 아이콘" />
+                          <img src="/fe/img/cms/ico_dur_04.png" alt="용량주의 성분 아이콘" />
                         </div>
                         <div className="definition-list__text">
                           <span className="definition-list__title">4. 용량주의 성분</span>
@@ -144,7 +144,7 @@ export default function KIDS_PP_US_DI_01() {
                       {/* 5. 투여기간주의 */}
                       <li className="definition-list__item">
                         <div className="definition-list__icon">
-                          <img src="/img/cms/ico_dur_05.png" alt="투여기간주의 성분 아이콘" />
+                          <img src="/fe/img/cms/ico_dur_05.png" alt="투여기간주의 성분 아이콘" />
                         </div>
                         <div className="definition-list__text">
                           <span className="definition-list__title">5. 투여기간주의 성분</span>
@@ -157,7 +157,7 @@ export default function KIDS_PP_US_DI_01() {
                       {/* 6. 효능군중복주의 */}
                       <li className="definition-list__item">
                         <div className="definition-list__icon">
-                          <img src="/img/cms/ico_dur_06.png" alt="효능군중복주의 성분 아이콘" />
+                          <img src="/fe/img/cms/ico_dur_06.png" alt="효능군중복주의 성분 아이콘" />
                         </div>
                         <div className="definition-list__text">
                           <span className="definition-list__title">6. 효능군중복주의 성분</span>
@@ -170,7 +170,7 @@ export default function KIDS_PP_US_DI_01() {
                       {/* 7. 노인주의 */}
                       <li className="definition-list__item">
                         <div className="definition-list__icon">
-                          <img src="/img/cms/ico_dur_07.png" alt="노인주의 성분 아이콘" />
+                          <img src="/fe/img/cms/ico_dur_07.png" alt="노인주의 성분 아이콘" />
                         </div>
                         <div className="definition-list__text">
                           <span className="definition-list__title">7. 노인주의 성분</span>
@@ -183,7 +183,7 @@ export default function KIDS_PP_US_DI_01() {
                       {/* 8. 수유부주의 */}
                       <li className="definition-list__item">
                         <div className="definition-list__icon">
-                          <img src="/img/cms/ico_dur_08.png" alt="수유부주의 성분 아이콘" />
+                          <img src="/fe/img/cms/ico_dur_08.png" alt="수유부주의 성분 아이콘" />
                         </div>
                         <div className="definition-list__text">
                           <span className="definition-list__title">8. 수유부주의 성분</span>
@@ -196,7 +196,7 @@ export default function KIDS_PP_US_DI_01() {
                       {/* 9. 분할주의 */}
                       <li className="definition-list__item">
                         <div className="definition-list__icon">
-                          <img src="/img/cms/ico_dur_09.png" alt="분할주의 의약품 아이콘" />
+                          <img src="/fe/img/cms/ico_dur_09.png" alt="분할주의 의약품 아이콘" />
                         </div>
                         <div className="definition-list__text">
                           <span className="definition-list__title">9. 분할주의 의약품</span>

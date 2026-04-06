@@ -50,7 +50,7 @@ export default function KIDS_PP_US_EN_19() {
                         <p className="update-date">(‘2025.11.30, uint : cases)</p>
                       </div>
                       <div className="img-switcher">
-                        <img src="/img/cms/en/statisticsAdrRelf_img01.png" alt="Request for relief of injury" className="responsive-img"/>
+                        <img src="/fe/img/cms/en/statisticsAdrRelf_img01.png" alt="Request for relief of injury" className="responsive-img"/>
                       </div>
                     </div>
                     

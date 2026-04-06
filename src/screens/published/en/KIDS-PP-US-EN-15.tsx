@@ -56,12 +56,12 @@ export default function KIDS_PP_US_EN_15() {
                     </div>
                     <div className="img-switcher">
                       <img 
-                        src="/img/cms/en/dur_intro_img01_en.png" 
+                        src="/fe/img/cms/en/dur_intro_img01_en.png" 
                         alt="한국의약품안전관리원 개발 정보가 식약처 고시를 거쳐 심평원 DUR 시스템으로 의료현장에 제공되는 과정 (PC)" 
                         className="responsive-img pc-only"
                       />
                       <img 
-                        src="/img/cms/en/dur_intro_img01_m_en.png" 
+                        src="/fe/img/cms/en/dur_intro_img01_m_en.png" 
                         alt="한국의약품안전관리원 개발 정보가 식약처 고시를 거쳐 심평원 DUR 시스템으로 의료현장에 제공되는 과정 (모바일)" 
                         className="responsive-img mo-only"
                       />

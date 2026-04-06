@@ -83,13 +83,13 @@ export default function KIDS_PP_US_EN_18() {
                     </div>
                     <h3 className="section-title">ADR Relief System Flow Chart</h3>
                     <div className="img-switcher">
-                      <img src="/img/cms/en/introAdrRelf_img01.png" alt="ADR Relief System Flow Chart" className="responsive-img pc-only"/>
-                      <img src="/img/cms/en/introAdrRelf_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                      <img src="/fe/img/cms/en/introAdrRelf_img01.png" alt="ADR Relief System Flow Chart" className="responsive-img pc-only"/>
+                      <img src="/fe/img/cms/en/introAdrRelf_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                     </div>
                     <h3 className="section-title">Types of Relief Benefits</h3>
                     <div className="img-switcher">
-                      <img src="/img/cms/en/introAdrRelf_img02.png" alt="Types of Relief Benefits" className="responsive-img pc-only"/>
-                      <img src="/img/cms/en/introAdrRelf_img02_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                      <img src="/fe/img/cms/en/introAdrRelf_img02.png" alt="Types of Relief Benefits" className="responsive-img pc-only"/>
+                      <img src="/fe/img/cms/en/introAdrRelf_img02_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                     </div> 
                   </section>
 

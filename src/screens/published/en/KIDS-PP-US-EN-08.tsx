@@ -85,7 +85,7 @@ export default function KIDS_PP_US_EN_08() {
                     </div>
                     <p className="txt-3 mb20">*ICSRs : Individual Case Safety Reports</p>
                     <div className="img-switcher">
-                      <img src="/img/cms/en/reportedICSR_img01.png" alt="" className="responsive-img"/>
+                      <img src="/fe/img/cms/en/reportedICSR_img01.png" alt="" className="responsive-img"/>
                     </div> 
                   </section>
 

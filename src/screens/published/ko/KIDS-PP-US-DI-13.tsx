@@ -66,7 +66,7 @@ export default function KIDS_PP_US_DI_13() {
                       <ul className="book-list">
                         <li>
                           <a href="/download/소아·청소년에 대한 의약품 적정사용 정보집_2022년 개정판.pdf" download className="btn-book" role="button">
-                            <img src="/img/cms/ApprUseBook_img01.png" alt="" aria-hidden="true" />
+                            <img src="/fe/img/cms/ApprUseBook_img01.png" alt="" aria-hidden="true" />
                             <p className="book-name">
                               소아·청소년에 대한 의약품 적정사용 정보집(’22)
                               <span className="sr-only">(파일 다운로드)</span>
@@ -75,7 +75,7 @@ export default function KIDS_PP_US_DI_13() {
                         </li>
                         <li>
                           <a href="/download/임부에 대한 의약품 적정사용 정보집(2025)(전문가용).pdf" download className="btn-book" role="button">
-                            <img src="/img/cms/ApprUseBook_img02.png" alt="" aria-hidden="true" />
+                            <img src="/fe/img/cms/ApprUseBook_img02.png" alt="" aria-hidden="true" />
                             <p className="book-name">
                               임부에 대한 의약품 적정사용 정보집(’25)
                               <span className="sr-only">(파일 다운로드)</span>
@@ -84,7 +84,7 @@ export default function KIDS_PP_US_DI_13() {
                         </li>
                         <li>
                           <a href="/download/노인에대한의약품적정사용정보집-웹용.pdf" download className="btn-book" role="button">
-                            <img src="/img/cms/ApprUseBook_img03.png" alt="" aria-hidden="true" />
+                            <img src="/fe/img/cms/ApprUseBook_img03.png" alt="" aria-hidden="true" />
                             <p className="book-name">
                               노인에 대한 의약품 적정사용 정보집(’15)
                               <span className="sr-only">(파일 다운로드)</span>
@@ -93,7 +93,7 @@ export default function KIDS_PP_US_DI_13() {
                         </li>
                         <li>
                           <a href="/download/1218_간질환정보집_최종본.pdf" download className="btn-book" role="button">
-                            <img src="/img/cms/ApprUseBook_img04.png" alt="" aria-hidden="true" />
+                            <img src="/fe/img/cms/ApprUseBook_img04.png" alt="" aria-hidden="true" />
                             <p className="book-name">
                               간질환 환자에 대한 의약품 적정사용 정보집(’17)
                               <span className="sr-only">(파일 다운로드)</span>
@@ -102,7 +102,7 @@ export default function KIDS_PP_US_DI_13() {
                         </li>
                         <li>
                           <a href="/download/1218_신질환정보집_최종본.pdf" download className="btn-book" role="button">
-                            <img src="/img/cms/ApprUseBook_img05.png" alt="" aria-hidden="true" />
+                            <img src="/fe/img/cms/ApprUseBook_img05.png" alt="" aria-hidden="true" />
                             <p className="book-name">
                               신질환 환자에 대한 의약품적정사용 정보집(’17)
                               <span className="sr-only">(파일 다운로드)</span>

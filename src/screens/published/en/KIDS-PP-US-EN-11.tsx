@@ -53,7 +53,7 @@ export default function KIDS_PP_US_EN_11() {
                       </ul>
                     </div>
                     <div className="img-switcher">
-                      <img src="/img/cms/en/historyRPVC_img01.png" alt="" className="responsive-img"/>
+                      <img src="/fe/img/cms/en/historyRPVC_img01.png" alt="" className="responsive-img"/>
                     </div>
                     <h3 className="section-title">RPVCs Location Status</h3>
                     <p className="fs-18 fw-700 mb20">28 sites in total, As of 2025)</p>

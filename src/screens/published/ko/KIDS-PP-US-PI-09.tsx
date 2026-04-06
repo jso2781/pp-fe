@@ -56,7 +56,7 @@ export default function KIDS_PP_US_PI_09() {
                       </ul>
                       <div className="mb24"></div>
                       <div className="img-switcher">
-                        <img src="/img/cms/safetyCausality_img01.png" alt="의약품안전성문제 관리 흐름도" className="responsive-img"/>
+                        <img src="/fe/img/cms/safetyCausality_img01.png" alt="의약품안전성문제 관리 흐름도" className="responsive-img"/>
                       </div>
                     </div>
 

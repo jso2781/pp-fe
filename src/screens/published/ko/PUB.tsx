@@ -1025,8 +1025,8 @@ export default function PUB() {
                   {/* ------------------------------------------------------------------------------------------------ */}
                   <h3 className="section-title">웹,모바일 이미지</h3>
                   <div className="img-switcher">
-                    <img src="/img/cms/adverseKaers_img01.png" alt="이미지설명" className="responsive-img pc-only"/>
-                    <img src="/img/cms/adverseKaers_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
+                    <img src="/fe/img/cms/adverseKaers_img01.png" alt="이미지설명" className="responsive-img pc-only"/>
+                    <img src="/fe/img/cms/adverseKaers_img01_m.png"  alt="" aria-hidden="true" className="responsive-img mo-only"/>
                   </div>
 
                 {/* --- 본문 끝 --- */}
