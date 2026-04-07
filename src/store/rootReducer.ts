@@ -24,6 +24,7 @@ import cdmBoardReducer from '@/features/cdm/board/BoardCdmSlice'
 import cdmFaqReducer from '@/features/cdm/faq/FaqCdmSlice'
 import cdmQnaReducer from '@/features/cdm/qna/QnaCdmSlice'
 import cdmAsmtPrpReducer from '@/features/cdm/asmtprp/AsmtprpCdmSlice'
+import cryptoReducer from '@/features/crypto/CryptoSlice'
 
 const rootReducer = combineReducers({
   ui: uiReducer,
@@ -51,6 +52,7 @@ const rootReducer = combineReducers({
   cdmFaq: cdmFaqReducer, // CDM FAQ
   cdmQna: cdmQnaReducer, // CDM Q&A
   cdmAsmtPrp: cdmAsmtPrpReducer, // CDM 과제제안
+  crypto: cryptoReducer, // 암·복호화(CA decrypto 등)
 })
 
 export default rootReducer

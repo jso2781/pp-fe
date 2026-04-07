@@ -15,7 +15,7 @@ import { existMbrInfo, updateMbrInfo } from '@/features/mbr/MbrInfoThunks';
 import { MbrInfoPVO, MbrInfoRVO, UpdateMbrInfoRVO } from '@/features/mbr/MbrInfoTypes';
 import { setAuthUserInfo } from '@/features/auth/AuthSlice';
 import { useDialog } from '@/contexts/DialogContext';
-
+import { decrypto } from '@/features/crypto/CryptoThunks';
 
 /**
  * PostgreSQL timestamp without time zone 컬럼에 맞는 형식으로 반환.
@@ -33,12 +33,16 @@ export default function EditProfile() {
   // Redux에서 사용자 정보 가져오기
   const userInfo = useAppSelector((state) => state.auth.userInfo);
 
-  // 폼 상태 관리
+  /** 복호화 직후 기준 평문 이메일(중복검증·저장 시 암호문과 비교하지 않도록) */
+  const initialDecryptedRef = useRef({ userName: '', email: '', phone: '' });
+  const [isProfileDecrypting, setIsProfileDecrypting] = useState(false);
+
+  // 폼: 이름·전화·이메일은 아래 effect에서 decrypto 성공 후에만 채움 (ref 초기값으로는 절대 표시 불가)
   const [formData, setFormData] = useState({
-    mbrId: userInfo?.mbrId || '',
-    userName: userInfo?.encptMbrFlnm || '', // 암호화된 이름 (평문으로 표시 불가, 실제로는 복호화 필요)
-    phone: userInfo?.encptMbrTelno || '', // 암호화된 전화번호 (평문으로 표시 불가, 실제로는 복호화 필요)
-    email: userInfo?.encptMbrEmlNm || '', // 암호화된 이메일 (평문으로 표시 불가, 실제로는 복호화 필요)
+    mbrId: '',
+    userName: '',
+    phone: '',
+    email: '',
     password: '',
     confirmPassword: '',
   });
@@ -63,18 +67,66 @@ export default function EditProfile() {
     checkAnyIdReady();
   }, []);
 
-  // userInfo가 변경되면 formData 업데이트
+  /**
+   * Auth의 encpt* 는 암호문. `decrypto` 한 번에 회원명·이메일·전화 암호 필드를 함께 넘기고,
+   * 응답 `decpt*` 로 폼을 채움 — 암호문만으로 폼을 덮어쓰는 별도 effect 는 없음.
+   */
   useEffect(() => {
-    if (userInfo) {
-      setFormData(prev => ({
+    if (!userInfo?.mbrId) return;
+
+    let cancelled = false;
+
+    const loadDecryptedProfile = async () => {
+      setIsProfileDecrypting(true);
+      const mbrId = userInfo.mbrId || '';
+      let userName = '';
+      let email = '';
+      let phone = '';
+
+      const encptMbrFlnm = userInfo.encptMbrFlnm?.trim();
+      const encptMbrEmlNm = userInfo.encptMbrEmlNm?.trim();
+      const encptMbrTelno = userInfo.encptMbrTelno?.trim();
+
+      try {
+        if (encptMbrFlnm || encptMbrEmlNm || encptMbrTelno) {
+          const r = await dispatch(
+            decrypto({
+              ...(encptMbrFlnm ? { encptMbrFlnm: userInfo.encptMbrFlnm } : {}),
+              ...(encptMbrEmlNm ? { encptMbrEmlNm: userInfo.encptMbrEmlNm } : {}),
+              ...(encptMbrTelno ? { encptMbrTelno: userInfo.encptMbrTelno } : {}),
+            })
+          ).unwrap();
+          if (!cancelled) {
+            userName = r.decptMbrFlnm?.trim() ?? '';
+            email = r.decptMbrEmlNm?.trim() ?? '';
+            phone = r.decptMbrTelno?.trim() ?? '';
+          }
+        }
+      } catch (e) {
+        console.error('EditProfile: decrypt profile fields failed', e);
+      } finally {
+        if (!cancelled) setIsProfileDecrypting(false);
+      }
+
+      if (cancelled) return;
+
+      initialDecryptedRef.current = { userName, email, phone };
+      setFormData((prev) => ({
         ...prev,
-        mbrId: userInfo.mbrId || '',
-        userName: userInfo.encptMbrFlnm || '',
-        phone: userInfo.encptMbrTelno || '',
-        email: userInfo.encptMbrEmlNm || '',
+        mbrId,
+        userName,
+        email,
+        phone,
+        password: '',
+        confirmPassword: '',
       }));
-    }
-  }, [userInfo]);
+    };
+
+    void loadDecryptedProfile();
+    return () => {
+      cancelled = true;
+    };
+  }, [userInfo, dispatch]);
 
   // 이메일 유효성 검사
   const validateEmail = (email: string): string => {
@@ -234,11 +286,13 @@ export default function EditProfile() {
 
   // 전체 폼 유효성 검사
   const validateForm = (): boolean => {
+    if (isProfileDecrypting) return false;
+
     const newErrors: Record<string, string> = {};
 
     // 이메일 (선택): 비어 있으면 검증 제외. 기존 값과 동일하면 중복확인 제외.
     const emailTrimmed = formData.email?.trim() ?? '';
-    const originalEmail = (userInfo?.encptMbrEmlNm ?? '').trim();
+    const originalEmail = (initialDecryptedRef.current.email ?? '').trim();
     const emailUnchanged = emailTrimmed === originalEmail;
 
     if (emailTrimmed.length > 0) {
@@ -268,13 +322,14 @@ export default function EditProfile() {
 
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
+    if (isProfileDecrypting) return;
     if (!validateForm()) {
       return;
     }
 
     // 이메일 (선택): 비어 있거나 기존과 동일하면 중복확인 제외. 새로 입력한 경우에만 체크.
     const emailTrimmed = formData.email?.trim() ?? '';
-    const originalEmail = (userInfo?.encptMbrEmlNm ?? '').trim();
+    const originalEmail = (initialDecryptedRef.current.email ?? '').trim();
     if (emailTrimmed.length > 0 && emailTrimmed !== originalEmail) {
       if (!isEmailChecked || !emailAvailable) {
         showAlert(t('emailDuplicateCheckCompleteReminder'), t('error'));
@@ -308,12 +363,12 @@ export default function EditProfile() {
         dispatch(setAuthUserInfo(userInfo));
 
         showAlert(
-          t('success') || '성공',
           t('editCompleteReminder'),
+          t('success') || '성공',
           () => navigate('/pp/ko')
         );
       } else {
-        showAlert(t('error'), t('editFailedReminder'));
+        showAlert(t('editFailedReminder'), t('error'));
       }
     } catch (error) {
       console.error(t('editingFailedReminder'), error);
@@ -424,6 +479,7 @@ export default function EditProfile() {
                               placeholder={t('emailPlaceholder')}
                               size="large"
                               fullWidth
+                              disabled={isProfileDecrypting}
                               error={!!errors.email}
                               helperText={errors.email || successMessages.email || ''}
                               slotProps={{
@@ -446,7 +502,11 @@ export default function EditProfile() {
                               onMouseDown={(e) => e.preventDefault()}
                               aria-label={t('emailDuplicateCheck')}
                               className="btn-form-util"
-                              disabled={!formData.email || formData.email.trim().length === 0}
+                              disabled={
+                                isProfileDecrypting ||
+                                !formData.email ||
+                                formData.email.trim().length === 0
+                              }
                             >
                               {t('duplicateCheck')}
                             </Button>
@@ -554,7 +614,12 @@ export default function EditProfile() {
                     <Button variant="outlined" size="large" onClick={() => navigate('/pp/ko')}>
                       {t('cancel')}
                     </Button>
-                    <Button variant="contained" size="large" onClick={handleSave}>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={handleSave}
+                      disabled={isProfileDecrypting}
+                    >
                       {t('editComplete')}
                     </Button>
                   </Box>

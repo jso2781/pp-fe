@@ -345,7 +345,7 @@ export default function LoginMethod() {
 
                     <Box className="login-card-area__right">
                       <Card className="kids-login-card">
-                        <Typography className="kids-login-title">KIDS 로그인</Typography>
+                        {/* <Typography className="kids-login-title">KIDS 로그인</Typography> */}
                         <CardContent className="kids-login-card-content">
                           <Box className="login-button-group">
                             <Button variant="outlined" onClick={() => navigate('/pp/ko/auth/Login')} className="login-button">
