@@ -16,6 +16,7 @@ import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyi
 import { getAnyIdCiFromSsob } from '@/features/auth/AnyIdThunks';
 import type { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes';
 import { useDialog } from '@/contexts/DialogContext';
+import { useAuth } from '@/contexts/AuthContext'
 
 const showAnyIdArea = shouldLoadAnyIdSdk();
 
@@ -30,6 +31,7 @@ export default function ExpertCert() {
   const hasLoadedAnyIdRef = useRef(false);
   const loadModuleCalledRef = useRef(false);
   const ciRef = useRef<string | null>(null);
+  const { user } = useAuth();
 
   // URL 파라미터에서 tx, acrValues, redirectUri 추출
   const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
@@ -105,6 +107,11 @@ export default function ExpertCert() {
           return;
         }
         try {
+          if (user?.userInfo?.linkInfoIdntfId !== ci) {
+            showAlert('인증 정보가 일치하지 않습니다.');
+            return;
+          }
+
           // FIXME 전문가회원 내업무 페이지 진입을 위한 Any-ID 인증 후처리 이력을 어딘가에 저장 또는, 세션정보 갱신 프로세스 필요 
           // 값 저장
           sessionStorage.setItem('expertCertSuccess', 'true');
