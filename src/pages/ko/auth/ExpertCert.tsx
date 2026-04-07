@@ -108,7 +108,7 @@ export default function ExpertCert() {
         }
         try {
           if (user?.userInfo?.linkInfoIdntfId !== ci) {
-            showAlert('인증된 정보가 현재 로그인한 사용자와 일치하지 않습니다.');
+            showAlert('인증 정보가 일치하지 않습니다.');
             return;
           }
 
