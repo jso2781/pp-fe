@@ -110,6 +110,13 @@ export interface AnyIdUserInfoFromSsobPVO {
    * tag: 인증완료 후 전달받은 tag
    */
   tag: string
+
+  /**
+   * isCheckMbr: 회원정보 존재 여부 체크(true: 체크, false: 체크하지 않음)
+   * true일 경우 응답값으로 existMbrInfo(Y/N)가 리턴됨. 
+   * false일 경우 응답값으로 existMbrInfo(Y/N) 항목이 리턴되지 않음.
+   */
+  isCheckMbr: boolean
 }
 
 /** ANY-ID 인증완료 후 전달받은 ssob를 복호화 후 ssob 내용 전체(JSON) 추출 결과 */
@@ -163,4 +170,11 @@ export interface AnyIdUserInfoFromSsobRVO {
    * 타임스탬프(2026-03-25 06:31:04:0351 형식)
    */
   timestamp?: string
+
+  /**
+   * 회원정보 존재 여부(Y/N)
+   * 요청시 isCheckMbr=true 일 경우 응답값으로 existMbrInfo(Y/N)가 리턴됨. 
+   * 요청시 isCheckMbr=false 일 경우 응답값으로 existMbrInfo(Y/N) 항목이 리턴되지 않음.
+   */
+  existMbrInfo?: string
 }

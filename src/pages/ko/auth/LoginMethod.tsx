@@ -186,9 +186,7 @@ export default function LoginMethod() {
             let userInfoFromSsob: AnyIdUserInfoFromSsobRVO | undefined = payload.userInfoFromSsob;
             if (!userInfoFromSsob && data?.ssob) {
               try {
-                userInfoFromSsob = await dispatchRef
-                  .current(getAnyIdUserInfoFromSsob({ ssob: data.ssob, tag: tagFromCallback }))
-                  .unwrap();
+                userInfoFromSsob = await dispatchRef.current(getAnyIdUserInfoFromSsob({ ssob: data.ssob, tag: tagFromCallback , isCheckMbr: false})).unwrap();
               } catch (e) {
                 console.warn('[AnyID] SignUpSel: getAnyIdUserInfoFromSsob failed', e);
               }

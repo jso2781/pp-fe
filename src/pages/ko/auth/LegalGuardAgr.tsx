@@ -27,6 +27,7 @@ import { useAppDispatch } from '@/store/hooks'
 import { getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks'
 import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes'
 import { resolveCiFromSignUpFlowState, type SignUpFlowUserInfoState } from '@/pages/ko/auth/signUpFlowState'
+import { useDialog } from '@/contexts/DialogContext';
 
 /** production 이거나, 개발 시 `VITE_SHOW_ANYID_AREA=true` 로 iframe·postMessage 활성화 (`shouldLoadAnyIdSdk`) */
 const showAnyIdArea = shouldLoadAnyIdSdk()
@@ -73,6 +74,24 @@ const normalizeBirthDate = (input: string): string => {
   return fullYear + mmdd;
 }
 
+const isUnder14ByBrdt = (brdt: string | undefined): boolean | null => {
+  if (!brdt) return null
+  const s = String(brdt).trim()
+  if (!/^\d{8}$/.test(s)) return null
+  const y = Number(s.slice(0, 4))
+  const m = Number(s.slice(4, 6))
+  const d = Number(s.slice(6, 8))
+  if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return null
+  const birth = new Date(y, m - 1, d)
+  if (Number.isNaN(birth.getTime())) return null
+
+  const today = new Date()
+  let age = today.getFullYear() - birth.getFullYear()
+  const mm = today.getMonth() - birth.getMonth()
+  if (mm < 0 || (mm === 0 && today.getDate() < birth.getDate())) age -= 1
+  return age < 14
+}
+
 export default function LegalGuardAgr() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -80,6 +99,7 @@ export default function LegalGuardAgr() {
   const dispatch = useAppDispatch()
   const currentStep = 2;
   const { lang } = useParams<{ lang: string }>();
+  const { showAlert } = useDialog();
 
   /** Any-ID는 `public/anyid-embed.html` iframe에서만 로드되며, 성공/실패는 postMessage로만 처리한다. */
   const tRef = useRef(t);
@@ -231,48 +251,71 @@ export default function LegalGuardAgr() {
       const tag = (data?.tag ?? data?.txId ?? '') as string
 
       try {
-        if (tag && tag === applicantTagRef.current) {
-          if (applicantSuccessHandledRef.current) return
-          applicantSuccessHandledRef.current = true
-          console.log('[LegalGuardAgr] applicant success handled once. tag=', tag)
-          const userInfoFromSsob = (await dispatch(
-            getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag })
-          ).unwrap()) as AnyIdUserInfoFromSsobRVO
+        // 신청인 인증 success
+        if(tag && tag === applicantTagRef.current){
+          if(applicantSuccessHandledRef.current)return;
 
-          applicantUserInfoFromSsobRef.current = userInfoFromSsob
+          applicantSuccessHandledRef.current = true;
+          console.log('[LegalGuardAgr] applicant success handled once. tag=', tag);
 
-          setLegalGuardFormData((prev) => ({
-            ...prev,
-            userName: userInfoFromSsob?.name ?? prev.userName,
-            birthDate: normalizeBirthDate(userInfoFromSsob?.brdt ?? prev.birthDate),
-            phone: userInfoFromSsob?.phone ?? prev.phone,
-          }))
+          const userInfoFromSsob = (await dispatch(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag, isCheckMbr: true })).unwrap()) as AnyIdUserInfoFromSsobRVO;
 
-          const ciValue = userInfoFromSsob.ci
-          setCi(ciValue ?? '')
-          setIsApplicantCertified(true)
-          return
+          // 이미 가입된 사용자인 경우, 알림 모달 표시 후 종료
+          if(userInfoFromSsob.existMbrInfo && userInfoFromSsob.existMbrInfo === 'Y'){
+            showAlert(t('alreadyRegistered'));
+            return;
+          }
+          else{
+            const under14 = isUnder14ByBrdt(userInfoFromSsob?.brdt);
+
+            // 14세 미만이 아닌 경우, 알림 모달 표시 후 종료
+            if(under14 === false){
+              setIsApplicantCertified(false);
+              setCi('');
+              openModal(t('minorCertifyReminder'));
+              return;
+            }
+
+            // 14세 미만이거나 판단 불가인 경우, 입력값 반영
+            if(under14 === true || under14 === null){
+              applicantUserInfoFromSsobRef.current = userInfoFromSsob;
+
+              setLegalGuardFormData((prev) => ({
+                ...prev,
+                userName: userInfoFromSsob?.name ?? prev.userName,
+                birthDate: normalizeBirthDate(userInfoFromSsob?.brdt ?? prev.birthDate),
+                phone: userInfoFromSsob?.phone ?? prev.phone,
+              }));
+    
+              const ciValue = userInfoFromSsob.ci;
+              setCi(ciValue ?? '');
+              setIsApplicantCertified(true);
+              return;
+            }
+          }
         }
 
-        if (tag && tag === guardianTagRef.current) {
-          if (guardianSuccessHandledRef.current) return
-          guardianSuccessHandledRef.current = true
-          console.log('[LegalGuardAgr] guardian success handled once. tag=', tag)
-          const userInfoFromSsob = (await dispatch(
-            getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag })
-          ).unwrap()) as AnyIdUserInfoFromSsobRVO
+        // 법정대리인 인증 success
+        if (tag && tag === guardianTagRef.current){
+          if(guardianSuccessHandledRef.current)return;
+
+          guardianSuccessHandledRef.current = true;
+          console.log('[LegalGuardAgr] guardian success handled once. tag=', tag);
+
+          const userInfoFromSsob = (await dispatch(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag, isCheckMbr: false })).unwrap()) as AnyIdUserInfoFromSsobRVO;
 
           setLegalGuardFormData((prev) => ({
             ...prev,
             parentName: userInfoFromSsob?.name ?? prev.parentName,
             parentPhone: userInfoFromSsob?.phone ?? prev.parentPhone,
             ciFromGuardAgr: userInfoFromSsob?.ci ?? prev.ciFromGuardAgr,
-          }))
+          }));
 
-          setIsLegalGuardCertified(true)
+          setIsLegalGuardCertified(true);
+          return;
         }
-      } catch (error) {
-        console.error('[LegalGuardAgr] anyid success handler error=', error)
+      }catch(error){
+        console.error('[LegalGuardAgr] anyid success handler error=', error);
       }
     },
     [dispatch]

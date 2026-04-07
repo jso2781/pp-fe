@@ -30,7 +30,7 @@ export default function CertifySelf() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const { showAlert } = useDialog()
+  const { showAlert } = useDialog();
 
 
   // 본인인증 완료 상태
@@ -167,13 +167,19 @@ export default function CertifySelf() {
     window.anyidAdaptor = {
       success: async (data: any) => {
         console.log('[AnyID] log:', data);
-        setIsCertified(true);
 
         try{
-          const userInfoFromSsob = await dispatchRef.current(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.txId })).unwrap();
-          userInfoFromSsobRef.current = userInfoFromSsob
-          ciRef.current = userInfoFromSsob.ci ?? null;
-          console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdUserInfoFromSsob ci=', ciRef.current);
+          const userInfoFromSsob = await dispatchRef.current(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.txId, isCheckMbr: true })).unwrap();
+          
+          if(userInfoFromSsob.existMbrInfo && userInfoFromSsob.existMbrInfo === 'Y'){
+            showAlert(t('alreadyRegistered'));
+            return;
+          }
+          else{
+            setIsCertified(true);
+            userInfoFromSsobRef.current = userInfoFromSsob
+            ciRef.current = userInfoFromSsob.ci ?? null;
+          }
         }catch(error){
           // API 호출 실패 시 오류 처리
           console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdUserInfoFromSsob error=', error);

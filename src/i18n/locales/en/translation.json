@@ -132,6 +132,7 @@
     "certifySelfFailedReminder": "Certification failed. Please try again.",
     "certifySelfModuleNotReady": "Certification module is not ready.",
     "certifyComplete": "Certify Complete",
+    "alreadyRegistered": "Already registered. Please try again.",
     "anyIdLog": "Any-ID log:",
     "certifySelfComplete": "Certification Complete",
     "certifySelfCompleteReminder": "Please complete the certification.",

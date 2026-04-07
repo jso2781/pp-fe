@@ -134,6 +134,7 @@
     "certifySelfFailedReminder": "본인인증에 실패했습니다. 다시 시도해주세요.",
     "certifySelfModuleNotReady": "본인인증 모듈이 준비되지 않았습니다.",
     "certifyComplete": "인증완료",
+    "alreadyRegistered": "이미 가입된 사용자입니다. 본인인증을 다시 시도해 주세요.",
     "anyIdLog": "Any-ID 로그:",
     "certifySelfComplete": "본인인증 완료",
     "certifySelfCompleteReminder": "본인인증을 완료해주세요.",
