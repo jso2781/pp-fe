@@ -22,7 +22,7 @@ import { setInternalServerError } from '@/features/ui/uiSlice'
  * NEVER put full origin here.
  */
 // 빌드 시에는 항상 '/api/pp/' 사용 (환경 변수 무시)
-const apiBaseURL = import.meta.env.MODE === 'production'
+const apiBaseURL = (import.meta.env.MODE === 'production' || import.meta.env.MODE === 'stg')
   ? '/api/pp'
   : (import.meta.env.VITE_API_BASE_URL ?? '/api')
 
@@ -43,7 +43,7 @@ const cdmApiBaseURL = import.meta.env.VITE_CDM_API_BASE_URL ?? 'http://localhost
 const CDM_PATHS = ['/community']
 
 const ppApiPathPrefix =
-  import.meta.env.MODE === 'production' ? '/api/pp' : (import.meta.env.VITE_API_BASE_URL ?? '/api')
+  (import.meta.env.MODE === 'production' || import.meta.env.MODE === 'stg') ? '/api/pp' : (import.meta.env.VITE_API_BASE_URL ?? '/api')
 
 function resolveLgnSeCdFromClient(): string {
   const fromStore = store.getState().auth.lgnSeCd
