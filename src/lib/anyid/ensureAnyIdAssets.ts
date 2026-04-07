@@ -17,7 +17,7 @@ function ensureLinkOnce(href: string): void {
  * production 이거나 `.env.development` 등에 `VITE_SHOW_ANYID_AREA=true` 일 때만 true.
  */
 export function shouldLoadAnyIdSdk(): boolean {
-  return import.meta.env.MODE === 'production' || import.meta.env.VITE_SHOW_ANYID_AREA === 'true'
+  return import.meta.env.MODE === 'production' || import.meta.env.MODE === 'stg' || import.meta.env.VITE_SHOW_ANYID_AREA === 'true'
 }
 
 /**
