@@ -220,7 +220,7 @@ export default function MyDrugInfo() {
 
     let searchParam = basketList.map((item) => ({          
           prdctCd: item.itemName || '',
-          igrdCd: item.ingrCode || '',
+          igrdCd: item.ingrEngName || '',
         })) as DurMyDrugInfoPVO[]; 
 
     if (isCheck) {
