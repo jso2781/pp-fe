@@ -12,6 +12,13 @@ import App from './App'
 import '@/styles/main.ko.scss'
 import '@/styles/main.en.scss'
 
+// 운영모드시 콘솔 로그 제거
+if (import.meta.env.MODE === 'production') {
+  console.log = () => {}
+  console.info = () => {}
+  console.debug = () => {}
+}
+
 const rootEl = document.getElementById('root')
 
 if (!rootEl) {

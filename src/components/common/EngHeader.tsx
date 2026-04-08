@@ -42,6 +42,7 @@ function SitemapItem({ item, onInternalNavigate }: { item: SitemapLinkItem; onIn
 
   const isInternal = item.internal || (typeof item.href === 'string' && item.href.startsWith('/'));
   const isExternal = (item as any).isExternal === true;
+  const targetName = (item as any).targetName as string | undefined;
 
   const handleInternalClick = () => {
     onInternalNavigate?.()
@@ -58,12 +59,13 @@ function SitemapItem({ item, onInternalNavigate }: { item: SitemapLinkItem; onIn
           ) : (
             <MuiLink 
               href={item.href}
-              target="_blank" 
+              target={targetName || '_blank'} 
               rel="noopener noreferrer" 
               className="sitemap-link" 
-              sx={{ color: 'inherit' }}
+              sx={{ color: 'inherit', display: 'inline-flex', alignItems: 'center', gap: '4px', lineHeight: 1.4 }}
             >
               {item.label}
+              {isExternal && <OpenInNew sx={{ fontSize: '13px', color: 'inherit', flexShrink: 0, alignSelf: 'center' }} />}
             </MuiLink>
           )
         ) : (
@@ -615,7 +617,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                               {(() => {
                                 const hasDepth3 = menu2.depth3 && menu2.depth3.length > 0;
                                 const menu2Url = menu2.url || '#';
-                                const isNewWindow = typeof menu2Url === 'string' && menu2Url.startsWith('http');
+                                const isNewWindow = !!menu2.menuNpagNm;
 
                                 return (
                               <Link
@@ -629,7 +631,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
                                   if (isNewWindow) {
                                     e.preventDefault();
-                                    openExternalInNamedWindow(menu2Url);
+                                    openExternalInNamedWindow(menu2Url, menu2.menuNpagNm);
                                   }
                                 }}
                               >
@@ -654,7 +656,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                   {menu2.depth3.map((menu3: any, idx3: number) => {
                                     const isObj = typeof menu3 === 'object' && menu3 !== null;
                                     const menu3Url = isObj ? (menu3.url || '#') : '#';
-                                    const isNewWindow = typeof menu3Url === 'string' && menu3Url.startsWith('http');
+                                    const isNewWindow = !!(isObj && menu3.menuNpagNm);
                                     
                                     return (
                                       <li key={idx3}>
@@ -666,7 +668,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
 
                                             if (isNewWindow) {
                                               e.preventDefault();
-                                              openExternalInNamedWindow(menu3Url);
+                                              openExternalInNamedWindow(menu3Url, menu3.menuNpagNm);
                                             }
                                           }}
                                           className={isNewWindow ? "ico-new" : ""}
@@ -763,7 +765,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                       {menu1.depth2.map((menu2: any, idx2: number) => {
                         const hasDepth3 = menu2.depth3 && menu2.depth3.length > 0;
                         const menu2Url = menu2.url || '/';
-                        const isNewWindow = typeof menu2Url === 'string' && menu2Url.startsWith('http');
+                        const isNewWindow = !!menu2.menuNpagNm;
                         return (
                           <li key={idx2} className="depth2-item">
                             <Link 
@@ -776,7 +778,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                 } else {
                                   if (isNewWindow) {
                                     e.preventDefault();
-                                    openExternalInNamedWindow(menu2Url);
+                                    openExternalInNamedWindow(menu2Url, menu2.menuNpagNm);
                                   }
                                   // 2-depth에 화면 링크만 있을 때: 링크 이동 후 모바일 Drawer 닫기
                                   setMobileMenuOpen(false);
@@ -802,7 +804,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                 {menu2.depth3.map((menu3: any, idx3: number) => {
                                   const isObj = typeof menu3 === 'object' && menu3 !== null;
                                   const menu3Url = isObj ? (menu3.url || '#') : '#';
-                                  const isNewWindow = typeof menu3Url === 'string' && menu3Url.startsWith('http');
+                                  const isNewWindow = !!(isObj && menu3.menuNpagNm);
                                   
                                   return (
                                     <li key={idx3} className="depth3-item">
@@ -812,7 +814,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                                         onClick={(e) => {
                                           if (isNewWindow) {
                                             e.preventDefault();
-                                            openExternalInNamedWindow(menu3Url);
+                                            openExternalInNamedWindow(menu3Url, menu3.menuNpagNm);
                                             return;
                                           }
 
@@ -886,7 +888,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                     <Box key={item.key} className="item-group">
                       {/* 2Depth 타이틀: href 있으면 링크로 렌더 */}
                       {item.href && item.href !== '#' ? (
-                        (item.internal !== false && !item.href.startsWith('http://') && !item.href.startsWith('https://')) ? (
+                        item.internal !== false ? (
                           <MuiLink
                             component={NavLink}
                             to={to(item.href)}
@@ -899,12 +901,13 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                         ) : (
                           <MuiLink
                             href={item.href}
-                            target="_blank"
+                            target={item.targetName || '_blank'}
                             rel="noopener noreferrer"
                             className="depth2-title"
-                            sx={{ color: 'inherit' }}
+                            sx={{ color: 'inherit', display: 'inline-flex', alignItems: 'center', gap: '4px', lineHeight: 1.4 }}
                           >
                             {item.label}
+                            {item.isExternal && <OpenInNew sx={{ fontSize: '13px', color: 'inherit', flexShrink: 0, alignSelf: 'center' }} />}
                           </MuiLink>
                         )
                       ) : (

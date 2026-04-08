@@ -265,6 +265,7 @@ export type LnbItem = {
   key: string;
   label: string;
   disabled?: boolean;
+  menuNpagNm?: string;
   children?: LnbItem[];
 };
 
@@ -339,6 +340,8 @@ export interface GnbDepth2Item {
   title: string
   /** 메뉴 URL 주소 (depth2에 직접 URL이 있는 경우, 선택적) */
   url?: string
+  /** 메뉴새창명 */
+  menuNpagNm?: string
   /** 하위 depth3 메뉴 목록 */
   depth3: GnbDepth3Item[]
 }
