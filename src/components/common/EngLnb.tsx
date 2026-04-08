@@ -136,8 +136,8 @@ function Lnb({ currentUrl, items }: LnbProps) {
               onClick={() => {
                 if (disabled) return;
                 if (hasChildren) return toggle(it.key);
-                if (it.key.startsWith('http')) {
-                  openExternalInNamedWindow(it.key);
+                if (it.menuNpagNm) {
+                  openExternalInNamedWindow(it.key, it.menuNpagNm);
                   return;
                 }
                 const dest = langPath(it.key, currentLang);
@@ -150,7 +150,7 @@ function Lnb({ currentUrl, items }: LnbProps) {
                 sx={lnbStyles.itemText(depth, isOpen)} 
               />
               {/* 외부 링크면 새창 아이콘 표시 */}
-              {it.key.startsWith('http') && !hasChildren && (
+              {it.menuNpagNm && !hasChildren && (
                 <OpenInNewIcon 
                   sx={{ 
                     fontSize: '16px',

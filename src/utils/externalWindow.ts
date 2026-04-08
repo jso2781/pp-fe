@@ -36,9 +36,9 @@ const getPopupFeaturesNearElement = (
   ].join(',');
 };
 
-export const openExternalInNamedWindow = (url: string) => {
-  const targetName = buildExternalWindowTarget(url);
-  const existingWindow = externalWindows.get(targetName);
+export const openExternalInNamedWindow = (url: string, targetName?: string) => {
+  const resolvedTargetName = targetName || buildExternalWindowTarget(url);
+  const existingWindow = externalWindows.get(resolvedTargetName);
 
   if (existingWindow && !existingWindow.closed) {
     existingWindow.location.href = url;
@@ -46,8 +46,8 @@ export const openExternalInNamedWindow = (url: string) => {
     return existingWindow;
   }
 
-  const openedWindow = window.open(url, targetName);
-  externalWindows.set(targetName, openedWindow);
+  const openedWindow = window.open(url, resolvedTargetName);
+  externalWindows.set(resolvedTargetName, openedWindow);
 
   openedWindow?.focus();
   return openedWindow;

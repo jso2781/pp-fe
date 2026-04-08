@@ -11,6 +11,7 @@ export type CollapsibleNavItem = {
   label: string
   disabled?: boolean
   isExternal?: boolean
+  menuNpagNm?: string
   originalKey?: string // 원본 key (onSelect에서 사용)
   children?: CollapsibleNavItem[] // 하위 메뉴 추가
 }
@@ -33,7 +34,8 @@ const convertLnbItemToNavItem = (item: LnbItem, indexPath: string): CollapsibleN
   key: `${indexPath}:${item.key}`,
   label: item.label,
   disabled: item.disabled,
-  isExternal: item.key.startsWith('http'),
+  isExternal: !!item.menuNpagNm,
+  menuNpagNm: item.menuNpagNm,
   originalKey: item.key,
   children: item.children?.map((child, idx) => convertLnbItemToNavItem(child, `${indexPath}-${idx}`)),
 });
@@ -179,7 +181,7 @@ export default function CollapsibleSideNav({
                     handleToggleOpen(it.key)
                   } else {
                     if (it.isExternal) {
-                      openExternalInNamedWindow(targetKey);
+                      openExternalInNamedWindow(targetKey, it.menuNpagNm);
                     } else {
                       onSelect?.(targetKey);
                     }
@@ -245,7 +247,7 @@ export default function CollapsibleSideNav({
                           if (collapsed) return;
                           const targetKey = child.originalKey ?? child.key;
                           if (child.isExternal) {
-                            openExternalInNamedWindow(targetKey);
+                            openExternalInNamedWindow(targetKey, child.menuNpagNm);
                           } else {
                             onSelect?.(targetKey);
                           }

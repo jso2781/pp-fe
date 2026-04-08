@@ -8,6 +8,8 @@ export type SitemapLinkItem = {
   label: string
   href?: string
   internal?: boolean
+  targetName?: string
+  isExternal?: boolean
   children?: SitemapLinkItem[]
 }
 
@@ -34,7 +36,9 @@ export function gnbListToSitemapSections(gnbList: GnbDepth1Item[]): SitemapSecti
       const linkProps = d2.url
         ? {
             href: d2.url,
-            internal: !d2.url.startsWith('http://') && !d2.url.startsWith('https://'),
+            internal: !d2.menuNpagNm,
+            isExternal: !!d2.menuNpagNm,
+            ...(d2.menuNpagNm && { targetName: d2.menuNpagNm }),
           }
         : undefined
       if (hasChildren) {
@@ -46,7 +50,9 @@ export function gnbListToSitemapSections(gnbList: GnbDepth1Item[]): SitemapSecti
             key: `sn-${d3.menuSn}`,
             label: d3.name,
             href: d3.url,
-            internal: !d3.isNewWindow,
+            internal: !d3.menuNpagNm,
+            isExternal: !!d3.menuNpagNm,
+            ...(d3.menuNpagNm && { targetName: d3.menuNpagNm }),
           })),
         }
       }

@@ -86,7 +86,7 @@ function createGnbStructor(
         if (depth3Menu.menuUrlAddr && depth3Menu.menuNm) {
           const menuSn = depth3Menu.menuSn;
           const url = depth3Menu.menuUrlAddr;
-          const isNewWindow = url.startsWith('http://') || url.startsWith('https://');
+          const isNewWindow = !!depth3Menu.menuNpagNm;
 
           /* 메뉴상세 정보 */
           const menuNpagNm = depth3Menu.menuNpagNm ?? null;                   /* 메뉴새창명 */
@@ -138,7 +138,7 @@ function createGnbStructor(
             if (depth4Menu.menuNm) {
               const menuSn = depth4Menu.menuSn ?? 0;
               const url = depth4Menu.menuUrlAddr || '#';
-              const isNewWindow = url.startsWith('http://') || url.startsWith('https://');
+              const isNewWindow = !!depth4Menu.menuNpagNm;
 
               /* 메뉴상세 정보 */
               const menuNpagNm = depth4Menu.menuNpagNm ?? null;                   /* 메뉴새창명 */
@@ -191,6 +191,9 @@ function createGnbStructor(
       if (depth2Menu.menuUrlAddr) {
         depth2Item.url = depth2Menu.menuUrlAddr
       }
+      if (depth2Menu.menuNpagNm) {
+        depth2Item.menuNpagNm = depth2Menu.menuNpagNm
+      }
 
       return depth2Item
     })
@@ -225,6 +228,7 @@ function createLnbStructor(menuList: MenuRVO[]): LnbItem[] {
       key,
       label: menu.menuNm || '',
       disabled: menu.useYn === 'N',
+      ...(menu.menuNpagNm && { menuNpagNm: menu.menuNpagNm }),
       children: []
     };
 
