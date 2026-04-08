@@ -28,6 +28,7 @@ function createLnbStructor(menuList: MenuRVO[]): LnbItem[] {
       key,
       label: menu.menuNm || '',
       disabled: menu.useYn === 'N',
+      ...(menu.menuNpagNm && { menuNpagNm: menu.menuNpagNm }),
       children: []
     };
 

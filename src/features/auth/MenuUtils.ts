@@ -8,7 +8,7 @@ export function normalizePathForMatch(pathname: string): string {
 
 /** 단일 노드가 현재 경로와 일치하는지 (자신 또는 하위 경로) */
 function nodeMatchesPath(node: LnbItem, normalizedPath: string): boolean {
-  if (node.key.startsWith('http')) return false;
+  if (node.menuNpagNm) return false;
   const keyNorm = normalizePathForMatch(node.key);
   return normalizedPath === keyNorm || (keyNorm !== normalizedPath && normalizedPath.startsWith(keyNorm + '/'));
 }
