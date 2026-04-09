@@ -47,6 +47,13 @@ export default function VideoBoardList() {
   // 게시판 ID 추출
   const { bbsId } = useParams<{ bbsId: string }>();
 
+  // 게시판 ID가 변경될 때 검색 조건 초기화
+  useEffect(() => {
+    setSearchCnd('title');
+    setSearchWrd('');
+    setPageNum(1);
+  }, [bbsId]);  
+
   const lang = getLangFromPathname(location.pathname) || 'ko'
 
   // Lnb 랜더링용

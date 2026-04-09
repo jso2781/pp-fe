@@ -110,6 +110,7 @@ export default function SignUpAgrTrms() {
     const defaultContents: Record<string, string> = {
       'UTZTN': '이용약관 상세 내용입니다.<br/>내용이 길어지면 자동으로 스크롤이 생성됩니다.',
       'CLCT': '개인정보 수집 및 이용동의 상세 내용입니다.',
+      'CLCT_CH': '개인정보 수집 및 이용동의 선택 상세 내용입니다.',
       'STTY_AGT': '만 14세 미만 아동에 관한 개인정보 수집〮이용 동의_법정대리인 상세 내용입니다.',
       'STT_PRVC_PP': '개인정보취급방침 상세 내용입니다.',
     };
@@ -147,6 +148,7 @@ export default function SignUpAgrTrms() {
   const [checked2, setChecked2] = useState(false);
   const [checked3, setChecked3] = useState(false);
   const [checked4, setChecked4] = useState(false);
+  const [checked5, setChecked5] = useState(false);
 
   // 이전 페이지에서 만 14세 미만 회원 가입 화면으로부터 이동했을 때만 "만 14세 미만 아동의 회원가입에 따른 개인정보 수집이용에 관한 법정대리인 동의" 약관 표기
   const isJunior = location.pathname.includes('/pp/ko/auth/JuniorSignUpAgrTrms');
@@ -158,12 +160,12 @@ export default function SignUpAgrTrms() {
   const [showErrorPopup, setShowErrorPopup] = useState(false);
 
   /*
-   * 만 14세미만 아동의 회원가입인 경우 필수 약관(1, 2, 3번) 동의 여부 체크 변수 추가
+   * 만 14세미만 아동의 회원가입인 경우 필수 약관(1, 2, 4번) 동의 여부 체크 변수 추가
    * 만 14세 이상 회원가입인 경우 필수 약관(1, 2번) 동의 여부 체크 변수 추가
    */
-  const isRequiredAgreed = isJunior ? checked1 && checked2 && checked3 : checked1 && checked2;
+  const isRequiredAgreed = isJunior ? checked1 && checked2 && checked4 : checked1 && checked2;
 
-  const allChecked = isJunior ? checked1 && checked2 && checked3 : checked1 && checked2;
+  const allChecked = isJunior ? checked1 && checked2 && checked4 : checked1 && checked2;
 
   const handleAllAgree = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
@@ -171,6 +173,7 @@ export default function SignUpAgrTrms() {
     setChecked2(isChecked);
     setChecked3(isChecked);
     setChecked4(isChecked);
+    setChecked5(isChecked);
   };
 
   // 다음 버튼 클릭 핸들러
@@ -229,27 +232,38 @@ export default function SignUpAgrTrms() {
     },
     { 
       id: 3, 
-      popupId: 'STTY_AGT', 
-      label: t('signUpJuniorPrivacyCollectionAgree'), 
-      required: true, 
+      popupId: 'CLCT_CH', 
+      label: t('privacyCollectionAgree'), 
+      required: false, 
       checked: checked3, 
-      isdisplay: (isJunior ? true : false), 
+      isdisplay: true, 
       showCheckbox: true, 
       showOptionalLabel: true, 
       setter: setChecked3
     },
     { 
       id: 4, 
+      popupId: 'STTY_AGT', 
+      label: t('signUpJuniorPrivacyCollectionAgree'), 
+      required: true, 
+      checked: checked4, 
+      isdisplay: (isJunior ? true : false), 
+      showCheckbox: true, 
+      showOptionalLabel: true, 
+      setter: setChecked4
+    },
+    { 
+      id: 5, 
       popupId: 'STT_PRVC_PP', 
       label: t('privacyPolicy'), 
       required: false, 
-      checked: checked4, 
+      checked: checked5, 
       isdisplay: true, 
       showCheckbox: false, 
       showOptionalLabel: false, 
-      setter: setChecked4
-    },
-  ], [checked1, checked2, checked3, checked4, isJunior, t]);
+      setter: setChecked5
+    }
+  ], [checked1, checked2, checked3, checked4, checked5, isJunior, t]);
   // --- 상태 관리 끝 ---
 
   return (
