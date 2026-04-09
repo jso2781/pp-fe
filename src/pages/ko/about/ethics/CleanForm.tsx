@@ -24,6 +24,7 @@ import { getTrmsSttLatest } from "@/features/stt/TrmsSttThunks";
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from "react-i18next";
 import { getMbrInfo } from "@/features/mbr/MbrInfoThunks";
+import { decrypto } from "@/features/crypto/CryptoThunks";
 
 export default function CleanForm () {
   const [agreeEs, setAgreeEs] = useState<string | null>(null);
@@ -31,6 +32,7 @@ export default function CleanForm () {
   const [encptMbrFlnm, setEncptMbrFlnm] = useState<string>('');
   const [encptMbrTelno, setEncptMbrTelno] = useState<string>('');
   const [encptMbrEmlNm, setEncptMbrEmlNm] = useState<string>('');
+  const [isProfileDecrypting, setIsProfileDecrypting] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -48,13 +50,43 @@ export default function CleanForm () {
       dispatch(getTrmsSttLatest({ trmsSttCd: 'CLCT_AGRE_CH_2' })).unwrap(),
       dispatch(getMbrInfo({ linkInfoIdntfId: getLinkInfoIdntfId() })).unwrap()
     ])
-      .then(([es, ch, mbrInfo]) => {
+      .then(async ([es, ch, mbrInfo]) => {
         // 일부 환경에서 약관 API가 null을 반환하는 케이스가 있어 방어적으로 처리
         setAgreeEs(es?.trmsSttCn || null);
         setAgreeCh(ch?.trmsSttCn || null);
-        setEncptMbrFlnm(mbrInfo?.encptMbrFlnm || '');
-        setEncptMbrTelno(mbrInfo?.encptMbrTelno || '');
-        setEncptMbrEmlNm(mbrInfo?.encptMbrEmlNm || '');
+
+        // 서버에서 내려온 회원정보는 encpt* (암호문) 이므로, 화면 표시 전에 복호화하여 평문으로 반영
+        const encptMbrFlnmRaw = (mbrInfo?.encptMbrFlnm ?? '').trim();
+        const encptMbrTelnoRaw = (mbrInfo?.encptMbrTelno ?? '').trim();
+        const encptMbrEmlNmRaw = (mbrInfo?.encptMbrEmlNm ?? '').trim();
+
+        if (encptMbrFlnmRaw || encptMbrTelnoRaw || encptMbrEmlNmRaw) {
+          setIsProfileDecrypting(true);
+          try {
+            const r = await dispatch(decrypto({
+              ...(encptMbrFlnmRaw ? { encptMbrFlnm: mbrInfo?.encptMbrFlnm } : {}),
+              ...(encptMbrTelnoRaw ? { encptMbrTelno: mbrInfo?.encptMbrTelno } : {}),
+              ...(encptMbrEmlNmRaw ? { encptMbrEmlNm: mbrInfo?.encptMbrEmlNm } : {}),
+            })).unwrap();
+
+            // CleanForm에서는 encpt* 이름을 쓰지만, 화면 표시/입력 값으로는 평문을 사용한다.
+            setEncptMbrFlnm(r?.decptMbrFlnm ?? '');
+            setEncptMbrTelno(r?.decptMbrTelno ?? '');
+            setEncptMbrEmlNm(r?.decptMbrEmlNm ?? '');
+          } catch (e) {
+            console.error('[CleanForm] failed to decrypto memberInfo', e);
+            // 복호화 실패 시 암호문을 화면에 노출하지 않도록 빈 값 처리
+            setEncptMbrFlnm('');
+            setEncptMbrTelno('');
+            setEncptMbrEmlNm('');
+          } finally {
+            setIsProfileDecrypting(false);
+          }
+        } else {
+          setEncptMbrFlnm('');
+          setEncptMbrTelno('');
+          setEncptMbrEmlNm('');
+        }
       })
       .catch((e) => {
         console.error('[CleanForm] failed to bootstrap terms/memberInfo', e)
@@ -73,7 +105,8 @@ export default function CleanForm () {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: '동의가 필요합니다.' })
       }
     }),
-    agreeOptional: z.enum(['Y', 'N']).optional().superRefine((v, ctx) => v == null && ctx.addIssue({ code: z.ZodIssueCode.custom, message: '동의 여부를 선택해 주세요.' })),
+    // 선택 동의는 미선택(=undefined) 허용. 제출 시 undefined는 'N'으로 간주하여 전송한다.
+    agreeOptional: z.enum(['Y', 'N']).optional(),
     encptMbrFlnm: z.string(),
     encptMbrTelno: z.string(),
     encptMbrEmlNm: z.string().trim().email({ message: '이메일 형식이 올바르지 않습니다.' }).or(z.literal('')),
@@ -133,7 +166,8 @@ export default function CleanForm () {
   };
 
   const onSubmit = async (values: FormValues) => {
-    if (values.encptMbrEmlNm && values.agreeOptional === 'N') {
+    // 이메일을 입력한 경우(선택 수집), 선택 동의는 반드시 'Y'여야 함. 미선택(undefined)은 'N'으로 취급.
+    if (values.encptMbrEmlNm && values.agreeOptional !== 'Y') {
       form.setError('agreeOptional', { type: 'validate', message: '이메일 수집·동의에 동의가 필요합니다.' }, { shouldFocus: true });
       return;
     }
@@ -146,6 +180,8 @@ export default function CleanForm () {
     }
     const payload: DshstyDclrPVO = {
       ...values,
+      // "개인정보 수집·이용 동의(선택)" 미선택 시에는 'N'으로 전송
+      prvcChcAgreYn: values.agreeOptional ?? 'N',
       linkInfoIdntfId
     };
     try {
@@ -284,7 +320,7 @@ export default function CleanForm () {
                             <Typography component="label" htmlFor="encptMbrEmlNm" className="label">
                               이메일 <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
                             </Typography>
-                            <RHFTextField type="email" id="encptMbrEmlNm" name="encptMbrEmlNm" placeholder="gidong_hong99@gmail.com" size="large" fullWidth 
+                            <RHFTextField disabled={isProfileDecrypting} type="email" id="encptMbrEmlNm" name="encptMbrEmlNm" placeholder="gidong_hong99@gmail.com" size="large" fullWidth 
                               slotProps={{
                                 htmlInput: { 'aria-describedby': 'encptMbrEmlNm-alert' },
                                 formHelperText: { id: 'encptMbrEmlNm-alert', className: 'error-alert' },

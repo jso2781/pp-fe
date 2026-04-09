@@ -85,7 +85,7 @@ export default function DurProposal() {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: '동의가 필요합니다.' })
       }
     }),
-    // (선택) 동의: 미선택(undefined) 허용. 휴대폰 입력 시 동의 필요 여부는 onSubmit에서 검사
+    // (선택) 동의: 휴대폰 입력 시 동의 필요 여부는 onSubmit에서 검사. 미선택(=undefined) 허용. 제출 시 undefined는 'N'으로 간주하여 전송한다.
     agreeOptional: z.enum(['Y', 'N']).optional(),
     role: z.string().trim().min(1, { message: '구분을 선택해주세요.' }),
     name: z.string().trim().min(1, { message: '이름을 입력해주세요.' }),
@@ -137,7 +137,7 @@ export default function DurProposal() {
   };
 
   const onSubmit = async (values: FormValues) => {
-    if (values.contact && values.agreeOptional === 'N') {
+    if (values.contact && values.agreeOptional !== 'Y') {
       form.setError('agreeOptional', { type: 'validate', message: '휴대전화번호가 입력된 경우 휴대폰번호 수집·동의에 동의가 필요합니다.' }, { shouldFocus: true });
       return;
     }
@@ -166,6 +166,7 @@ export default function DurProposal() {
     formData.append('insdRefMttrCn', '');                  // 내부참고사항내용
     formData.append('atchFileSn', '');                     // 첨부파일
     // formData.append('linkInfoIdntfId', values.linkInfoIdntfId); // 연계정보식별아이디
+    formData.append('prvcChcAgreYn', values.agreeOptional ?? 'N'); // 개인정보선택동의여부
     values.files?.forEach((file) => {
       formData.append('attachFiles', file)
     })
