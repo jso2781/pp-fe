@@ -157,6 +157,8 @@ export default function LoginMethod() {
     if (loadModuleCalledRef.current) return
     loadModuleCalledRef.current = true
 
+    const prevAdaptor = window.anyidAdaptor
+
     const loginTag: string = hasUrlTx && tx ? (anyidInit?.txId ?? tx) : devLoginTag
 
     const adaptor = {
@@ -234,7 +236,9 @@ export default function LoginMethod() {
         fail: failCb,
         log: logCb,
       })
-      return
+      return () => {
+        window.anyidAdaptor = prevAdaptor
+      }
     }
 
     window.AnyidC.LOAD_MODULE(
@@ -257,6 +261,10 @@ export default function LoginMethod() {
         { success: successCb, fail: failCb, log: logCb }
       )
     )
+
+    return () => {
+      window.anyidAdaptor = prevAdaptor
+    }
   }, [
     showAnyIdArea,
     phase,

@@ -16,6 +16,7 @@ import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyi
 import type { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes';
 import { getAnyIdCiFromSsob } from "@/features/auth/AnyIdThunks";
 import { useDialog } from '@/contexts/DialogContext';
+import { decrypto } from "@/features/crypto/CryptoThunks";
 
 const showAnyIdArea = shouldLoadAnyIdSdk();
 
@@ -29,6 +30,8 @@ export default function FindId() {
   const [anyIdReady, setAnyIdReady] = useState(false);
   const hasLoadedAnyIdRef = useRef(false);
   const loadModuleCalledRef = useRef(false);
+  /** Any-ID가 success를 연속 호출해 decrypto·getMbrInfo가 중복 실행되는 것을 막음 */
+  const findIdAuthOnceRef = useRef(false);
 
   /** Any-ID SDK가 LOAD_MODULE에 넘긴 success 외에 window.anyidAdaptor.success만 호출하는 경우 대비 (LoginMethod 잔여 핸들러로 /auth/anyid/login 호출 방지) */
   const dispatchRef = useRef(dispatch);
@@ -73,26 +76,43 @@ export default function FindId() {
     const prevAdaptor = window.anyidAdaptor;
     window.anyidAdaptor = {
       success: async (data: any) => {
-        const ci = await dispatchRef.current(getAnyIdCiFromSsob({ ssob: data?.ssob, tag: data?.txId })).unwrap();
-        console.log("FindId.tsx window.anyidAdaptor success getAnyIdCiFromSsob ci=", ci);
-
-        if (!ci) {
-          showAlert(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
+        // esign-relay: 단계마다 success가 올라옴. extractInfo 등은 SDK가 내부에서 여러 번 호출 — 여기서는 최종 완료만 처리 (LoginMethod 동일)
+        if (data?.step != null && data.step !== 'authComplete') {
           return;
         }
-        else{
+        if (findIdAuthOnceRef.current) return;
+        findIdAuthOnceRef.current = true;
+
+        try{
+          const ci = await dispatchRef.current(getAnyIdCiFromSsob({ ssob: data?.ssob, tag: data?.txId })).unwrap();
+          console.log("FindId.tsx window.anyidAdaptor success getAnyIdCiFromSsob ci=", ci);
+
+          if(!ci){
+            findIdAuthOnceRef.current = false;
+            showAlert(tRef.current('certifySelfFailedReminder') || '인증 정보를 확인할 수 없습니다.');
+            return;
+          }
+
           const info = await dispatchRef.current(getMbrInfo({ linkInfoIdntfId: ci } as MbrInfoPVO)).unwrap();
           console.log("FindId.tsx window.anyidAdaptor success getMbrInfo info=", info);
 
           if(!info){
+            findIdAuthOnceRef.current = false;
             showAlert(tRef.current('mbrInfoSearchFailed'));
             return;
           }
-          else{
-            navigateRef.current('/pp/ko/auth/FindIdAuthSuccess', {
-              state: { id: info?.mbrId, name: info?.encptMbrFlnm },
-            });
-          }
+
+          const decryptedInfo = await dispatchRef.current(decrypto({ encptMbrFlnm: info?.encptMbrFlnm })).unwrap();
+          const decptMbrFlnm = decryptedInfo?.decptMbrFlnm?.trim() ?? '';
+
+          navigateRef.current('/pp/ko/auth/FindIdAuthSuccess', {
+            state: { id: info?.mbrId, name: decptMbrFlnm },
+          });
+        }
+        catch(e){
+          findIdAuthOnceRef.current = false;
+          console.error('[FindId] anyid success handler failed', e);
+          showAlert(tRef.current('certifySelfFailedReminder') || '처리 중 오류가 발생했습니다.');
         }
       }
     };
