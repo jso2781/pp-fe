@@ -57,18 +57,18 @@ export interface SttyAgtInfoPVO {
   linkInfoIdntfId?: string
 
   /** 인증토큰 */
-  certTokenVl?: string
+  certTokenVl?: string | null
 
   /** 등록자아이디 */
-  rgtrId?: string
+  rgtrId?: string | null
 
   /** 등록일시 */
-  regDt?: string
+  regDt?: string | null
   /** 수정자아이디 */
-  mdfrId?: string
+  mdfrId?: string | null
 
   /** 수정일시 */
-  mdfcnDt?: string
+  mdfcnDt?: string | null
 }
 
 /**
