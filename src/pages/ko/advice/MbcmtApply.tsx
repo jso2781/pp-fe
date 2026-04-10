@@ -4,7 +4,7 @@
  * 화면경로: /ko/advice/MbcmtApply
  * 화면설명: 자문위원 전환신청 화면 (자격여부 확인 후 신청)
  */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Typography, TextField, CircularProgress, Backdrop } from '@mui/material'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
@@ -14,6 +14,7 @@ import { useDialog } from '@/contexts/DialogContext'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { exprtAplyChk, updateExprtAprvStts } from '@/features/advice/MbcmtApplyThunks'
 import { resetMbcmtApply } from '@/features/advice/MbcmtApplySlice'
+import { decrypto } from '@/features/crypto/CryptoThunks'
 
 export default function MbcmtApply() {
   const navigate = useNavigate()
@@ -23,19 +24,27 @@ export default function MbcmtApply() {
 
   const [qualified, setQualified] = useState<boolean | null>(null)
   const [isApplying, setIsApplying] = useState(false)
+  const [decryptedName, setDecryptedName] = useState<string>('')
+  const [decryptedPhone, setDecryptedPhone] = useState<string>('')
 
   const userInfo = useAppSelector((state) => state.auth.userInfo);
-
-  const name = userInfo?.encptMbrFlnm;
-  const phone = userInfo?.encptMbrTelno?.replace(/-/g, '');
   const mbrNo = userInfo?.mbrNo;
+
+  useEffect(() => {
+    if (!userInfo?.encptMbrFlnm && !userInfo?.encptMbrTelno) return
+    dispatch(decrypto({
+      encptMbrFlnm: userInfo.encptMbrFlnm,
+      encptMbrTelno: userInfo.encptMbrTelno,
+    })).unwrap().then((res) => {
+      setDecryptedName(res.decptMbrFlnm ?? '')
+      setDecryptedPhone(res.decptMbrTelno ?? '')
+    }).catch(() => {})
+  }, [userInfo?.encptMbrFlnm, userInfo?.encptMbrTelno])
 
   /** 자격여부 확인 */
   const handleCheckQualification = async () => {
     try {
       const result = await dispatch(exprtAplyChk({
-        exprtFlnm: name,
-        encptCnstnMbcmtTelno: phone,
         mbrNo: mbrNo,
       })).unwrap()
 
@@ -62,8 +71,6 @@ export default function MbcmtApply() {
     setIsApplying(true)
     try {
       await dispatch(updateExprtAprvStts({
-        exprtFlnm: name,
-        encptCnstnMbcmtTelno: phone,
         mbrNo: mbrNo,
       })).unwrap()
 
@@ -148,8 +155,7 @@ export default function MbcmtApply() {
                       <TextField
                         size="small"
                         placeholder="이름을 입력해주세요"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={decryptedName}
                         variant="outlined"
                         disabled
                       />
@@ -161,8 +167,7 @@ export default function MbcmtApply() {
                       <TextField
                         size="small"
                         placeholder="010-0000-0000"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        value={decryptedPhone}
                         variant="outlined"
                         disabled
                       />
