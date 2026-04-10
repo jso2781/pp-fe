@@ -358,6 +358,7 @@ export default function Login() {
                             <ListItem disablePadding className="account-utils__item">
                               <Link
                                 component="button"
+                                type="button"
                                 onClick={() => navigate('/pp/ko/auth/SignUpSel')}
                                 className="account-utils__link"
                               >
@@ -370,6 +371,7 @@ export default function Login() {
                             <ListItem disablePadding className="account-utils__item">
                               <Link
                                 component="button"
+                                type="button"
                                 onClick={() => navigate('/pp/ko/auth/FindId')}
                                 className="account-utils__link"
                               >
@@ -382,6 +384,7 @@ export default function Login() {
                             <ListItem disablePadding className="account-utils__item">
                               <Link
                                 component="button"
+                                type="button"
                                 onClick={() => navigate('/pp/ko/auth/FindPw')}
                                 className="account-utils__link"
                               >
