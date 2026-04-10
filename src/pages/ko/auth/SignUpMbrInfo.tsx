@@ -510,9 +510,9 @@ export default function SignUpMbrInfo() {
         mbrTypeCd: 'G',                       // 회원유형가입(G - 일반회원, Y - 14세미만회원, E - 전문가회원)
         mbrJoinSttsCd: 'N',                     // 회원가입상태(N - 정상, W - 탈퇴)
         mbrJoinDt: now,
-        rgtrId: formData.mbrId,
+        rgtrId: null,
         regDt: null,
-        mdfrId: formData.mbrId,
+        mdfrId: null,
         mdfcnDt: null,
         linkInfoIdntfId: ci,
         certTokenVl: null,
@@ -535,10 +535,10 @@ export default function SignUpMbrInfo() {
           encptSttyAgtTelno: storedLegalGuardFormData.parentPhone,
           sttyAgtRelNm: storedLegalGuardFormData.relationship,
           linkInfoIdntfId: storedLegalGuardFormData.ciFromGuardAgr,
-          certTokenVl: undefined,
-          rgtrId: formData.mbrId,
+          certTokenVl: null,
+          rgtrId: null,
           regDt: now,
-          mdfrId: formData.mbrId
+          mdfrId: null
         };
       }
       const result = await dispatch(insertMbrInfoWithSttyAgtInfo({ mbrInfo: mbrInfoPVO, sttyAgtInfo: sttyAgtInfoPVO } as MbrInfoWithSttyAgtInfoPVO)).unwrap();

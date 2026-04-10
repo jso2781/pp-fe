@@ -149,12 +149,12 @@ export interface MbrInfoPVO {
   certTokenVl?: string | null
 
   /** 등록자아이디 */
-  rgtrId?: string
+  rgtrId?: string | null
 
   /** 등록일시 */
   regDt?: string | null
   /** 수정자아이디 */
-  mdfrId?: string
+  mdfrId?: string | null
 
   /** 수정일시 */
   mdfcnDt?: string | null
