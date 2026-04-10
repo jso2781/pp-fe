@@ -77,6 +77,7 @@ export default function SignUpMbrInfo() {
       ciFromGuardAgr?: string;    // 법정대리인 동의 폼에서 법정대리인의 본인인증 성공 시 Any-ID에서 전달받은 ci
     };
   }) | null;
+  const prvcChcAgreYn: 'Y' | 'N' = locationState?.prvcChcAgreYn === 'Y' ? 'Y' : 'N'
 
   // formData 타입 정의
   type LegalGuardFormData = {
@@ -505,6 +506,7 @@ export default function SignUpMbrInfo() {
         encptMbrEmlNm: formData.email || undefined,
         encptMbrPswd: formData.password,
         encptMbrTelno: formData.phone,
+        prvcChcAgreYn,
         mbrTypeCd: 'G',                       // 회원유형가입(G - 일반회원, Y - 14세미만회원, E - 전문가회원)
         mbrJoinSttsCd: 'N',                     // 회원가입상태(N - 정상, W - 탈퇴)
         mbrJoinDt: now,
@@ -544,7 +546,7 @@ export default function SignUpMbrInfo() {
       // 회원정보 1건이 입력되었는지 확인
       if(result > 0){
         // 다음 단계로 이동 (가입 신청 완료 페이지)
-        navigate('/pp/ko/auth/SignUpComplete', { state: { steps, userInfoFromSsob } });
+        navigate('/pp/ko/auth/SignUpComplete', { state: { steps, userInfoFromSsob, prvcChcAgreYn } });
       } else {
         alert(t('insertMbrInfoFailed'));
       }
@@ -574,7 +576,9 @@ export default function SignUpMbrInfo() {
 
     // 일반(14세 이상) 가입: 본인인증 단계가 인덱스 2 → 약관동의로 (Any-ID 연동 정보는 이탈 시 제거)
     if (certifySelfIndex === 2) {
-      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, signUpIsJunior: false } });
+      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', {
+        state: { steps, signUpIsJunior: false, prvcChcAgreYn },
+      });
     }
     // 만 14세 미만 가입: steps에 certifySelf 없음 → 법정대리인 동의로
     else if (isJuniorSignUpFlow) {
@@ -584,10 +588,13 @@ export default function SignUpMbrInfo() {
           legalGuardFormData: storedLegalGuardFormData,
           userInfoFromSsob,
           signUpIsJunior: true,
+          prvcChcAgreYn,
         },
       });
     } else {
-      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', { state: { steps, signUpIsJunior: false } });
+      navigate('/pp/ko/auth/GeneralSignUpAgrTrms', {
+        state: { steps, signUpIsJunior: false, userInfoFromSsob, prvcChcAgreYn },
+      });
     }
   }
 

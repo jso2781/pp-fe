@@ -112,6 +112,9 @@ export interface MbrInfoPVO {
   /** 회원암호화전화번호 */
   encptMbrTelno?: string
 
+  /** 개인정보선택동의여부(Y/N) */
+  prvcChcAgreYn?: string
+
   /** 회원유형코드 */
   mbrTypeCd?: string
 
@@ -207,6 +210,9 @@ export interface MbrInfoRVO {
 
   /** 회원암호화전화번호 */
   encptMbrTelno?: string
+
+  /** 개인정보선택동의여부(Y/N) */
+  prvcChcAgreYn?: string
 
   /** 회원유형코드 */
   mbrTypeCd?: string

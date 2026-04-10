@@ -40,6 +40,9 @@ export interface DshstyDclrPVO {
   
   /** 부정행위기간내용 */
   dshstyActPrdCn?: string;
+
+  /** 개인정보선택동의여부 (CleanForm: "개인정보 수집·이용 동의(선택)" 값) */
+  prvcChcAgreYn?: 'Y' | 'N' | string;
   
   /** 등록자아이디 */
   rgtrId?: string;

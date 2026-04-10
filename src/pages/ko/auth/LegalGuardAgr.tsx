@@ -186,6 +186,7 @@ export default function LegalGuardAgr() {
         state: {
           userInfoFromSsob: signUpFlow.userInfoFromSsob,
           signUpIsJunior: false,
+          prvcChcAgreYn: signUpFlow.prvcChcAgreYn ?? 'N',
         },
       })
     }
@@ -628,6 +629,7 @@ export default function LegalGuardAgr() {
         legalGuardFormData,
         userInfoFromSsob: mergedUserInfoFromSsob,
         signUpIsJunior: true,
+        prvcChcAgreYn: signUpFlow?.prvcChcAgreYn ?? 'N',
       },
     });
   }
@@ -640,6 +642,7 @@ export default function LegalGuardAgr() {
         cancelled: true,
         userInfoFromSsob: signUpFlow?.userInfoFromSsob,
         signUpIsJunior: true,
+        prvcChcAgreYn: signUpFlow?.prvcChcAgreYn ?? 'N',
       },
     });
   }

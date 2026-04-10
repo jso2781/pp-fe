@@ -107,6 +107,7 @@ export default function CertifySelf() {
           steps: locationState?.steps ?? steps,
           userInfoFromSsob: locationState?.userInfoFromSsob,
           signUpIsJunior: true,
+          prvcChcAgreYn: locationState?.prvcChcAgreYn ?? 'N',
         },
       });
       return;
@@ -118,6 +119,7 @@ export default function CertifySelf() {
           steps: locationState?.steps,
           userInfoFromSsob: locationState?.userInfoFromSsob,
           signUpIsJunior: false,
+          prvcChcAgreYn: locationState?.prvcChcAgreYn ?? 'N',
         },
       });
     }
@@ -237,6 +239,7 @@ export default function CertifySelf() {
           steps, 
           userInfoFromSsob: userInfoFromSsobRef.current ?? locationState?.userInfoFromSsob,
           signUpIsJunior: false,
+          prvcChcAgreYn: locationState?.prvcChcAgreYn ?? 'N',
         } 
       });
     }
@@ -245,7 +248,12 @@ export default function CertifySelf() {
   // 취소하기: 본 화면은 14세 이상 가입 전용 → 일반 약관동의로만 이동 (만 14세 미만은 LegalGuardAgr에서 인증 처리, 본 화면이 플로우에 없음)
   const handleCancel = () => {
     navigate('/pp/ko/auth/GeneralSignUpAgrTrms', {
-      state: { steps, signUpIsJunior: false },
+      state: {
+        steps,
+        signUpIsJunior: false,
+        userInfoFromSsob: locationState?.userInfoFromSsob,
+        prvcChcAgreYn: locationState?.prvcChcAgreYn ?? 'N',
+      },
     });
   }
 

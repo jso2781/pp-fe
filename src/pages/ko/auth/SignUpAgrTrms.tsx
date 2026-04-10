@@ -178,12 +178,13 @@ export default function SignUpAgrTrms() {
 
   // 다음 버튼 클릭 핸들러
   const handleNextStep = () => {
+    const prvcChcAgreYn: 'Y' | 'N' = checked3 ? 'Y' : 'N'
     // 필수 약관이 전부 동의되었으면 다음 단계로 이동 
     if (isRequiredAgreed){
       if(isJunior){
         // 만 14세 미만 가입: 법정 대리인 동의 단계로 이동 (steps 객체 전달)
         navigate('/pp/ko/auth/LegalGuardAgr', {
-          state: { steps, userInfoFromSsob, signUpIsJunior: true },
+          state: { steps, userInfoFromSsob, signUpIsJunior: true, prvcChcAgreYn },
         });
       }else{
         /*
@@ -192,11 +193,11 @@ export default function SignUpAgrTrms() {
          */
         if(ci){
           navigate('/pp/ko/auth/SignUpMbrInfo', {
-            state: { steps, userInfoFromSsob, signUpIsJunior: false },
+            state: { steps, userInfoFromSsob, signUpIsJunior: false, prvcChcAgreYn },
           });
         }else{
           navigate('/pp/ko/auth/CertifySelf', {
-            state: { steps, userInfoFromSsob, signUpIsJunior: false },
+            state: { steps, userInfoFromSsob, signUpIsJunior: false, prvcChcAgreYn },
           });
         }
       }
@@ -403,7 +404,11 @@ export default function SignUpAgrTrms() {
                         size="large"
                         onClick={() =>
                           navigate('/pp/ko/auth/SignUpSel', {
-                            state: { userInfoFromSsob, signUpIsJunior: flowState?.signUpIsJunior },
+                            state: {
+                              userInfoFromSsob,
+                              signUpIsJunior: flowState?.signUpIsJunior,
+                              prvcChcAgreYn: checked3 ? 'Y' : 'N',
+                            },
                           })
                         }
                       >
