@@ -9,7 +9,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useAuth } from '@/contexts/AuthContext'
 import { login as loginThunk } from '@/features/auth/AuthThunks';
-import { Box, Button, Checkbox, Divider, FormControlLabel, Link, Stack, TextField, Typography, List, ListItem } from '@mui/material';
+import { Box, Button, Checkbox, Divider, FormControlLabel, Link, Stack, TextField, Tooltip, Typography, List, ListItem } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom'
 import DepsLocation from '@/components/common/DepsLocation'
 import { useTranslation } from 'react-i18next';
@@ -349,9 +349,11 @@ export default function Login() {
                           }
                         />
                         <Box className="login-actions">
-                          <Button variant="contained" type="submit" size="large" fullWidth>
-                            {t('login')}
-                          </Button>
+                          <span style={{ display: 'block', width: '100%' }}>
+                            <Button variant="contained" type="submit" size="large" title={t('loginSubmitTooltip')} fullWidth>
+                              {t('login')}
+                            </Button>
+                          </span>
                         </Box>
                         <List className="account-utils" component="nav" aria-label={t('accountManagementMenu')}>
                           <React.Fragment key="signup">

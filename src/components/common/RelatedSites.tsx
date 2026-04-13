@@ -39,6 +39,7 @@ const RelatedSites = () => {
             <FormControl fullWidth size="small">
               <Select
                 value=""
+                title={t('goToRelGov')}
                 displayEmpty
                 onChange={handleSelect}
                 inputProps={{ 'aria-label': t('goToRelGov') }}
@@ -70,6 +71,7 @@ const RelatedSites = () => {
             <FormControl fullWidth size="small">
               <Select
                 value=""
+                title={t('goToRelOrg')}
                 displayEmpty
                 onChange={handleSelect}
                 inputProps={{ 'aria-label': t('goToRelOrg') }}

@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "build:styles": "sass src/styles:dist/styles --no-source-map --style=compressed",
     "watch:styles": "sass --watch src/styles:dist/styles",
-    "update:styles": "sass --update src/styles:dist/styles --no-source-map"
+    "update:styles": "sass --update src/styles:dist/styles --no-source-map",
+    "report:unused-feature-apis": "node scripts/generate-unused-feature-apis-doc.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
@@ -52,6 +53,7 @@
     "@typescript-eslint/eslint-plugin": "^8.44.0",
     "@typescript-eslint/parser": "^8.44.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "docx": "^9.6.1",
     "dotenv-cli": "^7.4.4",
     "eslint": "^9.16.0",
     "eslint-plugin-react": "^7.35.2",

@@ -2,6 +2,8 @@
     "contactHpTitle": "Report And Consultation",
     "accountManagementMenu": "Account management menu",
     "login": "Login",
+    "loginSubmitAria": "Sign in",
+    "loginSubmitTooltip": "Sign in",
     "logout": "Logout",
     "loginSuccess": "Login successful.",
     "loginFail": "Login failed.",
