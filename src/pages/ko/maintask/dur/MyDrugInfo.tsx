@@ -49,7 +49,7 @@ export default function MyDrugInfo() {
   const currentUrl = location.pathname
 
   const [basketList, setBasketList] = useState<DurMyDrugSearchRVO[]>([])
-  const [searchCnd, setSearchCnd] = useState<'igrdNm' | 'prdctNm'>('igrdNm')
+  const [searchCnd, setSearchCnd] = useState<'igrdNm' | 'prdctNm'>('prdctNm')
   const [searchWrd, setSearchWrd] = useState<string>('')
   const [isCheck, setIsCheck] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string>('TAB1')
@@ -303,6 +303,7 @@ export default function MyDrugInfo() {
                     <p className="drug-title--sub">복용 중인 의약품을 입력하면 금기 및 주의 정보를 확인 할 수 있습니다.</p>
                     <ul className="drug-list">
                       <li>DUR정보가 있더라도 의약전문가의 의료적 판단에 따라 처방·조제 될 수 있습니다.</li>
+                      <li>본 화면의 검색 정보는 정기적으로 업데이트되나, 실시간 변동되는 의약품 허가 현황과 차이가 있을 수 있습니다. 검색 결과는 참고용으로 활용하시기 바랍니다.</li>
                       <li>참고자료원: 식품의약품안전처 “의약품 병용금기 성분 등의 지정에 관한 규정” 고시,
                       “의약품 적정사용을 위한 주의 정보” 공고 및 건강보험심사평가원 “DUR 대상 의약품” 등</li>
                     </ul>
@@ -314,7 +315,7 @@ export default function MyDrugInfo() {
                         <div className="step-num">01</div>
                         <div className="step-content">
                           <p className="step-text">의약품을 검색 후 대상 의약품의 선택 버튼을 눌러주세요.</p>
-                          <p className="step-desc">(제공할 정보가 없거나, 허가 취하된 의약품은 검색 되지 않을 수 있습니다.)</p>
+                          <p className="step-desc">(제공할 정보가 없거나, 허가가 없는 의약품은 검색 되지 않을 수 있습니다.)</p>
                         </div>
                       </li>
                       <li>
@@ -327,7 +328,7 @@ export default function MyDrugInfo() {
                       <li>
                         <div className="step-num">03</div>
                         <div className="step-content">
-                          <p className="step-text">DUR 정보 결과에서 DUR 정보별 안전정보를 확인 할 수 있습니다.</p>
+                          <p className="step-text">DUR 정보 결과에서 검색한 의약품에 대한 DUR 정보를 확인할 수 있습니다.</p>
                         </div>
                       </li>
                     </ul>

@@ -279,14 +279,15 @@ export default function DurSearchRoom(){
                     <Box className="guide-title">시작하기 전에</Box>
                     <ul className="guide-list">
                       <li>DUR이 적용되고 있는 성분 및 품목을 기준으로 검색이 가능합니다.</li>
-                      <li>식품의약품안전처 공시·공고로 지정된 금기 및 주의 성분은 <strong>“DUR 정보 다운로드”</strong> 버튼을 클릭하여 다운로드 받은 엑셀 파일로 확인하세요.</li>
+                      <li>식품의약품안전처 고시·공고로 지정된 금기 및 주의 성분은 <strong>“DUR 정보 다운로드”</strong> 버튼을 클릭하여 다운로드 받은 엑셀 파일로 확인할 수 있습니다.</li>
                     </ul>
 
                     <ul className="guide-list--sub">
                       {/* <li>본 DUR 정보는 비상업적 연구 또는 교육에만 사용할 수 있으며, 상업적 목적으로 활용하는 경우 한국의약품안전관리원의 사전 승인을 받아야만 합니다.</li> */}
                       {/* <li>Provided for non-commercial research and education use only. Used with permission from KIDS for any commercial purposes.</li> */}
-                      <li>의약품을 아래 검색창에 입력하면, 병용시 주의, 어린이∙어르신∙임신부∙수유부에서 주의 정보 등을 확인할 수 있습니다.</li>
-                      <li>참고자료원 : 식품의약품안전처 “의약품 병용금기 성분 등의 지정에 관한 규정” 고시, “의약품 적정사용을 위한 주의 정보” 공고 및 <br/>건강보험심사평가원 “DUR 대상 의약품”</li>
+                      <li>의약품의 성분명 혹은 제품명을 검색하면, 병용시∙소아∙노인∙임신부∙수유부에서의 주의 정보 등을 확인할 수 있습니다.</li>
+                      <li>본 화면의 검색 정보는 정기적으로 업데이트되나, 실시간 변동되는 의약품 허가 현황과 차이가 있을 수 있습니다. 검색 결과는 참고용으로 활용하시기 바랍니다.</li>
+                      <li>참고자료원 : 식품의약품안전처 “의약품 병용금기 성분 등의 지정에 관한 규정” 고시, “의약품 적정사용을 위한 주의 정보” 공고 및 <br/>건강보험심사평가원 “DUR 대상 의약품 등”</li>
                     </ul>
                   </Box>
 
