@@ -356,7 +356,7 @@ export default function LoginMethod() {
                         {/* <Typography className="kids-login-title">KIDS 로그인</Typography> */}
                         <CardContent className="kids-login-card-content">
                           <Box className="login-button-group">
-                            <Button variant="outlined" onClick={() => navigate('/pp/ko/auth/Login')} className="login-button">
+                            <Button variant="outlined" onClick={() => navigate('/pp/ko/auth/Login')} className="login-button" title={t('login')}>
                               <Stack spacing={1} alignItems="center" className="login-button-stack">
                                 <Stack direction="row" spacing={1} alignItems="center">
                                   <AccountIcon className="login-icon" />
