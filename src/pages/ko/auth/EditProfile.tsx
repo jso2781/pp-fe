@@ -14,8 +14,12 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { existMbrInfo, updateMbrInfo } from '@/features/mbr/MbrInfoThunks';
 import { MbrInfoPVO, MbrInfoRVO, UpdateMbrInfoRVO } from '@/features/mbr/MbrInfoTypes';
 import { setAuthUserInfo } from '@/features/auth/AuthSlice';
+import { getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks';
 import { useDialog } from '@/contexts/DialogContext';
 import { decrypto } from '@/features/crypto/CryptoThunks';
+import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets';
+
+const showAnyIdSdk = shouldLoadAnyIdSdk();
 
 /**
  * PostgreSQL timestamp without time zone 컬럼에 맞는 형식으로 반환.
@@ -54,18 +58,134 @@ export default function EditProfile() {
   const [emailAvailable, setEmailAvailable] = useState(false);
   const [isPasswordChangeMode, setIsPasswordChangeMode] = useState(false);
   const [isPhoneCertified, setIsPhoneCertified] = useState(false);
+  /** 번호변경 클릭 후 휴대폰 입력란 아래 Any-ID(#anyidc) 영역 표시 */
+  const [showPhoneAnyIdArea, setShowPhoneAnyIdArea] = useState(false);
   const [anyIdReady, setAnyIdReady] = useState(false);
-  const hasFetchedRef = useRef(false);  // Any-ID 스크립트 로드 확인
+  const hasLoadedAnyIdAssetsRef = useRef(false);
+  const loadModuleCalledRef = useRef(false);
+  const phoneChangeTxRef = useRef(`phone-change-${Date.now()}`);
+  const isHandlingAnyIdSuccessRef = useRef(false);
+  const dispatchRef = useRef(dispatch);
+  const tRef = useRef(t);
   useEffect(() => {
-    const checkAnyIdReady = () => {
-      if (window.AnyidC?.LOAD_MODULE) {
-        setAnyIdReady(true);
-      } else {
-        setTimeout(checkAnyIdReady, 100);
-      }
+    dispatchRef.current = dispatch;
+    tRef.current = t;
+  });
+
+  /** 번호변경으로 영역을 연 뒤에만 manifest/vendor/app 로드 + AnyidC 준비 대기 */
+  useEffect(() => {
+    // 사용자가 번호변경 버튼을 누르면(showPhoneAnyIdArea=true) Any-ID 본인인증 영역이 로딩됨.
+    if (!showAnyIdSdk || !showPhoneAnyIdArea) return;
+    if (hasLoadedAnyIdAssetsRef.current) return;
+    hasLoadedAnyIdAssetsRef.current = true;
+
+    let cancelWait: (() => void) | null = null;
+
+    ensureAnyIdAssets(false)
+      .then(() => {
+        cancelWait = waitForAnyidC(
+          () => setAnyIdReady(true),
+          () => console.warn('[EditProfile] AnyidC.LOAD_MODULE not ready (timeout)'),
+          50,
+          40
+        );
+      })
+      .catch((err) => {
+        console.error(t('anyIdAssetsLoadFailed'), err);
+      });
+
+    return () => {
+      cancelWait?.();
     };
-    checkAnyIdReady();
-  }, []);
+  }, [showPhoneAnyIdArea, t]);
+
+  /** #anyidc가 렌더된 뒤 LOAD_MODULE 1회 — CertifySelf와 동일 cfg·테마 */
+  useEffect(() => {
+    if (!showAnyIdSdk || !showPhoneAnyIdArea) return;
+    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return;
+    if (loadModuleCalledRef.current) return;
+    loadModuleCalledRef.current = true;
+
+    const prevAdaptor = window.anyidAdaptor;
+    window.anyidAdaptor = {
+      success: async (data: any) => {
+        // SDK는 단계별 성공 이벤트를 여러 번 전달할 수 있으므로 최종 이벤트만 1회 처리한다.
+        if(data?.step != null && data.step !== 'authComplete'){
+          return;
+        }
+
+        const ssob = data?.ssob;
+        if(!ssob || typeof ssob !== 'string'){
+          console.warn('[EditProfile] Any-ID success without ssob', data);
+          return;
+        }
+
+        if(isHandlingAnyIdSuccessRef.current){
+          return;
+        }
+        isHandlingAnyIdSuccessRef.current = true;
+
+        try{
+          const userInfo = await dispatchRef.current(
+            getAnyIdUserInfoFromSsob({
+              ssob,
+              tag: phoneChangeTxRef.current ?? data?.txId,
+              isCheckMbr: false,
+            })
+          ).unwrap();
+
+          const nextPhone = userInfo?.phone?.trim();
+
+          if(!nextPhone){
+            console.warn('[EditProfile] Any-ID userInfo.phone empty', userInfo);
+            showAlert(
+              tRef.current('phoneCertifyNoPhoneFromServer') || '인증 정보에서 전화번호를 확인할 수 없습니다.',
+              tRef.current('error')
+            );
+            return;
+          }
+
+          setFormData((prev) => ({ ...prev, phone: nextPhone }));
+          setIsPhoneCertified(true);
+        } catch (e) {
+          console.error('EditProfile: getAnyIdUserInfoFromSsob failed', e);
+          // showAlert(tRef.current('certifySelfFailedReminder'), tRef.current('error'));
+        } finally {
+          isHandlingAnyIdSuccessRef.current = false;
+        }
+      },
+    };
+
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`;
+    const txId = phoneChangeTxRef.current;
+
+    window.AnyidC.LOAD_MODULE({
+      cfg: configAnyidcJsonUrl,
+      txId,
+      tag: txId,
+      lvl: 2,
+      bypass: 1,
+      toggle: false,
+      show: false,
+      theme: '4.1.0',
+      redirect_uri: window.location.href,
+      success: (data: any) => {
+        void window.anyidAdaptor?.success?.(data);
+      },
+      fail: (err: any) => {
+        console.error(tRef.current('certifySelfFailed'), err);
+        setIsPhoneCertified(false);
+        showAlert(tRef.current('certifySelfFailedReminder'), tRef.current('error'));
+      },
+      log: (data: any) => {
+        console.log('[EditProfile] ' + tRef.current('anyIdLog'), data);
+      },
+    });
+
+    return () => {
+      window.anyidAdaptor = prevAdaptor;
+    };
+  }, [anyIdReady, showPhoneAnyIdArea, showAlert]);
 
   /**
    * Auth의 encpt* 는 암호문. `decrypto` 한 번에 회원명·이메일·전화 암호 필드를 함께 넘기고,
@@ -237,44 +357,22 @@ export default function EditProfile() {
     }
   };
 
-  // 휴대전화번호 변경 (Any-ID 본인인증)
+  // 휴대전화번호 변경: 아래 Any-ID 영역을 펼치고, 인증 성공 시 getAnyIdUserInfoFromSsob 로 번호 반영
   const handlePhoneChange = () => {
-    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) {
-      showAlert(t('certifySelfModuleNotReady'), t('error'));
+    if (!showAnyIdSdk) {
+      showAlert(
+        t('certifySelfLocalEnvMessage') || '로컬 테스트 환경에서는 Any-ID 본인인증을 사용할 수 없습니다.',
+        t('error')
+      );
       return;
     }
-
-    // public 폴더 기준 상대 경로 사용
-    const configAnyidcJsonUrl = '/anyid/config/config.anyidc.json';
-    const txId = `phone-change-${Date.now()}`;
-
-    // Any-ID 본인인증 랩업 호출
-    window.AnyidC.LOAD_MODULE({
-      cfg: configAnyidcJsonUrl,
-      txId: txId,
-      tag: txId,
-      lvl: 2, // 휴대폰 SMS 인증 레벨
-      bypass: 1,
-      toggle: true,
-      theme: '4.1.0',
-      redirect_uri: window.location.href,
-      success: function (data: any) {
-        // 본인인증 성공
-        setIsPhoneCertified(true);
-        // 본인인증 완료된 휴대전화번호로 변경
-        // TODO: data에서 전화번호 추출하여 formData.phone 업데이트
-        // 예: setFormData(prev => ({ ...prev, phone: data.phone }));
-        window.anyidAdaptor?.success?.(data);
-      },
-      fail: function (err: any) {
-        console.error(t('certifySelfFailed'), err);
-        setIsPhoneCertified(false);
-        showAlert(t('certifySelfFailedReminder'),t('error') || '오류');
-      },
-      log: function (data: any) {
-        console.log('============================ ' + t('anyIdLog') + ' ============================', data);
-      },
-    });
+    if (showPhoneAnyIdArea) {
+      return;
+    }
+    phoneChangeTxRef.current = `phone-change-${Date.now()}`;
+    isHandlingAnyIdSuccessRef.current = false;
+    setIsPhoneCertified(false);
+    setShowPhoneAnyIdArea(true);
   };
 
   // 비밀번호 변경 모드 토글
@@ -456,13 +554,25 @@ export default function EditProfile() {
                             <Button
                               variant="outlined"
                               size="large"
+                              type="button"
                               onClick={handlePhoneChange}
                               aria-label={t('phoneCertify')}
                               className="btn-form-util"
+                              disabled={showAnyIdSdk && showPhoneAnyIdArea}
                             >
                               {t('phoneChange')}
                             </Button>
                           </Stack>
+                          {showPhoneAnyIdArea && showAnyIdSdk && (
+                            <Box sx={{ mt: 2 }} aria-live="polite">
+                              {!anyIdReady && (
+                                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                                  {t('certifySelfModuleLoading') || '본인인증 모듈을 불러오는 중입니다.'}
+                                </Typography>
+                              )}
+                              <div id="anyidc" className="anyidc" />
+                            </Box>
+                          )}
                         </Box>
 
                         {/* 1.5 이메일 (선택) - 활성화, 1.6 중복확인 버튼 */}
