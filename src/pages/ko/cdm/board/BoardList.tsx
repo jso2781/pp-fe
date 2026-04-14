@@ -22,7 +22,7 @@ import {
   Paper,
   Link,
 } from '@mui/material';
-import { useParams, useSearchParams, Link as RouterLink } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
@@ -35,14 +35,8 @@ export default function BoardList() {
 
   const { boardType, lang } = useParams<{ boardType: string; lang: string }>();
 
-  const [searchParams] = useSearchParams();
-
-  const [searchCnd, setSearchCnd] = useState(searchParams.get('searchType') || 'title');
-  const [searchWrd, setSearchWrd] = useState(searchParams.get('searchKeyword') || '');
-
-  // 검색 버튼 클릭 시에만 반영되도록 별도 applied 상태 유지
-  const [appliedCnd, setAppliedCnd] = useState(searchCnd);
-  const [appliedWrd, setAppliedWrd] = useState(searchWrd);
+  const [searchCnd, setSearchCnd] = useState('title');
+  const [searchWrd, setSearchWrd] = useState('');
 
   // 페이징 관련
   const [pageNum, setPageNum] = useState(1);
@@ -56,22 +50,29 @@ export default function BoardList() {
   // Lnb 랜더링용
   const currentUrl = location.pathname;
 
+  // 메뉴 변경 시 검색 초기화
+  useEffect(() => {
+    setSearchCnd('title');
+    setSearchWrd('');
+    setPageNum(1);
+  }, [boardType]);
+
   // 스크롤 상단 이동
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pageNum]);
 
-  // 목록 조회
+  // 목록 조회 (boardType, pageNum 변경 시)
   useEffect(() => {
     if (!boardType) return;
     dispatch(selectBoardList({
       bbsId: config?.bbsId || boardType || "",
       page: pageNum,
       pageSize: String(pageSize),
-      searchType: appliedCnd,
-      searchKeyword: appliedWrd,
+      searchType: searchCnd,
+      searchKeyword: searchWrd,
     }));
-  }, [boardType, pageNum, appliedCnd, appliedWrd]);
+  }, [boardType, pageNum]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 
@@ -94,9 +95,14 @@ export default function BoardList() {
   }, [boardData]);
 
   const onSearch = () => {
-    setAppliedCnd(searchCnd);
-    setAppliedWrd(searchWrd);
     setPageNum(1);
+    dispatch(selectBoardList({
+      bbsId: config?.bbsId || boardType || "",
+      page: 1,
+      pageSize: String(pageSize),
+      searchType: searchCnd,
+      searchKeyword: searchWrd,
+    }));
   };
 
   return (

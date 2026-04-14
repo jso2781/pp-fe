@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectAsmtPrpList, getAsmtPrpDetail, getAsmtPrpAnswer, increaseAsmtPrpViewCount } from './AsmtprpCdmThunks'
+import { selectAsmtPrpList, getAsmtPrpDetail, getAsmtPrpAnswer, increaseAsmtPrpViewCount, selectAsmtPrpStatusCodes } from './AsmtprpCdmThunks'
 import { AsmtPrpItem } from './AsmtprpCdmTypes'
 
 export interface CdmAsmtPrpState {
@@ -7,6 +7,7 @@ export interface CdmAsmtPrpState {
   totalCount: number
   detail: AsmtPrpItem | null
   answer: any | null
+  statusCodeMap: Record<string, string>
   loading: boolean
   error: string | null
 }
@@ -16,6 +17,7 @@ const initialState: CdmAsmtPrpState = {
   totalCount: 0,
   detail: null,
   answer: null,
+  statusCodeMap: {},
   loading: false,
   error: null,
 }
@@ -90,6 +92,9 @@ const CdmAsmtPrpSlice = createSlice({
       .addCase(increaseAsmtPrpViewCount.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error?.message || 'Failed to increase asmtprp view count';
+      })
+      .addCase(selectAsmtPrpStatusCodes.fulfilled, (state, action) => {
+        state.statusCodeMap = action.payload;
       })
   },
 });

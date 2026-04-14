@@ -8,6 +8,7 @@ import {
   deleteAsmtPrpApiPath,
   getAsmtPrpAnswerApiPath,
   increaseAsmtPrpViewCountApiPath,
+  selectAsmtPrpStatusCodesApiPath,
 } from '@/api/cdm/asmtprp/AsmtprpCdmApiPaths'
 import { AsmtPrpItem, FetchAsmtPrpListParams, FetchAsmtPrpListResponse } from './AsmtprpCdmTypes'
 
@@ -110,6 +111,23 @@ export const getAsmtPrpAnswer = createAsyncThunk<any, { asmtPrpSn: string } | un
     } catch (e) {
       console.error('AsmtprpCdmThunks getAsmtPrpAnswer error!!', e);
       return rejectWithValue('AsmtprpCdmThunks getAsmtPrpAnswer error!!');
+    }
+  }
+)
+
+/**
+ * 과제제안 진행상태 공통코드 조회 (CMCMM00004)
+ */
+export const selectAsmtPrpStatusCodes = createAsyncThunk<Record<string, string>, void, { rejectValue: string }>(
+  '/community/asmtprp/selectStatusCodes',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await https.get(selectAsmtPrpStatusCodesApiPath());
+      const items: { code: string; name: string }[] = res.data?.data || [];
+      return Object.fromEntries(items.map((c) => [c.code, c.name]));
+    } catch (e) {
+      console.error('AsmtprpCdmThunks selectAsmtPrpStatusCodes error!!', e);
+      return rejectWithValue('AsmtprpCdmThunks selectAsmtPrpStatusCodes error!!');
     }
   }
 )

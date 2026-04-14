@@ -32,3 +32,8 @@ export const getAsmtPrpAnswerApiPath = () => '/community/asmtprp/selectAnswer'
  * 과제제안 조회수 증가
  */
 export const increaseAsmtPrpViewCountApiPath = () => '/community/asmtprp/increaseViewCount'
+
+/**
+ * 과제제안 진행상태 공통코드 조회 (CMCMM00004)
+ */
+export const selectAsmtPrpStatusCodesApiPath = () => '/cm/codes/CMCMM00004'

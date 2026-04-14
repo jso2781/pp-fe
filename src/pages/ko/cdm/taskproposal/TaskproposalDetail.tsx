@@ -7,6 +7,7 @@ import { Box, Button, Link, Stack, Typography } from '@mui/material';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
+import DOMPurify from 'dompurify';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   getAsmtPrpDetail,
@@ -14,6 +15,7 @@ import {
   deleteAsmtPrp,
   increaseAsmtPrpViewCount,
 } from '@/features/cdm/asmtprp/AsmtprpCdmThunks';
+import { downloadFileViaProxy } from '@/api/cdm/communityApi';
 
 function formatDate(value: string): string {
   if (!value) return '-';
@@ -201,12 +203,11 @@ export default function TaskproposalDetail() {
                               {fileList.map((file: any, index: number) => (
                                 <li key={file.atchFileId ?? index}>
                                   <Link
-                                    href={`${import.meta.env.VITE_CDM_API_BASE_URL ?? '/api/cm'}/common/file/download/${file.atchFileId}`}
+                                    component="button"
+                                    onClick={() => downloadFileViaProxy(file.atchFileId, file.fileNm)}
                                     className="attachment-item"
                                     underline="none"
                                     title="첨부파일 다운로드"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
                                   >
                                     <Box className="file-info">
                                       <span className="file-label">
@@ -252,7 +253,7 @@ export default function TaskproposalDetail() {
                           <Box className="board-content">
                             <Box
                               sx={{ minHeight: 100 }}
-                              dangerouslySetInnerHTML={{ __html: answerData.ansCn || '등록된 답변이 없습니다.' }}
+                              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(answerData.ansCn || '등록된 답변이 없습니다.') }}
                             />
                           </Box>
 
@@ -262,12 +263,11 @@ export default function TaskproposalDetail() {
                                 {ansFileList.map((file: any, index: number) => (
                                   <li key={file.atchFileId ?? index}>
                                     <Link
-                                      href={`${import.meta.env.VITE_CDM_API_BASE_URL ?? '/api/cm'}/common/file/download/${file.atchFileId}`}
+                                      component="button"
+                                      onClick={() => downloadFileViaProxy(file.atchFileId, file.fileNm)}
                                       className="attachment-item"
                                       underline="none"
                                       title="첨부파일 다운로드"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
                                     >
                                       <Box className="file-info">
                                         <span className="file-label">

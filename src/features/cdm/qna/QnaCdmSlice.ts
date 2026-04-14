@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectQnaList, getQnaDetail, getQnaAnswer, increaseQnaViewCount } from './QnaCdmThunks'
+import { selectQnaList, getQnaDetail, getQnaAnswer, increaseQnaViewCount, selectQnaStatusCodes } from './QnaCdmThunks'
 import { QnaItem } from './QnaCdmTypes'
 
 export interface CdmQnaState {
@@ -7,6 +7,7 @@ export interface CdmQnaState {
   totalCount: number
   detail: QnaItem | null
   answer: any | null
+  statusCodeMap: Record<string, string>
   loading: boolean
   error: string | null
 }
@@ -16,6 +17,7 @@ const initialState: CdmQnaState = {
   totalCount: 0,
   detail: null,
   answer: null,
+  statusCodeMap: {},
   loading: false,
   error: null,
 }
@@ -90,6 +92,9 @@ const CdmQnaSlice = createSlice({
       .addCase(increaseQnaViewCount.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error?.message || 'Failed to increase qna view count';
+      })
+      .addCase(selectQnaStatusCodes.fulfilled, (state, action) => {
+        state.statusCodeMap = action.payload;
       })
   },
 });

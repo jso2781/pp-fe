@@ -7,6 +7,7 @@ import { Box, Button, Link, Typography } from '@mui/material';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
+import DOMPurify from 'dompurify';
 import { type BoardType } from '@/api/cdm/boardConfig';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
@@ -15,6 +16,7 @@ import {
   deleteQna,
   increaseQnaViewCount,
 } from '@/features/cdm/qna/QnaCdmThunks';
+import { downloadFileViaProxy } from '@/api/cdm/communityApi';
 
 const BOARD_BBS_ID: Partial<Record<BoardType, string>> = {
   qna: 'BBS0000001',
@@ -156,7 +158,7 @@ export default function QnaDetail() {
                           {isHtml ? (
                             <div
                               className="content-inner html-render"
-                              dangerouslySetInnerHTML={{ __html: qnaContent }}
+                              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(qnaContent) }}
                             />
                           ) : (
                             <Typography className="content-inner text-render" sx={{ whiteSpace: 'pre-line' }}>
@@ -171,12 +173,11 @@ export default function QnaDetail() {
                               {qnaFileList.map((file: any, index: number) => (
                                 <li key={file.atchFileId ?? index}>
                                   <Link
-                                    href={`${import.meta.env.VITE_CDM_API_BASE_URL ?? '/api/cm'}/common/file/download/${file.atchFileId}`}
+                                    component="button"
+                                    onClick={() => downloadFileViaProxy(file.atchFileId, file.fileNm)}
                                     className="attachment-item"
                                     underline="none"
                                     title="첨부파일 다운로드"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
                                   >
                                     <Box className="file-info">
                                       <span className="file-label">
@@ -231,12 +232,11 @@ export default function QnaDetail() {
                                 {ansFileList.map((file: any, index: number) => (
                                   <li key={file.atchFileId ?? index}>
                                     <Link
-                                      href={`${import.meta.env.VITE_CDM_API_BASE_URL ?? '/api/cm'}/common/file/download/${file.atchFileId}`}
+                                      component="button"
+                                      onClick={() => downloadFileViaProxy(file.atchFileId, file.fileNm)}
                                       className="attachment-item"
                                       underline="none"
                                       title="첨부파일 다운로드"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
                                     >
                                       <Box className="file-info">
                                         <span className="file-label">

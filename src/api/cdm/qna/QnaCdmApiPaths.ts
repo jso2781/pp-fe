@@ -32,3 +32,8 @@ export const getQnaAnswerApiPath = () => '/community/qna/selectAnswer'
  * QnA 조회수 증가
  */
 export const increaseQnaViewCountApiPath = () => '/community/qna/increaseViewCount'
+
+/**
+ * QnA 진행상태 공통코드 조회 (CMCMM00001)
+ */
+export const selectQnaStatusCodesApiPath = () => '/cm/codes/CMCMM00001'

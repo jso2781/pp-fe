@@ -27,14 +27,14 @@ import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import type { AsmtPrpItem } from '@/features/cdm/asmtprp/AsmtprpCdmTypes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { selectAsmtPrpList } from '@/features/cdm/asmtprp/AsmtprpCdmThunks';
+import { selectAsmtPrpList, selectAsmtPrpStatusCodes } from '@/features/cdm/asmtprp/AsmtprpCdmThunks';
 import { resetResults } from '@/features/cdm/asmtprp/AsmtprpCdmSlice';
 
-/** 진행 상태 표시 (API 코드: "01" = 답변대기, "02" = 답변완료) */
-function AsmtStatusChip({ status }: Readonly<{ status: string }>) {
+function AsmtStatusChip({ status, codeMap }: Readonly<{ status: string; codeMap: Record<string, string> }>) {
   const s = status?.trim() ?? '';
-  if (s === '02') return <Chip size="small" label="답변완료" color="success" />;
-  return <Chip size="small" label="답변대기" color="warning" />;
+  const label = codeMap[s] ?? s;
+  const color = s === '02' ? 'success' : 'warning';
+  return <Chip size="small" label={label || '대기'} color={color} />;
 }
 
 export default function TaskproposalList() {
@@ -45,7 +45,7 @@ export default function TaskproposalList() {
   const currentUrl = location.pathname;
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector((s) => s.auth.userInfo);
-  const { list: listData, totalCount } = useAppSelector((s) => s.cdmAsmtPrp);
+  const { list: listData, totalCount, statusCodeMap } = useAppSelector((s) => s.cdmAsmtPrp);
 
   // 검색 폼
   const [searchCnd, setSearchCnd] = useState('title');
@@ -56,6 +56,11 @@ export default function TaskproposalList() {
   // 페이징
   const [pageNum, setPageNum] = useState(1);
   const pageSize = 10;
+
+  // 공통코드 조회 (최초 1회)
+  useEffect(() => {
+    dispatch(selectAsmtPrpStatusCodes());
+  }, []);
 
   // 스크롤 상단 이동
   useEffect(() => {
@@ -215,7 +220,7 @@ export default function TaskproposalList() {
                                 {r.title}
                               </TableCell>
                               <TableCell align="center">
-                                <AsmtStatusChip status={r.status} />
+                                <AsmtStatusChip status={r.status} codeMap={statusCodeMap} />
                               </TableCell>
                               <TableCell align="center">{r.date}</TableCell>
                               <TableCell align="center">{r.views}</TableCell>

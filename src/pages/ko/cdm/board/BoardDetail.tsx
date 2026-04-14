@@ -10,6 +10,7 @@ import Lnb from '@/components/common/Lnb';
 import { BOARD_CONFIG, type BoardType } from '@/api/cdm/boardConfig';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { getBoardDetail, increaseBoardViewCount } from '@/features/cdm/board/BoardCdmThunks';
+import { downloadFileViaProxy } from '@/api/cdm/communityApi';
 
 export default function BoardDetail() {
   const { t } = useTranslation();
@@ -137,12 +138,11 @@ export default function BoardDetail() {
                               {fileList.map((file, index) => (
                                 <li key={file.atchFileId ?? index}>
                                   <Link
-                                    href={`${import.meta.env.VITE_CDM_API_BASE_URL ?? '/api/cm'}/common/file/download/${file.atchFileId}`}
+                                    component="button"
+                                    onClick={() => downloadFileViaProxy(file.atchFileId, file.fileNm)}
                                     className="attachment-item"
                                     underline="none"
                                     title="첨부파일 다운로드"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
                                   >
                                     <Box className="file-info">
                                       <span className="file-label">

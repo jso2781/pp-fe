@@ -8,6 +8,7 @@ import {
   deleteQnaApiPath,
   getQnaAnswerApiPath,
   increaseQnaViewCountApiPath,
+  selectQnaStatusCodesApiPath,
 } from '@/api/cdm/qna/QnaCdmApiPaths'
 import { QnaItem, FetchQnaListParams, FetchQnaListResponse } from './QnaCdmTypes'
 
@@ -110,6 +111,23 @@ export const getQnaAnswer = createAsyncThunk<any, { qstnSn: string } | undefined
     } catch (e) {
       console.error('QnaCdmThunks getQnaAnswer error!!', e);
       return rejectWithValue('QnaCdmThunks getQnaAnswer error!!');
+    }
+  }
+)
+
+/**
+ * QnA 진행상태 공통코드 조회 (CMCMM00001)
+ */
+export const selectQnaStatusCodes = createAsyncThunk<Record<string, string>, void, { rejectValue: string }>(
+  '/community/qna/selectStatusCodes',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await https.get(selectQnaStatusCodesApiPath());
+      const items: { code: string; name: string }[] = res.data?.data || [];
+      return Object.fromEntries(items.map((c) => [c.code, c.name]));
+    } catch (e) {
+      console.error('QnaCdmThunks selectQnaStatusCodes error!!', e);
+      return rejectWithValue('QnaCdmThunks selectQnaStatusCodes error!!');
     }
   }
 )
