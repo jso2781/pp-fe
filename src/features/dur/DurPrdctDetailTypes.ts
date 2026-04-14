@@ -24,6 +24,9 @@ export interface DurPrdctDetailListPVO {
    * nursw - DUR수유부주의 정보에서 제품별 제약회사 조회(성분명 조건)
    */
   bannTypeCd: string
+
+  /** 연령금기 해당연령 */
+  rlvtAge?: string
 }
 
 /**

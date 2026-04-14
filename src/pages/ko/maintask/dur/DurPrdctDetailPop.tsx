@@ -28,6 +28,7 @@ function DurPrdctDetailPopInner() {
   const [searchParams] = useSearchParams();
   const igrdNm = searchParams.get('igrdNm') ?? (location.state as { igrdNm?: string } | null)?.igrdNm ?? '';
   const bannTypeCd = searchParams.get('bannTypeCd') ?? (location.state as { bannTypeCd?: string } | null)?.bannTypeCd ?? 'conc';
+  const rlvtAge = searchParams.get('rlvtAge') ?? (location.state as { rlvtAge?: string } | null)?.rlvtAge ?? '';
 
   const [pageNum, setPageNum] = useState(1);
   const [data, setData] = useState<PopupData>(initialData);
@@ -52,7 +53,7 @@ function DurPrdctDetailPopInner() {
     setData((prev) => ({ ...prev, loading: true }));
 
     /* 제품 상세 조회(비동기 데이터 조회) */
-    dispatch(selectPrdctDetailList({ pageNum, pageSize: PAGE_SIZE, igrdNm: igrdNm.trim(), bannTypeCd }))
+    dispatch(selectPrdctDetailList({ pageNum, pageSize: PAGE_SIZE, igrdNm: igrdNm.trim(), bannTypeCd, rlvtAge }))
       .then((action) => {
         if (selectPrdctDetailList.fulfilled.match(action)) {
           const p = action.payload;

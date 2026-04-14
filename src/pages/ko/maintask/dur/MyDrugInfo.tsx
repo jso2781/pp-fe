@@ -190,16 +190,17 @@ export default function MyDrugInfo() {
     setTabDetailPageNum((prev) => ({ ...prev, [tabKey]: page }))
   }
 
-  const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string) => {
-    const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`
-    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}`
-    const width = 800
-    const height = 600
-    const left = Math.round((window.screen.width - width) / 1.5)
-    const top = Math.round((window.screen.height - height) / 1.5)
-    const features = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes,popup=1`
-    window.open(url, 'DurPrdctDetailPop', features)
-  }
+  /** 제품검색 클릭 시 DurPrdctDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
+  const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string, rlvtAge?: string) => {
+    const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`;
+    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}${(rlvtAge ? "&rlvtAge="+rlvtAge : "")}`;
+    const width = 800;
+    const height = 600;
+    const left = Math.round((window.screen.width - width) / 1.5);
+    const top = Math.round((window.screen.height - height) / 1.5);
+    const features = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes,popup=1`;
+    window.open(url, 'DurPrdctDetailPop', features);
+  };  
 
   const openEftgrpDetailPop = (igrdNm: string) => {
     const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurEftgrpDetailPop`
@@ -645,7 +646,7 @@ export default function MyDrugInfo() {
                                                             size="xsmall"
                                                             className="btn-detail"
                                                             endIcon={<ChevronRightIcon />}
-                                                            onClick={() => openPrdctDetailPop(item.igrdNm, getBannTypeCd(category))}
+                                                            onClick={() => openPrdctDetailPop(item.igrdNm, getBannTypeCd(category), item.rlvtAge)}
                                                           >
                                                             제품검색
                                                           </Button>
