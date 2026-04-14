@@ -8,8 +8,19 @@ export interface DurEftgrpDetailListPVO {
   /** 한 페이지에 보여줄 아이템의 개수 */
   pageSize?: number
 
+  /**
+   * 효능그룹명
+   * ex) 해열진통소염제, 최면진정제
+   */
+  effGroupNm?: string
+
+  /**
+   * 계열(그룹명)
+   */
+  groupNm?: string
+
   /** 성분명 */
-  igrdNm?: string
+  igrdNm?: string  
 }
 
 /**

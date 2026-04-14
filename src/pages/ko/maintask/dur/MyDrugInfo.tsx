@@ -202,16 +202,17 @@ export default function MyDrugInfo() {
     window.open(url, 'DurPrdctDetailPop', features);
   };  
 
-  const openEftgrpDetailPop = (igrdNm: string) => {
-    const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurEftgrpDetailPop`
-    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}`
-    const width = 800
-    const height = 600
-    const left = Math.round((window.screen.width - width) / 2)
-    const top = Math.round((window.screen.height - height) / 2)
-    const features = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes,popup=1`
-    window.open(url, 'DurEftgrpDetailPop', features)
-  }
+  /** 중복 상세보기 클릭 시 DurEftgrpDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
+  const openEftgrpDetailPop = (igrdNm: string, effGroupNm: string, groupNm: string) => {
+    const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurEftgrpDetailPop`;
+    const url = `${base}?effGroupNm=${encodeURIComponent(effGroupNm)}&groupNm=${encodeURIComponent(groupNm)}&igrdNm=${encodeURIComponent(igrdNm)}`;
+    const width = 800;
+    const height = 600;
+    const left = Math.round((window.screen.width - width) / 2);
+    const top = Math.round((window.screen.height - height) / 2);
+    const features = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes,popup=1`;
+    window.open(url, 'DurEftgrpDetailPop', features);
+  };
 
   const onClickCheckDur = () => {
     if (basketList.length === 0) return
@@ -657,7 +658,7 @@ export default function MyDrugInfo() {
                                                             size="xsmall"
                                                             className="btn-detail"
                                                             endIcon={<ChevronRightIcon />}
-                                                            onClick={() => openEftgrpDetailPop(item.igrdNm)}
+                                                            onClick={() => openEftgrpDetailPop(item.igrdNm, item.effGroupNm, item.groupNm)}
                                                           >
                                                             중복 상세보기
                                                           </Button>

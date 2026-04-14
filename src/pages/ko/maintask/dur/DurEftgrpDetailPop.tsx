@@ -26,6 +26,8 @@ function DurEftgrpDetailPopInner() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const [searchParams] = useSearchParams();
+  const effGroupNm = searchParams.get('effGroupNm') ?? (location.state as { effGroupNm?: string } | null)?.effGroupNm ?? '';
+  const groupNm = searchParams.get('groupNm') ?? (location.state as { groupNm?: string } | null)?.groupNm ?? '';
   const igrdNm = searchParams.get('igrdNm') ?? (location.state as { igrdNm?: string } | null)?.igrdNm ?? '';
 
   const [pageNum, setPageNum] = useState(1);
@@ -65,7 +67,7 @@ function DurEftgrpDetailPopInner() {
     setData((prev) => ({ ...prev, loading: true }));
 
     /* 효능군중복주의 상세 조회(비동기 데이터 조회) */
-    dispatch(selectEftgrpDetailList({ pageNum, pageSize: PAGE_SIZE, igrdNm: igrdNm.trim() }))
+    dispatch(selectEftgrpDetailList({ pageNum, pageSize: PAGE_SIZE, effGroupNm: effGroupNm.trim(), groupNm: groupNm.trim(), igrdNm: igrdNm.trim() }))
       .then((action) => {
         if (selectEftgrpDetailList.fulfilled.match(action)) {
           const p = action.payload;
@@ -82,7 +84,7 @@ function DurEftgrpDetailPopInner() {
       /* 조회 실패 시 로딩 상태 설정 */
       .catch(() => setData((prev) => ({ ...prev, loading: false })));
 
-  }, [dispatch, pageNum, igrdNm]);
+  }, [dispatch, pageNum, igrdNm, effGroupNm, groupNm]);
 
 return (
       <Box className="ingredient-popup-wrapper">
@@ -105,9 +107,9 @@ return (
             <table className="base-table">
               <caption className="sr-only">성분명 정보</caption>
               <colgroup>
+                <col style={{ width: '20%' }} /> 
                 <col style={{ width: '30%' }} /> 
-                <col />
-                <col style={{ width: '130px' }} /> 
+                <col style={{ width: '50%' }} /> 
               </colgroup>
               <thead>
                 <tr>
@@ -121,9 +123,7 @@ return (
                   rows.length > 0 && rows.map((row) => (
                     <tr key={row.id}>
                       <td>{row.effGroupNm}</td>
-                      <td className="tal">
-                        {row.groupNm}
-                      </td>
+                      <td>{row.groupNm}</td>
                       <td>
                         <Box className="detail-info-row">
                           <p className="text">{row.igrdNm}</p>
