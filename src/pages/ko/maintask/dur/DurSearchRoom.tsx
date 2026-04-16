@@ -1096,7 +1096,7 @@ export default function DurSearchRoom(){
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   <span className="text">{item.groupNm}</span>
-                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openEftgrpDetailPop(item.igrdNm)}>
+                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openEftgrpDetailPop(item.igrdNm, item.effGroupNm, item.groupNm)}>
                                                     중복 상세보기
                                                   </Button>
                                                 </Box>
