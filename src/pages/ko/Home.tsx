@@ -34,7 +34,10 @@ type SnsItem = {
   desc: string;
   videoId?: string;
   data?: PostVO;
+	thmbExplnCn?: string;
+	vdoExplnCn?: string;
 };
+
 type SnsTab = { label: string; items: SnsItem[] };
 type SnsTabs = Record<TabKey, SnsTab>;
 
@@ -137,8 +140,10 @@ export default function Home() {
         title: item.pstTtl || '',
         url: `https://www.youtube.com/embed/${item.videoId || ''}`,
         thumbnail: getThumbnailUrl(item),
+        thmbExplnCn: item.thmbExplnCn || '',
         desc: item.pstCn || '',
         videoId: item.videoId || '',
+        vdoExplnCn: item.vdoExplnCn || '',
         data: item,
       })),
     };
@@ -150,6 +155,7 @@ export default function Home() {
         title: item.pstTtl || '',
         url: item.videoId || 'https://www.instagram.com',
         thumbnail: getThumbnailUrl(item),
+        thmbExplnCn: item.thmbExplnCn || '',
         desc: item.pstCn || '',
         data: item,
       })),
@@ -162,6 +168,7 @@ export default function Home() {
         title: item.pstTtl || '',
         url: item.videoId || 'https://blog.naver.com',
         thumbnail: getThumbnailUrl(item),
+        thmbExplnCn: item.thmbExplnCn || '',
         desc: item.pstCn || '',
         data: item,
       })),
@@ -175,6 +182,8 @@ export default function Home() {
       thumbnail: getThumbnailUrl(item),
       desc: item.pstCn || '',
       videoId: item.videoId || '',
+      vdoExplnCn: item.vdoExplnCn || '',
+      thmbExplnCn: item.thmbExplnCn || '',
       data: item,
     }));
 
@@ -660,7 +669,7 @@ export default function Home() {
                       >
                         <img 
                           src={getThumbnailUrl(item)} 
-                          alt={item.pstTtl || `프로모션 배너 ${index + 1}`} 
+                          alt={item.thmbExplnCn || `프로모션 배너 ${index + 1}`} 
                           style={{
                             width: '100%',
                             height: '100%',
@@ -835,7 +844,7 @@ export default function Home() {
                                   <Box
                                     component="iframe"
                                     src={`https://www.youtube.com/embed/${it.videoId}`} 
-                                    title={`${it.title} 안내 영상`}
+                                    title={`${it.vdoExplnCn ?? it.title + "안내 영상"}`}
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                     referrerPolicy="strict-origin-when-cross-origin"
                                     sandbox="allow-scripts allow-same-origin allow-presentation"
@@ -859,7 +868,7 @@ export default function Home() {
                                 <Box className="thumb-area">
                                   <img 
                                     src={it.thumbnail || '/fe/img/img_test.png'} 
-                                    alt={`${it.title} 썸네일 이미지`}
+                                    alt={`${it.thmbExplnCn ?? it.title + " 썸네일 이미지"}`}
                                     style={{objectFit: 'unset'}}
                                   />
                                 </Box>
@@ -911,7 +920,7 @@ export default function Home() {
                               <Box
                                 component="iframe"
                                 src={`https://www.youtube.com/embed/${it.videoId}`} 
-                                title={`${it.title} 안내 영상`}
+                                title={`${it.vdoExplnCn ?? it.title + "안내 영상"}`}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 referrerPolicy="strict-origin-when-cross-origin"
                                 sandbox="allow-scripts allow-same-origin allow-presentation"
@@ -932,7 +941,7 @@ export default function Home() {
                             <Box className="thumb-area">
                               <img 
                                 src={it.thumbnail || '/fe/img/img_test.png'} 
-                                alt={`${it.title} 썸네일 이미지`}
+                                alt={`${it.thmbExplnCn ?? it.title + " 썸네일 이미지"}`}
                                 style={{objectFit: 'unset'}}
                               />                              
                             </Box>
@@ -1065,7 +1074,7 @@ export default function Home() {
                       >
                         <img
                           src={getThumbnailUrl(item)}
-                          alt={item.pstTtl || `카드뉴스 이미지 ${index + 1}`}
+                          alt={item.thmbExplnCn || `카드뉴스 이미지 ${index + 1}`}
                           style={{
                             width: '100%',
                             height: '100%',

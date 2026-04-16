@@ -86,7 +86,8 @@ export default function GalleryBoardList() {
         thmbFileNm: n.thmbFileNm ?? '',
         thmbFilePath: n.thmbFileNm
           ? `${import.meta.env.VITE_THUMBNAIL_API_BASE_URL || 'api/pp'}/atch/thumb/${n.thmbFileNm}`
-          : '/fe/img/img_no_thmb.png',          
+          : '/fe/img/img_no_thmb.png',
+        thmbExplnCn: n.thmbExplnCn ?? ''
       };
     });
   }, [list]);
@@ -177,7 +178,7 @@ export default function GalleryBoardList() {
                             >
                               <Box className="thumb-area">
                                 <Box className="thumb-box">
-                                  <img src={item.thmbFilePath} alt={`썸네일 이미지 ${index+1}`} aria-hidden="true" style={{width: '100%', height: '100%', objectFit: 'unset'}}/>
+                                  <img src={item.thmbFilePath} alt={`${item.thmbExplnCn ?? "썸네일 이미지" + (index+1)}`} aria-hidden="true" style={{width: '100%', height: '100%', objectFit: 'unset'}}/>
                                 </Box>      
                               </Box>
                               <Box className="info-area">

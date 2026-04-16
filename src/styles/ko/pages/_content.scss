@@ -1630,6 +1630,21 @@
         br{display: none;}
       }
     }
+
+    li.source-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+
+      .source-label {
+        flex: 0 0 auto;
+      }
+
+      .source-text {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+    }
   }
 
   .guide-section {
