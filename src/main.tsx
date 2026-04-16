@@ -1,5 +1,6 @@
 import './i18n/i18n' /* first load */
 import { LOCALE_KEY } from './i18n/i18n'
+import axios from 'axios'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
@@ -24,6 +25,17 @@ const rootEl = document.getElementById('root')
 if (!rootEl) {
   throw new Error('Root element (#root) not found')
 }
+
+/** PP-be Spring CSRF 쿠키(XSRF-TOKEN) 선발급 — 이후 POST/PUT 등에 axios 인터셉터가 헤더를 붙일 수 있게 함 */
+const ppCsrfBootstrapBase =
+  import.meta.env.MODE === 'production' || import.meta.env.MODE === 'stg'
+    ? '/api/pp'
+    : `${import.meta.env.VITE_API_BASE_URL ?? '/api'}/pp`
+void axios
+  .get(`${ppCsrfBootstrapBase}/security/csrf`, { withCredentials: true })
+  .catch(() => {
+    /* 오프라인·프록시 미기동 시 무시 */
+  })
 
 function resolveInitialLang() {
   const saved = sessionStorage.getItem(LOCALE_KEY)
