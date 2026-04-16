@@ -58,6 +58,12 @@ export interface PostVO {
 
   /** 메뉴 URL */
   menuUrlAddr?: string | null
+
+	/** 썸네일설명내용 */
+	thmbExplnCn?: string | null
+
+  /** 동영상설명내용 */
+	vdoExplnCn?: string | null
 }
 
 /**

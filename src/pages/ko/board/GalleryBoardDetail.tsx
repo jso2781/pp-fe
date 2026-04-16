@@ -120,7 +120,7 @@ export default function GalleryBoardDetail() {
                             <Box
                               component="img"
                               src={`${import.meta.env.VITE_THUMBNAIL_API_BASE_URL || 'api/pp'}/atch/thumb/${data.imgFileNm}`}
-                              alt="공지사항 본문 테스트용 이미지"
+                              alt={`${data.thmbExplnCn ?? data.pstTtl + "썸네일 이미지"}`}
                             />
                           )}
                       </Box>

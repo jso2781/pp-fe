@@ -116,7 +116,7 @@ export default function VideoBoardDetail() {
                             <Box
                               component="iframe"
                               src={`https://www.youtube.com/embed/${data.videoId}`} 
-                              title={`${data.pstTtl} 안내 영상`}
+                              title={`${data.vdoExplnCn ?? data.pstTtl + "안내 영상"}`}
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                               referrerPolicy="strict-origin-when-cross-origin"
                               sandbox="allow-scripts allow-same-origin allow-presentation"
