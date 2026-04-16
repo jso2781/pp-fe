@@ -300,14 +300,19 @@ export default function MyDrugInfo() {
             <Box className="content-view" id="content">
               <Box className="page-content">
                 <section className="pageCont-dur-MyDrugInfo">
-                  <Box className="info-drug-box">
-                    <Box className="drug-title">내가 먹는 약의 DUR 정보를 확인해보세요!</Box>
-                    <p className="drug-title--sub">복용 중인 의약품을 입력하면 금기 및 주의 정보를 확인 할 수 있습니다.</p>
-                    <ul className="drug-list">
+                  <Box className="info-drug-box info-guide-box">
+                    <Box className="guide-title">내가 먹는 약의 DUR 정보를 확인해보세요!</Box>
+                    {/* <p className="drug-title--sub">복용 중인 의약품을 입력하면 금기 및 주의 정보를 확인 할 수 있습니다.</p> */}
+                    <ul className="guide-list">
+                      <li>복용 중인 의약품을 입력하면 금기 및 주의 정보를 확인 할 수 있습니다.</li>
+                    </ul>                    
+                    <ul className="guide-list--sub">
                       <li>DUR정보가 있더라도 의약전문가의 의료적 판단에 따라 처방·조제 될 수 있습니다.</li>
-                      <li>본 화면의 검색 정보는 정기적으로 업데이트되나, 실시간 변동되는 의약품 허가 현황과 차이가 있을 수 있습니다. 검색 결과는 참고용으로 활용하시기 바랍니다.</li>
-                      <li>참고자료원: 식품의약품안전처 “의약품 병용금기 성분 등의 지정에 관한 규정” 고시,
-                      “의약품 적정사용을 위한 주의 정보” 공고 및 건강보험심사평가원 “DUR 대상 의약품” 등</li>
+                      <li>본 화면의 검색 정보는 정기적으로 업데이트되나, 실시간 변동되는 의약품 허가 현황과 차이가 있을 수 있습니다.<br /> 검색 결과는 참고용으로 활용하시기 바랍니다.</li>
+                      <li className="source-item">
+                        <span className="source-label">참고자료원:</span>
+                        <span className="source-text">식품의약품안전처 “의약품 병용금기 성분 등의 지정에 관한 규정” 고시, “의약품 적정사용을 위한 주의 정보” 공고 및 건강보험심사평가원 “DUR 대상 의약품” 등</span>
+                      </li>
                     </ul>
                   </Box>
                   <h3 className="section-title">조회 방법</h3>

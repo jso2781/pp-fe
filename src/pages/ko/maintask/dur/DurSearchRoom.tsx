@@ -28,7 +28,7 @@ export default function DurSearchRoom(){
   /** 제품검색 클릭 시 DurPrdctDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
   const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string, rlvtAge?: string) => {
     const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`;
-    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}${(rlvtAge ? "&rlvtAge="+rlvtAge : "")}`;    
+    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}${(rlvtAge ? "&rlvtAge="+rlvtAge : "")}`;
     const width = 800;
     const height = 600;
     const left = Math.round((window.screen.width - width) / 1.5);
@@ -287,7 +287,10 @@ export default function DurSearchRoom(){
                       {/* <li>Provided for non-commercial research and education use only. Used with permission from KIDS for any commercial purposes.</li> */}
                       <li>의약품의 성분명 혹은 제품명을 검색하면, 병용시∙소아∙노인∙임신부∙수유부에서의 주의 정보 등을 확인할 수 있습니다.</li>
                       <li>본 화면의 검색 정보는 정기적으로 업데이트되나, 실시간 변동되는 의약품 허가 현황과 차이가 있을 수 있습니다. 검색 결과는 참고용으로 활용하시기 바랍니다.</li>
-                      <li>참고자료원 : 식품의약품안전처 “의약품 병용금기 성분 등의 지정에 관한 규정” 고시, “의약품 적정사용을 위한 주의 정보” 공고 및 <br/>건강보험심사평가원 “DUR 대상 의약품 등”</li>
+                      <li className="source-item">
+                        <span className="source-label">참고자료원:</span>
+                        <span className="source-text">식품의약품안전처 “의약품 병용금기 성분 등의 지정에 관한 규정” 고시, “의약품 적정사용을 위한 주의 정보” 공고 및<br />건강보험심사평가원 “DUR 대상 의약품” 등</span>
+                      </li>
                     </ul>
                   </Box>
 
@@ -1093,7 +1096,7 @@ export default function DurSearchRoom(){
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   <span className="text">{item.groupNm}</span>
-                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openEftgrpDetailPop(item.igrdNm, item.effGroupNm, item.groupNm)}>
+                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openEftgrpDetailPop(item.igrdNm)}>
                                                     중복 상세보기
                                                   </Button>
                                                 </Box>
