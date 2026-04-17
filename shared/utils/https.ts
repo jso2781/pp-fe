@@ -45,27 +45,6 @@ const CDM_PATHS = ['/community']
 const ppApiPathPrefix =
   (import.meta.env.MODE === 'production' || import.meta.env.MODE === 'stg') ? '/api/pp' : (import.meta.env.VITE_API_BASE_URL ?? '/api')
 
-/** PP-be 동일 오리진(또는 Vite proxy) 요청에만 Spring CSRF 헤더 부착 — CA/자문/CDM 등 타 서버에는 쿠키가 없음 */
-function isPpBackendRequest(config: { baseURL?: string; url?: string }): boolean {
-  const base = config.baseURL ?? apiBaseURL
-  if (base === authApiBaseURL || base === caApiBaseURL || base === adviceApiBaseURL || base === cdmApiBaseURL) {
-    return false
-  }
-  return true
-}
-
-/** CookieCsrfTokenRepository 기본 쿠키명 */
-function readXsrfTokenFromCookie(): string | null {
-  if (typeof document === 'undefined') return null
-  const m = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/)
-  if (!m?.[1]) return null
-  try {
-    return decodeURIComponent(m[1].replace(/^"(.*)"$/, '$1'))
-  } catch {
-    return m[1].replace(/^"(.*)"$/, '$1')
-  }
-}
-
 function resolveLgnSeCdFromClient(): string {
   const fromStore = store.getState().auth.lgnSeCd
   if (fromStore != null && fromStore !== '') return String(fromStore)
@@ -140,15 +119,6 @@ https.interceptors.request.use((config) => {
   }
   else if(CDM_PATHS.some((p) => url.includes(p) || url.startsWith(p + '?'))) {
     config.baseURL = cdmApiBaseURL
-  }
-
-  const method = (config.method ?? 'get').toLowerCase()
-  if (isPpBackendRequest(config) && ['post', 'put', 'patch', 'delete'].includes(method)) {
-    const xsrf = readXsrfTokenFromCookie()
-    if (xsrf) {
-      config.headers = config.headers ?? {}
-      config.headers['X-XSRF-TOKEN'] = xsrf
-    }
   }
 
   const lang = (i18n.language || 'ko').startsWith('en') ? 'en' : 'ko'
