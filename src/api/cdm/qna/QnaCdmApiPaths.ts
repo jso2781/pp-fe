@@ -36,4 +36,4 @@ export const increaseQnaViewCountApiPath = () => '/community/qna/increaseViewCou
 /**
  * QnA 진행상태 공통코드 조회 (CMCMM00001)
  */
-export const selectQnaStatusCodesApiPath = () => '/cm/codes/CMCMM00001'
+export const selectQnaStatusCodesApiPath = () => '/community/qna/codes/CMCMM00001'

@@ -36,4 +36,4 @@ export const increaseAsmtPrpViewCountApiPath = () => '/community/asmtprp/increas
 /**
  * 과제제안 진행상태 공통코드 조회 (CMCMM00004)
  */
-export const selectAsmtPrpStatusCodesApiPath = () => '/cm/codes/CMCMM00004'
+export const selectAsmtPrpStatusCodesApiPath = () => '/community/asmtprp/codes/CMCMM00004'
