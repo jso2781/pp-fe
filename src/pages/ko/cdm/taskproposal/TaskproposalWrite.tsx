@@ -221,6 +221,7 @@ export default function TaskproposalWrite() {
                               value={topicTitle}
                               onChange={(e) => setTopicTitle(e.target.value)}
                               placeholder="주제제목을 입력하세요."
+                              aria-label="주제제목 입력"
                               maxLength={50}
                               style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: 4, fontSize: '0.9rem', boxSizing: 'border-box' }}
                             />
@@ -266,6 +267,7 @@ export default function TaskproposalWrite() {
                               value={proposalContent}
                               onChange={(e) => setProposalContent(e.target.value)}
                               placeholder="제안내용을 입력해주세요."
+                              aria-label="제안내용 입력"
                               rows={5}
                               style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: 4, fontSize: '0.9rem', fontFamily: 'inherit', resize: 'vertical', boxSizing: 'border-box' }}
                             />
@@ -280,6 +282,7 @@ export default function TaskproposalWrite() {
                               value={expectedEffect}
                               onChange={(e) => setExpectedEffect(e.target.value)}
                               placeholder="기대효과를 입력해주세요."
+                              aria-label="기대효과 입력"
                               rows={5}
                               style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: 4, fontSize: '0.9rem', fontFamily: 'inherit', resize: 'vertical', boxSizing: 'border-box' }}
                             />
@@ -294,6 +297,7 @@ export default function TaskproposalWrite() {
                               value={etcExplanation}
                               onChange={(e) => setEtcExplanation(e.target.value)}
                               placeholder="기타설명을 입력해주세요."
+                              aria-label="기타설명 입력"
                               rows={5}
                               style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: 4, fontSize: '0.9rem', fontFamily: 'inherit', resize: 'vertical', boxSizing: 'border-box' }}
                             />
@@ -308,6 +312,7 @@ export default function TaskproposalWrite() {
                               value={caution}
                               onChange={(e) => setCaution(e.target.value)}
                               placeholder="주의할점을 입력해주세요."
+                              aria-label="주의할점 입력"
                               rows={5}
                               style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: 4, fontSize: '0.9rem', fontFamily: 'inherit', resize: 'vertical', boxSizing: 'border-box' }}
                             />

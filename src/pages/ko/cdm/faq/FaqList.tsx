@@ -25,18 +25,7 @@ import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
 import type { FaqItem } from '@/features/cdm/faq/FaqCdmTypes';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { selectFaqList, increaseFaqViewCount } from '@/features/cdm/faq/FaqCdmThunks';
-
-const FAQ_CATEGORY_MAP: Record<string, string> = {
-  '01': 'CDM의 이해',
-  '02': 'CDM의 구축',
-  '03': '협력기관의 역할',
-  '04': '의약품 안전정보 분석',
-  '05': '사이트 이용 문의사항',
-  '06': '기타',
-};
-
-const categories = Object.entries(FAQ_CATEGORY_MAP).map(([code, name]) => ({ code, name }));
+import { selectFaqList, increaseFaqViewCount, selectFaqCategories } from '@/features/cdm/faq/FaqCdmThunks';
 
 /** 검색어 하이라이트 컴포넌트 */
 const SearchRow = ({ text, word }: { text: string; word: string }) => {
@@ -110,14 +99,14 @@ export default function FaqList() {
   const currentUrl = location.pathname;
 
   const dispatch = useAppDispatch();
-  const { list: faqList, totalCount, loading } = useAppSelector((s) => s.cdmFaq);
+  const { list: faqList, totalCount, loading, categories } = useAppSelector((s) => s.cdmFaq);
 
   // 페이징
   const [pageNum, setPageNum] = useState(1);
   const pageSize = 10;
 
   // 카테고리 탭
-  const [activeCategory, setActiveCategory] = useState<string>(categories[0].code);
+  const [activeCategory, setActiveCategory] = useState<string>('');
 
   // 아코디언 열림 상태 (faqSn)
   const [expandedSn, setExpandedSn] = useState<string | null>(null);
@@ -128,18 +117,31 @@ export default function FaqList() {
   const [appliedType, setAppliedType] = useState('title');
   const [appliedWrd, setAppliedWrd] = useState('');
 
+  // 공통코드 조회 (CMCMM00005) - 최초 1회
+  useEffect(() => {
+    dispatch(selectFaqCategories());
+  }, []);
+
+  // categories 로드 후 activeCategory 초기화
+  useEffect(() => {
+    if (categories.length > 0 && !activeCategory) {
+      setActiveCategory(categories[0].code);
+    }
+  }, [categories]);
+
   // 스크롤 상단 이동
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pageNum]);
 
-  // FAQ 서버사이드 조회
+  // FAQ 서버사이드 조회 (activeCategory가 초기화된 이후에만 실행)
   useEffect(() => {
+    if (!activeCategory) return;
     dispatch(selectFaqList({
       page: pageNum,
       pageSize: String(pageSize),
       bbsId: '',
-      faqClsfNm: activeCategory,
+      faqSeCd: activeCategory,
       searchType: appliedType,
       searchKeyword: appliedWrd || undefined,
     }));
@@ -249,6 +251,9 @@ export default function FaqList() {
                       onChange={(e) => setSearchWrd(e.target.value)}
                       onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); onSearch(); } }}
                       sx={{ flexGrow: 1 }}
+                      slotProps={{
+                        htmlInput: { 'aria-label': '검색어 입력' }
+                      }}
                     />
                     <Button variant="contained" size="large" className="btn-search" onClick={onSearch}>
                       검색
@@ -264,7 +269,6 @@ export default function FaqList() {
                     variant="scrollable"
                     scrollButtons="auto"
                     allowScrollButtonsMobile
-                    sx={{ marginLeft: '-35px' }}
                   >
                     {categories.map(({ code, name }) => (
                       <Tab

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import https from '@/api/axiosInstance'
-import { selectFaqListApiPath, getFaqDetailApiPath, getFaqIncreaseViewCount as getFaqIncreaseViewCountApiPath } from '@/api/cdm/faq/FaqCdmApiPaths'
+import { selectFaqListApiPath, getFaqDetailApiPath, getFaqIncreaseViewCount as getFaqIncreaseViewCountApiPath, selectFaqCategoriesApiPath } from '@/api/cdm/faq/FaqCdmApiPaths'
 import { FaqItem, FetchFaqListParams, FetchFaqListResponse } from './FaqCdmTypes'
 
 /**
@@ -8,7 +8,7 @@ import { FaqItem, FetchFaqListParams, FetchFaqListResponse } from './FaqCdmTypes
  */
 export const selectFaqList = createAsyncThunk<FetchFaqListResponse, FetchFaqListParams | undefined, { rejectValue: string }>(
   '/community/faq/selectList',
-  async (params: FetchFaqListParams = { page: 1, pageSize: '10', bbsId: '', faqClsfNm: '', searchKeyword: '', searchType: '' }, { rejectWithValue }) => {
+  async (params: FetchFaqListParams = { page: 1, pageSize: '10', bbsId: '', faqSeCd: '', searchKeyword: '', searchType: '' }, { rejectWithValue }) => {
     try {
       const res = await https.get(selectFaqListApiPath(), { params });
       return {
@@ -34,6 +34,22 @@ export const getFaqDetail = createAsyncThunk<FaqItem, { bbsId: string; faqSn: st
     } catch (e) {
       console.error('FaqCdmThunks getFaqDetail error!!', e);
       return rejectWithValue('FaqCdmThunks getFaqDetail error!!');
+    }
+  }
+)
+
+/**
+ * FAQ 분류 공통코드 조회 (CMCMM00005)
+ */
+export const selectFaqCategories = createAsyncThunk<{ code: string; name: string }[], void, { rejectValue: string }>(
+  '/community/faq/selectCategories',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await https.get(selectFaqCategoriesApiPath());
+      return (res.data?.data || []) as { code: string; name: string }[];
+    } catch (e) {
+      console.error('FaqCdmThunks selectFaqCategories error!!', e);
+      return rejectWithValue('FaqCdmThunks selectFaqCategories error!!');
     }
   }
 )

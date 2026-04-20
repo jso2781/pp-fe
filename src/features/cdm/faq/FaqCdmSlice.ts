@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { selectFaqList, getFaqDetail, increaseFaqViewCount } from './FaqCdmThunks'
+import { selectFaqList, getFaqDetail, increaseFaqViewCount, selectFaqCategories } from './FaqCdmThunks'
 import { FaqItem } from './FaqCdmTypes'
 
 /**
@@ -9,6 +9,7 @@ export interface CdmFaqState {
   list: FaqItem[]
   totalCount: number
   detail: FaqItem | null
+  categories: { code: string; name: string }[]
   loading: boolean
   error: string | null
 }
@@ -20,6 +21,7 @@ const initialState: CdmFaqState = {
   list: [],
   totalCount: 0,
   detail: null,
+  categories: [],
   loading: false,
   error: null,
 }
@@ -79,6 +81,9 @@ const CdmFaqSlice = createSlice({
       .addCase(increaseFaqViewCount.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error?.message || 'Failed to increase view count';
+      })
+      .addCase(selectFaqCategories.fulfilled, (state, action) => {
+        state.categories = action.payload;
       })
   },
 });

@@ -9,6 +9,11 @@ export const selectFaqListApiPath = () => '/community/faq/selectList'
 export const getFaqDetailApiPath = () => '/community/faq/selectDetail'
 
 /**
- * FAQ 조회수 조회 증가 
+ * FAQ 조회수 조회 증가
  */
 export const getFaqIncreaseViewCount = () => '/community/faq/increaseViewCount'
+
+/**
+ * FAQ 분류 공통코드 조회 (CMCMM00005)
+ */
+export const selectFaqCategoriesApiPath = () => '/community/faq/codes/CMCMM00005'

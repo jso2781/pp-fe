@@ -262,6 +262,47 @@ export default function CertifySelf() {
     return null;
   }
 
+  // 나이스 인증팝업
+  /*
+  const handleAuth = () => {
+    window.open(
+      "https://auth.niceid.co.kr/ido/cert/request/NIaa684f4b-bab3-4c06-b47a-0418add5bb8e", 
+      "authNiceWeb",
+      "width=480,height=812,top=100,fullscreen=no,menubar=no,status=no,titlebar=yes,location=no,toolbar=no,scrollbar=no"
+    );
+  };
+  */
+ const handleAuth = async () => {
+  try {
+
+    const response = await fetch("/api/pp/niceid/getTransctionId", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      key: "value",
+    }),
+  });
+ 
+      const result = await response.json();
+
+    if (result.code === "0") {
+      window.open(
+       // `https://auth.niceid.co.kr/ido/cert/request/${result.data.transctionId}`,
+        `${result.data.uthUrl}`,
+        "authNiceWeb",
+        "width=480,height=812,top=100,fullscreen=no,menubar=no,status=no,titlebar=yes,location=no,toolbar=no,scrollbar=no"
+      );
+    } else {
+      alert(result.msg || "인증 요청에 실패했습니다.");
+    }
+  } catch (error) {
+    console.error("NICE 인증 요청 실패:", error);
+    alert("서버 요청 중 오류가 발생했습니다.");
+  }
+};
+
   return (
     <>
       <Box className="page-layout">
@@ -351,6 +392,7 @@ export default function CertifySelf() {
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group between">
                       <Button variant="outlined" size="large" onClick={handleCancel}>{t('cancel')}</Button>
+                      <Button variant="outlined" size="large" onClick={handleAuth}>{t('나이스본인인증')}</Button>
                       <Button 
                         variant="contained" 
                         size="large" 

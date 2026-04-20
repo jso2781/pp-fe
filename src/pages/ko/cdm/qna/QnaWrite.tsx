@@ -199,6 +199,7 @@ export default function QnaWrite() {
                               value={title}
                               onChange={(e) => setTitle(e.target.value)}
                               placeholder="제목을 입력하세요."
+                              aria-label="제목 입력"
                               maxLength={100}
                               style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: 4, fontSize: '0.9rem', boxSizing: 'border-box' }}
                             />
@@ -215,6 +216,7 @@ export default function QnaWrite() {
                               value={content}
                               onChange={(e) => setContent(e.target.value)}
                               placeholder="내용을 입력해주세요."
+                              aria-label="질문내용 입력"
                               rows={6}
                               style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: 4, fontSize: '0.9rem', fontFamily: 'inherit', resize: 'vertical', boxSizing: 'border-box' }}
                             />

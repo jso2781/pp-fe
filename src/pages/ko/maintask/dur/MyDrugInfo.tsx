@@ -302,7 +302,6 @@ export default function MyDrugInfo() {
                 <section className="pageCont-dur-MyDrugInfo">
                   <Box className="info-drug-box info-guide-box">
                     <Box className="guide-title">내가 먹는 약의 DUR 정보를 확인해보세요!</Box>
-                    {/* <p className="drug-title--sub">복용 중인 의약품을 입력하면 금기 및 주의 정보를 확인 할 수 있습니다.</p> */}
                     <ul className="guide-list">
                       <li>복용 중인 의약품을 입력하면 금기 및 주의 정보를 확인 할 수 있습니다.</li>
                     </ul>                    

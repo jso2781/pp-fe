@@ -2,7 +2,7 @@ export type FetchFaqListParams = {
   page: number;
   pageSize: string;
   bbsId: string;
-  faqClsfNm?: string;
+  faqSeCd?: string;
   searchType?: string;
   searchKeyword?: string;
 };
@@ -21,6 +21,7 @@ export interface FaqItem {
   taskSeCd: string;
   faqClsfNm: string;
   faqSeNm: string;
+  faqSeCd: string;
   faqTtl: string;
   faqSeq: number;
   useYn: string;

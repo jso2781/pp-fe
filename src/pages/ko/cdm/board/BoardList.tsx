@@ -1,7 +1,7 @@
 /**
  * CDM 게시판 목록
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -22,7 +22,7 @@ import {
   Paper,
   Link,
 } from '@mui/material';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams, Link as RouterLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import DepsLocation from '@/components/common/DepsLocation';
 import Lnb from '@/components/common/Lnb';
@@ -48,30 +48,46 @@ export default function BoardList() {
   const config = BOARD_CONFIG[boardType as BoardType];
 
   // Lnb 랜더링용
-  const currentUrl = location.pathname;
+  const { pathname: currentUrl } = useLocation();
 
-  // 메뉴 변경 시 검색 초기화
-  useEffect(() => {
-    setSearchCnd('title');
-    setSearchWrd('');
-    setPageNum(1);
-  }, [boardType]);
+  const prevBoardTypeRef = useRef<string | undefined>(undefined);
+  // 검색 버튼으로 실제 제출된 값 (입력 중인 값과 분리)
+  const committedRef = useRef({ cnd: 'title', wrd: '' });
 
   // 스크롤 상단 이동
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pageNum]);
 
-  // 목록 조회 (boardType, pageNum 변경 시)
+  // 목록 조회 (boardType 변경 시 검색 초기화 포함)
   useEffect(() => {
     if (!boardType) return;
-    dispatch(selectBoardList({
-      bbsId: config?.bbsId || boardType || "",
-      page: pageNum,
-      pageSize: String(pageSize),
-      searchType: searchCnd,
-      searchKeyword: searchWrd,
-    }));
+
+    const isBoardTypeChanged = prevBoardTypeRef.current !== boardType;
+    prevBoardTypeRef.current = boardType;
+
+    if (isBoardTypeChanged) {
+      committedRef.current = { cnd: 'title', wrd: '' };
+      setSearchCnd('title');
+      setSearchWrd('');
+      setPageNum(1);
+      dispatch(selectBoardList({
+        bbsId: config?.bbsId || boardType || "",
+        page: 1,
+        pageSize: String(pageSize),
+        searchType: 'title',
+        searchKeyword: '',
+      }));
+    } else {
+      // 페이지 이동 시 — 마지막으로 검색 버튼을 눌렀을 때의 값으로 조회
+      dispatch(selectBoardList({
+        bbsId: config?.bbsId || boardType || "",
+        page: pageNum,
+        pageSize: String(pageSize),
+        searchType: committedRef.current.cnd,
+        searchKeyword: committedRef.current.wrd,
+      }));
+    }
   }, [boardType, pageNum]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
@@ -95,14 +111,21 @@ export default function BoardList() {
   }, [boardData]);
 
   const onSearch = () => {
-    setPageNum(1);
-    dispatch(selectBoardList({
-      bbsId: config?.bbsId || boardType || "",
-      page: 1,
-      pageSize: String(pageSize),
-      searchType: searchCnd,
-      searchKeyword: searchWrd,
-    }));
+    // 검색 버튼 클릭 시 현재 입력값을 commit
+    committedRef.current = { cnd: searchCnd, wrd: searchWrd };
+    if (pageNum === 1) {
+      // pageNum이 이미 1이면 effect가 발동하지 않으므로 직접 dispatch
+      dispatch(selectBoardList({
+        bbsId: config?.bbsId || boardType || "",
+        page: 1,
+        pageSize: String(pageSize),
+        searchType: searchCnd,
+        searchKeyword: searchWrd,
+      }));
+    } else {
+      // pageNum을 1로 리셋 → effect 발동 → committedRef 값으로 조회
+      setPageNum(1);
+    }
   };
 
   return (
@@ -128,7 +151,11 @@ export default function BoardList() {
             <Box className="content-view" id="content">
               <Box className="page-content">
               {/* --- 본문 시작 --- */}
-                <Box component="form" className="board-search">
+                <Box
+                  component="form"
+                  className="board-search"
+                  onSubmit={(e) => { e.preventDefault(); onSearch(); }}
+                >
                   <FormControl size="large" className="search-condition">
                     <InputLabel id="search-condition-label" className="sr-only">{t('searchCondition')}</InputLabel>
                     <Select
@@ -147,14 +174,12 @@ export default function BoardList() {
                       placeholder={t('searchKeywordInput')}
                       value={searchWrd}
                       onChange={(e) => setSearchWrd(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          onSearch();
-                        }
-                      }}
                       sx={{ flexGrow: 1 }}
+                      slotProps={{
+                        htmlInput: { 'aria-label': t('searchKeywordInput') }
+                      }}
                     />
-                    <Button variant="contained" size="large" className="btn-search" onClick={onSearch}>{t('search')}</Button>
+                    <Button type="submit" variant="contained" size="large" className="btn-search">{t('search')}</Button>
                   </Box>
                 </Box>
 

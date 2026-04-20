@@ -162,6 +162,9 @@ export default function TaskproposalList() {
                       onChange={(e) => setSearchWrd(e.target.value)}
                       onKeyDown={(e) => { if (e.key === 'Enter') onSearch(); }}
                       sx={{ flexGrow: 1 }}
+                      slotProps={{
+                        htmlInput: { 'aria-label': '검색어 입력' }
+                      }}
                     />
                     <Button variant="contained" size="large" className="btn-search" onClick={onSearch}>
                       검색
