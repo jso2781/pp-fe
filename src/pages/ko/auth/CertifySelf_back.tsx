@@ -5,29 +5,40 @@
  * 화면설명: 본인인증 화면
  */
 import { useTranslation } from 'react-i18next'
-import React, { useMemo, useRef, useEffect } from 'react'
+import React, { useMemo, useState, useRef, useEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { Box, Button, Stepper, Step, StepLabel, Typography } from '@mui/material';
+import { Box, Button, Stepper, Step, StepLabel, Typography, Card, CardContent, Stack } from '@mui/material';
+import {
+  HelpOutline as HelpIcon,
+  Close as CloseIcon,
+} from '@mui/icons-material'
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
-import { getTransctionId } from '@/features/auth/NiceThunks'
-import { useAppDispatch } from '@/store/hooks'
+
+import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
+import { getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks';
 import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes';
+import { useAppDispatch } from '@/store/hooks';
+import { useDialog } from '@/contexts/DialogContext';
 import { resolveCiFromSignUpFlowState, type SignUpFlowUserInfoState } from '@/pages/ko/auth/signUpFlowState';
-import { getTransctionIdApiPath } from '@/api/auth/NiceApiPaths';
+
+const showAnyIdArea = shouldLoadAnyIdSdk()
 
 export default function CertifySelf() {
   const { lang } = useParams<{ lang: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+  const { showAlert } = useDialog();
 
-  const isShowNiceAuthArea = useMemo(() => {
-    return (import.meta.env.MODE === 'production' || import.meta.env.MODE === 'stg')
-      ? true
-      : false;
-  }, []);
+
+  // 본인인증 완료 상태
+  const [isCertified, setIsCertified] = useState(false);
+
+  // Any-ID 준비 상태
+  const [anyIdReady, setAnyIdReady] = useState(false);
+  const hasLoadedAnyIdRef = useRef(false);
 
   // 약관 동의 화면에서 전달받은 steps 사용 (본 화면은 14세 이상 가입 전용)
   const locationState = useMemo(() => {
@@ -42,6 +53,36 @@ export default function CertifySelf() {
       userInfoFromSsobRef.current = locationState.userInfoFromSsob
     }
   }, [locationState?.userInfoFromSsob])
+
+  // URL 파라미터에서 tx, acrValues, redirectUri 추출
+  const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
+
+  const tx = useMemo(() => {
+    // SSO를 쓰는 구조라면 SSO 모듈이 txId를 내려줌(가이드). 없으면 로컬에서 생성.
+    return params.get('tx');
+  }, [params]);
+
+  const acrValues = useMemo(() => {
+    const v = params.get('acrValues');
+    const n = v ? parseInt(v, 10) : NaN;
+    return Number.isFinite(n) ? n : 3;
+  }, [params]);
+
+  const redirectUri = useMemo(() => params.get('redirect_uri') || window.location.href, [params]);
+
+  /** LoginMethod 등에서 남은 window.anyidAdaptor가 Any-ID 성공 시 /auth/anyid/login을 호출하지 않도록 본 화면 전용으로 덮어씀 */
+  const txRef = useRef(tx);
+  const acrValuesRef = useRef(acrValues);
+  const redirectUriRef = useRef(redirectUri);
+  const dispatchRef = useRef(dispatch);
+  const tRef = useRef(t);
+  useEffect(() => {
+    txRef.current = tx
+    acrValuesRef.current = acrValues
+    redirectUriRef.current = redirectUri
+    dispatchRef.current = dispatch
+    tRef.current = t
+  })
 
   const steps = useMemo(() => {
     if (locationState?.steps && Array.isArray(locationState.steps)) {
@@ -84,21 +125,124 @@ export default function CertifySelf() {
     }
   }, [locationState, navigate, steps]);
 
+  // Any-ID 자원 로드 (전역 1회 캐시) + AnyidC 준비 즉시 확인 + 짧은 간격 대기
+  useEffect(() => {
+    if (!showAnyIdArea) return
+    if (hasLoadedAnyIdRef.current) return
+    hasLoadedAnyIdRef.current = true
+
+    let cancelWait: (() => void) | null = null
+
+    ensureAnyIdAssets(false)
+      .then(() => {
+        cancelWait = waitForAnyidC(
+          () => setAnyIdReady(true),
+          () => console.warn('[CertifySelf] AnyidC.LOAD_MODULE not ready (timeout)'),
+          50,
+          40
+        )
+      })
+      .catch((err) => {
+        console.error(t('anyIdAssetsLoadFailed'), err)
+      })
+
+    return () => {
+      cancelWait?.()
+    }
+  }, [showAnyIdArea, t])
+
+  const openModal = (message: string) => {
+    showAlert(message)
+  }
+
+  // #anyidc가 DOM에 마운트된 뒤 LOAD_MODULE 1회 호출 (bypass: 1, toggle: false, theme: '4.1.0') — showAnyIdArea 일 때만
+  const loadModuleCalledRef = useRef(false);
+  const ciRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!showAnyIdArea) return
+    if (!anyIdReady || !window.AnyidC?.LOAD_MODULE) return
+    if (loadModuleCalledRef.current) return
+    loadModuleCalledRef.current = true
+
+    const prevAdaptor = window.anyidAdaptor
+    window.anyidAdaptor = {
+      success: async (data: any) => {
+        console.log('[AnyID] log:', data);
+
+        try{
+          const userInfoFromSsob = await dispatchRef.current(getAnyIdUserInfoFromSsob({ ssob: data?.ssob, tag: txRef.current ?? data?.txId, isCheckMbr: true })).unwrap();
+          
+          if(userInfoFromSsob.existMbrInfo && userInfoFromSsob.existMbrInfo === 'Y'){
+            showAlert(t('alreadyRegistered'));
+            return;
+          }
+          else{
+            setIsCertified(true);
+            userInfoFromSsobRef.current = userInfoFromSsob
+            ciRef.current = userInfoFromSsob.ci ?? null;
+          }
+        }catch(error){
+          // API 호출 실패 시 오류 처리
+          console.log('CertifySelf.tsx window.anyidAdaptor success getAnyIdUserInfoFromSsob error=', error);
+        }finally{}
+      },
+    }
+
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
+    const txId = txRef.current ?? `certify-${Date.now()}`
+    const lvl = acrValuesRef.current
+
+    window.AnyidC.LOAD_MODULE({
+      cfg: configAnyidcJsonUrl,
+      txId,
+      tag: txId,
+      lvl,
+      bypass: 1,
+      toggle: false,
+      show: false,
+      theme: '4.1.0',
+      redirect_uri: redirectUriRef.current,
+      success: (data: any) => {
+        void window.anyidAdaptor?.success?.(data)
+      },
+      fail: (err: any) => {
+        console.error(tRef.current('certifySelfFailed'), err)
+        showAlert(tRef.current('certifySelfFailedReminder'))
+      },
+      log: (data: any) => {
+        console.log(tRef.current('anyIdLog'), data)
+      },
+    })
+
+    return () => {
+      window.anyidAdaptor = prevAdaptor
+    }
+  }, [anyIdReady])
+
   // 다음단계 버튼 클릭 핸들러
   const handleNextStep = () => {
+    // production: 본인인증 완료 후에만 다음 화면으로 진행
+    if (showAnyIdArea && !isCertified) {
+      openModal(t('certifySelfCompleteReminder'));
+      return;
+    }
+
     /*
      * 현재창에서 본인인증을 완료한 경우만 회원정보입력 페이지로 이동할 수 있음.
      * 개발환경에서는 ciRef.current가 없어도 회원정보입력 페이지로 이동할 수 있음.
      */
-    // 14세 이상 가입: 회원정보 입력 (만 14세 미만은 LegalGuardAgr에서 처리, 본 화면 미포함)
-    navigate('/pp/ko/auth/SignUpMbrInfo', {
-      state: {
-        steps,
-        userInfoFromSsob: userInfoFromSsobRef.current ?? locationState?.userInfoFromSsob,
-        signUpIsJunior: false,
-        prvcChcAgreYn: locationState?.prvcChcAgreYn ?? 'N',
-      }
-    });
+    if(ciRef.current || !showAnyIdArea){
+      // 14세 이상 가입: 회원정보 입력 (만 14세 미만은 LegalGuardAgr에서 처리, 본 화면 미포함)
+      navigate('/pp/ko/auth/SignUpMbrInfo', { 
+        state: { 
+          steps, 
+          userInfoFromSsob: userInfoFromSsobRef.current ?? locationState?.userInfoFromSsob,
+          signUpIsJunior: false,
+          prvcChcAgreYn: locationState?.prvcChcAgreYn ?? 'N',
+        } 
+      });
+    }
   }
 
   // 취소하기: 본 화면은 14세 이상 가입 전용 → 일반 약관동의로만 이동 (만 14세 미만은 LegalGuardAgr에서 인증 처리, 본 화면이 플로우에 없음)
@@ -117,55 +261,6 @@ export default function CertifySelf() {
   if (locationState?.signUpIsJunior === true) {
     return null;
   }
-
-  // 나이스ID 인증팝업 결과
-  useEffect(() => {
-
-    // 방법1: postMessage 수신
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data?.type === "NICE_AUTH_RESULT") {
-        console.log("인증 결과:", event.data);
-      }
-    };
-    // 방법2: localStorage 이벤트 수신 (opener 차단 시 fallback)
-    const handleStorage = (event: StorageEvent) => {
-      if (event.key === "NICE_AUTH_RESULT" && event.newValue) {
-        const data = JSON.parse(event.newValue);
-        console.log("인증 결과(storage):", data);
-        console.log("code:::", data?.code);  
-        console.log("name:::", data?.name);
-        console.log("birthdate:::", data?.birthdate);
-        console.log("ci:::", data?.ci);
-        console.log("di:::", data?.di);
-      }
-    };
-  
-      window.addEventListener("message", handleMessage);
-      window.addEventListener("storage", handleStorage);
-  
-    return () => {
-      window.removeEventListener("message", handleMessage);
-      window.removeEventListener("storage", handleStorage);
-    };
-  }, []);
-
-  const handleAuth = async () => {
-
-    try {
-
-      const result = await dispatch(getTransctionId({
-        requestId: "1234567890",
-      })).unwrap();
-  
-      window.open(
-        `${result.uthUrl}`,
-        "authNiceWeb",
-        "width=480,height=812,top=100,fullscreen=no,menubar=no,status=no,titlebar=yes,location=no,toolbar=no,scrollbar=no"
-      );
-    } catch (error) {
-      console.error("CertifySelf.tsx handleAuth error=", error);
-    }
-  };
 
   return (
     <>
@@ -228,27 +323,30 @@ export default function CertifySelf() {
                       </Typography>
                     </Box>
 
-                    <Box
-                      sx={{
-                        mt: 2,
-                        minHeight: 70,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        bgcolor: 'background.paper',
-                        px: 2,
-                        textAlign: 'center',
-                      }}
-                    >
-                      <Button
-                        variant="outlined"
-                        size="large"
-                        onClick={handleAuth}
-                        sx={{ minWidth: 240, height: 56 }}
+                    {/* showAnyIdArea: anyidc + SDK. 아니면 로컬 안내 문구 */}
+                    {showAnyIdArea ? (
+                      <Box sx={{ mt: 2 }}>
+                        <div id="anyidc" className="anyidc" />
+                      </Box>
+                    ) : (
+                      <Box
+                        sx={{
+                          mt: 2,
+                          minHeight: 200,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          border: '1px dashed',
+                          borderColor: 'divider',
+                          borderRadius: 1,
+                          bgcolor: 'background.paper',
+                          px: 2,
+                          textAlign: 'center',
+                        }}
                       >
-                        {t('본인인증 하기')}
-                      </Button>
-                    </Box>
+                        <Typography color="error">로컬 테스트 환경입니다. 개발환경에서는 사용할 수 없습니다.</Typography>
+                      </Box>
+                    )}
 
                     {/* 하단 버튼 영역 */}
                     <Box className="btn-group between">
@@ -257,6 +355,7 @@ export default function CertifySelf() {
                         variant="contained" 
                         size="large" 
                         onClick={handleNextStep}
+                        disabled={showAnyIdArea && !isCertified}
                       >
                         {t('nextStep')}
                       </Button>
