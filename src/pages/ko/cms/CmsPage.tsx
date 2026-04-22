@@ -121,7 +121,7 @@ export default function CmsPage() {
       if (!mapEl) return;
 
       const el = mapEl as HTMLElement;
-      el.innerHTML = '';
+      el.replaceChildren();
 
       const iframe = document.createElement('iframe');
       iframe.src = `${import.meta.env.BASE_URL}kakao-roughmap.html`;
