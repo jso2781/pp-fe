@@ -56,6 +56,31 @@ export const muiTheme = createTheme({
       },
     },
 
+    //페이징
+    MuiPaginationItem: {
+    styleOverrides: {
+      root: {
+        // 1. 기본 상태
+        color: '#1E2124', 
+        
+        // 2. 선택된 상태
+        '&.Mui-selected': {
+          backgroundColor: '#1E2124',
+          color: '#ffffff',
+          '&:hover': {
+            backgroundColor: '#33373a',
+          },
+        },
+        
+        // 3. 비활성화(Disabled) 상태
+        '&.Mui-disabled': {
+          opacity: 1, 
+          color: '#717375', 
+        },
+      },
+    },
+  },
+
     // 버튼 설정 베이스
     MuiButtonBase: {
       defaultProps: {
