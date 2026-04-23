@@ -1332,6 +1332,7 @@
   gap: 16px;
 
   .info-action-item {
+    position: relative;
     &__title {
       margin: 0 0 10px 0;
       font-size: var(--fs-18);
@@ -1347,6 +1348,8 @@
     }
   }
   .info-action__btn {
+    display: inline-block;
+    margin:0 0 0 10px;
     .btn-link { margin: 0; padding: 0; }
   }
 }
@@ -1589,14 +1592,14 @@
 
   .guide-list {
     li {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 500;
 
       &::before {
         content: '';
         position: absolute;
         left: 6px;
-        top: 10px; 
+        top: 11px; 
         width: 3px;
         height: 3px;
         background-color: #1E2124;
@@ -1613,7 +1616,7 @@
 
   .guide-list--sub {
     li {
-      font-size: 13px;
+      font-size: 18px;
       color: #464C53;
       padding-left: 18px; 
 
@@ -1621,7 +1624,7 @@
         content: '※';
         position: absolute;
         left: 0;
-        top: 0; 
+        top: 5px; 
         font-size: 13px;
       }
 
@@ -1873,8 +1876,9 @@
    ========================================================================== */
 .info-drug-box {
   margin:0 0 40px 0;
-  padding: 40px 40px 40px 110px;
-  background: #EEF2F7 url('/fe/img/ico_drug_title.png') no-repeat left 40px top 30px;
+  padding: 40px;
+  // background: #EEF2F7 url('/fe/img/ico_drug_title.png') no-repeat left 40px top 30px;
+  background: #EEF2F7;
   border-radius: 12px;
   
   .drug-title {
