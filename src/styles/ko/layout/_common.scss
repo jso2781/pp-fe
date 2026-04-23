@@ -1029,6 +1029,10 @@ body { overflow-x: hidden; }
         transform: translateY(-3px); 
         box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
       }
+      &:focus-visible {
+        box-shadow: inset 0 0 0 3px #000, 0 0 0 2px #ffffff;
+        z-index: 10;
+      }
     }
 
     .quick-txt {

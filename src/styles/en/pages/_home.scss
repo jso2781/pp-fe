@@ -310,11 +310,11 @@
         border-radius: 8px; 
         padding: 2px; 
         background: linear-gradient(0deg, #023133 8.17%, #0F6775 44.71%, #94CFBB 80.77%);
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask: linear-gradient(#fff, #fff) content-box, linear-gradient(#fff, #fff);
+        mask: linear-gradient(#fff, #fff) content-box, linear-gradient(#fff, #fff);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
-        
+
         opacity: 0; 
         transition: opacity 0.2s ease-in-out;
         pointer-events: none; 

@@ -485,8 +485,8 @@ export default function Home() {
                   <Card
                     sx={{
                       cursor: popup.popupLnkgAddr ? 'pointer' : 'default',
-                      width: '400px', // 팝업사이즈 고정
-                      height: '400px', // 팝업사이즈 고정
+                      width: '380px', // 팝업사이즈 고정
+                      height: '380px', // 팝업사이즈 고정
                       overflow: 'hidden',
                       display: 'flex',
                       flexDirection: 'column',
@@ -505,6 +505,7 @@ export default function Home() {
                       {popup.thmbFileNm && (
                         <Box
                           component="img"
+                          tabIndex={0} //포커스용
                           src={getThumbnailUrl(popup)}
                           alt={popup.popupTtl || ''}
                           sx={{
@@ -515,6 +516,12 @@ export default function Home() {
                             display: 'block',
                             objectFit: 'cover',
                             flex: '1 1 auto',
+                            '&:focus': {
+                              outline: '3px solid #000000',
+                              boxShadow: '0 0 0 4px #ffffff',
+                              outlineOffset: '-3px',
+                              borderRadius: '8px',
+                            }
                           }}
                         />
                       )}
@@ -786,7 +793,7 @@ export default function Home() {
               role="tabpanel" 
               id={`panel-${tab}`} 
               aria-labelledby={`tab-${tab}`}
-              tabIndex={0}
+              //tabIndex={0}
               className="sns-tabpanel"
             >
               {tab === 'all' ? (
@@ -978,7 +985,7 @@ export default function Home() {
                 role="tabpanel" 
                 id={`news-panel-${newsTab}`} 
                 aria-labelledby={`news-tab-${newsTab}`}
-                tabIndex={0}
+                //tabIndex={0}
                 className="news-tabpanel"
               >
                 <Box className="news-board-wrap">
@@ -1054,13 +1061,24 @@ export default function Home() {
                     }}>
                       <Box
                         component={RouterLink}
-                        to={bbsUrl4 ? `${bbsUrl4}/${item.pstSn}` : '/pp/ko'}                        
+                        to={bbsUrl4 ? `${bbsUrl4}/${item.pstSn}` : '/pp/ko'}        
+                        tabIndex={0}                
                         sx={{
                           width: '100%',
                           height: '100%',
                           display: 'flex',
                           justifyContent: 'center',
                           alignItems: 'center',
+                          position: 'relative',
+                          '&:focus': {
+                            outline: '3px solid #000',
+                            outlineOffset: '-4px', 
+                            boxShadow: 'inset 0 0 0 2px #ffffff',
+                          },
+                          '&:focus:not(:focus-visible)': {
+                            outline: 'none',
+                            boxShadow: 'none',
+                          }
                         }}
                       >
                         <img
