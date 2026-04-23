@@ -4,7 +4,7 @@ import { getTransctionIdApiPath } from '@/api/auth/NiceApiPaths'
 import { mockGetTransctionId, GetTransctionIdPVO, GetTransctionIdRVO } from './NiceTypes'
 
 /**
- * DUR 정보 검색 
+ * 나이스 본인인증(PASS) 기본설정 조회
  */
 export const getTransctionId = createAsyncThunk<GetTransctionIdRVO, GetTransctionIdPVO | undefined, { rejectValue: string }>(
   '/niceid/getTransctionId',

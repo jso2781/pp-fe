@@ -208,6 +208,21 @@ export default function DepsLocation() {
       // 클린신고센터 > 신고서 작성
       pattern: /^\/pp\/[A-Za-z]{2}\/about\/ethics\/CleanForm(\/\d+)?$/,
       labels: ["cleanCenter", "cleanCenterWrite"]
+    },
+    {
+      // 주요업무 > 의약품 이상사례보고 > 이상사례 통계
+      pattern: /^\/pp\/[A-Za-z]{2}\/adverse\/statistics\/StatisticsList(\/)?$/,
+      labels: ["drugSafetyReport", "adverseStatistics"]
+    },
+    {
+      // 주요업무 > 의약품 이상사례보고 > 이상사례 통계 > 상세
+      pattern: /^\/pp\/[A-Za-z]{2}\/adverse\/statistics\/StatisticsDetail(\/\d+)?$/,
+      labels: ["drugSafetyReport", "adverseStatistics"]
+    },
+    {
+      // 주요업무 > 의약품 이상사례보고 > 이상사례 통계 > 생성
+      pattern: /^\/pp\/[A-Za-z]{2}\/adverse\/statistics\/StatisticsCreate(\/)?$/,
+      labels: ["drugSafetyReport", "adverseStatistics"]
     }
   ], []);
 

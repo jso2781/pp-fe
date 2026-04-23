@@ -26,6 +26,7 @@ import cdmQnaReducer from '@/features/cdm/qna/QnaCdmSlice'
 import cdmAsmtPrpReducer from '@/features/cdm/asmtprp/AsmtprpCdmSlice'
 import cryptoReducer from '@/features/crypto/CryptoSlice'
 import niceReducer from '@/features/auth/NiceSlice'
+import statisticsReducer from '@/features/adverse/statistics/StatisticsSlice'
 
 const rootReducer = combineReducers({
   ui: uiReducer,
@@ -55,6 +56,7 @@ const rootReducer = combineReducers({
   cdmAsmtPrp: cdmAsmtPrpReducer, // CDM 과제제안
   crypto: cryptoReducer, // 암·복호화(CA decrypto 등)
   nice: niceReducer, // 나이스 본인인증
+  statistics: statisticsReducer, // 이상사례 통계
 })
 
 export default rootReducer

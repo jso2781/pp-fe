@@ -5,7 +5,7 @@
  * 화면설명: 본인인증 화면
  */
 import { useTranslation } from 'react-i18next'
-import React, { useMemo, useRef, useEffect } from 'react'
+import React, { useMemo, useRef, useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Stepper, Step, StepLabel, Typography } from '@mui/material';
 import DepsLocation from '@/components/common/DepsLocation'
@@ -15,6 +15,7 @@ import { useAppDispatch } from '@/store/hooks'
 import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes';
 import { resolveCiFromSignUpFlowState, type SignUpFlowUserInfoState } from '@/pages/ko/auth/signUpFlowState';
 import { getTransctionIdApiPath } from '@/api/auth/NiceApiPaths';
+import { useDialog } from '@/contexts/DialogContext';
 
 export default function CertifySelf() {
   const { lang } = useParams<{ lang: string }>();
@@ -22,6 +23,12 @@ export default function CertifySelf() {
   const location = useLocation();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { showAlert } = useDialog();
+
+  // 본인인증 완료 상태
+  const [isCertified, setIsCertified] = useState(false);
+
+  const ciRef = useRef<string | null>(null);
 
   const isShowNiceAuthArea = useMemo(() => {
     return (import.meta.env.MODE === 'production' || import.meta.env.MODE === 'stg')
@@ -86,6 +93,12 @@ export default function CertifySelf() {
 
   // 다음단계 버튼 클릭 핸들러
   const handleNextStep = () => {
+    // 본인인증 완료 후에만 다음 화면으로 진행
+    if (!isCertified) {
+      showAlert(t('certifySelfCompleteReminder'));
+      return;
+    }
+
     /*
      * 현재창에서 본인인증을 완료한 경우만 회원정보입력 페이지로 이동할 수 있음.
      * 개발환경에서는 ciRef.current가 없어도 회원정보입력 페이지로 이동할 수 있음.
@@ -123,26 +136,71 @@ export default function CertifySelf() {
 
     // 방법1: postMessage 수신
     const handleMessage = (event: MessageEvent) => {
-      if (event.data?.type === "NICE_AUTH_RESULT") {
+      const dataObj = event.data;
+
+      if (dataObj?.type === "NICE_AUTH_RESULT") {
         console.log("인증 결과:", event.data);
+        if('0000' === dataObj?.code){
+          const name = dataObj?.name;
+          const brdt = dataObj?.brdt;
+          const phone = dataObj?.phone;
+          const ci = dataObj?.ci;
+          const existMbrInfo = dataObj?.existMbrInfo;
+
+          const userInfoFromSsob = {name, brdt, phone, ci, existMbrInfo} as AnyIdUserInfoFromSsobRVO;
+          if(userInfoFromSsob.existMbrInfo && userInfoFromSsob.existMbrInfo === 'Y'){
+            showAlert(t('alreadyRegistered'));
+            return;
+          }
+          else{
+            setIsCertified(true);
+            userInfoFromSsobRef.current = userInfoFromSsob
+            ciRef.current = userInfoFromSsob.ci ?? null;
+          }
+        }
+        else if('FAIL' === event.data?.code){
+          showAlert(t('certifySelfFailedReminder'));
+          return;
+        }
       }
     };
     // 방법2: localStorage 이벤트 수신 (opener 차단 시 fallback)
     const handleStorage = (event: StorageEvent) => {
       if (event.key === "NICE_AUTH_RESULT" && event.newValue) {
-        const data = JSON.parse(event.newValue);
-        console.log("인증 결과(storage):", data);
-        console.log("code:::", data?.code);  
-        console.log("name:::", data?.name);
-        console.log("birthdate:::", data?.birthdate);
-        console.log("ci:::", data?.ci);
-        console.log("di:::", data?.di);
+        const dataObj = JSON.parse(event.newValue);
+        console.log("인증 결과(storage):", dataObj);
+
+        if('0000' === dataObj?.code){
+          const name = dataObj?.name;
+          const brdt = dataObj?.brdt;
+          const phone = dataObj?.phone;
+          const ci = dataObj?.ci;
+          const existMbrInfo = dataObj?.existMbrInfo;
+
+          const userInfoFromSsob = {name, brdt, phone, ci, existMbrInfo} as AnyIdUserInfoFromSsobRVO;
+          if(userInfoFromSsob.existMbrInfo && userInfoFromSsob.existMbrInfo === 'Y'){
+            showAlert(t('alreadyRegistered'));
+            return;
+          }
+          else{
+            setIsCertified(true);
+            userInfoFromSsobRef.current = userInfoFromSsob
+            ciRef.current = userInfoFromSsob.ci ?? null;
+          }
+        }
+        else if('FAIL' === dataObj?.code){
+          showAlert(t('certifySelfFailedReminder'));
+          return;
+        }
       }
     };
   
-      window.addEventListener("message", handleMessage);
-      window.addEventListener("storage", handleStorage);
+    window.addEventListener("message", handleMessage);
+    window.addEventListener("storage", handleStorage);
   
+    // 본인인증 화면의 진입 직후 Nice 본인인증창 열기
+    handleAuth();
+
     return () => {
       window.removeEventListener("message", handleMessage);
       window.removeEventListener("storage", handleStorage);
@@ -151,8 +209,7 @@ export default function CertifySelf() {
 
   const handleAuth = async () => {
 
-    try {
-
+    try{
       const result = await dispatch(getTransctionId({
         requestId: "1234567890",
       })).unwrap();
@@ -162,7 +219,7 @@ export default function CertifySelf() {
         "authNiceWeb",
         "width=480,height=812,top=100,fullscreen=no,menubar=no,status=no,titlebar=yes,location=no,toolbar=no,scrollbar=no"
       );
-    } catch (error) {
+    }catch(error){
       console.error("CertifySelf.tsx handleAuth error=", error);
     }
   };
@@ -257,6 +314,7 @@ export default function CertifySelf() {
                         variant="contained" 
                         size="large" 
                         onClick={handleNextStep}
+                        disabled={!isCertified}
                       >
                         {t('nextStep')}
                       </Button>

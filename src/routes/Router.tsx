@@ -79,6 +79,7 @@ const ExpertApprovalUpdateKo = lazy(() => import('@/pages/ko/expert/ExpertApprov
 const MbcmtApplyKo = lazy(() => import('@/pages/ko/advice/MbcmtApply'))
 const StatisticsListKo = lazy(() => import('@/pages/ko/maintask/adverse/statistics/StatisticsList'))
 const StatisticsDetailKo = lazy(() => import('@/pages/ko/maintask/adverse/statistics/StatisticsDetail'))
+const StatisticsCreateKo = lazy(() => import('@/pages/ko/maintask/adverse/statistics/StatisticsCreate'))
 
 const PrivacyPolicyKo = lazy(() => import('@/pages/ko/etc/PrivacyPolicy'))
 const TermsKo = lazy(() => import('@/pages/ko/etc/Terms'))
@@ -474,6 +475,8 @@ export default function Router() {
                 <Route path="/pp/:lang/advice/MbcmtApply" element={<LangElement byLang={{ ko: <ProtectedRoute><MbcmtApplyKo /></ProtectedRoute>, en: <ProtectedRoute><MbcmtApplyKo /></ProtectedRoute> }} />} />
                 {/* 이상사례통계 관련 화면advice */}
                 <Route path="/pp/:lang/adverse/statistics/StatisticsList" element={<LangElement byLang={{ ko: <StatisticsListKo />, en: <StatisticsListKo /> }} />} />
+                <Route path="/pp/:lang/adverse/statistics/StatisticsDetail/:id" element={<LangElement byLang={{ ko: <StatisticsDetailKo />, en: <StatisticsDetailKo /> }} />} />
+                <Route path="/pp/:lang/adverse/statistics/StatisticsCreate" element={<LangElement byLang={{ ko: <StatisticsCreateKo />, en: <StatisticsCreateKo /> }} />} />
 
                 {/* 국문 퍼블리싱 템플릿 화면들 */}
                 <Route path="/pp/ko/screens" element={<ScreensKo />} />

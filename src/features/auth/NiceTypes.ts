@@ -29,3 +29,34 @@ export const mockGetTransctionId: GetTransctionIdRVO = {
   returnCode: '0000',
   uthUrl: 'https://stg.drugsafe.or.kr/api/pp/niceid/return',
 }
+
+
+/** 
+ *  나이스 본인인증(PASS)창에서 인증완료 후 응답값(JSON) 추출
+ */
+export interface UserInfoFromNiceRVO {
+  /**
+   * 전화번호(01037898540 형식)
+   */
+  phone?: string
+
+  /**
+   * 인증 토큰(BSE8/HaCwUt6jOXI5sicOQf4QF5a5eOxZKyOZVhHoNa603/laU7SLBkK8OnDmBLEE1Cb6cT2myEL5S4zC4oLow== 형식)
+   */
+  ci?: string
+
+  /**
+   * 이름(박성주)
+   */
+  name?: string
+
+  /**
+   * 생년월일(19770728 형식)
+   */
+  brdt?: string
+
+  /**
+   * 회원정보 존재 여부(Y/N)
+   */
+  existMbrInfo?: string
+}
