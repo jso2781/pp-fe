@@ -42,6 +42,10 @@ const ADVICE_PATHS = ['/exprt/exprtAplyChk', '/exprt/updateExprtAprvStts']
 const cdmApiBaseURL = import.meta.env.VITE_CDM_API_BASE_URL ?? 'http://localhost:8090/api/cm'
 const CDM_PATHS = ['/community']
 
+/** BO API 서버 */
+const boApiBaseURL = import.meta.env.VITE_BO_API_BASE_URL ?? 'http://localhost:8091/api/bo'
+const BO_PATHS = ['/statistics', '/code-search']
+
 const ppApiPathPrefix =
   (import.meta.env.MODE === 'production' || import.meta.env.MODE === 'stg') ? '/api/pp' : (import.meta.env.VITE_API_BASE_URL ?? '/api')
 
@@ -119,6 +123,9 @@ https.interceptors.request.use((config) => {
   }
   else if(CDM_PATHS.some((p) => url.includes(p) || url.startsWith(p + '?'))) {
     config.baseURL = cdmApiBaseURL
+  }
+  else if(BO_PATHS.some((p) => url.includes(p) || url.startsWith(p + '?'))){
+    config.baseURL = boApiBaseURL
   }
 
   const lang = (i18n.language || 'ko').startsWith('en') ? 'en' : 'ko'
