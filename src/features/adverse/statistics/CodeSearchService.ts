@@ -8,7 +8,7 @@ import {
   selectMeddraLltPageApiPath,
   selectMeddraPtPageApiPath,
   selectMeddraSocPageApiPath,
-} from '@/api/codesearch/CodeSearchApiPaths'
+} from '@/api/adverse/statistics/CodeSearchApiPaths'
 import type { CodeSearchPageRVO, CodeSearchType } from './CodeSearchTypes'
 
 const searchWithPage = async (

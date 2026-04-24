@@ -1,8 +1,8 @@
 /**
- * 화면ID: KIDS-PP-US-NO-08
- * 화면명: 갤러리형 게시판 목록
- * 화면경로: /board/gallery/:bbsId
- * 화면설명: 갤러리형 게시판 목록
+ * 화면ID: KIDS-PP-US-AE-01
+ * 화면명: 이상사례 통계 목록
+ * 화면경로: /adverse/statistics/StatisticsList
+ * 화면설명: 이상사례 통계 목록 (외부용)
  */
 import ContactArea from '@/components/common/ContactArea';
 import DepsLocation from '@/components/common/DepsLocation';
@@ -10,47 +10,52 @@ import DgstfnExnm from '@/components/common/DgstfnExnm';
 import Lnb from '@/components/common/Lnb';
 import LnbSectionTitle from '@/components/common/LnbSectionTitle';
 import { useAuth } from '@/contexts/AuthContext';
-import { selectPstList } from '@/features/pst/PstThunks';
+import { deleteStatistics, selectStatisticsList, selectUserRole } from '@/features/adverse/statistics/StatisticsThunks';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   Box,
   Button,
-  FormControl,
-  Grid,
-  InputLabel,
+  Checkbox,
   Link,
-  MenuItem,
   Pagination,
-  Select,
+  Paper,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Typography
 } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
-import { Link as RouterLink, useParams, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link as RouterLink, useLocation, useNavigate, useParams } from 'react-router-dom';
+
+const PAGE_SIZE = 10;
+
+const formatDate = (ymd: string | null | undefined) => {
+  if (!ymd) return '-';
+  if (ymd.length === 8) return `${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`;
+  return ymd.slice(0, 10);
+};
+
+const formatDomstForgn = (cd: string | null | undefined) => {
+  if (cd === '01') return '국내';
+  if (cd === '02') return '국외';
+  return '-';
+};
 
 export default function StatisticsList() {
   const dispatch = useAppDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const { list, totalCount, totalPages, loading } = useAppSelector((s) => s.pst);
-
-  const [searchCnd, setSearchCnd] = useState(searchParams.get('searchCnd') || 'title');
-  const [searchWrd, setSearchWrd] = useState(searchParams.get('searchWrd') || '');
-  
-  // 페이징 관련
-  const [pageNum, setPageNum] = useState(1)
-  const [pageSize, setPageSize] = useState(12) // 화면에 페이지 사이즈 설정이 필요시 setPageSize 활용
-
-  // 게시판 ID 추출
-  const { bbsId } = useParams<{ bbsId: string }>();
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const { lang } = useParams<{ lang: string }>();
 
-  // Lnb 랜더링용
+  const { list, totalCount, loading } = useAppSelector((s) => s.statistics);
+
   const currentUrl = location.pathname;
 
-  // KOGI, 만족도조사, 메뉴 별 담당자/연락처 정보 세팅
   const { getMenuInfo } = useAuth();
   const menuInfo = getMenuInfo(location.pathname);
   const menuSn = menuInfo?.menuSn ?? 0;
@@ -58,37 +63,80 @@ export default function StatisticsList() {
   const contactPersonNm = menuInfo?.menuPicFlnm ?? null;
   const contactPhoneNum = menuInfo?.encptPicTelno ?? null;
 
+  const [searchWrd, setSearchWrd] = useState('');
+  const [pageNum, setPageNum] = useState(1);
+  const [menuAuthMap, setMenuAuthMap] = useState<Record<string, string>>({});
 
-  // 스크롤 상단 이동
+  const listAuth = (menuAuthMap['/bo/statistics/list'] ?? '').split(',').map(s => s.trim()).filter(Boolean);
+  const detailAuth = (menuAuthMap['/bo/statistics/:id'] ?? '').split(',').map(s => s.trim()).filter(Boolean);
+  const hasAuth = (code: string) => listAuth.includes(code);
+  const hasDetailAuth = (code: string) => detailAuth.includes(code);
+  const canCreate = hasAuth('BTN_APLY') || hasAuth('BTN_APLY_APRV');
+  const canViewDetail = hasAuth('CLCK_DTL') || hasAuth('CLCK_DTL_M');
+  const canDelete = hasDetailAuth('BTN_DEL') || hasDetailAuth('BTN_DEL_M');
+
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+
+  useEffect(() => {
+    dispatch(selectUserRole()).unwrap().then(({ menuAuthMap: m }) => {
+      setMenuAuthMap(m);
+    }).catch(() => {});
+  }, [dispatch]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pageNum]);  
-
-  const rows = useMemo(() => {
-    const arr = Array.isArray(list) && list.length > 0 ? list : [];
-    return arr.map((n: any, idx: number) => {
-      const id = n.pstSn ?? String(idx);
-      return {
-        id,
-        title: n.pstTtl ?? '',
-        writer: n.wrtrDeptNm  ?? '',
-        date: n.regDt ?? '',
-        views: n.pstInqCnt ?? 0,
-        thmbFileNm: n.thmbFileNm ?? '',
-        thmbFilePath: n.thmbFileNm
-          ? `/api/atch/thumb/${n.thmbFileNm}`
-          : '/fe/img/img_no_thmb.png',          
-      };
-    });
-  }, [list]);
+    setSelectedIds([]);
+  }, [pageNum]);
 
   useEffect(() => {
-    dispatch(selectPstList({ pageNum, pageSize, bbsId, searchCnd, searchWrd }));
-  }, [dispatch, pageNum, bbsId]);
+    dispatch(selectStatisticsList({
+      statsNm: searchWrd || undefined,
+      limit: PAGE_SIZE,
+      offset: (pageNum - 1) * PAGE_SIZE,
+    }));
+  }, [dispatch, pageNum]);
 
   const onSearch = () => {
     setPageNum(1);
-    dispatch(selectPstList({ pageNum, pageSize, bbsId, searchCnd, searchWrd }));
+    setSelectedIds([]);
+    dispatch(selectStatisticsList({
+      statsNm: searchWrd || undefined,
+      limit: PAGE_SIZE,
+      offset: 0,
+    }));
+  };
+
+  const handleToggleSelect = (id: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+    );
+  };
+
+  const handleToggleAll = () => {
+    if (selectedIds.length === list.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(list.map((r) => r.statsDsetMngSn));
+    }
+  };
+
+  const handleDelete = async () => {
+    if (selectedIds.length === 0) return;
+    if (!window.confirm(`선택한 ${selectedIds.length}건을 삭제하시겠습니까?`)) return;
+    try {
+      await dispatch(deleteStatistics(selectedIds)).unwrap();
+      alert('삭제가 완료되었습니다.');
+      setSelectedIds([]);
+      dispatch(selectStatisticsList({
+        statsNm: searchWrd || undefined,
+        limit: PAGE_SIZE,
+        offset: (pageNum - 1) * PAGE_SIZE,
+      }));
+    } catch {
+      alert('삭제에 실패했습니다.');
+    }
   };
 
   return (
@@ -107,7 +155,7 @@ export default function StatisticsList() {
                 </Box>
               </Box>
             </Box>
-            
+
             {/* 컨텐츠 본문 영역 */}
             <Box className="sub-content">
               <DepsLocation />
@@ -115,26 +163,18 @@ export default function StatisticsList() {
                 <Box className="page-content">
                 {/* --- 본문 시작 --- */}
                   <Box component="form" className="board-search">
-                    <FormControl size="large" className="search-condition">
-                      <InputLabel id="search-condition-label" className="sr-only">검색조건</InputLabel>
-                      <Select 
-                        size="large" 
-                        value={searchCnd} 
-                        labelId="search-condition-label" 
-                        onChange={(e) => setSearchCnd(String(e.target.value))}
-                      >
-                        <MenuItem value="title">제목</MenuItem>
-                        <MenuItem value="content">내용</MenuItem>
-                      </Select>
-                    </FormControl>
                     <Box className="search-input-group">
-                      <TextField 
-                        size="large" 
-                        placeholder="검색어 입력" 
-                        value={searchWrd} 
-                        onChange={(e) => setSearchWrd(e.target.value)} 
+                      <TextField
+                        size="large"
+                        placeholder="통계명 검색"
+                        slotProps={{
+                          htmlInput: { 'aria-label': '통계명 검색' }
+                        }}
+                        value={searchWrd}
+                        onChange={(e) => setSearchWrd(e.target.value)}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') {
+                            e.preventDefault();
                             onSearch();
                           }
                         }}
@@ -144,56 +184,115 @@ export default function StatisticsList() {
                     </Box>
                   </Box>
                   <Box className="board-list-area" component="section">
-                    <Box className="board-info" aria-label="게시판 검색결과">
+                    <Box className="board-info" aria-label="이상사례 통계 검색결과" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Typography className="board-count">
-                        검색결과 
+                        검색결과
                         <Typography component="span" className="count">{totalCount}</Typography>
                         건
                       </Typography>
+                      <Stack direction="row" spacing={1}>
+                        {canDelete && (
+                          <Button variant="outlined" size="small" color="error"
+                            disabled={selectedIds.length === 0}
+                            onClick={handleDelete}>
+                            삭제
+                          </Button>
+                        )}
+                        {canCreate && (
+                          <Button variant="contained" size="small"
+                            onClick={() => navigate(`/pp/${lang}/adverse/statistics/StatisticsCreate`)}>
+                            통계 생성
+                          </Button>
+                        )}
+                      </Stack>
                     </Box>
 
-                    <Box className="board-card-list">
-                      <Grid container component="ul" className="card-list-wrap">
-                        {rows.map((item, index) => (
-                          <Grid component="li" key={item.id} className="card-item-li">
-                            <Link
-                              component={RouterLink}
-                              className='card-item-link'                              
-                              to={`/pp/${lang}/board/gallery/${bbsId}/${item.id}`}
-                              underline="none"
-                              aria-label={`${item.title} 상세보기`}
-                            >
-                              <Box className="thumb-area">
-                                <Box className="thumb-box">
-                                  <img src={item.thmbFilePath} alt={`썸네일 이미지 ${index+1}`} aria-hidden="true" />
-                                </Box>      
-                              </Box>
-                              <Box className="info-area">
-                                <Typography className="title-text" component="strong">
-                                  {item.title}
-                                </Typography>
-                                <Box className="meta-group">
-                                  <span className="writer-name">
-                                    <span className="sr-only">작성자</span>{item.writer}
-                                  </span>
-                                  <span className="reg-date">
-                                    <span className="sr-only">등록일</span>{item.date}
-                                  </span>
-                                  <span className="view-count">
-                                    <span className="sr-only">조회수</span>{item.views}
-                                  </span>
-                                </Box>
-                              </Box>
-                            </Link>
-                          </Grid>
-                        ))}
-                      </Grid>
-                    </Box>
+                    <TableContainer component={Paper} className="bbs-list">
+                      <Table aria-label="이상사례 통계 목록" sx={{ tableLayout: 'fixed' }}>
+                        <TableHead>
+                          <TableRow>
+                            {canDelete && (
+                              <TableCell component="th" scope="col" align="center" sx={{ width: '5%' }}>
+                                <Checkbox
+                                  size="small"
+                                  checked={list.length > 0 && selectedIds.length === list.length}
+                                  indeterminate={selectedIds.length > 0 && selectedIds.length < list.length}
+                                  onChange={handleToggleAll}
+                                  inputProps={{ 'aria-label': '전체 선택' }}
+                                />
+                              </TableCell>
+                            )}
+                            <TableCell component="th" scope="col" align="center" sx={{ width: canDelete ? '6%' : '7%' }}>No</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '9%' }}>구분</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: canDelete ? '28%' : '30%' }}>통계명</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: canDelete ? '25%' : '26%' }}>자료기간</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '13%' }}>등록일</TableCell>
+                            <TableCell component="th" scope="col" align="center" sx={{ width: '14%' }}>상태</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {!loading && list.length === 0 && (
+                            <TableRow>
+                              <TableCell colSpan={canDelete ? 7 : 6} align="center" sx={{ py: 6 }}>
+                                등록된 통계 자료가 없습니다.
+                              </TableCell>
+                            </TableRow>
+                          )}
+                          {list.map((r, idx) => (
+                            <TableRow key={r.statsDsetMngSn}>
+                              {canDelete && (
+                                <TableCell align="center">
+                                  <Checkbox
+                                    size="small"
+                                    checked={selectedIds.includes(r.statsDsetMngSn)}
+                                    onChange={() => handleToggleSelect(r.statsDsetMngSn)}
+                                    inputProps={{ 'aria-label': `${r.statsNm} 선택` }}
+                                  />
+                                </TableCell>
+                              )}
+                              <TableCell component="th" scope="row" align="center">
+                                {totalCount - ((pageNum - 1) * PAGE_SIZE + idx)}
+                              </TableCell>
+                              <TableCell align="center">{formatDomstForgn(r.domstForgnSeCd)}</TableCell>
+                              <TableCell align="left">
+                                {canViewDetail ? (
+                                  <Link
+                                    component={RouterLink}
+                                    to={`/pp/${lang}/adverse/statistics/StatisticsDetail/${r.statsDsetMngSn}`}
+                                    color="inherit"
+                                    underline="hover"
+                                    aria-label={`${r.statsNm} 상세보기`}
+                                    sx={{
+                                      display: 'inline-block',
+                                      width: '100%',
+                                      fontWeight: 500,
+                                      cursor: 'pointer'
+                                    }}
+                                  >
+                                    {r.statsNm}
+                                  </Link>
+                                ) : (
+                                  <Typography sx={{ fontWeight: 500 }}>{r.statsNm}</Typography>
+                                )}
+                              </TableCell>
+                              <TableCell align="center">{formatDate(r.rptDataBgngYmd)} ~ {formatDate(r.rptDataEndYmd)}</TableCell>
+                              <TableCell align="center">{formatDate(r.regDt)}</TableCell>
+                              <TableCell align="center">
+                                {r.status === '03' ? '생성완료'
+                                  : r.status === '02' ? '생성 중'
+                                  : r.status === '04' ? '실패'
+                                  : '미생성'}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
 
                     <Stack className="paging-wrap">
                       <Pagination
                         page={pageNum}
-                        count={totalPages ?? 0}
+                        count={totalPages}
                         onChange={(_: React.ChangeEvent<unknown>, page: number) => {
                           setPageNum(page)
                         }}
@@ -205,11 +304,13 @@ export default function StatisticsList() {
                   {/* 만족도 조사 */}
                   <DgstfnExnm menuSn={menuSn} />
                   {/* 업무 담당 부서 및 연락처 */}
-                  <ContactArea
-                    contactDepNm={contactDepNm}
-                    contactPersonNm={contactPersonNm}
-                    contactPhoneNum={contactPhoneNum}
-                  />                                    
+                  {contactDepNm && contactPersonNm && contactPhoneNum && (
+                    <ContactArea
+                      contactDepNm={contactDepNm}
+                      contactPersonNm={contactPersonNm}
+                      contactPhoneNum={contactPhoneNum}
+                    />
+                  )}
                 {/* --- 본문 끝 --- */}
                 </Box>
               </Box>
