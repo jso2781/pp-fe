@@ -165,7 +165,7 @@ export default function SignUpAgrTrms() {
    */
   const isRequiredAgreed = isJunior ? checked1 && checked2 && checked4 : checked1 && checked2;
 
-  const allChecked = isJunior ? checked1 && checked2 && checked4 : checked1 && checked2;
+  const allChecked = isJunior ? checked1 && checked2 && checked3 && checked4 : checked1 && checked2 && checked3;
 
   const handleAllAgree = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
