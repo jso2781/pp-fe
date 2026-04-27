@@ -16,6 +16,9 @@ import { resetResults } from '@/features/dur/DurSearchRoomSlice';
 import { AgeItem, ConcItem, CpctItem, DosageItem, DurSearchRoomRVO, EftgrpItem, NurswItem, PrgntItem, SnctzItem } from '@/features/dur/DurSearchRoomTypes';
 import LnbSectionTitle from '@/components/common/LnbSectionTitle';
 import { downloadFromTaskCd } from '@/features/atch/AtchThunks';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 export default function DurSearchRoom(){
   const { t } = useTranslation();
@@ -276,7 +279,27 @@ export default function DurSearchRoom(){
                 {/* --- 본문 시작 --- */}
                 <section className="pageCont-dur-DurSearchRoom">
                   <Box className="info-guide-box">
-                    <Box className="guide-title">시작하기 전에</Box>
+                    <Box className="guide-title">
+                      <span>시작하기 전에</span>
+                      <Tooltip 
+                          title="DUR 정보 검색은 DUR 금기 및 주의에 해당하는 의약품을 조회하는 서비스입니다." 
+                          arrow
+                          slotProps={{
+                            tooltip: {
+                              sx: {
+                                maxWidth: '700px',
+                                fontSize: '16px', 
+                                padding: '10px 14px',
+                                lineHeight: 1.5
+                              }
+                            }
+                          }}
+                        >
+                        <IconButton size="small" sx={{ p: 0.5 }}>
+                          <InfoOutlinedIcon fontSize="small" sx={{ color: '#087C80', fontSize: 25 }} />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
                     <ul className="guide-list">
                       <li>DUR이 적용되고 있는 성분 및 품목을 기준으로 검색이 가능합니다.</li>
                       <li>식품의약품안전처 공시·공고로 지정된 금기 및 주의 성분은 <strong>“DUR 정보 다운로드”</strong> 버튼을 클릭하여 다운로드 받은 엑셀 파일로 확인하세요.</li>

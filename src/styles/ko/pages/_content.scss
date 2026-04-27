@@ -1592,7 +1592,7 @@
 
   .guide-list {
     li {
-      font-size: 18px;
+      font-size: var(--fs-18);
       font-weight: 500;
 
       &::before {
@@ -1917,7 +1917,7 @@
   }
 
   @media (max-width: 1200px) {
-    padding: 30px 30px 30px 100px;
+    padding: 30px 30px 30px 30px;
     background-position: left 30px top 25px;
     .drug-title { font-size: 20px; }
     .drug-title--sub li { font-size: 16px; }
