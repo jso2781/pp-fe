@@ -2219,6 +2219,11 @@
 
 
 // 의약품 적정사용 정보집
+.pageCont-dur-ApprUseBook{
+  @media (max-width: 1200px) {
+    .list-bullet-2 br{display:none;}
+  }
+}
 .appr-use-book-download {
   margin: 40px 0;
   padding: 26px 10px;
@@ -2274,6 +2279,7 @@
           margin-bottom: 12px;
           border-radius: 12px;
           box-sizing: border-box;
+          height:222px;
         }
 
         .book-name {
