@@ -70,6 +70,7 @@
     "legalGuardCertifyComplete": "Complete the certification of the legal guardian.",
     "minorCertifyReminder": "Certification of applicants under 14 years old is required.",
     "minorCertifyReminderDescription": " - Any-ID is required to be certified when registered. Any-ID is required for non-registered users.",
+    "niceCertify": "Nice(PASS) Certification",
     "birthDateError": "Enter your birth date (8 digits ex)20121231",
     "passwordPlaceholder": "Enter your password",
     "forgotPassword": "Forgot your password?",

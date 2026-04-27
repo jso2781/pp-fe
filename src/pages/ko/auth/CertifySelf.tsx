@@ -303,7 +303,7 @@ export default function CertifySelf() {
                         onClick={handleAuth}
                         sx={{ minWidth: 240, height: 56 }}
                       >
-                        {t('본인인증 하기')}
+                        {t('niceCertify')}
                       </Button>
                     </Box>
 
