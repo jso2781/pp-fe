@@ -282,11 +282,53 @@
           color: #464C53;
           transition: color 0.2s;
           cursor: pointer;
+          
 
           .file-icon { font-size: 20px; }
-          .file-info { display: flex; align-items: center; gap: 8px; font-size: 16px; }
+          /* .file-info { display: flex; align-items: center; gap: 8px; font-size: 16px; }
           .file-label { font-size: var(--fs18); font-weight: 700; color: #1E2124; margin-right: 4px; }
-          .file-name { font-size: var(--fs16); text-decoration: underline; color: #1D52B2; }
+          .file-name { font-size: var(--fs16); text-decoration: underline; color: #1D52B2; } */
+
+          .file-info {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            box-sizing: border-box;
+          }
+
+          .file-label {
+            font-size: var(--fs18);
+            font-weight: 700;
+            color: #1E2124;
+            flex-shrink: 0;
+          }
+
+          .file-name {
+            font-size: var(--fs16);
+            text-decoration: underline;
+            color: #1D52B2;
+            word-break: break-all;
+            overflow-wrap: anywhere;
+            line-height: 1.4;
+          }
+
+          @media (min-width: 768px) {
+            .file-info {
+              flex-direction: row;
+              align-items: center;
+            }
+          }
+
+          @media (max-width: 767px) {
+            .file-info {
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 4px;
+            }
+
+          }
+
+
           .file-meta {
             color: #666;
             font-size: 14px;
