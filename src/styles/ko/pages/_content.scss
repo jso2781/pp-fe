@@ -1616,7 +1616,7 @@
 
   .guide-list--sub {
     li {
-      font-size: 18px;
+      font-size: var(--fs-18);
       color: #464C53;
       padding-left: 18px; 
 
@@ -1629,7 +1629,7 @@
       }
 
       @media (max-width: 1200px) { 
-      
+        font-size:16px;
         br{display: none;}
       }
     }
@@ -1924,7 +1924,7 @@
     .drug-list li { font-size: 16px; }
   }
   @media (max-width: 768px) {
-    padding: 80px 20px 20px 20px; 
+    padding: 20px 20px 20px 20px; 
     background-position: center top 20px;
     background-size: 50px;
     margin-bottom: 24px;
