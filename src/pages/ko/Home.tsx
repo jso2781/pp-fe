@@ -34,10 +34,7 @@ type SnsItem = {
   desc: string;
   videoId?: string;
   data?: PostVO;
-	thmbExplnCn?: string;
-	vdoExplnCn?: string;
 };
-
 type SnsTab = { label: string; items: SnsItem[] };
 type SnsTabs = Record<TabKey, SnsTab>;
 
@@ -140,10 +137,8 @@ export default function Home() {
         title: item.pstTtl || '',
         url: `https://www.youtube.com/embed/${item.videoId || ''}`,
         thumbnail: getThumbnailUrl(item),
-        thmbExplnCn: item.thmbExplnCn || '',
         desc: item.pstCn || '',
         videoId: item.videoId || '',
-        vdoExplnCn: item.vdoExplnCn || '',
         data: item,
       })),
     };
@@ -155,7 +150,6 @@ export default function Home() {
         title: item.pstTtl || '',
         url: item.videoId || 'https://www.instagram.com',
         thumbnail: getThumbnailUrl(item),
-        thmbExplnCn: item.thmbExplnCn || '',
         desc: item.pstCn || '',
         data: item,
       })),
@@ -168,7 +162,6 @@ export default function Home() {
         title: item.pstTtl || '',
         url: item.videoId || 'https://blog.naver.com',
         thumbnail: getThumbnailUrl(item),
-        thmbExplnCn: item.thmbExplnCn || '',
         desc: item.pstCn || '',
         data: item,
       })),
@@ -182,8 +175,6 @@ export default function Home() {
       thumbnail: getThumbnailUrl(item),
       desc: item.pstCn || '',
       videoId: item.videoId || '',
-      vdoExplnCn: item.vdoExplnCn || '',
-      thmbExplnCn: item.thmbExplnCn || '',
       data: item,
     }));
 
@@ -494,8 +485,8 @@ export default function Home() {
                   <Card
                     sx={{
                       cursor: popup.popupLnkgAddr ? 'pointer' : 'default',
-                      width: '400px', // 팝업사이즈 고정
-                      height: '400px', // 팝업사이즈 고정
+                      width: '380px', // 팝업사이즈 고정
+                      height: '380px', // 팝업사이즈 고정
                       overflow: 'hidden',
                       display: 'flex',
                       flexDirection: 'column',
@@ -514,6 +505,7 @@ export default function Home() {
                       {popup.thmbFileNm && (
                         <Box
                           component="img"
+                          tabIndex={0} //포커스용
                           src={getThumbnailUrl(popup)}
                           alt={popup.popupTtl || ''}
                           sx={{
@@ -524,6 +516,12 @@ export default function Home() {
                             display: 'block',
                             objectFit: 'cover',
                             flex: '1 1 auto',
+                            '&:focus': {
+                              outline: '3px solid #000000',
+                              boxShadow: '0 0 0 4px #ffffff',
+                              outlineOffset: '-3px',
+                              borderRadius: '8px',
+                            }
                           }}
                         />
                       )}
@@ -669,7 +667,7 @@ export default function Home() {
                       >
                         <img 
                           src={getThumbnailUrl(item)} 
-                          alt={item.thmbExplnCn || `프로모션 배너 ${index + 1}`} 
+                          alt={item.pstTtl || `프로모션 배너 ${index + 1}`} 
                           style={{
                             width: '100%',
                             height: '100%',
@@ -795,7 +793,7 @@ export default function Home() {
               role="tabpanel" 
               id={`panel-${tab}`} 
               aria-labelledby={`tab-${tab}`}
-              tabIndex={0}
+              //tabIndex={0}
               className="sns-tabpanel"
             >
               {tab === 'all' ? (
@@ -844,7 +842,7 @@ export default function Home() {
                                   <Box
                                     component="iframe"
                                     src={`https://www.youtube.com/embed/${it.videoId}`} 
-                                    title={`${it.vdoExplnCn ?? it.title + "안내 영상"}`}
+                                    title={`${it.title} 안내 영상`}
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                     referrerPolicy="strict-origin-when-cross-origin"
                                     sandbox="allow-scripts allow-same-origin allow-presentation"
@@ -868,7 +866,7 @@ export default function Home() {
                                 <Box className="thumb-area">
                                   <img 
                                     src={it.thumbnail || '/fe/img/img_test.png'} 
-                                    alt={`${it.thmbExplnCn ?? it.title + " 썸네일 이미지"}`}
+                                    alt={`${it.title} 썸네일 이미지`}
                                     style={{objectFit: 'unset'}}
                                   />
                                 </Box>
@@ -920,7 +918,7 @@ export default function Home() {
                               <Box
                                 component="iframe"
                                 src={`https://www.youtube.com/embed/${it.videoId}`} 
-                                title={`${it.vdoExplnCn ?? it.title + "안내 영상"}`}
+                                title={`${it.title} 안내 영상`}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 referrerPolicy="strict-origin-when-cross-origin"
                                 sandbox="allow-scripts allow-same-origin allow-presentation"
@@ -941,7 +939,7 @@ export default function Home() {
                             <Box className="thumb-area">
                               <img 
                                 src={it.thumbnail || '/fe/img/img_test.png'} 
-                                alt={`${it.thmbExplnCn ?? it.title + " 썸네일 이미지"}`}
+                                alt={`${it.title} 썸네일 이미지`}
                                 style={{objectFit: 'unset'}}
                               />                              
                             </Box>
@@ -987,7 +985,7 @@ export default function Home() {
                 role="tabpanel" 
                 id={`news-panel-${newsTab}`} 
                 aria-labelledby={`news-tab-${newsTab}`}
-                tabIndex={0}
+                //tabIndex={0}
                 className="news-tabpanel"
               >
                 <Box className="news-board-wrap">
@@ -1063,18 +1061,29 @@ export default function Home() {
                     }}>
                       <Box
                         component={RouterLink}
-                        to={bbsUrl4 ? `${bbsUrl4}/${item.pstSn}` : '/pp/ko'}                        
+                        to={bbsUrl4 ? `${bbsUrl4}/${item.pstSn}` : '/pp/ko'}        
+                        tabIndex={0}                
                         sx={{
                           width: '100%',
                           height: '100%',
                           display: 'flex',
                           justifyContent: 'center',
                           alignItems: 'center',
+                          position: 'relative',
+                          '&:focus': {
+                            outline: '3px solid #000',
+                            outlineOffset: '-4px', 
+                            boxShadow: 'inset 0 0 0 2px #ffffff',
+                          },
+                          '&:focus:not(:focus-visible)': {
+                            outline: 'none',
+                            boxShadow: 'none',
+                          }
                         }}
                       >
                         <img
                           src={getThumbnailUrl(item)}
-                          alt={item.thmbExplnCn || `카드뉴스 이미지 ${index + 1}`}
+                          alt={item.pstTtl || `카드뉴스 이미지 ${index + 1}`}
                           style={{
                             width: '100%',
                             height: '100%',
