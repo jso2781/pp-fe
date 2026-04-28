@@ -16,6 +16,9 @@ import { resetResults } from '@/features/dur/DurSearchRoomSlice';
 import { AgeItem, ConcItem, CpctItem, DosageItem, DurSearchRoomRVO, EftgrpItem, NurswItem, PrgntItem, SnctzItem } from '@/features/dur/DurSearchRoomTypes';
 import LnbSectionTitle from '@/components/common/LnbSectionTitle';
 import { downloadFromTaskCd } from '@/features/atch/AtchThunks';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 export default function DurSearchRoom(){
   const { t } = useTranslation();
@@ -26,9 +29,9 @@ export default function DurSearchRoom(){
   const { lang } = useParams<{ lang: string }>();
 
   /** 제품검색 클릭 시 DurPrdctDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
-  const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string, rlvtAge?: string) => {
+  const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string) => {
     const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`;
-    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}${(rlvtAge ? "&rlvtAge="+rlvtAge : "")}`;
+    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}`;
     const width = 800;
     const height = 600;
     const left = Math.round((window.screen.width - width) / 1.5);
@@ -38,9 +41,9 @@ export default function DurSearchRoom(){
   };
 
   /** 중복 상세보기 클릭 시 DurEftgrpDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
-  const openEftgrpDetailPop = (igrdNm: string, effGroupNm: string, groupNm: string) => {
+  const openEftgrpDetailPop = (igrdNm: string) => {
     const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurEftgrpDetailPop`;
-    const url = `${base}?effGroupNm=${encodeURIComponent(effGroupNm)}&groupNm=${encodeURIComponent(groupNm)}&igrdNm=${encodeURIComponent(igrdNm)}`;
+    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}`;
     const width = 800;
     const height = 600;
     const left = Math.round((window.screen.width - width) / 2);
@@ -276,21 +279,37 @@ export default function DurSearchRoom(){
                 {/* --- 본문 시작 --- */}
                 <section className="pageCont-dur-DurSearchRoom">
                   <Box className="info-guide-box">
-                    <Box className="guide-title">시작하기 전에</Box>
+                    <Box className="guide-title">
+                      <span>시작하기 전에</span>
+                      <Tooltip 
+                          title="DUR 정보 검색은 DUR 금기 및 주의에 해당하는 의약품을 조회하는 서비스입니다." 
+                          arrow
+                          slotProps={{
+                            tooltip: {
+                              sx: {
+                                maxWidth: '700px',
+                                fontSize: '16px', 
+                                padding: '10px 14px',
+                                lineHeight: 1.5
+                              }
+                            }
+                          }}
+                        >
+                        <IconButton size="small" sx={{ p: 0.5 }}>
+                          <InfoOutlinedIcon fontSize="small" sx={{ color: '#087C80', fontSize: 25 }} />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
                     <ul className="guide-list">
                       <li>DUR이 적용되고 있는 성분 및 품목을 기준으로 검색이 가능합니다.</li>
-                      <li>식품의약품안전처 고시·공고로 지정된 금기 및 주의 성분은 <strong>“DUR 정보 다운로드”</strong> 버튼을 클릭하여 다운로드 받은 엑셀 파일로 확인할 수 있습니다.</li>
+                      <li>식품의약품안전처 공시·공고로 지정된 금기 및 주의 성분은 <strong>“DUR 정보 다운로드”</strong> 버튼을 클릭하여 다운로드 받은 엑셀 파일로 확인하세요.</li>
                     </ul>
 
                     <ul className="guide-list--sub">
                       {/* <li>본 DUR 정보는 비상업적 연구 또는 교육에만 사용할 수 있으며, 상업적 목적으로 활용하는 경우 한국의약품안전관리원의 사전 승인을 받아야만 합니다.</li> */}
                       {/* <li>Provided for non-commercial research and education use only. Used with permission from KIDS for any commercial purposes.</li> */}
-                      <li>의약품의 성분명 혹은 제품명을 검색하면, 병용시∙소아∙노인∙임신부∙수유부에서의 주의 정보 등을 확인할 수 있습니다.</li>
-                      <li>본 화면의 검색 정보는 정기적으로 업데이트되나, 실시간 변동되는 의약품 허가 현황과 차이가 있을 수 있습니다. 검색 결과는 참고용으로 활용하시기 바랍니다.</li>
-                      <li className="source-item">
-                        <span className="source-label">참고자료원:</span>
-                        <span className="source-text">식품의약품안전처 “의약품 병용금기 성분 등의 지정에 관한 규정” 고시, “의약품 적정사용을 위한 주의 정보” 공고 및<br />건강보험심사평가원 “DUR 대상 의약품” 등</span>
-                      </li>
+                      <li>의약품을 아래 검색창에 입력하면, 병용시 주의, 어린이∙어르신∙임신부∙수유부에서 주의 정보 등을 확인할 수 있습니다.</li>
+                      <li>참고자료원 : 식품의약품안전처 “의약품 병용금기 성분 등의 지정에 관한 규정” 고시, “의약품 적정사용을 위한 주의 정보” 공고 및 건강보험심사평가원 “DUR 대상 의약품”</li>
                     </ul>
                   </Box>
 
@@ -648,7 +667,7 @@ export default function DurSearchRoom(){
                                                     resultSearchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
-                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'age', item.rlvtAge)}>
+                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'age')}>
                                                         제품검색
                                                       </Button>
                                                       </>
@@ -1096,7 +1115,7 @@ export default function DurSearchRoom(){
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   <span className="text">{item.groupNm}</span>
-                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openEftgrpDetailPop(item.igrdNm, item.effGroupNm, item.groupNm)}>
+                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openEftgrpDetailPop(item.igrdNm)}>
                                                     중복 상세보기
                                                   </Button>
                                                 </Box>

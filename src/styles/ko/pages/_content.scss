@@ -1100,7 +1100,7 @@
       flex-shrink: 0; 
       width: 90px;
       height: 90px;
-      // background: #EDF8F8;
+      background: #EDF8F8;
       display: flex; 
       align-items: center;
       justify-content: center;
@@ -1332,6 +1332,7 @@
   gap: 16px;
 
   .info-action-item {
+    position: relative;
     &__title {
       margin: 0 0 10px 0;
       font-size: var(--fs-18);
@@ -1347,6 +1348,8 @@
     }
   }
   .info-action__btn {
+    display: inline-block;
+    margin:0 0 0 10px;
     .btn-link { margin: 0; padding: 0; }
   }
 }
@@ -1589,14 +1592,14 @@
 
   .guide-list {
     li {
-      font-size: 16px;
+      font-size: var(--fs-18);
       font-weight: 500;
 
       &::before {
         content: '';
         position: absolute;
         left: 6px;
-        top: 10px; 
+        top: 11px; 
         width: 3px;
         height: 3px;
         background-color: #1E2124;
@@ -1613,7 +1616,7 @@
 
   .guide-list--sub {
     li {
-      font-size: 13px;
+      font-size: 18px;
       color: #464C53;
       padding-left: 18px; 
 
@@ -1621,28 +1624,13 @@
         content: '※';
         position: absolute;
         left: 0;
-        top: 0; 
+        top: 5px; 
         font-size: 13px;
       }
 
       @media (max-width: 1200px) { 
       
         br{display: none;}
-      }
-    }
-
-    li.source-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 4px;
-
-      .source-label {
-        flex: 0 0 auto;
-      }
-
-      .source-text {
-        flex: 1 1 auto;
-        min-width: 0;
       }
     }
   }
@@ -1703,8 +1691,8 @@
   gap: 6px; 
   min-height: 50px; 
   img{
-    width:50px;
-    height:50px;
+    width:30px;
+    height:30px;
   }
 }
 
@@ -1888,15 +1876,16 @@
    ========================================================================== */
 .info-drug-box {
   margin:0 0 40px 0;
-  padding: 40px 40px 40px 110px;
-  background: #EEF2F7 url('/fe/img/ico_drug_title.png') no-repeat left 40px top 30px;
+  padding: 40px;
+  // background: #EEF2F7 url('/fe/img/ico_drug_title.png') no-repeat left 40px top 30px;
+  background: #EEF2F7;
   border-radius: 12px;
   
   .drug-title {
     position: relative;
     font-size: var(--fs-24);
     font-weight: 700;
-    margin-bottom: 8x;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
   }
@@ -1928,7 +1917,7 @@
   }
 
   @media (max-width: 1200px) {
-    padding: 30px 30px 30px 100px;
+    padding: 30px 30px 30px 30px;
     background-position: left 30px top 25px;
     .drug-title { font-size: 20px; }
     .drug-title--sub li { font-size: 16px; }
@@ -2230,6 +2219,11 @@
 
 
 // 의약품 적정사용 정보집
+.pageCont-dur-ApprUseBook{
+  @media (max-width: 1200px) {
+    .list-bullet-2 br{display:none;}
+  }
+}
 .appr-use-book-download {
   margin: 40px 0;
   padding: 26px 10px;
@@ -2285,6 +2279,7 @@
           margin-bottom: 12px;
           border-radius: 12px;
           box-sizing: border-box;
+          height:222px;
         }
 
         .book-name {

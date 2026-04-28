@@ -91,9 +91,10 @@ export default function DurProposal() {
     name: z.string().trim().min(1, { message: '이름을 입력해주세요.' }),
     contact: z.string(),
     email: z.string().trim().min(1, { message: '이메일을 입력해주세요.' }).email({ message: '이메일 형식이 올바르지 않습니다.' }),
-    problem: z.string().trim().min(1, { message: '현황 및 문제점을 입력해주세요.' }).max(300, { message: '현황 및 문제점을 300자 이내로 입력해주세요.' }),
-    detail: z.string().trim().min(1, { message: '국내외 허가사항, 임상진료지침, 교과서 등 근거 문헌 제시 필요시, 별도의 근거 자료 첨부' }),
-    etc: z.string().trim().max(1000, { message: '참고 및 기타사항을 1,000자 이내로 입력해주세요.' }).optional().default(''),
+    problem: z.string().trim().min(1, { message: '현황 및 문제점을 입력해주세요.' }),
+    summary: z.string().trim().optional().default(''),
+    detail: z.string().trim().min(1, { message: '의견 및 요청사항 상세기재를 입력해주세요.' }),
+    etc: z.string().trim().optional().default(''),
     files: z
       .array(z.instanceof(File))
       .default([])
@@ -113,7 +114,7 @@ export default function DurProposal() {
     contact: '',
     email: '',
     problem: '',
-    /* summary: '', 제거됨(summary 필드 제거) */
+    summary: '',
     detail: '',
     etc: '',
     files: [],
@@ -126,7 +127,7 @@ export default function DurProposal() {
 
   // 제출 시 검증 실패하면 화면 순서대로 첫 번째 오류 필드로 포커스·스크롤
   const onInvalid = (errors: FieldErrors<FormValues>) => {
-    const order: (keyof FormValues)[] = ['agreeRequired', 'agreeOptional', 'role', 'name', 'contact', 'email', 'problem', 'detail', 'etc', 'files'];
+    const order: (keyof FormValues)[] = ['agreeRequired', 'agreeOptional', 'role', 'name', 'contact', 'email', 'problem', 'summary', 'detail', 'etc', 'files'];
     const first = order.find((name) => errors[name]);
     if (first) {
       form.setFocus(first, { shouldSelect: true });
@@ -159,7 +160,7 @@ export default function DurProposal() {
     formData.append('encptMbrEmlNm', values.email);        // 이메일
     formData.append('wrtSeCd', values.role);               // 구분코드
     formData.append('pbptCn', values.problem);             // 문제점내용
-    formData.append('dmndMttrCn', '');                     // 요청사항(간략), values.summary 제거됨
+    formData.append('dmndMttrCn', values.summary ?? '');   // 요청사항(간략)
     formData.append('dmndMttrDtlCn', values.detail ?? ''); // 요청사항(상세)
     formData.append('refMttrCn', values.etc ?? '');        // 참고사항내용
     formData.append('insdRefMttrCn', '');                  // 내부참고사항내용
@@ -207,11 +208,13 @@ export default function DurProposal() {
               <Box className="page-content">
                 {/* --- 본문 시작 --- */}
                 <section className="pageCont-dur-DurProposal">
-                  <Box className="info-drug-box">
-                    <p>한국의약품관리원에서는 보건의료 전문가들로부터 DUR 정보 추가 또는 변경에 대한 의견을 제안 받아,</p>
-                    <p>현장의 의견을 반영하고자 합니다.</p>
-                    <p>의견제안과 관련하여 궁금한 점이 있으시면 <span className="fw-700">DUR정보팀(T.02-2172-6824, kids_dur@drugsafe.or.kr)</span>으로<br></br>연락주시기 바랍니다.</p>
-                    <p>건강보험심사평가원 DUR 전산시스템(의약품안전사용서비스) 관련 문의는 답변이 제한될 수 있습니다.</p>
+                  <Box className="info-guide-box">
+                    <ul className="guide-list">
+                      <li>보건의료 전문가들로부터 제안된 의견들을 검토함으로써 현장의 의견을 반영하고자 합니다.</li>
+                      <li>의견 제안과 관련하여 궁금한 점이 있으시면 <span className="fw-700">DUR정보팀(T.02-2172-6824, kids_dur@drugsafe.or.kr)</span>으로<br></br>연락주시기 바랍니다.</li>
+                      <li>의견 접수 후 남겨주신 연락처로 연락 드리겠습니다.</li>
+                      <li>건강보험심사평가원 DUR 전산시스템(의약품안전사용서비스) 관련 문의는 답변이 제한될 수 있습니다.</li>
+                    </ul>
                   </Box>
                   <p className="fs-18 fw-700">한국의약품안전관리원은 DUR 의견 제안과 관련하여 아래와 같이 개인정보를 수집·이용하고자 합니다.<br/> 내용을 자세히 읽으신 후 동의 여부를 결정하여 주십시오.</p>
                   <ZodFormProvider schema={schema} methods={form}>
@@ -270,6 +273,13 @@ export default function DurProposal() {
                     </Box>
                   </ZodFormProvider>
 
+                  <h3 className="section-title">의견 제안 처리 절차</h3>
+                  <ul className="opinion-process-step">
+                    <li>홈페이지 <br/>의견제안 접수</li>
+                    <li>의견정리 및 검토</li>
+                    <li>전문가 자문회의</li>
+                    <li>검토결과 회신</li>
+                  </ul>
                 </section>
 
                 <h3 className="section-title">의견 제안 입력</h3>
@@ -330,7 +340,7 @@ export default function DurProposal() {
                             이메일
                             <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
-                          <RHFTextField type="email" name="email" id="email" placeholder="example@email.com" size="large" fullWidth
+                          <RHFTextField type="email" name="email" id="email" placeholder="gidong_hong99@gmail.com" size="large" fullWidth
                             slotProps={{
                               htmlInput: { 'aria-required': 'true', 'aria-describedby': 'email-alert' },
                               formHelperText: { id: 'email-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite'  },
@@ -344,7 +354,7 @@ export default function DurProposal() {
                             현황 및 문제점
                             <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
-                          <RHFTextField name="problem" id="problem" placeholder="현황 및 문제점을 300자 이내로 입력해주세요." size="large" fullWidth multiline minRows={3}
+                          <RHFTextField name="problem" id="problem" placeholder="현황 및 문제점을 100자 이내로 입력해주세요." size="large" fullWidth multiline minRows={3}
                             slotProps={{
                               htmlInput: { 'aria-required': 'true', 'aria-describedby': 'problem-alert', 'aria-labelledby': 'problem-label' },
                               formHelperText: { id: 'problem-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
@@ -352,13 +362,27 @@ export default function DurProposal() {
                           />
                         </Box>
 
+                        {/* 의견 및 요청사항 간략기재 */}
+                        <Box className="form-item">
+                          <Typography component="label" htmlFor="summary" id="summary-label" className="label">
+                            의견 및 요청사항 간략기재
+                            <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
+                          </Typography>
+                          <RHFTextField name="summary" id="summary" placeholder="의견 및 요청사항을 100자 이내로 입력해주세요." size="large" fullWidth multiline minRows={3}
+                            slotProps={{
+                              htmlInput: { 'aria-describedby': 'summary-alert', 'aria-labelledby': 'summary-label' },
+                              formHelperText: { id: 'summary-alert', className: 'error-alert' },
+                            }}
+                          />
+                        </Box>
+
                         {/* 의견 및 요청사항 상세기재 */}
                         <Box className="form-item">
                           <Typography component="label" htmlFor="detail" id="detail-label" className="label">
-                            의견 및 요청사항
+                            의견 및 요청사항 상세기재
                             <Box component="span" className="required" aria-label="필수입력">(필수)</Box>
                           </Typography>
-                          <RHFTextField name="detail" id="detail" placeholder="국내외 허가사항, 임상진료지침, 교과서 등 근거 문헌 제시 필요시, 별도의 근거 자료 첨부" size="large" fullWidth multiline minRows={5}
+                          <RHFTextField name="detail" id="detail" placeholder="의견 및 요청사항을 1,000자 이내로 입력해주세요." size="large" fullWidth multiline minRows={5}
                             slotProps={{
                               htmlInput: { 'aria-required': 'true', 'aria-describedby': 'detail-alert', 'aria-labelledby': 'detail-label' },
                               formHelperText: { id: 'detail-alert', className: 'error-alert', role: 'alert', 'aria-live': 'polite' },
@@ -366,13 +390,13 @@ export default function DurProposal() {
                           />
                         </Box>
 
-                        {/* 참고 및 기타사항 */}
+                        {/* 참고사항 및 기타 */}
                         <Box className="form-item">
                           <Typography component="label" htmlFor="etc" id="etc-label" className="label">
-                            참고 및 기타사항
+                            참고사항 및 기타
                             <Box component="span" className="optional" aria-label="선택입력">(선택)</Box>
                           </Typography>
-                          <RHFTextField name="etc" id="etc" placeholder="참고 및 기타사항을 1,000자 이내로 입력해주세요." size="large" fullWidth multiline minRows={2}
+                          <RHFTextField name="etc" id="etc" placeholder="참고사항 및 기타 사항을 1,000자 이내로 입력해주세요." size="large" fullWidth multiline minRows={2}
                             slotProps={{
                               htmlInput: { 'aria-describedby': 'etc-alert', 'aria-labelledby': 'etc-label' },
                               formHelperText: { id: 'etc-alert', className: 'error-alert' },

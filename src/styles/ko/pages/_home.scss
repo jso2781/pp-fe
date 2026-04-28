@@ -786,7 +786,16 @@
           text-decoration: none;
           color: inherit;
 
-          
+          &:focus-visible {
+            outline: 3px solid #000 !important;
+            
+            outline-offset: -3px !important;
+            border-radius: 8px;
+            
+            position: relative;
+            z-index: 2;
+          }
+
           /* 썸네일 영역 */
           .thumb-area {
             flex: 0 0 200px;
@@ -1094,6 +1103,16 @@
             z-index: 2;
             cursor: pointer;
 
+            &:focus-visible {
+            box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #087c80 ; 
+            outline: 2px solid transparent; 
+            outline-offset: 2px;
+          }
+          &:focus:not(:focus-visible) {
+            box-shadow: none;
+            outline: none;
+          }
+
             @media (max-width: 1200px) {
               top: -48px;
               right: 0px;
@@ -1120,10 +1139,11 @@
                   transition: background-color 0.2s;
                   color: inherit;
 
-                  &:hover,
+                  
                   &:focus-visible {
-                    background-color: rgba(8, 124, 128, 0.03);
-                    outline: none;
+                    outline: 2px solid #000000;
+                    outline-offset: -2px;
+                    background-color: rgba(36, 109, 243, 0.05);
                   }
 
                   .subject {
@@ -1145,7 +1165,7 @@
                     font-size: 17px;
                     flex-shrink: 0;
                     text-align: right;
-                    color: #888;
+                    color: #1E2124;
 
                     @media (max-width: 1200px) {
                       font-size: 13px;
@@ -1263,3 +1283,4 @@
     }
   }
 }
+

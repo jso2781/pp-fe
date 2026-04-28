@@ -300,7 +300,7 @@
       z-index: 1; // 가상 요소보다 위에 있도록 설정
 
       // 1. 테두리용 가상 요소 설정
-      &::before {
+      /* &::before {
         content: '';
         position: absolute;
         top: 0;
@@ -310,28 +310,28 @@
         border-radius: 8px; 
         padding: 2px; 
         background: linear-gradient(0deg, #023133 8.17%, #0F6775 44.71%, #94CFBB 80.77%);
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask: linear-gradient(#fff, #fff) content-box, linear-gradient(#fff, #fff);
+        mask: linear-gradient(#fff, #fff) content-box, linear-gradient(#fff, #fff);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
-        
+
         opacity: 0; 
         transition: opacity 0.2s ease-in-out;
         pointer-events: none; 
-      }
+      } */
 
       &:focus-visible {
         background-color: #f0fbfc;
-        outline: none; 
+        outline: 2px solid #087c80;
+        outline-offset: 4px;
         transform: translateY(-5px);
-        &::before { opacity: 1; } 
       }
 
       &:hover {
         transform: translateY(-5px);
-        &::before {
+        /* &::before {
           opacity: 1; 
-        }
+        } */
       }
 
       .icon-bg {
