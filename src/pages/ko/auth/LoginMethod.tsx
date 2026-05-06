@@ -357,6 +357,9 @@ export default function LoginMethod() {
                     </Box>
 
                     <Box className="login-card-area__id-login">
+                      <Typography component="h3" className="kids-login-title">
+                        KIDS 로그인
+                      </Typography>
                       <Card className="kids-login-card">
                         <CardContent className="kids-login-card-content">
                           <Box className="login-button-group">
