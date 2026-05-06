@@ -5,7 +5,7 @@ export interface AnyIdInitPVO {
 }
 
 export interface AnyIdInitRVO {
-  cfg?: string        /* Any-ID 설정파일 경로 (기본값: /config/config.anyidc.json) */
+  cfg?: string        /* Any-ID 설정파일 경로 (예: /config/local|dev|prod/config.anyidc.json) */
   txId?: string       /* Any-ID 트랜잭션 ID(tx) */
   tag?: string        /* Any-ID 태그 */
   lvl?: number        /* Any-ID 레벨(기본값: 3) */

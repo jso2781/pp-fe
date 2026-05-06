@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import https from '@/api/axiosInstance'
+import { getAnyIdConfigUrl } from '@/lib/anyid/anyidConfig'
 
 function ensureAnyIdAssets() {
   // Vite base path (dev: '/', prod: '/' 또는 '/pp/') 반영해 public 자원 경로 생성
@@ -81,9 +82,7 @@ export default function Login() {
           },
         }
 
-        // public 폴더 기준 상대 경로 사용
-        // public/anyid/config/config.anyidc.json -> /anyid/config/config.anyidc.json
-        const configAnyidcJsonUrl = '/config/config.anyidc.json';
+        const configAnyidcJsonUrl = getAnyIdConfigUrl();
         console.log("configAnyidcJsonUrl="+configAnyidcJsonUrl);
         if(!window.AnyidC){
             setError('Any-ID module window.AnyidC is not loaded.')

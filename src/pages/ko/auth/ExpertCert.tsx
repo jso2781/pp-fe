@@ -12,6 +12,7 @@ import { getMbrInfo } from '@/features/mbr/MbrInfoThunks';
 import { useAppDispatch } from '@/store/hooks';
 import { Box, Typography } from '@mui/material';
 import { useMemo, useEffect, useRef, useState } from "react";
+import { getAnyIdConfigUrl } from '@/lib/anyid/anyidConfig';
 import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets';
 import { getAnyIdCiFromSsob } from '@/features/auth/AnyIdThunks';
 import type { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes';
@@ -124,7 +125,7 @@ export default function ExpertCert() {
       },
     };
 
-    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`;
+    const configAnyidcJsonUrl = getAnyIdConfigUrl();
     const txId = `exprtCert-${Date.now()}`;
     const lvl = 3;
 
