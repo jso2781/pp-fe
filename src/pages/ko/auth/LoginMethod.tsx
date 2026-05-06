@@ -14,7 +14,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { getAnyIdInit, getAnyIdUserInfoFromSsob, postAnyIdLogin } from '@/features/auth/AnyIdThunks'
 import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes'
-import { getAnyIdConfigUrl } from '@/lib/anyid/anyidConfig'
 import { shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
 import { useAnyIdSdkReady } from '@/lib/anyid/useAnyIdSdkReady'
 import DepsLocation from '@/components/common/DepsLocation'
@@ -217,7 +216,7 @@ export default function LoginMethod() {
     }
     window.anyidAdaptor = adaptor as typeof window.anyidAdaptor
 
-    const baseCfg = getAnyIdConfigUrl()
+    const baseCfg = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
     const successCb = (data: any) => void window.anyidAdaptor?.success?.(data)
     const failCb = (err: any) => {
       console.error('[AnyID] fail:', err)
@@ -246,7 +245,7 @@ export default function LoginMethod() {
       }
     }
 
-    window.AnyidC.LOAD_MODULE(      
+    window.AnyidC.LOAD_MODULE(
       Object.assign(
         {
           contextRoot: location.pathname,
@@ -254,7 +253,7 @@ export default function LoginMethod() {
           fail: failCb,
           log: logCb,
           redirect_uri: redirectUri,
-          cfg: anyidInit?.cfg ?? getAnyIdConfigUrl(),
+          cfg: anyidInit?.cfg ?? '/config/config.anyidc.json',
           txId: anyidInit?.txId ?? tx,
           tag: anyidInit?.tag ?? tx,
           lvl: anyidInit?.lvl ?? acrValues,
@@ -354,28 +353,29 @@ export default function LoginMethod() {
                         <Box id="anyidc" className="anyidc" sx={{ minHeight: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <Typography color="error">로그인 도구를 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.</Typography>
                         </Box>
-                      )}                  
+                      )}
                     </Box>
 
-                      <Box className="login-card-area__id-login">
-                        <Card className="kids-login-card">
-                          <CardContent className="kids-login-card-content">
-                            <Box className="login-button-group">
-                              <Button variant="outlined" onClick={() => navigate('/pp/ko/auth/Login')} className="login-button" title={t('login')}>
-                                <Stack spacing={1} alignItems="center" className="login-button-stack">
-                                  <Stack direction="row" spacing={1} alignItems="center">
-                                    <AccountIcon className="login-icon" />
-                                    <Typography variant="body1" className="login-label">아이디 로그인</Typography>
-                                  </Stack>
-                                  <Typography variant="caption" className="login-desc">
-                                    한국의약품안전관리원 가입 시 등록한 아이디를 이용하여 로그인
-                                  </Typography>
+                    <Box className="login-card-area__right">
+                      <Card className="kids-login-card">
+                        {/* <Typography className="kids-login-title">KIDS 로그인</Typography> */}
+                        <CardContent className="kids-login-card-content">
+                          <Box className="login-button-group">
+                            <Button variant="outlined" onClick={() => navigate('/pp/ko/auth/Login')} className="login-button" title={t('login')}>
+                              <Stack spacing={1} alignItems="center" className="login-button-stack">
+                                <Stack direction="row" spacing={1} alignItems="center">
+                                  <AccountIcon className="login-icon" />
+                                  <Typography variant="body1" className="login-label">아이디 로그인</Typography>
                                 </Stack>
-                              </Button>
-                            </Box>
-                          </CardContent>
-                        </Card>
-                      </Box>
+                                <Typography variant="caption" className="login-desc">
+                                  한국의약품안전관리원 가입 시 등록한 아이디를 이용하여 로그인
+                                </Typography>
+                              </Stack>
+                            </Button>
+                          </Box>
+                        </CardContent>
+                      </Card>
+                    </Box>
                   </Box>
                 </Box>
               </Box>

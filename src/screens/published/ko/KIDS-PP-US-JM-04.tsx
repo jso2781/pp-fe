@@ -8,7 +8,6 @@ import {
   HelpOutline as HelpIcon,
 } from '@mui/icons-material'
 import DepsLocation from '@/components/common/DepsLocation'
-import { getAnyIdConfigUrl } from '@/lib/anyid/anyidConfig'
 import ScreenShell from '../../ScreenShell'
 
 
@@ -32,7 +31,9 @@ export default function KIDS_PP_US_JM_04() {
         return
       }
 
-      const configAnyidcJsonUrl = getAnyIdConfigUrl()
+      // public 폴더 기준 상대 경로 사용
+      // public/anyid/config/config.anyidc.json -> /anyid/config/config.anyidc.json
+      const configAnyidcJsonUrl = '/anyid/config/config.anyidc.json'
 
       // 정부24와 동일한 방식으로 간편인증 다이얼로그 표시
       window.AnyidC.LOAD_MODULE({

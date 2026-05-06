@@ -17,7 +17,6 @@ import { setAuthUserInfo } from '@/features/auth/AuthSlice';
 import { getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks';
 import { useDialog } from '@/contexts/DialogContext';
 import { decrypto } from '@/features/crypto/CryptoThunks';
-import { getAnyIdConfigUrl } from '@/lib/anyid/anyidConfig';
 import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets';
 
 const showAnyIdSdk = shouldLoadAnyIdSdk();
@@ -157,7 +156,7 @@ export default function EditProfile() {
       },
     };
 
-    const configAnyidcJsonUrl = getAnyIdConfigUrl();
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`;
     const txId = phoneChangeTxRef.current;
 
     window.AnyidC.LOAD_MODULE({

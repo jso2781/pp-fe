@@ -24,7 +24,6 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { getAnyIdInit, postAnyIdLogin } from '@/features/auth/AnyIdThunks'
-import { getAnyIdConfigUrl } from '@/lib/anyid/anyidConfig'
 import https from '@/api/axiosInstance'
 import DepsLocation from '@/components/common/DepsLocation'
 
@@ -169,7 +168,7 @@ export default function LoginMethod() {
         fail: failCb,
         log: logCb,
         redirect_uri: redirectUri,
-        cfg: anyidInit?.cfg ?? getAnyIdConfigUrl(),
+        cfg: anyidInit?.cfg ?? '/anyid/config/config.anyidc.json',
         txId: anyidInit?.txId ?? tx,
         tag: anyidInit?.tag ?? tx,
         lvl: anyidInit?.lvl ?? acrValues,

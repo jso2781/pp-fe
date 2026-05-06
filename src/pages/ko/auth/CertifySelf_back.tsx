@@ -15,7 +15,6 @@ import {
 import DepsLocation from '@/components/common/DepsLocation'
 import { getSignUpSteps } from '@/pages/ko/auth/signUpSteps'
 
-import { getAnyIdConfigUrl } from '@/lib/anyid/anyidConfig'
 import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
 import { getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks';
 import type { AnyIdUserInfoFromSsobRVO } from '@/features/auth/AnyIdTypes';
@@ -190,7 +189,7 @@ export default function CertifySelf() {
       },
     }
 
-    const configAnyidcJsonUrl = getAnyIdConfigUrl()
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`
     const txId = txRef.current ?? `certify-${Date.now()}`
     const lvl = acrValuesRef.current
 

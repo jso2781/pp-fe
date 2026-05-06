@@ -22,7 +22,6 @@ import {
   type AnyidEmbedInitParams,
   type AnyidEmbedParentToChild,
 } from '@/lib/anyid/anyidEmbedProtocol'
-import { getAnyIdConfigUrl } from '@/lib/anyid/anyidConfig'
 import { shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets'
 import { useAppDispatch } from '@/store/hooks'
 import { getAnyIdUserInfoFromSsob } from '@/features/auth/AnyIdThunks'
@@ -39,7 +38,7 @@ const showAnyIdArea = shouldLoadAnyIdSdk()
  */
 const anyIdPublicBase = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '')}/`
 const ANYID_EMBED_PAGE = `${anyIdPublicBase}anyid-embed.html`
-const ANYID_CONFIG_JSON_URL = getAnyIdConfigUrl()
+const ANYID_CONFIG_JSON_URL = `${anyIdPublicBase}config/config.anyidc.json`
 
 // 법정대리인동의 화면의 입력 데이터 JSON 구조 (LegalGuardFormData 타입)
 type LegalGuardFormData = {

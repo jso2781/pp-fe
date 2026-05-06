@@ -838,16 +838,16 @@
 
 .login-card-area {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
+  align-items: stretch;
   position: relative;
   box-sizing: border-box;
 
   &__left {
-    width: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column; 
+    gap: 20px; 
+    border-right: 1px solid #D8D8D8;
 
     .login-method-card {
       flex: 1; 
@@ -856,22 +856,13 @@
     }
   }
 
-  &__id-login {
-    position: relative;
-    width: calc(50% - 16px);
-    margin-top: 50px;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: -35px;
-      left: 0;
-      width: calc(200% + 32px);
-      height: 1px;
-      background-color: #D8D8D8;
-    }
-
+  &__right {
+    flex: 1;
+    display: flex;
+    // padding-left: 40px;
+    
     .kids-login-card {
+      flex: 1;
       display: flex;
       flex-direction: column;
 
@@ -881,29 +872,24 @@
       }
 
       .kids-login-card-content {
-        flex: 1;
+        flex: 1; // 공간을 차지하도록 설정
         display: flex;
         flex-direction: column;
-        padding: 0;
+        justify-content: flex-end; 
+        padding:0 0 0 8px;
       }
     }
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 1200px) {
+    flex-direction: column;
     gap: 40px; 
 
      &__left {
       border-right:none;
     }
 
-    &__id-login {
-      width: 100%;
-      margin-top: 0;
-
-      &::before {
-        display: none;
-      }
-
+    &__right {
       .kids-login-card {
          .kids-login-title {
           margin:0 0 10px 0;

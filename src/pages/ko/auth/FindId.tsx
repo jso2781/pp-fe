@@ -12,7 +12,6 @@ import { getMbrInfo } from '@/features/mbr/MbrInfoThunks';
 import { useAppDispatch } from '@/store/hooks';
 import { Box, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from "react";
-import { getAnyIdConfigUrl } from '@/lib/anyid/anyidConfig';
 import { ensureAnyIdAssets, waitForAnyidC, shouldLoadAnyIdSdk } from '@/lib/anyid/ensureAnyIdAssets';
 import type { MbrInfoPVO } from '@/features/mbr/MbrInfoTypes';
 import { getAnyIdCiFromSsob } from "@/features/auth/AnyIdThunks";
@@ -118,7 +117,7 @@ export default function FindId() {
       }
     };
 
-    const configAnyidcJsonUrl = getAnyIdConfigUrl();
+    const configAnyidcJsonUrl = `${(import.meta.env.BASE_URL || '/').replace(/\/+$/, '/')}config/config.anyidc.json`;
     const txId = `findId-${Date.now()}`;
     const lvl = 3;
 
