@@ -191,9 +191,9 @@ export default function MyDrugInfo() {
   }
 
   /** 제품검색 클릭 시 DurPrdctDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
-  const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string, rlvtAge?: string) => {
+  const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string, rlvtAge?: string, condiGrdCd?: string) => {
     const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`;
-    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}${(rlvtAge ? "&rlvtAge="+rlvtAge : "")}`;
+    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}${(rlvtAge ? "&rlvtAge=" + encodeURIComponent(rlvtAge) : "")}${(condiGrdCd ? "&condiGrdCd=" + encodeURIComponent(condiGrdCd) : "")}`;
     const width = 800;
     const height = 600;
     const left = Math.round((window.screen.width - width) / 1.5);
@@ -645,17 +645,28 @@ export default function MyDrugInfo() {
                                                     <dd>
                                                       <Box className="detail-info-row">
                                                         <span className="text">{row.value}</span>
-                                                        {row.label === '성분' && item?.igrdNm && (activeCategory !== 'TAB1') && (
+                                                        {row.label === '성분' && item?.igrdNm && (
                                                           <Button
                                                             variant="outlined02"
                                                             size="xsmall"
                                                             className="btn-detail"
                                                             endIcon={<ChevronRightIcon />}
-                                                            onClick={() => openPrdctDetailPop(item.igrdNm, getBannTypeCd(category), item.rlvtAge)}
+                                                            onClick={() => openPrdctDetailPop(item.igrdNm, getBannTypeCd(category), item.rlvtAge, item.condiGrdCd)}
                                                           >
                                                             제품검색
                                                           </Button>
                                                         )}
+                                                        {row.label === '병용금기 성분' && item?.prohibitIgrdNm && category === 'TAB1' && (
+                                                          <Button
+                                                            variant="outlined02"
+                                                            size="xsmall"
+                                                            className="btn-detail"
+                                                            endIcon={<ChevronRightIcon />}
+                                                            onClick={() => openPrdctDetailPop(item.prohibitIgrdNm, getBannTypeCd(category), item.rlvtAge, item.condiGrdCd)}
+                                                          >
+                                                            제품검색
+                                                          </Button>
+                                                        )}                                                        
                                                         {category === 'TAB6' && row.label === '계열' && item?.igrdNm && (
                                                           <Button
                                                             variant="outlined02"

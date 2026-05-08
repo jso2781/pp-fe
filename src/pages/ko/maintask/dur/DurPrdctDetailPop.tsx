@@ -29,6 +29,7 @@ function DurPrdctDetailPopInner() {
   const igrdNm = searchParams.get('igrdNm') ?? (location.state as { igrdNm?: string } | null)?.igrdNm ?? '';
   const bannTypeCd = searchParams.get('bannTypeCd') ?? (location.state as { bannTypeCd?: string } | null)?.bannTypeCd ?? 'conc';
   const rlvtAge = searchParams.get('rlvtAge') ?? (location.state as { rlvtAge?: string } | null)?.rlvtAge ?? '';
+  const condiGrdCd = searchParams.get('condiGrdCd') ?? (location.state as { condiGrdCd?: string } | null)?.condiGrdCd ?? '';
 
   const [pageNum, setPageNum] = useState(1);
   const [data, setData] = useState<PopupData>(initialData);
@@ -53,7 +54,7 @@ function DurPrdctDetailPopInner() {
     setData((prev) => ({ ...prev, loading: true }));
 
     /* 제품 상세 조회(비동기 데이터 조회) */
-    dispatch(selectPrdctDetailList({ pageNum, pageSize: PAGE_SIZE, igrdNm: igrdNm.trim(), bannTypeCd, rlvtAge }))
+    dispatch(selectPrdctDetailList({ pageNum, pageSize: PAGE_SIZE, igrdNm: igrdNm.trim(), bannTypeCd, rlvtAge, condiGrdCd }))
       .then((action) => {
         if (selectPrdctDetailList.fulfilled.match(action)) {
           const p = action.payload;
@@ -70,7 +71,7 @@ function DurPrdctDetailPopInner() {
       /* 조회 실패 시 로딩 상태 설정 */
       .catch(() => setData((prev) => ({ ...prev, loading: false })));
 
-  }, [dispatch, pageNum, igrdNm]);
+  }, [dispatch, pageNum, igrdNm, bannTypeCd, rlvtAge, condiGrdCd]);
 
 return (
       <Box className="ingredient-popup-wrapper">

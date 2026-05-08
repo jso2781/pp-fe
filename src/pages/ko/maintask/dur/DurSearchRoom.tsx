@@ -29,9 +29,9 @@ export default function DurSearchRoom(){
   const { lang } = useParams<{ lang: string }>();
 
   /** 제품검색 클릭 시 DurPrdctDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
-  const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string) => {
+  const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string, rlvtAge?: string, condiGrdCd?: string) => {
     const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`;
-    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}`;
+    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}${(rlvtAge ? "&rlvtAge=" + encodeURIComponent(rlvtAge) : "")}${(condiGrdCd ? "&condiGrdCd=" + encodeURIComponent(condiGrdCd) : "")}`;
     const width = 800;
     const height = 600;
     const left = Math.round((window.screen.width - width) / 1.5);
@@ -41,9 +41,9 @@ export default function DurSearchRoom(){
   };
 
   /** 중복 상세보기 클릭 시 DurEftgrpDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
-  const openEftgrpDetailPop = (igrdNm: string) => {
+  const openEftgrpDetailPop = (igrdNm: string, effGroupNm: string, groupNm: string) => {
     const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurEftgrpDetailPop`;
-    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}`;
+    const url = `${base}?effGroupNm=${encodeURIComponent(effGroupNm)}&groupNm=${encodeURIComponent(groupNm)}&igrdNm=${encodeURIComponent(igrdNm)}`;
     const width = 800;
     const height = 600;
     const left = Math.round((window.screen.width - width) / 2);
@@ -667,7 +667,7 @@ export default function DurSearchRoom(){
                                                     resultSearchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
-                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'age')}>
+                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'age', item.rlvtAge)}>
                                                         제품검색
                                                       </Button>
                                                       </>
@@ -772,7 +772,7 @@ export default function DurSearchRoom(){
                                                     resultSearchCnd === 'igrdNm' ? (
                                                       <>
                                                       <span className="text">{item.igrdNm}</span>
-                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'prgnt')}>
+                                                      <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openPrdctDetailPop(item.igrdNm, 'prgnt', undefined, item.condiGrdCd)}>
                                                         제품검색
                                                       </Button>
                                                       </>
@@ -1115,7 +1115,7 @@ export default function DurSearchRoom(){
                                               <dd>
                                                 <Box className="detail-info-row">
                                                   <span className="text">{item.groupNm}</span>
-                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openEftgrpDetailPop(item.igrdNm)}>
+                                                  <Button variant="outlined02" size="xsmall" className="btn-detail" endIcon={<ChevronRightIcon />} onClick={() => openEftgrpDetailPop(item.igrdNm, item.effGroupNm, item.groupNm)}>
                                                     중복 상세보기
                                                   </Button>
                                                 </Box>

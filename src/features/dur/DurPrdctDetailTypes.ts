@@ -27,6 +27,9 @@ export interface DurPrdctDetailListPVO {
 
   /** 연령금기 해당연령 */
   rlvtAge?: string
+
+  /** 임부금기 등급 */
+  condiGrdCd?: string
 }
 
 /**
