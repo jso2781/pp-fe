@@ -832,6 +832,17 @@
   }
 }
 
+.login-method-page {
+  #anyidc.thema_04.conts-area .tit-wrap.order-change {
+    justify-content: flex-start;
+    column-gap: 24px;
+  }
+
+  #anyidc.thema_04.conts-area .tit-wrap.order-change #anyidtoggle {
+    display: none !important;
+  }
+}
+
 .anyidc {
   display: none;
 }

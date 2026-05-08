@@ -303,7 +303,7 @@ export default function LoginMethod() {
             <DepsLocation />
             <Box className="content-view" id="content">
               <Box className="page-content">
-                <Box className="page-content__anyid">
+                <Box className="page-content__anyid login-method-page">
                   <Box className="login-card-area">
                     <Box className="login-card-area__left">
                       {phase === 'preparing' && (
