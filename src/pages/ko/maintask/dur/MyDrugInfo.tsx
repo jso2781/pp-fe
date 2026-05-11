@@ -191,9 +191,9 @@ export default function MyDrugInfo() {
   }
 
   /** 제품검색 클릭 시 DurPrdctDetailPop을 팝업 창으로 열고, igrdNm을 쿼리로 전달 */
-  const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string, rlvtAge?: string, condiGrdCd?: string) => {
+  const openPrdctDetailPop = (igrdNm: string, bannTypeCd: string, rlvtAge?: string, condiGrdCd?: string, maxAdminPrdDayCnt?: string) => {
     const base = `${window.location.origin}/pp/${lang ?? 'ko'}/maintask/dur/DurPrdctDetailPop`;
-    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}${(rlvtAge ? "&rlvtAge=" + encodeURIComponent(rlvtAge) : "")}${(condiGrdCd ? "&condiGrdCd=" + encodeURIComponent(condiGrdCd) : "")}`;
+    const url = `${base}?igrdNm=${encodeURIComponent(igrdNm)}&bannTypeCd=${encodeURIComponent(bannTypeCd)}${(rlvtAge ? "&rlvtAge=" + encodeURIComponent(rlvtAge) : "")}${(condiGrdCd ? "&condiGrdCd=" + encodeURIComponent(condiGrdCd) : "")}${(maxAdminPrdDayCnt ? "&maxAdminPrdDayCnt=" + encodeURIComponent(maxAdminPrdDayCnt) : "")}`;
     const width = 800;
     const height = 600;
     const left = Math.round((window.screen.width - width) / 1.5);
@@ -651,7 +651,7 @@ export default function MyDrugInfo() {
                                                             size="xsmall"
                                                             className="btn-detail"
                                                             endIcon={<ChevronRightIcon />}
-                                                            onClick={() => openPrdctDetailPop(item.igrdNm, getBannTypeCd(category), item.rlvtAge, item.condiGrdCd)}
+                                                            onClick={() => openPrdctDetailPop(item.igrdNm, getBannTypeCd(category), item.rlvtAge, item.condiGrdCd, item.maxAdminPrdDayCnt)}
                                                           >
                                                             제품검색
                                                           </Button>
@@ -662,7 +662,7 @@ export default function MyDrugInfo() {
                                                             size="xsmall"
                                                             className="btn-detail"
                                                             endIcon={<ChevronRightIcon />}
-                                                            onClick={() => openPrdctDetailPop(item.prohibitIgrdNm, getBannTypeCd(category), item.rlvtAge, item.condiGrdCd)}
+                                                            onClick={() => openPrdctDetailPop(item.prohibitIgrdNm, getBannTypeCd(category), item.rlvtAge, item.condiGrdCd, item.maxAdminPrdDayCnt)}
                                                           >
                                                             제품검색
                                                           </Button>

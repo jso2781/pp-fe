@@ -30,6 +30,9 @@ export interface DurPrdctDetailListPVO {
 
   /** 임부금기 등급 */
   condiGrdCd?: string
+
+  /** 최대투여기간(일) */
+  maxAdminPrdDayCnt?: string
 }
 
 /**
