@@ -479,8 +479,8 @@ export default function Router() {
                 <Route path="/pp/:lang/adverse/statistics/StatisticsCreate" element={<LangElement byLang={{ ko: <StatisticsCreateKo />, en: <StatisticsCreateKo /> }} />} />
 
                 {/* 국문 퍼블리싱 템플릿 화면들 */}
-                <Route path="/pp/ko/screens" element={<ScreensKo />} />
-                <Route path="/pp/ko/screens/:screenId" element={<ScreenViewerKo />} />
+                {/* <Route path="/pp/ko/screens" element={<ScreensKo />} />
+                <Route path="/pp/ko/screens/:screenId" element={<ScreenViewerKo />} /> */}
 
                 {/* lang 포함 NotFound - 반드시 가장 마지막에 배치 (와일드카드는 모든 경로를 매칭하므로) */}
                 <Route path="/pp/:lang/InternalServerError" element={<LangElement byLang={{ ko: <InternalServerErrorKo />, en: <InternalServerErrorKo /> }} />} />

@@ -458,7 +458,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
                   <Button size="small" className="btn_extend" onClick={handleResetTimerClick}>시간연장</Button>
                 </Box>
               )}
-              <Button size="small" onClick={() => navigate(to(`/pp/ko/screens`))}>Screens</Button>
+              {/* <Button size="small" onClick={() => navigate(to(`/pp/ko/screens`))}>Screens</Button> */}
               <Button size="small" onClick={onToggleLang} startIcon={<Language />}>
                 {i18nInstance.language === 'ko' ? 'English' : '한국어'}
               </Button>
