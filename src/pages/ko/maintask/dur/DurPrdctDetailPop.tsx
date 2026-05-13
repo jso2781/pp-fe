@@ -31,6 +31,7 @@ function DurPrdctDetailPopInner() {
   const rlvtAge = searchParams.get('rlvtAge') ?? (location.state as { rlvtAge?: string } | null)?.rlvtAge ?? '';
   const condiGrdCd = searchParams.get('condiGrdCd') ?? (location.state as { condiGrdCd?: string } | null)?.condiGrdCd ?? '';
   const maxAdminPrdDayCnt = searchParams.get('maxAdminPrdDayCnt') ?? (location.state as { maxAdminPrdDayCnt?: string } | null)?.maxAdminPrdDayCnt ?? '';
+  const dayMaxAdminCpct = searchParams.get('dayMaxAdminCpct') ?? (location.state as { dayMaxAdminCpct?: string } | null)?.dayMaxAdminCpct ?? '';
 
   const [pageNum, setPageNum] = useState(1);
   const [data, setData] = useState<PopupData>(initialData);
@@ -55,7 +56,7 @@ function DurPrdctDetailPopInner() {
     setData((prev) => ({ ...prev, loading: true }));
 
     /* 제품 상세 조회(비동기 데이터 조회) */
-    dispatch(selectPrdctDetailList({ pageNum, pageSize: PAGE_SIZE, igrdNm: igrdNm.trim(), bannTypeCd, rlvtAge, condiGrdCd, maxAdminPrdDayCnt }))
+    dispatch(selectPrdctDetailList({ pageNum, pageSize: PAGE_SIZE, igrdNm: igrdNm.trim(), bannTypeCd, rlvtAge, condiGrdCd, maxAdminPrdDayCnt, dayMaxAdminCpct }))
       .then((action) => {
         if (selectPrdctDetailList.fulfilled.match(action)) {
           const p = action.payload;
@@ -72,7 +73,7 @@ function DurPrdctDetailPopInner() {
       /* 조회 실패 시 로딩 상태 설정 */
       .catch(() => setData((prev) => ({ ...prev, loading: false })));
 
-  }, [dispatch, pageNum, igrdNm, bannTypeCd, rlvtAge, condiGrdCd, maxAdminPrdDayCnt]);
+  }, [dispatch, pageNum, igrdNm, bannTypeCd, rlvtAge, condiGrdCd, maxAdminPrdDayCnt, dayMaxAdminCpct]);
 
 return (
       <Box className="ingredient-popup-wrapper">

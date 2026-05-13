@@ -33,6 +33,9 @@ export interface DurPrdctDetailListPVO {
 
   /** 최대투여기간(일) */
   maxAdminPrdDayCnt?: string
+
+  /** 1일 최대용량 */
+  dayMaxAdminCpct?: string
 }
 
 /**
