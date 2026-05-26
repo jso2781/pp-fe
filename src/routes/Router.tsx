@@ -349,11 +349,12 @@ const LangGuard = ({ children }: { children: JSX.Element }) => {
   useEffect(() => {
     const pathname = location.pathname;
     const shouldRedirect = SSO_REDIRECT_AUTH_PATHS.some((p) => pathname.includes(p));
-    if (shouldRedirect) {
+    const useSsoLogin = ssoInfo?.ssoByPass !== 1;
+    if (shouldRedirect && useSsoLogin) {
       const agencyContextPath = ssoInfo?.agencyContextPath ?? '';
       redirectToSsoLoginPage(agencyContextPath);
     }
-  }, [location.pathname, ssoInfo?.agencyContextPath]);
+  }, [location.pathname, ssoInfo?.agencyContextPath, ssoInfo?.ssoByPass]);
 
   if (needsRedirect) {
     // querystring, hash 유지

@@ -4,12 +4,12 @@
  * 본인인증만 쓰는 임베드에서는 해당 행을 숨긴다 (#anyidc 직계 .tit-wrap 만).
  * tab-area(인증 수단 목록)는 #anyidc 밖 형제 영역이므로 영향 없음.
  */
-#anyidc > .tit-wrap {
+.login-method-page #anyidc #anyidtoggle {
   display: none !important;
 }
 
 @media (max-width: 767px) {
-    #anyidc.thema_04 .pc-hide {
-        display: none !important;
-    }
+  .login-method-page #anyidc.thema_04 .pc-hide {
+    display: block !important;
+  }
 }

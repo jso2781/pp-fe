@@ -3,9 +3,9 @@
  * 화면명: 로그인 방식 선택
  * 화면경로: /ko/auth/LoginMethod
  *
- * - production·stg + tx 없음: /oidc/auth (KMS tx)
- * - production·stg + tx 있음: getAnyIdInit → LOAD_MODULE(SSO)
- * - 그 외 MODE + `VITE_SHOW_ANYID_AREA=true`: 임베드 LOAD_MODULE(bypass 1, 본인인증) — 성공 시 ssob·tag로 /auth/anyid/login
+ * - production·stg + ssoByPass !== 1 + tx 없음: /oidc/auth (KMS tx)
+ * - production·stg + ssoByPass !== 1 + tx 있음: getAnyIdInit → LOAD_MODULE(SSO)
+ * - 그 외(로컬 또는 ssoByPass=1) + `VITE_SHOW_ANYID_AREA=true`: 임베드 LOAD_MODULE(bypass 1, 본인인증) — 성공 시 ssob·tag로 /auth/anyid/login
  */
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material'
@@ -51,6 +51,7 @@ export default function LoginMethod() {
   const params = useMemo(() => new URLSearchParams(location.search), [location.search])
   const tx = useMemo(() => params.get('tx') || null, [params])
   const hasUrlTx = Boolean(tx)
+  const useSsoLogin = isSsoModeEnv && ssoInfo?.ssoByPass !== 1
 
   const acrValues = useMemo(() => {
     const v = params.get('acrValues')
@@ -64,11 +65,11 @@ export default function LoginMethod() {
     return `${window.location.origin}${r.startsWith('/') ? '' : '/'}${r}`
   }, [params])
 
-  /** SSO 환경이 아니면 항상 임베드(bypass=1). SSO 환경에서는 tx 수신 후에만 SDK 로드 */
-  const devEmbedLogin = showAnyIdArea && !isSsoModeEnv
+  /** SSO 미사용 환경(로컬 또는 bypass=1)이면 항상 임베드(bypass=1). */
+  const devEmbedLogin = showAnyIdArea && !useSsoLogin
   const devLoginTag = useMemo(() => `login-dev-${Date.now()}`, [])
 
-  const sdkEnabled = showAnyIdArea && (!isSsoModeEnv || hasUrlTx)
+  const sdkEnabled = showAnyIdArea && (!useSsoLogin || hasUrlTx)
   const anyIdSdkReady = useAnyIdSdkReady(sdkEnabled, {
     showGovLoginTitleRow: !devEmbedLogin,
   })
@@ -80,13 +81,18 @@ export default function LoginMethod() {
     }
     if (!isSsoModeEnv) return
     if (hasUrlTx) return
+    if (ssoInfo == null) return
+    if (!useSsoLogin) {
+      setPhase('preparing')
+      return
+    }
     setPhase('redirecting')
     const currentPath = location.pathname || '/pp/ko/auth/LoginMethod'
     window.location.href = `/oidc/auth?end_point=${encodeURIComponent(currentPath)}`
-  }, [showAnyIdArea, isSsoModeEnv, hasUrlTx, location.pathname])
+  }, [showAnyIdArea, isSsoModeEnv, hasUrlTx, location.pathname, ssoInfo, useSsoLogin])
 
   useEffect(() => {
-    if (!showAnyIdArea || !isSsoModeEnv || !hasUrlTx) return
+    if (!showAnyIdArea || !useSsoLogin || !hasUrlTx) return
     let cancelled = false
     ;(async () => {
       try {
@@ -116,15 +122,15 @@ export default function LoginMethod() {
     return () => {
       cancelled = true
     }
-  }, [showAnyIdArea, isSsoModeEnv, hasUrlTx, tx, dispatch])
+  }, [showAnyIdArea, useSsoLogin, hasUrlTx, tx, dispatch])
 
   useEffect(() => {
     if (!showAnyIdArea) return
     if (phase === 'local' || phase === 'error' || phase === 'redirecting') return
     if (!anyIdSdkReady) return
-    if (isSsoModeEnv && hasUrlTx && anyidInit?.txId !== tx) return
+    if (useSsoLogin && hasUrlTx && anyidInit?.txId !== tx) return
     setPhase('ready')
-  }, [showAnyIdArea, phase, anyIdSdkReady, isSsoModeEnv, hasUrlTx, anyidInit?.txId, tx])
+  }, [showAnyIdArea, phase, anyIdSdkReady, useSsoLogin, hasUrlTx, anyidInit?.txId, tx])
 
   const loadModuleCalledRef = useRef(false)
   /** Any-ID가 success를 여러 번 호출해도 /auth/anyid/login 은 1회만 */
@@ -156,17 +162,17 @@ export default function LoginMethod() {
     if (!showAnyIdArea) return
     if (phase !== 'ready') return
     if (!anyIdSdkReady || !window.AnyidC?.LOAD_MODULE) return
-    if (isSsoModeEnv && hasUrlTx && anyidInit?.txId !== tx) return
+    if (useSsoLogin && hasUrlTx && anyidInit?.txId !== tx) return
     if (loadModuleCalledRef.current) return
     loadModuleCalledRef.current = true
 
     const prevAdaptor = window.anyidAdaptor
 
     const loginTag: string =
-      isSsoModeEnv && hasUrlTx && tx ? (anyidInit?.txId ?? tx) : devLoginTag
+      useSsoLogin && hasUrlTx && tx ? (anyidInit?.txId ?? tx) : devLoginTag
 
     const adaptor = {
-      sso: isSsoModeEnv ? (ssoInfo ?? undefined) : undefined,
+      sso: useSsoLogin ? (ssoInfo ?? undefined) : undefined,
       success: async (data: any) => {
         // esign 등에서 단계마다 success가 반복 호출됨 — 최종 완료만 처리(step 없으면 기존 SDK 호환)
         if (data?.step != null && data.step !== 'authComplete') {
@@ -274,7 +280,7 @@ export default function LoginMethod() {
     phase,
     anyIdSdkReady,
     hasUrlTx,
-    isSsoModeEnv,
+    useSsoLogin,
     devEmbedLogin,
     devLoginTag,
     tx,
