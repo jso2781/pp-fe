@@ -157,6 +157,27 @@ export default function LoginMethod() {
     dispatchRef.current = dispatch
     tRef.current = t
   })
+  // // resAuthData 파라미터가 있으면 부모 창에 전달하고 팝업 닫기
+  // useEffect(() => {
+  //   const resAuthData = params.get('resAuthData')
+  //   if (resAuthData) {
+  //     if (window.opener) {
+  //       window.opener.postMessage({ resAuthData }, window.location.origin)
+  //       window.close()
+  //     }
+  //   }
+  // }, [params])
+  // useEffect(() => {
+  //   const handleMessage = (event: MessageEvent) => {
+  //     if (event.origin !== window.location.origin) return
+  //     const { resAuthData } = event.data
+  //     if (resAuthData && window.AnyidC?.LOAD_MODULE) {
+  //       window.AnyidC.pid_callback?.({ resAuthData })
+  //     }
+  //   }
+  //   window.addEventListener('message', handleMessage)
+  //   return () => window.removeEventListener('message', handleMessage)
+  // }, [])
 
   useEffect(() => {
     if (!showAnyIdArea) return

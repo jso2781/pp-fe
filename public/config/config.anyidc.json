@@ -37,7 +37,7 @@
     , "urls": {
         "provider": "https://www.anyid.dev:1443/pid/auth.do"
       , "accInfo": "/api/pp/auth/pid/accessInfo"
-      , "redirectUri": "https://stg.drugsafe.or.kr/oidc/redirect"
+      , "redirectUri": "https://www.anyid.dev:1443/redirect.jsp"
       , "extract": "/api/pp/auth/pid/extract"
       }
     }
