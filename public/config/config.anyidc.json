@@ -16,13 +16,6 @@
       }
     }
   , {
-      "name" : "magcert-relay"
-    , "level": 2
-    , "urls": {
-        "provider": "https://crt.anyid.dev:1456/MagicLine4Web/v2.1/share.jsp"
-      }
-    }
-  , {
       "name": "esign-relay"
     , "level": 2
     , "urls": {
